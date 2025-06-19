@@ -5,7 +5,7 @@ import 'package:personal_oracle/screens/games/face_the_fear.dart';
 import 'package:personal_oracle/screens/games/find_the_path.dart';
 import 'package:personal_oracle/screens/games/let_him_win.dart';
 import 'package:personal_oracle/screens/games/match_the_emotion.dart';
-import 'package:personal_oracle/screens/games/order_the_scrolls.dart';
+import 'package:personal_oracle/screens/games/order_the_scrolls/screen.dart';
 import 'package:personal_oracle/screens/games/which_door.dart';
 
 class MiniJeuxApp extends StatelessWidget {
