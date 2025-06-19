@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
 import 'quiz_screen.dart';
+import 'games/menu.dart'; // 👈 Assure-toi que ce fichier contient MenuPrincipal
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -23,7 +24,7 @@ class WelcomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Spacer(),
-                
+
                 // Icône principale
                 Container(
                   width: AppConstants.iconXLarge,
@@ -40,7 +41,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: AppConstants.paddingXLarge),
-                
+
                 // Titre
                 Text(
                   'Oracle Nordique',
@@ -48,7 +49,7 @@ class WelcomeScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: AppConstants.paddingMedium),
-                
+
                 // Sous-titre
                 Text(
                   'Découvrez quelle divinité nordique sommeille en vous',
@@ -56,7 +57,7 @@ class WelcomeScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: AppConstants.paddingXLarge + AppConstants.paddingMedium),
-                
+
                 // Description
                 Card(
                   child: Padding(
@@ -77,9 +78,10 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 const Spacer(),
-                
-                // Bouton de démarrage
+
+                // Bouton "Commencer le Quiz"
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -100,6 +102,30 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+
+                const SizedBox(height: AppConstants.paddingMedium),
+
+                // Bouton "Mini-Jeux"
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () => _navigateToMiniJeux(context),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppConstants.accent,
+                      side: BorderSide(color: AppConstants.accent, width: 2),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppConstants.paddingMedium,
+                      ),
+                    ),
+                    child: const Text(
+                      '🎮 Mini-Jeux',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -111,9 +137,14 @@ class WelcomeScreen extends StatelessWidget {
   void _navigateToQuiz(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => const QuizScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const QuizScreen()),
+    );
+  }
+
+  void _navigateToMiniJeux(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MenuPrincipal()),
     );
   }
 }
