@@ -14,5 +14,4 @@ jobs:
       - uses: bluefireteam/flutter-gh-pages@v8
         with:
           baseHref: /personal-oracle/
-          webRenderer: canvaskit
 
