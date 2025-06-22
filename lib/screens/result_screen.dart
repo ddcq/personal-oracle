@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:personal_oracle/data/app_data.dart';
-import 'package:personal_oracle/screens/welcome_screen.dart';
-import 'package:personal_oracle/widgets/deity_card.dart'; // 👈 Import it
+import '../data/app_data.dart';
+import 'welcome_screen.dart';
+import '../widgets/deity_card.dart'; // 👈 Import it
 
 class ResultScreen extends StatelessWidget {
   final String deity;

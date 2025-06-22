@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:personal_oracle/screens/games/balance_of_justice.dart';
-import 'package:personal_oracle/screens/games/break_the_rock.dart';
-import 'package:personal_oracle/screens/games/face_the_fear.dart';
-import 'package:personal_oracle/screens/games/find_the_path.dart';
-import 'package:personal_oracle/screens/games/let_him_win.dart';
-import 'package:personal_oracle/screens/games/match_the_emotion.dart';
-import 'package:personal_oracle/screens/games/order_the_scrolls/screen.dart';
-import 'package:personal_oracle/screens/games/which_door.dart';
+import 'balance_of_justice.dart';
+import 'break_the_rock.dart';
+import 'face_the_fear.dart';
+import 'find_the_path.dart';
+import 'let_him_win.dart';
+import 'match_the_emotion.dart';
+import 'order_the_scrolls/screen.dart';
+import 'which_door.dart';
 
 class MiniJeuxApp extends StatelessWidget {
   const MiniJeuxApp({super.key});
