@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../game_controller.dart';
+import '../myth_story_page.dart'; // Assurez-vous que le chemin est correct
 
 class GameControls extends StatelessWidget {
   final GameController controller;
@@ -42,33 +43,69 @@ class GameControls extends StatelessWidget {
 
     return Column(
       children: [
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: controller.isOrderCompletelyCorrect()
-                ? Colors.green[50]
-                : Colors.red[50],
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: controller.isOrderCompletelyCorrect()
-                  ? Colors.green
-                  : Colors.red,
-              width: 2,
+        if (!controller.isOrderCompletelyCorrect())
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.red[50],
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.red,
+                width: 2,
+              ),
+            ),
+            child: const Text(
+              '❌ Désolé, l\'ordre est incorrect.',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
-          child: Text(
-            controller.isOrderCompletelyCorrect()
-                ? '✅ Bravo ! Ordre correct !'
-                : '❌ Désolé, l\'ordre est incorrect.',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+        
+        if (controller.isOrderCompletelyCorrect())
+          SizedBox(
+            width: double.infinity,
+            height: 60,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MythStoryPage(
+                      mythStory: controller.selectedStory,
+                    ),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 3,
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.book_outlined, size: 24),
+                  SizedBox(width: 8),
+                  Text(
+                    '✅ Bravo ! Lire l\'histoire complète',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            textAlign: TextAlign.center,
           ),
-        ),
+        
         const SizedBox(height: 12),
         SizedBox(
           width: double.infinity,
