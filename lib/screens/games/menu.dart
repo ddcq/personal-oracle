@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personal_oracle/screens/games/asgard_wall/asgard_wall_game.dart';
 import 'balance_of_justice.dart';
 import 'break_the_rock.dart';
 import 'face_the_fear.dart';
@@ -41,7 +42,7 @@ class MenuPrincipal extends StatelessWidget {
 
   final List<_MiniJeuItem> jeux = [
     _MiniJeuItem("🧠 Wisdom - Riddle Game", () => OrderTheScrollsGame()),
-    _MiniJeuItem("🦊 Cunning - Maze Game", () => WhichDoorGame()),
+    _MiniJeuItem("🦊 Asgard Wall Game", () => AsgardWallApp()),
     _MiniJeuItem("⚔️ Honor - Reflection Game", () => LetHimWinGame()),
     _MiniJeuItem("🦁 Courage - Hold Button", () => FaceTheFearGame()),
     _MiniJeuItem("💪 Strength - Tapper", () => BreakTheRockGame()),
