@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:personal_oracle/screens/games/asgard_wall/full_story.dart';
+import 'package:personal_oracle/screens/games/myth_story_page.dart';
 
 class VictoryScreen extends StatelessWidget {
   const VictoryScreen({super.key});
@@ -6,9 +8,7 @@ class VictoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Victoire !'),
-      ),
+      appBar: AppBar(title: Text('Victoire !')),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -49,6 +49,44 @@ class VictoryScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            MythStoryPage(mythStory: getMythStory()),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 3,
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.book_outlined, size: 24),
+                      SizedBox(width: 8),
+                      Text(
+                        '✅ Bravo ! Lire l\'histoire complète',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 32),
               ElevatedButton.icon(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/game');
@@ -72,7 +110,10 @@ class VictoryScreen extends StatelessWidget {
               SizedBox(height: 16),
               TextButton(
                 onPressed: () {
-                  Navigator.popUntil(context, ModalRoute.withName('/')); // Retourne à l'écran d'accueil
+                  Navigator.popUntil(
+                    context,
+                    ModalRoute.withName('/'),
+                  ); // Retourne à l'écran d'accueil
                 },
                 child: Text(
                   'Retour à l\'accueil',

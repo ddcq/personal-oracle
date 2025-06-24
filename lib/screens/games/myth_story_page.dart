@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:personal_oracle/screens/games/order_the_scrolls/model.dart';
+import 'package:personal_oracle/screens/games/model.dart';
 
 class MythStoryPage extends StatelessWidget {
   final MythStory mythStory;
 
-  const MythStoryPage({Key? key, required this.mythStory}) : super(key: key);
+  const MythStoryPage({super.key, required this.mythStory});
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +74,13 @@ class MythStoryPage extends StatelessWidget {
             child: Text(
               card.detailedStory,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Colors.white,
                 height: 1.6,
                 fontSize: 16,
+                
               ),
               textAlign: TextAlign.justify,
+              
             ),
           ),
           
@@ -107,10 +110,10 @@ class ParallaxImage extends StatefulWidget {
   final int index;
 
   const ParallaxImage({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   State<ParallaxImage> createState() => _ParallaxImageState();

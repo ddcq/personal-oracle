@@ -1,4 +1,4 @@
-import 'model.dart';
+import '../model.dart';
 
 List<MythStory> getMythStories() {
   return [

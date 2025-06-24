@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'data.dart';
-import 'model.dart';
+import '../model.dart';
 
 class GameController extends ChangeNotifier {
   late MythStory _selectedStory;

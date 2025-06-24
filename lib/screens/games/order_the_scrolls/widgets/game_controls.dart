@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../game_controller.dart';
-import '../myth_story_page.dart'; // Assurez-vous que le chemin est correct
+import '../../myth_story_page.dart'; // Assurez-vous que le chemin est correct
 
 class GameControls extends StatelessWidget {
   final GameController controller;

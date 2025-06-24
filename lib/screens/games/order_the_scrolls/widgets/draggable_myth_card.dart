@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'myth_card_content.dart';
-import '../model.dart';
+import '../../model.dart';
 import '../game_controller.dart';
 
 class DraggableMythCard extends StatelessWidget {

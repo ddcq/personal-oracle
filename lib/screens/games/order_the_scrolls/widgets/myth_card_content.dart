@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model.dart';
+import '../../model.dart';
 import '../game_controller.dart';
 
 class MythCardContent extends StatelessWidget {

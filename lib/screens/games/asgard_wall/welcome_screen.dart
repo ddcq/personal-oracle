@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:personal_oracle/screens/games/asgard_wall/full_story.dart';
+import 'package:personal_oracle/screens/games/myth_story_page.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -59,6 +61,44 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 32),
+                            SizedBox(
+                width: double.infinity,
+                height: 60,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            MythStoryPage(mythStory: getMythStory()),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 3,
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.book_outlined, size: 24),
+                      SizedBox(width: 8),
+                      Text(
+                        '✅ Bravo ! Lire l\'histoire complète',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/game');
