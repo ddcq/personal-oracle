@@ -2,23 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:personal_oracle/screens/games/asgard_wall/defeat_screen.dart';
 import 'package:personal_oracle/screens/games/asgard_wall/victory_screen.dart';
 import 'package:personal_oracle/screens/games/asgard_wall/welcome_screen.dart';
-
 import 'asgard_wall/asgard_wall_game.dart';
 import 'order_the_scrolls/screen.dart';
-
-class MiniJeuxApp extends StatelessWidget {
-  const MiniJeuxApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mini-Jeux des Valeurs',
-      theme: ThemeData(primarySwatch: Colors.teal),
-      home: MenuPrincipal(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
 
 class MenuPrincipal extends StatelessWidget {
   MenuPrincipal({super.key});
@@ -27,46 +12,311 @@ class MenuPrincipal extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("📚 À propos"),
-        content: Text(
-            "Bienvenue dans les Mini-Jeux des Valeurs !\n\nChaque jeu représente une qualité : sagesse, ruse, honneur, courage, force, passion, nature ou justice. Choisis un jeu et montre ta maîtrise !"),
+        backgroundColor: const Color(0xFF1E1E2E),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFD700).withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(Icons.info_outline, color: Color(0xFFFFD700), size: 24),
+            ),
+            const SizedBox(width: 12),
+            const Text("À propos", style: TextStyle(color: Colors.white, fontSize: 20)),
+          ],
+        ),
+        content: const Text(
+          "Bienvenue dans les Mini-Jeux des Valeurs !\n\nChaque jeu représente une qualité : sagesse, ruse, honneur, courage, force, passion, nature ou justice. Choisis un jeu et montre ta maîtrise !",
+          style: TextStyle(color: Colors.white70, fontSize: 16, height: 1.4),
+        ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text("OK"))
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              backgroundColor: const Color(0xFFFFD700),
+              foregroundColor: Colors.black,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
+            child: const Text("Compris", style: TextStyle(fontWeight: FontWeight.bold)),
+          )
         ],
       ),
     );
   }
 
-  final List<_MiniJeuItem> jeux = [
-    _MiniJeuItem("Réordonne l'histoire", () => OrderTheScrollsGame()),
-    _MiniJeuItem("La muraille d'Asgard", () => AsgardWallApp()),
-    _MiniJeuItem("Wall defeat", () => DefeatScreen()),
-    _MiniJeuItem("Wall Victory", () => VictoryScreen()),
-    _MiniJeuItem("Wall welcome", () => WelcomeScreen()),
+  final jeux = <_MiniJeuItem>[
+    _MiniJeuItem(
+      "Réordonne l'Histoire", 
+      "Remets les événements dans l'ordre chronologique",
+      Icons.auto_stories,
+      const Color(0xFF6366F1),
+      "Sagesse",
+      () => OrderTheScrollsGame()
+    ),
+    _MiniJeuItem(
+      "La Muraille d'Asgard", 
+      "Défends le royaume des dieux nordiques",
+      Icons.security,
+      const Color(0xFFEF4444),
+      "Force",
+      () => AsgardWallApp()
+    ),
+    _MiniJeuItem(
+      "Défaite Honorable", 
+      "Apprends de tes échecs avec dignité",
+      Icons.shield_outlined,
+      const Color(0xFF8B5CF6),
+      "Honneur",
+      () => DefeatScreen()
+    ),
+    _MiniJeuItem(
+      "Victoire Éclatante", 
+      "Célèbre tes triomphes avec humilité",
+      Icons.emoji_events,
+      const Color(0xFFFFD700),
+      "Gloire",
+      () => VictoryScreen()
+    ),
+    _MiniJeuItem(
+      "Accueil du Guerrier", 
+      "Prépare-toi au combat qui t'attend",
+      Icons.favorite,
+      const Color(0xFF10B981),
+      "Courage",
+      () => WelcomeScreen()
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('🎮 Mini-Jeux des Valeurs'),
-        actions: [
-          IconButton(icon: Icon(Icons.help_outline), onPressed: () => _showHelp(context)),
+      backgroundColor: const Color(0xFF0F0F23),
+      body: CustomScrollView(
+        slivers: [
+          // App Bar personnalisée
+          SliverAppBar(
+            expandedHeight: 120,
+            floating: false,
+            pinned: true,
+            backgroundColor: const Color(0xFF1E1E2E),
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      const Color(0xFF1E1E2E),
+                      const Color(0xFF0F0F23),
+                    ],
+                  ),
+                ),
+                child: const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 20),
+                      Text(
+                        '⚔️ Mini-Jeux des Valeurs',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Forge ton destin nordique',
+                        style: TextStyle(
+                          color: Colors.white60,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            actions: [
+              Container(
+                margin: const EdgeInsets.only(right: 16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFD700).withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.help_outline, color: Color(0xFFFFD700)),
+                  onPressed: () => _showHelp(context),
+                ),
+              ),
+            ],
+          ),
+
+          // Grille des jeux
+          SliverPadding(
+            padding: const EdgeInsets.all(20),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                childAspectRatio: 2.5,
+                mainAxisSpacing: 16,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final jeu = jeux[index];
+                  return _buildGameCard(context, jeu, index);
+                },
+                childCount: jeux.length,
+              ),
+            ),
+          ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: jeux.length,
-        itemBuilder: (context, index) {
-          final jeu = jeux[index];
-          return ListTile(
-            title: Text(jeu.label),
-            trailing: Icon(Icons.chevron_right),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => jeu.builder()),
+    );
+  }
+
+  Widget _buildGameCard(BuildContext context, _MiniJeuItem jeu, int index) {
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => jeu.builder()),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              jeu.color.withOpacity(0.2),
+              jeu.color.withOpacity(0.05),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: jeu.color.withOpacity(0.3),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: jeu.color.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
-          );
-        },
+          ],
+        ),
+        child: Stack(
+          children: [
+            // Motif de fond
+            Positioned(
+              right: -20,
+              top: -20,
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: jeu.color.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            
+            // Contenu principal
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  // Icône du jeu
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: jeu.color.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: jeu.color.withOpacity(0.5)),
+                    ),
+                    child: Icon(
+                      jeu.icon,
+                      color: jeu.color,
+                      size: 30,
+                    ),
+                  ),
+                  
+                  const SizedBox(width: 16),
+                  
+                  // Informations du jeu
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Badge de valeur
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: jeu.color.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            jeu.valeur,
+                            style: TextStyle(
+                              color: jeu.color,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 8),
+                        
+                        // Titre
+                        Text(
+                          jeu.label,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 4),
+                        
+                        // Description
+                        Text(
+                          jeu.description,
+                          style: const TextStyle(
+                            color: Colors.white60,
+                            fontSize: 14,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  // Flèche
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: jeu.color.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      color: jeu.color,
+                      size: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -74,7 +324,11 @@ class MenuPrincipal extends StatelessWidget {
 
 class _MiniJeuItem {
   final String label;
+  final String description;
+  final IconData icon;
+  final Color color;
+  final String valeur;
   final Widget Function() builder;
 
-  _MiniJeuItem(this.label, this.builder);
+  _MiniJeuItem(this.label, this.description, this.icon, this.color, this.valeur, this.builder);
 }

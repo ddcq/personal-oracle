@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/app_data.dart';
-import 'welcome_screen.dart';
+import 'main_screen.dart';
 import '../widgets/deity_card.dart'; // 👈 Import it
 
 class ResultScreen extends StatelessWidget {
@@ -110,7 +110,7 @@ class ResultScreen extends StatelessWidget {
                         onPressed: () => Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const WelcomeScreen(),
+                            builder: (context) => const MainScreen(),
                           ),
                           (route) => false,
                         ),
