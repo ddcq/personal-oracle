@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:personal_oracle/screens/games/asgard_wall/defeat_screen.dart';
-import 'package:personal_oracle/screens/games/asgard_wall/victory_screen.dart';
-import 'package:personal_oracle/screens/games/asgard_wall/welcome_screen.dart';
+import 'asgard_wall/defeat_screen.dart';
+import 'asgard_wall/victory_screen.dart';
+import 'asgard_wall/welcome_screen.dart';
+import 'qix/screen.dart';
+import 'snake/screen.dart';
+import 'puzzle/screen.dart';
 import 'asgard_wall/asgard_wall_game.dart';
 import 'order_the_scrolls/screen.dart';
 
@@ -60,10 +63,34 @@ class MenuPrincipal extends StatelessWidget {
     _MiniJeuItem(
       "La Muraille d'Asgard", 
       "Défends le royaume des dieux nordiques",
-      Icons.security,
+      Icons.fort,
       const Color(0xFFEF4444),
       "Force",
       () => AsgardWallApp()
+    ),
+    _MiniJeuItem(
+      "Les Runes Dispersées", 
+      "Reconstitue les symboles sacrés vikings",
+      Icons.extension,
+      const Color(0xFF06B6D4),
+      "Patience",
+      () => PuzzleGame() // À créer
+    ),
+    _MiniJeuItem(
+      "Le Serpent de Midgard", 
+      "Guide Jörmungandr dans sa quête éternelle",
+      Icons.trending_up,
+      const Color(0xFF22C55E),
+      "Ruse",
+      () => SnakeGame() // À créer
+    ),
+    _MiniJeuItem(
+      "Conquête de Territoire", 
+      "Étends ton domaine en traçant des frontières",
+      Icons.crop_square,
+      const Color(0xFFFF6B35),
+      "Stratégie",
+      () => QixGame() // À créer
     ),
     _MiniJeuItem(
       "Défaite Honorable", 
