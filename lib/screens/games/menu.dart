@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:personal_oracle/screens/games/asgard_wall/asgard_wall_game.dart';
-import 'balance_of_justice.dart';
-import 'break_the_rock.dart';
-import 'face_the_fear.dart';
-import 'find_the_path.dart';
-import 'let_him_win.dart';
-import 'match_the_emotion.dart';
+import 'package:personal_oracle/screens/games/asgard_wall/defeat_screen.dart';
+import 'package:personal_oracle/screens/games/asgard_wall/victory_screen.dart';
+import 'package:personal_oracle/screens/games/asgard_wall/welcome_screen.dart';
+
+import 'asgard_wall/asgard_wall_game.dart';
 import 'order_the_scrolls/screen.dart';
-import 'which_door.dart';
 
 class MiniJeuxApp extends StatelessWidget {
   const MiniJeuxApp({super.key});
@@ -41,14 +38,11 @@ class MenuPrincipal extends StatelessWidget {
   }
 
   final List<_MiniJeuItem> jeux = [
-    _MiniJeuItem("🧠 Wisdom - Riddle Game", () => OrderTheScrollsGame()),
-    _MiniJeuItem("🦊 Asgard Wall Game", () => AsgardWallApp()),
-    _MiniJeuItem("⚔️ Honor - Reflection Game", () => LetHimWinGame()),
-    _MiniJeuItem("🦁 Courage - Hold Button", () => FaceTheFearGame()),
-    _MiniJeuItem("💪 Strength - Tapper", () => BreakTheRockGame()),
-    _MiniJeuItem("❤️ Passion - Emotion Match", () => MatchEmotionGame()),
-    _MiniJeuItem("🌿 Nature - Find the Path", () => FindThePathGame()),
-    _MiniJeuItem("⚖️ Justice - Balance", () => BalanceOfJusticeGame()),
+    _MiniJeuItem("Réordonne l'histoire", () => OrderTheScrollsGame()),
+    _MiniJeuItem("La muraille d'Asgard", () => AsgardWallApp()),
+    _MiniJeuItem("Wall defeat", () => DefeatScreen()),
+    _MiniJeuItem("Wall Victory", () => VictoryScreen()),
+    _MiniJeuItem("Wall welcome", () => WelcomeScreen()),
   ];
 
   @override

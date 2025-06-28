@@ -573,11 +573,7 @@ class _GameScreenState extends State<GameScreen> {
                   )
                 : Container(
                     // Rendre les cases vides transparentes pour laisser l'image de fond apparaître
-                    color: Colors.transparent.withAlpha(
-                      0,
-                    ), // Transparent pour les cases vides
-                    // Optionnel: si vous voulez un motif de grille sur l'image de fond
-                    // child: CustomPaint(painter: WallBackgroundPainter()),
+                    color: Colors.transparent, // Transparent pour les cases vides
                   ),
           );
         },
