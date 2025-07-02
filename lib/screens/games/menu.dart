@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'asgard_wall/defeat_screen.dart';
+import 'qix3/main.dart';
 import 'asgard_wall/victory_screen.dart';
 import 'asgard_wall/welcome_screen.dart';
-import 'qix/screen.dart';
+import 'qix2/screen.dart';
 import 'snake/screen.dart';
 import 'puzzle/screen.dart';
 import 'asgard_wall/asgard_wall_game.dart';
@@ -90,7 +90,7 @@ class MenuPrincipal extends StatelessWidget {
       Icons.crop_square,
       const Color(0xFFFF6B35),
       "Stratégie",
-      () => QixGame() // À créer
+      () => Qix3() // À créer
     ),
     _MiniJeuItem(
       "Défaite Honorable", 
@@ -98,7 +98,7 @@ class MenuPrincipal extends StatelessWidget {
       Icons.shield_outlined,
       const Color(0xFF8B5CF6),
       "Honneur",
-      () => DefeatScreen()
+      () => MyApp()
     ),
     _MiniJeuItem(
       "Victoire Éclatante", 
