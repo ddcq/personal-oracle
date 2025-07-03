@@ -13,12 +13,14 @@ class SnakeGame extends StatefulWidget {
   State<SnakeGame> createState() => _SnakeGameState();
 }
 
-class _SnakeGameState extends State<SnakeGame> {
+class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
   static const int gridSize = 20;
   static const int gameSpeed = 300; // milliseconds
 
   List<Offset> snake = [const Offset(10, 10)];
+  List<Offset> previousSnake = [const Offset(10, 10)];
   Offset food = const Offset(15, 15);
+  Offset previousFood = const Offset(15, 15);
   Direction direction = Direction.right;
   Direction nextDirection = Direction.right;
   bool isGameRunning = false;
@@ -26,9 +28,36 @@ class _SnakeGameState extends State<SnakeGame> {
   int score = 0;
   Timer? gameTimer;
 
+  late AnimationController _growthAnimationController;
+  late Animation<double> _growthAnimation;
+  late AnimationController _movementAnimationController;
+  late Animation<double> _movementAnimation;
+
   @override
   void initState() {
     super.initState();
+    _growthAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+    );
+    _growthAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _growthAnimationController,
+        curve: Curves.easeOutBack,
+      ),
+    );
+
+    _movementAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: gameSpeed),
+    );
+    _movementAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _movementAnimationController,
+        curve: Curves.linear,
+      ),
+    );
+
     _generateNewFood();
   }
 
@@ -64,6 +93,8 @@ class _SnakeGameState extends State<SnakeGame> {
 
   @override
   void dispose() {
+    _growthAnimationController.dispose();
+    _movementAnimationController.dispose();
     gameTimer?.cancel();
     super.dispose();
   }
@@ -71,6 +102,7 @@ class _SnakeGameState extends State<SnakeGame> {
   void _startGame() {
     setState(() {
       snake = [const Offset(10, 10)];
+      previousSnake = [const Offset(10, 10)];
       direction = Direction.right;
       nextDirection = Direction.right;
       score = 0;
@@ -84,6 +116,8 @@ class _SnakeGameState extends State<SnakeGame> {
       timer,
     ) {
       if (mounted) {
+        _movementAnimationController.reset();
+        _movementAnimationController.forward();
         _updateGame();
       }
     });
@@ -121,6 +155,9 @@ class _SnakeGameState extends State<SnakeGame> {
 
   void _updateGame() {
     if (!isGameRunning || isGameOver || !mounted) return;
+
+    previousSnake = List.from(snake); // Store current snake for interpolation
+    previousFood = food; // Store current food for interpolation
 
     // Calculer nouvelle position de la tête
     direction = nextDirection;
@@ -173,6 +210,7 @@ class _SnakeGameState extends State<SnakeGame> {
       snake = newSnake;
       if (foodEaten) {
         score += 10;
+        _growthAnimationController.forward(from: 0.0); // Déclencher l'animation de croissance
       }
     });
   }
@@ -264,7 +302,7 @@ class _SnakeGameState extends State<SnakeGame> {
                     RepaintBoundary(
                       child: CustomPaint(
                         key: ValueKey('${snake.length}-${food.dx}-${food.dy}'),
-                        painter: GamePainter(snake: snake, food: food),
+                        painter: GamePainter(snake: snake, food: food, growthAnimation: _growthAnimation, movementAnimation: _movementAnimation, previousSnake: previousSnake, previousFood: previousFood),
                         size: Size.infinite,
                       ),
                     ),
@@ -555,9 +593,20 @@ class _SnakeGameState extends State<SnakeGame> {
 // ==========================================
 class GamePainter extends CustomPainter {
   final List<Offset> snake;
+  final List<Offset> previousSnake;
   final Offset food;
+  final Offset previousFood;
+  final Animation<double> growthAnimation;
+  final Animation<double> movementAnimation;
 
-  GamePainter({required this.snake, required this.food});
+  GamePainter({
+    required this.snake,
+    required this.previousSnake,
+    required this.food,
+    required this.previousFood,
+    required this.growthAnimation,
+    required this.movementAnimation,
+  }) : super(repaint: Listenable.merge([growthAnimation, movementAnimation]));
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -591,9 +640,14 @@ class GamePainter extends CustomPainter {
 
     for (int i = 0; i < snake.length; i++) {
       final segment = snake[i];
+      final previousSegment = previousSnake.length > i ? previousSnake[i] : snake[i];
+
+      final interpolatedDx = previousSegment.dx + (segment.dx - previousSegment.dx) * movementAnimation.value;
+      final interpolatedDy = previousSegment.dy + (segment.dy - previousSegment.dy) * movementAnimation.value;
+
       final rect = Rect.fromLTWH(
-        segment.dx * cellWidth + 1,
-        segment.dy * cellHeight + 1,
+        interpolatedDx * cellWidth + 1,
+        interpolatedDy * cellHeight + 1,
         cellWidth - 2,
         cellHeight - 2,
       );
@@ -619,8 +673,16 @@ class GamePainter extends CustomPainter {
           eyePaint,
         );
       } else {
+        // Appliquer l'animation de croissance aux segments du serpent
+        final scale = (i == snake.length - 1) ? growthAnimation.value : 1.0;
+        final scaledRect = Rect.fromLTWH(
+          rect.left + (rect.width * (1 - scale)) / 2,
+          rect.top + (rect.height * (1 - scale)) / 2,
+          rect.width * scale,
+          rect.height * scale,
+        );
         canvas.drawRRect(
-          RRect.fromRectAndRadius(rect, const Radius.circular(4)),
+          RRect.fromRectAndRadius(scaledRect, const Radius.circular(4)),
           snakePaint,
         );
       }
@@ -657,7 +719,8 @@ class GamePainter extends CustomPainter {
   bool shouldRepaint(GamePainter oldDelegate) {
     return oldDelegate.snake.length != snake.length ||
         oldDelegate.snake.first != snake.first ||
-        oldDelegate.food != food;
+        oldDelegate.food != food ||
+        oldDelegate.growthAnimation.value != growthAnimation.value;
   }
 }
 
