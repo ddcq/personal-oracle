@@ -21,6 +21,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
   List<Offset> snake = [const Offset(10, 10)];
   List<Offset> previousSnake = [const Offset(10, 10)];
   Offset food = const Offset(15, 15);
+  FoodType foodType = FoodType.regular; // NEW: To track food type
   Offset previousFood = const Offset(15, 15);
   Direction direction = Direction.right;
   Direction nextDirection = Direction.right;
@@ -28,7 +29,9 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
   bool isGameOver = false;
   int score = 0;
   Timer? gameTimer;
-  ui.Image? _foodImage; // Declare _foodImage
+  Timer? _goldenAppleTimer; // NEW: Timer for temporary golden apples
+  ui.Image? _foodImage;
+  ui.Image? _goldenFoodImage; // NEW: Image for golden apple
   late AnimationController _growthAnimationController;
   late Animation<double> _growthAnimation;
   late AnimationController _movementAnimationController;
@@ -62,6 +65,12 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
     _loadImage('assets/images/apple_regular.png').then((image) {
       setState(() {
         _foodImage = image;
+      });
+    });
+    // NEW: Load golden apple image
+    _loadImage('assets/images/apple_golden.png').then((image) {
+      setState(() {
+        _goldenFoodImage = image;
       });
     });
   }
@@ -106,6 +115,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
     _growthAnimationController.dispose();
     _movementAnimationController.dispose();
     gameTimer?.cancel();
+    _goldenAppleTimer?.cancel(); // NEW: Dispose timer
     super.dispose();
   }
 
@@ -153,6 +163,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
 
   void _resetGame() {
     gameTimer?.cancel();
+    _goldenAppleTimer?.cancel(); // NEW: Cancel timer on reset
     setState(() {
       snake = [const Offset(10, 10)];
       direction = Direction.right;
@@ -160,6 +171,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
       score = 0;
       isGameRunning = false;
       isGameOver = false;
+      foodType = FoodType.regular; // NEW: Reset food type
     });
     _generateNewFood();
   }
@@ -208,8 +220,11 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
 
     // Vérifier si on mange la nourriture
     bool foodEaten = false;
+    FoodType eatenFoodType = foodType; // NEW: Capture food type before it changes
+
     if (newHead == food) {
       foodEaten = true;
+      _goldenAppleTimer?.cancel(); // NEW: Cancel timer if apple is eaten
       _generateNewFood();
     } else {
       // Retirer la queue seulement si on n'a pas mangé
@@ -220,7 +235,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
     setState(() {
       snake = newSnake;
       if (foodEaten) {
-        score += 10;
+        score += (eatenFoodType == FoodType.golden) ? 50 : 10; // NEW: Score based on food type
         _growthAnimationController.forward(from: 0.0); // Déclencher l'animation de croissance
         // Update game speed dynamically
         gameTimer?.cancel();
@@ -239,6 +254,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
   void _generateNewFood() {
     Random random = Random();
     Offset newFood;
+    _goldenAppleTimer?.cancel();
 
     do {
       newFood = Offset(
@@ -246,6 +262,22 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
         random.nextInt(gridSize).toDouble(),
       );
     } while (snake.contains(newFood));
+
+    // NEW: Logic to spawn golden apples
+    // 15% chance of a golden apple
+    if (random.nextDouble() < 0.15) {
+      foodType = FoodType.golden;
+      // Golden apple reverts to regular after 5 seconds if not eaten
+      _goldenAppleTimer = Timer(const Duration(seconds: 5), () {
+        if (mounted && food == newFood && foodType == FoodType.golden) {
+          setState(() {
+            foodType = FoodType.regular;
+          });
+        }
+      });
+    } else {
+      foodType = FoodType.regular;
+    }
 
     food = newFood; // Pas besoin de setState ici car appelé depuis _updateGame
   }
@@ -329,8 +361,17 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
                     // Grille de jeu avec clé pour forcer le rebuild
                     RepaintBoundary(
                       child: CustomPaint(
-                        key: ValueKey('${snake.length}-${food.dx}-${food.dy}'),
-                        painter: GamePainter(snake: snake, food: food, growthAnimation: _growthAnimation, movementAnimation: _movementAnimation, previousSnake: previousSnake, previousFood: previousFood, foodImage: _foodImage),
+                        key: ValueKey('${snake.length}-${food.dx}-${food.dy}-${foodType.index}'), // NEW: Key includes foodType
+                        painter: GamePainter(
+                          snake: snake,
+                          food: food,
+                          foodType: foodType, // NEW: Pass foodType
+                          growthAnimation: _growthAnimation,
+                          movementAnimation: _movementAnimation,
+                          previousSnake: previousSnake,
+                          previousFood: previousFood,
+                          foodImage: foodType == FoodType.golden ? _goldenFoodImage : _foodImage, // NEW: Pass correct image
+                        ),
                         size: Size.infinite,
                       ),
                     ),
@@ -623,6 +664,7 @@ class GamePainter extends CustomPainter {
   final List<Offset> snake;
   final List<Offset> previousSnake;
   final Offset food;
+  final FoodType foodType; // NEW: Receive foodType
   final Offset previousFood;
   final Animation<double> growthAnimation;
   final Animation<double> movementAnimation;
@@ -632,6 +674,7 @@ class GamePainter extends CustomPainter {
     required this.snake,
     required this.previousSnake,
     required this.food,
+    required this.foodType, // NEW: Receive foodType
     required this.previousFood,
     required this.growthAnimation,
     required this.movementAnimation,
@@ -740,8 +783,8 @@ class GamePainter extends CustomPainter {
 
     // Effet de lueur sur la nourriture
     final glowPaint = Paint()
-      ..color = Colors.orange.withOpacity(0.3)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
+      ..color = (foodType == FoodType.golden ? Colors.yellow : Colors.orange).withOpacity(0.4) // NEW: Dynamic glow
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, foodType == FoodType.golden ? 8.0 : 4.0); // NEW: Dynamic glow
 
     canvas.drawOval(
       Rect.fromLTWH(
@@ -759,6 +802,7 @@ class GamePainter extends CustomPainter {
     return oldDelegate.snake.length != snake.length ||
         oldDelegate.snake.first != snake.first ||
         oldDelegate.food != food ||
+        oldDelegate.foodType != foodType || // NEW: Check foodType
         oldDelegate.growthAnimation.value != growthAnimation.value ||
         oldDelegate.movementAnimation.value != movementAnimation.value ||
         oldDelegate.foodImage != foodImage;
@@ -766,6 +810,7 @@ class GamePainter extends CustomPainter {
 }
 
 // ==========================================
-// ENUM POUR LES DIRECTIONS
+// ENUMS
 // ==========================================
+enum FoodType { regular, golden }
 enum Direction { up, down, left, right }

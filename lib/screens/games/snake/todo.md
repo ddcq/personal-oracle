@@ -5,7 +5,7 @@ Voici plein d'idées pour enrichir le jeu et le rendre encore plus captivant :
 **Niveaux de difficulté progressifs :**
 - Vitesse qui augmente avec le score
 - Obstacles qui apparaissent (rochers de Midgard)
-- Différents types de nourriture (pommes d'or = +50 points, mais temporaires)
+- [x] Différents types de nourriture (pommes d'or = +50 points, mais temporaires)
 
 **Power-ups mythologiques :**
 - ⚡ **Mjöllnir** : Détruit les obstacles temporairement
