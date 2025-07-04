@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui' as ui;
 
 // ==========================================
 // SNAKE GAME - Le Serpent de Midgard
@@ -27,7 +28,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
   bool isGameOver = false;
   int score = 0;
   Timer? gameTimer;
-
+  ui.Image? _foodImage; // Declare _foodImage
   late AnimationController _growthAnimationController;
   late Animation<double> _growthAnimation;
   late AnimationController _movementAnimationController;
@@ -57,8 +58,17 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
         curve: Curves.linear,
       ),
     );
-
     _generateNewFood();
+    _loadImage('assets/images/apple_regular.png').then((image) {
+      setState(() {
+        _foodImage = image;
+      });
+    });
+  }
+
+  Future<ui.Image> _loadImage(String path) async {
+    final ByteData data = await rootBundle.load(path);
+    return decodeImageFromList(data.buffer.asUint8List());
   }
 
   // Gérer les événements clavier
@@ -112,10 +122,11 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
     _generateNewFood();
 
     gameTimer?.cancel();
-    gameTimer = Timer.periodic(const Duration(milliseconds: gameSpeed), (
+    gameTimer = Timer.periodic(Duration(milliseconds: _calculateGameSpeed(score)), (
       timer,
     ) {
       if (mounted) {
+        _movementAnimationController.duration = Duration(milliseconds: _calculateGameSpeed(score));
         _movementAnimationController.reset();
         _movementAnimationController.forward();
         _updateGame();
@@ -211,6 +222,16 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
       if (foodEaten) {
         score += 10;
         _growthAnimationController.forward(from: 0.0); // Déclencher l'animation de croissance
+        // Update game speed dynamically
+        gameTimer?.cancel();
+        gameTimer = Timer.periodic(Duration(milliseconds: _calculateGameSpeed(score)), (timer) {
+          if (mounted) {
+            _movementAnimationController.duration = Duration(milliseconds: _calculateGameSpeed(score));
+            _movementAnimationController.reset();
+            _movementAnimationController.forward();
+            _updateGame();
+          }
+        });
       }
     });
   }
@@ -227,6 +248,13 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
     } while (snake.contains(newFood));
 
     food = newFood; // Pas besoin de setState ici car appelé depuis _updateGame
+  }
+
+  int _calculateGameSpeed(int currentScore) {
+    // Initial speed is 300ms. Decrease speed by 20ms for every 20 points.
+    // Ensure speed doesn't go below a certain minimum (e.g., 50ms).
+    int newSpeed = max(50, gameSpeed - (currentScore ~/ 20) * 20);
+    return newSpeed;
   }
 
   void _gameOver() {
@@ -302,7 +330,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
                     RepaintBoundary(
                       child: CustomPaint(
                         key: ValueKey('${snake.length}-${food.dx}-${food.dy}'),
-                        painter: GamePainter(snake: snake, food: food, growthAnimation: _growthAnimation, movementAnimation: _movementAnimation, previousSnake: previousSnake, previousFood: previousFood),
+                        painter: GamePainter(snake: snake, food: food, growthAnimation: _growthAnimation, movementAnimation: _movementAnimation, previousSnake: previousSnake, previousFood: previousFood, foodImage: _foodImage),
                         size: Size.infinite,
                       ),
                     ),
@@ -598,6 +626,7 @@ class GamePainter extends CustomPainter {
   final Offset previousFood;
   final Animation<double> growthAnimation;
   final Animation<double> movementAnimation;
+  final ui.Image? foodImage;
 
   GamePainter({
     required this.snake,
@@ -606,6 +635,7 @@ class GamePainter extends CustomPainter {
     required this.previousFood,
     required this.growthAnimation,
     required this.movementAnimation,
+    this.foodImage,
   }) : super(repaint: Listenable.merge([growthAnimation, movementAnimation]));
 
   @override
@@ -689,7 +719,6 @@ class GamePainter extends CustomPainter {
     }
 
     // Dessiner la nourriture (offrande)
-    final foodPaint = Paint()..color = Colors.orange;
     final foodRect = Rect.fromLTWH(
       food.dx * cellWidth + 2,
       food.dy * cellHeight + 2,
@@ -697,7 +726,17 @@ class GamePainter extends CustomPainter {
       cellHeight - 4,
     );
 
-    canvas.drawOval(foodRect, foodPaint);
+    if (foodImage != null) {
+      paintImage(
+        canvas: canvas,
+        rect: foodRect,
+        image: foodImage!,
+        fit: BoxFit.contain,
+      );
+    } else {
+      final foodPaint = Paint()..color = Colors.orange;
+      canvas.drawOval(foodRect, foodPaint);
+    }
 
     // Effet de lueur sur la nourriture
     final glowPaint = Paint()
@@ -720,7 +759,9 @@ class GamePainter extends CustomPainter {
     return oldDelegate.snake.length != snake.length ||
         oldDelegate.snake.first != snake.first ||
         oldDelegate.food != food ||
-        oldDelegate.growthAnimation.value != growthAnimation.value;
+        oldDelegate.growthAnimation.value != growthAnimation.value ||
+        oldDelegate.movementAnimation.value != movementAnimation.value ||
+        oldDelegate.foodImage != foodImage;
   }
 }
 
