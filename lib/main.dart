@@ -2,8 +2,19 @@ import 'package:flutter/material.dart';
 import 'screens/main_screen.dart'; // 👈 Nouveau fichier avec MainScreen
 import 'utils/constants.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'package:personal_oracle/services/database_service.dart';
+import 'package:personal_oracle/services/gamification_service.dart';
+import 'package:provider/provider.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseService().database;
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => GamificationService(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

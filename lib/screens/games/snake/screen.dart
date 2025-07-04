@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
+import 'package:personal_oracle/services/gamification_service.dart';
+import 'package:provider/provider.dart';
 
 // ==========================================
 // SNAKE GAME - Le Serpent de Midgard
@@ -32,6 +34,8 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
   Timer? _goldenAppleTimer; // NEW: Timer for temporary golden apples
   ui.Image? _foodImage;
   ui.Image? _goldenFoodImage; // NEW: Image for golden apple
+  ui.Image? _obstacleImage; // NEW: Image for obstacles
+  List<Offset> obstacles = []; // NEW: List to hold obstacles
   late AnimationController _growthAnimationController;
   late Animation<double> _growthAnimation;
   late AnimationController _movementAnimationController;
@@ -71,6 +75,12 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
     _loadImage('assets/images/apple_golden.png').then((image) {
       setState(() {
         _goldenFoodImage = image;
+      });
+    });
+    // NEW: Load obstacle image
+    _loadImage('assets/images/stone.png').then((image) {
+      setState(() {
+        _obstacleImage = image;
       });
     });
   }
@@ -128,8 +138,10 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
       score = 0;
       isGameRunning = true;
       isGameOver = false;
+      obstacles = [];
     });
     _generateNewFood();
+    _generateObstacles();
 
     gameTimer?.cancel();
     gameTimer = Timer.periodic(Duration(milliseconds: _calculateGameSpeed(score)), (
@@ -172,6 +184,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
       isGameRunning = false;
       isGameOver = false;
       foodType = FoodType.regular; // NEW: Reset food type
+      obstacles = [];
     });
     _generateNewFood();
   }
@@ -208,8 +221,8 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
     if (newHead.dy < 0) newHead = Offset(newHead.dx, gridSize - 1);
     if (newHead.dy >= gridSize) newHead = Offset(newHead.dx, 0);
 
-    // Vérifier collision avec soi-même
-    if (snake.contains(newHead)) {
+    // Vérifier collision avec soi-même ou les obstacles
+    if (snake.contains(newHead) || obstacles.contains(newHead)) {
       _gameOver();
       return;
     }
@@ -261,7 +274,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
         random.nextInt(gridSize).toDouble(),
         random.nextInt(gridSize).toDouble(),
       );
-    } while (snake.contains(newFood));
+    } while (snake.contains(newFood) || obstacles.contains(newFood));
 
     // NEW: Logic to spawn golden apples
     // 15% chance of a golden apple
@@ -282,6 +295,25 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
     food = newFood; // Pas besoin de setState ici car appelé depuis _updateGame
   }
 
+  void _generateObstacles() {
+    Random random = Random();
+    List<Offset> newObstacles = [];
+    // Add 5 obstacles for now
+    for (int i = 0; i < 5; i++) {
+      Offset newObstacle;
+      do {
+        newObstacle = Offset(
+          random.nextInt(gridSize).toDouble(),
+          random.nextInt(gridSize).toDouble(),
+        );
+      } while (snake.contains(newObstacle) || food == newObstacle || newObstacles.contains(newObstacle));
+      newObstacles.add(newObstacle);
+    }
+    setState(() {
+      obstacles = newObstacles;
+    });
+  }
+
   int _calculateGameSpeed(int currentScore) {
     // Initial speed is 300ms. Decrease speed by 20ms for every 20 points.
     // Ensure speed doesn't go below a certain minimum (e.g., 50ms).
@@ -289,12 +321,26 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
     return newSpeed;
   }
 
-  void _gameOver() {
+  void _gameOver() async {
     gameTimer?.cancel();
     setState(() {
       isGameRunning = false;
       isGameOver = true;
     });
+
+    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    await gamificationService.saveGameScore('Snake', score);
+
+    // Optionally, unlock a trophy or card based on score
+    if (score > 50) {
+      await gamificationService.unlockTrophy('snake_master');
+    }
+    if (score > 80) {
+      await gamificationService.unlockCollectibleCard('fenrir_card');
+    }
+    if (score > 90) {
+      await gamificationService.unlockStory('fenrir_story');
+    }
   }
 
   void _changeDirection(Direction newDirection) {
@@ -361,16 +407,18 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
                     // Grille de jeu avec clé pour forcer le rebuild
                     RepaintBoundary(
                       child: CustomPaint(
-                        key: ValueKey('${snake.length}-${food.dx}-${food.dy}-${foodType.index}'), // NEW: Key includes foodType
+                        key: ValueKey('${snake.length}-${food.dx}-${food.dy}-${foodType.index}-${obstacles.length}'),
                         painter: GamePainter(
                           snake: snake,
                           food: food,
-                          foodType: foodType, // NEW: Pass foodType
+                          foodType: foodType,
                           growthAnimation: _growthAnimation,
                           movementAnimation: _movementAnimation,
                           previousSnake: previousSnake,
                           previousFood: previousFood,
-                          foodImage: foodType == FoodType.golden ? _goldenFoodImage : _foodImage, // NEW: Pass correct image
+                          foodImage: foodType == FoodType.golden ? _goldenFoodImage : _foodImage,
+                          obstacles: obstacles,
+                          obstacleImage: _obstacleImage,
                         ),
                         size: Size.infinite,
                       ),
@@ -664,21 +712,25 @@ class GamePainter extends CustomPainter {
   final List<Offset> snake;
   final List<Offset> previousSnake;
   final Offset food;
-  final FoodType foodType; // NEW: Receive foodType
+  final FoodType foodType;
   final Offset previousFood;
   final Animation<double> growthAnimation;
   final Animation<double> movementAnimation;
   final ui.Image? foodImage;
+  final List<Offset> obstacles;
+  final ui.Image? obstacleImage;
 
   GamePainter({
     required this.snake,
     required this.previousSnake,
     required this.food,
-    required this.foodType, // NEW: Receive foodType
+    required this.foodType,
     required this.previousFood,
     required this.growthAnimation,
     required this.movementAnimation,
     this.foodImage,
+    required this.obstacles,
+    this.obstacleImage,
   }) : super(repaint: Listenable.merge([growthAnimation, movementAnimation]));
 
   @override
@@ -705,6 +757,35 @@ class GamePainter extends CustomPainter {
         Offset(size.width, i * cellHeight),
         gridPaint,
       );
+    }
+
+    // Dessiner les obstacles
+    if (obstacleImage != null) {
+      for (final obstacle in obstacles) {
+        final rect = Rect.fromLTWH(
+          obstacle.dx * cellWidth,
+          obstacle.dy * cellHeight,
+          cellWidth,
+          cellHeight,
+        );
+        paintImage(
+          canvas: canvas,
+          rect: rect,
+          image: obstacleImage!,
+          fit: BoxFit.contain,
+        );
+      }
+    } else {
+      final obstaclePaint = Paint()..color = Colors.grey;
+      for (final obstacle in obstacles) {
+        final rect = Rect.fromLTWH(
+          obstacle.dx * cellWidth + 2,
+          obstacle.dy * cellHeight + 2,
+          cellWidth - 4,
+          cellHeight - 4,
+        );
+        canvas.drawRect(rect, obstaclePaint);
+      }
     }
 
     // Dessiner le serpent
@@ -802,10 +883,12 @@ class GamePainter extends CustomPainter {
     return oldDelegate.snake.length != snake.length ||
         oldDelegate.snake.first != snake.first ||
         oldDelegate.food != food ||
-        oldDelegate.foodType != foodType || // NEW: Check foodType
+        oldDelegate.foodType != foodType ||
+        oldDelegate.obstacles != obstacles ||
         oldDelegate.growthAnimation.value != growthAnimation.value ||
         oldDelegate.movementAnimation.value != movementAnimation.value ||
-        oldDelegate.foodImage != foodImage;
+        oldDelegate.foodImage != foodImage ||
+        oldDelegate.obstacleImage != obstacleImage;
   }
 }
 

@@ -3,8 +3,8 @@ Voici plein d'idées pour enrichir le jeu et le rendre encore plus captivant :
 ## 🎮 **Améliorations Gameplay**
 
 **Niveaux de difficulté progressifs :**
-- Vitesse qui augmente avec le score
-- Obstacles qui apparaissent (rochers de Midgard)
+- [x] Vitesse qui augmente avec le score
+- [x] Obstacles qui apparaissent (rochers de Midgard)
 - [x] Différents types de nourriture (pommes d'or = +50 points, mais temporaires)
 
 **Power-ups mythologiques :**
@@ -17,7 +17,7 @@ Voici plein d'idées pour enrichir le jeu et le rendre encore plus captivant :
 
 **Effets visuels avancés :**
 - Particules magiques quand on mange
-- Animation de croissance du serpent
+- [x] Animation de croissance du serpent
 - Fond étoilé animé (cosmos nordique)
 - Pulsation de la nourriture
 - Trail lumineux derrière la tête

@@ -82,7 +82,7 @@ class MenuPrincipal extends StatelessWidget {
       Icons.trending_up,
       const Color(0xFF22C55E),
       "Ruse",
-      () => SnakeGame() // À créer
+      () => const SnakeGame()
     ),
     _MiniJeuItem(
       "Conquête de Territoire", 
