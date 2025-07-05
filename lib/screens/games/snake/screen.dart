@@ -762,11 +762,17 @@ class GamePainter extends CustomPainter {
     // Dessiner les obstacles
     if (obstacleImage != null) {
       for (final obstacle in obstacles) {
+        final double obstacleScale = 1.2; // 20% larger for rocks
+        final double originalObstacleWidth = cellWidth;
+        final double originalObstacleHeight = cellHeight;
+        final double scaledObstacleWidth = originalObstacleWidth * obstacleScale;
+        final double scaledObstacleHeight = originalObstacleHeight * obstacleScale;
+
         final rect = Rect.fromLTWH(
-          obstacle.dx * cellWidth,
-          obstacle.dy * cellHeight,
-          cellWidth,
-          cellHeight,
+          obstacle.dx * cellWidth + (cellWidth - scaledObstacleWidth) / 2,
+          obstacle.dy * cellHeight + (cellHeight - scaledObstacleHeight) / 2,
+          scaledObstacleWidth,
+          scaledObstacleHeight,
         );
         paintImage(
           canvas: canvas,
@@ -778,11 +784,17 @@ class GamePainter extends CustomPainter {
     } else {
       final obstaclePaint = Paint()..color = Colors.grey;
       for (final obstacle in obstacles) {
+        final double obstacleScale = 1.2; // 20% larger for rocks
+        final double originalObstacleWidth = cellWidth - 4;
+        final double originalObstacleHeight = cellHeight - 4;
+        final double scaledObstacleWidth = originalObstacleWidth * obstacleScale;
+        final double scaledObstacleHeight = originalObstacleHeight * obstacleScale;
+
         final rect = Rect.fromLTWH(
-          obstacle.dx * cellWidth + 2,
-          obstacle.dy * cellHeight + 2,
-          cellWidth - 4,
-          cellHeight - 4,
+          obstacle.dx * cellWidth + (cellWidth - scaledObstacleWidth) / 2,
+          obstacle.dy * cellHeight + (cellHeight - scaledObstacleHeight) / 2,
+          scaledObstacleWidth,
+          scaledObstacleHeight,
         );
         canvas.drawRect(rect, obstaclePaint);
       }
@@ -843,11 +855,17 @@ class GamePainter extends CustomPainter {
     }
 
     // Dessiner la nourriture (offrande)
+    final double foodScale = 2.0; // Double size for apples
+    final double originalFoodWidth = cellWidth - 4;
+    final double originalFoodHeight = cellHeight - 4;
+    final double scaledFoodWidth = originalFoodWidth * foodScale;
+    final double scaledFoodHeight = originalFoodHeight * foodScale;
+
     final foodRect = Rect.fromLTWH(
-      food.dx * cellWidth + 2,
-      food.dy * cellHeight + 2,
-      cellWidth - 4,
-      cellHeight - 4,
+      food.dx * cellWidth + (cellWidth - scaledFoodWidth) / 2,
+      food.dy * cellHeight + (cellHeight - scaledFoodHeight) / 2,
+      scaledFoodWidth,
+      scaledFoodHeight,
     );
 
     if (foodImage != null) {
