@@ -43,17 +43,47 @@ class _SnakeGameState extends State<SnakeGame> {
       body: Column(
         children: [
           Expanded(
-            child: GameWidget(
-              game: _game,
-              overlayBuilderMap: {
-                'startOverlay': (BuildContext context, SnakeFlameGame game) {
-                  return StartOverlay(game: game);
-                },
-                'gameOverOverlay': (BuildContext context, SnakeFlameGame game) {
-                  return GameOverOverlay(game: game);
-                },
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final gameSize = constraints.biggest.shortestSide;
+                final wallThickness = gameSize / (GameState.gridSize + 2); // 1 cell for wall
+                final gameAreaSize = gameSize - (wallThickness * 2); // Inner game area
+
+                return Center(
+                  child: Container(
+                    width: gameSize,
+                    height: gameSize,
+                    child: Stack(
+                      children: [
+                        // Background wall image for the entire gameSize area
+                        Positioned.fill(
+                          child: Image.asset('assets/images/wall.webp', fit: BoxFit.fill),
+                        ),
+                        // Centered black square for the game area
+                        Center(
+                          child: Container(
+                            width: gameAreaSize,
+                            height: gameAreaSize,
+                            color: Colors.black, // Black square
+                            child: GameWidget(
+                              game: _game,
+                              overlayBuilderMap: {
+                                'startOverlay': (BuildContext context, SnakeFlameGame game) {
+                                  return StartOverlay(game: game);
+                                },
+                                'gameOverOverlay': (BuildContext context, SnakeFlameGame game) {
+                                  return GameOverOverlay(game: game);
+                                },
+                              },
+                              initialActiveOverlays: const ['startOverlay'],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
               },
-              initialActiveOverlays: const ['startOverlay'],
             ),
           ),
           // Contrôles directionnels pour mobile
