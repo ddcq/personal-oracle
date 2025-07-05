@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
+import 'package:personal_oracle/screens/games/snake/game_logic.dart';
 import 'package:personal_oracle/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 
@@ -17,25 +18,19 @@ class SnakeGame extends StatefulWidget {
 }
 
 class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
-  static const int gridSize = 20;
-  static const int gameSpeed = 300; // milliseconds
+  final GameLogic _gameLogic = GameLogic();
+  late GameState gameState;
 
-  List<Offset> snake = [const Offset(10, 10)];
-  List<Offset> previousSnake = [const Offset(10, 10)];
-  Offset food = const Offset(15, 15);
-  FoodType foodType = FoodType.regular; // NEW: To track food type
-  Offset previousFood = const Offset(15, 15);
-  Direction direction = Direction.right;
-  Direction nextDirection = Direction.right;
-  bool isGameRunning = false;
-  bool isGameOver = false;
-  int score = 0;
+  // Previous state for interpolation
+  List<Offset> previousSnake = [];
+  Offset previousFood = const Offset(0, 0);
+
+  static const int gameSpeed = 300; // milliseconds
   Timer? gameTimer;
-  Timer? _goldenAppleTimer; // NEW: Timer for temporary golden apples
+  Timer? _goldenAppleTimer;
   ui.Image? _foodImage;
-  ui.Image? _goldenFoodImage; // NEW: Image for golden apple
-  ui.Image? _obstacleImage; // NEW: Image for obstacles
-  List<Offset> obstacles = []; // NEW: List to hold obstacles
+  ui.Image? _goldenFoodImage;
+  ui.Image? _obstacleImage;
   late AnimationController _growthAnimationController;
   late Animation<double> _growthAnimation;
   late AnimationController _movementAnimationController;
@@ -44,6 +39,10 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    gameState = GameState.initial();
+    previousSnake = List.from(gameState.snake);
+    previousFood = gameState.food;
+
     _growthAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 150),
@@ -65,23 +64,19 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
         curve: Curves.linear,
       ),
     );
-    _generateNewFood();
+
+    _loadImages();
+  }
+
+  void _loadImages() {
     _loadImage('assets/images/apple_regular.png').then((image) {
-      setState(() {
-        _foodImage = image;
-      });
+      setState(() => _foodImage = image);
     });
-    // NEW: Load golden apple image
     _loadImage('assets/images/apple_golden.png').then((image) {
-      setState(() {
-        _goldenFoodImage = image;
-      });
+      setState(() => _goldenFoodImage = image);
     });
-    // NEW: Load obstacle image
     _loadImage('assets/images/stone.png').then((image) {
-      setState(() {
-        _obstacleImage = image;
-      });
+      setState(() => _obstacleImage = image);
     });
   }
 
@@ -90,24 +85,23 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
     return decodeImageFromList(data.buffer.asUint8List());
   }
 
-  // Gérer les événements clavier
   void _handleKeyEvent(KeyEvent event) {
     if (event is KeyDownEvent) {
       switch (event.logicalKey) {
         case LogicalKeyboardKey.arrowUp:
-          _changeDirection(Direction.up);
+          _gameLogic.changeDirection(gameState, Direction.up);
           break;
         case LogicalKeyboardKey.arrowDown:
-          _changeDirection(Direction.down);
+          _gameLogic.changeDirection(gameState, Direction.down);
           break;
         case LogicalKeyboardKey.arrowLeft:
-          _changeDirection(Direction.left);
+          _gameLogic.changeDirection(gameState, Direction.left);
           break;
         case LogicalKeyboardKey.arrowRight:
-          _changeDirection(Direction.right);
+          _gameLogic.changeDirection(gameState, Direction.right);
           break;
         case LogicalKeyboardKey.space:
-          if (isGameRunning || isGameOver) {
+          if (gameState.isGameRunning || gameState.isGameOver) {
             _pauseGame();
           } else {
             _startGame();
@@ -125,236 +119,128 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
     _growthAnimationController.dispose();
     _movementAnimationController.dispose();
     gameTimer?.cancel();
-    _goldenAppleTimer?.cancel(); // NEW: Dispose timer
+    _goldenAppleTimer?.cancel();
     super.dispose();
   }
 
   void _startGame() {
     setState(() {
-      snake = [const Offset(10, 10)];
-      previousSnake = [const Offset(10, 10)];
-      direction = Direction.right;
-      nextDirection = Direction.right;
-      score = 0;
-      isGameRunning = true;
-      isGameOver = false;
-      obstacles = [];
+      gameState = GameState.initial();
+      gameState.isGameRunning = true;
+      gameState.obstacles = _gameLogic.generateObstacles(gameState);
+      previousSnake = List.from(gameState.snake);
+      previousFood = gameState.food;
     });
-    _generateNewFood();
-    _generateObstacles();
 
     gameTimer?.cancel();
-    gameTimer = Timer.periodic(Duration(milliseconds: _calculateGameSpeed(score)), (
-      timer,
-    ) {
+    gameTimer = Timer.periodic(Duration(milliseconds: _calculateGameSpeed(gameState.score)), (timer) {
       if (mounted) {
-        _movementAnimationController.duration = Duration(milliseconds: _calculateGameSpeed(score));
-        _movementAnimationController.reset();
-        _movementAnimationController.forward();
-        _updateGame();
+        _tick();
       }
     });
   }
 
   void _pauseGame() {
-    if (isGameOver) return;
+    if (gameState.isGameOver) return;
 
     gameTimer?.cancel();
     setState(() {
-      isGameRunning = !isGameRunning;
+      gameState.isGameRunning = !gameState.isGameRunning;
     });
 
-    if (isGameRunning) {
-      gameTimer = Timer.periodic(const Duration(milliseconds: gameSpeed), (
-        timer,
-      ) {
-        _updateGame();
+    if (gameState.isGameRunning) {
+      gameTimer = Timer.periodic(const Duration(milliseconds: gameSpeed), (timer) {
+        if (mounted) {
+          _tick();
+        }
       });
     }
   }
 
   void _resetGame() {
     gameTimer?.cancel();
-    _goldenAppleTimer?.cancel(); // NEW: Cancel timer on reset
-    setState(() {
-      snake = [const Offset(10, 10)];
-      direction = Direction.right;
-      nextDirection = Direction.right;
-      score = 0;
-      isGameRunning = false;
-      isGameOver = false;
-      foodType = FoodType.regular; // NEW: Reset food type
-      obstacles = [];
-    });
-    _generateNewFood();
-  }
-
-  void _updateGame() {
-    if (!isGameRunning || isGameOver || !mounted) return;
-
-    previousSnake = List.from(snake); // Store current snake for interpolation
-    previousFood = food; // Store current food for interpolation
-
-    // Calculer nouvelle position de la tête
-    direction = nextDirection;
-    Offset head = snake.first;
-    Offset newHead;
-
-    switch (direction) {
-      case Direction.up:
-        newHead = Offset(head.dx, head.dy - 1);
-        break;
-      case Direction.down:
-        newHead = Offset(head.dx, head.dy + 1);
-        break;
-      case Direction.left:
-        newHead = Offset(head.dx - 1, head.dy);
-        break;
-      case Direction.right:
-        newHead = Offset(head.dx + 1, head.dy);
-        break;
-    }
-
-    // Gérer les bordures (téléportation)
-    if (newHead.dx < 0) newHead = Offset(gridSize - 1, newHead.dy);
-    if (newHead.dx >= gridSize) newHead = Offset(0, newHead.dy);
-    if (newHead.dy < 0) newHead = Offset(newHead.dx, gridSize - 1);
-    if (newHead.dy >= gridSize) newHead = Offset(newHead.dx, 0);
-
-    // Vérifier collision avec soi-même ou les obstacles
-    if (snake.contains(newHead) || obstacles.contains(newHead)) {
-      _gameOver();
-      return;
-    }
-
-    // Mettre à jour le serpent
-    List<Offset> newSnake = List.from(snake);
-    newSnake.insert(0, newHead);
-
-    // Vérifier si on mange la nourriture
-    bool foodEaten = false;
-    FoodType eatenFoodType = foodType; // NEW: Capture food type before it changes
-
-    if (newHead == food) {
-      foodEaten = true;
-      _goldenAppleTimer?.cancel(); // NEW: Cancel timer if apple is eaten
-      _generateNewFood();
-    } else {
-      // Retirer la queue seulement si on n'a pas mangé
-      newSnake.removeLast();
-    }
-
-    // Mettre à jour l'état - CRITIQUE pour le repaint
-    setState(() {
-      snake = newSnake;
-      if (foodEaten) {
-        score += (eatenFoodType == FoodType.golden) ? 50 : 10; // NEW: Score based on food type
-        _growthAnimationController.forward(from: 0.0); // Déclencher l'animation de croissance
-        // Update game speed dynamically
-        gameTimer?.cancel();
-        gameTimer = Timer.periodic(Duration(milliseconds: _calculateGameSpeed(score)), (timer) {
-          if (mounted) {
-            _movementAnimationController.duration = Duration(milliseconds: _calculateGameSpeed(score));
-            _movementAnimationController.reset();
-            _movementAnimationController.forward();
-            _updateGame();
-          }
-        });
-      }
-    });
-  }
-
-  void _generateNewFood() {
-    Random random = Random();
-    Offset newFood;
     _goldenAppleTimer?.cancel();
+    setState(() {
+      gameState = GameState.initial();
+      previousSnake = List.from(gameState.snake);
+      previousFood = gameState.food;
+    });
+  }
 
-    do {
-      newFood = Offset(
-        random.nextInt(gridSize).toDouble(),
-        random.nextInt(gridSize).toDouble(),
-      );
-    } while (snake.contains(newFood) || obstacles.contains(newFood));
+  void _tick() {
+    final wasGameOver = gameState.isGameOver;
+    final oldSnakeLength = gameState.snake.length;
+    final oldFoodType = gameState.foodType;
+    final oldScore = gameState.score;
 
-    // NEW: Logic to spawn golden apples
-    // 15% chance of a golden apple
-    if (random.nextDouble() < 0.15) {
-      foodType = FoodType.golden;
-      // Golden apple reverts to regular after 5 seconds if not eaten
+    previousSnake = List.from(gameState.snake);
+    previousFood = gameState.food;
+
+    final newState = _gameLogic.updateGame(gameState);
+
+    // Handle golden apple timer
+    if (oldFoodType != FoodType.golden && newState.foodType == FoodType.golden) {
+      _goldenAppleTimer?.cancel();
       _goldenAppleTimer = Timer(const Duration(seconds: 5), () {
-        if (mounted && food == newFood && foodType == FoodType.golden) {
+        if (mounted && gameState.foodType == FoodType.golden) {
           setState(() {
-            foodType = FoodType.regular;
+            gameState.foodType = FoodType.regular;
           });
         }
       });
-    } else {
-      foodType = FoodType.regular;
+    } else if (oldFoodType == FoodType.golden && newState.food != previousFood) {
+      // Food was eaten, cancel timer
+      _goldenAppleTimer?.cancel();
     }
 
-    food = newFood; // Pas besoin de setState ici car appelé depuis _updateGame
-  }
-
-  void _generateObstacles() {
-    Random random = Random();
-    List<Offset> newObstacles = [];
-    // Add 5 obstacles for now
-    for (int i = 0; i < 5; i++) {
-      Offset newObstacle;
-      do {
-        newObstacle = Offset(
-          random.nextInt(gridSize).toDouble(),
-          random.nextInt(gridSize).toDouble(),
-        );
-      } while (snake.contains(newObstacle) || food == newObstacle || newObstacles.contains(newObstacle));
-      newObstacles.add(newObstacle);
+    // Trigger growth animation
+    if (newState.snake.length > oldSnakeLength) {
+      _growthAnimationController.forward(from: 0.0);
     }
+
+    // Update movement animation speed
+    _movementAnimationController.duration = Duration(milliseconds: _calculateGameSpeed(newState.score));
+    _movementAnimationController.reset();
+    _movementAnimationController.forward();
+
     setState(() {
-      obstacles = newObstacles;
+      gameState = newState;
     });
+
+    // REGRESSION FIX: If score changed, update the game loop timer speed
+    if (newState.score > oldScore) {
+      gameTimer?.cancel();
+      gameTimer = Timer.periodic(Duration(milliseconds: _calculateGameSpeed(newState.score)), (timer) {
+        if (mounted) {
+          _tick();
+        }
+      });
+    }
+
+    // Check for game over
+    if (!wasGameOver && gameState.isGameOver) {
+      _handleGameOver();
+    }
   }
 
   int _calculateGameSpeed(int currentScore) {
-    // Initial speed is 300ms. Decrease speed by 20ms for every 20 points.
-    // Ensure speed doesn't go below a certain minimum (e.g., 50ms).
-    int newSpeed = max(50, gameSpeed - (currentScore ~/ 20) * 20);
-    return newSpeed;
+    return max(50, gameSpeed - (currentScore ~/ 20) * 20);
   }
 
-  void _gameOver() async {
+  void _handleGameOver() async {
     gameTimer?.cancel();
-    setState(() {
-      isGameRunning = false;
-      isGameOver = true;
-    });
-
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
-    await gamificationService.saveGameScore('Snake', score);
+    await gamificationService.saveGameScore('Snake', gameState.score);
 
-    // Optionally, unlock a trophy or card based on score
-    if (score > 50) {
+    if (gameState.score > 50) {
       await gamificationService.unlockTrophy('snake_master');
     }
-    if (score > 80) {
+    if (gameState.score > 80) {
       await gamificationService.unlockCollectibleCard('fenrir_card');
     }
-    if (score > 90) {
+    if (gameState.score > 90) {
       await gamificationService.unlockStory('fenrir_story');
     }
-  }
-
-  void _changeDirection(Direction newDirection) {
-    if (!isGameRunning || isGameOver) return;
-
-    // Empêcher le serpent de faire demi-tour
-    if ((direction == Direction.up && newDirection == Direction.down) ||
-        (direction == Direction.down && newDirection == Direction.up) ||
-        (direction == Direction.left && newDirection == Direction.right) ||
-        (direction == Direction.right && newDirection == Direction.left)) {
-      return;
-    }
-
-    nextDirection = newDirection;
   }
 
   @override
@@ -377,7 +263,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
               padding: const EdgeInsets.all(8),
               child: Center(
                 child: Text(
-                  'Score: $score',
+                  'Score: ${gameState.score}',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -390,7 +276,6 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
         ),
         body: Column(
           children: [
-            // Zone de jeu
             Expanded(
               child: Container(
                 margin: const EdgeInsets.all(16),
@@ -404,28 +289,25 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
                 ),
                 child: Stack(
                   children: [
-                    // Grille de jeu avec clé pour forcer le rebuild
                     RepaintBoundary(
                       child: CustomPaint(
-                        key: ValueKey('${snake.length}-${food.dx}-${food.dy}-${foodType.index}-${obstacles.length}'),
+                        key: ValueKey('${gameState.snake.length}-${gameState.food.dx}-${gameState.food.dy}-${gameState.foodType.index}-${gameState.obstacles.length}'),
                         painter: GamePainter(
-                          snake: snake,
-                          food: food,
-                          foodType: foodType,
+                          snake: gameState.snake,
+                          food: gameState.food,
+                          foodType: gameState.foodType,
                           growthAnimation: _growthAnimation,
                           movementAnimation: _movementAnimation,
                           previousSnake: previousSnake,
                           previousFood: previousFood,
-                          foodImage: foodType == FoodType.golden ? _goldenFoodImage : _foodImage,
-                          obstacles: obstacles,
+                          foodImage: gameState.foodType == FoodType.golden ? _goldenFoodImage : _foodImage,
+                          obstacles: gameState.obstacles,
                           obstacleImage: _obstacleImage,
                         ),
                         size: Size.infinite,
                       ),
                     ),
-
-                    // Overlay de game over
-                    if (isGameOver)
+                    if (gameState.isGameOver)
                       Container(
                         color: Colors.black54,
                         child: Center(
@@ -451,7 +333,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'Jörmungandr a péri...\nScore final: $score',
+                                  'Jörmungandr a péri...\nScore final: ${gameState.score}',
                                   style: const TextStyle(
                                     color: Colors.white70,
                                     fontSize: 16,
@@ -474,9 +356,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
                           ),
                         ),
                       ),
-
-                    // Overlay de démarrage
-                    if (!isGameRunning && !isGameOver)
+                    if (!gameState.isGameRunning && !gameState.isGameOver)
                       Container(
                         color: Colors.black54,
                         child: Center(
@@ -551,25 +431,22 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
                 ),
               ),
             ),
-
-            // Contrôles
             Container(
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  // Contrôles
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButton.icon(
-                        onPressed: (isGameRunning || isGameOver)
+                        onPressed: (gameState.isGameRunning || gameState.isGameOver)
                             ? _pauseGame
                             : null,
                         icon: Icon(
-                          isGameRunning ? Icons.pause : Icons.play_arrow,
+                          gameState.isGameRunning ? Icons.pause : Icons.play_arrow,
                         ),
                         label: Text(
-                          isGameRunning
+                          gameState.isGameRunning
                               ? 'Pause (Espace)'
                               : 'Reprendre (Espace)',
                         ),
@@ -589,10 +466,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 16),
-
-                  // Instructions clavier
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -609,15 +483,11 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
                       textAlign: TextAlign.center,
                     ),
                   ),
-
                   const SizedBox(height: 16),
-
-                  // Contrôles directionnels
                   Column(
                     children: [
-                      // Haut
                       GestureDetector(
-                        onTap: () => _changeDirection(Direction.up),
+                        onTap: () => _gameLogic.changeDirection(gameState, Direction.up),
                         child: Container(
                           width: 60,
                           height: 60,
@@ -632,15 +502,12 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 8),
-
-                      // Gauche et Droite
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           GestureDetector(
-                            onTap: () => _changeDirection(Direction.left),
+                            onTap: () => _gameLogic.changeDirection(gameState, Direction.left),
                             child: Container(
                               width: 60,
                               height: 60,
@@ -656,7 +523,7 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () => _changeDirection(Direction.right),
+                            onTap: () => _gameLogic.changeDirection(gameState, Direction.right),
                             child: Container(
                               width: 60,
                               height: 60,
@@ -673,12 +540,9 @@ class _SnakeGameState extends State<SnakeGame> with TickerProviderStateMixin {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 8),
-
-                      // Bas
                       GestureDetector(
-                        onTap: () => _changeDirection(Direction.down),
+                        onTap: () => _gameLogic.changeDirection(gameState, Direction.down),
                         child: Container(
                           width: 60,
                           height: 60,
@@ -735,8 +599,8 @@ class GamePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double cellWidth = size.width / _SnakeGameState.gridSize;
-    final double cellHeight = size.height / _SnakeGameState.gridSize;
+    final double cellWidth = size.width / GameState.gridSize;
+    final double cellHeight = size.height / GameState.gridSize;
 
     // Dessiner la grille (optionnel)
     final gridPaint = Paint()
@@ -744,7 +608,7 @@ class GamePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.5;
 
-    for (int i = 0; i <= _SnakeGameState.gridSize; i++) {
+    for (int i = 0; i <= GameState.gridSize; i++) {
       // Lignes verticales
       canvas.drawLine(
         Offset(i * cellWidth, 0),
@@ -909,9 +773,3 @@ class GamePainter extends CustomPainter {
         oldDelegate.obstacleImage != obstacleImage;
   }
 }
-
-// ==========================================
-// ENUMS
-// ==========================================
-enum FoodType { regular, golden }
-enum Direction { up, down, left, right }
