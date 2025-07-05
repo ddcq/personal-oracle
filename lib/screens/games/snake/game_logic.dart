@@ -74,11 +74,13 @@ class GameLogic {
         break;
     }
 
-    // Handle screen boundaries (teleportation)
-    if (newHead.dx < 0) newHead = Offset(GameState.gridSize - 1, newHead.dy);
-    if (newHead.dx >= GameState.gridSize) newHead = Offset(0, newHead.dy);
-    if (newHead.dy < 0) newHead = Offset(newHead.dx, GameState.gridSize - 1);
-    if (newHead.dy >= GameState.gridSize) newHead = Offset(newHead.dx, 0);
+    // Handle screen boundaries (game over)
+    if (newHead.dx < 0 || newHead.dx >= GameState.gridSize ||
+        newHead.dy < 0 || newHead.dy >= GameState.gridSize) {
+      state.isGameRunning = false;
+      state.isGameOver = true;
+      return state;
+    }
 
     // Check for collision with self or obstacles
     if (state.snake.contains(newHead) || state.obstacles.contains(newHead)) {

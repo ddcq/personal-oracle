@@ -1,5 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:personal_oracle/screens/games/snake/game_logic.dart';
 import 'package:personal_oracle/screens/games/snake/snake_flame_game.dart';
 import 'package:personal_oracle/services/gamification_service.dart';
 import 'package:provider/provider.dart';
@@ -39,17 +40,109 @@ class _SnakeGameState extends State<SnakeGame> {
         backgroundColor: const Color(0xFF22C55E),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: GameWidget(
-        game: _game,
-        overlayBuilderMap: {
-          'startOverlay': (BuildContext context, SnakeFlameGame game) {
-            return StartOverlay(game: game);
-          },
-          'gameOverOverlay': (BuildContext context, SnakeFlameGame game) {
-            return GameOverOverlay(game: game);
-          },
-        },
-        initialActiveOverlays: const ['startOverlay'],
+      body: Column(
+        children: [
+          Expanded(
+            child: GameWidget(
+              game: _game,
+              overlayBuilderMap: {
+                'startOverlay': (BuildContext context, SnakeFlameGame game) {
+                  return StartOverlay(game: game);
+                },
+                'gameOverOverlay': (BuildContext context, SnakeFlameGame game) {
+                  return GameOverOverlay(game: game);
+                },
+              },
+              initialActiveOverlays: const ['startOverlay'],
+            ),
+          ),
+          // Contrôles directionnels pour mobile
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                // Haut
+                GestureDetector(
+                  onTap: () => _game.gameLogic.changeDirection(_game.gameState, Direction.up),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF22C55E),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.keyboard_arrow_up,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                // Gauche et Droite
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: () => _game.gameLogic.changeDirection(_game.gameState, Direction.left),
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF22C55E),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.keyboard_arrow_left,
+                          color: Colors.white,
+                          size: 32,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => _game.gameLogic.changeDirection(_game.gameState, Direction.right),
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF22C55E),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.keyboard_arrow_right,
+                          color: Colors.white,
+                          size: 32,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 8),
+
+                // Bas
+                GestureDetector(
+                  onTap: () => _game.gameLogic.changeDirection(_game.gameState, Direction.down),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF22C55E),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
