@@ -169,18 +169,10 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
         // This is the "null" area case where we don't want to fill the outside.
         return;
       }
-
+      
       // Otherwise, fill the region without the Qix.
       for (var p in regionWithoutQix) {
         _setFilled(p.x.toInt(), p.y.toInt(), true);
-      }
-    } else if (emptyRegions.length == 1) {
-      // Keep current logic: fill only if this single region contains the Qix.
-      List<Vector2> region = emptyRegions[0];
-      if (_regionContainsPoint(region, _virtualQixPosition)) {
-        for (var p in region) {
-          _setFilled(p.x.toInt(), p.y.toInt(), true);
-        }
       }
     }
     // If emptyRegions.length is 0, it means the whole grid is filled or no new empty regions were found.
