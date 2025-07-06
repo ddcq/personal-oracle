@@ -22,6 +22,14 @@ class _SnakeGameState extends State<SnakeGame> {
   }
 
   @override
+  void dispose() {
+    _game.pauseEngine(); // Pause the game engine when the widget is disposed
+    _game.removeAll(game.children); // Remove all components from the game
+    _game.onRemove(); // Clean up resources
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
