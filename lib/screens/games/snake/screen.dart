@@ -1,8 +1,8 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:personal_oracle/screens/games/snake/game_logic.dart';
-import 'package:personal_oracle/screens/games/snake/snake_flame_game.dart';
-import 'package:personal_oracle/services/gamification_service.dart';
+import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
+import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 
 class SnakeGame extends StatefulWidget {
@@ -24,7 +24,7 @@ class _SnakeGameState extends State<SnakeGame> {
   @override
   void dispose() {
     _game.pauseEngine(); // Pause the game engine when the widget is disposed
-    _game.removeAll(game.children); // Remove all components from the game
+    _game.removeAll(_game.children); // Remove all components from the game
     _game.onRemove(); // Clean up resources
     super.dispose();
   }

@@ -1,4 +1,4 @@
-import 'package:personal_oracle/services/database_service.dart';
+import 'package:oracle_d_asgard/services/database_service.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/foundation.dart'; // Import for ChangeNotifier
 

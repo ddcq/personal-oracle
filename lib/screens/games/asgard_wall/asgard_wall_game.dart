@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:personal_oracle/screens/games/asgard_wall/defeat_screen.dart';
-import 'package:personal_oracle/screens/games/asgard_wall/game_screen.dart';
-import 'package:personal_oracle/screens/games/asgard_wall/victory_screen.dart';
-import 'package:personal_oracle/screens/games/asgard_wall/welcome_screen.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/defeat_screen.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/victory_screen.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
 
 
 void main() {

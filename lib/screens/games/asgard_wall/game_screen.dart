@@ -3,8 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:personal_oracle/screens/games/asgard_wall/game_components.dart';
-import 'package:personal_oracle/screens/games/asgard_wall/game_data.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/game_components.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/game_data.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'screens/main_screen.dart'; // 👈 Nouveau fichier avec MainScreen
 import 'utils/constants.dart';
 
-import 'package:personal_oracle/services/database_service.dart';
-import 'package:personal_oracle/services/gamification_service.dart';
+import 'package:oracle_d_asgard/services/database_service.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

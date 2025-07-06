@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:personal_oracle/screens/games/order_the_scrolls/utils/help_dialog.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/utils/help_dialog.dart';
 import 'package:provider/provider.dart';
 import 'game_controller.dart';
 import './widgets/game_grid.dart';

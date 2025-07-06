@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:personal_oracle/services/gamification_service.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {

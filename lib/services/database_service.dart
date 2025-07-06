@@ -18,7 +18,7 @@ class DatabaseService {
 
   Future<Database> _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'personal_oracle.db');
+    String path = join(documentsDirectory.path, 'oracle_d_asgard.db');
     return await openDatabase(
       path,
       version: 1,

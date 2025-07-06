@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:personal_oracle/screens/games/model.dart';
+import 'package:oracle_d_asgard/screens/games/model.dart';
 
 class MythStoryPage extends StatelessWidget {
   final MythStory mythStory;

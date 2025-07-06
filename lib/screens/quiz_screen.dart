@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:personal_oracle/data/app_data.dart';
+import 'package:oracle_d_asgard/data/app_data.dart';
 import '../models/question.dart';
 import '../services/quiz_service.dart';
 import '../utils/constants.dart';

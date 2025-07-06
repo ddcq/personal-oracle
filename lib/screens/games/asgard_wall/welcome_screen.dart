@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:personal_oracle/screens/games/asgard_wall/full_story.dart';
-import 'package:personal_oracle/screens/games/myth_story_page.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/full_story.dart';
+import 'package:oracle_d_asgard/screens/games/myth_story_page.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});

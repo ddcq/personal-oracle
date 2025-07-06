@@ -4,8 +4,8 @@ import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:personal_oracle/screens/games/snake/snake_component.dart';
-import 'package:personal_oracle/services/gamification_service.dart';
+import 'package:oracle_d_asgard/screens/games/snake/snake_component.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
 
 import 'game_logic.dart';
 
