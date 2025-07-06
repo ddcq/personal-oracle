@@ -89,7 +89,7 @@ class MenuPrincipal extends StatelessWidget {
       Icons.crop_square,
       const Color(0xFFFF6B35),
       "Stratégie",
-      () => QixGame()
+      () => QixGameScreen()
     ),
     _MiniJeuItem(
       "Accueil du Guerrier", 
