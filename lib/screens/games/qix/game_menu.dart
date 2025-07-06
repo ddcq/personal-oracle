@@ -15,10 +15,10 @@ class GameMenu extends StatelessWidget {
             padding: const EdgeInsets.all(24),
             margin: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: const Color(0xFFFF6B35).withOpacity(0.1),
+              color: const Color(0xFFFF6B35).withAlpha(25),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: const Color(0xFFFF6B35).withOpacity(0.3),
+                color: const Color(0xFFFF6B35).withAlpha(76),
               ),
             ),
             child: const Column(

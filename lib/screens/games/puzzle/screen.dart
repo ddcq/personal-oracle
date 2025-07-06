@@ -30,9 +30,9 @@ class _PuzzleGameState extends State<PuzzleGame> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFF06B6D4).withOpacity(0.1),
+                color: const Color(0xFF06B6D4).withAlpha(25),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFF06B6D4).withOpacity(0.3)),
+                border: Border.all(color: const Color(0xFF06B6D4).withAlpha(76)),
               ),
               child: const Column(
                 children: [

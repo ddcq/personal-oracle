@@ -392,8 +392,9 @@ class _GameScreenState extends State<GameScreen> {
 
   // Gère les événements de touche du clavier.
   bool handleKeyPress(KeyEvent event) {
-    if (!gameActive)
+    if (!gameActive) {
       return false; // Ignore les touches si le jeu n'est pas actif
+    }
 
     if (event is KeyDownEvent) {
       switch (event.logicalKey) {

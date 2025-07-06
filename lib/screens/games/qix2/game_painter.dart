@@ -56,7 +56,7 @@ class GamePainter extends CustomPainter {
     for (int i = 0; i < bars.length; i++) {
       final bar = bars[i];
       // On diminue l'opacité pour l'effet de traînée
-      barPaint.color = Colors.red.withOpacity(1.0 - (i / bars.length));
+      barPaint.color = Colors.red.withAlpha((255 * (1.0 - (i / bars.length))).toInt());
       canvas.drawLine(
         Offset((bar.p1.pos.x + 0.5) * pixelWidth, (bar.p1.pos.y + 0.5) * pixelHeight),
         Offset((bar.p2.pos.x + 0.5) * pixelWidth, (bar.p2.pos.y + 0.5) * pixelHeight),

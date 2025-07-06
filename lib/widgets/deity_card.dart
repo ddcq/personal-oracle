@@ -21,7 +21,7 @@ class DeityCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: deity.colors.first.withOpacity(0.3),
+            color: deity.colors.first.withAlpha(76),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -48,7 +48,7 @@ class DeityCard extends StatelessWidget {
             deity.title,
             style: TextStyle(
               fontSize: 18,
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withAlpha(229),
             ),
           ),
         ],

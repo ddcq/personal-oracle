@@ -162,7 +162,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     }
 
     // Interpolate snake position for smooth movement
-    final interpolationFactor = timeSinceLastTick / tickTime;
+    
   }
 
   void tick() {

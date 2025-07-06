@@ -99,7 +99,7 @@ class WelcomeContent extends StatelessWidget {
                 width: AppConstants.iconXLarge,
                 height: AppConstants.iconXLarge,
                 decoration: BoxDecoration(
-                  color: AppConstants.accent.withOpacity(0.1),
+                  color: AppConstants.accent.withAlpha(25),
                   shape: BoxShape.circle,
                   border: Border.all(color: AppConstants.accent, width: 2),
                 ),
@@ -154,9 +154,9 @@ class WelcomeContent extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(AppConstants.paddingMedium),
                 decoration: BoxDecoration(
-                  color: AppConstants.accent.withOpacity(0.1),
+                  color: AppConstants.accent.withAlpha(25),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppConstants.accent.withOpacity(0.3)),
+                  border: Border.all(color: AppConstants.accent.withAlpha(76)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

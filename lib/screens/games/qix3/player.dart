@@ -94,7 +94,7 @@ class PlayerComponent extends PositionComponent
     if (hitEdgeIndex != null && intersectionPoint != null) {
       currentPath.add(intersectionPoint);
       final initialVelocityDirection = velocity.normalized();
-      final splitResult = _splitArena(hitEdgeIndex, intersectionPoint);
+      _splitArena(hitEdgeIndex, intersectionPoint);
 
       onEdge = true;
       position.setFrom(intersectionPoint);
@@ -186,11 +186,7 @@ class PlayerComponent extends PositionComponent
     Vector2 endPoint,
     List<Vector2> currentPath,
   ) {
-    print('--- _splitArenaDifferentEdges Debug ---');
-    print('Original Vertices: $originalVertices');
-    print('Start Index: $startIndex, End Index: $endIndex');
-    print('Path Start Point: $pathStartPoint, End Point: $endPoint');
-    print('Current Path: $currentPath');
+    
 
     final numVertices = originalVertices.length;
 
@@ -220,9 +216,7 @@ class PlayerComponent extends PositionComponent
       currentIdx = (currentIdx + 1) % numVertices;
     }
 
-    print('Constructed Poly1: $poly1');
-    print('Constructed Poly2: $poly2');
-    print('--- End _splitArenaDifferentEdges Debug ---');
+    
 
     return SplitResult(poly1, poly2, false);
   }
@@ -254,16 +248,13 @@ class PlayerComponent extends PositionComponent
       );
     }
 
-    List<Vector2> newVertices1 = result.newArenaVertices;
-    List<Vector2> newVertices2 = result.claimedAreaVertices;
-
-    final tempArena1 = Arena()..vertices = newVertices1;
+    final tempArena1 = Arena()..vertices = result.newArenaVertices;
     if (tempArena1.contains(game.qix.position)) {
-      arena!.updateEdges(newVertices1, newVertices2);
-      return SplitResult(newVertices1, newVertices2, result.traversedReversed);
+      arena!.updateEdges(result.newArenaVertices, result.claimedAreaVertices);
+      return SplitResult(result.newArenaVertices, result.claimedAreaVertices, result.traversedReversed);
     } else {
-      arena!.updateEdges(newVertices2, newVertices1);
-      return SplitResult(newVertices2, newVertices1, result.traversedReversed);
+      arena!.updateEdges(result.claimedAreaVertices, result.newArenaVertices);
+      return SplitResult(result.claimedAreaVertices, result.newArenaVertices, result.traversedReversed);
     }
   }
 

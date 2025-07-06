@@ -138,7 +138,7 @@ class _ParallaxImageState extends State<ParallaxImage> {
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  Colors.black.withOpacity(0.1),
+                  Colors.black.withAlpha(25),
                   Colors.transparent,
                 ],
               ),

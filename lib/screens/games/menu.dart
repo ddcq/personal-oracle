@@ -22,7 +22,7 @@ class MenuPrincipal extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFD700).withOpacity(0.2),
+                color: const Color(0xFFFFD700).withAlpha(51),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(Icons.info_outline, color: Color(0xFFFFD700), size: 24),
@@ -172,7 +172,7 @@ class MenuPrincipal extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(right: 16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFD700).withOpacity(0.2),
+                  color: const Color(0xFFFFD700).withAlpha(51),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: IconButton(
@@ -218,18 +218,18 @@ class MenuPrincipal extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              jeu.color.withOpacity(0.2),
-              jeu.color.withOpacity(0.05),
+              jeu.color.withAlpha(51),
+              jeu.color.withAlpha(12),
             ],
           ),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: jeu.color.withOpacity(0.3),
+            color: jeu.color.withAlpha(76),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: jeu.color.withOpacity(0.1),
+              color: jeu.color.withAlpha(25),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -245,7 +245,7 @@ class MenuPrincipal extends StatelessWidget {
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
-                  color: jeu.color.withOpacity(0.1),
+                  color: jeu.color.withAlpha(25),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -261,9 +261,9 @@ class MenuPrincipal extends StatelessWidget {
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: jeu.color.withOpacity(0.2),
+                      color: jeu.color.withAlpha(51),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: jeu.color.withOpacity(0.5)),
+                      border: Border.all(color: jeu.color.withAlpha(127)),
                     ),
                     child: Icon(
                       jeu.icon,
@@ -284,7 +284,7 @@ class MenuPrincipal extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: jeu.color.withOpacity(0.2),
+                            color: jeu.color.withAlpha(51),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -330,7 +330,7 @@ class MenuPrincipal extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: jeu.color.withOpacity(0.1),
+                      color: jeu.color.withAlpha(25),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
