@@ -58,6 +58,29 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     return _boundaryGrid[y][x];
   }
 
+  bool isPointTrulyOnEdge(Vector2 point) {
+    int x = point.x.toInt();
+    int y = point.y.toInt();
+
+    if (!isPointOnBoundary(point)) return false; // Must be a boundary point
+
+    // Check if any adjacent cell is not filled (including diagonals)
+    final dx = [0, 0, 1, -1, 1, 1, -1, -1];
+    final dy = [1, -1, 0, 0, 1, -1, 1, -1];
+
+    for (int i = 0; i < 8; i++) {
+      int nextX = x + dx[i];
+      int nextY = y + dy[i];
+
+      if (nextX >= 0 && nextX < gridSize && nextY >= 0 && nextY < gridSize) {
+        if (!isFilled(nextX, nextY)) {
+          return true; // Found an adjacent unfilled cell
+        }
+      }
+    }
+    return false; // All adjacent cells are filled, or out of bounds
+  }
+
   void _setBoundary(int x, int y, bool value) {
     if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) return;
     _boundaryGrid[y][x] = value;
@@ -69,9 +92,19 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     _grid[y][x] = value;
   }
 
-  bool _isFilled(int x, int y) {
+  bool isFilled(int x, int y) {
     if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) return true; // Treat out of bounds as filled
     return _grid[y][x];
+  }
+
+  // Helper to check if a list of Vector2 contains a specific point by value
+  bool _regionContainsPoint(List<Vector2> region, Vector2 point) {
+    for (var p in region) {
+      if (p.x.toInt() == point.x.toInt() && p.y.toInt() == point.y.toInt()) {
+        return true;
+      }
+    }
+    return false;
   }
 
   void fillArea(List<Vector2> path, Vector2 pathStartGridPosition, Vector2 pathEndGridPosition) {
@@ -90,7 +123,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
 
     for (int y = 0; y < gridSize; y++) {
       for (int x = 0; x < gridSize; x++) {
-        if (!_isFilled(x, y) && !visitedForFloodFill[y][x]) {
+        if (!isFilled(x, y) && !visitedForFloodFill[y][x]) {
           List<Vector2> region = _floodFill(x, y, _grid, visitedForFloodFill);
           if (region.isNotEmpty) {
             emptyRegions.add(region);
@@ -107,29 +140,44 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       List<Vector2> region1 = emptyRegions[0];
       List<Vector2> region2 = emptyRegions[1];
 
-      List<Vector2> areaToFill;
+      List<Vector2> regionWithoutQix;
+      List<Vector2> regionWithQix;
 
-      bool region1ContainsQix = region1.contains(_virtualQixPosition);
-      bool region2ContainsQix = region2.contains(_virtualQixPosition);
+      bool region1ContainsQix = _regionContainsPoint(region1, _virtualQixPosition);
+      bool region2ContainsQix = _regionContainsPoint(region2, _virtualQixPosition);
 
       if (region1ContainsQix && !region2ContainsQix) {
-        areaToFill = region2; // Region1 contains Qix, so fill Region2
+        regionWithQix = region1;
+        regionWithoutQix = region2;
       } else if (!region1ContainsQix && region2ContainsQix) {
-        areaToFill = region1; // Region2 contains Qix, so fill Region1
+        regionWithQix = region2;
+        regionWithoutQix = region1;
       } else {
-        // This case should ideally not happen if the Qix is always in one of the two regions.
-        // As a fallback, fill the smaller region (assuming Qix is not enclosed).
-        areaToFill = (region1.length < region2.length) ? region1 : region2;
+        // This case means either both regions contain Qix (impossible for a single Qix)
+        // or neither contains Qix (Qix is on a boundary or outside the empty regions).
+        // In a well-formed Qix game, the Qix should always be in one of the two regions.
+        // If this happens, it's an unexpected state, so we'll do nothing to avoid incorrect filling.
+        return;
       }
 
-      for (var p in areaToFill) {
+      // Crucial check for "null" area bug:
+      // If the region *without* the Qix is the *larger* one, it means the Qix is in the smaller region.
+      // This implies the player has enclosed a small, "null" area around the Qix,
+      // and we should NOT fill the larger "outside" area.
+      if (regionWithoutQix.length > regionWithQix.length) {
+        // The region without Qix is larger, meaning Qix is in the smaller, enclosed region.
+        // This is the "null" area case where we don't want to fill the outside.
+        return;
+      }
+
+      // Otherwise, fill the region without the Qix.
+      for (var p in regionWithoutQix) {
         _setFilled(p.x.toInt(), p.y.toInt(), true);
       }
     } else if (emptyRegions.length == 1) {
-      // If only one region is found, it means the path enclosed the Qix or the outside.
-      // We fill only if this single region contains the Qix.
+      // Keep current logic: fill only if this single region contains the Qix.
       List<Vector2> region = emptyRegions[0];
-      if (region.contains(_virtualQixPosition)) {
+      if (_regionContainsPoint(region, _virtualQixPosition)) {
         for (var p in region) {
           _setFilled(p.x.toInt(), p.y.toInt(), true);
         }

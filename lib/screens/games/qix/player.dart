@@ -50,10 +50,15 @@ class PlayerComponent extends PositionComponent with HasGameReference<QixGame> {
     newGridPosition.y = newGridPosition.y.clamp(0, gridSize - 1);
 
     // Check if moving off the edge or back onto it
-    bool isNewPositionOnEdge = game.arena.isPointOnBoundary(newGridPosition);
+    bool isNewPositionTrulyOnEdge = game.arena.isPointTrulyOnEdge(newGridPosition);
 
     if (onEdge) {
-      if (!isNewPositionOnEdge) {
+      // If on edge, prevent moving into an already filled area that is not a boundary
+      if (game.arena.isFilled(newGridPosition.x.toInt(), newGridPosition.y.toInt()) && !isNewPositionTrulyOnEdge) {
+        return; // Do not move into a filled non-boundary area
+      }
+
+      if (!isNewPositionTrulyOnEdge) {
         // Moving off the edge
         onEdge = false;
         pathStartGridPosition = gridPosition.clone();
@@ -66,7 +71,7 @@ class PlayerComponent extends PositionComponent with HasGameReference<QixGame> {
       gridPosition = newGridPosition;
     } else {
       // Currently drawing a path
-      if (isNewPositionOnEdge) {
+      if (isNewPositionTrulyOnEdge) {
         // Hit an existing boundary
         game.arena.addPathPoint(newGridPosition.clone());
         game.arena.fillArea(currentPath, pathStartGridPosition!, newGridPosition);
