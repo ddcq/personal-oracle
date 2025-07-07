@@ -2,32 +2,61 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'qix_game.dart';
 import 'arena.dart';
+import 'constants.dart' as game_constants;
 
-class PlayerComponent extends PositionComponent with HasGameReference<QixGame> {
+enum Direction { up, down, left, right }
+
+class Player extends PositionComponent with HasGameReference<QixGame> {
   final double gridSize;
   final double cellSize;
-  Vector2 gridPosition;
+  Vector2 gridPosition; // Logical grid position
+  Vector2 targetGridPosition; // Target grid position for smooth movement
+  double _moveSpeed = 200.0; // Pixels per second
+
   bool onEdge = true;
   List<Vector2> currentPath = [];
   Vector2? pathStartGridPosition;
+  Direction? currentDirection; // Current direction for automatic movement
 
-  PlayerComponent({
+  Player({
     required this.gridSize,
     required this.cellSize,
-    required QixGame gameRef,
-  }) : gridPosition = Vector2(0, 0) {
+  }) : gridPosition = Vector2(0, 0),
+       targetGridPosition = Vector2(0, 0) {
     size = Vector2.all(cellSize);
     anchor = Anchor.topLeft;
     position = gridPosition * cellSize;
   }
 
+  void setDirection(Direction? direction) {
+    currentDirection = direction;
+  }
+
   @override
   void update(double dt) {
     super.update(dt);
-    position = gridPosition * cellSize;
+
+    // Smoothly move towards the target grid position
+    Vector2 targetPixelPosition = targetGridPosition * cellSize;
+    if (position.distanceTo(targetPixelPosition) > 0.1) {
+      position.moveToTarget(targetPixelPosition, _moveSpeed * dt);
+    } else {
+      position = targetPixelPosition; // Snap to target to avoid floating point inaccuracies
+      gridPosition = targetGridPosition.clone(); // Update logical grid position
+
+      // If player has reached target, and there's a current direction, move again
+      if (currentDirection != null) {
+        move(currentDirection!);
+      }
+    }
   }
 
   void move(Direction direction) {
+    // Only allow new move if player has reached the current target
+    if (position.distanceTo(targetGridPosition * cellSize) > 0.1) {
+      return;
+    }
+
     Vector2 newGridPosition = gridPosition.clone();
 
     switch (direction) {
@@ -50,7 +79,7 @@ class PlayerComponent extends PositionComponent with HasGameReference<QixGame> {
     newGridPosition.y = newGridPosition.y.clamp(0, gridSize - 1);
 
     // Check if moving off the edge or back onto it
-    bool isNewPositionTrulyOnEdge = game.arena.isPointTrulyOnEdge(newGridPosition);
+    bool isNewPositionTrulyOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge;
 
     if (onEdge) {
       // If on edge, prevent moving into an already filled area that is not a boundary
@@ -67,8 +96,8 @@ class PlayerComponent extends PositionComponent with HasGameReference<QixGame> {
         game.arena.startPath(gridPosition.clone());
         game.arena.addPathPoint(newGridPosition.clone());
       }
-      // If still on edge, just update position
-      gridPosition = newGridPosition;
+      // If still on edge, just update target position
+      targetGridPosition = newGridPosition;
     } else {
       // Currently drawing a path
       if (isNewPositionTrulyOnEdge) {
@@ -79,12 +108,23 @@ class PlayerComponent extends PositionComponent with HasGameReference<QixGame> {
         pathStartGridPosition = null;
         game.arena.endPath();
         currentPath.clear();
+
+        // After filling, ensure player is on a boundary. If not, teleport to nearest boundary point.
+        debugPrint('Player hit boundary at $newGridPosition. Filling area...');
+        if (!game.arena.isPointOnBoundary(newGridPosition)) {
+          Vector2 nearestBoundary = game.arena.findNearestBoundaryPoint(newGridPosition);
+          debugPrint('Player not on boundary after fill. Teleporting to nearest boundary at $nearestBoundary');
+          targetGridPosition = nearestBoundary;
+          gridPosition = nearestBoundary; // Snap immediately for teleportation
+        } else {
+          debugPrint('Player remains on boundary at $newGridPosition after fill.');
+        }
       } else {
         // Continue drawing path
         currentPath.add(newGridPosition.clone());
         game.arena.addPathPoint(newGridPosition.clone());
       }
-      gridPosition = newGridPosition;
+      targetGridPosition = newGridPosition;
     }
   }
 

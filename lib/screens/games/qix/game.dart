@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:collection'; // Pour utiliser Queue pour le flood fill
 import 'dart:math';
+import 'constants.dart';
 
 class QixGameScreen extends StatefulWidget {
   final VoidCallback onGameOver;
@@ -14,19 +15,6 @@ class QixGameScreen extends StatefulWidget {
 
 class _QixGameScreenState extends State<QixGameScreen>
     with TickerProviderStateMixin {
-  // --- CONSTANTES DE LA GRILLE ---
-  static const int kGridWidth = 150;
-  static const int kGridHeight = 200;
-  static const int kEmpty = 0;
-  static const int kFilled = 1;
-  static const int kLine = 2;
-  // NOUVELLES CONSTANTES pour la lisibilité du code de remplissage
-  static const int kTempFillArea1 = 3;
-  static const int kTempFillArea2 = 4;
-  static const int kSeedScanArea = 5;
-
-  static const double gameWidth = 150.0;
-  static const double gameHeight = 200.0;
 
   // --- ÉTAT DU JEU ---
   late List<List<int>> _grid;
@@ -35,7 +23,7 @@ class _QixGameScreenState extends State<QixGameScreen>
 
   late AnimationController _jormungandController;
   // SUPPRESSION du Timer pour la boucle de jeu. On utilisera l'AnimationController.
-  // Timer? _gameLoopTimer; 
+  // Timer? _gameLoopTimer;
   bool _gameRunning = true;
   bool _isDrawing = false;
   bool _slowDraw = false;
@@ -46,7 +34,8 @@ class _QixGameScreenState extends State<QixGameScreen>
   String _countdownMessage = "";
   Timer? _countdownTimer;
   int _countdown = 3;
-  List<Offset> _currentLine = []; // Note : Cette variable n'est plus utilisée pour la collision principale.
+  List<Offset> _currentLine =
+      []; // Note : Cette variable n'est plus utilisée pour la collision principale.
   List<SparK> _sparks = [];
 
   Offset _playerPosition = const Offset(kGridWidth / 2, 0);
@@ -69,7 +58,9 @@ class _QixGameScreenState extends State<QixGameScreen>
     _initializeGrid();
 
     _jormungandController = AnimationController(
-      duration: const Duration(milliseconds: 1000), // La durée n'importe pas en mode repeat
+      duration: const Duration(
+        milliseconds: 1000,
+      ), // La durée n'importe pas en mode repeat
       vsync: this,
     );
 
@@ -94,10 +85,10 @@ class _QixGameScreenState extends State<QixGameScreen>
     });
 
     _jormungandController.repeat(); // On lance la boucle de jeu/rendu
-    
+
     _startCountdown();
     // On supprime l'appel à l'ancienne boucle de jeu
-    // _startGameLoop(); 
+    // _startGameLoop();
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _focusNode.requestFocus(),
@@ -105,13 +96,16 @@ class _QixGameScreenState extends State<QixGameScreen>
   }
 
   void _initializeGrid() {
-    _grid = List.generate(kGridWidth, (_) => List.filled(kGridHeight, kEmpty));
+    _grid = List.generate(
+      kGridWidth,
+      (_) => List.filled(kGridHeight, kGridFree),
+    );
     // CORRECTION : On remplit les bordures pour que la logique de déplacement
     // sur les zones conquises puisse fonctionner à l'avenir et pour la cohérence.
     for (int x = 0; x < kGridWidth; x++) {
       for (int y = 0; y < kGridHeight; y++) {
         if (x == 0 || x == kGridWidth - 1 || y == 0 || y == kGridHeight - 1) {
-          _grid[x][y] = kFilled;
+          _grid[x][y] = kGridEdge;
         }
       }
     }
@@ -157,10 +151,10 @@ class _QixGameScreenState extends State<QixGameScreen>
     if (!mounted) return;
     setState(() {
       _lives--;
-      
+
       for (var point in _currentLinePoints) {
-        if (_grid[point.x][point.y] == kLine) {
-          _grid[point.x][point.y] = kEmpty;
+        if (_grid[point.x][point.y] == kGridPath) {
+          _grid[point.x][point.y] = kGridFree;
         }
       }
       _currentLinePoints.clear();
@@ -219,7 +213,11 @@ class _QixGameScreenState extends State<QixGameScreen>
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF0F0F23),
-        title: const Text('💀 Défaite !', style: TextStyle(color: Colors.red), textAlign: TextAlign.center),
+        title: const Text(
+          '💀 Défaite !',
+          style: TextStyle(color: Colors.red),
+          textAlign: TextAlign.center,
+        ),
         content: Text(
           'Jörmungand a triomphé !\n\nScore: $_score\nTerritoire conquis: ${(_territoryConquered * 100).toStringAsFixed(1)}%',
           style: const TextStyle(color: Colors.white),
@@ -241,37 +239,63 @@ class _QixGameScreenState extends State<QixGameScreen>
   void _updatePlayer() {
     if (!_autoMove || _atCorner) return;
 
-    double currentSpeed = (_isDrawing && _slowDraw) ? _moveSpeed * 0.5 : _moveSpeed;
+    double currentSpeed = (_isDrawing && _slowDraw)
+        ? _moveSpeed * 0.5
+        : _moveSpeed;
     Offset newPosition = _playerPosition;
     switch (_currentDirection) {
-      case 'up': newPosition = Offset(_playerPosition.dx, _playerPosition.dy - currentSpeed); break;
-      case 'down': newPosition = Offset(_playerPosition.dx, _playerPosition.dy + currentSpeed); break;
-      case 'left': newPosition = Offset(_playerPosition.dx - currentSpeed, _playerPosition.dy); break;
-      case 'right': newPosition = Offset(_playerPosition.dx + currentSpeed, _playerPosition.dy); break;
+      case 'up':
+        newPosition = Offset(
+          _playerPosition.dx,
+          _playerPosition.dy - currentSpeed,
+        );
+        break;
+      case 'down':
+        newPosition = Offset(
+          _playerPosition.dx,
+          _playerPosition.dy + currentSpeed,
+        );
+        break;
+      case 'left':
+        newPosition = Offset(
+          _playerPosition.dx - currentSpeed,
+          _playerPosition.dy,
+        );
+        break;
+      case 'right':
+        newPosition = Offset(
+          _playerPosition.dx + currentSpeed,
+          _playerPosition.dy,
+        );
+        break;
     }
 
-    Point<int> newGridPos = Point(newPosition.dx.round(), newPosition.dy.round());
+    Point<int> newGridPos = Point(
+      newPosition.dx.round(),
+      newPosition.dy.round(),
+    );
 
     if (newGridPos != _playerGridPos) {
       if (_isValidGridPosition(newGridPos)) {
-        bool wasOnBorder = _grid[_playerGridPos.x][_playerGridPos.y] == kFilled;
-        bool isOnBorder = _grid[newGridPos.x][newGridPos.y] == kFilled;
+        bool wasOnBorder =
+            _grid[_playerGridPos.x][_playerGridPos.y] == kGridFilled;
+        bool isOnBorder = _grid[newGridPos.x][newGridPos.y] == kGridFilled;
 
         if (wasOnBorder && !isOnBorder && !_isDrawing) {
           _isDrawing = true;
           _currentLinePoints.clear();
           // *** CORRECTION LOGIQUE ***
           // Ajoute le point de départ à la ligne pour qu'elle soit complète.
-          _currentLinePoints.add(_playerGridPos); 
+          _currentLinePoints.add(_playerGridPos);
         }
 
         if (_isDrawing) {
           if (!_currentLinePoints.contains(newGridPos)) {
-            _grid[newGridPos.x][newGridPos.y] = kLine;
+            _grid[newGridPos.x][newGridPos.y] = kGridPath;
             _currentLinePoints.add(newGridPos);
           }
         }
-        
+
         if (_isDrawing && isOnBorder) {
           _finishDrawing();
         }
@@ -282,8 +306,8 @@ class _QixGameScreenState extends State<QixGameScreen>
         if (_isDrawing) {
           _loseLife();
         } else {
-           _atCorner = true;
-           _autoMove = false;
+          _atCorner = true;
+          _autoMove = false;
         }
       }
     }
@@ -292,20 +316,20 @@ class _QixGameScreenState extends State<QixGameScreen>
 
   bool _isPositionOnBorder(Point<int> pos) {
     // Cette fonction est maintenant moins utile, on vérifie directement la valeur de la cellule.
-    // On pourrait la réutiliser pour vérifier si une cellule est kFilled.
-    return _grid[pos.x][pos.y] == kFilled;
+    // On pourrait la réutiliser pour vérifier si une cellule est kGridFilled.
+    return _grid[pos.x][pos.y] == kGridFilled;
   }
 
   bool _isValidGridPosition(Point<int> pos) {
     if (pos.x < 0 || pos.x >= kGridWidth || pos.y < 0 || pos.y >= kGridHeight) {
-      return false; 
+      return false;
     }
     // On ne peut pas croiser sa propre ligne
-    if (_isDrawing && _grid[pos.x][pos.y] == kLine) {
-       return false;
+    if (_isDrawing && _grid[pos.x][pos.y] == kGridPath) {
+      return false;
     }
-    // Si on ne dessine pas, on doit rester sur une zone kFilled
-    if (!_isDrawing && _grid[pos.x][pos.y] != kFilled) {
+    // Si on ne dessine pas, on doit rester sur une zone kGridFilled
+    if (!_isDrawing && _grid[pos.x][pos.y] != kGridFilled) {
       return false;
     }
     return true;
@@ -333,37 +357,42 @@ class _QixGameScreenState extends State<QixGameScreen>
     List<Point<int>> area1 = _floodFill(seeds[0], kTempFillArea1);
     List<Point<int>> area2 = _floodFill(seeds[1], kTempFillArea2);
 
-    bool jormungandInArea1 = _grid[jormungandGridPos.x][jormungandGridPos.y] == kTempFillArea1;
+    bool jormungandInArea1 =
+        _grid[jormungandGridPos.x][jormungandGridPos.y] == kTempFillArea1;
 
     List<Point<int>> areaToFill;
-    
+
     // On choisit l'aire la plus petite à remplir. Si l'aire contient Jörmungand, on prend l'autre.
     if (jormungandInArea1) {
-        areaToFill = area2.length < area1.length ? area2 : area2; // On remplit la zone sans le monstre
+      areaToFill = area2.length < area1.length
+          ? area2
+          : area2; // On remplit la zone sans le monstre
     } else {
-        areaToFill = area1.length < area2.length ? area1 : area1; // On remplit la zone sans le monstre
+      areaToFill = area1.length < area2.length
+          ? area1
+          : area1; // On remplit la zone sans le monstre
     }
-    
+
     // Si les deux zones sont de taille égale, on remplit celle sans le monstre.
-    if(area1.length == area2.length) {
-       areaToFill = jormungandInArea1 ? area2 : area1;
+    if (area1.length == area2.length) {
+      areaToFill = jormungandInArea1 ? area2 : area1;
     }
 
     // On remplit la zone choisie
     for (var point in areaToFill) {
-      _grid[point.x][point.y] = kFilled;
+      _grid[point.x][point.y] = kGridFilled;
     }
     // On transforme la ligne en bordure remplie
     for (var point in _currentLinePoints) {
-      _grid[point.x][point.y] = kFilled;
+      _grid[point.x][point.y] = kGridFilled;
     }
-    
-    // On nettoie les marqueurs temporaires (kTempFill...) en les remettant à kEmpty
+
+    // On nettoie les marqueurs temporaires (kTempFill...) en les remettant à kGridFree
     for (int x = 1; x < kGridWidth - 1; x++) {
       for (int y = 1; y < kGridHeight - 1; y++) {
         final cell = _grid[x][y];
         if (cell == kTempFillArea1 || cell == kTempFillArea2) {
-          _grid[x][y] = kEmpty;
+          _grid[x][y] = kGridFree;
         }
       }
     }
@@ -376,33 +405,46 @@ class _QixGameScreenState extends State<QixGameScreen>
   List<Point<int>> _findSeeds(List<Point<int>> line) {
     List<Point<int>> seeds = [];
     List<Point<int>> tempFilled = [];
-    
+
     for (var point in line) {
-      for (var offset in [const Point(0, 1), const Point(0, -1), const Point(1, 0), const Point(-1, 0)]) {
+      for (var offset in [
+        const Point(0, 1),
+        const Point(0, -1),
+        const Point(1, 0),
+        const Point(-1, 0),
+      ]) {
         Point<int> neighbor = Point(point.x + offset.x, point.y + offset.y);
-        
-        if (neighbor.x > 0 && neighbor.x < kGridWidth-1 && neighbor.y > 0 && neighbor.y < kGridHeight-1 && _grid[neighbor.x][neighbor.y] == kEmpty) {
+
+        if (neighbor.x > 0 &&
+            neighbor.x < kGridWidth - 1 &&
+            neighbor.y > 0 &&
+            neighbor.y < kGridHeight - 1 &&
+            _grid[neighbor.x][neighbor.y] == kGridFree) {
           seeds.add(neighbor);
           // *** CORRECTION LISIBILITÉ ***
           _floodFill(neighbor, kSeedScanArea, tempFilled);
           if (seeds.length >= 2) {
             // Nettoie le marquage temporaire
-            for(var p in tempFilled) _grid[p.x][p.y] = kEmpty;
+            for (var p in tempFilled) _grid[p.x][p.y] = kGridFree;
             return seeds;
           }
         }
       }
     }
     // Nettoyage au cas où un seul seed a été trouvé
-    for(var p in tempFilled) _grid[p.x][p.y] = kEmpty;
+    for (var p in tempFilled) _grid[p.x][p.y] = kGridFree;
     return seeds;
   }
 
-  List<Point<int>> _floodFill(Point<int> startNode, int fillId, [List<Point<int>>? trackedPoints]) {
+  List<Point<int>> _floodFill(
+    Point<int> startNode,
+    int fillId, [
+    List<Point<int>>? trackedPoints,
+  ]) {
     List<Point<int>> filledPoints = [];
     Queue<Point<int>> queue = Queue();
 
-    if (_grid[startNode.x][startNode.y] != kEmpty) return filledPoints;
+    if (_grid[startNode.x][startNode.y] != kGridFree) return filledPoints;
 
     queue.add(startNode);
     _grid[startNode.x][startNode.y] = fillId;
@@ -411,9 +453,18 @@ class _QixGameScreenState extends State<QixGameScreen>
 
     while (queue.isNotEmpty) {
       Point<int> node = queue.removeFirst();
-      for (var offset in [const Point(0, 1), const Point(0, -1), const Point(1, 0), const Point(-1, 0)]) {
+      for (var offset in [
+        const Point(0, 1),
+        const Point(0, -1),
+        const Point(1, 0),
+        const Point(-1, 0),
+      ]) {
         Point<int> neighbor = Point(node.x + offset.x, node.y + offset.y);
-        if (neighbor.x > 0 && neighbor.x < kGridWidth-1 && neighbor.y > 0 && neighbor.y < kGridHeight-1 && _grid[neighbor.x][neighbor.y] == kEmpty) {
+        if (neighbor.x > 0 &&
+            neighbor.x < kGridWidth - 1 &&
+            neighbor.y > 0 &&
+            neighbor.y < kGridHeight - 1 &&
+            _grid[neighbor.x][neighbor.y] == kGridFree) {
           _grid[neighbor.x][neighbor.y] = fillId;
           filledPoints.add(neighbor);
           trackedPoints?.add(neighbor);
@@ -428,7 +479,7 @@ class _QixGameScreenState extends State<QixGameScreen>
     int filledCount = 0;
     for (int x = 0; x < kGridWidth; x++) {
       for (int y = 0; y < kGridHeight; y++) {
-        if (_grid[x][y] == kFilled) {
+        if (_grid[x][y] == kGridFilled) {
           filledCount++;
         }
       }
@@ -443,7 +494,8 @@ class _QixGameScreenState extends State<QixGameScreen>
   void _resetDrawingState() {
     // Pas besoin de setState ici car il sera appelé par les fonctions parentes (_finishDrawing, _loseLife)
     for (var point in _currentLinePoints) {
-      if (_grid[point.x][point.y] == kLine) _grid[point.x][point.y] = kEmpty;
+      if (_grid[point.x][point.y] == kGridPath)
+        _grid[point.x][point.y] = kGridFree;
     }
     _currentLinePoints.clear();
     _isDrawing = false;
@@ -459,11 +511,19 @@ class _QixGameScreenState extends State<QixGameScreen>
     );
 
     // Rebond sur les murs extérieurs
-    if (_jormungandPosition.dx <= 0 || _jormungandPosition.dx >= kGridWidth - 1) {
-      _jormungandVelocity = Offset(-_jormungandVelocity.dx, _jormungandVelocity.dy);
+    if (_jormungandPosition.dx <= 0 ||
+        _jormungandPosition.dx >= kGridWidth - 1) {
+      _jormungandVelocity = Offset(
+        -_jormungandVelocity.dx,
+        _jormungandVelocity.dy,
+      );
     }
-    if (_jormungandPosition.dy <= 0 || _jormungandPosition.dy >= kGridHeight - 1) {
-      _jormungandVelocity = Offset(_jormungandVelocity.dx, -_jormungandVelocity.dy);
+    if (_jormungandPosition.dy <= 0 ||
+        _jormungandPosition.dy >= kGridHeight - 1) {
+      _jormungandVelocity = Offset(
+        _jormungandVelocity.dx,
+        -_jormungandVelocity.dy,
+      );
     }
   }
 
@@ -514,7 +574,11 @@ class _QixGameScreenState extends State<QixGameScreen>
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF0F0F23),
-        title: const Text('🎉 Victoire !', style: TextStyle(color: Colors.green), textAlign: TextAlign.center),
+        title: const Text(
+          '🎉 Victoire !',
+          style: TextStyle(color: Colors.green),
+          textAlign: TextAlign.center,
+        ),
         content: Text(
           'Jörmungand a été vaincu !\n\nScore final: $_score\nTerritoire conquis: ${(_territoryConquered * 100).toStringAsFixed(1)}%',
           style: const TextStyle(color: Colors.white),
@@ -596,10 +660,7 @@ class _QixGameScreenState extends State<QixGameScreen>
                           slowDraw: _slowDraw,
                           jormungandAnim: _jormungandController.value,
                         ),
-                        size: Size(
-                          gameWidth,
-                          gameHeight,
-                        ),
+                        size: Size(gameWidth, gameHeight),
                       ),
                     ),
                   ),
@@ -614,7 +675,6 @@ class _QixGameScreenState extends State<QixGameScreen>
       ),
     );
   }
-
 }
 
 class SparK {
@@ -631,14 +691,14 @@ class SparK {
       if (position.dx <= 0 && velocity.dx < 0) {
         velocity = Offset(-velocity.dx, velocity.dy);
       }
-      if (position.dx >= _QixGameScreenState.gameWidth && velocity.dx > 0) {
+      if (position.dx >= gameWidth && velocity.dx > 0) {
         velocity = Offset(-velocity.dx, velocity.dy);
       }
     } else {
       if (position.dy <= 0 && velocity.dy < 0) {
         velocity = Offset(velocity.dx, -velocity.dy);
       }
-      if (position.dy >= _QixGameScreenState.gameHeight && velocity.dy > 0) {
+      if (position.dy >= gameHeight && velocity.dy > 0) {
         velocity = Offset(velocity.dx, -velocity.dy);
       }
     }
@@ -680,10 +740,10 @@ class GamePainter extends CustomPainter {
       for (int y = 0; y < grid[x].length; y++) {
         Paint currentPaint;
         switch (grid[x][y]) {
-          case _QixGameScreenState.kFilled:
+          case kGridFilled:
             currentPaint = filledPaint;
             break;
-          case _QixGameScreenState.kLine:
+          case kGridPath:
             currentPaint = linePaint;
             break;
           default:

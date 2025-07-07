@@ -1,59 +1,52 @@
-import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oracle_d_asgard/screens/games/qix/arena.dart';
-import 'package:oracle_d_asgard/screens/games/qix/player.dart';
+import 'arena.dart';
+import 'player.dart';
+import 'constants.dart' as game_constants;
 
-class QixGame extends FlameGame with KeyboardEvents, HasCollisionDetection {
-  static const double arenaSize = 30.0; // 30x30 grid
-  static const double cellSize = 20.0; // Size of each grid cell in pixels
-
-  late PlayerComponent player;
-  late ArenaComponent arena;
+class QixGame extends FlameGame with KeyboardEvents {
+  late final ArenaComponent arena;
+  late final Player player;
 
   @override
   Future<void> onLoad() async {
-    // Set up camera to view the 30x30 grid
-    camera.viewfinder.zoom = 1.0;
-    camera.viewfinder.position = Vector2(arenaSize * cellSize / 2, arenaSize * cellSize / 2);
-    camera.viewfinder.anchor = Anchor.center;
+    await super.onLoad();
 
-    arena = ArenaComponent(
-      gridSize: arenaSize,
+    const double gridSize = 100;
+    final double cellSize = size.x / gridSize;
+
+    arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize);
+    player = Player(
+      gridSize: gridSize,
       cellSize: cellSize,
-      gameRef: this,
     );
+    player.gridPosition = Vector2(gridSize / 2, 0); // Start at the top edge
+    player.targetGridPosition = player.gridPosition.clone();
+
     add(arena);
-
-    player = PlayerComponent(
-      gridSize: arenaSize,
-      cellSize: cellSize,
-      gameRef: this,
-    );
     add(player);
   }
 
   @override
-  KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (event is KeyDownEvent) {
-      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-        player.move(Direction.up);
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-        player.move(Direction.down);
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-        player.move(Direction.left);
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-        player.move(Direction.right);
-        return KeyEventResult.handled;
-      }
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    super.onKeyEvent(event, keysPressed);
+    if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
+      player.setDirection(Direction.left);
+    } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
+      player.setDirection(Direction.right);
+    } else if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
+      player.setDirection(Direction.up);
+    } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
+      player.setDirection(Direction.down);
+    } else {
+      player.setDirection(null);
     }
-    return KeyEventResult.ignored;
+    return KeyEventResult.handled;
   }
 }
-
-enum Direction { up, down, left, right }
