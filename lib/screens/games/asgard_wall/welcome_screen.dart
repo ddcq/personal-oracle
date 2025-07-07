@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/full_story.dart';
 import 'package:oracle_d_asgard/screens/games/myth_story_page.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -8,9 +9,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Muraille d\'Asgard'),
-      ),
+      appBar: AppBar(title: Text('Muraille d\'Asgard')),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -61,7 +60,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 32),
-                            SizedBox(
+              SizedBox(
                 width: double.infinity,
                 height: 60,
                 child: ElevatedButton(
@@ -101,9 +100,15 @@ class WelcomeScreen extends StatelessWidget {
               SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/game');
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => GameScreen()),
+                  );
                 },
-                icon: Icon(Icons.castle, color: Colors.black), // Icône de château
+                icon: Icon(
+                  Icons.castle,
+                  color: Colors.black,
+                ), // Icône de château
                 label: Text(
                   'Construire le Mur',
                   style: TextStyle(fontSize: 20, color: Colors.black),

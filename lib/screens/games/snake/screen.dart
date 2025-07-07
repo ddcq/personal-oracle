@@ -42,7 +42,7 @@ class _SnakeGameState extends State<SnakeGame> {
       backgroundColor: const Color(0xFF0F0F23),
       appBar: AppBar(
         title: const Text(
-          '🐍 Le Serpent de Midgard (Flame)',
+          '🐍 Le Serpent de Midgard',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF22C55E),

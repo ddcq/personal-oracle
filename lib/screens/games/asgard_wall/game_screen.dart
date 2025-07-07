@@ -3,8 +3,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/defeat_screen.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_components.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_data.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/victory_screen.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -444,9 +446,9 @@ class _GameScreenState extends State<GameScreen> {
     });
     // Navigue vers l'écran de victoire ou de défaite
     if (won) {
-      Navigator.pushReplacementNamed(context, '/victory');
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => VictoryScreen()));
     } else {
-      Navigator.pushReplacementNamed(context, '/defeat');
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DefeatScreen()));
     }
   }
 
@@ -590,10 +592,7 @@ class _GameScreenState extends State<GameScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.popUntil(
-              context,
-              ModalRoute.withName('/'),
-            ); // Retourne à l'écran d'accueil
+            Navigator.pop(context);
           },
         ),
       ),

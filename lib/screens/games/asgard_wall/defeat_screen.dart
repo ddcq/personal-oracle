@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
 
 class DefeatScreen extends StatelessWidget {
   const DefeatScreen({super.key});
@@ -51,7 +53,7 @@ class DefeatScreen extends StatelessWidget {
               SizedBox(height: 32),
               ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/game');
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GameScreen()));
                 },
                 icon: Icon(Icons.refresh, color: Colors.black),
                 label: Text(
@@ -72,7 +74,7 @@ class DefeatScreen extends StatelessWidget {
               SizedBox(height: 16),
               TextButton(
                 onPressed: () {
-                  Navigator.popUntil(context, ModalRoute.withName('/')); // Retourne à l'écran d'accueil
+                  Navigator.pop(context);
                 },
                 child: Text(
                   'Retour à l\'accueil',
