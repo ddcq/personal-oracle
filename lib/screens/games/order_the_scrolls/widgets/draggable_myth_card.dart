@@ -12,6 +12,8 @@ class DraggableMythCard extends StatelessWidget {
   final VoidCallback onDragStarted;
   final VoidCallback onDragEnd;
   final Function(int, int) onReorder;
+  final Function(MythCard) onCardPressed;
+  final VoidCallback onCardReleased;
 
   const DraggableMythCard({
     super.key,
@@ -22,6 +24,8 @@ class DraggableMythCard extends StatelessWidget {
     required this.onDragStarted,
     required this.onDragEnd,
     required this.onReorder,
+    required this.onCardPressed,
+    required this.onCardReleased,
   });
 
   @override
@@ -65,16 +69,20 @@ class DraggableMythCard extends StatelessWidget {
             ),
             child: const Icon(Icons.add, color: Colors.grey, size: 32),
           ),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            transform: Matrix4.identity()
-              ..scale(isHovering ? 1.05 : 1.0)
-              ..translate(0.0, isHovering ? -4.0 : 0.0),
-            child: MythCardContent(
-              card: card,
-              index: index,
-              size: size,
-              controller: controller,
+          child: GestureDetector(
+            onLongPressStart: (_) => onCardPressed(card),
+            onLongPressEnd: (_) => onCardReleased(),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              transform: Matrix4.identity()
+                ..scale(isHovering ? 1.05 : 1.0)
+                ..translate(0.0, isHovering ? -4.0 : 0.0),
+              child: MythCardContent(
+                card: card,
+                index: index,
+                size: size,
+                controller: controller,
+              ),
             ),
           ),
         );

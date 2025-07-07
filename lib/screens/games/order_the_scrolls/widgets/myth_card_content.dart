@@ -88,21 +88,7 @@ class MythCardContent extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    card.description,
-                    style: TextStyle(
-                      color: isDragging ? Colors.white : Colors.white70,
-                      fontSize: isDragging ? 10 : 12,
-                      shadows: const [
-                        Shadow(
-                          offset: Offset(1, 1),
-                          blurRadius: 3,
-                          color: Colors.black,
-                        ),
-                      ],
-                    ),
-                  ),
+                  
                 ],
               ),
             ),

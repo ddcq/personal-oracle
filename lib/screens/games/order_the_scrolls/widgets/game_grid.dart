@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oracle_d_asgard/screens/games/model.dart';
 import '../game_controller.dart';
 import 'draggable_myth_card.dart';
 
@@ -7,6 +8,8 @@ class GameGrid extends StatelessWidget {
   final Function(int, int) onCardReorder;
   final VoidCallback onDragStarted;
   final VoidCallback onDragEnd;
+  final Function(MythCard) onCardPressed;
+  final VoidCallback onCardReleased;
 
   const GameGrid({
     super.key,
@@ -14,6 +17,8 @@ class GameGrid extends StatelessWidget {
     required this.onCardReorder,
     required this.onDragStarted,
     required this.onDragEnd,
+    required this.onCardPressed,
+    required this.onCardReleased,
   });
 
   @override
@@ -42,6 +47,8 @@ class GameGrid extends StatelessWidget {
           onDragStarted: onDragStarted,
           onDragEnd: onDragEnd,
           onReorder: onCardReorder,
+          onCardPressed: onCardPressed,
+          onCardReleased: onCardReleased,
         );
       },
     );

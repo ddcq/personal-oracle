@@ -20,15 +20,13 @@ class GameControls extends StatelessWidget {
       return SizedBox(
         width: double.infinity,
         height: 50,
-        child: ElevatedButton(
+        child: TextButton(
           onPressed: onValidate,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF2E3B4E),
+          style: TextButton.styleFrom(
+            backgroundColor: const Color(0xFF6366F1),
             foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 2,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           ),
           child: const Text(
             'Valider l\'ordre',
@@ -48,10 +46,10 @@ class GameControls extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.red[50],
+              color: const Color(0xFFEF4444).withAlpha(51),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: Colors.red,
+                color: const Color(0xFFEF4444),
                 width: 2,
               ),
             ),
@@ -60,7 +58,7 @@ class GameControls extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Colors.white,
               ),
               textAlign: TextAlign.center,
             ),
@@ -70,7 +68,7 @@ class GameControls extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: 60,
-            child: ElevatedButton(
+            child: TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -81,13 +79,11 @@ class GameControls extends StatelessWidget {
                   ),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+              style: TextButton.styleFrom(
+                backgroundColor: const Color(0xFF22C55E),
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 3,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -110,21 +106,18 @@ class GameControls extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           height: 50,
-          child: OutlinedButton(
+          child: TextButton(
             onPressed: onReset,
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(
-                color: Color(0xFF2E3B4E),
-                width: 2,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+            style: TextButton.styleFrom(
+              backgroundColor: const Color(0xFF06B6D4),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             ),
             child: const Text(
               'Rejouer avec un autre mythe',
               style: TextStyle(
-                color: Color(0xFF2E3B4E),
+                color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
