@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'puzzle_screen.dart';
 
 // ==========================================
 // PUZZLE GAME - Les Runes Dispersées
@@ -49,7 +50,7 @@ class _PuzzleGameState extends State<PuzzleGame> {
                   ),
                   SizedBox(height: 12),
                   Text(
-                    'Assemble les fragments des anciennes runes\npour déverrouiller leur pouvoir mystique',
+                    'Assemble les fragments des anciennes runes pour déverrouiller leur pouvoir mystique',
                     style: TextStyle(color: Colors.white70, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
@@ -59,9 +60,9 @@ class _PuzzleGameState extends State<PuzzleGame> {
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () {
-                // TODO: Lancer le jeu de puzzle
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Puzzle en cours de développement...')),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PuzzleScreen()),
                 );
               },
               style: ElevatedButton.styleFrom(
