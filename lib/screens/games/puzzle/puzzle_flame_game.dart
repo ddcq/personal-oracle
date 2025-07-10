@@ -1,7 +1,9 @@
+import 'dart:ui' as ui;
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
+import 'package:flame/flame.dart';
 import './puzzle_game.dart';
 import './puzzle_model.dart';
 
@@ -50,12 +52,14 @@ class DashedRectangleComponent extends RectangleComponent {
 
 class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
   final PuzzleGame puzzleGame;
+  late final ui.Image puzzleImage;
 
   PuzzleFlameGame({required this.puzzleGame});
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    puzzleImage = await Flame.images.load('asgard.jpg');
 
     // Dessiner le plateau de jeu en pointillés
     final double pieceSize = puzzleGame.pieceSize;
@@ -79,7 +83,13 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
 
     // Ajouter les pièces de puzzle
     for (var pieceData in puzzleGame.pieces) {
-      add(PuzzlePieceComponent(pieceData: pieceData, gameRef: this, offsetX: offsetX, offsetY: offsetY));
+      add(PuzzlePieceComponent(
+          pieceData: pieceData,
+          gameRef: this,
+          offsetX: offsetX,
+          offsetY: offsetY,
+          puzzleImage: puzzleImage,
+          puzzleSize: puzzleGame.cols));
     }
   }
 }
@@ -89,33 +99,45 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   final PuzzleFlameGame gameRef;
   final double offsetX;
   final double offsetY;
+  final ui.Image puzzleImage;
+  final int puzzleSize;
 
-  PuzzlePieceComponent({required this.pieceData, required this.gameRef, required this.offsetX, required this.offsetY}) : super(
-    position: Vector2(pieceData.currentPosition.dx + offsetX, pieceData.currentPosition.dy + offsetY),
-    size: Vector2(pieceData.size.width, pieceData.size.height),
-  );
+  late final Rect _sourceRect;
+  final Paint _paint = Paint()..filterQuality = FilterQuality.high;
+
+  PuzzlePieceComponent({
+    required this.pieceData,
+    required this.gameRef,
+    required this.offsetX,
+    required this.offsetY,
+    required this.puzzleImage,
+    required this.puzzleSize,
+  }) : super(
+          position: Vector2(pieceData.currentPosition.dx + offsetX, pieceData.currentPosition.dy + offsetY),
+          size: Vector2(pieceData.size.width, pieceData.size.height),
+        ) {
+    _calculateSourceRect();
+  }
+
+  void _calculateSourceRect() {
+    final double imageSliceWidth = puzzleImage.width / puzzleSize;
+    final double imageSliceHeight = puzzleImage.height / puzzleSize;
+
+    final int col = pieceData.id % puzzleSize;
+    final int row = pieceData.id ~/ puzzleSize;
+
+    _sourceRect = Rect.fromLTWH(
+      col * imageSliceWidth,
+      row * imageSliceHeight,
+      imageSliceWidth,
+      imageSliceHeight,
+    );
+  }
 
   @override
   void render(Canvas canvas) {
-    final Paint piecePaint = Paint()
-      ..color = pieceData.isLocked ? Colors.green : Colors.pink;
-    canvas.drawRect(size.toRect(), piecePaint);
-
-    final TextPainter textPainter = TextPainter(
-      text: TextSpan(
-        text: '${pieceData.id}',
-        style: const TextStyle(color: Colors.white, fontSize: 24),
-      ),
-      textDirection: TextDirection.ltr,
-    );
-    textPainter.layout();
-    textPainter.paint(
-      canvas,
-      Offset(
-        (size.x - textPainter.width) / 2,
-        (size.y - textPainter.height) / 2,
-      ),
-    );
+    final Rect destRect = size.toRect();
+    canvas.drawImageRect(puzzleImage, _sourceRect, destRect, _paint);
   }
 
   @override
