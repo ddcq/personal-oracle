@@ -105,6 +105,11 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   late final Rect _sourceRect;
   final Paint _paint = Paint()..filterQuality = FilterQuality.high;
 
+  // Priorités de rendu
+  static const int _lockedPriority = 0;
+  static const int _defaultPriority = 1;
+  static const int _draggingPriority = 100;
+
   PuzzlePieceComponent({
     required this.pieceData,
     required this.gameRef,
@@ -115,6 +120,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   }) : super(
           position: Vector2(pieceData.currentPosition.dx + offsetX, pieceData.currentPosition.dy + offsetY),
           size: Vector2(pieceData.size.width, pieceData.size.height),
+          priority: pieceData.isLocked ? _lockedPriority : _defaultPriority, // Initialiser la priorité
         ) {
     _calculateSourceRect();
   }
@@ -141,11 +147,27 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   }
 
   @override
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    if (!pieceData.isLocked) {
+      priority = _draggingPriority; // Mettre la pièce au-dessus de toutes les autres
+    }
+  }
+
+  @override
   void update(double dt) {
     super.update(dt);
     // Mettre à jour la position du composant Flame en fonction des données du modèle
     position.x = pieceData.currentPosition.dx + offsetX;
     position.y = pieceData.currentPosition.dy + offsetY;
+
+    // Ajuster la priorité si l'état de verrouillage a changé
+    if (pieceData.isLocked && priority != _lockedPriority) {
+      priority = _lockedPriority;
+    } else if (!pieceData.isLocked && priority == _lockedPriority) {
+      // Si elle était verrouillée mais ne l'est plus (cas peu probable mais pour robustesse)
+      priority = _defaultPriority;
+    }
   }
 
   @override
@@ -160,6 +182,11 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   void onDragEnd(DragEndEvent event) {
     if (!pieceData.isLocked) {
       gameRef.puzzleGame.handlePieceDrop(pieceData.id, Offset(position.x - offsetX, position.y - offsetY));
+    }
+    // Si la pièce n'est pas verrouillée après le drop, elle reste à la priorité par défaut
+    // Si elle est verrouillée, update() la mettra à _lockedPriority
+    if (!pieceData.isLocked) {
+      priority = _defaultPriority;
     }
   }
 }
