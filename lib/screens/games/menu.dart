@@ -30,7 +30,7 @@ class MenuPrincipal extends StatelessWidget {
       "Reconstitue les symboles sacrés vikings",
       Icons.extension,
       const Color(0xFF06B6D4),
-      () => PuzzleGame() // À créer
+      () => PuzzleGameScreen() // À créer
     ),
     _MiniJeuItem(
       "Le Serpent de Midgard", 

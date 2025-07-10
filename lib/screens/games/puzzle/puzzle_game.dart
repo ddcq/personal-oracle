@@ -7,9 +7,13 @@ class PuzzleGame {
   final int rows = 3;
   final int cols = 3;
   final double pieceSize = 100.0;
+  VoidCallback? onGameCompleted;
 
-  PuzzleGame() {
+  PuzzleGame({this.onGameCompleted});
+
+  void initializeAndScatter(Rect puzzleBoardBounds, Size availableArea) {
     _initializePuzzle();
+    scatterPieces(availableArea, puzzleBoardBounds);
   }
 
   void _initializePuzzle() {
@@ -33,14 +37,20 @@ class PuzzleGame {
   // La classe devra la recevoir en paramètre.
   void scatterPieces(Size availableArea, Rect puzzleBoardBounds) {
     final Random random = Random();
-    final double scatterAreaMinY = 0;
-    final double scatterAreaMaxY = puzzleBoardBounds.top - pieceSize;
+
+    // Zone de dispersion pour le coin supérieur gauche des pièces.
+    // On s'assure que toute la pièce reste visible.
+    final double scatterWidth = availableArea.width - pieceSize;
+    final double scatterHeight = availableArea.height - pieceSize;
 
     for (var piece in pieces) {
-      final randomGlobalX = random.nextDouble() * (availableArea.width - pieceSize);
-      final randomGlobalY = scatterAreaMinY + random.nextDouble() * (scatterAreaMaxY - scatterAreaMinY);
-      
-      // Convert global random position to local position relative to the puzzle board
+      // Génère une position aléatoire dans la zone de dispersion.
+      // Utilise max(0, ...) pour éviter des valeurs négatives si la zone est plus petite que la pièce.
+      final randomGlobalX = random.nextDouble() * max(0, scatterWidth);
+      final randomGlobalY = random.nextDouble() * max(0, scatterHeight);
+
+      // Convertit la position globale en position locale par rapport au plateau de jeu.
+      // La position du composant sera la position globale, car l'offset du plateau est ajouté plus tard.
       final localRandomX = randomGlobalX - puzzleBoardBounds.left;
       final localRandomY = randomGlobalY - puzzleBoardBounds.top;
 
@@ -56,6 +66,9 @@ class PuzzleGame {
     if (distance < snapThreshold) {
       piece.currentPosition = piece.targetPosition;
       piece.isLocked = true;
+      if (isGameCompleted()) {
+        onGameCompleted?.call();
+      }
       return true; // Indique que l'état a changé
     }
     // La pièce reste où elle est déposée

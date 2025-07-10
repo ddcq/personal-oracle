@@ -104,6 +104,9 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
 
   late final Rect _sourceRect;
   final Paint _paint = Paint()..filterQuality = FilterQuality.high;
+  final Paint _shadowPaint = Paint(); // Pre-allocate shadow paint
+  final Offset _defaultShadowOffset = const Offset(2.0, 2.0); // Pre-allocate default shadow offset
+  final Offset _draggingShadowOffset = const Offset(5.0, 5.0); // Pre-allocate dragging shadow offset
   bool _isDragging = false; // Indicateur de glissement
 
   // Priorités de rendu
@@ -147,13 +150,13 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
 
     // Dessiner l'ombre
     if (!pieceData.isLocked) {
-      final Paint shadowPaint = Paint()
+      _shadowPaint
         ..color = Colors.black.withOpacity(_isDragging ? 0.6 : 0.3) // Ombre plus foncée si glissée
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, _isDragging ? 8.0 : 2.0); // Flou plus important si glissée
 
-      final Offset shadowOffset = Offset(_isDragging ? 5.0 : 2.0, _isDragging ? 5.0 : 2.0); // Décalage plus grand si glissée
+      final Offset currentShadowOffset = _isDragging ? _draggingShadowOffset : _defaultShadowOffset; // Utiliser l'offset pré-alloué
 
-      canvas.drawRect(destRect.shift(shadowOffset), shadowPaint);
+      canvas.drawRect(destRect.shift(currentShadowOffset), _shadowPaint);
     }
 
     canvas.drawImageRect(puzzleImage, _sourceRect, destRect, _paint);
@@ -172,8 +175,11 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   void update(double dt) {
     super.update(dt);
     // Mettre à jour la position du composant Flame en fonction des données du modèle
-    position.x = pieceData.currentPosition.dx + offsetX;
-    position.y = pieceData.currentPosition.dy + offsetY;
+    // Seulement si la pièce n'est pas verrouillée, car les pièces verrouillées ne bougent plus.
+    if (!pieceData.isLocked) {
+      position.x = pieceData.currentPosition.dx + offsetX;
+      position.y = pieceData.currentPosition.dy + offsetY;
+    }
 
     // Ajuster la priorité si l'état de verrouillage a changé
     if (pieceData.isLocked && priority != _lockedPriority) {

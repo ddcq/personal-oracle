@@ -4,14 +4,14 @@ import 'puzzle_screen.dart';
 // ==========================================
 // PUZZLE GAME - Les Runes Dispersées
 // ==========================================
-class PuzzleGame extends StatefulWidget {
-  const PuzzleGame({super.key});
+class PuzzleGameScreen extends StatefulWidget {
+  const PuzzleGameScreen({super.key});
 
   @override
-  State<PuzzleGame> createState() => _PuzzleGameState();
+  State<PuzzleGameScreen> createState() => _PuzzleGameScreenState();
 }
 
-class _PuzzleGameState extends State<PuzzleGame> {
+class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
