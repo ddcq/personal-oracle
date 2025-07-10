@@ -104,6 +104,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
 
   late final Rect _sourceRect;
   final Paint _paint = Paint()..filterQuality = FilterQuality.high;
+  bool _isDragging = false; // Indicateur de glissement
 
   // Priorités de rendu
   static const int _lockedPriority = 0;
@@ -143,6 +144,18 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   @override
   void render(Canvas canvas) {
     final Rect destRect = size.toRect();
+
+    // Dessiner l'ombre
+    if (!pieceData.isLocked) {
+      final Paint shadowPaint = Paint()
+        ..color = Colors.black.withOpacity(_isDragging ? 0.6 : 0.3) // Ombre plus foncée si glissée
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, _isDragging ? 8.0 : 2.0); // Flou plus important si glissée
+
+      final Offset shadowOffset = Offset(_isDragging ? 5.0 : 2.0, _isDragging ? 5.0 : 2.0); // Décalage plus grand si glissée
+
+      canvas.drawRect(destRect.shift(shadowOffset), shadowPaint);
+    }
+
     canvas.drawImageRect(puzzleImage, _sourceRect, destRect, _paint);
   }
 
@@ -151,6 +164,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     super.onDragStart(event);
     if (!pieceData.isLocked) {
       priority = _draggingPriority; // Mettre la pièce au-dessus de toutes les autres
+      _isDragging = true; // La pièce est en cours de glissement
     }
   }
 
@@ -188,5 +202,6 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     if (!pieceData.isLocked) {
       priority = _defaultPriority;
     }
+    _isDragging = false; // Le glissement est terminé
   }
 }
