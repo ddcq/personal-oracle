@@ -97,7 +97,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Jeu de Puzzle Jigsaw - $versionNumber')),
+      appBar: AppBar(title: const Text('Jeu de Puzzle')),
       body: Stack(
         alignment: Alignment.topCenter,
         children: [

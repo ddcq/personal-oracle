@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Profile', style: TextStyle(color: Colors.white)),
+        title: const Text('Profil', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -82,16 +82,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   return ListView(
                     padding: const EdgeInsets.all(16.0),
                     children: [
-                      _buildSectionTitle('Game Scores'),
+                      _buildSectionTitle('Scores de jeu'),
                       _buildGameScores(snakeScores),
                       const SizedBox(height: 20),
-                      _buildSectionTitle('Trophies'),
+                      _buildSectionTitle('Trophées'),
                       _buildTrophies(unlockedTrophies),
                       const SizedBox(height: 20),
-                      _buildSectionTitle('Collectible Cards'),
+                      _buildSectionTitle('Cartes à collectionner'),
                       _buildCollectibleCards(unlockedCards),
                       const SizedBox(height: 20),
-                      _buildSectionTitle('Unlocked Stories'),
+                      _buildSectionTitle('Histoires débloquées'),
                       _buildUnlockedStories(storyProgress),
                       const SizedBox(height: 50), // Add some bottom padding
                     ],
@@ -157,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildGameScores(List<Map<String, dynamic>> scores) {
     if (scores.isEmpty) {
       return const Text(
-        'No Snake scores yet.',
+        'Aucun score de Snake pour l'instant.',
         style: TextStyle(color: Colors.white70),
       );
     }
@@ -165,7 +165,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Snake Game:',
+          'Jeu du Serpent :',
           style: Theme.of(
             context,
           ).textTheme.bodyLarge?.copyWith(color: Colors.white),
@@ -219,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildTrophies(List<Map<String, dynamic>> trophies) {
     if (trophies.isEmpty) {
       return const Text(
-        'No trophies unlocked yet.',
+        'Aucun trophée débloqué pour l'instant.',
         style: TextStyle(color: Colors.white70),
       );
     }
@@ -264,7 +264,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildCollectibleCards(List<Map<String, dynamic>> cards) {
     if (cards.isEmpty) {
       return const Text(
-        'No collectible cards unlocked yet.',
+        'Aucune carte à collectionner débloquée pour l'instant.'
         style: TextStyle(color: Colors.white70),
       );
     }
@@ -296,7 +296,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ), // Placeholder icon
               const SizedBox(height: 8),
               Text(
-                _allMythCards[card['card_id']]?.title ?? 'Unknown Card',
+                _allMythCards[card['card_id']]?.title ?? 'Carte inconnue',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
@@ -328,7 +328,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildUnlockedStories(List<Map<String, dynamic>> storyProgress) {
     if (storyProgress.isEmpty) {
       return const Text(
-        'No stories unlocked yet.',
+        'Aucune histoire débloquée pour l'instant.',
         style: TextStyle(color: Colors.white70),
       );
     }
@@ -349,7 +349,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final storyId = progress['story_id'];
         final mythStory = allMythStories.firstWhere(
           (story) => story.title == storyId,
-          orElse: () => MythStory(title: 'Unknown Story', correctOrder: []), // Fallback
+          orElse: () => MythStory(title: 'Histoire inconnue', correctOrder: []), // Fallback
         );
         final unlockedParts = jsonDecode(progress['parts_unlocked']);
         final progressPercentage = unlockedParts.length / mythStory.correctOrder.length;
@@ -394,7 +394,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '${(progressPercentage * 100).toStringAsFixed(0)}% Complete',
+                  '${(progressPercentage * 100).toStringAsFixed(0)}% Terminée',
                   style: TextStyle(color: Colors.white70, fontSize: 12),
                 )
               ],
