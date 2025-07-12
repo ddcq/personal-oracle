@@ -15,7 +15,6 @@ class QixGameScreen extends StatefulWidget {
 
 class _QixGameScreenState extends State<QixGameScreen>
     with TickerProviderStateMixin {
-
   // --- ÉTAT DU JEU ---
   late List<List<int>> _grid;
   late double _scaleX;
@@ -31,20 +30,20 @@ class _QixGameScreenState extends State<QixGameScreen>
   int _lives = 3;
   double _territoryConquered = 0.0;
   bool _isGameReady = false;
-  String _countdownMessage = "";
+
   Timer? _countdownTimer;
   int _countdown = 3;
-  List<Offset> _currentLine =
-      []; // Note : Cette variable n'est plus utilisée pour la collision principale.
-  List<SparK> _sparks = [];
+  String _countdownMessage = "";
+
+  final List<SparK> _sparks = [];
 
   Offset _playerPosition = const Offset(kGridWidth / 2, 0);
   Point<int> _playerGridPos = const Point(kGridWidth ~/ 2, 0);
   Offset _jormungandPosition = const Offset(kGridWidth / 2, kGridHeight / 2);
 
-  List<Point<int>> _currentLinePoints = [];
+  final List<Point<int>> _currentLinePoints = [];
 
-  double _moveSpeed = 0.75;
+  final double _moveSpeed = 0.75;
   String _currentDirection = 'right';
   bool _autoMove = true;
   bool _atCorner = false;
@@ -314,12 +313,6 @@ class _QixGameScreenState extends State<QixGameScreen>
     _playerPosition = newPosition;
   }
 
-  bool _isPositionOnBorder(Point<int> pos) {
-    // Cette fonction est maintenant moins utile, on vérifie directement la valeur de la cellule.
-    // On pourrait la réutiliser pour vérifier si une cellule est kGridFilled.
-    return _grid[pos.x][pos.y] == kGridFilled;
-  }
-
   bool _isValidGridPosition(Point<int> pos) {
     if (pos.x < 0 || pos.x >= kGridWidth || pos.y < 0 || pos.y >= kGridHeight) {
       return false;
@@ -425,14 +418,18 @@ class _QixGameScreenState extends State<QixGameScreen>
           _floodFill(neighbor, kSeedScanArea, tempFilled);
           if (seeds.length >= 2) {
             // Nettoie le marquage temporaire
-            for (var p in tempFilled) _grid[p.x][p.y] = kGridFree;
+            for (var p in tempFilled) {
+              _grid[p.x][p.y] = kGridFree;
+            }
             return seeds;
           }
         }
       }
     }
     // Nettoyage au cas où un seul seed a été trouvé
-    for (var p in tempFilled) _grid[p.x][p.y] = kGridFree;
+    for (var p in tempFilled) {
+      _grid[p.x][p.y] = kGridFree;
+    }
     return seeds;
   }
 
@@ -494,8 +491,9 @@ class _QixGameScreenState extends State<QixGameScreen>
   void _resetDrawingState() {
     // Pas besoin de setState ici car il sera appelé par les fonctions parentes (_finishDrawing, _loseLife)
     for (var point in _currentLinePoints) {
-      if (_grid[point.x][point.y] == kGridPath)
+      if (_grid[point.x][point.y] == kGridPath) {
         _grid[point.x][point.y] = kGridFree;
+      }
     }
     _currentLinePoints.clear();
     _isDrawing = false;
@@ -669,7 +667,19 @@ class _QixGameScreenState extends State<QixGameScreen>
               ],
             ),
             if (!_isGameReady && _gameRunning)
-              Container(/* ... Overlay de décompte ... */),
+              Container(
+                color: Colors.black54,
+                alignment: Alignment.center,
+                child: Text(
+                  _countdownMessage,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
           ],
         ),
       ),
@@ -732,7 +742,7 @@ class GamePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final emptyPaint = Paint()..color = const Color(0xFF1a1a2e);
     final filledPaint = Paint()
-      ..color = const Color(0xFFFF6B35).withOpacity(0.3);
+      ..color = const Color(0xFFFF6B35).withAlpha((255 * 0.3).toInt());
     final linePaint = Paint()..color = slowDraw ? Colors.amber : Colors.white;
 
     // 1. Dessine l'état de la grille
@@ -758,8 +768,8 @@ class GamePainter extends CustomPainter {
 
     // 2. Dessine Jörmungand
     final jormungandPaint = Paint()
-      ..color = Colors.green.withOpacity(
-        0.8 + 0.2 * sin(jormungandAnim * 2 * pi),
+      ..color = Colors.green.withAlpha(
+        (255 * (0.8 + 0.2 * sin(jormungandAnim * 2 * pi))).toInt(),
       );
     canvas.drawCircle(
       Offset(jormungandPos.dx * scaleX, jormungandPos.dy * scaleY),
@@ -769,7 +779,9 @@ class GamePainter extends CustomPainter {
 
     // 3. Dessine le joueur
     final playerPaint = Paint()
-      ..color = isDrawing ? Colors.cyan.withOpacity(0.5) : Colors.cyan;
+      ..color = isDrawing
+          ? Colors.cyan.withAlpha((255 * 0.5).toInt())
+          : Colors.cyan;
     canvas.drawCircle(
       Offset(playerPos.dx * scaleX, playerPos.dy * scaleY),
       4,

@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'game_logic.dart';
 
@@ -43,11 +42,6 @@ class SnakeComponent extends PositionComponent {
     required this.snakeTailDownSprite,
   }) {
     initializeSnake();
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
   }
 
   @override

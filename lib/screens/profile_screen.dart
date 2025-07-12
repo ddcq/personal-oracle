@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:oracle_d_asgard/screens/games/myth_story_page.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
+import 'package:oracle_d_asgard/screens/games/model.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/data.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,6 +16,23 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late Map<String, MythCard> _allMythCards;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAllMythCards();
+  }
+
+  void _loadAllMythCards() {
+    _allMythCards = {};
+    for (var story in getMythStories()) {
+      for (var card in story.correctOrder) {
+        _allMythCards[card.id] = card;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 gamificationService.getGameScores('Snake'),
                 gamificationService.getUnlockedTrophies(),
                 gamificationService.getUnlockedCollectibleCards(),
-                gamificationService.getUnlockedStories(),
+                gamificationService.getUnlockedStoryProgress(),
               ]),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -48,33 +70,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(child: Text('No data available.'));
                 } else {
-                  final List<Map<String, dynamic>> snakeScores =
-                      snapshot.data![0];
+                  final List<Map<String, dynamic>> snakeScores = snapshot.data![0];
                   final List<Map<String, dynamic>> unlockedTrophies =
                       snapshot.data![1];
                   final List<Map<String, dynamic>> unlockedCards =
                       snapshot.data![2];
-                  final List<Map<String, dynamic>> unlockedStories =
+                  final List<Map<String, dynamic>> storyProgress =
                       snapshot.data![3];
 
-                  return Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.all(16.0),
-                      children: [
-                        _buildSectionTitle('Game Scores'),
-                        _buildGameScores(snakeScores),
-                        const SizedBox(height: 20),
-                        _buildSectionTitle('Trophies'),
-                        _buildTrophies(unlockedTrophies),
-                        const SizedBox(height: 20),
-                        _buildSectionTitle('Collectible Cards'),
-                        _buildCollectibleCards(unlockedCards),
-                        const SizedBox(height: 20),
-                        _buildSectionTitle('Unlocked Stories'),
-                        _buildUnlockedStories(unlockedStories),
-                        const SizedBox(height: 50), // Add some bottom padding
-                      ],
-                    ),
+                  return ListView(
+                    padding: const EdgeInsets.all(16.0),
+                    children: [
+                      _buildSectionTitle('Game Scores'),
+                      _buildGameScores(snakeScores),
+                      const SizedBox(height: 20),
+                      _buildSectionTitle('Trophies'),
+                      _buildTrophies(unlockedTrophies),
+                      const SizedBox(height: 20),
+                      _buildSectionTitle('Collectible Cards'),
+                      _buildCollectibleCards(unlockedCards),
+                      const SizedBox(height: 20),
+                      _buildSectionTitle('Unlocked Stories'),
+                      _buildUnlockedStories(storyProgress),
+                      const SizedBox(height: 50), // Add some bottom padding
+                    ],
                   );
                 }
               },
@@ -155,10 +174,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           (score) {
             final DateTime timestamp =
                 DateTime.fromMillisecondsSinceEpoch(score['timestamp']);
-            final String formattedDate =
-                DateFormat('yyyy-MM-dd – HH:mm').format(timestamp);
             return Card(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withAlpha((255 * 0.1).toInt()),
               elevation: 3,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
@@ -182,7 +199,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const SizedBox(height: 4),
                           Text(
                             'Date: ${_formatRelativeTime(timestamp)}',
-                            style: const TextStyle(color: Colors.white70, fontSize: 12),
+                            style: const TextStyle(
+                                color: Colors.white70, fontSize: 12),
                           ),
                         ],
                       ),
@@ -192,7 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             );
           },
-        ).toList(),
+        ),
       ],
     );
   }
@@ -217,7 +235,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       itemBuilder: (context, index) {
         final trophy = trophies[index];
         return Card(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withAlpha((255 * 0.1).toInt()),
           elevation: 5,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
@@ -262,7 +280,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       itemBuilder: (context, index) {
         final card = cards[index];
         return Card(
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.white.withAlpha((255 * 0.1).toInt()),
           elevation: 5,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
@@ -277,11 +295,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ), // Placeholder icon
               const SizedBox(height: 8),
               Text(
-                card['card_id'],
+                _allMythCards[card['card_id']]?.title ?? 'Unknown Card',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  _allMythCards[card['card_id']]?.description ?? '',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 10,
+                  ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -291,13 +324,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildUnlockedStories(List<Map<String, dynamic>> stories) {
-    if (stories.isEmpty) {
+  Widget _buildUnlockedStories(List<Map<String, dynamic>> storyProgress) {
+    if (storyProgress.isEmpty) {
       return const Text(
         'No stories unlocked yet.',
         style: TextStyle(color: Colors.white70),
       );
     }
+    final allMythStories = getMythStories();
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -307,33 +342,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
         mainAxisSpacing: 10,
         childAspectRatio: 1.0,
       ),
-      itemCount: stories.length,
+      itemCount: storyProgress.length,
       itemBuilder: (context, index) {
-        final story = stories[index];
-        return Card(
-          color: Colors.white.withOpacity(0.1),
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.book,
-                color: Colors.purpleAccent,
-                size: 40,
-              ), // Placeholder icon
-              const SizedBox(height: 8),
-              Text(
-                story['story_id'],
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+        final progress = storyProgress[index];
+        final storyId = progress['story_id'];
+        final mythStory = allMythStories.firstWhere(
+          (story) => story.title == storyId,
+          orElse: () => MythStory(title: 'Unknown Story', correctOrder: []), // Fallback
+        );
+        final unlockedParts = jsonDecode(progress['parts_unlocked']);
+        final progressPercentage = unlockedParts.length / mythStory.correctOrder.length;
+
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MythStoryPage(mythStory: mythStory),
               ),
-            ],
+            );
+          },
+          child: Card(
+            color: Colors.white.withAlpha((255 * 0.1).toInt()),
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.book,
+                  color: Colors.purpleAccent,
+                  size: 40,
+                ), // Placeholder icon
+                const SizedBox(height: 8),
+                Text(
+                  mythStory.title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                LinearProgressIndicator(
+                  value: progressPercentage,
+                  backgroundColor: Colors.grey[700],
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.amber),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${(progressPercentage * 100).toStringAsFixed(0)}% Complete',
+                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                )
+              ],
+            ),
           ),
         );
       },

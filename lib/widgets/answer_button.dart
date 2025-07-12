@@ -5,7 +5,7 @@ class AnswerButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const AnswerButton({
+  const AnswerButton({super.key, 
     required this.text,
     required this.onPressed,
   });

@@ -1,13 +1,17 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'data.dart';
 import '../model.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
 
 class GameController extends ChangeNotifier {
   late MythStory _selectedStory;
   late List<MythCard> _shuffledCards;
   bool _validated = false;
   int? _draggedIndex;
+
+  final GamificationService _gamificationService = GamificationService();
 
   MythStory get selectedStory => _selectedStory;
   List<MythCard> get shuffledCards => _shuffledCards;
@@ -41,8 +45,19 @@ class GameController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void validateOrder() {
+  void validateOrder() async {
     _validated = true;
+    if (isOrderCompletelyCorrect()) {
+      final progress = await _gamificationService.getStoryProgress(_selectedStory.title);
+      final unlockedParts = progress != null ? jsonDecode(progress['parts_unlocked']) : [];
+
+      for (var card in _selectedStory.correctOrder) {
+        if (!unlockedParts.contains(card.id)) {
+          await _gamificationService.unlockStoryPart(_selectedStory.title, card.id);
+          break; // Unlock only one part per victory
+        }
+      }
+    }
     notifyListeners();
   }
 

@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'qix_game.dart';
-import 'arena.dart';
+
 import 'constants.dart' as game_constants;
 
 enum Direction { up, down, left, right }
@@ -11,7 +11,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
   final double cellSize;
   Vector2 gridPosition; // Logical grid position
   Vector2 targetGridPosition; // Target grid position for smooth movement
-  double _moveSpeed = 200.0; // Pixels per second
+  final double _moveSpeed = 200.0; // Pixels per second
 
   bool onEdge = true;
   List<Vector2> currentPath = [];

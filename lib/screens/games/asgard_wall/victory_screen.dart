@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/screens/games/asgard_wall/full_story.dart';
-import 'package:oracle_d_asgard/screens/games/myth_story_page.dart';
+
+
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
-import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
+
 
 class VictoryScreen extends StatelessWidget {
   const VictoryScreen({super.key});
@@ -51,43 +51,6 @@ class VictoryScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                height: 60,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            MythStoryPage(mythStory: getMythStory()),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 3,
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.book_outlined, size: 24),
-                      SizedBox(width: 8),
-                      Text(
-                        '✅ Bravo ! Lire l\'histoire complète',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               SizedBox(height: 32),
               ElevatedButton.icon(
                 onPressed: () {

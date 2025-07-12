@@ -59,7 +59,7 @@ class MenuPrincipal extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final minWidthSpace = screenWidth / 100; // Minimum horizontal space for padding
+    
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F23),
       body: CustomScrollView(

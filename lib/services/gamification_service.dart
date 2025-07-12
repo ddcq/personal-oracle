@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:oracle_d_asgard/services/database_service.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/foundation.dart'; // Import for ChangeNotifier
@@ -90,31 +92,54 @@ class GamificationService with ChangeNotifier {
     return await db.query('collectible_cards');
   }
 
-  Future<void> unlockStory(String storyId) async {
+  Future<void> unlockStoryPart(String storyId, String partId) async {
     final db = await _databaseService.database;
-    await db.insert(
-      'unlocked_stories',
-      {
-        'story_id': storyId,
-        'unlocked_at': DateTime.now().millisecondsSinceEpoch,
-      },
-      conflictAlgorithm: ConflictAlgorithm.ignore,
-    );
-    notifyListeners(); // Notify listeners
-  }
-
-  Future<bool> isStoryUnlocked(String storyId) async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'unlocked_stories',
+    final List<Map<String, dynamic>> existing = await db.query(
+      'story_progress',
       where: 'story_id = ?',
       whereArgs: [storyId],
     );
-    return result.isNotEmpty;
+
+    if (existing.isNotEmpty) {
+      final List<dynamic> parts = jsonDecode(existing.first['parts_unlocked']);
+      if (!parts.contains(partId)) {
+        parts.add(partId);
+        await db.update(
+          'story_progress',
+          {'parts_unlocked': jsonEncode(parts)},
+          where: 'story_id = ?',
+          whereArgs: [storyId],
+        );
+      }
+    } else {
+      await db.insert(
+        'story_progress',
+        {
+          'story_id': storyId,
+          'parts_unlocked': jsonEncode([partId]),
+          'unlocked_at': DateTime.now().millisecondsSinceEpoch,
+        },
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+    }
+    notifyListeners();
   }
 
-  Future<List<Map<String, dynamic>>> getUnlockedStories() async {
+  Future<Map<String, dynamic>?> getStoryProgress(String storyId) async {
     final db = await _databaseService.database;
-    return await db.query('unlocked_stories');
+    final List<Map<String, dynamic>> result = await db.query(
+      'story_progress',
+      where: 'story_id = ?',
+      whereArgs: [storyId],
+    );
+    if (result.isNotEmpty) {
+      return result.first;
+    }
+    return null;
+  }
+
+  Future<List<Map<String, dynamic>>> getUnlockedStoryProgress() async {
+    final db = await _databaseService.database;
+    return await db.query('story_progress');
   }
 }

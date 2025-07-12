@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../game_controller.dart';
-import '../../myth_story_page.dart'; // Assurez-vous que le chemin est correct
+
 
 class GameControls extends StatelessWidget {
   final GameController controller;
@@ -65,40 +65,25 @@ class GameControls extends StatelessWidget {
           ),
         
         if (controller.isOrderCompletelyCorrect())
-          SizedBox(
+          Container(
             width: double.infinity,
-            height: 60,
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MythStoryPage(
-                      mythStory: controller.selectedStory,
-                    ),
-                  ),
-                );
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: const Color(0xFF22C55E),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF22C55E).withAlpha(51),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: const Color(0xFF22C55E),
+                width: 2,
               ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.book_outlined, size: 24),
-                  SizedBox(width: 8),
-                  Text(
-                    '✅ Bravo ! Lire l\'histoire complète',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+            ),
+            child: const Text(
+              '✅ Bravo ! Vous avez reconstitué l\'histoire et gagné toutes les cartes ! ',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
+              textAlign: TextAlign.center,
             ),
           ),
         

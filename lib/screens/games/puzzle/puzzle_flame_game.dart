@@ -147,19 +147,54 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   @override
   void render(Canvas canvas) {
     final Rect destRect = size.toRect();
+    const double cornerRadius = 8.0;
+    final RRect pieceRRect = RRect.fromRectAndRadius(destRect, const Radius.circular(cornerRadius));
 
-    // Dessiner l'ombre
+    // 1. Dessiner l'ombre portée pour l'effet de flottement
     if (!pieceData.isLocked) {
       _shadowPaint
-        ..color = Colors.black.withOpacity(_isDragging ? 0.6 : 0.3) // Ombre plus foncée si glissée
-        ..maskFilter = MaskFilter.blur(BlurStyle.normal, _isDragging ? 8.0 : 2.0); // Flou plus important si glissée
+        ..color = Colors.black.withAlpha((255 * (_isDragging ? 0.7 : 0.4)).toInt()) // Ombre plus prononcée
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, _isDragging ? 10.0 : 5.0); // Flou plus important
 
-      final Offset currentShadowOffset = _isDragging ? _draggingShadowOffset : _defaultShadowOffset; // Utiliser l'offset pré-alloué
-
-      canvas.drawRect(destRect.shift(currentShadowOffset), _shadowPaint);
+      final Offset currentShadowOffset = _isDragging ? _draggingShadowOffset : _defaultShadowOffset;
+      canvas.drawRRect(pieceRRect.shift(currentShadowOffset), _shadowPaint);
     }
 
+    // Sauvegarder l'état du canvas avant de clipper
+    canvas.save();
+    // Appliquer le clipping pour les coins arrondis
+    canvas.clipRRect(pieceRRect);
+
+    // 2. Dessiner l'image
     canvas.drawImageRect(puzzleImage, _sourceRect, destRect, _paint);
+
+    // 3. Ajouter un biseau pour l'effet 3D
+    // Biseau interne (superposition sur l'image)
+    final Paint bevelPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        stops: const [0.0, 0.4, 0.6, 1.0],
+        colors: [
+          Colors.white.withAlpha((255 * 0.35).toInt()), // Lumière en haut à gauche
+          Colors.white.withAlpha((255 * 0.1).toInt()),
+          Colors.black.withAlpha((255 * 0.1).toInt()),
+          Colors.black.withAlpha((255 * 0.45).toInt()), // Ombre en bas à droite
+        ],
+      ).createShader(destRect);
+
+    // Dessiner un rectangle par-dessus l'image avec le shader de gradient
+    canvas.drawRect(destRect, bevelPaint);
+
+    // 4. Ajouter une bordure pour mieux définir la pièce
+    final Paint borderPaint = Paint()
+      ..color = Colors.black.withAlpha((255 * 0.2).toInt())
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
+    canvas.drawRRect(pieceRRect, borderPaint);
+
+    // Restaurer l'état du canvas
+    canvas.restore();
   }
 
   @override
@@ -200,6 +235,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
 
   @override
   void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     if (!pieceData.isLocked) {
       gameRef.puzzleGame.handlePieceDrop(pieceData.id, Offset(position.x - offsetX, position.y - offsetY));
     }

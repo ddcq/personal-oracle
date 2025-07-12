@@ -58,7 +58,7 @@ class _SnakeGameState extends State<SnakeGame> {
                 final gameAreaSize = gameSize - (wallThickness * 2); // Inner game area
 
                 return Center(
-                  child: Container(
+                  child: SizedBox(
                     width: gameSize,
                     height: gameSize,
                     child: Stack(
@@ -117,7 +117,7 @@ class _SnakeGameState extends State<SnakeGame> {
                   ),
                 ),
 
-                const SizedBox(height: 8),
+                const Padding(padding: EdgeInsets.only(bottom: 8)),
 
                 // Gauche et Droite
                 Row(
@@ -158,7 +158,7 @@ class _SnakeGameState extends State<SnakeGame> {
                   ],
                 ),
 
-                const SizedBox(height: 8),
+                const Padding(padding: EdgeInsets.only(bottom: 8)),
 
                 // Bas
                 GestureDetector(

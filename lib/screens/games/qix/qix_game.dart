@@ -1,11 +1,11 @@
-import 'package:flame/components.dart';
+
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'arena.dart';
 import 'player.dart';
-import 'constants.dart' as game_constants;
+
 
 class QixGame extends FlameGame with KeyboardEvents {
   late final ArenaComponent arena;

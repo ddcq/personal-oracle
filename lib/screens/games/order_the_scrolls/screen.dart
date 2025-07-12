@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'utils/help_dialog.dart';
-import '../model.dart';
+
 import 'package:provider/provider.dart';
 import 'game_controller.dart';
 import './widgets/game_grid.dart';
@@ -15,7 +15,7 @@ class OrderTheScrollsGame extends StatefulWidget {
 
 class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
   late GameController _gameController;
-  MythCard? _selectedCardForDescription;
+  
 
   @override
   void initState() {
@@ -30,17 +30,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
     super.dispose();
   }
 
-  void _onCardPressed(MythCard card) {
-    setState(() {
-      _selectedCardForDescription = card;
-    });
-  }
-
-  void _onCardReleased() {
-    setState(() {
-      _selectedCardForDescription = null;
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -151,8 +141,8 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
                                 onDragEnd: () {
                                   controller.setDraggedIndex(null);
                                 },
-                                onCardPressed: _onCardPressed,
-                                onCardReleased: _onCardReleased,
+                                onCardPressed: (card) {},
+                              onCardReleased: () {},
                               ),
                             ),
                           ),
@@ -168,33 +158,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
                   ],
                 ),
               ),
-              if (_selectedCardForDescription != null)
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    margin: const EdgeInsets.all(20),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1E1E2E),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: const Color(0xFF6366F1).withAlpha(76)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF6366F1).withAlpha(25),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      _selectedCardForDescription!.description,
-                      style: const TextStyle(color: Colors.white70, fontSize: 16, height: 1.4),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
+              
             ],
           );
         },
