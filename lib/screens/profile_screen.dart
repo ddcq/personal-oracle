@@ -5,8 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:oracle_d_asgard/screens/games/myth_story_page.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
-import 'package:oracle_d_asgard/screens/games/model.dart';
-import 'package:oracle_d_asgard/screens/games/order_the_scrolls/data.dart';
+import 'package:oracle_d_asgard/models/myth_card.dart';
+import 'package:oracle_d_asgard/models/myth_story.dart';
+import 'package:oracle_d_asgard/data/stories_data.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/screens/games/model.dart';
+import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 
@@ -72,7 +72,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
                         const SizedBox(height: 8.0),
                         if (isUnlocked)
                           Text(
-                            card.description,
+                            card.detailedStory,
                             style: Theme.of(context).textTheme.bodyMedium,
                           )
                         else

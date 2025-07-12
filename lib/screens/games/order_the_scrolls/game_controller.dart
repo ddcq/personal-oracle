@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'data.dart';
-import '../model.dart';
+import 'package:oracle_d_asgard/data/stories_data.dart';
+import 'package:oracle_d_asgard/models/myth_story.dart';
+import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 
 class GameController extends ChangeNotifier {

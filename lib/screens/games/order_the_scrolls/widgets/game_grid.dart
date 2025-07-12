@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/screens/games/model.dart';
+import 'package:oracle_d_asgard/models/myth_card.dart';
 import '../game_controller.dart';
 import 'draggable_myth_card.dart';
 
