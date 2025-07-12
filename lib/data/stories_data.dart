@@ -1,5 +1,6 @@
 import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
+import 'package:oracle_d_asgard/models/collectible_card.dart';
 
 List<MythStory> getMythStories() {
   return [
@@ -52,6 +53,26 @@ List<MythStory> getMythStories() {
               'Guidé par la main perfide de Loki, Höd banda son arc et tira. La flèche de gui vola à travers les airs dans un silence mortel et transperça le cœur de Baldr. Le dieu lumineux poussa un cri de surprise et de douleur avant de s\'effondrer, mort sur le coup.\n\nUn silence de mort tomba sur l\'assemblée. Tous les dieux restèrent figés d\'horreur, incapables de comprendre ce qui venait de se passer. Puis éclatèrent les pleurs et les lamentations. Frigg se précipita vers son fils, mais il était trop tard.\n\nHöd, réalisant l\'ampleur de sa tragédie involontaire, pleura amèrement. Loki, lui, disparut discrètement dans l\'ombre, son œuvre de destruction accomplie.\n\nAinsi périt Baldr le Beau, et avec lui, une part de la lumière du monde s\'éteignit pour toujours, annonçant les temps sombres du Ragnarök qui devaient venir.',
         ),
       ],
+      collectibleCards: [
+        CollectibleCard(
+          id: 'baldr_card',
+          title: 'Baldr le Bon',
+          description: 'Le dieu de la lumière, de la beauté et de la pureté. Sa mort fut le premier signe du Ragnarök.',
+          imagePath: 'assets/images/baldr_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'frigg_card',
+          title: 'Frigg la Mère',
+          description: 'Déesse de l\'amour, du mariage et de la maternité, épouse d\'Odin et mère de Baldr.',
+          imagePath: 'assets/images/frigg_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'gui_card',
+          title: 'Le Gui Mortel',
+          description: 'La seule plante capable de blesser Baldr, utilisée par Loki pour causer sa mort.',
+          imagePath: 'assets/images/gui_card.jpg', // Image à créer
+        ),
+      ],
     ),
     MythStory(
       title: 'Le marteau de Thor',
@@ -81,7 +102,7 @@ List<MythStory> getMythStories() {
               'Thor, avec l\'aide de Loki, se déguise en Freyja pour duper Thrym. Il revêt une robe de mariée et un voile pour infiltrer le royaume des géants.',
           imagePath: 'assets/images/thor_3.jpg',
           detailedStory:
-              'C\'est alors que Loki eut une idée aussi audacieuse que ridicule : Thor devrait se déguiser en Freyja pour tromper Thrym ! L\'idée de voir le plus viril des dieux revêtir des habits de femme amusa beaucoup le rusé Loki.\n\nThor protesta violemment : "Jamais ! Les dieux se moqueront de moi pour l\'éternité ! Ma réputation de guerrier sera ruinée !\n\nMais Heimdall le sage intervint : "Préfères-tu que les géants envahissent Asgard sans que nous puissions nous défendre ? Sans Mjöllnir, nous sommes perdus."\n\nÀ contrecœur, Thor accepta. Avec l\'aide de Loki, il revêtit une magnifique robe de mariée, se couvrit d\'un voile orné de bijoux précieux, et plaça sur sa poitrine le collier réparé de Freyja. Ses mains puissantes furent dissimulées sous de longs gants de soie. Ainsi déguisé, le dieu du tonnerre ressemblait à une épouse timide et voilée.',
+              'C\'est alors que Loki eut une idée aussi audacieuse que ridicule : Thor devrait se déguiser en Freyja pour tromper Thrym ! L\'idée de voir le plus viril des dieux revêtir des habits de femme amusa beaucoup le rusé Loki.\n\nThor protesta violemment : "Jamais ! Les dieux se moqueront de moi pour l\'éternité ! Ma réputation de guerrier sera ruinée !\n\nMais Heimdall le sage intervint: "Préfères-tu que les géants envahissent Asgard sans que nous puissions nous défendre ? Sans Mjöllnir, nous sommes perdus."\n\nÀ contrecœur, Thor accepta. Avec l\'aide de Loki, il revêtit une magnifique robe de mariée, se couvrit d\'un voile orné de bijoux précieux, et plaça sur sa poitrine le collier réparé de Freyja. Ses mains puissantes furent dissimulées sous de longs gants de soie. Ainsi déguisé, le dieu du tonnerre ressemblait à une épouse timide et voilée.',
         ),
         MythCard(
           id: '4',
@@ -99,7 +120,27 @@ List<MythStory> getMythStories() {
               'Dès que Mjöllnir lui est présenté comme cadeau nuptial, Thor le saisit et massacre les géants, mettant fin à la supercherie dans un bain de sang.',
           imagePath: 'assets/images/thor_5.jpg',
           detailedStory:
-              'Thrym, rassuré par l\'explication de Loki, décida de procéder à la cérémonie. Selon la tradition, il ordonna qu\'on apporte le marteau de Thor pour bénir l\'union et le placer sur les genoux de la mariée, symbole de fertilité et de protection.\n\nDès que Mjöllnir fut posé sur ses genoux, Thor sentit sa force divine revenir en lui comme un torrent. Ses yeux s\'enflammèrent de joie et de rage contenues. D\'un geste puissant, il arracha son voile et déchira sa robe de mariée.\n\n"Je suis Thor, fils d\'Odin !" rugit-il en brandissant son marteau. "Et voici ma réponse à votre chantage !\n\nLa foudre jaillit de Mjöllnir tandis que Thor massacrait Thrym et tous les géants présents dans un déchaînement de violence divine. Les éclairs illuminèrent la salle du festin transformée en champ de bataille, et le tonnerre résonna dans tout Jötunheim.\n\nAinsi Thor récupéra-t-il son marteau, et jamais plus les géants n\'osèrent défier ouvertement le dieu du tonnerre.',
+              'Thrym, rassuré par l\'explication de Loki, décida de procéder à la cérémonie. Selon la tradition, il ordonna qu\'on apporte le marteau de Thor pour bénir l\'union et le placer sur les genoux de la mariée, symbole de fertilité et de protection.\n\nDès que Mjöllnir fut posé sur ses genoux, Thor sentit sa force divine revenir en lui comme un torrent. Ses yeux s\'enflammèrent de joie et de rage contenues. D\'un geste puissant, il arracha son voile et déchira sa robe de mariée.\n\n"Je suis Thor, fils d\'Odin !" rugit-it en brandissant son marteau. "Et voici ma réponse à votre chantage !\n\nLa foudre jaillit de Mjöllnir tandis que Thor massacrait Thrym et tous les géants présents dans un déchaînement de violence divine. Les éclairs illuminèrent la salle du festin transformée en champ de bataille, et le tonnerre résonna dans tout Jötunheim.\n\nAinsi Thor récupéra-t-il son marteau, et jamais plus les géants n\'osèrent défier ouvertement le dieu du tonnerre.',
+        ),
+      ],
+      collectibleCards: [
+        CollectibleCard(
+          id: 'thor_card',
+          title: 'Thor le Protecteur',
+          description: 'Le dieu du tonnerre, protecteur d\'Asgard et des hommes, armé de son marteau Mjöllnir.',
+          imagePath: 'assets/images/thor_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'mjollnir_card',
+          title: 'Mjöllnir',
+          description: 'Le marteau légendaire de Thor, capable de contrôler la foudre et de revenir à son porteur.',
+          imagePath: 'assets/images/mjollnir_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'thrym_card',
+          title: 'Thrym le Géant',
+          description: 'Le roi des géants qui vola Mjöllnir et demanda Freyja en mariage.',
+          imagePath: 'assets/images/thrym_card.jpg', // Image à créer
         ),
       ],
     ),
@@ -152,6 +193,26 @@ List<MythStory> getMythStories() {
               'Un lourd silence tomba sur l\'assemblée des dieux. Tous savaient qu\'ils s\'apprêtaient à trahir Fenrir, et que celui qui placerait sa main dans la gueule du loup la perdrait à coup sûr. Personne n\'osait se porter volontaire.\n\nSeul Tyr, le dieu du courage et de l\'honneur, s\'avança. Il était le seul à avoir nourri Fenrir, le seul en qui le loup avait encore confiance. Sans hésitation, fidèle à sa réputation de bravoure, il tendit sa main droite et la plaça entre les mâchoires redoutables de la bête.\n\nGleipnir fut alors attaché autour des pattes de Fenrir. Le loup tenta de le briser comme les chaînes précédentes, bandant tous ses muscles, tirant de toutes ses forces. Mais plus il luttait, plus le lien magique se resserrait.\n\nRéalisant qu\'il avait été dupé et qu\'il resterait prisonnier pour l\'éternité, Fenrir leva ses yeux jaunes vers Tyr. Un regard de tristesse et de rage mêlées passa entre le dieu et la bête. Puis, d\'un coup sec, Fenrir referma sa mâchoire, arrachant la main de Tyr dans un craquement sinistre.\n\nFenrir fut ensuite traîné vers une île déserte et attaché à un rocher au plus profond de la terre, où il demeure enchaîné jusqu\'au Ragnarök, le jour où il brisera enfin ses liens pour dévorer Odin.\n\nAinsi Tyr perdit-il sa main, mais gagna l\'éternelle reconnaissance des dieux pour son sacrifice héroïque qui sauva les neuf mondes... du moins temporairement.',
         ),
       ],
+      collectibleCards: [
+        CollectibleCard(
+          id: 'fenrir_card',
+          title: 'Fenrir le Loup',
+          description: 'Le loup gigantesque, fils de Loki, destiné à dévorer Odin lors du Ragnarök.',
+          imagePath: 'assets/images/fenrir_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'tyr_card',
+          title: 'Týr le Sacrifié',
+          description: 'Le dieu de la guerre et de la justice, qui sacrifia sa main pour enchaîner Fenrir.',
+          imagePath: 'assets/images/tyr_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'gleipnir_card',
+          title: 'Gleipnir',
+          description: 'La chaîne magique, fine comme un ruban, forgée par les nains pour lier Fenrir.',
+          imagePath: 'assets/images/gleipnir_card.jpg', // Image à créer
+        ),
+      ],
     ),
     MythStory(
       title: 'La naissance du monde',
@@ -202,6 +263,26 @@ List<MythStory> getMythStories() {
               'Les dieux, après avoir vaincu Ymir, se mirent à l\'œuvre pour façonner le monde à partir de son corps colossal. Ils commencèrent par diviser son corps en deux moitiés égales, créant ainsi la terre et le ciel.\n\nLa chair d\'Ymir devint la terre fertile, couverte de forêts luxuriantes et de plaines verdoyantes. Ses os furent brisés et érigés en montagnes majestueuses, formant les chaînes montagneuses qui traversent le monde. Son sang, qui avait inondé les géants, fut canalisé pour former les mers profondes et les rivières sinueuses.\n\nLe crâne d\'Ymir fut soulevé pour créer le ciel, soutenu par quatre nains représentant les points cardinaux : Nord, Sud, Est et Ouest. Les étoiles furent placées dans le ciel comme des lanternes scintillantes, tandis que la lune et le soleil furent créés pour réguler le temps.\n\nAinsi naquit Midgard, le monde des hommes, au centre de l\'univers, entouré par les neuf mondes interconnectés. Les dieux avaient façonné un cosmos harmonieux à partir du chaos primordial.',
         ),
       ],
+      collectibleCards: [
+        CollectibleCard(
+          id: 'ymir_card',
+          title: 'Ymir le Géant Primordial',
+          description: 'Le premier être vivant, dont le corps a servi à créer le monde.',
+          imagePath: 'assets/images/ymir_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'audhumla_card',
+          title: 'Audhumla la Vache Cosmique',
+          description: 'La vache primordiale qui nourrit Ymir et révéla Buri, l\'ancêtre des dieux.',
+          imagePath: 'assets/images/audhumla_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'ginnungagap_card',
+          title: 'Le Ginnungagap',
+          description: 'Le vide béant primordial d\'où toute la création a émergé.',
+          imagePath: 'assets/images/ginnungagap_card.jpg', // Image à créer
+        ),
+      ],
     ),
     MythStory(
       title: 'La forge de Mjöllnir',
@@ -249,7 +330,33 @@ List<MythStory> getMythStories() {
               'Les trésors sont offerts aux dieux. Thor, émerveillé par Mjöllnir, accepte le pardon de Loki, bien que le manche soit un peu court.',
           imagePath: 'assets/images/forge_5.jpg',
           detailedStory:
-              'Lorsque les nains présentèrent leurs créations aux dieux, Thor fut immédiatement attiré par Mjöllnir. Il le prit en main, ressentant la puissance du marteau qui pulsait à travers lui. "C\'est un trésor digne de mon épouse Sif !" s\'exclama-t-il, oubliant presque sa colère contre Loki.\n\nBien que le manche du marteau fût un peu court, ce qui le rendait difficile à manier pour un dieu de sa stature, Thor accepta le cadeau avec gratitude. Il savait que Mjöllnir serait un atout précieux dans ses combats contre les géants et les forces du chaos.\n\nLoki, soulagé, put enfin respirer. Il avait réussi à réparer son erreur et à apaiser la colère de Thor, au prix de quelques frayeurs supplémentaires. Les dieux célébrèrent la création de ces trésors magiques, renforçant ainsi leur lien avec les nains et leur pouvoir sur les neuf mondes.',
+              'Lorsque les nains présentèrent leurs créations aux dieux, Thor fut immédiatement attiré par Mjöllnir. Il le prit en main, ressentant la puissance du marteau qui pulsait à travers lui. "C\'est un trésor digne de mon épouse Sif !" s\'exclama-t-il, oubliant presque sa colère contre Loki.\n\nBien que le manche du marteau fût un peu court, ce qui le rendait difficile à manier pour un dieu de sa stature, Thor accepta le cadeau avec gratitude. Il savait que Mjöllnir serait un atout précieux dans ses combats contre les géants et les forces du chaos.\n\nLoki, soulagé, put enfin respirer. Il avait réussi à réparer son erreur et à apaiser la colère de Thor, au prix de quelques frayeurs supplémentaires. Les dieux célébrèrent la creation de ces trésors magiques, renforçant ainsi leur lien avec les nains et leur pouvoir sur les neuf mondes.',
+        ),
+      ],
+      collectibleCards: [
+        CollectibleCard(
+          id: 'sif_card',
+          title: 'Sif aux Cheveux d\'Or',
+          description: 'Déesse de la fertilité et épouse de Thor, célèbre pour sa magnifique chevelure dorée.',
+          imagePath: 'assets/images/sif_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'brokkr_sindri_card',
+          title: 'Brokkr et Sindri',
+          description: 'Les nains forgerons qui créèrent les plus grands trésors des dieux, dont Mjöllnir.',
+          imagePath: 'assets/images/brokkr_sindri_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'draupnir_card',
+          title: 'Draupnir l\'Anneau',
+          description: 'L\'anneau magique d\'Odin, capable de produire huit anneaux d\'or toutes les neuf nuits.',
+          imagePath: 'assets/images/draupnir_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'gungnir_card',
+          title: 'Gungnir la Lance',
+          description: 'La lance d\'Odin qui ne manque jamais sa cible, symbole de son pouvoir et de sa sagesse.',
+          imagePath: 'assets/images/gungnir_card.jpg', // Image à créer
         ),
       ],
     ),
@@ -318,6 +425,26 @@ List<MythStory> getMythStories() {
           imagePath: 'assets/images/wall_7.jpg',
           detailedStory:
               'Après la victoire sur Hrimthurs, les dieux se mirent à reconstruire Asgard. Ils utilisèrent les pierres de la muraille détruite pour ériger une nouvelle forteresse, encore plus solide que la précédente. Les Ases célébrèrent leur triomphe avec de grandes fêtes, honorant Loki pour son rôle crucial dans la défaite du géant. Ils comprirent que, même si la ruse et la tromperie n’étaient pas toujours les meilleures solutions, elles pouvaient parfois être nécessaires pour protéger leur royaume. La nouvelle muraille d’Asgard devint un symbole de leur force et de leur unité, et les dieux jurèrent de toujours veiller sur leur royaume, prêts à affronter toute menace qui pourrait surgir à l’avenir.',
+        ),
+      ],
+      collectibleCards: [
+        CollectibleCard(
+          id: 'hrimthurs_card',
+          title: 'Hrimthurs le Bâtisseur',
+          description: 'Le géant qui proposa de construire la muraille d\'Asgard en échange de Freyja, du soleil et de la lune.',
+          imagePath: 'assets/images/hrimthurs_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'svadilfari_card',
+          title: 'Svadilfari le Cheval',
+          description: 'Le cheval magique de Hrimthurs, dont la vitesse et la force aidèrent à la construction de la muraille.',
+          imagePath: 'assets/images/svadilfari_card.jpg', // Image à créer
+        ),
+        CollectibleCard(
+          id: 'sleipnir_card',
+          title: 'Sleipnir le Cheval à Huit Pattes',
+          description: 'Le cheval d\'Odin, né de l\'union de Loki transformé en jument et de Svadilfari.',
+          imagePath: 'assets/images/sleipnir_card.jpg', // Image à créer
         ),
       ],
     ),

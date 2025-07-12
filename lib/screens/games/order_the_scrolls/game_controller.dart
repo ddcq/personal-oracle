@@ -49,13 +49,33 @@ class GameController extends ChangeNotifier {
   void validateOrder() async {
     _validated = true;
     if (isOrderCompletelyCorrect()) {
-      final progress = await _gamificationService.getStoryProgress(_selectedStory.title);
-      final unlockedParts = progress != null ? jsonDecode(progress['parts_unlocked']) : [];
+      final random = Random();
+      final rewardType = random.nextInt(2); // 0 for story part, 1 for collectible card
 
-      for (var card in _selectedStory.correctOrder) {
-        if (!unlockedParts.contains(card.id)) {
-          await _gamificationService.unlockStoryPart(_selectedStory.title, card.id);
-          break; // Unlock only one part per victory
+      if (rewardType == 0) {
+        // Unlock story part
+        final progress = await _gamificationService.getStoryProgress(_selectedStory.title);
+        final unlockedParts = progress != null ? jsonDecode(progress['parts_unlocked']) : [];
+
+        for (var card in _selectedStory.correctOrder) {
+          if (!unlockedParts.contains(card.id)) {
+            await _gamificationService.unlockStoryPart(_selectedStory.title, card.id);
+            break; // Unlock only one part per victory
+          }
+        }
+      } else {
+        // Unlock collectible card
+        final availableCards = _selectedStory.collectibleCards;
+        if (availableCards.isNotEmpty) {
+          final unlockedCards = await _gamificationService.getUnlockedCollectibleCards();
+          final unlockedCardIds = unlockedCards.map((e) => e['card_id']).toList();
+          
+          final uncollectedCards = availableCards.where((card) => !unlockedCardIds.contains(card.id)).toList();
+
+          if (uncollectedCards.isNotEmpty) {
+            final cardToUnlock = uncollectedCards[random.nextInt(uncollectedCards.length)];
+            await _gamificationService.unlockCollectibleCard(cardToUnlock.id);
+          }
         }
       }
     }

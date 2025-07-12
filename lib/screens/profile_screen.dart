@@ -7,6 +7,7 @@ import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
+import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/data/stories_data.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -18,11 +19,13 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late Map<String, MythCard> _allMythCards;
+  late Map<String, CollectibleCard> _allCollectibleCards;
 
   @override
   void initState() {
     super.initState();
     _loadAllMythCards();
+    _loadAllCollectibleCards();
   }
 
   void _loadAllMythCards() {
@@ -30,6 +33,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     for (var story in getMythStories()) {
       for (var card in story.correctOrder) {
         _allMythCards[card.id] = card;
+      }
+    }
+  }
+
+  void _loadAllCollectibleCards() {
+    _allCollectibleCards = {};
+    for (var story in getMythStories()) {
+      for (var card in story.collectibleCards) {
+        _allCollectibleCards[card.id] = card;
       }
     }
   }
@@ -145,7 +157,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } else if (difference.inDays < 30) {
       final weeks = (difference.inDays / 7).floor();
       return "Il y a $weeks sem";
-    } else if (difference.inDays < 365) {
+    }
+    else if (difference.inDays < 365) {
       final months = (difference.inDays / 30).floor();
       return "Il y a $months mois";
     } else {
@@ -157,7 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildGameScores(List<Map<String, dynamic>> scores) {
     if (scores.isEmpty) {
       return const Text(
-        'Aucun score de Snake pour l'instant.',
+        'Aucun score de Snake pour l’instant.',
         style: TextStyle(color: Colors.white70),
       );
     }
@@ -219,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildTrophies(List<Map<String, dynamic>> trophies) {
     if (trophies.isEmpty) {
       return const Text(
-        'Aucun trophée débloqué pour l'instant.',
+        'Aucun trophée débloqué pour l’instant.',
         style: TextStyle(color: Colors.white70),
       );
     }
@@ -264,7 +277,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildCollectibleCards(List<Map<String, dynamic>> cards) {
     if (cards.isEmpty) {
       return const Text(
-        'Aucune carte à collectionner débloquée pour l'instant.'
+        'Aucune carte à collectionner débloquée pour l’instant.',
         style: TextStyle(color: Colors.white70),
       );
     }
@@ -279,7 +292,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       itemCount: cards.length,
       itemBuilder: (context, index) {
-        final card = cards[index];
+        final cardData = cards[index];
+        final collectibleCard = _allCollectibleCards[cardData['card_id']];
+
+        if (collectibleCard == null) {
+          return const SizedBox.shrink(); // Should not happen
+        }
+
         return Card(
           color: Colors.white.withAlpha((255 * 0.1).toInt()),
           elevation: 5,
@@ -289,16 +308,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.auto_stories,
-                color: Colors.lightBlueAccent,
-                size: 40,
-              ), // Placeholder icon
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    collectibleCard.imagePath,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
               const SizedBox(height: 8),
               Text(
-                _allMythCards[card['card_id']]?.title ?? 'Carte inconnue',
+                collectibleCard.title,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
@@ -308,9 +331,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
-                  _allMythCards[card['card_id']]?.description ?? '',
+                  collectibleCard.description,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 10,
                   ),
@@ -318,6 +341,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
+              const SizedBox(height: 8),
             ],
           ),
         );
@@ -328,7 +352,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildUnlockedStories(List<Map<String, dynamic>> storyProgress) {
     if (storyProgress.isEmpty) {
       return const Text(
-        'Aucune histoire débloquée pour l'instant.',
+        'Aucune histoire débloquée pour l’instant.',
         style: TextStyle(color: Colors.white70),
       );
     }
@@ -349,7 +373,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final storyId = progress['story_id'];
         final mythStory = allMythStories.firstWhere(
           (story) => story.title == storyId,
-          orElse: () => MythStory(title: 'Histoire inconnue', correctOrder: []), // Fallback
+          orElse: () => MythStory(title: 'Histoire inconnue', correctOrder: [], collectibleCards: []), // Fallback
         );
         final unlockedParts = jsonDecode(progress['parts_unlocked']);
         final progressPercentage = unlockedParts.length / mythStory.correctOrder.length;
