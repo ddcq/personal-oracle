@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oracle_d_asgard/widgets/app_dialog.dart';
 import 'dart:async';
 import 'dart:collection'; // Pour utiliser Queue pour le flood fill
 import 'dart:math';
@@ -210,16 +211,12 @@ class _QixGameScreenState extends State<QixGameScreen>
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF0F0F23),
-        title: const Text(
-          '💀 Défaite !',
-          style: TextStyle(color: Colors.red),
-          textAlign: TextAlign.center,
-        ),
+      builder: (context) => AppDialog(
+        icon: Icons.sentiment_very_dissatisfied,
+        title: 'Défaite !',
         content: Text(
           'Jörmungand a triomphé !\n\nScore: $_score\nTerritoire conquis: ${(_territoryConquered * 100).toStringAsFixed(1)}%',
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Color(0xFFC5CAE9)),
           textAlign: TextAlign.center,
         ),
         actions: [
@@ -228,104 +225,184 @@ class _QixGameScreenState extends State<QixGameScreen>
               Navigator.of(context).pop();
               widget.onGameOver();
             },
-            child: const Text('Menu Principal'),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: const Color(0xFF81D4FA).withAlpha(51),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(
+                'Menu Principal',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
+  List<String> _getValidNextDirections() {
+    final List<String> validDirections = [];
+    final Point<int> currentPos = _playerGridPos;
+
+    final Map<String, Point<int>> potentialMoves = {
+      'up': Point(currentPos.x, currentPos.y - 1),
+      'down': Point(currentPos.x, currentPos.y + 1),
+      'left': Point(currentPos.x - 1, currentPos.y),
+      'right': Point(currentPos.x + 1, currentPos.y),
+    };
+
+    final Map<String, String> oppositeDirections = {
+      'up': 'down',
+      'down': 'up',
+      'left': 'right',
+      'right': 'left',
+    };
+
+    final String oppositeDirection = oppositeDirections[_currentDirection]!;
+
+    for (final entry in potentialMoves.entries) {
+      final direction = entry.key;
+      final nextPos = entry.value;
+
+      // On ne peut pas faire demi-tour
+      if (direction == oppositeDirection) {
+        continue;
+      }
+      // On ne teste pas la direction actuelle
+      if (direction == _currentDirection) {
+        continue;
+      }
+
+      // On vérifie si la case est valide (sur une bordure ou une zone conquise)
+      if (nextPos.x >= 0 &&
+          nextPos.x < kGridWidth &&
+          nextPos.y >= 0 &&
+          nextPos.y < kGridHeight &&
+          (_grid[nextPos.x][nextPos.y] == kGridEdge ||
+              _grid[nextPos.x][nextPos.y] == kGridFilled)) {
+        validDirections.add(direction);
+      }
+    }
+    return validDirections;
+  }
+
   void _updatePlayer() {
     if (!_autoMove || _atCorner) return;
 
-    double currentSpeed = (_isDrawing && _slowDraw)
-        ? _moveSpeed * 0.5
-        : _moveSpeed;
+    // 1. Calcul de la position visuelle suivante
+    double currentSpeed =
+        (_isDrawing && _slowDraw) ? _moveSpeed * 0.5 : _moveSpeed;
     Offset newPosition = _playerPosition;
     switch (_currentDirection) {
       case 'up':
         newPosition = Offset(
-          _playerPosition.dx,
-          _playerPosition.dy - currentSpeed,
-        );
+            _playerPosition.dx, _playerPosition.dy - currentSpeed);
         break;
       case 'down':
         newPosition = Offset(
-          _playerPosition.dx,
-          _playerPosition.dy + currentSpeed,
-        );
+            _playerPosition.dx, _playerPosition.dy + currentSpeed);
         break;
       case 'left':
         newPosition = Offset(
-          _playerPosition.dx - currentSpeed,
-          _playerPosition.dy,
-        );
+            _playerPosition.dx - currentSpeed, _playerPosition.dy);
         break;
       case 'right':
         newPosition = Offset(
-          _playerPosition.dx + currentSpeed,
-          _playerPosition.dy,
-        );
+            _playerPosition.dx + currentSpeed, _playerPosition.dy);
         break;
     }
 
-    Point<int> newGridPos = Point(
-      newPosition.dx.round(),
-      newPosition.dy.round(),
-    );
+    // 2. Déterminer la case logique suivante
+    Point<int> nextGridPos =
+        Point(newPosition.dx.round(), newPosition.dy.round());
 
-    if (newGridPos != _playerGridPos) {
-      if (_isValidGridPosition(newGridPos)) {
-        bool wasOnBorder =
-            _grid[_playerGridPos.x][_playerGridPos.y] == kGridFilled;
-        bool isOnBorder = _grid[newGridPos.x][newGridPos.y] == kGridFilled;
+    // 3. Si on ne change pas de case, on met juste à jour la position visuelle et on arrête
+    if (nextGridPos == _playerGridPos) {
+      _playerPosition = newPosition;
+      return;
+    }
 
-        if (wasOnBorder && !isOnBorder && !_isDrawing) {
-          _isDrawing = true;
-          _currentLinePoints.clear();
-          // *** CORRECTION LOGIQUE ***
-          // Ajoute le point de départ à la ligne pour qu'elle soit complète.
-          _currentLinePoints.add(_playerGridPos);
+    // 4. On a changé de case, on vérifie si le mouvement est valide
+    if (_isValidGridPosition(nextGridPos)) {
+      // Le mouvement est valide, on met à jour la position visuelle
+      _playerPosition = newPosition;
+
+      // Logique de début/fin de dessin
+      bool wasOnBorder =
+          _grid[_playerGridPos.x][_playerGridPos.y] == kGridEdge ||
+              _grid[_playerGridPos.x][_playerGridPos.y] == kGridFilled;
+      bool isOnBorder = _grid[nextGridPos.x][nextGridPos.y] == kGridEdge ||
+          _grid[nextGridPos.x][nextGridPos.y] == kGridFilled;
+
+      if (wasOnBorder && !isOnBorder && !_isDrawing) {
+        _isDrawing = true;
+        _currentLinePoints.clear();
+        _currentLinePoints.add(_playerGridPos);
+        // La nouvelle case est le premier point du chemin
+        _grid[nextGridPos.x][nextGridPos.y] = kGridPath;
+        _currentLinePoints.add(nextGridPos);
+      } else if (_isDrawing) {
+        if (!_currentLinePoints.contains(nextGridPos)) {
+          _grid[nextGridPos.x][nextGridPos.y] = kGridPath;
+          _currentLinePoints.add(nextGridPos);
         }
+      }
 
-        if (_isDrawing) {
-          if (!_currentLinePoints.contains(newGridPos)) {
-            _grid[newGridPos.x][newGridPos.y] = kGridPath;
-            _currentLinePoints.add(newGridPos);
-          }
-        }
+      if (_isDrawing && isOnBorder) {
+        _finishDrawing();
+      }
 
-        if (_isDrawing && isOnBorder) {
-          _finishDrawing();
-        }
-        _playerGridPos = newGridPos;
+      // On met à jour la position logique du joueur
+      _playerGridPos = nextGridPos;
+    } else {
+      // Le mouvement est invalide (mur, etc.)
+      if (_isDrawing) {
+        _loseLife();
       } else {
-        // Le joueur a heurté un mur ou sa propre ligne
-        // Si en train de dessiner, c'est une perte de vie
-        if (_isDrawing) {
-          _loseLife();
+        // On est sur une bordure et on a heurté un coin
+        // On replace le joueur au centre de sa case actuelle pour éviter qu'il ne se coince
+        _playerPosition =
+            Offset(_playerGridPos.x.toDouble(), _playerGridPos.y.toDouble());
+
+        final validDirections = _getValidNextDirections();
+        if (validDirections.length == 1) {
+          setState(() {
+            _currentDirection = validDirections.first;
+          });
         } else {
-          _atCorner = true;
-          _autoMove = false;
+          setState(() {
+            _atCorner = true;
+            _autoMove = false;
+          });
         }
       }
     }
-    _playerPosition = newPosition;
   }
 
   bool _isValidGridPosition(Point<int> pos) {
+    // Vérifie les limites de la grille
     if (pos.x < 0 || pos.x >= kGridWidth || pos.y < 0 || pos.y >= kGridHeight) {
       return false;
     }
-    // On ne peut pas croiser sa propre ligne
+
+    // Empêche de croiser sa propre ligne en dessinant
     if (_isDrawing && _grid[pos.x][pos.y] == kGridPath) {
+      // On peut revenir sur le premier point pour fermer une zone, mais pas sur les autres.
+      if (_currentLinePoints.length > 2 && pos == _currentLinePoints.first) {
+        return true;
+      }
       return false;
     }
-    // Si on ne dessine pas, on doit rester sur une zone kGridFilled
-    if (!_isDrawing && _grid[pos.x][pos.y] != kGridFilled) {
-      return false;
-    }
-    return true;
+    
+    return true; // Le mouvement est permis par défaut, les cas interdits sont traités au-dessus
   }
 
   void _finishDrawing() {
@@ -570,16 +647,12 @@ class _QixGameScreenState extends State<QixGameScreen>
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF0F0F23),
-        title: const Text(
-          '🎉 Victoire !',
-          style: TextStyle(color: Colors.green),
-          textAlign: TextAlign.center,
-        ),
+      builder: (context) => AppDialog(
+        icon: Icons.celebration,
+        title: 'Victoire !',
         content: Text(
-          'Jörmungand a été vaincu !\n\nScore final: $_score\nTerritoire conquis: ${(_territoryConquered * 100).toStringAsFixed(1)}%',
-          style: const TextStyle(color: Colors.white),
+          'Jörmungand a été vaincu!\n\nScore final: $_score\nTerritoire conquis: ${(_territoryConquered * 100).toStringAsFixed(1)}%',
+          style: const TextStyle(color: Color(0xFFC5CAE9)),
           textAlign: TextAlign.center,
         ),
         actions: [
@@ -588,7 +661,23 @@ class _QixGameScreenState extends State<QixGameScreen>
               Navigator.of(context).pop();
               widget.onGameOver();
             },
-            child: const Text('Menu Principal'),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: const Color(0xFF81D4FA).withAlpha(51),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(
+                'Menu Principal',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:confetti/confetti.dart';
+import 'package:oracle_d_asgard/widgets/app_dialog.dart';
 import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_flame_game.dart';
 
 import './puzzle_game.dart';
@@ -58,38 +59,61 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     _confettiController.play();
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(
-          'Victoire !',
-          style: TextStyle(color: Colors.black),
-        ),
+      builder: (context) => AppDialog(
+        icon: Icons.celebration,
+        title: 'Victoire !',
         content: const Text(
           'Bravo, vous avez terminé le puzzle.',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Color(0xFFC5CAE9)),
         ),
         actions: [
           TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-          _resetGame();
-        },
-        child: const Text(
-          'Rejouer',
-          style: TextStyle(color: Colors.black),
-        ),
+            onPressed: () {
+              Navigator.of(context).pop();
+              _resetGame();
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: const Color(0xFF81D4FA).withAlpha(51),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(
+                'Rejouer',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
           ),
           TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-          Navigator.of(context).pop(); // Retour à la liste des jeux
-        },
-        child: const Text(
-          'Retour',
-          style: TextStyle(color: Colors.black),
-        ),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop(); // Retour à la liste des jeux
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: const Color(0xFF81D4FA).withAlpha(51),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(
+                'Retour',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
           ),
         ],
-        backgroundColor: Colors.white,
       ),
     );
   }
