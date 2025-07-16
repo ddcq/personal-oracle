@@ -33,6 +33,13 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     return _grid[y][x] == game_constants.kGridFilled;
   }
 
+  bool isTraversable(int x, int y) {
+    if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) {
+      return false;
+    }
+    return _grid[y][x] != game_constants.kGridFilled;
+  }
+
   void startPath(Vector2 startPoint) {
     _currentDrawingPath.clear();
     _currentDrawingPath.add(startPoint);

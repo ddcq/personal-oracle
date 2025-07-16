@@ -30,8 +30,19 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
   }
 
   void setDirection(Direction? direction, {bool isManual = false}) {
-    currentDirection = direction;
-    _isManualInput = isManual;
+    if (isManual) {
+      bool originalIsManualInput = _isManualInput;
+      _isManualInput = true; // Temporarily set to true for _canMove check
+      if (direction != null && _canMove(direction)) {
+        currentDirection = direction;
+        _isManualInput = true; // Set permanently for manual input
+      } else {
+        _isManualInput = originalIsManualInput; // Revert if move is impossible
+      }
+    } else {
+      currentDirection = direction;
+      _isManualInput = isManual;
+    }
   }
 
   @override
@@ -54,34 +65,34 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
           List<Direction> possibleDirections = [];
           List<Direction> allDirections = [Direction.up, Direction.down, Direction.left, Direction.right];
 
-          // Determine the opposite direction to prevent U-turns
-          Direction? oppositeDirection;
-          if (currentDirection == Direction.up) {
-            oppositeDirection = Direction.down;
-          } else if (currentDirection == Direction.down) {
-            oppositeDirection = Direction.up;
-          } else if (currentDirection == Direction.left) {
-            oppositeDirection = Direction.right;
-          } else if (currentDirection == Direction.right) {
-            oppositeDirection = Direction.left;
-          }
+            // Determine the opposite direction to prevent U-turns
+            Direction? oppositeDirection;
+            if (currentDirection == Direction.up) {
+              oppositeDirection = Direction.down;
+            } else if (currentDirection == Direction.down) {
+              oppositeDirection = Direction.up;
+            } else if (currentDirection == Direction.left) {
+              oppositeDirection = Direction.right;
+            } else if (currentDirection == Direction.right) {
+              oppositeDirection = Direction.left;
+            }
 
-          for (Direction dir in allDirections) {
-            if (dir != oppositeDirection && _canMove(dir)) {
-              possibleDirections.add(dir);
+            for (Direction dir in allDirections) {
+              if (dir != oppositeDirection && _canMove(dir)) {
+                possibleDirections.add(dir);
+              }
+            }
+
+            if (possibleDirections.length == 1) {
+              currentDirection = possibleDirections.first;
+              _isManualInput = false; // Automatically chosen path is not manual
+              move(currentDirection!); // Move in the new direction
+            } else {
+              currentDirection = null; // Stop automatic movement if multiple or no options
+              _isManualInput = false; // Reset manual input flag
             }
           }
-
-          if (possibleDirections.length == 1) {
-            currentDirection = possibleDirections.first;
-            _isManualInput = false; // Automatically chosen path is not manual
-            move(currentDirection!); // Move in the new direction
-          } else {
-            currentDirection = null; // Stop automatic movement if multiple or no options
-            _isManualInput = false; // Reset manual input flag
-          }
         }
-      }
     }
   }
 
@@ -111,18 +122,17 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
       return false; // Cannot move further in this direction (hit boundary)
     }
 
-    bool isNewPositionTrulyOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge || game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridFilled;
-
-    if (onEdge) {
-      // If on edge, prevent moving into an already filled area that is not a boundary
-      if (game.arena.isFilled(newGridPosition.x.toInt(), newGridPosition.y.toInt()) && !isNewPositionTrulyOnEdge) {
-        return false; // Do not move into a filled non-boundary area
-      }
-      // If on edge and trying to move off the edge automatically, prevent it
-      if (!isNewPositionTrulyOnEdge && !_isManualInput) {
-        return false;
-      }
+    // Check if the new position is traversable
+    if (!game.arena.isTraversable(newGridPosition.x.toInt(), newGridPosition.y.toInt())) {
+      return false;
     }
+
+    // If on edge, only allow moving off the edge with manual input
+    bool isNewPositionOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge;
+    if (onEdge && !isNewPositionOnEdge && !_isManualInput) {
+      return false;
+    }
+
     return true;
   }
 
@@ -157,11 +167,10 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     newGridPosition.x = newGridPosition.x.clamp(0, gridSize - 1);
     newGridPosition.y = newGridPosition.y.clamp(0, gridSize - 1);
 
-    // Check if moving off the edge or back onto it
-    bool isNewPositionTrulyOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge || game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridFilled;
+    bool isNewPositionOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge;
 
     if (onEdge) {
-      if (!isNewPositionTrulyOnEdge) {
+      if (!isNewPositionOnEdge) {
         // Moving off the edge
         onEdge = false;
         pathStartGridPosition = gridPosition.clone();
@@ -174,7 +183,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
       targetGridPosition = newGridPosition;
     } else {
       // Currently drawing a path
-      if (isNewPositionTrulyOnEdge) {
+      if (isNewPositionOnEdge) {
         // Hit an existing boundary
         game.arena.addPathPoint(newGridPosition.clone());
         game.arena.fillArea(currentPath, pathStartGridPosition!, newGridPosition);
