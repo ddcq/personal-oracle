@@ -17,6 +17,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
   List<Vector2> currentPath = [];
   Vector2? pathStartGridPosition;
   Direction? currentDirection; // Current direction for automatic movement
+  bool _isManualInput = false; // True if the last direction change was from user input
 
   Player({
     required this.gridSize,
@@ -28,8 +29,9 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     position = gridPosition * cellSize;
   }
 
-  void setDirection(Direction? direction) {
+  void setDirection(Direction? direction, {bool isManual = false}) {
     currentDirection = direction;
+    _isManualInput = isManual;
   }
 
   @override
@@ -72,9 +74,11 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
 
           if (possibleDirections.length == 1) {
             currentDirection = possibleDirections.first;
+            _isManualInput = false; // Automatically chosen path is not manual
             move(currentDirection!); // Move in the new direction
           } else {
             currentDirection = null; // Stop automatic movement if multiple or no options
+            _isManualInput = false; // Reset manual input flag
           }
         }
       }
@@ -107,12 +111,16 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
       return false; // Cannot move further in this direction (hit boundary)
     }
 
-    bool isNewPositionTrulyOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge;
+    bool isNewPositionTrulyOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge || game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridFilled;
 
     if (onEdge) {
       // If on edge, prevent moving into an already filled area that is not a boundary
       if (game.arena.isFilled(newGridPosition.x.toInt(), newGridPosition.y.toInt()) && !isNewPositionTrulyOnEdge) {
         return false; // Do not move into a filled non-boundary area
+      }
+      // If on edge and trying to move off the edge automatically, prevent it
+      if (!isNewPositionTrulyOnEdge && !_isManualInput) {
+        return false;
       }
     }
     return true;
@@ -150,7 +158,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     newGridPosition.y = newGridPosition.y.clamp(0, gridSize - 1);
 
     // Check if moving off the edge or back onto it
-    bool isNewPositionTrulyOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge;
+    bool isNewPositionTrulyOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge || game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridFilled;
 
     if (onEdge) {
       if (!isNewPositionTrulyOnEdge) {
