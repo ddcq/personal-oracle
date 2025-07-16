@@ -1,10 +1,13 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'dart:collection';
+import 'dart:ui' as ui;
+import 'package:flame/sprite.dart';
 import 'qix_game.dart';
 import 'constants.dart' as game_constants;
 
 class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
+  late ui.Image _rewardCardImage;
   final double gridSize;
   final double cellSize;
 
@@ -23,6 +26,11 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       gridSize / 2,
       gridSize / 2,
     ); // Center of the arena
+  }
+
+  @override
+  Future<void> onLoad() async {
+    _rewardCardImage = await game.images.load('fenrir_card.jpg');
   }
 
   void _setGridValue(int x, int y, int value) {
@@ -231,16 +239,30 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   @override
   void render(Canvas canvas) {
     // Render filled areas (including boundaries)
-    final filledPaint = Paint()..color = Colors.cyan.withAlpha(128);
     final boundaryPaint = Paint()..color = Colors.cyanAccent;
     for (int y = 0; y < gridSize; y++) {
       for (int x = 0; x < gridSize; x++) {
-        if (_grid[y][x] == game_constants.kGridFilled || _grid[y][x] == game_constants.kGridEdge) {
+        if (_grid[y][x] == game_constants.kGridFilled) {
+          final double sourceX = (x / gridSize) * _rewardCardImage.width;
+          final double sourceY = (y / gridSize) * _rewardCardImage.height;
+          final double sourceWidth = (1 / gridSize) * _rewardCardImage.width;
+          final double sourceHeight = (1 / gridSize) * _rewardCardImage.height;
+
+          final subSprite = Sprite(
+            _rewardCardImage,
+            srcPosition: Vector2(sourceX, sourceY),
+            srcSize: Vector2(sourceWidth, sourceHeight),
+          );
+
+          subSprite.render(
+            canvas,
+            position: Vector2(x * cellSize, y * cellSize),
+            size: Vector2.all(cellSize),
+          );
+        } else if (_grid[y][x] == game_constants.kGridEdge) {
           canvas.drawRect(
             Rect.fromLTWH(x * cellSize, y * cellSize, cellSize, cellSize),
-            _grid[y][x] == game_constants.kGridEdge
-                ? boundaryPaint
-                : filledPaint,
+            boundaryPaint,
           );
         }
       }
