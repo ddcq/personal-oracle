@@ -46,15 +46,86 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
 
       // If player has reached target, and there's a current direction, move again
       if (currentDirection != null) {
-        move(currentDirection!);
+        bool moved = move(currentDirection!);
+        if (!moved) {
+          // Player cannot move in the current direction, find alternatives
+          List<Direction> possibleDirections = [];
+          List<Direction> allDirections = [Direction.up, Direction.down, Direction.left, Direction.right];
+
+          // Determine the opposite direction to prevent U-turns
+          Direction? oppositeDirection;
+          if (currentDirection == Direction.up) {
+            oppositeDirection = Direction.down;
+          } else if (currentDirection == Direction.down) {
+            oppositeDirection = Direction.up;
+          } else if (currentDirection == Direction.left) {
+            oppositeDirection = Direction.right;
+          } else if (currentDirection == Direction.right) {
+            oppositeDirection = Direction.left;
+          }
+
+          for (Direction dir in allDirections) {
+            if (dir != oppositeDirection && _canMove(dir)) {
+              possibleDirections.add(dir);
+            }
+          }
+
+          if (possibleDirections.length == 1) {
+            currentDirection = possibleDirections.first;
+            move(currentDirection!); // Move in the new direction
+          } else {
+            currentDirection = null; // Stop automatic movement if multiple or no options
+          }
+        }
       }
     }
   }
 
-  void move(Direction direction) {
+  bool _canMove(Direction direction) {
+    Vector2 newGridPosition = gridPosition.clone();
+    switch (direction) {
+      case Direction.up:
+        newGridPosition.y--;
+        break;
+      case Direction.down:
+        newGridPosition.y++;
+        break;
+      case Direction.left:
+        newGridPosition.x--;
+        break;
+      case Direction.right:
+        newGridPosition.x++;
+        break;
+    }
+
+    // Clamp to grid boundaries
+    newGridPosition.x = newGridPosition.x.clamp(0, gridSize - 1);
+    newGridPosition.y = newGridPosition.y.clamp(0, gridSize - 1);
+
+    // Check if the new position is within bounds after clamping
+    if (newGridPosition.x == gridPosition.x && newGridPosition.y == gridPosition.y) {
+      return false; // Cannot move further in this direction (hit boundary)
+    }
+
+    bool isNewPositionTrulyOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge;
+
+    if (onEdge) {
+      // If on edge, prevent moving into an already filled area that is not a boundary
+      if (game.arena.isFilled(newGridPosition.x.toInt(), newGridPosition.y.toInt()) && !isNewPositionTrulyOnEdge) {
+        return false; // Do not move into a filled non-boundary area
+      }
+    }
+    return true;
+  }
+
+  bool move(Direction direction) {
     // Only allow new move if player has reached the current target
     if (position.distanceTo(targetGridPosition * cellSize) > 0.1) {
-      return;
+      return false;
+    }
+
+    if (!_canMove(direction)) {
+      return false;
     }
 
     Vector2 newGridPosition = gridPosition.clone();
@@ -82,11 +153,6 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     bool isNewPositionTrulyOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge;
 
     if (onEdge) {
-      // If on edge, prevent moving into an already filled area that is not a boundary
-      if (game.arena.isFilled(newGridPosition.x.toInt(), newGridPosition.y.toInt()) && !isNewPositionTrulyOnEdge) {
-        return; // Do not move into a filled non-boundary area
-      }
-
       if (!isNewPositionTrulyOnEdge) {
         // Moving off the edge
         onEdge = false;
@@ -126,6 +192,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
       }
       targetGridPosition = newGridPosition;
     }
+    return true;
   }
 
   @override

@@ -23,8 +23,9 @@ class QixGame extends FlameGame with KeyboardEvents {
       gridSize: gridSize,
       cellSize: cellSize,
     );
-    player.gridPosition = Vector2(gridSize / 2, 0); // Start at the top edge
+    player.gridPosition = Vector2(0, 0); // Start at the top-left edge
     player.targetGridPosition = player.gridPosition.clone();
+    player.setDirection(Direction.right); // Start moving right along the edge automatically
 
     add(arena);
     add(player);
@@ -36,16 +37,16 @@ class QixGame extends FlameGame with KeyboardEvents {
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     super.onKeyEvent(event, keysPressed);
-    if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
-      player.setDirection(Direction.left);
-    } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
-      player.setDirection(Direction.right);
-    } else if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-      player.setDirection(Direction.up);
-    } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
-      player.setDirection(Direction.down);
-    } else {
-      player.setDirection(null);
+    if (event is KeyDownEvent) {
+      if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
+        player.setDirection(Direction.left);
+      } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
+        player.setDirection(Direction.right);
+      } else if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
+        player.setDirection(Direction.up);
+      } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
+        player.setDirection(Direction.down);
+      }
     }
     return KeyEventResult.handled;
   }
