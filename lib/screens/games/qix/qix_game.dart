@@ -14,7 +14,7 @@ class QixGame extends FlameGame with KeyboardEvents {
     await super.onLoad();
 
     const double gridSize = 100;
-    final double cellSize = size.x / gridSize;
+    final double cellSize = (size.x < size.y ? size.x : size.y) / gridSize;
 
     arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize);
     player = Player(gridSize: gridSize, cellSize: cellSize);
