@@ -63,37 +63,43 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
         bool moved = move(currentDirection!);
         if (!moved) {
           // Player cannot move in the current direction, find alternatives
-          List<Direction> possibleDirections = [];
-          List<Direction> allDirections = [Direction.up, Direction.down, Direction.left, Direction.right];
-
-            // Determine the opposite direction to prevent U-turns
-            Direction? oppositeDirection;
-            if (currentDirection == Direction.up) {
-              oppositeDirection = Direction.down;
-            } else if (currentDirection == Direction.down) {
-              oppositeDirection = Direction.up;
-            } else if (currentDirection == Direction.left) {
-              oppositeDirection = Direction.right;
-            } else if (currentDirection == Direction.right) {
-              oppositeDirection = Direction.left;
-            }
-
-            for (Direction dir in allDirections) {
-              if (dir != oppositeDirection && _canMove(dir)) {
-                possibleDirections.add(dir);
-              }
-            }
-
-            if (possibleDirections.length == 1) {
-              currentDirection = possibleDirections.first;
-              _isManualInput = false; // Automatically chosen path is not manual
-              move(currentDirection!); // Move in the new direction
-            } else {
-              currentDirection = null; // Stop automatic movement if multiple or no options
-              _isManualInput = false; // Reset manual input flag
-            }
+          _findNextAutoDirection();
+          if (currentDirection != null) {
+            move(currentDirection!); // Move in the new direction
+          }
           }
         }
+    }
+  }
+
+  void _findNextAutoDirection() {
+    List<Direction> possibleDirections = [];
+    List<Direction> allDirections = [Direction.up, Direction.down, Direction.left, Direction.right];
+
+    // Determine the opposite direction to prevent U-turns
+    Direction? oppositeDirection;
+    if (currentDirection == Direction.up) {
+      oppositeDirection = Direction.down;
+    } else if (currentDirection == Direction.down) {
+      oppositeDirection = Direction.up;
+    } else if (currentDirection == Direction.left) {
+      oppositeDirection = Direction.right;
+    } else if (currentDirection == Direction.right) {
+      oppositeDirection = Direction.left;
+    }
+
+    for (Direction dir in allDirections) {
+      if (dir != oppositeDirection && _canMove(dir)) {
+        possibleDirections.add(dir);
+      }
+    }
+
+    if (possibleDirections.length == 1) {
+      currentDirection = possibleDirections.first;
+      _isManualInput = false; // Automatically chosen path is not manual
+    } else {
+      currentDirection = null; // Stop automatic movement if multiple or no options
+      _isManualInput = false; // Reset manual input flag
     }
   }
 
