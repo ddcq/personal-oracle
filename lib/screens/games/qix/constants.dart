@@ -1,7 +1,7 @@
 
 // --- CONSTANTES DE LA GRILLE ---
-const int kGridWidth = 150;
-const int kGridHeight = 200;
+const int kGridSize = 100;
+
 const int kGridFree = 0;
 const int kGridPath = 1;
 const int kGridFilled = 2;
