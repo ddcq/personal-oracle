@@ -101,51 +101,58 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   }
 
   void fillArea(
-    List<Vector2> path,
+    List<Vector2> playerPath,
     Vector2 pathStartGridPosition,
     Vector2 pathEndGridPosition,
   ) {
-    // 1. Mark the path itself as a permanent edge
-    for (var p in path) {
-      _setGridValue(p.x.toInt(), p.y.toInt(), game_constants.kGridEdge);
+    // Step 1: Mark the player's path as a permanent edge on the grid.
+    // This ensures the drawn line becomes part of the game's boundaries.
+    for (var point in playerPath) {
+      _setGridValue(point.x.toInt(), point.y.toInt(), game_constants.kGridEdge);
     }
 
-    // 2. Find all distinct empty regions using flood-fill
-    List<List<Vector2>> emptyRegions = [];
-    List<List<bool>> visited = List.generate(
+    // Step 2: Identify all distinct enclosed regions within the arena.
+    // This is done by performing flood-fill operations from all 'free' (unfilled) cells.
+    List<List<Vector2>> identifiedRegions = [];
+    List<List<bool>> visitedCells = List.generate(
       gridSize.toInt(),
       (_) => List.generate(gridSize.toInt(), (_) => false),
     );
 
     for (int y = 0; y < gridSize; y++) {
       for (int x = 0; x < gridSize; x++) {
-        if (_grid[y][x] == game_constants.kGridFree && !visited[y][x]) {
-          List<Vector2> region = _floodFill(x, y, visited);
-          if (region.isNotEmpty) {
-            emptyRegions.add(region);
+        // If a cell is free and hasn't been visited yet, it's part of a new region.
+        if (_grid[y][x] == game_constants.kGridFree && !visitedCells[y][x]) {
+          List<Vector2> currentRegion = _floodFill(x, y, visitedCells);
+          if (currentRegion.isNotEmpty) {
+            identifiedRegions.add(currentRegion);
           }
         }
       }
     }
 
-    // 3. Determine which region contains the Qix
-    int qixRegionIndex = -1;
-    for (int i = 0; i < emptyRegions.length; i++) {
-      if (_regionContainsPoint(emptyRegions[i], _virtualQixPosition)) {
-        qixRegionIndex = i;
+    // Step 3: Determine which of the identified regions contains the Qix (enemy).
+    // The region containing the Qix should NOT be filled.
+    int qixContainingRegionIndex = -1;
+    for (int i = 0; i < identifiedRegions.length; i++) {
+      if (_regionContainsPoint(identifiedRegions[i], _virtualQixPosition)) {
+        qixContainingRegionIndex = i;
         break;
       }
     }
 
-    // 4. Fill all regions that do not contain the Qix
-    for (int i = 0; i < emptyRegions.length; i++) {
-      if (i != qixRegionIndex) {
-        for (var p in emptyRegions[i]) {
-          _setGridValue(p.x.toInt(), p.y.toInt(), game_constants.kGridFilled);
+    // Step 4: Fill all regions that do NOT contain the Qix.
+    // These are the areas successfully claimed by the player.
+    for (int i = 0; i < identifiedRegions.length; i++) {
+      if (i != qixContainingRegionIndex) {
+        for (var pointInRegion in identifiedRegions[i]) {
+          _setGridValue(pointInRegion.x.toInt(), pointInRegion.y.toInt(), game_constants.kGridFilled);
         }
       }
     }
 
+    // After filling, re-evaluate edges that might have become fully enclosed
+    // and convert them to filled areas.
     _demoteEnclosedEdges();
   }
 
