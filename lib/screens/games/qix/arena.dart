@@ -32,7 +32,9 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       gridSize / 2,
     ); // Center of the arena
 
-    _boundaryPaint = Paint()..color = Colors.blue[900]!;
+    _boundaryPaint = Paint()
+      ..color = Colors.blue[900]!
+      ..isAntiAlias = false;
     _pathPaint = Paint()
       ..color = Colors.blue
       ..strokeWidth = 2.0
