@@ -16,6 +16,10 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   final List<Vector2> _currentDrawingPath = [];
   late Vector2 _virtualQixPosition;
 
+  late final Paint _boundaryPaint;
+  late final Paint _pathPaint;
+  late final Map<int, Sprite> _filledSprites;
+
   ArenaComponent({required this.gridSize, required this.cellSize}) {
     size = Vector2(
       (gridSize * cellSize).toDouble(),
@@ -27,11 +31,34 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       gridSize / 2,
       gridSize / 2,
     ); // Center of the arena
+
+    _boundaryPaint = Paint()..color = Colors.blue[900]!;
+    _pathPaint = Paint()
+      ..color = Colors.blue
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke;
+    _filledSprites = {};
   }
 
   @override
   Future<void> onLoad() async {
     _rewardCardImage = await game.images.load('fenrir_card.jpg');
+
+    // Pre-calculate sprites for filled areas
+    for (int y = 0; y < gridSize; y++) {
+      for (int x = 0; x < gridSize; x++) {
+        final double sourceX = (x / gridSize) * _rewardCardImage.width;
+        final double sourceY = (y / gridSize) * _rewardCardImage.height;
+        final double sourceWidth = (1 / gridSize) * _rewardCardImage.width;
+        final double sourceHeight = (1 / gridSize) * _rewardCardImage.height;
+
+        _filledSprites[y * gridSize.toInt() + x] = Sprite(
+          _rewardCardImage,
+          srcPosition: Vector2(sourceX, sourceY),
+          srcSize: Vector2(sourceWidth, sourceHeight),
+        );
+      }
+    }
   }
 
   void _setGridValue(int x, int y, int value) {
@@ -247,32 +274,22 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   @override
   void render(Canvas canvas) {
     // Render filled areas (including boundaries)
-    final boundaryPaint = Paint()..color = Colors.blue[900]!;
     for (int y = 0; y < gridSize; y++) {
       for (int x = 0; x < gridSize; x++) {
         if (_grid[y][x] == game_constants.kGridFilled) {
-          final double sourceX = (x / gridSize) * _rewardCardImage.width;
-          final double sourceY = (y / gridSize) * _rewardCardImage.height;
-          final double sourceWidth = (1 / gridSize) * _rewardCardImage.width;
-          final double sourceHeight = (1 / gridSize) * _rewardCardImage.height;
-
-          final subSprite = Sprite(
-            _rewardCardImage,
-            srcPosition: Vector2(sourceX, sourceY),
-            srcSize: Vector2(sourceWidth, sourceHeight),
-          );
-
-          final spritePaint = Paint()..isAntiAlias = false;
-          subSprite.render(
-            canvas,
-            position: Vector2(x * cellSize, y * cellSize),
-            size: Vector2.all(cellSize),
-            overridePaint: spritePaint,
-          );
+          final sprite = _filledSprites[y * gridSize.toInt() + x];
+          if (sprite != null) {
+            sprite.render(
+              canvas,
+              position: Vector2(x * cellSize, y * cellSize),
+              size: Vector2.all(cellSize),
+              overridePaint: _boundaryPaint, // Using boundaryPaint for filled areas for now
+            );
+          }
         } else if (_grid[y][x] == game_constants.kGridEdge) {
           canvas.drawRect(
             Rect.fromLTWH(x * cellSize, y * cellSize, cellSize, cellSize),
-            boundaryPaint,
+            _boundaryPaint,
           );
         }
       }
@@ -280,11 +297,6 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
 
     // Render current drawing path
     if (_currentDrawingPath.isNotEmpty) {
-      final pathPaint = Paint()
-        ..color = Colors.blue
-        ..strokeWidth = 2.0
-        ..style = PaintingStyle.stroke;
-
       final path = Path();
       path.moveTo(
         _currentDrawingPath.first.x * cellSize + cellSize / 2,
@@ -296,7 +308,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
           _currentDrawingPath[i].y * cellSize + cellSize / 2,
         );
       }
-      canvas.drawPath(path, pathPaint);
+      canvas.drawPath(path, _pathPaint);
     }
   }
 }
