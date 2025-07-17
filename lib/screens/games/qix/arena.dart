@@ -19,6 +19,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late final Paint _boundaryPaint;
   late final Paint _pathPaint;
   late final Map<int, Sprite> _filledSprites;
+  final List<Vector2> _boundaryPoints = [];
 
   ArenaComponent({required this.gridSize, required this.cellSize}) {
     size = Vector2(
@@ -97,14 +98,20 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       (_) => List.generate(gridSize.toInt(), (_) => game_constants.kGridFree),
     );
 
+    _boundaryPoints.clear();
+
     // Initialize outer boundary
     for (int x = 0; x < gridSize; x++) {
       _setGridValue(x, 0, game_constants.kGridEdge);
+      _boundaryPoints.add(Vector2(x.toDouble(), 0.0));
       _setGridValue(x, gridSize.toInt() - 1, game_constants.kGridEdge);
+      _boundaryPoints.add(Vector2(x.toDouble(), gridSize - 1));
     }
     for (int y = 0; y < gridSize; y++) {
       _setGridValue(0, y, game_constants.kGridEdge);
+      _boundaryPoints.add(Vector2(0.0, y.toDouble()));
       _setGridValue(gridSize.toInt() - 1, y, game_constants.kGridEdge);
+      _boundaryPoints.add(Vector2(gridSize - 1, y.toDouble()));
     }
   }
 
@@ -129,15 +136,18 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     return false;
   }
 
-  void fillArea(
+  List<Vector2> fillArea(
     List<Vector2> playerPath,
     Vector2 pathStartGridPosition,
     Vector2 pathEndGridPosition,
   ) {
+    List<Vector2> newlyFilledPoints = [];
+
     // Step 1: Mark the player's path as a permanent edge on the grid.
     // This ensures the drawn line becomes part of the game's boundaries.
     for (var point in playerPath) {
       _setGridValue(point.x.toInt(), point.y.toInt(), game_constants.kGridEdge);
+      _boundaryPoints.add(point);
     }
 
     // Step 2: Identify all distinct enclosed regions within the arena.
@@ -176,39 +186,60 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       if (i != qixContainingRegionIndex) {
         for (var pointInRegion in identifiedRegions[i]) {
           _setGridValue(pointInRegion.x.toInt(), pointInRegion.y.toInt(), game_constants.kGridFilled);
+          newlyFilledPoints.add(pointInRegion);
         }
       }
     }
 
     // After filling, re-evaluate edges that might have become fully enclosed
     // and convert them to filled areas.
-    _demoteEnclosedEdges();
+    _demoteEnclosedEdges(newlyFilledPoints);
+    return newlyFilledPoints;
   }
 
-  void _demoteEnclosedEdges() {
-    for (int y = 1; y < gridSize - 1; y++) {
-      for (int x = 1; x < gridSize - 1; x++) {
-        if (_grid[y][x] == game_constants.kGridEdge) {
-          bool isEnclosed = true;
-          final neighbors = [
-            _grid[y - 1][x], // N
-            _grid[y + 1][x], // S
-            _grid[y][x - 1], // W
-            _grid[y][x + 1], // E
-            _grid[y - 1][x - 1], // NW
-            _grid[y - 1][x + 1], // NE
-            _grid[y + 1][x - 1], // SW
-            _grid[y + 1][x + 1], // SE
-          ];
-          for (var neighbor in neighbors) {
-            if (neighbor == game_constants.kGridFree) {
+  void _demoteEnclosedEdges(List<Vector2> newlyFilledPoints) {
+    // Create a set to store unique points to check to avoid redundant processing
+    Set<Vector2> pointsToCheck = {};
+
+    // Add all newly filled points and their immediate neighbors to the set
+    for (Vector2 filledPoint in newlyFilledPoints) {
+      pointsToCheck.add(filledPoint);
+      for (int dy = -1; dy <= 1; dy++) {
+        for (int dx = -1; dx <= 1; dx++) {
+          if (dx == 0 && dy == 0) continue;
+          Vector2 neighbor = Vector2(filledPoint.x + dx, filledPoint.y + dy);
+          if (neighbor.x >= 0 && neighbor.x < gridSize && neighbor.y >= 0 && neighbor.y < gridSize) {
+            pointsToCheck.add(neighbor);
+          }
+        }
+      }
+    }
+
+    // Iterate only over the points that might have changed their enclosure status
+    for (Vector2 p in pointsToCheck) {
+      int x = p.x.toInt();
+      int y = p.y.toInt();
+
+      if (_grid[y][x] == game_constants.kGridEdge) {
+        bool isEnclosed = true;
+        // Check 8 neighbors
+        for (int dy = -1; dy <= 1; dy++) {
+          for (int dx = -1; dx <= 1; dx++) {
+            if (dx == 0 && dy == 0) continue;
+            int nx = x + dx;
+            int ny = y + dy;
+
+            // If any neighbor is free, it's not enclosed
+            if (nx >= 0 && nx < gridSize && ny >= 0 && ny < gridSize && _grid[ny][nx] == game_constants.kGridFree) {
               isEnclosed = false;
               break;
             }
           }
-          if (isEnclosed) {
-            _setGridValue(x, y, game_constants.kGridFilled);
-          }
+          if (!isEnclosed) break;
+        }
+
+        if (isEnclosed) {
+          _setGridValue(x, y, game_constants.kGridFilled);
         }
       }
     }
@@ -258,16 +289,11 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     Vector2 nearestPoint = Vector2.zero();
     double minDistance = double.infinity;
 
-    for (int y = 0; y < gridSize; y++) {
-      for (int x = 0; x < gridSize; x++) {
-        if (_grid[y][x] == game_constants.kGridEdge) {
-          Vector2 boundaryPoint = Vector2(x.toDouble(), y.toDouble());
-          double distance = point.distanceTo(boundaryPoint);
-          if (distance < minDistance) {
-            minDistance = distance;
-            nearestPoint = boundaryPoint;
-          }
-        }
+    for (Vector2 boundaryPoint in _boundaryPoints) {
+      double distance = point.distanceTo(boundaryPoint);
+      if (distance < minDistance) {
+        minDistance = distance;
+        nearestPoint = boundaryPoint;
       }
     }
     return nearestPoint;

@@ -31,7 +31,7 @@ L'objectif est de rendre le code plus simple à comprendre et à maintenir en ex
 -   [x] **Clarifier l'algorithme de remplissage (`ArenaComponent.fillArea`)** : Cette méthode est correcte mais complexe.
     -   **Action** : Ajouter des commentaires stratégiques pour expliquer les 4 étapes clés de l'algorithme (marquage du chemin, flood-fill pour trouver les régions, identification de la région du Qix, remplissage des autres régions). Renommer certaines variables pour mieux refléter leur intention.
 
--   [ ] **Utiliser des `enum` pour les directions** : Le code utilise déjà un `enum Direction`, ce qui est une excellente pratique. Il faut s'assurer que son usage est cohérent partout et éviter les `String` comme `'right'` (présent dans l'ancienne version `game.dart`).
+-   [x] **Utiliser des `enum` pour les directions** : Le code utilise déjà un `enum Direction`, ce qui est une excellente pratique. Il faut s'assurer que son usage est cohérent partout et éviter les `String` comme `'right'` (présent dans l'ancienne version `game.dart`).
 
 ## 3. Optimisations de Performance
 
@@ -41,7 +41,7 @@ Les performances sont cruciales pour un jeu fluide. Les optimisations se concent
     -   **Action 1 (Critique)** : **Mettre en cache les objets `Paint`**. Ne pas créer de `new Paint()` à chaque frame. Déclarez-les comme des membres finaux de la classe.
     -   **Action 2 (Critique)** : **Arrêter de créer des `Sprite` à chaque frame**. La ligne `final subSprite = Sprite(...)` dans la boucle de rendu est une source majeure de "jank" (saccades). Pré-calculez et stockez les sprites des tuiles de l'image dans une liste ou une map lors du `onLoad`.
 
--   [ ] **Optimiser les algorithmes de balayage de la grille** : Plusieurs méthodes parcourent toute la grille, ce qui est coûteux.
+-   [x] **Optimiser les algorithmes de balayage de la grille** : Plusieurs méthodes parcourent toute la grille, ce qui est coûteux.
     -   **Action pour `_demoteEnclosedEdges`** : Au lieu de scanner toute la grille (`O(N*M)`), cette méthode pourrait être optimisée pour ne vérifier que les voisins des nouvelles bordures qui viennent d'être créées après un `fillArea`.
     -   **Action pour `findNearestBoundaryPoint`** : Si cette fonction est utilisée fréquemment, un parcours complet de la grille est trop lent. Envisagez de pré-calculer une liste de tous les points de bordure pour accélérer la recherche.
 
