@@ -29,6 +29,15 @@ class QixGame extends FlameGame with KeyboardEvents {
     add(player);
   }
 
+  void onPlayerStateChanged(PlayerState newState) {
+    if (newState == PlayerState.onEdge) {
+      arena.fillArea(player.currentPath, player.pathStartGridPosition!, player.gridPosition);
+      arena.endPath();
+      player.currentPath.clear();
+      player.pathStartGridPosition = null;
+    }
+  }
+
   void handleDirectionChange(Direction direction) {
     Direction? newDirection;
     switch (direction) {

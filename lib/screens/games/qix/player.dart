@@ -187,11 +187,8 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
       if (isNewPositionOnEdge) {
         // Hit an existing boundary
         game.arena.addPathPoint(newGridPosition.clone());
-        game.arena.fillArea(currentPath, pathStartGridPosition!, newGridPosition);
         state = PlayerState.onEdge;
-        pathStartGridPosition = null;
-        game.arena.endPath();
-        currentPath.clear();
+        game.onPlayerStateChanged(state);
 
         // After filling, ensure player is on a boundary. If not, teleport to nearest boundary point.
         debugPrint('Player hit boundary at $newGridPosition. Filling area...');
