@@ -5,6 +5,8 @@ import 'qix_game.dart';
 import 'constants.dart' as game_constants;
 import 'constants.dart';
 
+enum PlayerState { onEdge, drawing, dead }
+
 class Player extends PositionComponent with HasGameReference<QixGame> {
   final double gridSize;
   final double cellSize;
@@ -12,7 +14,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
   Vector2 targetGridPosition; // Target grid position for smooth movement
   final double _moveSpeed = 200.0; // Pixels per second
 
-  bool onEdge = true;
+  PlayerState state = PlayerState.onEdge;
   List<Vector2> currentPath = [];
   Vector2? pathStartGridPosition;
   Direction? currentDirection; // Current direction for automatic movement
@@ -128,7 +130,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
 
     // If on edge, only allow moving off the edge with manual input
     bool isNewPositionOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge;
-    if (onEdge && !isNewPositionOnEdge && !_isManualInput) {
+    if (state == PlayerState.onEdge && !isNewPositionOnEdge && !_isManualInput) {
       return false;
     }
 
@@ -168,10 +170,10 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
 
     bool isNewPositionOnEdge = game.arena.getGridValue(newGridPosition.x.toInt(), newGridPosition.y.toInt()) == game_constants.kGridEdge;
 
-    if (onEdge) {
+    if (state == PlayerState.onEdge) {
       if (!isNewPositionOnEdge) {
         // Moving off the edge
-        onEdge = false;
+        state = PlayerState.drawing;
         pathStartGridPosition = gridPosition.clone();
         currentPath.add(gridPosition.clone());
         currentPath.add(newGridPosition.clone());
@@ -180,13 +182,13 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
       }
       // If still on edge, just update target position
       targetGridPosition = newGridPosition;
-    } else {
+    } else if (state == PlayerState.drawing) {
       // Currently drawing a path
       if (isNewPositionOnEdge) {
         // Hit an existing boundary
         game.arena.addPathPoint(newGridPosition.clone());
         game.arena.fillArea(currentPath, pathStartGridPosition!, newGridPosition);
-        onEdge = true;
+        state = PlayerState.onEdge;
         pathStartGridPosition = null;
         game.arena.endPath();
         currentPath.clear();
