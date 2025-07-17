@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'qix_game.dart';
 
 import 'constants.dart' as game_constants;
-
-enum Direction { up, down, left, right }
+import 'constants.dart';
 
 class Player extends PositionComponent with HasGameReference<QixGame> {
   final double gridSize;
@@ -214,7 +213,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
 
   @override
   void render(Canvas canvas) {
-    final paint = Paint()..color = Colors.yellow;
+    final paint = Paint()..color = Colors.red;
     canvas.drawRect(size.toRect(), paint);
 
     

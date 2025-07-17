@@ -1,10 +1,11 @@
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
-import 'dart:collection';
 import 'dart:ui' as ui;
-import 'package:flame/sprite.dart';
-import 'qix_game.dart';
+import 'dart:collection';
+
 import 'constants.dart' as game_constants;
+import 'qix_game.dart';
 
 class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late ui.Image _rewardCardImage;
@@ -239,7 +240,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   @override
   void render(Canvas canvas) {
     // Render filled areas (including boundaries)
-    final boundaryPaint = Paint()..color = Colors.cyanAccent;
+    final boundaryPaint = Paint()..color = Colors.blue[900]!;
     for (int y = 0; y < gridSize; y++) {
       for (int x = 0; x < gridSize; x++) {
         if (_grid[y][x] == game_constants.kGridFilled) {
@@ -254,10 +255,12 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
             srcSize: Vector2(sourceWidth, sourceHeight),
           );
 
+          final spritePaint = Paint()..isAntiAlias = false;
           subSprite.render(
             canvas,
             position: Vector2(x * cellSize, y * cellSize),
             size: Vector2.all(cellSize),
+            overridePaint: spritePaint,
           );
         } else if (_grid[y][x] == game_constants.kGridEdge) {
           canvas.drawRect(

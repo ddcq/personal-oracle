@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'arena.dart';
 import 'player.dart';
+import 'constants.dart';
 
 class QixGame extends FlameGame with KeyboardEvents {
   late final ArenaComponent arena;
@@ -26,6 +27,25 @@ class QixGame extends FlameGame with KeyboardEvents {
 
     add(arena);
     add(player);
+  }
+
+  void handleDirectionChange(Direction direction) {
+    Direction? newDirection;
+    switch (direction) {
+      case Direction.up:
+        newDirection = Direction.up;
+        break;
+      case Direction.down:
+        newDirection = Direction.down;
+        break;
+      case Direction.left:
+        newDirection = Direction.left;
+        break;
+      case Direction.right:
+        newDirection = Direction.right;
+        break;
+    }
+    player.setDirection(newDirection, isManual: true);
   }
 
   @override

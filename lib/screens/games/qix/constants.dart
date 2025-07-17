@@ -13,3 +13,5 @@ const int kSeedScanArea = 5;
 
 const double gameWidth = 150.0;
 const double gameHeight = 200.0;
+
+enum Direction { up, down, left, right }
