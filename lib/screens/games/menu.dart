@@ -83,27 +83,29 @@ class MenuPrincipal extends StatelessWidget {
                   ),
                 ),
                 child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: screenHeight * 0.02), // Responsive spacing
-                      Text(
-                        '⚔️ Mini-Jeux',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: screenWidth * 0.06, // Responsive font size
-                          fontWeight: FontWeight.bold,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: screenHeight * 0.02), // Responsive spacing
+                        Text(
+                          '⚔️ Mini-Jeux',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenWidth * 0.05, // Responsive font size
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: screenHeight * 0.01), // Responsive spacing
-                      Text(
-                        'Forge ton destin nordique',
-                        style: TextStyle(
-                          color: Colors.white60,
-                          fontSize: screenWidth * 0.04, // Responsive font size
+                        SizedBox(height: screenHeight * 0.01), // Responsive spacing
+                        Text(
+                          'Forge ton destin nordique',
+                          style: TextStyle(
+                            color: Colors.white60,
+                            fontSize: screenWidth * 0.03, // Responsive font size
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

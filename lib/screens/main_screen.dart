@@ -89,98 +89,100 @@ class WelcomeContent extends StatelessWidget {
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(AppConstants.paddingLarge),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: AppConstants.paddingXLarge),
 
-              // Icône principale
-              Container(
-                width: AppConstants.iconXLarge,
-                height: AppConstants.iconXLarge,
-                decoration: BoxDecoration(
-                  color: AppConstants.accent.withAlpha(25),
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppConstants.accent, width: 2),
+                // Icône principale
+                Container(
+                  width: AppConstants.iconXLarge,
+                  height: AppConstants.iconXLarge,
+                  decoration: BoxDecoration(
+                    color: AppConstants.accent.withAlpha(25),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppConstants.accent, width: 2),
+                  ),
+                  child: const Icon(
+                    Icons.shield,
+                    size: 60,
+                    color: AppConstants.accent,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.shield,
-                  size: 60,
-                  color: AppConstants.accent,
+                const SizedBox(height: AppConstants.paddingXLarge),
+
+                // Titre
+                Text(
+                  'Oracle Nordique',
+                  style: Theme.of(context).textTheme.headlineLarge,
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              const SizedBox(height: AppConstants.paddingXLarge),
+                const SizedBox(height: AppConstants.paddingMedium),
 
-              // Titre
-              Text(
-                'Oracle Nordique',
-                style: Theme.of(context).textTheme.headlineLarge,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppConstants.paddingMedium),
+                // Sous-titre
+                Text(
+                  'Découvrez quelle divinité nordique sommeille en vous',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: AppConstants.paddingXLarge + AppConstants.paddingMedium),
 
-              // Sous-titre
-              Text(
-                'Découvrez quelle divinité nordique sommeille en vous',
-                style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppConstants.paddingXLarge + AppConstants.paddingMedium),
+                // Description
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppConstants.paddingLarge),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Comment ça marche ?',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        const SizedBox(height: AppConstants.paddingMedium),
+                        Text(
+                          'Répondez à nos questions pour découvrir votre divinité tutélaire nordique. Recevez ensuite des conseils personnalisés et des défis quotidiens inspirés de la mythologie viking.',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
 
-              // Description
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppConstants.paddingLarge),
-                  child: Column(
+                const SizedBox(height: AppConstants.paddingXLarge),
+
+                // Message d'information
+                Container(
+                  padding: const EdgeInsets.all(AppConstants.paddingMedium),
+                  decoration: BoxDecoration(
+                    color: AppConstants.accent.withAlpha(25),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppConstants.accent.withAlpha(76)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Comment ça marche ?',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                      Icon(
+                        Icons.info_outline,
+                        color: AppConstants.accent,
+                        size: 20,
                       ),
-                      const SizedBox(height: AppConstants.paddingMedium),
-                      Text(
-                        'Répondez à nos questions pour découvrir votre divinité tutélaire nordique. Recevez ensuite des conseils personnalisés et des défis quotidiens inspirés de la mythologie viking.',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        textAlign: TextAlign.center,
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Utilisez le menu en bas pour naviguer entre les différentes sections',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppConstants.accent,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-
-              const Spacer(),
-
-              // Message d'information
-              Container(
-                padding: const EdgeInsets.all(AppConstants.paddingMedium),
-                decoration: BoxDecoration(
-                  color: AppConstants.accent.withAlpha(25),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppConstants.accent.withAlpha(76)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      color: AppConstants.accent,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Utilisez le menu en bas pour naviguer entre les différentes sections',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppConstants.accent,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: AppConstants.paddingMedium),
-            ],
+                const SizedBox(height: AppConstants.paddingMedium),
+              ],
+            ),
           ),
         ),
       ),
