@@ -6,23 +6,24 @@ import 'dart:collection';
 
 import 'constants.dart' as game_constants;
 import 'qix_game.dart';
+import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 
 
 class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late ui.Image _rewardCardImage;
-  final double gridSize;
+  final int gridSize;
   final double cellSize;
 
   late List<List<int>> _grid; // 0: free, 1: filled, 2: path, 3: edge
-  final List<Vector2> _currentDrawingPath = [];
-  late Vector2 _virtualQixPosition;
+  final List<IntVector2> _currentDrawingPath = [];
+  late IntVector2 _virtualQixPosition;
   int _nonFreeCells = 0;
 
   late final Paint _boundaryPaint;
   late final Paint _pathPaint;
   late final Map<int, Sprite> _filledSprites;
-  final List<Vector2> _boundaryPoints = [];
+  final List<IntVector2> _boundaryPoints = [];
 
   
 
@@ -33,9 +34,9 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     );
     position = Vector2.zero();
     _initializeGrid();
-    _virtualQixPosition = Vector2(
-      gridSize / 2,
-      gridSize / 2,
+    _virtualQixPosition = IntVector2(
+      (gridSize / 2).toInt(),
+      (gridSize / 2).toInt(),
     ); // Center of the arena
 
     _boundaryPaint = Paint()
@@ -61,7 +62,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
         final double sourceWidth = (1 / gridSize) * _rewardCardImage.width;
         final double sourceHeight = (1 / gridSize) * _rewardCardImage.height;
 
-        _filledSprites[y * gridSize.toInt() + x] = Sprite(
+        _filledSprites[y * gridSize + x] = Sprite(
           _rewardCardImage,
           srcPosition: Vector2(sourceX, sourceY),
           srcSize: Vector2(sourceWidth, sourceHeight),
@@ -96,12 +97,12 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     return _grid[y][x] != game_constants.kGridFilled;
   }
 
-  void startPath(Vector2 startPoint) {
+  void startPath(IntVector2 startPoint) {
     _currentDrawingPath.clear();
     _currentDrawingPath.add(startPoint);
   }
 
-  void addPathPoint(Vector2 point) {
+  void addPathPoint(IntVector2 point) {
     _currentDrawingPath.add(point);
   }
 
@@ -111,8 +112,8 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
 
   void _initializeGrid() {
     _grid = List.generate(
-      gridSize.toInt(),
-      (_) => List.generate(gridSize.toInt(), (_) => game_constants.kGridFree),
+      gridSize,
+      (_) => List.generate(gridSize, (_) => game_constants.kGridFree),
     );
 
     _boundaryPoints.clear();
@@ -121,21 +122,21 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     // Initialize outer boundary
     for (int x = 0; x < gridSize; x++) {
       _setGridValue(x, 0, game_constants.kGridEdge);
-      _boundaryPoints.add(Vector2(x.toDouble(), 0.0));
-      _setGridValue(x, gridSize.toInt() - 1, game_constants.kGridEdge);
-      _boundaryPoints.add(Vector2(x.toDouble(), gridSize - 1));
+      _boundaryPoints.add(IntVector2(x, 0));
+      _setGridValue(x, gridSize - 1, game_constants.kGridEdge);
+      _boundaryPoints.add(IntVector2(x, gridSize - 1));
     }
     for (int y = 0; y < gridSize; y++) {
       _setGridValue(0, y, game_constants.kGridEdge);
-      _boundaryPoints.add(Vector2(0.0, y.toDouble()));
-      _setGridValue(gridSize.toInt() - 1, y, game_constants.kGridEdge);
-      _boundaryPoints.add(Vector2(gridSize - 1, y.toDouble()));
+      _boundaryPoints.add(IntVector2(0, y));
+      _setGridValue(gridSize - 1, y, game_constants.kGridEdge);
+      _boundaryPoints.add(IntVector2(gridSize - 1, y));
     }
   }
 
-  bool isPointOnBoundary(Vector2 point) {
-    int x = point.x.toInt();
-    int y = point.y.toInt();
+  bool isPointOnBoundary(IntVector2 point) {
+    int x = point.x;
+    int y = point.y;
     if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) return false;
     return _grid[y][x] == game_constants.kGridEdge;
   }
@@ -145,42 +146,42 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   }
 
   // Helper to check if a list of Vector2 contains a specific point by value
-  bool _regionContainsPoint(List<Vector2> region, Vector2 point) {
+  bool _regionContainsPoint(List<IntVector2> region, IntVector2 point) {
     for (var p in region) {
-      if (p.x.toInt() == point.x.toInt() && p.y.toInt() == point.y.toInt()) {
+      if (p.x == point.x && p.y == point.y) {
         return true;
       }
     }
     return false;
   }
 
-  List<Vector2> fillArea(
-    List<Vector2> playerPath,
-    Vector2 pathStartGridPosition,
-    Vector2 pathEndGridPosition,
+  List<IntVector2> fillArea(
+    List<IntVector2> playerPath,
+    IntVector2 pathStartGridPosition,
+    IntVector2 pathEndGridPosition,
   ) {
-    List<Vector2> newlyFilledPoints = [];
+    List<IntVector2> newlyFilledPoints = [];
 
     // Step 1: Mark the player's path as a permanent edge on the grid.
     // This ensures the drawn line becomes part of the game's boundaries.
     for (var point in playerPath) {
-      _setGridValue(point.x.toInt(), point.y.toInt(), game_constants.kGridEdge);
+      _setGridValue(point.x, point.y, game_constants.kGridEdge);
       _boundaryPoints.add(point);
     }
 
     // Step 2: Identify all distinct enclosed regions within the arena.
     // This is done by performing flood-fill operations from all 'free' (unfilled) cells.
-    List<List<Vector2>> identifiedRegions = [];
+    List<List<IntVector2>> identifiedRegions = [];
     List<List<bool>> visitedCells = List.generate(
-      gridSize.toInt(),
-      (_) => List.generate(gridSize.toInt(), (_) => false),
+      gridSize,
+      (_) => List.generate(gridSize, (_) => false),
     );
 
     for (int y = 0; y < gridSize; y++) {
       for (int x = 0; x < gridSize; x++) {
         // If a cell is free and hasn't been visited yet, it's part of a new region.
         if (_grid[y][x] == game_constants.kGridFree && !visitedCells[y][x]) {
-          List<Vector2> currentRegion = _floodFill(x, y, visitedCells);
+          List<IntVector2> currentRegion = _floodFill(x, y, visitedCells);
           if (currentRegion.isNotEmpty) {
             identifiedRegions.add(currentRegion);
           }
@@ -203,7 +204,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     for (int i = 0; i < identifiedRegions.length; i++) {
       if (i != qixContainingRegionIndex) {
         for (var pointInRegion in identifiedRegions[i]) {
-          _setGridValue(pointInRegion.x.toInt(), pointInRegion.y.toInt(), game_constants.kGridFilled);
+          _setGridValue(pointInRegion.x, pointInRegion.y, game_constants.kGridFilled);
           newlyFilledPoints.add(pointInRegion);
         }
       }
@@ -216,17 +217,17 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     return newlyFilledPoints;
   }
 
-  void _demoteEnclosedEdges(List<Vector2> newlyFilledPoints, List<Vector2> playerPath) {
+  void _demoteEnclosedEdges(List<IntVector2> newlyFilledPoints, List<IntVector2> playerPath) {
     // Create a set to store unique points to check to avoid redundant processing
-    Set<Vector2> pointsToCheck = {};
+    Set<IntVector2> pointsToCheck = {};
 
     // Add all newly filled points and their immediate neighbors to the set
-    for (Vector2 filledPoint in newlyFilledPoints) {
+    for (IntVector2 filledPoint in newlyFilledPoints) {
       pointsToCheck.add(filledPoint);
       for (int dy = -1; dy <= 1; dy++) {
         for (int dx = -1; dx <= 1; dx++) {
           if (dx == 0 && dy == 0) continue;
-          Vector2 neighbor = Vector2(filledPoint.x + dx, filledPoint.y + dy);
+          IntVector2 neighbor = IntVector2(filledPoint.x + dx, filledPoint.y + dy);
           if (neighbor.x >= 0 && neighbor.x < gridSize && neighbor.y >= 0 && neighbor.y < gridSize) {
             pointsToCheck.add(neighbor);
           }
@@ -235,12 +236,12 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     }
 
     // Add all points from the player's path and their immediate neighbors to the set
-    for (Vector2 pathPoint in playerPath) {
+    for (IntVector2 pathPoint in playerPath) {
       pointsToCheck.add(pathPoint);
       for (int dy = -1; dy <= 1; dy++) {
         for (int dx = -1; dx <= 1; dx++) {
           if (dx == 0 && dy == 0) continue;
-          Vector2 neighbor = Vector2(pathPoint.x + dx, pathPoint.y + dy);
+          IntVector2 neighbor = IntVector2(pathPoint.x + dx, pathPoint.y + dy);
           if (neighbor.x >= 0 && neighbor.x < gridSize && neighbor.y >= 0 && neighbor.y < gridSize) {
             pointsToCheck.add(neighbor);
           }
@@ -249,26 +250,18 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     }
 
     // Iterate only over the points that might have changed their enclosure status
-    for (Vector2 p in pointsToCheck) {
-      int x = p.x.toInt();
-      int y = p.y.toInt();
+    for (IntVector2 p in pointsToCheck) {
+      int x = p.x;
+      int y = p.y;
 
       if (_grid[y][x] == game_constants.kGridEdge) {
         bool isEnclosed = true;
         // Check 8 neighbors
-        for (int dy = -1; dy <= 1; dy++) {
-          for (int dx = -1; dx <= 1; dx++) {
-            if (dx == 0 && dy == 0) continue;
-            int nx = x + dx;
-            int ny = y + dy;
-
-            // If any neighbor is free, it's not enclosed
-            if (nx >= 0 && nx < gridSize && ny >= 0 && ny < gridSize && _grid[ny][nx] == game_constants.kGridFree) {
-              isEnclosed = false;
-              break;
-            }
+        for (IntVector2 neighbor in p.allNeighbors) {
+          if (neighbor.isInBounds(0, gridSize - 1, 0, gridSize - 1) && _grid[neighbor.y][neighbor.x] == game_constants.kGridFree) {
+            isEnclosed = false;
+            break;
           }
-          if (!isEnclosed) break;
         }
 
         if (isEnclosed) {
@@ -278,9 +271,9 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     }
   }
 
-  List<Vector2> _floodFill(int startX, int startY, List<List<bool>> visited) {
-    List<Vector2> filledPoints = [];
-    Queue<Vector2> queue = Queue();
+  List<IntVector2> _floodFill(int startX, int startY, List<List<bool>> visited) {
+    List<IntVector2> filledPoints = [];
+    Queue<IntVector2> queue = Queue();
 
     if (startX < 0 ||
         startX >= gridSize ||
@@ -291,25 +284,19 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       return filledPoints;
     }
 
-    queue.add(Vector2(startX.toDouble(), startY.toDouble()));
+    queue.add(IntVector2(startX, startY));
     visited[startY][startX] = true;
 
-    final dx = [0, 0, 1, -1];
-    final dy = [1, -1, 0, 0];
-
     while (queue.isNotEmpty) {
-      Vector2 current = queue.removeFirst();
+      IntVector2 current = queue.removeFirst();
       filledPoints.add(current);
 
-      for (int i = 0; i < 4; i++) {
-        int nextX = current.x.toInt() + dx[i];
-        int nextY = current.y.toInt() + dy[i];
-
-        if (nextX >= 0 && nextX < gridSize && nextY >= 0 && nextY < gridSize) {
-          if (_grid[nextY][nextX] == game_constants.kGridFree &&
-              !visited[nextY][nextX]) {
-            visited[nextY][nextX] = true;
-            queue.add(Vector2(nextX.toDouble(), nextY.toDouble()));
+      for (IntVector2 neighbor in current.cardinalNeighbors) {
+        if (neighbor.isInBounds(0, gridSize - 1, 0, gridSize - 1)) {
+          if (_grid[neighbor.y][neighbor.x] == game_constants.kGridFree &&
+              !visited[neighbor.y][neighbor.x]) {
+            visited[neighbor.y][neighbor.x] = true;
+            queue.add(neighbor);
           }
         }
       }
@@ -327,14 +314,14 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   }
 
   // Finds the nearest boundary point to a given point
-  Vector2 findNearestBoundaryPoint(Vector2 point) {
-    Vector2 nearestPoint = Vector2.zero();
-    double minDistance = double.infinity;
+  IntVector2 findNearestBoundaryPoint(IntVector2 point) {
+    IntVector2 nearestPoint = IntVector2(0,0);
+    double minDistanceSquared = double.infinity;
 
-    for (Vector2 boundaryPoint in _boundaryPoints) {
-      double distance = point.distanceTo(boundaryPoint);
-      if (distance < minDistance) {
-        minDistance = distance;
+    for (IntVector2 boundaryPoint in _boundaryPoints) {
+      int distanceSquared = point.distanceSquaredTo(boundaryPoint);
+      if (distanceSquared < minDistanceSquared) {
+        minDistanceSquared = distanceSquared.toDouble();
         nearestPoint = boundaryPoint;
       }
     }
@@ -347,7 +334,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     for (int y = 0; y < gridSize; y++) {
       for (int x = 0; x < gridSize; x++) {
         if (_grid[y][x] == game_constants.kGridFilled) {
-          final sprite = _filledSprites[y * gridSize.toInt() + x];
+          final sprite = _filledSprites[y * gridSize + x];
           if (sprite != null) {
             sprite.render(
               canvas,

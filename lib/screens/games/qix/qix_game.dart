@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'arena.dart';
 import 'player.dart';
 import 'constants.dart';
+import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 class QixGame extends FlameGame with KeyboardEvents {
   late final ArenaComponent arena;
@@ -15,13 +16,13 @@ class QixGame extends FlameGame with KeyboardEvents {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final double gridSize = kGridSize.toDouble();
+    final int gridSize = kGridSize;
     final double cellSize = (size.x < size.y ? size.x : size.y) / gridSize;
 
     arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize);
     player = Player(gridSize: gridSize, cellSize: cellSize);
-    player.gridPosition = Vector2(0, 0); // Start at the top-left edge
-    player.targetGridPosition = player.gridPosition.clone();
+    player.gridPosition = IntVector2(0, 0); // Start at the top-left edge
+    player.targetGridPosition = IntVector2(player.gridPosition.x, player.gridPosition.y);
     player.setDirection(
       Direction.right,
     ); // Start moving right along the edge automatically
