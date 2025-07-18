@@ -10,6 +10,13 @@ import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 
 
+class FloodFillResult {
+  final List<IntVector2> points;
+  final bool containsQix;
+
+  FloodFillResult(this.points, this.containsQix);
+}
+
 class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late ui.Image _rewardCardImage;
   final int gridSize;
@@ -25,8 +32,6 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late final Map<int, Sprite> _filledSprites;
   final List<IntVector2> _boundaryPoints = [];
   late final Map<IntVector2, Rect> _cellRects;
-
-  
 
   ArenaComponent({required this.gridSize, required this.cellSize}) {
     size = Vector2(
@@ -154,16 +159,6 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     return _grid[y][x];
   }
 
-  // Helper to check if a list of Vector2 contains a specific point by value
-  bool _regionContainsPoint(List<IntVector2> region, IntVector2 point) {
-    for (var p in region) {
-      if (p.x == point.x && p.y == point.y) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   List<IntVector2> fillArea(
     List<IntVector2> playerPath,
     IntVector2 pathStartGridPosition,
@@ -180,7 +175,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
 
     // Step 2: Identify all distinct enclosed regions within the arena.
     // This is done by performing flood-fill operations from all 'free' (unfilled) cells.
-    List<List<IntVector2>> identifiedRegions = [];
+    List<FloodFillResult> identifiedRegions = [];
     List<List<bool>> visitedCells = List.generate(
       gridSize,
       (_) => List.generate(gridSize, (_) => false),
@@ -190,9 +185,9 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       for (int x = 0; x < gridSize; x++) {
         // If a cell is free and hasn't been visited yet, it's part of a new region.
         if (_grid[y][x] == game_constants.kGridFree && !visitedCells[y][x]) {
-          List<IntVector2> currentRegion = _floodFill(x, y, visitedCells);
-          if (currentRegion.isNotEmpty) {
-            identifiedRegions.add(currentRegion);
+          FloodFillResult result = _floodFill(x, y, visitedCells);
+          if (result.points.isNotEmpty) {
+            identifiedRegions.add(result);
           }
         }
       }
@@ -202,7 +197,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     // The region containing the Qix should NOT be filled.
     int qixContainingRegionIndex = -1;
     for (int i = 0; i < identifiedRegions.length; i++) {
-      if (_regionContainsPoint(identifiedRegions[i], _virtualQixPosition)) {
+      if (identifiedRegions[i].containsQix) {
         qixContainingRegionIndex = i;
         break;
       }
@@ -212,7 +207,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     // These are the areas successfully claimed by the player.
     for (int i = 0; i < identifiedRegions.length; i++) {
       if (i != qixContainingRegionIndex) {
-        for (var pointInRegion in identifiedRegions[i]) {
+        for (var pointInRegion in identifiedRegions[i].points) {
           _setGridValue(pointInRegion.x, pointInRegion.y, game_constants.kGridFilled);
           newlyFilledPoints.add(pointInRegion);
         }
@@ -280,15 +275,16 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     }
   }
 
-  List<IntVector2> _floodFill(int startX, int startY, List<List<bool>> visited) {
+  FloodFillResult _floodFill(int startX, int startY, List<List<bool>> visited) {
     List<IntVector2> filledPoints = [];
     Queue<IntVector2> queue = Queue();
+    bool containsQix = false;
 
     IntVector2 startPoint = IntVector2(startX, startY);
     if (!startPoint.isInBounds(0, gridSize - 1, 0, gridSize - 1) ||
         _grid[startY][startX] != game_constants.kGridFree ||
         visited[startY][startX]) {
-      return filledPoints;
+      return FloodFillResult(filledPoints, containsQix);
     }
 
     queue.add(IntVector2(startX, startY));
@@ -297,6 +293,10 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     while (queue.isNotEmpty) {
       IntVector2 current = queue.removeFirst();
       filledPoints.add(current);
+
+      if (current.x == _virtualQixPosition.x && current.y == _virtualQixPosition.y) {
+        containsQix = true;
+      }
 
       for (IntVector2 neighbor in current.cardinalNeighbors) {
         if (neighbor.isInBounds(0, gridSize - 1, 0, gridSize - 1)) {
@@ -308,7 +308,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
         }
       }
     }
-    return filledPoints;
+    return FloodFillResult(filledPoints, containsQix);
   }
 
   void calculateFilledPercentage() {
@@ -325,13 +325,17 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     IntVector2 nearestPoint = IntVector2(0,0);
     double minDistanceSquared = double.infinity;
 
+    debugPrint('Searching nearest boundary point to: $point');
     for (IntVector2 boundaryPoint in _boundaryPoints) {
       int distanceSquared = point.distanceSquaredTo(boundaryPoint);
+      debugPrint('Boundary point: $boundaryPoint, distanceSquared: $distanceSquared');
       if (distanceSquared < minDistanceSquared) {
         minDistanceSquared = distanceSquared.toDouble();
         nearestPoint = boundaryPoint;
+        debugPrint('New nearest: $nearestPoint, minDistanceSquared: $minDistanceSquared');
       }
     }
+    debugPrint('Nearest boundary point found: $nearestPoint');
     return nearestPoint;
   }
 
