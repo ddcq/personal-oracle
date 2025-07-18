@@ -199,12 +199,12 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
 
     // After filling, re-evaluate edges that might have become fully enclosed
     // and convert them to filled areas.
-    _demoteEnclosedEdges(newlyFilledPoints);
+    _demoteEnclosedEdges(newlyFilledPoints, playerPath);
     calculateFilledPercentage();
     return newlyFilledPoints;
   }
 
-  void _demoteEnclosedEdges(List<Vector2> newlyFilledPoints) {
+  void _demoteEnclosedEdges(List<Vector2> newlyFilledPoints, List<Vector2> playerPath) {
     // Create a set to store unique points to check to avoid redundant processing
     Set<Vector2> pointsToCheck = {};
 
@@ -215,6 +215,20 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
         for (int dx = -1; dx <= 1; dx++) {
           if (dx == 0 && dy == 0) continue;
           Vector2 neighbor = Vector2(filledPoint.x + dx, filledPoint.y + dy);
+          if (neighbor.x >= 0 && neighbor.x < gridSize && neighbor.y >= 0 && neighbor.y < gridSize) {
+            pointsToCheck.add(neighbor);
+          }
+        }
+      }
+    }
+
+    // Add all points from the player's path and their immediate neighbors to the set
+    for (Vector2 pathPoint in playerPath) {
+      pointsToCheck.add(pathPoint);
+      for (int dy = -1; dy <= 1; dy++) {
+        for (int dx = -1; dx <= 1; dx++) {
+          if (dx == 0 && dy == 0) continue;
+          Vector2 neighbor = Vector2(pathPoint.x + dx, pathPoint.y + dy);
           if (neighbor.x >= 0 && neighbor.x < gridSize && neighbor.y >= 0 && neighbor.y < gridSize) {
             pointsToCheck.add(neighbor);
           }
