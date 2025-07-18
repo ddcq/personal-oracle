@@ -46,22 +46,7 @@ class QixGame extends FlameGame with KeyboardEvents {
   }
 
   void handleDirectionChange(Direction direction) {
-    Direction? newDirection;
-    switch (direction) {
-      case Direction.up:
-        newDirection = Direction.up;
-        break;
-      case Direction.down:
-        newDirection = Direction.down;
-        break;
-      case Direction.left:
-        newDirection = Direction.left;
-        break;
-      case Direction.right:
-        newDirection = Direction.right;
-        break;
-    }
-    player.setDirection(newDirection, isManual: true);
+    player.setDirection(direction, isManual: true);
   }
 
   @override

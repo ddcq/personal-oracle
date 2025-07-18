@@ -275,10 +275,8 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     List<IntVector2> filledPoints = [];
     Queue<IntVector2> queue = Queue();
 
-    if (startX < 0 ||
-        startX >= gridSize ||
-        startY < 0 ||
-        startY >= gridSize ||
+    IntVector2 startPoint = IntVector2(startX, startY);
+    if (!startPoint.isInBounds(0, gridSize - 1, 0, gridSize - 1) ||
         _grid[startY][startX] != game_constants.kGridFree ||
         visited[startY][startX]) {
       return filledPoints;

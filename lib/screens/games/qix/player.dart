@@ -101,7 +101,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     if (state == PlayerState.onEdge) {
       List<Direction> edgeDirections = [];
       for (Direction dir in possibleDirections) {
-        IntVector2 nextPos = _getNextGridPosition(dir);
+        IntVector2 nextPos = _getNewGridPosition(dir);
         bool isNextPosEdge = game.arena.getGridValue(nextPos.x, nextPos.y) == game_constants.kGridEdge;
         if (isNextPosEdge) {
           edgeDirections.add(dir);
@@ -138,21 +138,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
   }
 
   bool _canMove(Direction direction) {
-    IntVector2 newGridPosition;
-    switch (direction) {
-      case Direction.up:
-        newGridPosition = IntVector2(gridPosition.x, gridPosition.y - 1);
-        break;
-      case Direction.down:
-        newGridPosition = IntVector2(gridPosition.x, gridPosition.y + 1);
-        break;
-      case Direction.left:
-        newGridPosition = IntVector2(gridPosition.x - 1, gridPosition.y);
-        break;
-      case Direction.right:
-        newGridPosition = IntVector2(gridPosition.x + 1, gridPosition.y);
-        break;
-    }
+    IntVector2 newGridPosition = _getNewGridPosition(direction);
 
     // Clamp to grid boundaries
     newGridPosition = newGridPosition.clamp(0, gridSize - 1, 0, gridSize - 1);
@@ -190,22 +176,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
       return false;
     }
 
-    IntVector2 newGridPosition;
-
-    switch (direction) {
-      case Direction.up:
-        newGridPosition = IntVector2(gridPosition.x, gridPosition.y - 1);
-        break;
-      case Direction.down:
-        newGridPosition = IntVector2(gridPosition.x, gridPosition.y + 1);
-        break;
-      case Direction.left:
-        newGridPosition = IntVector2(gridPosition.x - 1, gridPosition.y);
-        break;
-      case Direction.right:
-        newGridPosition = IntVector2(gridPosition.x + 1, gridPosition.y);
-        break;
-    }
+    IntVector2 newGridPosition = _getNewGridPosition(direction);
 
     // Clamp to grid boundaries
     newGridPosition = newGridPosition.clamp(0, gridSize - 1, 0, gridSize - 1);
@@ -261,15 +232,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
   }
 
   @override
-  @override
-  void render(Canvas canvas) {
-    final paint = Paint()..color = Colors.red;
-    canvas.drawRect(size.toRect(), paint);
-
-    
-  }
-
-  IntVector2 _getNextGridPosition(Direction direction) {
+  IntVector2 _getNewGridPosition(Direction direction) {
     IntVector2 nextPos;
     switch (direction) {
       case Direction.up:
@@ -287,4 +250,14 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     }
     return nextPos.clamp(0, gridSize - 1, 0, gridSize - 1);
   }
+
+  @override
+  void render(Canvas canvas) {
+    final paint = Paint()..color = Colors.red;
+    canvas.drawRect(size.toRect(), paint);
+
+    
+  }
+
+  
 }
