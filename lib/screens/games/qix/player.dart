@@ -90,17 +90,50 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     }
 
     for (Direction dir in allDirections) {
-      if (dir != oppositeDirection && _canMove(dir)) {
-        possibleDirections.add(dir);
+      if (dir != oppositeDirection) {
+        bool canMoveResult = _canMove(dir);
+        if (canMoveResult) {
+          possibleDirections.add(dir);
+        }
       }
     }
 
-    if (possibleDirections.length == 1) {
-      currentDirection = possibleDirections.first;
-      _isManualInput = false; // Automatically chosen path is not manual
+    if (state == PlayerState.onEdge) {
+      List<Direction> edgeDirections = [];
+      for (Direction dir in possibleDirections) {
+        IntVector2 nextPos = _getNextGridPosition(dir);
+        bool isNextPosEdge = game.arena.getGridValue(nextPos.x, nextPos.y) == game_constants.kGridEdge;
+        if (isNextPosEdge) {
+          edgeDirections.add(dir);
+        }
+      }
+
+      if (edgeDirections.length == 1) {
+        currentDirection = edgeDirections.first;
+        _isManualInput = false;
+      } else if (edgeDirections.length > 1) {
+        // Prioritize continuing straight if possible
+        if (currentDirection != null && edgeDirections.contains(currentDirection)) {
+          currentDirection = currentDirection;
+          _isManualInput = false;
+        } else {
+          // If no straight continuation, pick the first available edge direction
+          currentDirection = edgeDirections.first;
+          _isManualInput = false;
+        }
+      } else {
+        currentDirection = null;
+        _isManualInput = false;
+      }
     } else {
-      currentDirection = null; // Stop automatic movement if multiple or no options
-      _isManualInput = false; // Reset manual input flag
+      // Original logic for drawing state
+      if (possibleDirections.length == 1) {
+        currentDirection = possibleDirections.first;
+        _isManualInput = false;
+      } else {
+        currentDirection = null;
+        _isManualInput = false;
+      }
     }
   }
 
@@ -124,6 +157,11 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     // Clamp to grid boundaries
     newGridPosition = newGridPosition.clamp(0, gridSize - 1, 0, gridSize - 1);
 
+    // If automatic movement, prevent moving to the same spot
+    if (!_isManualInput && newGridPosition == gridPosition) {
+      return false;
+    }
+
     // Check if the new position is within bounds after clamping
     if (!newGridPosition.isInBounds(0, gridSize - 1, 0, gridSize - 1)) {
       return false; // Cannot move further in this direction (hit boundary)
@@ -139,7 +177,6 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     if (state == PlayerState.onEdge && !isNewPositionOnEdge && !_isManualInput) {
       return false;
     }
-
     return true;
   }
 
@@ -196,14 +233,14 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
         game.onPlayerStateChanged(state);
 
         // After filling, ensure player is on a boundary. If not, teleport to nearest boundary point.
-        debugPrint('Player hit boundary at $newGridPosition. Filling area...');
+        
         if (!game.arena.isPointOnBoundary(newGridPosition)) {
           IntVector2 nearestBoundary = game.arena.findNearestBoundaryPoint(newGridPosition);
-          debugPrint('Player not on boundary after fill. Teleporting to nearest boundary at $nearestBoundary');
+          
           targetGridPosition = nearestBoundary;
           gridPosition = nearestBoundary; // Snap immediately for teleportation
         } else {
-          debugPrint('Player remains on boundary at $newGridPosition after fill.');
+          
         }
       } else {
         // Continue drawing path
@@ -212,14 +249,42 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
       }
       targetGridPosition = newGridPosition;
     }
+
+    // If the player is on an edge and the new position is the same as the current position
+    // (meaning they hit a boundary and couldn't move further in that direction),
+    // return false to trigger _findNextAutoDirection.
+    if (state == PlayerState.onEdge && newGridPosition == gridPosition) {
+      return false;
+    }
+
     return true;
   }
 
+  @override
   @override
   void render(Canvas canvas) {
     final paint = Paint()..color = Colors.red;
     canvas.drawRect(size.toRect(), paint);
 
     
+  }
+
+  IntVector2 _getNextGridPosition(Direction direction) {
+    IntVector2 nextPos;
+    switch (direction) {
+      case Direction.up:
+        nextPos = IntVector2(gridPosition.x, gridPosition.y - 1);
+        break;
+      case Direction.down:
+        nextPos = IntVector2(gridPosition.x, gridPosition.y + 1);
+        break;
+      case Direction.left:
+        nextPos = IntVector2(gridPosition.x - 1, gridPosition.y);
+        break;
+      case Direction.right:
+        nextPos = IntVector2(gridPosition.x + 1, gridPosition.y);
+        break;
+    }
+    return nextPos.clamp(0, gridSize - 1, 0, gridSize - 1);
   }
 }

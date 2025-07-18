@@ -69,7 +69,8 @@ class IntVector2 {
   Offset toOffset() => Offset(x.toDouble(), y.toDouble());
 
   @override
-  String toString() => 'IntVector2(x: \$x, y: \$y)';
+  @override
+  String toString() => 'IntVector2(x: $x, y: $y)';
 }
 
 extension IntVector2Extension on IntVector2 {
