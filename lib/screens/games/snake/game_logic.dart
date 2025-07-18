@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'dart:ui';
+import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 // ==========================================
 // ENUMS
@@ -13,10 +13,10 @@ enum Direction { up, down, left, right }
 // ==========================================
 /// Holds all the data representing the current state of the game.
 class GameState {
-  List<Offset> snake;
-  Offset food;
+  List<IntVector2> snake;
+  IntVector2 food;
   FoodType foodType;
-  List<Offset> obstacles;
+  List<IntVector2> obstacles;
   int score;
   Direction direction;
   Direction nextDirection;
@@ -40,8 +40,8 @@ class GameState {
   /// Creates a GameState with the default initial values.
   factory GameState.initial() {
     return GameState(
-      snake: [const Offset(10, 10)],
-      food: const Offset(15, 15),
+      snake: [const IntVector2(10, 10)],
+      food: const IntVector2(15, 15),
       obstacles: [],
     );
   }
@@ -56,27 +56,27 @@ class GameLogic {
 
     // Calculate new head position
     state.direction = state.nextDirection;
-    Offset head = state.snake.first;
-    Offset newHead;
+    IntVector2 head = state.snake.first;
+    IntVector2 newHead;
 
     switch (state.direction) {
       case Direction.up:
-        newHead = Offset(head.dx, head.dy - 1);
+        newHead = IntVector2(head.x, head.y - 1);
         break;
       case Direction.down:
-        newHead = Offset(head.dx, head.dy + 1);
+        newHead = IntVector2(head.x, head.y + 1);
         break;
       case Direction.left:
-        newHead = Offset(head.dx - 1, head.dy);
+        newHead = IntVector2(head.x - 1, head.y);
         break;
       case Direction.right:
-        newHead = Offset(head.dx + 1, head.dy);
+        newHead = IntVector2(head.x + 1, head.y);
         break;
     }
 
     // Handle screen boundaries (game over)
-    if (newHead.dx < 0 || newHead.dx >= GameState.gridSize ||
-        newHead.dy < 0 || newHead.dy >= GameState.gridSize) {
+    if (newHead.x < 0 || newHead.x >= GameState.gridSize ||
+        newHead.y < 0 || newHead.y >= GameState.gridSize) {
       state.isGameRunning = false;
       state.isGameOver = true;
       return state;
@@ -90,7 +90,7 @@ class GameLogic {
     }
 
     // Update snake
-    List<Offset> newSnake = List.from(state.snake);
+    List<IntVector2> newSnake = List.from(state.snake);
     newSnake.insert(0, newHead);
 
     // Check for food
@@ -108,11 +108,11 @@ class GameLogic {
 
   void _generateNewFood(GameState state) {
     Random random = Random();
-    Offset newFood;
+    IntVector2 newFood;
     do {
-      newFood = Offset(
-        random.nextInt(GameState.gridSize).toDouble(),
-        random.nextInt(GameState.gridSize).toDouble(),
+      newFood = IntVector2(
+        random.nextInt(GameState.gridSize),
+        random.nextInt(GameState.gridSize),
       );
     } while (state.snake.contains(newFood) || state.obstacles.contains(newFood));
 
@@ -137,15 +137,15 @@ class GameLogic {
     state.nextDirection = newDirection;
   }
 
-  List<Offset> generateObstacles(GameState state) {
+  List<IntVector2> generateObstacles(GameState state) {
     Random random = Random();
-    List<Offset> newObstacles = [];
+    List<IntVector2> newObstacles = [];
     for (int i = 0; i < 5; i++) {
-      Offset newObstacle;
+      IntVector2 newObstacle;
       do {
-        newObstacle = Offset(
-          random.nextInt(GameState.gridSize).toDouble(),
-          random.nextInt(GameState.gridSize).toDouble(),
+        newObstacle = IntVector2(
+          random.nextInt(GameState.gridSize),
+          random.nextInt(GameState.gridSize),
         );
       } while (state.snake.contains(newObstacle) || state.food == newObstacle || newObstacles.contains(newObstacle));
       newObstacles.add(newObstacle);

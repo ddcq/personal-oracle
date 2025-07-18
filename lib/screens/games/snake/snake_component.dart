@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'game_logic.dart';
+import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 class SnakeComponent extends PositionComponent {
   final GameState gameState;
@@ -67,7 +67,7 @@ class SnakeComponent extends PositionComponent {
         // Head of the snake
         newSegment = SpriteComponent(
           sprite: _getSnakeHeadSprite(gameState.direction),
-          position: Vector2(segment.dx, segment.dy) * cellSize,
+          position: segment.toVector2() * cellSize,
           size: Vector2.all(cellSize),
         );
       } else if (i == gameState.snake.length - 1) {
@@ -75,7 +75,7 @@ class SnakeComponent extends PositionComponent {
         final bodySegmentBeforeTail = gameState.snake[i - 1];
         newSegment = SpriteComponent(
           sprite: _getSnakeTailSprite(segment, bodySegmentBeforeTail),
-          position: Vector2(segment.dx, segment.dy) * cellSize,
+          position: segment.toVector2() * cellSize,
           size: Vector2.all(cellSize),
         );
       } else {
@@ -86,7 +86,7 @@ class SnakeComponent extends PositionComponent {
             gameState.snake[i - 1],
             gameState.snake[i + 1],
           ),
-          position: Vector2(segment.dx, segment.dy) * cellSize,
+          position: segment.toVector2() * cellSize,
           size: Vector2.all(cellSize),
         );
       }
@@ -117,7 +117,7 @@ class SnakeComponent extends PositionComponent {
         );
       }
 
-      snakeSegment.position = Vector2(segment.dx, segment.dy) * cellSize;
+            snakeSegment.position = segment.toVector2() * cellSize;
     }
   }
 
@@ -134,28 +134,28 @@ class SnakeComponent extends PositionComponent {
     }
   }
 
-  Sprite _getSnakeTailSprite(Offset tailPosition, Offset bodyPosition) {
-    if (tailPosition.dx > bodyPosition.dx) {
+  Sprite _getSnakeTailSprite(IntVector2 tailPosition, IntVector2 bodyPosition) {
+    if (tailPosition.x > bodyPosition.x) {
       return snakeTailLeftSprite;
-    } else if (tailPosition.dx < bodyPosition.dx) {
+    } else if (tailPosition.x < bodyPosition.x) {
       return snakeTailRightSprite;
-    } else if (tailPosition.dy > bodyPosition.dy) {
+    } else if (tailPosition.y > bodyPosition.y) {
       return snakeTailUpSprite;
     } else {
       return snakeTailDownSprite;
     }
   }
 
-  Sprite _getSnakeBodySprite(Offset currentSegment, Offset prevSegment, Offset nextSegment) {
-    if (prevSegment.dy == currentSegment.dy && currentSegment.dy == nextSegment.dy) {
+  Sprite _getSnakeBodySprite(IntVector2 currentSegment, IntVector2 prevSegment, IntVector2 nextSegment) {
+    if (prevSegment.y == currentSegment.y && currentSegment.y == nextSegment.y) {
       return snakeBodyHorizontalSprite;
-    } else if (prevSegment.dx == currentSegment.dx && currentSegment.dx == nextSegment.dx) {
+    } else if (prevSegment.x == currentSegment.x && currentSegment.x == nextSegment.x) {
       return snakeBodyVerticalSprite;
     } else {
-      final prevRelativeX = prevSegment.dx - currentSegment.dx;
-      final prevRelativeY = prevSegment.dy - currentSegment.dy;
-      final nextRelativeX = nextSegment.dx - currentSegment.dx;
-      final nextRelativeY = nextSegment.dy - currentSegment.dy;
+      final prevRelativeX = prevSegment.x - currentSegment.x;
+      final prevRelativeY = prevSegment.y - currentSegment.y;
+      final nextRelativeX = nextSegment.x - currentSegment.x;
+      final nextRelativeY = nextSegment.y - currentSegment.y;
 
       if ((prevRelativeX == 1 && prevRelativeY == 0 && nextRelativeX == 0 && nextRelativeY == 1) ||
           (prevRelativeX == 0 && prevRelativeY == 1 && nextRelativeX == 1 && nextRelativeY == 0)) {

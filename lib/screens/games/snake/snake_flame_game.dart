@@ -2,12 +2,14 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_component.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 
 import 'game_logic.dart';
+import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final GameLogic gameLogic = GameLogic();
@@ -128,7 +130,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     for (final obstacle in gameState.obstacles) {
       final newObstacle = SpriteComponent(
         sprite: obstacleSprite,
-        position: obstacle.toVector2() * cellSize,
+        position: (obstacle.toOffset() * cellSize).toVector2(),
         size: Vector2.all(cellSize),
       );
       _obstacles.add(newObstacle);
@@ -236,6 +238,4 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
 }
 
-extension OffsetExtension on Offset {
-  Vector2 toVector2() => Vector2(dx, dy);
-}
+
