@@ -24,6 +24,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late final Paint _pathPaint;
   late final Map<int, Sprite> _filledSprites;
   final List<IntVector2> _boundaryPoints = [];
+  late final Map<IntVector2, Rect> _cellRects;
 
   
 
@@ -118,6 +119,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
 
     _boundaryPoints.clear();
     _nonFreeCells = 0; // Initialize to 0 as border cells don't count
+    _cellRects = {};
 
     // Initialize outer boundary
     for (int x = 0; x < gridSize; x++) {
@@ -131,6 +133,13 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       _boundaryPoints.add(IntVector2(0, y));
       _setGridValue(gridSize - 1, y, game_constants.kGridEdge);
       _boundaryPoints.add(IntVector2(gridSize - 1, y));
+    }
+
+    // Pre-calculate Rects for all grid cells
+    for (int y = 0; y < gridSize; y++) {
+      for (int x = 0; x < gridSize; x++) {
+        _cellRects[IntVector2(x, y)] = Rect.fromLTWH(x * cellSize, y * cellSize, cellSize, cellSize);
+      }
     }
   }
 
@@ -343,7 +352,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
           }
         } else if (_grid[y][x] == game_constants.kGridEdge) {
           canvas.drawRect(
-            Rect.fromLTWH(x * cellSize, y * cellSize, cellSize, cellSize),
+            _cellRects[IntVector2(x, y)]!,
             _boundaryPaint,
           );
         }

@@ -1,49 +1,40 @@
+# Todo List for Qix Game Improvements
 
-# Todo List pour l'Amélioration du Jeu Qix
+This document outlines potential areas for further improvement in the Qix game, building upon previous refactorings.
 
-Ce document détaille les pistes d'amélioration pour le projet de jeu Qix, basées sur une analyse du code existant. Les suggestions sont regroupées par catégories : Architecture & Design, Factorisation & Lisibilité, et Optimisations de Performance.
+## 1. Performance & Optimization
 
-## 1. Architecture & Design Logiciel
+-   **Arena Rendering Optimization (Long-term)**:
+    -   The `ArenaComponent.render` method currently iterates through the entire grid (`gridSize * gridSize`) every frame. For very large grids, consider optimizing rendering by:
+        -   Only re-rendering changed grid cells.
+        -   Using a `PictureRecorder` to pre-render static parts of the arena and only update dynamic elements.
+        -   Investigating Flame's `SpriteBatch` or custom shaders for more efficient drawing of many small rectangles/sprites.
+-   **`findNearestBoundaryPoint` Performance (Medium-term)**:
+    -   If `findNearestBoundaryPoint` becomes a performance bottleneck (e.g., with extremely complex boundaries), consider using a spatial data structure (like a k-d tree or a quadtree) to store `_boundaryPoints` for faster nearest neighbor lookups. This is likely overkill for typical Qix grid sizes but worth noting for scalability.
+-   **`_demoteEnclosedEdges` Optimization (Medium-term)**:
+    -   While `pointsToCheck` helps, the nested loops for checking neighbors could still be a target for optimization if profiling reveals it as a bottleneck.
 
-L'enjeu principal est de clarifier l'architecture en choisissant une seule implémentation et en améliorant la communication entre les composants.
+## 2. Code Clarity & Maintainability
 
--   [x] **Supprimer l'implémentation redondante** : Le projet contient deux versions du jeu :
-    1.  Une version moderne basée sur Flame (`qix_game.dart`, `player.dart`, `arena.dart`).
-    2.  Une version plus ancienne et monolithique utilisant un `CustomPainter` (`game.dart`).
-    Le fichier `main.dart` utilise la version Flame. Il est crucial de **supprimer `game.dart` et `game.dart.bak`** pour éviter la confusion, réduire la dette technique et se concentrer sur une seule architecture.
+-   **Constants Naming in `constants.dart`**:
+    -   Review the naming of `kTempFillArea1`, `kTempFillArea2`, `kSeedScanArea`. While their purpose is understood within the flood-fill algorithm, more descriptive names could improve clarity if the algorithm's details are ever abstracted or modified.
+-   **Player Input State Management (Minor)**:
+    -   The `setDirection` method in `player.dart` uses a boolean `_isManualInput` and a temporary variable `originalIsManualInput`. While functional, a more explicit state machine for input handling (e.g., `PlayerInputState { Manual, Automatic }`) could potentially make the logic even clearer, though this is a very minor point.
+-   **Game Difficulty/Speed Configuration**:
+    -   The `_arenaTraversalTime` in `player.dart` is currently a fixed constant. Consider exposing this (or a derived speed setting) as a configurable parameter, possibly tied to game difficulty levels.
 
--   [x] **Améliorer la gestion d'état du joueur** : La classe `Player` gère son état avec plusieurs booléens (`onEdge`, `_isManualInput`). Cela peut devenir complexe et source de bugs.
-    -   **Action** : Remplacer les booléens par une machine à états (State Machine) plus robuste en utilisant un `enum`. Par exemple : `enum PlayerState { OnEdge, Drawing, Dead }`. Le comportement du joueur dans la méthode `update` découlerait directement de l'état courant, rendant la logique plus claire.
+## 3. Feature Enhancements (Future Considerations)
 
--   [x] **Découpler les composants (Single Responsibility Principle)** : La méthode `Player.move` est surchargée. Elle gère le déplacement, le changement d'état (passer de `onEdge` à `drawing`), et déclenche directement le remplissage de la zone dans `arena.fillArea(...)`.
-    -   **Action** : Le joueur ne devrait que notifier un changement d'état ou la complétion d'un chemin. Le composant principal (`QixGame`) devrait écouter ces événements et ordonner à l'`Arena` de se mettre à jour. Cela respecte mieux le principe de responsabilité unique.
-
--   [x] **Centraliser et unifier les constantes** : Des constantes de grille sont définies dans `constants.dart` (`kGridWidth`) mais une autre taille (`gridSize`) est définie localement dans `qix_game.dart`.
-    -   **Action** : Créer une seule source de vérité pour la configuration de la grille (taille, dimensions des cellules, etc.) dans `constants.dart` et l'utiliser partout.
-
-## 2. Factorisation & Lisibilité du Code
-
-L'objectif est de rendre le code plus simple à comprendre et à maintenir en extrayant des logiques complexes dans des fonctions dédiées.
-
--   [x] **Simplifier la méthode `Player.update`** : La logique de décision pour le mouvement automatique dans les coins est imbriquée et difficile à suivre.
-    -   **Action** : Extraire la logique de "recherche de la prochaine direction valide" dans une méthode dédiée comme `_findNextAutoDirection()` pour alléger la méthode `update`.
-
--   [x] **Clarifier l'algorithme de remplissage (`ArenaComponent.fillArea`)** : Cette méthode est correcte mais complexe.
-    -   **Action** : Ajouter des commentaires stratégiques pour expliquer les 4 étapes clés de l'algorithme (marquage du chemin, flood-fill pour trouver les régions, identification de la région du Qix, remplissage des autres régions). Renommer certaines variables pour mieux refléter leur intention.
-
--   [x] **Utiliser des `enum` pour les directions** : Le code utilise déjà un `enum Direction`, ce qui est une excellente pratique. Il faut s'assurer que son usage est cohérent partout et éviter les `String` comme `'right'` (présent dans l'ancienne version `game.dart`).
-
-## 3. Optimisations de Performance
-
-Les performances sont cruciales pour un jeu fluide. Les optimisations se concentrent sur le rendu et les algorithmes coûteux.
-
--   [x] **Optimiser le rendu de l'`ArenaComponent`** : La méthode `render` est très inefficace.
-    -   **Action 1 (Critique)** : **Mettre en cache les objets `Paint`**. Ne pas créer de `new Paint()` à chaque frame. Déclarez-les comme des membres finaux de la classe.
-    -   **Action 2 (Critique)** : **Arrêter de créer des `Sprite` à chaque frame**. La ligne `final subSprite = Sprite(...)` dans la boucle de rendu est une source majeure de "jank" (saccades). Pré-calculez et stockez les sprites des tuiles de l'image dans une liste ou une map lors du `onLoad`.
-
--   [x] **Optimiser les algorithmes de balayage de la grille** : Plusieurs méthodes parcourent toute la grille, ce qui est coûteux.
-    -   **Action pour `_demoteEnclosedEdges`** : Au lieu de scanner toute la grille (`O(N*M)`), cette méthode pourrait être optimisée pour ne vérifier que les voisins des nouvelles bordures qui viennent d'être créées après un `fillArea`.
-    -   **Action pour `findNearestBoundaryPoint`** : Si cette fonction est utilisée fréquemment, un parcours complet de la grille est trop lent. Envisagez de pré-calculer une liste de tous les points de bordure pour accélérer la recherche.
-
--   [x] **Remplacer la boucle de jeu `Timer` par `AnimationController` (Déjà fait dans `game.dart`)** : L'ancienne version `game.dart` a été correctement refactorisée pour utiliser un `AnimationController` au lieu d'un `Timer`. C'est une bonne pratique car il se synchronise avec le cycle de rafraîchissement de l'écran. Il faut s'assurer que la version Flame (`QixGame`) s'appuie bien sur la boucle de jeu interne de Flame (`update(dt)`) et non sur des `Timer` externes. L'implémentation actuelle est correcte à ce niveau.
-
+-   **Qix (Enemy) AI**:
+    -   Currently, the Qix's movement is not implemented. Developing a basic AI for the Qix to move around the arena and interact with the player's path would be a significant feature.
+-   **Game Over Conditions**:
+    -   Implement clear game over conditions (e.g., player touching the Qix, Qix touching the drawing path).
+-   **Visual Feedback for Path Drawing**:
+    -   Enhance the visual feedback when the player is drawing a path (e.g., different color, animation).
+-   **Sound Effects and Music**:
+    -   Add sound effects for movement, drawing, filling, and game events.
+    -   Implement background music.
+-   **Multiple Levels/Stages**:
+    -   Introduce different arena layouts or increasing difficulty levels.
+-   **Score Tracking**:
+    -   Implement a scoring system based on filled area, time, or other factors.

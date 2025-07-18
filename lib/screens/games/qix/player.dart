@@ -13,7 +13,8 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
   final double cellSize;
   IntVector2 gridPosition; // Logical grid position
   IntVector2 targetGridPosition; // Target grid position for smooth movement
-  final double _moveSpeed = 200.0; // Pixels per second
+  final double _arenaTraversalTime = 2.0; // Time in seconds to traverse the entire arena
+  late final double _moveSpeed; // Pixels per second
 
   PlayerState state = PlayerState.onEdge;
   List<IntVector2> currentPath = [];
@@ -29,6 +30,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     size = Vector2.all(cellSize);
     anchor = Anchor.topLeft;
     position = gridPosition.toVector2() * cellSize;
+    _moveSpeed = (gridSize * cellSize) / _arenaTraversalTime;
   }
 
   void setDirection(Direction? direction, {bool isManual = false}) {
@@ -231,7 +233,6 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     return true;
   }
 
-  @override
   IntVector2 _getNewGridPosition(Direction direction) {
     IntVector2 nextPos;
     switch (direction) {
