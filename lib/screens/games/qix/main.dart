@@ -4,24 +4,81 @@ import 'qix_game.dart';
 import 'directional_pad.dart';
 import 'constants.dart';
 
-class QixGameScreen extends StatelessWidget {
+class QixGameScreen extends StatefulWidget {
   const QixGameScreen({super.key});
 
   @override
+  State<QixGameScreen> createState() => _QixGameScreenState();
+}
+
+class _QixGameScreenState extends State<QixGameScreen> {
+  late final QixGame _game;
+
+  @override
+  void initState() {
+    super.initState();
+    _game = QixGame();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final QixGame game = QixGame();
-    return Scaffold(
-      appBar: AppBar(title: const Text('Qix Basic')),
-      body: Stack(
+    final Orientation orientation = MediaQuery.of(context).orientation;
+
+    Widget percentageDisplay = ValueListenableBuilder<double>(
+      valueListenable: _game.filledPercentageNotifier,
+      builder: (context, percentage, child) {
+        return Text(
+          'Zone découverte: ${percentage.toStringAsFixed(2)}%',
+          style: const TextStyle(color: Colors.white, fontSize: 20),
+        );
+      },
+    );
+
+    Widget gameAndControls;
+
+    if (orientation == Orientation.portrait) {
+      gameAndControls = Column(
         children: [
-          GameWidget(game: game),
-          DirectionalPad(
-            onDirectionChanged: (Direction direction) {
-              game.handleDirectionChange(direction);
-            },
+          Expanded(child: GameWidget(game: _game)),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: percentageDisplay,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: DirectionalPad(
+              onDirectionChanged: (Direction direction) {
+                _game.handleDirectionChange(direction);
+              },
+            ),
           ),
         ],
-      ),
+      );
+    } else { // Orientation.landscape
+      gameAndControls = Row(
+        children: [
+          Expanded(child: GameWidget(game: _game)),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column( // Use a column for percentage and directional pad in landscape
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                percentageDisplay,
+                DirectionalPad(
+                  onDirectionChanged: (Direction direction) {
+                    _game.handleDirectionChange(direction);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Qix Basic')),
+      body: gameAndControls,
     );
   }
 }

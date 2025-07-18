@@ -7,6 +7,8 @@ import 'dart:collection';
 import 'constants.dart' as game_constants;
 import 'qix_game.dart';
 
+
+
 class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late ui.Image _rewardCardImage;
   final double gridSize;
@@ -20,6 +22,8 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late final Paint _pathPaint;
   late final Map<int, Sprite> _filledSprites;
   final List<Vector2> _boundaryPoints = [];
+
+  
 
   ArenaComponent({required this.gridSize, required this.cellSize}) {
     size = Vector2(
@@ -45,6 +49,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     _rewardCardImage = await game.images.load('fenrir_card.jpg');
 
     // Pre-calculate sprites for filled areas
@@ -62,6 +67,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
         );
       }
     }
+    calculateFilledPercentage();
   }
 
   void _setGridValue(int x, int y, int value) {
@@ -194,6 +200,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     // After filling, re-evaluate edges that might have become fully enclosed
     // and convert them to filled areas.
     _demoteEnclosedEdges(newlyFilledPoints);
+    calculateFilledPercentage();
     return newlyFilledPoints;
   }
 
@@ -282,6 +289,18 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       }
     }
     return filledPoints;
+  }
+
+  void calculateFilledPercentage() {
+    int filledCells = 0;
+    for (int y = 0; y < gridSize; y++) {
+      for (int x = 0; x < gridSize; x++) {
+        if (_grid[y][x] == game_constants.kGridFilled) {
+          filledCells++;
+        }
+      }
+    }
+    game.updateFilledPercentage((filledCells / (gridSize * gridSize)) * 100);
   }
 
   // Finds the nearest boundary point to a given point

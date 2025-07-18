@@ -9,6 +9,7 @@ import 'constants.dart';
 class QixGame extends FlameGame with KeyboardEvents {
   late final ArenaComponent arena;
   late final Player player;
+  final ValueNotifier<double> filledPercentageNotifier = ValueNotifier<double>(0.0);
 
   @override
   Future<void> onLoad() async {
@@ -27,6 +28,11 @@ class QixGame extends FlameGame with KeyboardEvents {
 
     add(arena);
     add(player);
+    arena.calculateFilledPercentage();
+  }
+
+  void updateFilledPercentage(double percentage) {
+    filledPercentageNotifier.value = percentage;
   }
 
   void onPlayerStateChanged(PlayerState newState) {
