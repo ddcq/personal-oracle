@@ -17,6 +17,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late List<List<int>> _grid; // 0: free, 1: filled, 2: path, 3: edge
   final List<Vector2> _currentDrawingPath = [];
   late Vector2 _virtualQixPosition;
+  int _nonFreeCells = 0;
 
   late final Paint _boundaryPaint;
   late final Paint _pathPaint;
@@ -71,7 +72,17 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   }
 
   void _setGridValue(int x, int y, int value) {
+    int oldValue = _grid[y][x];
     _grid[y][x] = value;
+
+    // Check if the cell is within the inner playable area (not border)
+    bool isInnerCell = x > 0 && x < gridSize - 1 && y > 0 && y < gridSize - 1;
+
+    if (isInnerCell && oldValue == game_constants.kGridFree) {
+      if (value == game_constants.kGridEdge || value == game_constants.kGridFilled) {
+        _nonFreeCells++;
+      }
+    }
   }
 
   bool isFilled(int x, int y) {
@@ -105,6 +116,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     );
 
     _boundaryPoints.clear();
+    _nonFreeCells = 0; // Initialize to 0 as border cells don't count
 
     // Initialize outer boundary
     for (int x = 0; x < gridSize; x++) {
@@ -306,15 +318,12 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   }
 
   void calculateFilledPercentage() {
-    int filledCells = 0;
-    for (int y = 0; y < gridSize; y++) {
-      for (int x = 0; x < gridSize; x++) {
-        if (_grid[y][x] == game_constants.kGridFilled) {
-          filledCells++;
-        }
-      }
+    final double innerGridSize = gridSize - 2;
+    if (innerGridSize <= 0) {
+      game.updateFilledPercentage(0.0);
+      return;
     }
-    game.updateFilledPercentage((filledCells / (gridSize * gridSize)) * 100);
+    game.updateFilledPercentage((_nonFreeCells / (innerGridSize * innerGridSize)) * 100);
   }
 
   // Finds the nearest boundary point to a given point
