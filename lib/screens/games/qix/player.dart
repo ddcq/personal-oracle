@@ -6,7 +6,7 @@ import 'constants.dart' as game_constants;
 import 'constants.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
-enum PlayerState { onEdge, drawing, dead }
+enum PlayerState { onEdge, drawing, dead, rescued }
 
 class Player extends PositionComponent with HasGameReference<QixGame> {
   final int gridSize;
@@ -22,11 +22,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
   Direction? currentDirection; // Current direction for automatic movement
   bool _isManualInput = false; // True if the last direction change was from user input
 
-  Player({
-    required this.gridSize,
-    required this.cellSize,
-  }) : gridPosition = IntVector2(0, 0),
-       targetGridPosition = IntVector2(0, 0) {
+  Player({required this.gridSize, required this.cellSize}) : gridPosition = IntVector2(0, 0), targetGridPosition = IntVector2(0, 0) {
     size = Vector2.all(cellSize);
     anchor = Anchor.topLeft;
     position = gridPosition.toVector2() * cellSize;
@@ -53,6 +49,11 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
   void update(double dt) {
     super.update(dt);
 
+    if (state == PlayerState.rescued) {
+      state = PlayerState.onEdge;
+      return;
+    }
+
     // Smoothly move towards the target grid position
     Vector2 targetPixelPosition = targetGridPosition.toVector2() * cellSize;
     if (position.distanceTo(targetPixelPosition) > 0.1) {
@@ -70,8 +71,8 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
           if (currentDirection != null) {
             move(currentDirection!); // Move in the new direction
           }
-          }
         }
+      }
     }
   }
 
@@ -204,17 +205,6 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
         game.arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
         state = PlayerState.onEdge;
         game.onPlayerStateChanged(state);
-
-        // After filling, ensure player is on a boundary. If not, teleport to nearest boundary point.
-        
-        if (!game.arena.isPointOnBoundary(newGridPosition)) {
-          IntVector2 nearestBoundary = game.arena.findNearestBoundaryPoint(newGridPosition);
-          
-          targetGridPosition = nearestBoundary;
-          gridPosition = nearestBoundary; // Snap immediately for teleportation
-        } else {
-          
-        }
       } else {
         // Continue drawing path
         currentPath.add(IntVector2(newGridPosition.x, newGridPosition.y));
@@ -256,9 +246,16 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
   void render(Canvas canvas) {
     final paint = Paint()..color = Colors.red;
     canvas.drawRect(size.toRect(), paint);
-
-    
   }
 
-  
+  void teleportTo(IntVector2 newPosition) {
+    gridPosition = newPosition;
+    targetGridPosition = newPosition;
+    position = newPosition.toVector2() * cellSize;
+    currentDirection = null; // Reset direction since player is teleported
+    state = PlayerState.rescued; // Reset state to onEdge after teleport
+    currentPath.clear(); // Clear current path since teleporting
+    pathStartGridPosition = null; // Reset path start position
+    game.arena.endPath(); // Clear the visual path in the arena
+  }
 }

@@ -23,9 +23,7 @@ class QixGame extends FlameGame with KeyboardEvents {
     player = Player(gridSize: gridSize, cellSize: cellSize);
     player.gridPosition = IntVector2(0, 0); // Start at the top-left edge
     player.targetGridPosition = IntVector2(player.gridPosition.x, player.gridPosition.y);
-    player.setDirection(
-      Direction.right,
-    ); // Start moving right along the edge automatically
+    player.setDirection(Direction.right); // Start moving right along the edge automatically
 
     add(arena);
     add(player);
@@ -40,8 +38,6 @@ class QixGame extends FlameGame with KeyboardEvents {
     if (newState == PlayerState.onEdge) {
       arena.fillArea(player.currentPath, player.pathStartGridPosition!, player.gridPosition);
       arena.endPath();
-      player.currentPath.clear();
-      player.pathStartGridPosition = null;
     }
   }
 
@@ -50,10 +46,7 @@ class QixGame extends FlameGame with KeyboardEvents {
   }
 
   @override
-  KeyEventResult onKeyEvent(
-    KeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
+  KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     super.onKeyEvent(event, keysPressed);
 
     if (event is KeyDownEvent) {
