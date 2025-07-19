@@ -376,7 +376,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           orElse: () => MythStory(title: 'Histoire inconnue', correctOrder: [], collectibleCards: []), // Fallback
         );
         final unlockedParts = jsonDecode(progress['parts_unlocked']);
-        final progressPercentage = unlockedParts.length / mythStory.correctOrder.length;
+        final int totalParts = mythStory.correctOrder.length;
+        final progressPercentage = totalParts > 0 ? unlockedParts.length / totalParts : 0.0;
 
         return GestureDetector(
           onTap: () {

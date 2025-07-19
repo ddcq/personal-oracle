@@ -37,7 +37,14 @@ class _QixGameScreenState extends State<QixGameScreen> {
     if (orientation == Orientation.portrait) {
       gameAndControls = Column(
         children: [
-          Expanded(child: GameWidget(game: _game)),
+          Expanded(
+            child: Container(
+              color: Colors.blue[900],
+              child: Center(
+                child: GameWidget(game: _game),
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: percentageDisplay,
@@ -55,7 +62,14 @@ class _QixGameScreenState extends State<QixGameScreen> {
     } else { // Orientation.landscape
       gameAndControls = Row(
         children: [
-          Expanded(child: GameWidget(game: _game)),
+          Expanded(
+            child: Container(
+              color: Colors.blue[900],
+              child: Center(
+                child: GameWidget(game: _game),
+              ),
+            ),
+          ),
           SizedBox(
             width: 200,
             child: Padding(
