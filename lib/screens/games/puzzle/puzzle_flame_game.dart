@@ -153,7 +153,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     // 1. Dessiner l'ombre portée pour l'effet de flottement
     if (!pieceData.isLocked) {
       _shadowPaint
-        ..color = Colors.black.withAlpha((255 * (_isDragging ? 0.7 : 0.4)).toInt()) // Ombre plus prononcée
+        ..color = Colors.black.withAlpha((_isDragging ? 178 : 102)) // Ombre plus prononcée
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, _isDragging ? 10.0 : 5.0); // Flou plus important
 
       final Offset currentShadowOffset = _isDragging ? _draggingShadowOffset : _defaultShadowOffset;
@@ -176,10 +176,10 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
         end: Alignment.bottomRight,
         stops: const [0.0, 0.4, 0.6, 1.0],
         colors: [
-          Colors.white.withAlpha((255 * 0.35).toInt()), // Lumière en haut à gauche
-          Colors.white.withAlpha((255 * 0.1).toInt()),
-          Colors.black.withAlpha((255 * 0.1).toInt()),
-          Colors.black.withAlpha((255 * 0.45).toInt()), // Ombre en bas à droite
+          Colors.white.withAlpha(89), // Lumière en haut à gauche
+          Colors.white.withAlpha(25),
+          Colors.black.withAlpha(25),
+          Colors.black.withAlpha(115), // Ombre en bas à droite
         ],
       ).createShader(destRect);
 
@@ -188,7 +188,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
 
     // 4. Ajouter une bordure pour mieux définir la pièce
     final Paint borderPaint = Paint()
-      ..color = Colors.black.withAlpha((255 * 0.2).toInt())
+      ..color = Colors.black.withAlpha(51)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
     canvas.drawRRect(pieceRRect, borderPaint);

@@ -190,7 +190,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             final DateTime timestamp =
                 DateTime.fromMillisecondsSinceEpoch(score['timestamp']);
             return Card(
-              color: Colors.white.withAlpha((255 * 0.1).toInt()),
+              color: Colors.white.withAlpha(25),
               elevation: 3,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
@@ -250,7 +250,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       itemBuilder: (context, index) {
         final trophy = trophies[index];
         return Card(
-          color: Colors.white.withAlpha((255 * 0.1).toInt()),
+          color: Colors.white.withAlpha(25),
           elevation: 5,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
@@ -345,7 +345,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           },
           child: Card(
-            color: Colors.white.withAlpha((255 * 0.1).toInt()),
+            color: Colors.white.withAlpha(25),
             elevation: 5,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),

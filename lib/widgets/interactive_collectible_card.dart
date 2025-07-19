@@ -92,7 +92,7 @@ class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard>
                           height: double.infinity,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [Colors.white.withAlpha(0), Colors.white.withAlpha((255 * 0.3).toInt()), Colors.white.withAlpha(0)],
+                              colors: [Colors.white.withAlpha(0), Colors.white.withAlpha(76), Colors.white.withAlpha(0)],
                               begin: Alignment(-math.cos(math.pi / 6), -math.sin(math.pi / 6)), // 30 degrees angle
                               end: Alignment(math.cos(math.pi / 6), math.sin(math.pi / 6)), // 30 degrees angle
                             ),
