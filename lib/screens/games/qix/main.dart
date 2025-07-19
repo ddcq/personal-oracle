@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
+import 'package:oracle_d_asgard/widgets/gauge_widget.dart';
 import 'qix_game.dart';
 import 'directional_pad.dart';
 import 'constants.dart';
@@ -27,10 +28,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
     Widget percentageDisplay = ValueListenableBuilder<double>(
       valueListenable: _game.filledPercentageNotifier,
       builder: (context, percentage, child) {
-        return Text(
-          'Zone découverte: ${percentage.toStringAsFixed(2)}%',
-          style: const TextStyle(color: Colors.white, fontSize: 20),
-        );
+        return GaugeWidget(percentage: percentage);
       },
     );
 
@@ -58,18 +56,21 @@ class _QixGameScreenState extends State<QixGameScreen> {
       gameAndControls = Row(
         children: [
           Expanded(child: GameWidget(game: _game)),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column( // Use a column for percentage and directional pad in landscape
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                percentageDisplay,
-                DirectionalPad(
-                  onDirectionChanged: (Direction direction) {
-                    _game.handleDirectionChange(direction);
-                  },
-                ),
-              ],
+          SizedBox(
+            width: 200,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column( // Use a column for percentage and directional pad in landscape
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  percentageDisplay,
+                  DirectionalPad(
+                    onDirectionChanged: (Direction direction) {
+                      _game.handleDirectionChange(direction);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],
