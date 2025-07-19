@@ -7,6 +7,7 @@ import 'dart:collection';
 import 'player.dart';
 import 'constants.dart' as game_constants;
 import 'qix_game.dart';
+import 'qix.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 class FloodFillResult {
@@ -31,6 +32,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late final Map<int, Sprite> _filledSprites;
   final List<IntVector2> _boundaryPoints = [];
   late final Map<IntVector2, Rect> _cellRects;
+  late QixComponent _qixComponent;
 
   ArenaComponent({required this.gridSize, required this.cellSize}) {
     size = Vector2((gridSize * cellSize).toDouble(), (gridSize * cellSize).toDouble());
@@ -46,6 +48,14 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       ..strokeWidth = 2.0
       ..style = PaintingStyle.stroke;
     _filledSprites = {};
+
+    _qixComponent = QixComponent(
+      gridPosition: _virtualQixPosition,
+      cellSize: cellSize,
+      gridSize: gridSize,
+      isGridEdge: isPointOnBoundary,
+    );
+    add(_qixComponent);
   }
 
   @override
