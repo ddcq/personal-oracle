@@ -33,7 +33,7 @@ class DefeatScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 32),
                 Image.asset(
-                  'assets/images/fenrir_card.jpg', // Placeholder, replace with a defeat image if available
+                  'assets/images/cards/fenrir_card.jpg', // Placeholder, replace with a defeat image if available
                   height: 200,
                 ),
                 const SizedBox(height: 32),

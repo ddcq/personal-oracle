@@ -471,7 +471,7 @@ class _GameScreenState extends State<GameScreen> {
         borderRadius: BorderRadius.circular(8),
         // AJOUT : Image de fond pour le plateau
         image: DecorationImage(
-          image: AssetImage('assets/images/asgard.jpg'),
+          image: AssetImage('assets/images/backgrounds/asgard.jpg'),
           fit: BoxFit.cover, // L'image couvrira le conteneur
           // Optionnel : un filtre pour assombrir l'image et améliorer la lisibilité des blocs
           // colorFilter: ColorFilter.mode(Colors.black.withAlpha(128), BlendMode.dstATop),

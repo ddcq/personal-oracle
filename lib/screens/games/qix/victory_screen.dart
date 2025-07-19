@@ -33,7 +33,7 @@ class VictoryScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 32),
                 Image.asset(
-                  'assets/images/odin_card.jpg', // Placeholder, replace with a victory image if available
+                  'assets/images/cards/odin_card.jpg', // Placeholder, replace with a victory image if available
                   height: 200,
                 ),
                 const SizedBox(height: 32),

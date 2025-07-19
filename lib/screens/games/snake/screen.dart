@@ -65,7 +65,7 @@ class _SnakeGameState extends State<SnakeGame> {
                       children: [
                         // Background wall image for the entire gameSize area
                         Positioned.fill(
-                          child: Image.asset('assets/images/wall.webp', fit: BoxFit.fill),
+                          child: Image.asset('assets/images/backgrounds/wall.webp', fit: BoxFit.fill),
                         ),
                         // Centered black square for the game area
                         Center(
