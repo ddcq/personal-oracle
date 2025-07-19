@@ -6,10 +6,10 @@ class GaugeWidget extends StatelessWidget {
   final double goalPercentage;
 
   const GaugeWidget({
-    Key? key,
+    super.key,
     required this.percentage,
     this.goalPercentage = 80.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class GaugeWidget extends StatelessWidget {
                     child: Container(
                       width: 4,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withAlpha((0.7 * 255).round()),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),

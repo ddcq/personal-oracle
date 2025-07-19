@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:oracle_d_asgard/screens/games/myth_story_page.dart';
-import 'package:oracle_d_asgard/screens/collectible_card_detail_page.dart';
+import 'package:oracle_d_asgard/widgets/interactive_collectible_card.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
@@ -289,7 +289,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         crossAxisCount: 3,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        childAspectRatio: 0.7,
+        childAspectRatio: 1.0,
       ),
       itemCount: cards.length,
       itemBuilder: (context, index) {
@@ -300,44 +300,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return const SizedBox.shrink(); // Should not happen
         }
 
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CollectibleCardDetailPage(card: collectibleCard),
-              ),
-            );
-          },
-          child: Card(
-            color: Colors.white.withAlpha((255 * 0.1).toInt()),
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Transform(
-                    alignment: FractionalOffset.center,
-                    transform: Matrix4.identity()
-                      ..setEntry(3, 2, 0.001) // Perspective
-                      ..rotateX(0.1) // Small rotation on X axis
-                      ..rotateY(0.1), // Small rotation on Y axis
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        collectibleCard.imagePath,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+        return InteractiveCollectibleCard(card: collectibleCard);
       },
     );
   }
