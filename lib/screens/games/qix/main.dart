@@ -18,7 +18,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
   @override
   void initState() {
     super.initState();
-    _game = QixGame();
+    _game = QixGame(context);
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,6 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
 
   late List<List<int>> _grid; // 0: free, 1: filled, 2: path, 3: edge
   final List<IntVector2> _currentDrawingPath = [];
-  late IntVector2 _virtualQixPosition;
   int _nonFreeCells = 0;
 
   late final Paint _boundaryPaint;
@@ -38,7 +38,9 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     size = Vector2((gridSize * cellSize).toDouble(), (gridSize * cellSize).toDouble());
     position = Vector2.zero();
     _initializeGrid();
-    _virtualQixPosition = IntVector2((gridSize / 2).toInt(), (gridSize / 2).toInt()); // Center of the arena
+    final Random random = Random();
+    final int minCoord = 20;
+    final IntVector2 initialQixPosition = IntVector2(minCoord + random.nextInt(gridSize - 40), minCoord + random.nextInt(gridSize - 40));
 
     _boundaryPaint = Paint()
       ..color = Colors.blue[900]!
@@ -50,12 +52,18 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     _filledSprites = {};
 
     _qixComponent = QixComponent(
-      gridPosition: _virtualQixPosition,
+      gridPosition: initialQixPosition,
       cellSize: cellSize,
       gridSize: gridSize,
       isGridEdge: isPointOnBoundary,
+      isPlayerPath: isPointOnCurrentDrawingPath,
+      onGameOver: () => game.gameOver(game.context),
     );
     add(_qixComponent);
+  }
+
+  bool isPointOnCurrentDrawingPath(IntVector2 point) {
+    return _currentDrawingPath.contains(point);
   }
 
   @override
@@ -155,8 +163,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     if (!isPointOnBoundary(playerPosition)) {
       IntVector2 nearestBoundary = findNearestBoundaryPoint(playerPosition);
       game.player.teleportTo(nearestBoundary);
-    } else {
-    }
+    } else {}
   }
 
   int getGridValue(int x, int y) {
@@ -292,7 +299,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       IntVector2 current = queue.removeFirst();
       filledPoints.add(current);
 
-      if (current.x == _virtualQixPosition.x && current.y == _virtualQixPosition.y) {
+      if (current == _qixComponent.gridPosition) {
         containsQix = true;
       }
 

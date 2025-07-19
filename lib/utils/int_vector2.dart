@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart'; // For Offset
 import 'package:flame/components.dart'; // For Vector2
 
@@ -11,20 +13,11 @@ class IntVector2 {
   // Opérations arithmétiques
   IntVector2 operator +(IntVector2 other) => IntVector2(x + other.x, y + other.y);
   IntVector2 operator -(IntVector2 other) => IntVector2(x - other.x, y - other.y);
-  IntVector2 operator *(int scalar) => IntVector2(x * scalar, y * scalar);
-  IntVector2 operator /(int scalar) {
-    if (scalar == 0) throw ArgumentError('Cannot divide by zero');
-    return IntVector2(x ~/ scalar, y ~/ scalar); // Division entière
-  }
+  IntVector2 operator *(IntVector2 other) => IntVector2(x * other.x, y * other.y);
 
   // Comparaison
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is IntVector2 &&
-          runtimeType == other.runtimeType &&
-          x == other.x &&
-          y == other.y;
+  bool operator ==(Object other) => identical(this, other) || other is IntVector2 && runtimeType == other.runtimeType && x == other.x && y == other.y;
 
   @override
   int get hashCode => Object.hash(x, y);
@@ -52,18 +45,23 @@ class IntVector2 {
 
   // Retourne les 4 voisins directs (haut, bas, gauche, droite)
   List<IntVector2> get cardinalNeighbors => [
-        IntVector2(x, y - 1), // Haut
-        IntVector2(x, y + 1), // Bas
-        IntVector2(x - 1, y), // Gauche
-        IntVector2(x + 1, y), // Droite
-      ];
+    IntVector2(x, y - 1), // Haut
+    IntVector2(x, y + 1), // Bas
+    IntVector2(x - 1, y), // Gauche
+    IntVector2(x + 1, y), // Droite
+  ];
 
   // Retourne les 8 voisins (incluant les diagonales)
   List<IntVector2> get allNeighbors => [
-        IntVector2(x - 1, y - 1), IntVector2(x, y - 1), IntVector2(x + 1, y - 1),
-        IntVector2(x - 1, y),                           IntVector2(x + 1, y),
-        IntVector2(x - 1, y + 1), IntVector2(x, y + 1), IntVector2(x + 1, y + 1),
-      ];
+    IntVector2(x - 1, y - 1),
+    IntVector2(x, y - 1),
+    IntVector2(x + 1, y - 1),
+    IntVector2(x - 1, y),
+    IntVector2(x + 1, y),
+    IntVector2(x - 1, y + 1),
+    IntVector2(x, y + 1),
+    IntVector2(x + 1, y + 1),
+  ];
 
   // Conversion vers Offset (si nécessaire pour l'affichage Flutter)
   Offset toOffset() => Offset(x.toDouble(), y.toDouble());
@@ -76,4 +74,3 @@ class IntVector2 {
 extension IntVector2Extension on IntVector2 {
   Vector2 toVector2() => Vector2(x.toDouble(), y.toDouble());
 }
-
