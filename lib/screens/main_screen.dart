@@ -1,187 +1,111 @@
 import 'package:flutter/material.dart';
-import '../utils/constants.dart';
-import 'quiz_screen.dart';
-import 'games/menu.dart';
-import 'profile_screen.dart';
+import 'package:oracle_d_asgard/screens/profile_screen.dart';
+import 'package:oracle_d_asgard/screens/quiz_screen.dart';
+import 'package:oracle_d_asgard/screens/games/menu.dart';
 
-// Écran principal avec navigation
-class MainScreen extends StatefulWidget {
+class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
-
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
-
-  // Liste des pages
-  late final List<Widget> _pages;
-
-  @override
-  void initState() {
-    super.initState();
-    _pages = [
-      const WelcomeContent(), // Page d'accueil
-      const QuizScreen(),     // Page Quiz
-      MenuPrincipal(),        // Page Mini-jeux
-      const ProfileScreen(),  // Page Profil
-    ];
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: AppConstants.primaryDark,
-        selectedItemColor: AppConstants.accent,
-        unselectedItemColor: Colors.grey,
-        selectedFontSize: 12,
-        unselectedFontSize: 10,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Accueil',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.quiz),
-            label: 'Quiz',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.games),
-            label: 'Jeu',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profil',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Contenu de votre page d'accueil (WelcomeScreen transformé)
-class WelcomeContent extends StatelessWidget {
-  const WelcomeContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppConstants.primaryDark, AppConstants.secondaryDark],
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
         ),
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(AppConstants.paddingLarge),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: AppConstants.paddingXLarge),
-
-                // Icône principale
-                Container(
-                  width: AppConstants.iconXLarge,
-                  height: AppConstants.iconXLarge,
-                  decoration: BoxDecoration(
-                    color: AppConstants.accent.withAlpha(25),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppConstants.accent, width: 2),
-                  ),
-                  child: const Icon(
-                    Icons.shield,
-                    size: 60,
-                    color: AppConstants.accent,
-                  ),
-                ),
-                const SizedBox(height: AppConstants.paddingXLarge),
-
-                // Titre
-                Text(
-                  'Oracle Nordique',
-                  style: Theme.of(context).textTheme.headlineLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: AppConstants.paddingMedium),
-
-                // Sous-titre
-                Text(
-                  'Découvrez quelle divinité nordique sommeille en vous',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: AppConstants.paddingXLarge + AppConstants.paddingMedium),
-
-                // Description
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppConstants.paddingLarge),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Comment ça marche ?',
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        const SizedBox(height: AppConstants.paddingMedium),
-                        Text(
-                          'Répondez à nos questions pour découvrir votre divinité tutélaire nordique. Recevez ensuite des conseils personnalisés et des défis quotidiens inspirés de la mythologie viking.',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          textAlign: TextAlign.center,
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Oracle d’Asgard',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      fontFamily: 'NotoSansRunic',
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        const Shadow(
+                          blurRadius: 15.0,
+                          color: Colors.black87,
+                          offset: Offset(4.0, 4.0),
                         ),
                       ],
                     ),
                   ),
-                ),
-
-                const SizedBox(height: AppConstants.paddingXLarge),
-
-                // Message d'information
-                Container(
-                  padding: const EdgeInsets.all(AppConstants.paddingMedium),
-                  decoration: BoxDecoration(
-                    color: AppConstants.accent.withAlpha(25),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppConstants.accent.withAlpha(76)),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.info_outline,
-                        color: AppConstants.accent,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Utilisez le menu en bas pour naviguer entre les différentes sections',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppConstants.accent,
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 350, // Hauteur visible (70% de 500)
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                          top: 0,
+                          width: MediaQuery.of(context).size.width, // Prend toute la largeur
+                          child: ClipRect(
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              heightFactor: 0.7, // Affiche 70% de l'image
+                              child: Image.asset(
+                                'assets/images/odin_chibi.png',
+                                height: 500, // Hauteur réelle de l'image
+                              ),
+                            ),
                           ),
-                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/games/banner.png', // Assurez-vous que ce chemin est correct
+                        width: 300, // Ajustez la largeur selon vos besoins
+                        fit: BoxFit.contain,
+                      ),
+                      Text(
+                        'Welcome',
+                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                          fontFamily: 'NotoSansRunic',
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(5.0, 5.0))],
                         ),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: AppConstants.paddingMedium),
-              ],
+                  const SizedBox(height: 30),
+                  ChibiButton(
+                    text: 'Mini games',
+                    color: const Color(0xFFF9A825), // Orange
+                    shadowColor: const Color(0xFFC78500),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  ChibiButton(
+                    text: 'Quiz',
+                    color: const Color(0xFF1E88E5), // Blue
+                    shadowColor: const Color(0xFF155FA0),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  ChibiButton(
+                    text: 'Profile',
+                    color: const Color(0xFFE53935), // Red
+                    shadowColor: const Color(0xFFB71C1C),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -190,4 +114,41 @@ class WelcomeContent extends StatelessWidget {
   }
 }
 
-// Page de profil simple
+class ChibiButton extends StatelessWidget {
+  final String text;
+  final Color color;
+  final Color shadowColor;
+  final VoidCallback onPressed;
+
+  const ChibiButton({super.key, required this.text, required this.color, required this.shadowColor, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 220,
+        height: 60,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(50),
+          border: Border.all(color: Colors.white.withOpacity(0.8), width: 2.5),
+          boxShadow: [BoxShadow(color: shadowColor, offset: const Offset(0, 6), blurRadius: 0)],
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontFamily: 'NotoSansRunic',
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+              shadows: [Shadow(blurRadius: 3.0, color: Colors.black54, offset: Offset(2.0, 2.0))],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
