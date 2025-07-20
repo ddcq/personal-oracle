@@ -95,9 +95,10 @@ class _QuizScreenState extends State<QuizScreen> {
                   separatorBuilder: (context, index) => const SizedBox(height: 15),
                   itemBuilder: (context, index) {
                     final answer = question.answers[index];
+                    final String letter = String.fromCharCode('A'.codeUnitAt(0) + index);
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 15),
-                      child: AnswerButton(text: answer.text, onPressed: () => handleAnswer(index)),
+                      child: AnswerButton(text: answer.text, onPressed: () => handleAnswer(index), letter: letter),
                     );
                   },
                 ),
