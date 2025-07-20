@@ -16,7 +16,6 @@ class MainScreen extends StatelessWidget {
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -24,19 +23,14 @@ class MainScreen extends StatelessWidget {
                     'Oracle d’Asgard',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      fontFamily: 'NotoSansRunic',
+                      fontFamily: 'AmaticSC',
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      shadows: [
-                        const Shadow(
-                          blurRadius: 15.0,
-                          color: Colors.black87,
-                          offset: Offset(4.0, 4.0),
-                        ),
-                      ],
+                      fontSize: 70,
+                      letterSpacing: 2.0,
+                      shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
                     ),
                   ),
-                  const SizedBox(height: 10),
                   SizedBox(
                     height: 350, // Hauteur visible (70% de 500)
                     child: Stack(
@@ -66,13 +60,15 @@ class MainScreen extends StatelessWidget {
                         width: 300, // Ajustez la largeur selon vos besoins
                         fit: BoxFit.contain,
                       ),
-                      Text(
-                        'Welcome',
-                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          fontFamily: 'NotoSansRunic',
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(5.0, 5.0))],
+                      Positioned(
+                        top: 20.0, // Ajustez cette valeur pour déplacer le texte vers le haut
+                        child: Text(
+                          'Welcome',
+                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(5.0, 5.0))],
+                          ),
                         ),
                       ),
                     ],
@@ -139,7 +135,6 @@ class ChibiButton extends StatelessWidget {
           child: Text(
             text,
             style: const TextStyle(
-              fontFamily: 'NotoSansRunic',
               color: Colors.white,
               fontSize: 22,
               fontWeight: FontWeight.bold,

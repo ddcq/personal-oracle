@@ -103,6 +103,10 @@ flutter:
     - family: NotoSansRunic
       fonts:
         - asset: assets/fonts/NotoSansRunic-Regular.ttf
+    - family: AmaticSC
+      fonts:
+        - asset: assets/fonts/AmaticSC-Bold.ttf
+          weight: 700
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
