@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/screens/main_screen.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/screens/games/qix/main.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
 import 'package:oracle_d_asgard/screens/games/snake/screen.dart';
@@ -96,7 +96,7 @@ class MenuPrincipal extends StatelessWidget {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => jeu.builder()));
                       },
                     ),
-                  )).toList(),
+                  )),
                   
                 ],
               ),

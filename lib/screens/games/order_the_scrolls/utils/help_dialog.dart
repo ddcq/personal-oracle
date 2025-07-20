@@ -71,15 +71,17 @@ class HelpDialog {
   }
 
   static Widget _buildRule(String text, TextStyle? style) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('• ', style: TextStyle(color: Color(0xFF81D4FA), fontSize: 16)),
-          Expanded(child: Text(text, style: style)),
-        ],
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('• ', style: TextStyle(color: Color(0xFF81D4FA), fontSize: 16)),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(text, style: style),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -17,9 +17,7 @@ class QuizScreen extends StatefulWidget {
 class _QuizScreenState extends State<QuizScreen> {
   int currentQuestion = 0;
 
-  Map<String, int> scores = {
-    for (var trait in AppConstants.personalityTraits) trait: 0,
-  };
+  Map<String, int> scores = {for (var trait in AppConstants.personalityTraits) trait: 0};
 
   void handleAnswer(int answerIndex) {
     final answer = AppData.questions[currentQuestion].answers[answerIndex];
@@ -41,10 +39,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _navigateToResult() {
     final deity = QuizService.calculateBestDeity(scores);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => ResultScreen(deity: deity)),
-    );
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ResultScreen(deity: deity)));
   }
 
   @override
@@ -53,68 +48,62 @@ class _QuizScreenState extends State<QuizScreen> {
     final Question question = AppData.questions[currentQuestion];
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppConstants.primaryDark, AppConstants.secondaryDark],
-          ),
+          image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(AppConstants.paddingLarge),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ProgressBar(
-                  currentQuestion: currentQuestion + 1,
-                  totalQuestions: AppData.questions.length,
-                  progress: progress,
-                ),
-                const SizedBox(height: AppConstants.paddingXLarge),
-
-                // Question
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                ProgressBar(currentQuestion: currentQuestion + 1, totalQuestions: AppData.questions.length, progress: progress),
+                const SizedBox(height: 30),
                 Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(AppConstants.paddingLarge),
+                  padding: const EdgeInsets.all(20.0),
+                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
                   decoration: BoxDecoration(
-                    color: AppConstants.secondaryDark,
-                    borderRadius: BorderRadius.circular(AppConstants.radiusLarge),
-                    border: Border.all(color: AppConstants.cardDark),
+                    color: Color.fromRGBO(0, 0, 0, 0.5), // Semi-transparent background
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: Text(
                     question.question,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      height: 1.4,
-                    ),
                     textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 40, // Adjusted font size for better fit within container
+                      letterSpacing: 1.5,
+                      shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
+                    ),
                   ),
                 ),
-                const SizedBox(height: AppConstants.paddingXLarge),
-
-                // Réponses
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: question.answers.length,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: AppConstants.paddingMedium),
-                    itemBuilder: (context, index) {
-                      final answer = question.answers[index];
-                      return AnswerButton(
-                        text: answer.text,
-                        onPressed: () => handleAnswer(index),
-                      );
-                    },
-                  ),
+                const SizedBox(height: 30),
+                ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: question.answers.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: 15),
+                  itemBuilder: (context, index) {
+                    final answer = question.answers[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: AnswerButton(text: answer.text, onPressed: () => handleAnswer(index)),
+                    );
+                  },
                 ),
               ],
             ),
           ),
-        ),
       ),
     );
   }

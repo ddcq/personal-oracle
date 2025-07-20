@@ -195,13 +195,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               margin: const EdgeInsets.symmetric(vertical: 5),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Row(
-                  children: [
-                    const Icon(Icons.score, color: Colors.greenAccent, size: 24),
-                    const SizedBox(width: 10),
-                    Expanded(
+              child: Row(
+                children: [
+                  const Icon(Icons.score, color: Colors.greenAccent, size: 24),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -220,8 +220,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },

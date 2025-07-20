@@ -607,9 +607,7 @@ class _GameScreenState extends State<GameScreen> {
         child: GestureDetector(
           // Permet de refocaliser le jeu en tapant n'importe où
           onTap: () => focusNode.requestFocus(),
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
+          child: Column(
               children: [
                 // Légende du jeu (réduite car les règles sont sur l'écran d'accueil)
                 Container(
@@ -704,7 +702,6 @@ class _GameScreenState extends State<GameScreen> {
               ],
             ),
           ),
-        ),
       ),
     );
   }
