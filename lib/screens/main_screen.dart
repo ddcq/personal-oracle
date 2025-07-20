@@ -123,7 +123,7 @@ class ChibiButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: 220,
+        width: 280,
         height: 60,
         decoration: BoxDecoration(
           color: color,
