@@ -35,7 +35,8 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late QixComponent _qixComponent;
 
   ArenaComponent({required this.gridSize, required this.cellSize}) {
-    size = Vector2((gridSize * cellSize).toDouble(), (gridSize * cellSize).toDouble());
+    var arenaDoubleSize = (gridSize * cellSize).toDouble();
+    size = Vector2(arenaDoubleSize, arenaDoubleSize);
     position = Vector2.zero();
     _initializeGrid();
     final Random random = Random();
@@ -68,7 +69,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    _rewardCardImage = await game.images.load('fenrir_card.jpg');
+    _rewardCardImage = await game.images.load('cards/fenrir_card.jpg');
 
     // Pre-calculate sprites for filled areas
     for (int y = 0; y < gridSize; y++) {

@@ -1,14 +1,17 @@
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
-import 'qix_game.dart';
+import 'dart:ui' as ui; // For Image
+import 'arena.dart';
 
 import 'constants.dart' as game_constants;
 import 'constants.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
+import 'package:oracle_d_asgard/components/animated_character_component.dart'; // Import AnimatedCharacterComponent
 
 enum PlayerState { onEdge, drawing, dead, rescued }
 
-class Player extends PositionComponent with HasGameReference<QixGame> {
+class Player extends PositionComponent {
+  final ArenaComponent arena;
+  final Function(PlayerState) onPlayerStateChanged;
   final int gridSize;
   final double cellSize;
   IntVector2 gridPosition; // Logical grid position
@@ -22,11 +25,23 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
   Direction? currentDirection; // Current direction for automatic movement
   bool _isManualInput = false; // True if the last direction change was from user input
 
-  Player({required this.gridSize, required this.cellSize}) : gridPosition = IntVector2(0, 0), targetGridPosition = IntVector2(0, 0) {
+  late AnimatedCharacterComponent _characterSprite;
+
+  Player({required this.gridSize, required this.cellSize, required ui.Image characterSpriteSheet, required this.arena, required this.onPlayerStateChanged})
+    : gridPosition = IntVector2(0, 0),
+      targetGridPosition = IntVector2(0, 0) {
     size = Vector2.all(cellSize);
     anchor = Anchor.topLeft;
     position = gridPosition.toVector2() * cellSize;
     _moveSpeed = (gridSize * cellSize) / _arenaTraversalTime;
+    _characterSprite = AnimatedCharacterComponent(
+      characterSpriteSheet: characterSpriteSheet,
+      characterIndex: 0, // Character1
+      size: Vector2.all(cellSize * 4), // 4 times the cell size
+      anchor: Anchor.center, // Center the sprite on the player component
+      position: Vector2.all(cellSize / 2), // Center the character within the cell
+    );
+    add(_characterSprite);
   }
 
   void setDirection(Direction? direction, {bool isManual = false}) {
@@ -37,11 +52,29 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
         currentDirection = direction;
         _isManualInput = true; // Set permanently for manual input
       } else {
-        _isManualInput = originalIsManualInput; // Revert if move is impossible
+        _isManualInput = originalIsManualInput; // Revert if move is impossible;
       }
     } else {
       currentDirection = direction;
       _isManualInput = isManual;
+    }
+    // Update the character sprite's direction
+    _characterSprite.direction = _mapDirectionToCharacterDirection(currentDirection);
+  }
+
+  // Helper to map Flame Direction to CharacterDirection
+  CharacterDirection _mapDirectionToCharacterDirection(Direction? direction) {
+    switch (direction) {
+      case Direction.up:
+        return CharacterDirection.up;
+      case Direction.down:
+        return CharacterDirection.down;
+      case Direction.left:
+        return CharacterDirection.left;
+      case Direction.right:
+        return CharacterDirection.right;
+      default:
+        return CharacterDirection.down; // Default direction
     }
   }
 
@@ -105,7 +138,7 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
       List<Direction> edgeDirections = [];
       for (Direction dir in possibleDirections) {
         IntVector2 nextPos = _getNewGridPosition(dir);
-        bool isNextPosEdge = game.arena.getGridValue(nextPos.x, nextPos.y) == game_constants.kGridEdge;
+        bool isNextPosEdge = arena.getGridValue(nextPos.x, nextPos.y) == game_constants.kGridEdge;
         if (isNextPosEdge) {
           edgeDirections.add(dir);
         }
@@ -138,6 +171,8 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
         _isManualInput = false;
       }
     }
+    // Update the character sprite's direction after currentDirection might have changed
+    _characterSprite.direction = _mapDirectionToCharacterDirection(currentDirection);
   }
 
   bool _canMove(Direction direction) {
@@ -157,12 +192,12 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     }
 
     // Check if the new position is traversable
-    if (!game.arena.isTraversable(newGridPosition.x, newGridPosition.y)) {
+    if (!arena.isTraversable(newGridPosition.x, newGridPosition.y)) {
       return false;
     }
 
     // If on edge, only allow moving off the edge with manual input
-    bool isNewPositionOnEdge = game.arena.getGridValue(newGridPosition.x, newGridPosition.y) == game_constants.kGridEdge;
+    bool isNewPositionOnEdge = arena.getGridValue(newGridPosition.x, newGridPosition.y) == game_constants.kGridEdge;
     if (state == PlayerState.onEdge && !isNewPositionOnEdge && !_isManualInput) {
       return false;
     }
@@ -184,7 +219,8 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     // Clamp to grid boundaries
     newGridPosition = newGridPosition.clamp(0, gridSize - 1, 0, gridSize - 1);
 
-    bool isNewPositionOnEdge = game.arena.getGridValue(newGridPosition.x, newGridPosition.y) == game_constants.kGridEdge;
+    // If on edge, only allow moving off the edge with manual input
+    bool isNewPositionOnEdge = arena.getGridValue(newGridPosition.x, newGridPosition.y) == game_constants.kGridEdge;
 
     if (state == PlayerState.onEdge) {
       if (!isNewPositionOnEdge) {
@@ -193,8 +229,8 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
         pathStartGridPosition = IntVector2(gridPosition.x, gridPosition.y);
         currentPath.add(IntVector2(gridPosition.x, gridPosition.y));
         currentPath.add(IntVector2(newGridPosition.x, newGridPosition.y));
-        game.arena.startPath(IntVector2(gridPosition.x, gridPosition.y));
-        game.arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
+        arena.startPath(IntVector2(gridPosition.x, gridPosition.y));
+        arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
       }
       // If still on edge, just update target position
       targetGridPosition = newGridPosition;
@@ -202,13 +238,13 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
       // Currently drawing a path
       if (isNewPositionOnEdge) {
         // Hit an existing boundary
-        game.arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
+        arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
         state = PlayerState.onEdge;
-        game.onPlayerStateChanged(state);
+        onPlayerStateChanged(state);
       } else {
         // Continue drawing path
         currentPath.add(IntVector2(newGridPosition.x, newGridPosition.y));
-        game.arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
+        arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
       }
       targetGridPosition = newGridPosition;
     }
@@ -242,12 +278,6 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     return nextPos.clamp(0, gridSize - 1, 0, gridSize - 1);
   }
 
-  @override
-  void render(Canvas canvas) {
-    final paint = Paint()..color = Colors.red;
-    canvas.drawRect(size.toRect(), paint);
-  }
-
   void teleportTo(IntVector2 newPosition) {
     gridPosition = newPosition;
     targetGridPosition = newPosition;
@@ -256,6 +286,6 @@ class Player extends PositionComponent with HasGameReference<QixGame> {
     state = PlayerState.rescued; // Reset state to onEdge after teleport
     currentPath.clear(); // Clear current path since teleporting
     pathStartGridPosition = null; // Reset path start position
-    game.arena.endPath(); // Clear the visual path in the arena
+    arena.endPath(); // Clear the visual path in the arena
   }
 }

@@ -37,44 +37,45 @@ class _QixGameScreenState extends State<QixGameScreen> {
     if (orientation == Orientation.portrait) {
       gameAndControls = Column(
         children: [
-          Expanded(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Container(
               color: Colors.blue[900],
-              child: Center(
-                child: GameWidget(game: _game),
-              ),
+              child: AspectRatio(aspectRatio: 1.0, child: GameWidget(game: _game)),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: percentageDisplay,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: DirectionalPad(
-              onDirectionChanged: (Direction direction) {
-                _game.handleDirectionChange(direction);
-              },
+
+          Expanded(
+            child: Column(
+              children: [
+                Padding(padding: const EdgeInsets.all(8.0), child: percentageDisplay),
+                Center(
+                  child: DirectionalPad(
+                    onDirectionChanged: (Direction direction) {
+                      _game.handleDirectionChange(direction);
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       );
-    } else { // Orientation.landscape
+    } else {
+      // Orientation.landscape
       gameAndControls = Row(
         children: [
-          Expanded(
+          Center(
             child: Container(
               color: Colors.blue[900],
-              child: Center(
-                child: GameWidget(game: _game),
-              ),
+              child: AspectRatio(aspectRatio: 1.0, child: GameWidget(game: _game)),
             ),
           ),
-          SizedBox(
-            width: 200,
+          Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column( // Use a column for percentage and directional pad in landscape
+              child: Column(
+                // Use a column for percentage and directional pad in landscape
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   percentageDisplay,

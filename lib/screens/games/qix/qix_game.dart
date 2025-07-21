@@ -2,6 +2,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:ui' as ui; // For Image
 import 'arena.dart';
 import 'player.dart';
 import 'constants.dart';
@@ -12,6 +13,7 @@ import 'defeat_screen.dart';
 class QixGame extends FlameGame with KeyboardEvents {
   late final ArenaComponent arena;
   late final Player player;
+  late ui.Image characterSpriteSheet;
   final ValueNotifier<double> filledPercentageNotifier = ValueNotifier<double>(0.0);
   final BuildContext context;
 
@@ -21,11 +23,13 @@ class QixGame extends FlameGame with KeyboardEvents {
   Future<void> onLoad() async {
     await super.onLoad();
 
+    characterSpriteSheet = await images.load('characters.png');
+
     final int gridSize = kGridSize;
     final double cellSize = (size.x < size.y ? size.x : size.y) / gridSize;
 
     arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize);
-    player = Player(gridSize: gridSize, cellSize: cellSize);
+    player = Player(gridSize: gridSize, cellSize: cellSize, characterSpriteSheet: characterSpriteSheet, arena: arena, onPlayerStateChanged: onPlayerStateChanged);
     player.gridPosition = IntVector2(0, 0); // Start at the top-left edge
     player.targetGridPosition = IntVector2(player.gridPosition.x, player.gridPosition.y);
     player.setDirection(Direction.right); // Start moving right along the edge automatically

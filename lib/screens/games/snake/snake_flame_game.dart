@@ -190,7 +190,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
         gamificationService.unlockCollectibleCard('fenrir_card');
       }
       if (gameState.score > 90) {
-        gamificationService.unlockStoryPart('fenrir_story', 'fenrir_story');
+        gamificationService.unlockStoryPart('Fenrir enchaîné', 'fenrir_story');
       }
     }
   }
