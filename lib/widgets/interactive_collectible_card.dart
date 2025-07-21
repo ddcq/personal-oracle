@@ -25,8 +25,8 @@ class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard>
     _shineController = AnimationController(vsync: this, duration: const Duration(seconds: 3))..repeat(reverse: true);
 
     _shineAnimation = Tween<double>(
-      begin: -200.0, // Start off-screen left (width of shine effect)
-      end: 200.0 + 200.0,   // End off-screen right (card width + shine width)
+      begin: -2.0, // Start off-screen left (relative to card width)
+      end: 1.0, // End off-screen right (relative to card width)
     ).animate(_shineController);
   }
 
@@ -69,40 +69,45 @@ class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard>
         child: AnimatedBuilder(
           animation: _shineAnimation,
           builder: (context, child) {
-            return Transform(
-              alignment: FractionalOffset.center,
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001) // Perspective
-                ..rotateX(_rotationX)
-                ..rotateY(_rotationY),
-              child: AspectRatio(
-                aspectRatio: 1.0, // Force the card to be square
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Stack(
-                    children: [
-                      Image.asset(widget.card.imagePath, fit: BoxFit.contain),
-                      // Shine overlay
-                      Positioned(
-                        left: _shineAnimation.value,
-                        top: 0,
-                        bottom: 0,
-                        child: Container(
-                          width: 200, // Width of the shine effect
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.white.withAlpha(0), Colors.white.withAlpha(76), Colors.white.withAlpha(0)],
-                              begin: Alignment(-math.cos(math.pi / 6), -math.sin(math.pi / 6)), // 30 degrees angle
-                              end: Alignment(math.cos(math.pi / 6), math.sin(math.pi / 6)), // 30 degrees angle
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final cardWidth = constraints.maxWidth;
+                return Transform(
+                  alignment: FractionalOffset.center,
+                  transform: Matrix4.identity()
+                    ..setEntry(3, 2, 0.001) // Perspective
+                    ..rotateX(_rotationX)
+                    ..rotateY(_rotationY),
+                  child: AspectRatio(
+                    aspectRatio: 1.0, // Force the card to be square
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Stack(
+                        children: [
+                          Image.asset(widget.card.imagePath, fit: BoxFit.contain),
+                          // Shine overlay
+                          Positioned(
+                            left: _shineAnimation.value * cardWidth, // Scale animation based on card width
+                            top: 0,
+                            bottom: 0,
+                            child: Container(
+                              width: cardWidth * 3, // Set shine width to card width
+                              height: double.infinity,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [Colors.white.withAlpha(0), Colors.white.withAlpha(76), Colors.white.withAlpha(0)],
+                                  begin: Alignment(-math.cos(math.pi / 6), -math.sin(math.pi / 6)), // 30 degrees angle
+                                  end: Alignment(math.cos(math.pi / 6), math.sin(math.pi / 6)), // 30 degrees angle
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
         ),
