@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart'; // Import for ChangeNotifier
 import 'package:oracle_d_asgard/data/stories_data.dart' show getCollectibleCards, getMythStories;
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
-import 'package:oracle_d_asgard/models/myth_story.dart';
+
 
 class GamificationService with ChangeNotifier {
   static final GamificationService _instance = GamificationService._internal();

@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
 import './puzzle_game.dart';
 import './puzzle_model.dart';
+import 'package:oracle_d_asgard/data/stories_data.dart' show getCollectibleCards, getMythStories;
 import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/models/collectible_card.dart';
+import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'dart:math';
 
 class DashedRectangleComponent extends RectangleComponent {
@@ -44,9 +47,10 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
   final PuzzleGame puzzleGame;
   late final ui.Image puzzleImage;
   final GamificationService _gamificationService = GamificationService();
+  final Function(CollectibleCard rewardCard) onRewardEarned; // New callback
 
-  PuzzleFlameGame({required this.puzzleGame}) {
-    puzzleGame.onGameCompleted = _onGameCompleted;
+  PuzzleFlameGame({required this.puzzleGame, required this.onRewardEarned}) {
+    puzzleGame.onGameCompleted = onGameCompletedFromPuzzleGame;
   }
 
   @override
@@ -54,8 +58,8 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
     await super.onLoad();
 
     final unearnedContent = await _gamificationService.getUnearnedContent();
-    final List<dynamic> unearnedCollectibleCards = unearnedContent['unearned_collectible_cards'];
-    final List<dynamic> nextMythCardsToEarn = unearnedContent['next_myth_cards_to_earn'];
+    final List<CollectibleCard> unearnedCollectibleCards = unearnedContent['unearned_collectible_cards'].cast<CollectibleCard>();
+    final List<MythCard> nextMythCardsToEarn = (unearnedContent['next_myth_cards_to_earn'] as List<Map<String, dynamic>>).map((e) => e['next_myth_card'] as MythCard).toList();
 
     String imageToLoad;
     if (unearnedCollectibleCards.isNotEmpty) {
@@ -65,8 +69,7 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
       puzzleGame.associatedCardId = selected.id;
     } else if (nextMythCardsToEarn.isNotEmpty) {
       final random = Random();
-      final selectedStory = nextMythCardsToEarn[random.nextInt(nextMythCardsToEarn.length)];
-      final selectedMythCard = selectedStory['next_myth_card'];
+      final selectedMythCard = nextMythCardsToEarn[random.nextInt(nextMythCardsToEarn.length)];
       imageToLoad = selectedMythCard.imagePath.substring('assets/images/'.length);
       puzzleGame.associatedCardId = selectedMythCard.id;
     } else {
@@ -96,13 +99,32 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
       add(PuzzlePieceComponent(pieceData: pieceData, gameRef: this, offsetX: offsetX, offsetY: offsetY, puzzleImage: puzzleImage, puzzleSize: puzzleGame.cols));
     }
   }
-  void _onGameCompleted() async {
+
+  void onGameCompletedFromPuzzleGame() async {
     if (puzzleGame.associatedCardId != null) {
-      await _gamificationService.unlockCollectibleCard(puzzleGame.associatedCardId!);
-      // Optionally, show a dialog or navigate to a success screen
-      print('Card ${puzzleGame.associatedCardId} unlocked!');
+      final allCollectibleCards = getCollectibleCards();
+      final allMythStories = getMythStories();
+
+      CollectibleCard? rewardCard;
+
+      // Try to find in CollectibleCards first
+      try {
+        rewardCard = allCollectibleCards.firstWhere((card) => card.id == puzzleGame.associatedCardId);
+      } catch (e) {
+        // If not found in CollectibleCards, try in MythCards
+        try {
+          rewardCard = allMythStories.expand((story) => story.correctOrder).firstWhere((card) => card.id == puzzleGame.associatedCardId);
+        } catch (e) {
+          // Card not found in either, handle error or use a default
+          // print('Reward card with ID ${puzzleGame.associatedCardId} not found.');
+        }
+      }
+
+      if (rewardCard != null) {
+        await _gamificationService.unlockCollectibleCard(rewardCard.id);
+        onRewardEarned(rewardCard);
+      }
     }
-    // You might want to add more logic here, like navigating back or showing a success message
   }
 }
 

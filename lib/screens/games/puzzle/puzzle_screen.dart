@@ -1,7 +1,9 @@
+import 'package:oracle_d_asgard/models/collectible_card.dart';
+import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:confetti/confetti.dart';
-import 'package:oracle_d_asgard/widgets/app_dialog.dart';
+
 import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_flame_game.dart';
 
 import './puzzle_game.dart';
@@ -24,8 +26,8 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   @override
   void initState() {
     super.initState();
-    _game = PuzzleGame(onGameCompleted: _showVictoryDialog);
-    _flameGame = PuzzleFlameGame(puzzleGame: _game);
+    _game = PuzzleGame();
+    _flameGame = PuzzleFlameGame(puzzleGame: _game, onRewardEarned: _showVictoryDialog);
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 2),
     );
@@ -55,65 +57,17 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     });
   }
 
-  void _showVictoryDialog() {
+  void _showVictoryDialog(CollectibleCard rewardCard) {
     _confettiController.play();
     showDialog(
       context: context,
-      builder: (context) => AppDialog(
-        icon: Icons.celebration,
-        title: 'Victoire !',
-        content: const Text(
-          'Bravo, vous avez terminé le puzzle.',
-          style: TextStyle(color: Color(0xFFC5CAE9)),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _resetGame();
-            },
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: const Color(0xFF81D4FA).withAlpha(51),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text(
-                'Rejouer',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop(); // Retour à la liste des jeux
-            },
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: const Color(0xFF81D4FA).withAlpha(51),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text(
-                'Retour',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ),
-        ],
+      barrierDismissible: false,
+      builder: (context) => VictoryPopup(
+        rewardCard: rewardCard,
+        onDismiss: () {
+          Navigator.of(context).pop(); // Dismiss the popup
+          _resetGame();
+        },
       ),
     );
   }

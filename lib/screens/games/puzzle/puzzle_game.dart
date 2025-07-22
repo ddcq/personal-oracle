@@ -1,3 +1,4 @@
+
 import 'dart:math';
 import 'dart:ui';
 import './puzzle_model.dart'; // Le modèle pur créé à l'étape 1
@@ -7,7 +8,7 @@ class PuzzleGame {
   final int rows = 3;
   final int cols = 3;
   final double pieceSize = 100.0;
-  VoidCallback? onGameCompleted;
+      VoidCallback? onGameCompleted;
   String? associatedCardId;
 
   PuzzleGame({this.onGameCompleted});
