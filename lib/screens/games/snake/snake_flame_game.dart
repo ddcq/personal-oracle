@@ -43,9 +43,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     // Calculate cell size based on the shortest screen dimension
     final screenWidth = size.x;
     final screenHeight = size.y;
-    cellSize =
-        (screenWidth < screenHeight ? screenWidth : screenHeight) /
-        GameState.gridSize;
+    cellSize = (screenWidth < screenHeight ? screenWidth : screenHeight) / GameState.gridSize;
 
     // Initialize gameState first
     gameState = GameState.initial();
@@ -55,7 +53,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     goldenFoodSprite = await loadSprite('apple_golden.png');
     obstacleSprite = await loadSprite('stone.png');
 
-    final image = await images.load('snake-graphics.png');
+    final image = await images.load('games/snake-graphics.png');
     final spriteSheet = SpriteSheet(image: image, srcSize: Vector2.all(64));
 
     final snakeHeadUpSprite = spriteSheet.getSprite(0, 3);
@@ -89,16 +87,12 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       snakeTailDownSprite: snakeTailDownSprite,
       snakeTailLeftSprite: snakeTailLeftSprite,
       snakeTailRightSprite: snakeTailRightSprite,
-      snakeTailUpSprite: snakeTailUpSprite
+      snakeTailUpSprite: snakeTailUpSprite,
     );
     add(_snakeComponent);
 
     // Initialize components once
-    _foodComponent = SpriteComponent(
-      sprite: regularFoodSprite,
-      position: Vector2.zero(),
-      size: Vector2.all(cellSize),
-    );
+    _foodComponent = SpriteComponent(sprite: regularFoodSprite, position: Vector2.zero(), size: Vector2.all(cellSize));
     add(_foodComponent);
 
     // Initialize growth animation timer
@@ -128,11 +122,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     }
     _obstacles.clear();
     for (final obstacle in gameState.obstacles) {
-      final newObstacle = SpriteComponent(
-        sprite: obstacleSprite,
-        position: (obstacle.toOffset() * cellSize).toVector2(),
-        size: Vector2.all(cellSize),
-      );
+      final newObstacle = SpriteComponent(sprite: obstacleSprite, position: (obstacle.toOffset() * cellSize).toVector2(), size: Vector2.all(cellSize));
       _obstacles.add(newObstacle);
       add(newObstacle);
     }
@@ -164,7 +154,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     }
 
     // Interpolate snake position for smooth movement
-    
   }
 
   void tick() {
@@ -196,10 +185,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
 
   @override
-  KeyEventResult onKeyEvent(
-    KeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
+  KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event is KeyDownEvent) {
       switch (event.logicalKey) {
         case LogicalKeyboardKey.arrowUp:
@@ -237,5 +223,3 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     startGame();
   }
 }
-
-

@@ -8,6 +8,7 @@ class PuzzleGame {
   final int cols = 3;
   final double pieceSize = 100.0;
   VoidCallback? onGameCompleted;
+  String? associatedCardId;
 
   PuzzleGame({this.onGameCompleted});
 

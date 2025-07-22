@@ -5,10 +5,12 @@ class MythStory {
   final String title;
   final List<MythCard> correctOrder;
   final List<CollectibleCard> collectibleCards;
+  final List<String> tags;
 
   MythStory({
     required this.title,
     required this.correctOrder,
     required this.collectibleCards,
+    this.tags = const [],
   });
 }

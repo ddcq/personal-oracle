@@ -9,6 +9,7 @@ import 'constants.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 import 'defeat_screen.dart';
+import 'victory_screen.dart';
 
 class QixGame extends FlameGame with KeyboardEvents {
   late final ArenaComponent arena;
@@ -41,6 +42,9 @@ class QixGame extends FlameGame with KeyboardEvents {
 
   void updateFilledPercentage(double percentage) {
     filledPercentageNotifier.value = percentage;
+    if (percentage >= kWinPercentage) {
+      win();
+    }
   }
 
   void onPlayerStateChanged(PlayerState newState) {
@@ -58,6 +62,11 @@ class QixGame extends FlameGame with KeyboardEvents {
     // Stop the game
     pauseEngine();
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const DefeatScreen()));
+  }
+
+  void win() {
+    pauseEngine();
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const VictoryScreen()));
   }
 
   @override

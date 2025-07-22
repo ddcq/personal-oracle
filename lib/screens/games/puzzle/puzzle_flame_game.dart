@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
 import './puzzle_game.dart';
 import './puzzle_model.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'dart:math';
 
 class DashedRectangleComponent extends RectangleComponent {
   DashedRectangleComponent({required Rect rect}) : super(position: Vector2(rect.left, rect.top), size: Vector2(rect.width, rect.height)) {
@@ -25,26 +27,14 @@ class DashedRectangleComponent extends RectangleComponent {
     canvas.drawPath(path, paint);
   }
 
-  void _drawDashedLine(
-    Path path,
-    Offset p1,
-    Offset p2,
-    double dash,
-    double space,
-  ) {
+  void _drawDashedLine(Path path, Offset p1, Offset p2, double dash, double space) {
     double distance = (p2 - p1).distance;
     double current = 0.0;
     while (current < distance) {
-      path.moveTo(
-        p1.dx + (p2.dx - p1.dx) * (current / distance),
-        p1.dy + (p2.dy - p1.dy) * (current / distance),
-      );
+      path.moveTo(p1.dx + (p2.dx - p1.dx) * (current / distance), p1.dy + (p2.dy - p1.dy) * (current / distance));
       current += dash;
       if (current > distance) current = distance;
-      path.lineTo(
-        p1.dx + (p2.dx - p1.dx) * (current / distance),
-        p1.dy + (p2.dy - p1.dy) * (current / distance),
-      );
+      path.lineTo(p1.dx + (p2.dx - p1.dx) * (current / distance), p1.dy + (p2.dy - p1.dy) * (current / distance));
       current += space;
     }
   }
@@ -53,13 +43,38 @@ class DashedRectangleComponent extends RectangleComponent {
 class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
   final PuzzleGame puzzleGame;
   late final ui.Image puzzleImage;
+  final GamificationService _gamificationService = GamificationService();
 
-  PuzzleFlameGame({required this.puzzleGame});
+  PuzzleFlameGame({required this.puzzleGame}) {
+    puzzleGame.onGameCompleted = _onGameCompleted;
+  }
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    puzzleImage = await Flame.images.load('asgard.jpg');
+
+    final unearnedContent = await _gamificationService.getUnearnedContent();
+    final List<dynamic> unearnedCollectibleCards = unearnedContent['unearned_collectible_cards'];
+    final List<dynamic> nextMythCardsToEarn = unearnedContent['next_myth_cards_to_earn'];
+
+    String imageToLoad;
+    if (unearnedCollectibleCards.isNotEmpty) {
+      final random = Random();
+      final selected = unearnedCollectibleCards[random.nextInt(unearnedCollectibleCards.length)];
+      imageToLoad = selected.imagePath.substring('assets/images/'.length);
+      puzzleGame.associatedCardId = selected.id;
+    } else if (nextMythCardsToEarn.isNotEmpty) {
+      final random = Random();
+      final selectedStory = nextMythCardsToEarn[random.nextInt(nextMythCardsToEarn.length)];
+      final selectedMythCard = selectedStory['next_myth_card'];
+      imageToLoad = selectedMythCard.imagePath.substring('assets/images/'.length);
+      puzzleGame.associatedCardId = selectedMythCard.id;
+    } else {
+      // Fallback image if no unearned cards
+      imageToLoad = 'home_illu.png';
+      puzzleGame.associatedCardId = null; // No specific card to unlock
+    }
+    puzzleImage = await Flame.images.load(imageToLoad);
 
     // Dessiner le plateau de jeu en pointillés
     final double pieceSize = puzzleGame.pieceSize;
@@ -71,26 +86,23 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
 
     for (int i = 0; i < puzzleGame.rows; i++) {
       for (int j = 0; j < puzzleGame.cols; j++) {
-        final Rect rect = Rect.fromLTWH(
-          offsetX + j * pieceSize,
-          offsetY + i * pieceSize,
-          pieceSize,
-          pieceSize,
-        );
+        final Rect rect = Rect.fromLTWH(offsetX + j * pieceSize, offsetY + i * pieceSize, pieceSize, pieceSize);
         add(DashedRectangleComponent(rect: rect));
       }
     }
 
     // Ajouter les pièces de puzzle
     for (var pieceData in puzzleGame.pieces) {
-      add(PuzzlePieceComponent(
-          pieceData: pieceData,
-          gameRef: this,
-          offsetX: offsetX,
-          offsetY: offsetY,
-          puzzleImage: puzzleImage,
-          puzzleSize: puzzleGame.cols));
+      add(PuzzlePieceComponent(pieceData: pieceData, gameRef: this, offsetX: offsetX, offsetY: offsetY, puzzleImage: puzzleImage, puzzleSize: puzzleGame.cols));
     }
+  }
+  void _onGameCompleted() async {
+    if (puzzleGame.associatedCardId != null) {
+      await _gamificationService.unlockCollectibleCard(puzzleGame.associatedCardId!);
+      // Optionally, show a dialog or navigate to a success screen
+      print('Card ${puzzleGame.associatedCardId} unlocked!');
+    }
+    // You might want to add more logic here, like navigating back or showing a success message
   }
 }
 
@@ -122,10 +134,10 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     required this.puzzleImage,
     required this.puzzleSize,
   }) : super(
-          position: Vector2(pieceData.currentPosition.dx + offsetX, pieceData.currentPosition.dy + offsetY),
-          size: Vector2(pieceData.size.width, pieceData.size.height),
-          priority: pieceData.isLocked ? _lockedPriority : _defaultPriority, // Initialiser la priorité
-        ) {
+         position: Vector2(pieceData.currentPosition.dx + offsetX, pieceData.currentPosition.dy + offsetY),
+         size: Vector2(pieceData.size.width, pieceData.size.height),
+         priority: pieceData.isLocked ? _lockedPriority : _defaultPriority, // Initialiser la priorité
+       ) {
     _calculateSourceRect();
   }
 
@@ -136,12 +148,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     final int col = pieceData.id % puzzleSize;
     final int row = pieceData.id ~/ puzzleSize;
 
-    _sourceRect = Rect.fromLTWH(
-      col * imageSliceWidth,
-      row * imageSliceHeight,
-      imageSliceWidth,
-      imageSliceHeight,
-    );
+    _sourceRect = Rect.fromLTWH(col * imageSliceWidth, row * imageSliceHeight, imageSliceWidth, imageSliceHeight);
   }
 
   @override
@@ -153,7 +160,8 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     // 1. Dessiner l'ombre portée pour l'effet de flottement
     if (!pieceData.isLocked) {
       _shadowPaint
-        ..color = Colors.black.withAlpha((_isDragging ? 178 : 102)) // Ombre plus prononcée
+        ..color = Colors.black
+            .withAlpha((_isDragging ? 178 : 102)) // Ombre plus prononcée
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, _isDragging ? 10.0 : 5.0); // Flou plus important
 
       final Offset currentShadowOffset = _isDragging ? _draggingShadowOffset : _defaultShadowOffset;
@@ -207,14 +215,12 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   }
 
   @override
+  @override
   void update(double dt) {
     super.update(dt);
     // Mettre à jour la position du composant Flame en fonction des données du modèle
-    // Seulement si la pièce n'est pas verrouillée, car les pièces verrouillées ne bougent plus.
-    if (!pieceData.isLocked) {
-      position.x = pieceData.currentPosition.dx + offsetX;
-      position.y = pieceData.currentPosition.dy + offsetY;
-    }
+    position.x = pieceData.currentPosition.dx + offsetX;
+    position.y = pieceData.currentPosition.dy + offsetY;
 
     // Ajuster la priorité si l'état de verrouillage a changé
     if (pieceData.isLocked && priority != _lockedPriority) {

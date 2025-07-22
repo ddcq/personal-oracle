@@ -38,3 +38,8 @@ This document outlines potential areas for further improvement in the Qix game, 
     -   Introduce different arena layouts or increasing difficulty levels.
 -   **Score Tracking**:
     -   Implement a scoring system based on filled area, time, or other factors.
+
+## 4. Completed Tasks
+
+-   **Victory Condition**:
+    -   The victory condition (covering more than 80% of the arena) has been implemented.

@@ -12,6 +12,8 @@ const int kTempFillArea1 = 3;
 const int kTempFillArea2 = 4;
 const int kSeedScanArea = 5;
 
+const double kWinPercentage = 80.0;
+
 const double gameWidth = 150.0;
 const double gameHeight = 200.0;
 
