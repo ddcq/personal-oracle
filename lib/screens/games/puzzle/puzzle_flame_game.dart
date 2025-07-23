@@ -96,7 +96,7 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
 
     // Ajouter les pièces de puzzle
     for (var pieceData in puzzleGame.pieces) {
-      add(PuzzlePieceComponent(pieceData: pieceData, gameRef: this, offsetX: offsetX, offsetY: offsetY, puzzleImage: puzzleImage, puzzleSize: puzzleGame.cols));
+      add(PuzzlePieceComponent(pieceData: pieceData, gameRef: this, offsetX: offsetX, offsetY: offsetY, puzzleImage: puzzleImage, puzzleSize: puzzleGame.cols, pieceSize: pieceSize));
     }
   }
 
@@ -135,6 +135,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   final double offsetY;
   final ui.Image puzzleImage;
   final int puzzleSize;
+  final double pieceSize;
 
   late final Rect _sourceRect;
   final Paint _paint = Paint()..filterQuality = FilterQuality.high;
@@ -155,6 +156,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     required this.offsetY,
     required this.puzzleImage,
     required this.puzzleSize,
+    required this.pieceSize,
   }) : super(
          position: Vector2(pieceData.currentPosition.dx + offsetX, pieceData.currentPosition.dy + offsetY),
          size: Vector2(pieceData.size.width, pieceData.size.height),
@@ -171,6 +173,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     final int row = pieceData.id ~/ puzzleSize;
 
     _sourceRect = Rect.fromLTWH(col * imageSliceWidth, row * imageSliceHeight, imageSliceWidth, imageSliceHeight);
+    size = Vector2(pieceSize, pieceSize);
   }
 
   @override

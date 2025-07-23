@@ -1,17 +1,16 @@
-
 import 'dart:math';
 import 'dart:ui';
 import './puzzle_model.dart'; // Le modèle pur créé à l'étape 1
 
 class PuzzleGame {
   List<PuzzlePieceData> pieces = [];
-  final int rows = 3;
-  final int cols = 3;
-  final double pieceSize = 100.0;
-      VoidCallback? onGameCompleted;
+  late int rows;
+  late int cols;
+  late double pieceSize;
+  VoidCallback? onGameCompleted;
   String? associatedCardId;
 
-  PuzzleGame({this.onGameCompleted});
+  PuzzleGame({this.onGameCompleted, required this.rows, required this.cols});
 
   void initializeAndScatter(Rect puzzleBoardBounds, Size availableArea) {
     _initializePuzzle();
@@ -24,14 +23,7 @@ class PuzzleGame {
       final int row = i ~/ cols;
       final int col = i % cols;
       final Offset targetPos = Offset(col * pieceSize, row * pieceSize);
-      pieces.add(
-        PuzzlePieceData(
-          id: i,
-          currentPosition: targetPos,
-          targetPosition: targetPos,
-          size: Size(pieceSize, pieceSize),
-        ),
-      );
+      pieces.add(PuzzlePieceData(id: i, currentPosition: targetPos, targetPosition: targetPos, size: Size(pieceSize, pieceSize)));
     }
   }
 
