@@ -7,6 +7,9 @@ import '../widgets/answer_button.dart';
 import '../widgets/progress_bar.dart';
 import 'result_screen.dart';
 
+import 'package:provider/provider.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
+
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
 
@@ -39,6 +42,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _navigateToResult() {
     final deity = QuizService.calculateBestDeity(scores);
+    Provider.of<GamificationService>(context, listen: false).saveQuizResult(deity.name);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ResultScreen(deity: deity)));
   }
 

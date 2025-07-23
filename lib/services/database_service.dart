@@ -21,7 +21,7 @@ class DatabaseService {
     String path = join(documentsDirectory.path, 'oracle_d_asgard.db');
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -54,11 +54,28 @@ class DatabaseService {
     ''');
 
     await _createStoryProgressTable(db);
+
+    await db.execute('''
+      CREATE TABLE quiz_results (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        deity_name TEXT NOT NULL,
+        timestamp INTEGER NOT NULL
+      )
+    ''');
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
       await _createStoryProgressTable(db);
+    }
+    if (oldVersion < 3) {
+      await db.execute('''
+        CREATE TABLE quiz_results (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          deity_name TEXT NOT NULL,
+          timestamp INTEGER NOT NULL
+        )
+      ''');
     }
   }
 

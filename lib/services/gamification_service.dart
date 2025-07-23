@@ -122,6 +122,20 @@ class GamificationService with ChangeNotifier {
     return await db.query('story_progress');
   }
 
+  Future<void> saveQuizResult(String deityName) async {
+    final db = await _databaseService.database;
+    await db.insert('quiz_results', {
+      'deity_name': deityName,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    notifyListeners();
+  }
+
+  Future<List<Map<String, dynamic>>> getQuizResults() async {
+    final db = await _databaseService.database;
+    return await db.query('quiz_results', orderBy: 'timestamp DESC');
+  }
+
   Future<Map<String, dynamic>> getUnearnedContent({String? tag}) async {
     final allCollectibleCards = getCollectibleCards();
     final allMythStories = getMythStories();
