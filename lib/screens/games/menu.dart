@@ -5,6 +5,7 @@ import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
 import 'package:oracle_d_asgard/screens/games/snake/screen.dart';
 import 'package:oracle_d_asgard/screens/games/puzzle/screen.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MenuPrincipal extends StatelessWidget {
   MenuPrincipal({super.key});
@@ -54,16 +55,16 @@ class MenuPrincipal extends StatelessWidget {
                       fontFamily: 'AmaticSC',
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 70,
-                      letterSpacing: 2.0,
+                      fontSize: 70.sp,
+                      letterSpacing: 2.0.sp,
                       shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  SizedBox(height: 30.h),
                   // Generate ChibiButtons from the jeux list
                   ...jeux.map(
                     (jeu) => Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
+                      padding: EdgeInsets.only(bottom: 15.h),
                       child: ChibiButton(
                         text: jeu.label,
                         color: jeu.color,

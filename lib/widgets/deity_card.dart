@@ -1,6 +1,7 @@
 // deity_card.dart
 import 'package:flutter/material.dart';
 import '../models/deity.dart'; // Make sure this model matches the structure from AppData
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DeityCard extends StatelessWidget {
   final Deity deity;
@@ -10,45 +11,52 @@ class DeityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(32),
+      width: 1.sw,
+      padding: EdgeInsets.all(32.w),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: deity.colors,
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
             color: deity.colors.first.withAlpha(76),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            blurRadius: 20.r,
+            offset: Offset(0, 10.h),
           ),
         ],
       ),
-      child: Column(
+      child: Row(
         children: [
           Image.asset(
             deity.icon,
-            width: 80,
-            height: 80,
+            width: 160.w,
+            height: 160.h,
           ),
-          const SizedBox(height: 16),
-          Text(
-            deity.name,
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            deity.title,
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.white.withAlpha(229),
+          SizedBox(width: 24.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  deity.name,
+                  style: TextStyle(
+                    fontSize: 32.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  deity.title,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    color: Colors.white.withAlpha(229),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

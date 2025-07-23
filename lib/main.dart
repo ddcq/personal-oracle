@@ -5,6 +5,7 @@ import 'utils/constants.dart';
 import 'package:oracle_d_asgard/services/database_service.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,38 +23,45 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Oracle Nordique',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: AppConstants.primaryDark,
-        textTheme: const TextTheme(
-          headlineLarge: TextStyle(
-            color: Colors.white,
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
+    return ScreenUtilInit(
+      designSize: const Size(360, 690), // Standard mobile design size
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp(
+          title: 'Oracle Nordique',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            scaffoldBackgroundColor: AppConstants.primaryDark,
+            textTheme: TextTheme(
+              headlineLarge: TextStyle(
+                color: Colors.white,
+                fontSize: 28.sp,
+                fontWeight: FontWeight.bold,
+              ),
+              headlineSmall: TextStyle(
+                color: Colors.white,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              bodyMedium: TextStyle(
+                color: Colors.white70,
+                fontSize: 16.sp,
+              ),
+              bodySmall: TextStyle(
+                color: Colors.white60,
+                fontSize: 14.sp,
+              ),
+            ),
+            cardTheme: CardThemeData(
+              color: Colors.white.withAlpha(25),
+              elevation: 4,
+            ),
           ),
-          headlineSmall: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-          bodyMedium: TextStyle(
-            color: Colors.white70,
-            fontSize: 16,
-          ),
-          bodySmall: TextStyle(
-            color: Colors.white60,
-            fontSize: 14,
-          ),
-        ),
-        cardTheme: CardThemeData(
-          color: Colors.white.withAlpha(25),
-          elevation: 4,
-        ),
-      ),
-      home: const MainScreen(), // 👈 Utilise MainScreen au lieu de WelcomeScreen
-      debugShowCheckedModeBanner: false,
+          home: const MainScreen(), // 👈 Utilise MainScreen au lieu de WelcomeScreen
+          debugShowCheckedModeBanner: false,
+        );
+      },
     );
   }
 }

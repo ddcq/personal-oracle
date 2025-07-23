@@ -3,6 +3,7 @@ import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/screens/quiz_screen.dart';
 import 'package:oracle_d_asgard/screens/games/menu.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -27,25 +28,25 @@ class MainScreen extends StatelessWidget {
                       fontFamily: 'AmaticSC',
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 70,
-                      letterSpacing: 2.0,
+                      fontSize: 70.sp,
+                      letterSpacing: 2.0.sp,
                       shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
                     ),
                   ),
                   SizedBox(
-                    height: 350, // Hauteur visible (70% de 500)
+                    height: 350.h, // Hauteur visible (70% de 500)
                     child: Stack(
                       children: <Widget>[
                         Positioned(
                           top: 0,
-                          width: MediaQuery.of(context).size.width, // Prend toute la largeur
+                          width: 1.sw, // Prend toute la largeur
                           child: ClipRect(
                             child: Align(
                               alignment: Alignment.topCenter,
                               heightFactor: 0.7, // Affiche 70% de l'image
                               child: Image.asset(
                                 'assets/images/odin_chibi.png',
-                                height: 500, // Hauteur réelle de l'image
+                                height: 500.h, // Hauteur réelle de l'image
                               ),
                             ),
                           ),
@@ -54,7 +55,7 @@ class MainScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: 0.8.sw,
                     child: ChibiButton(
                       text: 'Mini games',
                       color: const Color(0xFFF9A825), // Orange
@@ -64,9 +65,9 @@ class MainScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: 0.8.sw,
                     child: ChibiButton(
                       text: 'Quiz',
                       color: const Color(0xFF1E88E5), // Blue
@@ -76,9 +77,9 @@ class MainScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: 0.8.sw,
                     child: ChibiButton(
                       text: 'Profile',
                       color: const Color(0xFFE53935), // Red
