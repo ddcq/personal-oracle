@@ -399,9 +399,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Navigator.push(context, MaterialPageRoute(builder: (context) => MythStoryPage(mythStory: mythStory)));
           },
           child: Card(
-            color: Colors.white.withAlpha(25),
+            color: const Color(0xFFF5F5DC), // Beige color for paper effect
             elevation: 5,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+              side: const BorderSide(color: Color(0xFF8B4513), width: 2), // Brown border for book effect
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -412,12 +415,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   textAlign: TextAlign.center,
                   style: Theme.of(
                     context,
-                  ).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'AmaticSC', fontSize: 20),
+                  ).textTheme.bodyLarge?.copyWith(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: 'AmaticSC', fontSize: 20),
                 ),
                 const SizedBox(height: 8),
-                LinearProgressIndicator(value: progressPercentage, backgroundColor: Colors.grey[700], valueColor: AlwaysStoppedAnimation<Color>(Colors.amber)),
+                LinearProgressIndicator(value: progressPercentage, backgroundColor: Colors.grey[400], valueColor: AlwaysStoppedAnimation<Color>(Colors.brown)),
                 const SizedBox(height: 4),
-                Text('${(progressPercentage * 100).toStringAsFixed(0)}% Terminée', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                Text('${(progressPercentage * 100).toStringAsFixed(0)}% Terminée', style: const TextStyle(color: Colors.black87, fontSize: 12)),
               ],
             ),
           ),

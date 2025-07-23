@@ -42,7 +42,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _navigateToResult() {
     final deity = QuizService.calculateBestDeity(scores);
-    Provider.of<GamificationService>(context, listen: false).saveQuizResult(deity.name);
+    Provider.of<GamificationService>(context, listen: false).saveQuizResult(deity);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ResultScreen(deity: deity)));
   }
 
