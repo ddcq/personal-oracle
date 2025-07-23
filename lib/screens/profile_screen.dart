@@ -52,20 +52,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Profil', style: TextStyle(color: Colors.white)),
+        title: Text(
+          'Profil',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.displayMedium?.copyWith(
+            fontFamily: 'AmaticSC',
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 40,
+            letterSpacing: 2.0,
+            shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF4A148C), // Dark Purple
-              Color(0xFF880E4F), // Dark Pink
-            ],
-          ),
+          image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
         ),
         child: Consumer<GamificationService>(
           builder: (context, gamificationService, child) {
@@ -123,16 +127,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+        style: Theme.of(context).textTheme.displayMedium?.copyWith(
+          fontFamily: 'AmaticSC',
           color: Colors.white,
           fontWeight: FontWeight.bold,
-          shadows: [
-            Shadow(
-              offset: Offset(2.0, 2.0),
-              blurRadius: 3.0,
-              color: Color.fromARGB(150, 0, 0, 0),
-            ),
-          ],
+          fontSize: 40,
+          letterSpacing: 2.0,
+          shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
         ),
         textAlign: TextAlign.center,
       ),
@@ -170,9 +171,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildGameScores(List<Map<String, dynamic>> scores) {
     if (scores.isEmpty) {
-      return const Text(
+      return Text(
         'Aucun score de Snake pour l’instant.',
-        style: TextStyle(color: Colors.white70),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Colors.white70,
+          fontFamily: 'AmaticSC',
+          fontSize: 20,
+        ),
       );
     }
     return Column(
@@ -180,9 +185,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         Text(
           'Jeu du Serpent :',
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(color: Colors.white),
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'AmaticSC',
+            fontSize: 28,
+            shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(3.0, 3.0))],
+          ),
         ),
         const SizedBox(height: 10),
         ...scores.map(
@@ -207,9 +216,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           Text(
                             'Score: ${score['score']}',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'AmaticSC',
+                              fontSize: 20,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -232,9 +244,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildTrophies(List<Map<String, dynamic>> trophies) {
     if (trophies.isEmpty) {
-      return const Text(
+      return Text(
         'Aucun trophée débloqué pour l’instant.',
-        style: TextStyle(color: Colors.white70),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Colors.white70,
+          fontFamily: 'AmaticSC',
+          fontSize: 20,
+        ),
       );
     }
     return GridView.builder(
@@ -263,9 +279,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Text(
                 trophy['trophy_id'],
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'AmaticSC',
+                  fontSize: 20,
                 ),
               ),
             ],
@@ -277,9 +295,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildCollectibleCards(List<Map<String, dynamic>> cards) {
     if (cards.isEmpty) {
-      return const Text(
+      return Text(
         'Aucune carte à collectionner débloquée pour l’instant.',
-        style: TextStyle(color: Colors.white70),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Colors.white70,
+          fontFamily: 'AmaticSC',
+          fontSize: 20,
+        ),
       );
     }
     return GridView.builder(
@@ -307,9 +329,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildUnlockedStories(List<Map<String, dynamic>> storyProgress) {
     if (storyProgress.isEmpty) {
-      return const Text(
+      return Text(
         'Aucune histoire débloquée pour l’instant.',
-        style: TextStyle(color: Colors.white70),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Colors.white70,
+          fontFamily: 'AmaticSC',
+          fontSize: 20,
+        ),
       );
     }
     final allMythStories = getMythStories();
@@ -362,9 +388,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text(
                   mythStory.title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'AmaticSC',
+                    fontSize: 20,
                   ),
                 ),
                 const SizedBox(height: 8),
