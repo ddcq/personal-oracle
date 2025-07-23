@@ -10,42 +10,17 @@ class MenuPrincipal extends StatelessWidget {
   MenuPrincipal({super.key});
 
   final jeux = <_MiniJeuItem>[
+    _MiniJeuItem("Réordonne l'Histoire", const Color(0xFF6366F1), const Color(0xFF4A4CBB), () => OrderTheScrollsGame()),
+    _MiniJeuItem("La Muraille d'Asgard", const Color(0xFFEF4444), const Color(0xFFB71C1C), () => WelcomeScreen()),
     _MiniJeuItem(
-      "Réordonne l'Histoire", 
-      const Color(0xFF6366F1),
-      const Color(0xFF4A4CBB),
-      () => OrderTheScrollsGame()
-    ),
-    _MiniJeuItem(
-      "La Muraille d'Asgard", 
-      const Color(0xFFEF4444),
-      const Color(0xFFB71C1C),
-      () => WelcomeScreen()
-    ),
-    _MiniJeuItem(
-      "Les Runes Dispersées", 
+      "Les Runes Dispersées",
       const Color(0xFF06B6D4),
       const Color(0xFF048D9F),
-      () => PuzzleGameScreen() // À créer
+      () => PuzzleGameScreen(), // À créer
     ),
-    _MiniJeuItem(
-      "Le Serpent de Midgard", 
-      const Color(0xFF22C55E),
-      const Color(0xFF1A9B49),
-      () => const SnakeGame()
-    ),
-    _MiniJeuItem(
-      "Conquête de Territoire", 
-      const Color(0xFFFF6B35),
-      const Color(0xFFCC552A),
-      () => QixGameScreen()
-    ),
-    _MiniJeuItem(
-      "Accueil du Guerrier", 
-      const Color(0xFF10B981),
-      const Color(0xFF0C8C64),
-      () => WelcomeScreen()
-    ),
+    _MiniJeuItem("Le Serpent de Midgard", const Color(0xFF22C55E), const Color(0xFF1A9B49), () => const SnakeGame()),
+    _MiniJeuItem("Conquête de Territoire", const Color(0xFFFF6B35), const Color(0xFFCC552A), () => QixGameScreen()),
+    _MiniJeuItem("Accueil du Guerrier", const Color(0xFF10B981), const Color(0xFF0C8C64), () => WelcomeScreen()),
   ];
 
   @override
@@ -86,18 +61,18 @@ class MenuPrincipal extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   // Generate ChibiButtons from the jeux list
-                  ...jeux.map((jeu) => Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: ChibiButton(
-                      text: jeu.label,
-                      color: jeu.color,
-                      shadowColor: jeu.shadowColor,
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => jeu.builder()));
-                      },
+                  ...jeux.map(
+                    (jeu) => Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: ChibiButton(
+                        text: jeu.label,
+                        color: jeu.color,
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => jeu.builder()));
+                        },
+                      ),
                     ),
-                  )),
-                  
+                  ),
                 ],
               ),
             ),

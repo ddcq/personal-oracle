@@ -53,53 +53,40 @@ class MainScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/images/games/banner.png', // Assurez-vous que ce chemin est correct
-                        width: 300, // Ajustez la largeur selon vos besoins
-                        fit: BoxFit.contain,
-                      ),
-                      Positioned(
-                        top: 20.0, // Ajustez cette valeur pour déplacer le texte vers le haut
-                        child: Text(
-                          'Welcome',
-                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(5.0, 5.0))],
-                          ),
-                        ),
-                      ),
-                    ],
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: ChibiButton(
+                      text: 'Mini games',
+                      color: const Color(0xFFF9A825), // Orange
+
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
+                      },
+                    ),
                   ),
-                  const SizedBox(height: 30),
-                  ChibiButton(
-                    text: 'Mini games',
-                    color: const Color(0xFFF9A825), // Orange
-                    shadowColor: const Color(0xFFC78500),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
-                    },
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: ChibiButton(
+                      text: 'Quiz',
+                      color: const Color(0xFF1E88E5), // Blue
+
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
+                      },
+                    ),
                   ),
-                  const SizedBox(height: 15),
-                  ChibiButton(
-                    text: 'Quiz',
-                    color: const Color(0xFF1E88E5), // Blue
-                    shadowColor: const Color(0xFF155FA0),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  ChibiButton(
-                    text: 'Profile',
-                    color: const Color(0xFFE53935), // Red
-                    shadowColor: const Color(0xFFB71C1C),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
-                    },
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: ChibiButton(
+                      text: 'Profile',
+                      color: const Color(0xFFE53935), // Red
+
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                      },
+                    ),
                   ),
                 ],
               ),
