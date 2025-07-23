@@ -85,6 +85,7 @@ flutter:
      - assets/images/backgrounds/
      - assets/images/games/
      - assets/images/icons/
+     - assets/images/heads/
      - assets/fonts/
   #   - images/a_dot_ham.jpeg
 

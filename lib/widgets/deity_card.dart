@@ -29,10 +29,10 @@ class DeityCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(
+          Image.asset(
             deity.icon,
-            size: 80,
-            color: Colors.white,
+            width: 80,
+            height: 80,
           ),
           const SizedBox(height: 16),
           Text(

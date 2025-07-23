@@ -4,7 +4,7 @@ class Deity {
   final String id;
   final String name;
   final String title;
-  final IconData icon;
+  final String icon;
   final Map<String, int> traits;
   final String description;
   final String dailyChallenge;
@@ -34,7 +34,7 @@ class Deity {
   }
 
   // Création depuis JSON
-  factory Deity.fromJson(Map<String, dynamic> json, IconData icon, List<Color> colors) {
+  factory Deity.fromJson(Map<String, dynamic> json, String icon, List<Color> colors) {
     return Deity(
       id: json['id'],
       name: json['name'],
