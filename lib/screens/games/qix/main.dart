@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
-import 'package:oracle_d_asgard/widgets/gauge_widget.dart';
+import 'package:oracle_d_asgard/widgets/progress_bar.dart';
 import 'qix_game.dart';
 import 'directional_pad.dart';
 import 'constants.dart';
+import 'defeat_screen.dart';
+import 'victory_screen.dart';
 
 class QixGameScreen extends StatefulWidget {
   const QixGameScreen({super.key});
@@ -18,7 +20,10 @@ class _QixGameScreenState extends State<QixGameScreen> {
   @override
   void initState() {
     super.initState();
-    _game = QixGame(context);
+    _game = QixGame(
+      onGameOver: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => DefeatScreen())),
+      onWin: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => VictoryScreen())),
+    );
   }
 
   @override
@@ -28,7 +33,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
     Widget percentageDisplay = ValueListenableBuilder<double>(
       valueListenable: _game.filledPercentageNotifier,
       builder: (context, percentage, child) {
-        return GaugeWidget(percentage: percentage);
+        return ProgressBar(progress: percentage);
       },
     );
 
@@ -50,10 +55,12 @@ class _QixGameScreenState extends State<QixGameScreen> {
               children: [
                 Padding(padding: const EdgeInsets.all(8.0), child: percentageDisplay),
                 Center(
-                  child: DirectionalPad(
-                    onDirectionChanged: (Direction direction) {
-                      _game.handleDirectionChange(direction);
-                    },
+                  child: FittedBox(
+                    child: DirectionalPad(
+                      onDirectionChanged: (Direction direction) {
+                        _game.handleDirectionChange(direction);
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -79,10 +86,12 @@ class _QixGameScreenState extends State<QixGameScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   percentageDisplay,
-                  DirectionalPad(
-                    onDirectionChanged: (Direction direction) {
-                      _game.handleDirectionChange(direction);
-                    },
+                  FittedBox(
+                    child: DirectionalPad(
+                      onDirectionChanged: (Direction direction) {
+                        _game.handleDirectionChange(direction);
+                      },
+                    ),
                   ),
                 ],
               ),

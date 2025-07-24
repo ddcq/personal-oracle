@@ -59,6 +59,7 @@ class AnswerButton extends StatelessWidget {
                 text,
                 maxLines: 2,
                 minFontSize: 10.sp,
+                stepGranularity: 1.0.sp,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 22.sp,

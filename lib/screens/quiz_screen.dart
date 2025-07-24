@@ -80,7 +80,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          ProgressBar(currentQuestion: currentQuestion + 1, totalQuestions: AppData.questions.length, progress: progress),
+                          ProgressBar(progress: progress, displayText: 'Question ${currentQuestion + 1} sur ${AppData.questions.length}'),
                           Container(
                             padding: EdgeInsets.all(20.w),
                             margin: EdgeInsets.all(20.w),
@@ -93,6 +93,7 @@ class _QuizScreenState extends State<QuizScreen> {
                               textAlign: TextAlign.center,
                               maxLines: 4, // Allow multiple lines for questions
                               minFontSize: 10.sp,
+                              stepGranularity: 1.0.sp,
                               style: Theme.of(context).textTheme.displayMedium?.copyWith(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -134,7 +135,7 @@ class _QuizScreenState extends State<QuizScreen> {
               : Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    ProgressBar(currentQuestion: currentQuestion + 1, totalQuestions: AppData.questions.length, progress: progress),
+                    ProgressBar(progress: progress, displayText: 'Question ${currentQuestion + 1} sur ${AppData.questions.length}'),
                     Container(
                       padding: EdgeInsets.all(20.w),
                       margin: EdgeInsets.all(20.w),
@@ -147,6 +148,7 @@ class _QuizScreenState extends State<QuizScreen> {
                         textAlign: TextAlign.center,
                         maxLines: 4, // Allow multiple lines for questions
                         minFontSize: 10.sp,
+                        stepGranularity: 1.0.sp,
                         style: Theme.of(context).textTheme.displayMedium?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

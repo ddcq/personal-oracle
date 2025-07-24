@@ -8,17 +8,15 @@ import 'player.dart';
 import 'constants.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
-import 'defeat_screen.dart';
-import 'victory_screen.dart';
-
 class QixGame extends FlameGame with KeyboardEvents {
   late final ArenaComponent arena;
   late final Player player;
   late ui.Image characterSpriteSheet;
   final ValueNotifier<double> filledPercentageNotifier = ValueNotifier<double>(0.0);
-  final BuildContext context;
+  final VoidCallback onGameOver;
+  final VoidCallback onWin;
 
-  QixGame(this.context);
+  QixGame({required this.onGameOver, required this.onWin});
 
   @override
   Future<void> onLoad() async {
@@ -58,15 +56,15 @@ class QixGame extends FlameGame with KeyboardEvents {
     player.setDirection(direction, isManual: true);
   }
 
-  void gameOver(BuildContext context) {
+  void gameOver() {
     // Stop the game
     pauseEngine();
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const DefeatScreen()));
+    onGameOver();
   }
 
   void win() {
     pauseEngine();
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const VictoryScreen()));
+    onWin();
   }
 
   @override

@@ -3,16 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class ProgressBar extends StatelessWidget {
-  final int currentQuestion;
-  final int totalQuestions;
   final double progress;
+  final String? displayText;
 
-  const ProgressBar({
-    super.key,
-    required this.currentQuestion,
-    required this.totalQuestions,
-    required this.progress,
-  });
+  const ProgressBar({super.key, required this.progress, this.displayText});
 
   @override
   Widget build(BuildContext context) {
@@ -26,19 +20,19 @@ class ProgressBar extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          AutoSizeText(
-            'Question $currentQuestion sur $totalQuestions',
-            maxLines: 1,
-            minFontSize: 10.sp,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 22.sp,
-              fontWeight: FontWeight.bold,
-              shadows: [
-                Shadow(color: Colors.black.withAlpha(128), offset: Offset(2, 2), blurRadius: 4),
-              ],
+          if (displayText != null)
+            AutoSizeText(
+              displayText!,
+              maxLines: 1,
+              minFontSize: 10.sp,
+              stepGranularity: 1.0.sp,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 22.sp,
+                fontWeight: FontWeight.bold,
+                shadows: [Shadow(color: Colors.black.withAlpha(128), offset: Offset(2, 2), blurRadius: 4)],
+              ),
             ),
-          ),
           SizedBox(height: 12.h),
           Container(
             height: 30.h,
@@ -46,9 +40,7 @@ class ProgressBar extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.r),
               border: Border.all(color: borderColor, width: 3.w),
               color: Colors.black.withAlpha(77),
-              boxShadow: [
-                BoxShadow(color: Colors.black.withAlpha(128), offset: Offset(0, 4), blurRadius: 6, spreadRadius: 1),
-              ],
+              boxShadow: [BoxShadow(color: Colors.black.withAlpha(128), offset: Offset(0, 4), blurRadius: 6, spreadRadius: 1)],
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
@@ -74,28 +66,22 @@ class ProgressBar extends StatelessWidget {
                             end: Alignment.bottomCenter,
                             stops: const [0.0, 0.5, 1.0],
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: lightColor.withAlpha(128),
-                              blurRadius: 10,
-                              spreadRadius: 2,
-                            ),
-                          ],
                         ),
                       );
                     },
                   ),
                   Align(
                     alignment: Alignment.center,
-                    child: Text(
+                    child: AutoSizeText(
                       '${(progress * 100).round()}%',
+                      maxLines: 1,
+                      minFontSize: 10.sp,
+                      stepGranularity: 1.0.sp,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(color: Colors.black.withAlpha(204), offset: Offset(1, 1), blurRadius: 2),
-                        ],
+                        shadows: [Shadow(color: Colors.black.withAlpha(204), offset: Offset(1, 1), blurRadius: 2)],
                       ),
                     ),
                   ),

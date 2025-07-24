@@ -57,7 +57,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       gridSize: gridSize,
       isGridEdge: isPointOnBoundary,
       isPlayerPath: isPointOnCurrentDrawingPath,
-      onGameOver: () => game.gameOver(game.context),
+      onGameOver: () => game.gameOver(),
     );
     add(_qixComponent);
   }
@@ -316,7 +316,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       game.updateFilledPercentage(0.0);
       return;
     }
-    game.updateFilledPercentage((_nonFreeCells / (innerGridSize * innerGridSize)) * 100);
+    game.updateFilledPercentage((_nonFreeCells / (innerGridSize * innerGridSize)));
   }
 
   // Finds the nearest boundary point to a given point

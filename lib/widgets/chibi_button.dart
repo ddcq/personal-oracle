@@ -3,11 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChibiButton extends StatefulWidget {
-  final String text;
+  final String? text;
+  final Widget? child;
   final Color color;
   final VoidCallback onPressed;
 
-  const ChibiButton({super.key, required this.text, required this.color, required this.onPressed});
+  const ChibiButton({super.key, this.text, this.child, required this.color, required this.onPressed})
+      : assert(text != null || child != null, 'Either text or child must be provided');
 
   @override
   State<ChibiButton> createState() => _ChibiButtonState();
@@ -62,8 +64,8 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
               color: widget.color,
-              child: Text(
-                widget.text,
+              child: widget.child ?? Text(
+                widget.text!,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 24.sp,
