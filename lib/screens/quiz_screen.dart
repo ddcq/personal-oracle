@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/data/app_data.dart';
 import '../models/question.dart';
 import '../services/quiz_service.dart';
+import '../utils/colors.dart';
 import '../utils/constants.dart';
 import '../widgets/answer_button.dart';
 import '../widgets/progress_bar.dart';
@@ -9,6 +10,7 @@ import 'result_screen.dart';
 
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -69,46 +71,51 @@ class _QuizScreenState extends State<QuizScreen> {
         ),
         child: SafeArea(
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                ProgressBar(currentQuestion: currentQuestion + 1, totalQuestions: AppData.questions.length, progress: progress),
-                const SizedBox(height: 30),
-                Container(
-                  padding: const EdgeInsets.all(20.0),
-                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(0, 0, 0, 0.5), // Semi-transparent background
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: Text(
-                    question.question,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40, // Adjusted font size for better fit within container
-                      letterSpacing: 1.5,
-                      shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              ProgressBar(currentQuestion: currentQuestion + 1, totalQuestions: AppData.questions.length, progress: progress),
+              Container(
+                padding: EdgeInsets.all(20.w),
+                margin: EdgeInsets.all(20.w),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(0, 0, 0, 0.5), // Semi-transparent background
+                  borderRadius: BorderRadius.circular(15.r),
+                ),
+                child: Text(
+                  question.question,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp, // Adjusted font size for better fit within container
+                        shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
+                      ),
+                ),
+              ),
+              ListView.separated(
+                shrinkWrap: true,
+                itemCount: question.answers.length,
+                separatorBuilder: (context, index) => SizedBox(height: 15.h),
+                itemBuilder: (context, index) {
+                  final answer = question.answers[index];
+                  final String letter = String.fromCharCode('A'.codeUnitAt(0) + index);
+                  final traits = answer.scores.keys.toList();
+                  final gradientColors = traits.isNotEmpty ? TraitColors.gradients[traits.first] : null;
+
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 15.h),
+                    child: AnswerButton(
+                      text: answer.text,
+                      onPressed: () => handleAnswer(index),
+                      letter: letter,
+                      gradientColors: gradientColors,
                     ),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: question.answers.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: 15),
-                  itemBuilder: (context, index) {
-                    final answer = question.answers[index];
-                    final String letter = String.fromCharCode('A'.codeUnitAt(0) + index);
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: AnswerButton(text: answer.text, onPressed: () => handleAnswer(index), letter: letter),
-                    );
-                  },
-                ),
-              ],
-            ),
+                  );
+                },
+              ),
+            ],
           ),
+        ),
       ),
     );
   }

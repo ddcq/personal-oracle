@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChibiButton extends StatefulWidget {
   final String text;
@@ -49,25 +50,25 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
         duration: const Duration(milliseconds: 80),
         curve: Curves.easeOut,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
           decoration: BoxDecoration(
             gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [lightColor, widget.color, darkColor]),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [BoxShadow(color: Colors.black.withAlpha(64), offset: const Offset(0, 4), blurRadius: 6)],
-            border: Border.all(color: borderColor, width: 3),
+            borderRadius: BorderRadius.circular(16.r),
+            boxShadow: [BoxShadow(color: Colors.black.withAlpha(64), offset: Offset(0, 4.h), blurRadius: 6.r)],
+            border: Border.all(color: borderColor, width: 3.w),
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
               color: widget.color,
               child: Text(
                 widget.text,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
+                  letterSpacing: 2.sp,
                   color: Colors.white,
                   fontFamily: GoogleFonts.amarante().fontFamily,
                 ),

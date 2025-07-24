@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProgressBar extends StatelessWidget {
   final int currentQuestion;
@@ -23,21 +24,21 @@ class ProgressBar extends StatelessWidget {
           children: [
             Text(
               'Question $currentQuestion sur $totalQuestions',
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white70,
-                fontSize: 14,
+                fontSize: 14.sp,
               ),
             ),
             Text(
               '${(progress * 100).round()}%',
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white70,
-                fontSize: 14,
+                fontSize: 14.sp,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         LinearProgressIndicator(
           value: progress,
           backgroundColor: const Color(0xFF334155),
