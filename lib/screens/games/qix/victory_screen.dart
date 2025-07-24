@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:oracle_d_asgard/components/victory_popup.dart';
 
 class VictoryScreen extends StatelessWidget {
-  const VictoryScreen({super.key});
+  final Map<String, dynamic>? collectibleCard;
+
+  const VictoryScreen({super.key, this.collectibleCard});
 
   @override
   Widget build(BuildContext context) {
@@ -11,21 +14,11 @@ class VictoryScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Congratulations, you have won!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Back to Menu'),
-            ),
-          ],
+        child: VictoryPopup(
+          collectibleCard: collectibleCard,
+          onClose: () {
+            Navigator.of(context).pop();
+          },
         ),
       ),
     );

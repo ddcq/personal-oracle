@@ -14,9 +14,10 @@ class QixGame extends FlameGame with KeyboardEvents {
   late ui.Image characterSpriteSheet;
   final ValueNotifier<double> filledPercentageNotifier = ValueNotifier<double>(0.0);
   final VoidCallback onGameOver;
-  final VoidCallback onWin;
+  final Function(Map<String, dynamic>?) onWin;
+  final Map<String, dynamic>? _unearnedContent;
 
-  QixGame({required this.onGameOver, required this.onWin});
+  QixGame({required this.onGameOver, required this.onWin, required Map<String, dynamic>? unearnedContent}) : _unearnedContent = unearnedContent;
 
   @override
   Future<void> onLoad() async {
@@ -41,7 +42,7 @@ class QixGame extends FlameGame with KeyboardEvents {
   void updateFilledPercentage(double percentage) {
     filledPercentageNotifier.value = percentage;
     if (percentage >= kWinPercentage) {
-      win();
+      win(_unearnedContent);
     }
   }
 
@@ -62,9 +63,9 @@ class QixGame extends FlameGame with KeyboardEvents {
     onGameOver();
   }
 
-  void win() {
+  void win(Map<String, dynamic>? collectibleCard) {
     pauseEngine();
-    onWin();
+    onWin(collectibleCard);
   }
 
   @override
