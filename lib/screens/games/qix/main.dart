@@ -41,30 +41,30 @@ class _QixGameScreenState extends State<QixGameScreen> {
 
     if (orientation == Orientation.portrait) {
       gameAndControls = Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              color: Colors.blue[900],
-              child: AspectRatio(aspectRatio: 1.0, child: GameWidget(game: _game)),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.blue[900],
+                child: AspectRatio(aspectRatio: 1.0, child: GameWidget(game: _game)),
+              ),
             ),
           ),
-
-          Expanded(
-            child: Column(
-              children: [
-                Padding(padding: const EdgeInsets.all(8.0), child: percentageDisplay),
-                Center(
-                  child: FittedBox(
-                    child: DirectionalPad(
-                      onDirectionChanged: (Direction direction) {
-                        _game.handleDirectionChange(direction);
-                      },
-                    ),
+          Column(
+            children: [
+              Padding(padding: const EdgeInsets.all(8.0), child: percentageDisplay),
+              Center(
+                child: FittedBox(
+                  child: DirectionalPad(
+                    onDirectionChanged: (Direction direction) {
+                      _game.handleDirectionChange(direction);
+                    },
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       );
@@ -103,7 +103,14 @@ class _QixGameScreenState extends State<QixGameScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Qix Basic')),
-      body: gameAndControls,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
+        ),
+        child: SafeArea(
+          child: gameAndControls,
+        ),
+      ),
     );
   }
 }

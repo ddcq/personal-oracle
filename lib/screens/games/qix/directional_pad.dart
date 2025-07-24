@@ -12,15 +12,13 @@ class DirectionalPad extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomRight,
       child: Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.all(2.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildDirectionButton(Icon(Icons.arrow_upward, color: Colors.white), Direction.up),
-              ],
+              children: [_buildDirectionButton(Icon(Icons.arrow_upward, color: Colors.white), Direction.up)],
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -32,9 +30,7 @@ class DirectionalPad extends StatelessWidget {
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildDirectionButton(Icon(Icons.arrow_downward, color: Colors.white), Direction.down),
-              ],
+              children: [_buildDirectionButton(Icon(Icons.arrow_downward, color: Colors.white), Direction.down)],
             ),
           ],
         ),
