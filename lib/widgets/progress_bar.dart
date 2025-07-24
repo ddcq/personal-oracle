@@ -15,36 +15,93 @@ class ProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Label (Question x sur y) and % progress
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Question $currentQuestion sur $totalQuestions',
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 14.sp,
+    final Color baseColor = Colors.amber.shade700;
+    final Color lightColor = Colors.amber.shade500;
+    final Color darkColor = Colors.amber.shade900;
+    final Color borderColor = Colors.brown.shade900;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'Question $currentQuestion sur $totalQuestions',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 22.sp,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                Shadow(color: Colors.black.withAlpha(128), offset: Offset(2, 2), blurRadius: 4),
+              ],
+            ),
+          ),
+          SizedBox(height: 12.h),
+          Container(
+            height: 30.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.r),
+              border: Border.all(color: borderColor, width: 3.w),
+              color: Colors.black.withAlpha(77),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withAlpha(128), offset: Offset(0, 4), blurRadius: 6, spreadRadius: 1),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.r),
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [darkColor.withAlpha(128), baseColor.withAlpha(102)],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                  ),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Container(
+                        width: constraints.maxWidth * progress,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [lightColor, baseColor, darkColor],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: const [0.0, 0.5, 1.0],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: lightColor.withAlpha(128),
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      '${(progress * 100).round()}%',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(color: Colors.black.withAlpha(204), offset: Offset(1, 1), blurRadius: 2),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Text(
-              '${(progress * 100).round()}%',
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 14.sp,
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 8.h),
-        LinearProgressIndicator(
-          value: progress,
-          backgroundColor: const Color(0xFF334155),
-          valueColor: const AlwaysStoppedAnimation<Color>(Colors.amber),
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }
