@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class ProgressBar extends StatelessWidget {
   final int currentQuestion;
@@ -25,8 +26,10 @@ class ProgressBar extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
+          AutoSizeText(
             'Question $currentQuestion sur $totalQuestions',
+            maxLines: 1,
+            minFontSize: 10.sp,
             style: TextStyle(
               color: Colors.white,
               fontSize: 22.sp,

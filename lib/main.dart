@@ -10,12 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseService().database;
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => GamificationService(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(ChangeNotifierProvider(create: (context) => GamificationService(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(360, 690), // Standard mobile design size
-      minTextAdapt: true,
+      minTextAdapt: false,
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
@@ -34,29 +29,12 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
             scaffoldBackgroundColor: AppConstants.primaryDark,
             textTheme: TextTheme(
-              headlineLarge: TextStyle(
-                color: Colors.white,
-                fontSize: 28.sp,
-                fontWeight: FontWeight.bold,
-              ),
-              headlineSmall: TextStyle(
-                color: Colors.white,
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w600,
-              ),
-              bodyMedium: TextStyle(
-                color: Colors.white70,
-                fontSize: 16.sp,
-              ),
-              bodySmall: TextStyle(
-                color: Colors.white60,
-                fontSize: 14.sp,
-              ),
+              headlineLarge: TextStyle(color: Colors.white, fontSize: 28.sp, fontWeight: FontWeight.bold),
+              headlineSmall: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.w600),
+              bodyMedium: TextStyle(color: Colors.white70, fontSize: 16.sp),
+              bodySmall: TextStyle(color: Colors.white60, fontSize: 14.sp),
             ),
-            cardTheme: CardThemeData(
-              color: Colors.white.withAlpha(25),
-              elevation: 4,
-            ),
+            cardTheme: CardThemeData(color: Colors.white.withAlpha(25), elevation: 4),
           ),
           home: const MainScreen(), // 👈 Utilise MainScreen au lieu de WelcomeScreen
           debugShowCheckedModeBanner: false,

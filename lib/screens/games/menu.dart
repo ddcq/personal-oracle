@@ -29,7 +29,7 @@ class MenuPrincipal extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true, // Permet au body de s'étendre derrière l'AppBar
       appBar: AppBar(
-        backgroundColor: Colors.transparent, // Rend l'AppBar transparente
+        backgroundColor: Colors.white30, // Rend l'AppBar transparente
         elevation: 0, // Supprime l'ombre de l'AppBar
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white), // Icône de retour

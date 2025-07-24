@@ -7,6 +7,7 @@ import '../utils/constants.dart';
 import '../widgets/answer_button.dart';
 import '../widgets/progress_bar.dart';
 import 'result_screen.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
@@ -52,6 +53,7 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     final double progress = (currentQuestion + 1) / AppData.questions.length;
     final Question question = AppData.questions[currentQuestion];
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -70,51 +72,112 @@ class _QuizScreenState extends State<QuizScreen> {
           image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
         ),
         child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              ProgressBar(currentQuestion: currentQuestion + 1, totalQuestions: AppData.questions.length, progress: progress),
-              Container(
-                padding: EdgeInsets.all(20.w),
-                margin: EdgeInsets.all(20.w),
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(0, 0, 0, 0.5), // Semi-transparent background
-                  borderRadius: BorderRadius.circular(15.r),
-                ),
-                child: Text(
-                  question.question,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.sp, // Adjusted font size for better fit within container
-                        shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
+          child: isLandscape
+              ? Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ProgressBar(currentQuestion: currentQuestion + 1, totalQuestions: AppData.questions.length, progress: progress),
+                          Container(
+                            padding: EdgeInsets.all(20.w),
+                            margin: EdgeInsets.all(20.w),
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(0, 0, 0, 0.5), // Semi-transparent background
+                              borderRadius: BorderRadius.circular(15.r),
+                            ),
+                            child: AutoSizeText(
+                              question.question,
+                              textAlign: TextAlign.center,
+                              maxLines: 4, // Allow multiple lines for questions
+                              minFontSize: 10.sp,
+                              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.sp, // Max font size
+                                    shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
+                                  ),
+                            ),
+                          ),
+                          SizedBox.shrink(), // Spacer to push content up
+                        ],
                       ),
-                ),
-              ),
-              ListView.separated(
-                shrinkWrap: true,
-                itemCount: question.answers.length,
-                separatorBuilder: (context, index) => SizedBox(height: 15.h),
-                itemBuilder: (context, index) {
-                  final answer = question.answers[index];
-                  final String letter = String.fromCharCode('A'.codeUnitAt(0) + index);
-                  final traits = answer.scores.keys.toList();
-                  final gradientColors = traits.isNotEmpty ? TraitColors.gradients[traits.first] : null;
-
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 15.h),
-                    child: AnswerButton(
-                      text: answer.text,
-                      onPressed: () => handleAnswer(index),
-                      letter: letter,
-                      gradientColors: gradientColors,
                     ),
-                  );
-                },
-              ),
-            ],
-          ),
+                    Expanded(
+                      flex: 1,
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: question.answers.length,
+                        separatorBuilder: (context, index) => SizedBox(height: 15.h),
+                        itemBuilder: (context, index) {
+                          final answer = question.answers[index];
+                          final String letter = String.fromCharCode('A'.codeUnitAt(0) + index);
+                          final traits = answer.scores.keys.toList();
+                          final gradientColors = traits.isNotEmpty ? TraitColors.gradients[traits.first] : null;
+
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 15.h),
+                            child: AnswerButton(
+                              text: answer.text,
+                              onPressed: () => handleAnswer(index),
+                              letter: letter,
+                              gradientColors: gradientColors,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    ProgressBar(currentQuestion: currentQuestion + 1, totalQuestions: AppData.questions.length, progress: progress),
+                    Container(
+                      padding: EdgeInsets.all(20.w),
+                      margin: EdgeInsets.all(20.w),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(0, 0, 0, 0.5), // Semi-transparent background
+                        borderRadius: BorderRadius.circular(15.r),
+                      ),
+                      child: AutoSizeText(
+                        question.question,
+                        textAlign: TextAlign.center,
+                        maxLines: 4, // Allow multiple lines for questions
+                        minFontSize: 10.sp,
+                        style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.sp, // Max font size
+                              shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
+                            ),
+                      ),
+                    ),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: question.answers.length,
+                      separatorBuilder: (context, index) => SizedBox(height: 15.h),
+                      itemBuilder: (context, index) {
+                        final answer = question.answers[index];
+                        final String letter = String.fromCharCode('A'.codeUnitAt(0) + index);
+                        final traits = answer.scores.keys.toList();
+                        final gradientColors = traits.isNotEmpty ? TraitColors.gradients[traits.first] : null;
+
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 15.h),
+                          child: AnswerButton(
+                            text: answer.text,
+                            onPressed: () => handleAnswer(index),
+                            letter: letter,
+                            gradientColors: gradientColors,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
         ),
       ),
     );
