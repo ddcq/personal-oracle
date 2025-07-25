@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 import 'package:oracle_d_asgard/widgets/progress_bar.dart';
 import 'qix_game.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
-import 'constants.dart';
+
 import 'defeat_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';

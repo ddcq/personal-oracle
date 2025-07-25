@@ -3,7 +3,7 @@ import 'dart:ui' as ui; // For Image
 import 'arena.dart';
 
 import 'constants.dart' as game_constants;
-import 'constants.dart';
+import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/components/animated_character_component.dart'; // Import AnimatedCharacterComponent
 
@@ -22,7 +22,7 @@ class Player extends PositionComponent {
   PlayerState state = PlayerState.onEdge;
   List<IntVector2> currentPath = [];
   IntVector2? pathStartGridPosition;
-  Direction? currentDirection; // Current direction for automatic movement
+  dp.Direction? currentDirection; // Current direction for automatic movement
   bool _isManualInput = false; // True if the last direction change was from user input
 
   late AnimatedCharacterComponent _characterSprite;
@@ -44,7 +44,7 @@ class Player extends PositionComponent {
     add(_characterSprite);
   }
 
-  void setDirection(Direction? direction, {bool isManual = false}) {
+  void setDirection(dp.Direction? direction, {bool isManual = false}) {
     if (isManual) {
       bool originalIsManualInput = _isManualInput;
       _isManualInput = true; // Temporarily set to true for _canMove check
@@ -63,15 +63,15 @@ class Player extends PositionComponent {
   }
 
   // Helper to map Flame Direction to CharacterDirection
-  CharacterDirection _mapDirectionToCharacterDirection(Direction? direction) {
+  CharacterDirection _mapDirectionToCharacterDirection(dp.Direction? direction) {
     switch (direction) {
-      case Direction.up:
+      case dp.Direction.up:
         return CharacterDirection.up;
-      case Direction.down:
+      case dp.Direction.down:
         return CharacterDirection.down;
-      case Direction.left:
+      case dp.Direction.left:
         return CharacterDirection.left;
-      case Direction.right:
+      case dp.Direction.right:
         return CharacterDirection.right;
       default:
         return CharacterDirection.down; // Default direction
@@ -110,22 +110,22 @@ class Player extends PositionComponent {
   }
 
   void _findNextAutoDirection() {
-    List<Direction> possibleDirections = [];
-    List<Direction> allDirections = [Direction.up, Direction.down, Direction.left, Direction.right];
+    List<dp.Direction> possibleDirections = [];
+    List<dp.Direction> allDirections = [dp.Direction.up, dp.Direction.down, dp.Direction.left, dp.Direction.right];
 
     // Determine the opposite direction to prevent U-turns
-    Direction? oppositeDirection;
-    if (currentDirection == Direction.up) {
-      oppositeDirection = Direction.down;
-    } else if (currentDirection == Direction.down) {
-      oppositeDirection = Direction.up;
-    } else if (currentDirection == Direction.left) {
-      oppositeDirection = Direction.right;
-    } else if (currentDirection == Direction.right) {
-      oppositeDirection = Direction.left;
+    dp.Direction? oppositeDirection;
+    if (currentDirection == dp.Direction.up) {
+      oppositeDirection = dp.Direction.down;
+    } else if (currentDirection == dp.Direction.down) {
+      oppositeDirection = dp.Direction.up;
+    } else if (currentDirection == dp.Direction.left) {
+      oppositeDirection = dp.Direction.right;
+    } else if (currentDirection == dp.Direction.right) {
+      oppositeDirection = dp.Direction.left;
     }
 
-    for (Direction dir in allDirections) {
+    for (dp.Direction dir in allDirections) {
       if (dir != oppositeDirection) {
         bool canMoveResult = _canMove(dir);
         if (canMoveResult) {
@@ -135,8 +135,8 @@ class Player extends PositionComponent {
     }
 
     if (state == PlayerState.onEdge) {
-      List<Direction> edgeDirections = [];
-      for (Direction dir in possibleDirections) {
+      List<dp.Direction> edgeDirections = [];
+      for (dp.Direction dir in possibleDirections) {
         IntVector2 nextPos = _getNewGridPosition(dir);
         bool isNextPosEdge = arena.getGridValue(nextPos.x, nextPos.y) == game_constants.kGridEdge;
         if (isNextPosEdge) {
@@ -175,7 +175,7 @@ class Player extends PositionComponent {
     _characterSprite.direction = _mapDirectionToCharacterDirection(currentDirection);
   }
 
-  bool _canMove(Direction direction) {
+  bool _canMove(dp.Direction direction) {
     IntVector2 newGridPosition = _getNewGridPosition(direction);
 
     // Clamp to grid boundaries
@@ -204,7 +204,7 @@ class Player extends PositionComponent {
     return true;
   }
 
-  bool move(Direction direction) {
+  bool move(dp.Direction direction) {
     // Only allow new move if player has reached the current target
     if (position.distanceTo(targetGridPosition.toVector2() * cellSize) > 0.1) {
       return false;
@@ -259,19 +259,19 @@ class Player extends PositionComponent {
     return true;
   }
 
-  IntVector2 _getNewGridPosition(Direction direction) {
+  IntVector2 _getNewGridPosition(dp.Direction direction) {
     IntVector2 nextPos;
     switch (direction) {
-      case Direction.up:
+      case dp.Direction.up:
         nextPos = IntVector2(gridPosition.x, gridPosition.y - 1);
         break;
-      case Direction.down:
+      case dp.Direction.down:
         nextPos = IntVector2(gridPosition.x, gridPosition.y + 1);
         break;
-      case Direction.left:
+      case dp.Direction.left:
         nextPos = IntVector2(gridPosition.x - 1, gridPosition.y);
         break;
-      case Direction.right:
+      case dp.Direction.right:
         nextPos = IntVector2(gridPosition.x + 1, gridPosition.y);
         break;
     }

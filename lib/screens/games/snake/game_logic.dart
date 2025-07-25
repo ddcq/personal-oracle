@@ -1,11 +1,12 @@
 import 'dart:math';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
+import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
 // ==========================================
 // ENUMS
 // ==========================================
 enum FoodType { regular, golden }
-enum Direction { up, down, left, right }
+
 
 
 // ==========================================
@@ -18,8 +19,8 @@ class GameState {
   FoodType foodType;
   List<IntVector2> obstacles;
   int score;
-  Direction direction;
-  Direction nextDirection;
+  dp.Direction direction;
+  dp.Direction nextDirection;
   bool isGameRunning;
   bool isGameOver;
 
@@ -31,8 +32,8 @@ class GameState {
     this.foodType = FoodType.regular,
     required this.obstacles,
     this.score = 0,
-    this.direction = Direction.right,
-    this.nextDirection = Direction.right,
+    this.direction = dp.Direction.right,
+    this.nextDirection = dp.Direction.right,
     this.isGameRunning = false,
     this.isGameOver = false,
   });
@@ -57,19 +58,18 @@ class GameLogic {
     // Calculate new head position
     state.direction = state.nextDirection;
     IntVector2 head = state.snake.first;
-    IntVector2 newHead;
-
+    IntVector2 newHead = head; // Initialize newHead to avoid "not assigned" error
     switch (state.direction) {
-      case Direction.up:
+      case dp.Direction.up:
         newHead = IntVector2(head.x, head.y - 1);
         break;
-      case Direction.down:
+      case dp.Direction.down:
         newHead = IntVector2(head.x, head.y + 1);
         break;
-      case Direction.left:
+      case dp.Direction.left:
         newHead = IntVector2(head.x - 1, head.y);
         break;
-      case Direction.right:
+      case dp.Direction.right:
         newHead = IntVector2(head.x + 1, head.y);
         break;
     }
@@ -124,13 +124,13 @@ class GameLogic {
     state.food = newFood;
   }
 
-  void changeDirection(GameState state, Direction newDirection) {
+  void changeDirection(GameState state, dp.Direction newDirection) {
     if (!state.isGameRunning || state.isGameOver) return;
 
-    if ((state.direction == Direction.up && newDirection == Direction.down) ||
-        (state.direction == Direction.down && newDirection == Direction.up) ||
-        (state.direction == Direction.left && newDirection == Direction.right) ||
-        (state.direction == Direction.right && newDirection == Direction.left)) {
+    if ((state.direction == dp.Direction.up && newDirection == dp.Direction.down) ||
+        (state.direction == dp.Direction.down && newDirection == dp.Direction.up) ||
+        (state.direction == dp.Direction.left && newDirection == dp.Direction.right) ||
+        (state.direction == dp.Direction.right && newDirection == dp.Direction.left)) {
       return;
     }
 

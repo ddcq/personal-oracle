@@ -10,6 +10,7 @@ import 'package:oracle_d_asgard/services/gamification_service.dart';
 
 import 'game_logic.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
+import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
 class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final GameLogic gameLogic = GameLogic();
@@ -189,16 +190,16 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     if (event is KeyDownEvent) {
       switch (event.logicalKey) {
         case LogicalKeyboardKey.arrowUp:
-          gameLogic.changeDirection(gameState, Direction.up);
+          gameLogic.changeDirection(gameState, dp.Direction.up);
           break;
         case LogicalKeyboardKey.arrowDown:
-          gameLogic.changeDirection(gameState, Direction.down);
+          gameLogic.changeDirection(gameState, dp.Direction.down);
           break;
         case LogicalKeyboardKey.arrowLeft:
-          gameLogic.changeDirection(gameState, Direction.left);
+          gameLogic.changeDirection(gameState, dp.Direction.left);
           break;
         case LogicalKeyboardKey.arrowRight:
-          gameLogic.changeDirection(gameState, Direction.right);
+          gameLogic.changeDirection(gameState, dp.Direction.right);
           break;
         case LogicalKeyboardKey.keyR:
           resetGame();

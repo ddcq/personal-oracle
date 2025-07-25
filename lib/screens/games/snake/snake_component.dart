@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'game_logic.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
+import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
 class SnakeComponent extends PositionComponent {
   final GameState gameState;
@@ -121,15 +122,15 @@ class SnakeComponent extends PositionComponent {
     }
   }
 
-  Sprite _getSnakeHeadSprite(Direction direction) {
+  Sprite _getSnakeHeadSprite(dp.Direction direction) {
     switch (direction) {
-      case Direction.up:
+      case dp.Direction.up:
         return snakeHeadUpSprite;
-      case Direction.right:
+      case dp.Direction.right:
         return snakeHeadRightSprite;
-      case Direction.left:
+      case dp.Direction.left:
         return snakeHeadLeftSprite;
-      case Direction.down:
+      case dp.Direction.down:
         return snakeHeadDownSprite;
     }
   }

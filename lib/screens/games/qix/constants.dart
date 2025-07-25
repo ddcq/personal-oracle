@@ -17,7 +17,7 @@ const double kWinPercentage = 0.8;
 const double gameWidth = 150.0;
 const double gameHeight = 200.0;
 
-enum Direction { up, down, left, right }
+
 
 const IntVector2 kDirectionUp = IntVector2(0, -1);
 const IntVector2 kDirectionDown = IntVector2(0, 1);
