@@ -3,6 +3,7 @@ import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:confetti/confetti.dart';
+import 'package:oracle_d_asgard/widgets/confetti_overlay.dart';
 
 import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_flame_game.dart';
 
@@ -74,7 +75,6 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   }
 
   void _showVictoryDialog(CollectibleCard rewardCard) {
-    _confettiController.play();
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -92,30 +92,15 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Jeu de Puzzle')),
-      body: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          GameWidget(game: _flameGame),
-          ConfettiWidget(
-            confettiController: _confettiController,
-            blastDirectionality: BlastDirectionality.explosive,
-            shouldLoop: false,
-            colors: const [
-              Colors.green,
-              Colors.blue,
-              Colors.pink,
-              Colors.orange,
-              Colors.purple,
-            ],
-          ),
-        ],
+      body: ConfettiOverlay(
+        controller: _confettiController,
+        child: GameWidget(game: _flameGame),
       ),
     );
   }
 
   @override
   void dispose() {
-    _confettiController.dispose();
     super.dispose();
   }
 }
