@@ -8,6 +8,7 @@ import 'arena.dart';
 import 'player.dart';
 import 'constants.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
+import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 
 class QixGame extends FlameGame with KeyboardEvents {
   late final ArenaComponent arena;

@@ -4,6 +4,7 @@ import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
+import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 
 class SnakeGame extends StatefulWidget {
   const SnakeGame({super.key});
@@ -95,89 +96,12 @@ class _SnakeGameState extends State<SnakeGame> {
             ),
           ),
           // Contrôles directionnels pour mobile
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                // Haut
-                GestureDetector(
-                  onTap: () => _game.gameLogic.changeDirection(_game.gameState, Direction.up),
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF22C55E),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.keyboard_arrow_up,
-                      color: Colors.white,
-                      size: 32,
-                    ),
-                  ),
-                ),
-
-                const Padding(padding: EdgeInsets.only(bottom: 8)),
-
-                // Gauche et Droite
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    GestureDetector(
-                      onTap: () => _game.gameLogic.changeDirection(_game.gameState, Direction.left),
-                      child: Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF22C55E),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(
-                          Icons.keyboard_arrow_left,
-                          color: Colors.white,
-                          size: 32,
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => _game.gameLogic.changeDirection(_game.gameState, Direction.right),
-                      child: Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF22C55E),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(
-                          Icons.keyboard_arrow_right,
-                          color: Colors.white,
-                          size: 32,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const Padding(padding: EdgeInsets.only(bottom: 8)),
-
-                // Bas
-                GestureDetector(
-                  onTap: () => _game.gameLogic.changeDirection(_game.gameState, Direction.down),
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF22C55E),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.keyboard_arrow_down,
-                      color: Colors.white,
-                      size: 32,
-                    ),
-                  ),
-                ),
-              ],
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: DirectionalPad(
+              onDirectionChanged: (Direction direction) {
+                _game.gameLogic.changeDirection(_game.gameState, direction);
+              },
             ),
           ),
         ],

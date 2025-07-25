@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:oracle_d_asgard/widgets/progress_bar.dart';
 import 'qix_game.dart';
-import 'directional_pad.dart';
+import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 import 'constants.dart';
 import 'defeat_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
@@ -152,9 +152,8 @@ class _QixGameScreenState extends State<QixGameScreen> {
                   }
                   return gameAndControls;
                 }
-              } else {
-                return const Center(child: CircularProgressIndicator());
               }
+              return const Center(child: CircularProgressIndicator());
             },
           ),
         ),

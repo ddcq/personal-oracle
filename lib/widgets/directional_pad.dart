@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'constants.dart';
+
+enum Direction {
+  up,
+  down,
+  left,
+  right,
+}
 
 class DirectionalPad extends StatelessWidget {
   final ValueChanged<Direction> onDirectionChanged;
 
-  const DirectionalPad({super.key, required this.onDirectionChanged}) : super();
+  const DirectionalPad({super.key, required this.onDirectionChanged});
 
   @override
   Widget build(BuildContext context) {
