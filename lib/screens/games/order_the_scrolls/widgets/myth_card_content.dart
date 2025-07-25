@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
+import 'package:oracle_d_asgard/utils/image_utils.dart';
 import '../game_controller.dart';
 
 class MythCardContent extends StatelessWidget {
@@ -9,14 +10,7 @@ class MythCardContent extends StatelessWidget {
   final GameController controller;
   final bool isDragging;
 
-  const MythCardContent({
-    super.key,
-    required this.card,
-    required this.index,
-    required this.size,
-    required this.controller,
-    this.isDragging = false,
-  });
+  const MythCardContent({super.key, required this.card, required this.index, required this.size, required this.controller, this.isDragging = false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,39 +20,22 @@ class MythCardContent extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(isDragging ? 16 : 20),
         boxShadow: isDragging
-            ? [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.3),
-                  blurRadius: 12,
-                  offset: const Offset(0, 6),
-                ),
-              ]
-            : [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.15),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                ),
-              ],
+            ? [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 6))]
+            : [BoxShadow(color: Colors.black.withValues(alpha: 0.15), blurRadius: 8, offset: const Offset(0, 3))],
         border: controller.getCardBorder(index),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Stack(
           children: [
-            Positioned.fill(
-              child: Image.asset(card.imagePath, fit: BoxFit.cover),
-            ),
+            Positioned.fill(child: Image.asset(addAssetPrefix(card.imagePath), fit: BoxFit.cover)),
             Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black.withValues(alpha: 0.2),
-                      Colors.black.withValues(alpha: 0.8),
-                    ],
+                    colors: [Colors.black.withValues(alpha: 0.2), Colors.black.withValues(alpha: 0.8)],
                   ),
                 ),
               ),
@@ -77,18 +54,11 @@ class MythCardContent extends StatelessWidget {
                       color: Colors.white,
                       fontSize: isDragging ? 14 : 16,
                       fontWeight: FontWeight.bold,
-                      shadows: const [
-                        Shadow(
-                          offset: Offset(1, 1),
-                          blurRadius: 3,
-                          color: Colors.black,
-                        ),
-                      ],
+                      shadows: const [Shadow(offset: Offset(1, 1), blurRadius: 3, color: Colors.black)],
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  
                 ],
               ),
             ),
@@ -100,13 +70,7 @@ class MythCardContent extends StatelessWidget {
                   Icons.open_with,
                   color: Colors.white,
                   size: 20,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(1, 1),
-                      blurRadius: 3,
-                      color: Colors.black,
-                    ),
-                  ],
+                  shadows: [Shadow(offset: Offset(1, 1), blurRadius: 3, color: Colors.black)],
                 ),
               ),
             if (controller.validated)
@@ -117,26 +81,14 @@ class MythCardContent extends StatelessWidget {
                   width: 28,
                   height: 28,
                   decoration: BoxDecoration(
-                    color: controller.isCardCorrect(index) 
-                        ? Colors.green 
-                        : Colors.red,
+                    color: controller.isCardCorrect(index) ? Colors.green : Colors.red,
                     shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.3),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 4, offset: const Offset(0, 2))],
                   ),
                   child: Center(
                     child: Text(
                       '${index + 1}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
                     ),
                   ),
                 ),

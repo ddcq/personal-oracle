@@ -1,6 +1,7 @@
 // deity_card.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'dart:ui'; // For ImageFilter
 
 import '../models/deity.dart'; // Make sure this model matches the structure from AppData
@@ -36,7 +37,7 @@ class _DeityCardState extends State<DeityCard> {
           scale: _scale,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeOutBack,
-          child: Image.asset(widget.deity.icon, width: 1.sw, height: 1.sw),
+          child: Image.asset(addAssetPrefix(widget.deity.icon), width: 1.sw, height: 1.sw),
         ),
         SizedBox(height: 8.h),
         // New blurred container for name and title

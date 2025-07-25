@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'dart:math' as math;
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/screens/collectible_card_detail_page.dart';
+import 'package:oracle_d_asgard/utils/image_utils.dart';
 
 class InteractiveCollectibleCard extends StatefulWidget {
   final CollectibleCard card;
@@ -84,7 +85,7 @@ class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard>
                       borderRadius: BorderRadius.circular(15),
                       child: Stack(
                         children: [
-                          Image.asset(widget.card.imagePath, fit: BoxFit.contain),
+                          Image.asset(addAssetPrefix(widget.card.imagePath), fit: BoxFit.contain),
                           // Shine overlay
                           Positioned(
                             left: _shineAnimation.value * cardWidth, // Scale animation based on card width
