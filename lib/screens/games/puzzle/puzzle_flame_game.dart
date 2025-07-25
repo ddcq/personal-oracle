@@ -65,12 +65,12 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
     if (unearnedCollectibleCards.isNotEmpty) {
       final random = Random();
       final selected = unearnedCollectibleCards[random.nextInt(unearnedCollectibleCards.length)];
-      imageToLoad = selected.imagePath.substring('assets/images/'.length);
+      imageToLoad = selected.imagePath;
       puzzleGame.associatedCardId = selected.id;
     } else if (nextMythCardsToEarn.isNotEmpty) {
       final random = Random();
       final selectedMythCard = nextMythCardsToEarn[random.nextInt(nextMythCardsToEarn.length)];
-      imageToLoad = selectedMythCard.imagePath.substring('assets/images/'.length);
+      imageToLoad = selectedMythCard.imagePath;
       puzzleGame.associatedCardId = selectedMythCard.id;
     } else {
       // Fallback image if no unearned cards

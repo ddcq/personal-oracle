@@ -40,9 +40,9 @@ class DirectionalPad extends StatelessWidget {
 
   Widget _buildDirectionButton(Widget icon, Direction direction) {
     return ChibiButton(
-      child: icon,
       color: Colors.blueGrey, // You can choose a suitable color
       onPressed: () => onDirectionChanged(direction),
+      child: icon,
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +15,11 @@ class QixGame extends FlameGame with KeyboardEvents {
   late ui.Image characterSpriteSheet;
   final ValueNotifier<double> filledPercentageNotifier = ValueNotifier<double>(0.0);
   final VoidCallback onGameOver;
-  final Function(Map<String, dynamic>?) onWin;
-  final Map<String, dynamic>? _unearnedContent;
+  final Function(CollectibleCard?) onWin;
+  final String? _rewardCardImagePath;
+  final CollectibleCard? _rewardCard;
 
-  QixGame({required this.onGameOver, required this.onWin, required Map<String, dynamic>? unearnedContent}) : _unearnedContent = unearnedContent;
+  QixGame({required this.onGameOver, required this.onWin, String? rewardCardImagePath, CollectibleCard? rewardCard}) : _rewardCardImagePath = rewardCardImagePath, _rewardCard = rewardCard;
 
   @override
   Future<void> onLoad() async {
@@ -28,7 +30,7 @@ class QixGame extends FlameGame with KeyboardEvents {
     final int gridSize = kGridSize;
     final double cellSize = (size.x < size.y ? size.x : size.y) / gridSize;
 
-    arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize);
+    arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize, rewardCardImagePath: _rewardCardImagePath);
     player = Player(gridSize: gridSize, cellSize: cellSize, characterSpriteSheet: characterSpriteSheet, arena: arena, onPlayerStateChanged: onPlayerStateChanged);
     player.gridPosition = IntVector2(0, 0); // Start at the top-left edge
     player.targetGridPosition = IntVector2(player.gridPosition.x, player.gridPosition.y);
@@ -42,7 +44,7 @@ class QixGame extends FlameGame with KeyboardEvents {
   void updateFilledPercentage(double percentage) {
     filledPercentageNotifier.value = percentage;
     if (percentage >= kWinPercentage) {
-      win(_unearnedContent);
+      win();
     }
   }
 
@@ -63,9 +65,9 @@ class QixGame extends FlameGame with KeyboardEvents {
     onGameOver();
   }
 
-  void win(Map<String, dynamic>? collectibleCard) {
+  void win() {
     pauseEngine();
-    onWin(collectibleCard);
+    onWin(_rewardCard);
   }
 
   @override

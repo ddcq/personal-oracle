@@ -1,3 +1,4 @@
+import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:oracle_d_asgard/widgets/progress_bar.dart';
@@ -7,7 +8,7 @@ import 'constants.dart';
 import 'defeat_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
-import 'victory_screen.dart';
+import 'package:oracle_d_asgard/components/victory_popup.dart';
 
 class QixGameScreen extends StatefulWidget {
   const QixGameScreen({super.key});
@@ -31,10 +32,31 @@ class _QixGameScreenState extends State<QixGameScreen> {
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
     _unearnedContent = await gamificationService.getUnearnedContent();
 
+    CollectibleCard? selectedRewardCard;
+    String? rewardCardImagePath;
+
+    if (_unearnedContent != null && _unearnedContent!['unearned_collectible_cards'] != null && _unearnedContent!['unearned_collectible_cards'].isNotEmpty) {
+      selectedRewardCard = _unearnedContent!['unearned_collectible_cards'][0];
+      rewardCardImagePath = selectedRewardCard?.imagePath;
+    }
+
     _game = QixGame(
       onGameOver: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => DefeatScreen())),
-      onWin: (collectibleCard) => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => VictoryScreen(collectibleCard: collectibleCard))),
-      unearnedContent: _unearnedContent,
+      onWin: (CollectibleCard? collectibleCard) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => VictoryPopup(
+            rewardCard: collectibleCard!,
+            onDismiss: () {
+              Navigator.of(context).pop(); // Dismiss the popup
+              Navigator.of(context).pop(); // Go back to the previous screen (game menu)
+            },
+          ),
+        );
+      },
+      rewardCardImagePath: rewardCardImagePath,
+      rewardCard: selectedRewardCard,
     );
   }
 
@@ -138,4 +160,5 @@ class _QixGameScreenState extends State<QixGameScreen> {
         ),
       ),
     );
+  }
 }

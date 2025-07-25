@@ -12,4 +12,14 @@ class CollectibleCard {
     required this.imagePath,
     this.tags = const [],
   });
+
+  factory CollectibleCard.fromJson(Map<String, dynamic> json) {
+    return CollectibleCard(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      imagePath: json['imagePath'] as String,
+      tags: List<String>.from(json['tags'] as List),
+    );
+  }
 }

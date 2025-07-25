@@ -39,66 +39,66 @@ class MainScreen extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: SizedBox(
-                          height: 350.h, // Hauteur visible (70% de 500)
-                          child: Stack(
-                            children: <Widget>[
-                              Positioned(
-                                top: 0,
-                                width: 1.sw, // Prend toute la largeur
-                                child: ClipRect(
-                                  child: Align(
-                                    alignment: Alignment.topCenter,
-                                    heightFactor: 0.7, // Affiche 70% de l'image
-                                    child: Image.asset(
-                                      'assets/images/odin_chibi.png',
-                                      height: 500.h, // Hauteur réelle de l'image
-                                    ),
+                        child: Stack(
+                          children: <Widget>[
+                            Positioned(
+                              top: 0,
+                              width: 1.sw, // Prend toute la largeur
+                              child: ClipRect(
+                                child: Align(
+                                  alignment: Alignment.topCenter,
+                                  heightFactor: 0.7, // Affiche 70% de l'image
+                                  child: Image.asset(
+                                    'assets/images/odin_chibi.png',
+                                    height: 500.h, // Hauteur réelle de l'image
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: 0.8.sw,
-                            child: ChibiButton(
-                              text: 'Mini games',
-                              color: const Color(0xFFF9A825), // Orange
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 0.8.sw,
+                              child: ChibiButton(
+                                text: 'Mini games',
+                                color: const Color(0xFFF9A825), // Orange
 
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
-                              },
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
+                                },
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10.h),
-                          SizedBox(
-                            width: 0.8.sw,
-                            child: ChibiButton(
-                              text: 'Quiz',
-                              color: const Color(0xFF1E88E5), // Blue
+                            SizedBox(height: 10.h),
+                            SizedBox(
+                              width: 0.8.sw,
+                              child: ChibiButton(
+                                text: 'Quiz',
+                                color: const Color(0xFF1E88E5), // Blue
 
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
-                              },
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
+                                },
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10.h),
-                          SizedBox(
-                            width: 0.8.sw,
-                            child: ChibiButton(
-                              text: 'Profile',
-                              color: const Color(0xFFE53935), // Red
+                            SizedBox(height: 10.h),
+                            SizedBox(
+                              width: 0.8.sw,
+                              child: ChibiButton(
+                                text: 'Profile',
+                                color: const Color(0xFFE53935), // Red
 
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
-                              },
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                                },
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   );

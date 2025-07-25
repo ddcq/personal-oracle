@@ -8,7 +8,7 @@ class ChibiButton extends StatefulWidget {
   final Color color;
   final VoidCallback onPressed;
 
-  const ChibiButton({super.key, this.text, this.child, required this.color, required this.onPressed})
+  const ChibiButton({super.key, this.text, required this.color, required this.onPressed, this.child})
       : assert(text != null || child != null, 'Either text or child must be provided');
 
   @override

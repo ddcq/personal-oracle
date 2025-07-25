@@ -10,6 +10,7 @@ import 'constants.dart' as game_constants;
 import 'qix_game.dart';
 import 'qix.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
+import 'package:oracle_d_asgard/utils/image_utils.dart';
 
 class FloodFillResult {
   final List<IntVector2> points;
@@ -22,6 +23,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late ui.Image _rewardCardImage;
   final int gridSize;
   final double cellSize;
+  final String? rewardCardImagePath;
 
   late List<List<int>> _grid; // 0: free, 1: filled, 2: path, 3: edge
   final List<IntVector2> _currentDrawingPath = [];
@@ -34,7 +36,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late final Map<IntVector2, Rect> _cellRects;
   late QixComponent _qixComponent;
 
-  ArenaComponent({required this.gridSize, required this.cellSize}) {
+  ArenaComponent({required this.gridSize, required this.cellSize, this.rewardCardImagePath}) {
     var arenaDoubleSize = (gridSize * cellSize).toDouble();
     size = Vector2(arenaDoubleSize, arenaDoubleSize);
     position = Vector2.zero();
@@ -69,7 +71,12 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    _rewardCardImage = await game.images.load('cards/fenrir_card.jpg');
+    if (rewardCardImagePath != null) {
+      _rewardCardImage = await game.images.load(rewardCardImagePath!);
+    } else {
+      // Load a default image if no reward card image is provided
+      _rewardCardImage = await game.images.load('assets/images/cards/fenrir_card.jpg');
+    }
 
     // Pre-calculate sprites for filled areas
     for (int y = 0; y < gridSize; y++) {
