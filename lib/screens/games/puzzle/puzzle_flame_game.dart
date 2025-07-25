@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
 import './puzzle_game.dart';
 import './puzzle_model.dart';
-import 'package:oracle_d_asgard/data/stories_data.dart' show getCollectibleCards, getMythStories;
+
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
@@ -48,6 +48,7 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
   late final ui.Image puzzleImage;
   final GamificationService _gamificationService = GamificationService();
   final Function(CollectibleCard rewardCard) onRewardEarned; // New callback
+  CollectibleCard? associatedCard;
 
   PuzzleFlameGame({required this.puzzleGame, required this.onRewardEarned}) {
     puzzleGame.onGameCompleted = onGameCompletedFromPuzzleGame;
@@ -66,16 +67,16 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
       final random = Random();
       final selected = unearnedCollectibleCards[random.nextInt(unearnedCollectibleCards.length)];
       imageToLoad = selected.imagePath;
-      puzzleGame.associatedCardId = selected.id;
+      associatedCard = selected;
     } else if (nextMythCardsToEarn.isNotEmpty) {
       final random = Random();
       final selectedMythCard = nextMythCardsToEarn[random.nextInt(nextMythCardsToEarn.length)];
       imageToLoad = selectedMythCard.imagePath;
-      puzzleGame.associatedCardId = selectedMythCard.id;
+      associatedCard = selectedMythCard;
     } else {
       // Fallback image if no unearned cards
       imageToLoad = 'home_illu.png';
-      puzzleGame.associatedCardId = null; // No specific card to unlock
+      associatedCard = null; // No specific card to unlock
     }
     puzzleImage = await Flame.images.load(imageToLoad);
 
@@ -101,29 +102,9 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
   }
 
   void onGameCompletedFromPuzzleGame() async {
-    if (puzzleGame.associatedCardId != null) {
-      final allCollectibleCards = getCollectibleCards();
-      final allMythStories = getMythStories();
-
-      CollectibleCard? rewardCard;
-
-      // Try to find in CollectibleCards first
-      try {
-        rewardCard = allCollectibleCards.firstWhere((card) => card.id == puzzleGame.associatedCardId);
-      } catch (e) {
-        // If not found in CollectibleCards, try in MythCards
-        try {
-          rewardCard = allMythStories.expand((story) => story.correctOrder).firstWhere((card) => card.id == puzzleGame.associatedCardId);
-        } catch (e) {
-          // Card not found in either, handle error or use a default
-          // print('Reward card with ID ${puzzleGame.associatedCardId} not found.');
-        }
-      }
-
-      if (rewardCard != null) {
-        await _gamificationService.unlockCollectibleCard(rewardCard.id);
-        onRewardEarned(rewardCard);
-      }
+    if (associatedCard != null) {
+      await _gamificationService.unlockCollectibleCard(associatedCard!.id);
+      onRewardEarned(associatedCard!); 
     }
   }
 }

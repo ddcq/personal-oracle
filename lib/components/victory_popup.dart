@@ -52,17 +52,18 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
         opacity: _fadeAnimation,
         child: SlideTransition(
           position: _slideAnimation,
-          child: Center(
-            child: Material(
-              color: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: Colors.black54, // Semi-transparent background for the overlay
+            child: Center(
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.blueGrey[800], // Revert to a solid color or make it transparent
+                  color: Colors.blueGrey[800],
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [BoxShadow(color: Colors.black.withAlpha(128), blurRadius: 10, offset: const Offset(0, 5))],
                 ),
-                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8, maxHeight: MediaQuery.of(context).size.height * 0.7),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

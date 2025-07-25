@@ -5,6 +5,8 @@ import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
 class SnakeGame extends StatefulWidget {
   const SnakeGame({super.key});
@@ -65,9 +67,7 @@ class _SnakeGameState extends State<SnakeGame> {
                     child: Stack(
                       children: [
                         // Background wall image for the entire gameSize area
-                        Positioned.fill(
-                          child: Image.asset('assets/images/backgrounds/wall.webp', fit: BoxFit.fill),
-                        ),
+                        Positioned.fill(child: Image.asset('assets/images/backgrounds/wall.webp', fit: BoxFit.fill)),
                         // Centered black square for the game area
                         Center(
                           child: Container(
@@ -125,65 +125,43 @@ class StartOverlay extends StatelessWidget {
           decoration: BoxDecoration(
             color: const Color(0xFF0F0F23),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: const Color(0xFF22C55E),
-            ),
+            border: Border.all(color: const Color(0xFF22C55E)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.trending_up,
-                size: 60,
-                color: Color(0xFF22C55E),
-              ),
-              const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Guide Jörmungandr',
-                style: TextStyle(
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  fontFamily: 'AmaticSC',
                   color: Colors.white,
-                  fontSize: 24,
                   fontWeight: FontWeight.bold,
+                  fontSize: 40.sp,
+                  letterSpacing: 2.0.sp,
+                  shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
                 ),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
-              const Text(
+              SizedBox(height: 8.h),
+              Text(
                 'Aide le serpent-monde à grandir\nen dévorant les offrandes des mortels',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Colors.white70, fontSize: 14.sp),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
-              const Text(
+              SizedBox(height: 8.h),
+              Text(
                 '⌨️ Contrôles:\n↑↓←→ Flèches | R: Recommencer',
-                style: TextStyle(
-                  color: Colors.white54,
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: Colors.white54, fontSize: 12.sp),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
+              SizedBox(height: 16.h),
+              ChibiButton(
+                text: 'Réveiller le Serpent',
+                color: const Color(0xFF22C55E),
                 onPressed: () {
                   game.overlays.remove('startOverlay');
                   game.startGame();
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF22C55E),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
-                  ),
-                ),
-                child: const Text(
-                  'Réveiller le Serpent',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
               ),
             ],
           ),
@@ -208,28 +186,19 @@ class GameOverOverlay extends StatelessWidget {
           decoration: BoxDecoration(
             color: const Color(0xFF0F0F23),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: const Color(0xFF22C55E),
-            ),
+            border: Border.all(color: const Color(0xFF22C55E)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
                 '⚰️ Ragnarök !',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(color: Colors.red, fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
                 'Jörmungandr a péri...\nScore final: ${game.gameState.score}',
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 16,
-                ),
+                style: const TextStyle(color: Colors.white70, fontSize: 16),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -238,13 +207,8 @@ class GameOverOverlay extends StatelessWidget {
                   game.overlays.remove('gameOverOverlay');
                   game.resetGame();
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF22C55E),
-                ),
-                child: const Text(
-                  'Renaître',
-                  style: TextStyle(color: Colors.white),
-                ),
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF22C55E)),
+                child: const Text('Renaître', style: TextStyle(color: Colors.white)),
               ),
             ],
           ),

@@ -43,17 +43,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
     _game = QixGame(
       onGameOver: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => DefeatScreen())),
       onWin: (CollectibleCard? collectibleCard) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => VictoryPopup(
-            rewardCard: collectibleCard!,
-            onDismiss: () {
-              Navigator.of(context).pop(); // Dismiss the popup
-              Navigator.of(context).pop(); // Go back to the previous screen (game menu)
-            },
-          ),
-        );
+        _game!.overlays.add('victoryOverlay');
       },
       rewardCardImagePath: rewardCardImagePath,
       rewardCard: selectedRewardCard,
@@ -98,7 +88,23 @@ class _QixGameScreenState extends State<QixGameScreen> {
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
                               color: Colors.blue[900],
-                              child: AspectRatio(aspectRatio: 1.0, child: GameWidget(game: _game!)),
+                              child: AspectRatio(
+                                aspectRatio: 1.0,
+                                child: GameWidget(
+                                  game: _game!,
+                                  overlayBuilderMap: {
+                                    'victoryOverlay': (BuildContext context, QixGame game) {
+                                      return VictoryPopup(
+                                        rewardCard: game.rewardCard!,
+                                        onDismiss: () {
+                                          game.overlays.remove('victoryOverlay');
+                                          Navigator.of(context).pop(); // Go back to the previous screen (game menu)
+                                        },
+                                      );
+                                    },
+                                  },
+                                ),
+                              ),
                             ),
                           ),
                         ),

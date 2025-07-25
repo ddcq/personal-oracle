@@ -29,9 +29,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     super.initState();
     _game = PuzzleGame(rows: _rows, cols: _cols);
     _flameGame = PuzzleFlameGame(puzzleGame: _game, onRewardEarned: _showVictoryDialog);
-    _confettiController = ConfettiController(
-      duration: const Duration(seconds: 2),
-    );
+    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _resetGame();
@@ -45,7 +43,8 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
 
     // Calculate pieceSize based on the smaller dimension to ensure it fits
     final double calculatedPieceSize = isPortrait
-        ? (screenWidth * 0.9) / _cols // 90% of screen width for portrait
+        ? (screenWidth * 0.9) /
+              _cols // 90% of screen width for portrait
         : (screenHeight * 0.9) / _rows; // 90% of screen height for landscape
 
     final double calculatedPuzzleWidth = calculatedPieceSize * _cols;
@@ -54,12 +53,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     final double boardX = (screenWidth - calculatedPuzzleWidth) / 2;
     final double boardY = (screenHeight - calculatedPuzzleHeight) / 2;
 
-    final Rect puzzleBoardBounds = Rect.fromLTWH(
-      boardX,
-      boardY,
-      calculatedPuzzleWidth,
-      calculatedPuzzleHeight,
-    );
+    final Rect puzzleBoardBounds = Rect.fromLTWH(boardX, boardY, calculatedPuzzleWidth, calculatedPuzzleHeight);
 
     // Update the game with the new piece size and board dimensions
     _game.pieceSize = calculatedPieceSize;
@@ -67,25 +61,12 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     _game.cols = _cols;
 
     setState(() {
-      _game.initializeAndScatter(
-        puzzleBoardBounds,
-        MediaQuery.of(context).size,
-      );
+      _game.initializeAndScatter(puzzleBoardBounds, MediaQuery.of(context).size);
     });
   }
 
   void _showVictoryDialog(CollectibleCard rewardCard) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => VictoryPopup(
-        rewardCard: rewardCard,
-        onDismiss: () {
-          Navigator.of(context).pop(); // Dismiss the popup
-          _resetGame();
-        },
-      ),
-    );
+    _flameGame.overlays.add('victoryOverlay');
   }
 
   @override
@@ -94,7 +75,20 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
       appBar: AppBar(title: const Text('Jeu de Puzzle')),
       body: ConfettiOverlay(
         controller: _confettiController,
-        child: GameWidget(game: _flameGame),
+        child: GameWidget(
+          game: _flameGame,
+          overlayBuilderMap: {
+            'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
+              return VictoryPopup(
+                rewardCard: game.associatedCard!,
+                onDismiss: () {
+                  game.overlays.remove('victoryOverlay');
+                  _resetGame();
+                },
+              );
+            },
+          },
+        ),
       ),
     );
   }

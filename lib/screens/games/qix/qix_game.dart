@@ -17,10 +17,10 @@ class QixGame extends FlameGame with KeyboardEvents {
   final ValueNotifier<double> filledPercentageNotifier = ValueNotifier<double>(0.0);
   final VoidCallback onGameOver;
   final Function(CollectibleCard?) onWin;
-  final String? _rewardCardImagePath;
-  final CollectibleCard? _rewardCard;
+  final String? rewardCardImagePath;
+  final CollectibleCard? rewardCard;
 
-  QixGame({required this.onGameOver, required this.onWin, String? rewardCardImagePath, CollectibleCard? rewardCard}) : _rewardCardImagePath = rewardCardImagePath, _rewardCard = rewardCard;
+  QixGame({required this.onGameOver, required this.onWin, this.rewardCardImagePath, this.rewardCard});
 
   @override
   Future<void> onLoad() async {
@@ -31,7 +31,7 @@ class QixGame extends FlameGame with KeyboardEvents {
     final int gridSize = kGridSize;
     final double cellSize = (size.x < size.y ? size.x : size.y) / gridSize;
 
-    arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize, rewardCardImagePath: _rewardCardImagePath);
+    arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize, rewardCardImagePath: rewardCardImagePath);
     player = Player(gridSize: gridSize, cellSize: cellSize, characterSpriteSheet: characterSpriteSheet, arena: arena, onPlayerStateChanged: onPlayerStateChanged);
     player.gridPosition = IntVector2(0, 0); // Start at the top-left edge
     player.targetGridPosition = IntVector2(player.gridPosition.x, player.gridPosition.y);
@@ -68,7 +68,7 @@ class QixGame extends FlameGame with KeyboardEvents {
 
   void win() {
     pauseEngine();
-    onWin(_rewardCard);
+    onWin(rewardCard);
   }
 
   @override
