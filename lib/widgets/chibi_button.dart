@@ -7,8 +7,9 @@ class ChibiButton extends StatefulWidget {
   final Widget? child;
   final Color color;
   final VoidCallback onPressed;
+  final TextStyle? textStyle;
 
-  const ChibiButton({super.key, this.text, required this.color, required this.onPressed, this.child})
+  const ChibiButton({super.key, this.text, required this.color, required this.onPressed, this.child, this.textStyle})
       : assert(text != null || child != null, 'Either text or child must be provided');
 
   @override
@@ -67,7 +68,7 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
               child: widget.child ?? Text(
                 widget.text!,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: widget.textStyle ?? TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2.sp,
