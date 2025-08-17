@@ -6,15 +6,39 @@ import 'package:oracle_d_asgard/services/database_service.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:audioplayers/audioplayers.dart';
+
+import 'package:oracle_d_asgard/services/sound_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseService().database;
-  runApp(ChangeNotifierProvider(create: (context) => GamificationService(), child: const MyApp()));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => GamificationService()),
+        ChangeNotifierProvider(create: (context) => SoundService()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<SoundService>(context, listen: false).playMainMenuMusic();
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {

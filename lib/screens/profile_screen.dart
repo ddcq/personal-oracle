@@ -13,6 +13,7 @@ import 'package:oracle_d_asgard/data/stories_data.dart';
 import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:oracle_d_asgard/services/sound_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -176,6 +177,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           }
                         },
                       ),
+                      _buildSectionTitle('Paramètres'),
+                      _buildSoundSettings(),
+                      const SizedBox(height: 20),
                       _buildSectionTitle('Scores de jeu'),
                       _buildGameScores(snakeScores),
                       const SizedBox(height: 20),
@@ -196,6 +200,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildSoundSettings() {
+    return Consumer<SoundService>(
+      builder: (context, soundService, child) {
+        return Card(
+          color: Colors.white.withAlpha(25),
+          elevation: 5,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Musique d\'ambiance',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'AmaticSC', fontSize: 22),
+                ),
+                Switch(
+                  value: !soundService.isMuted,
+                  onChanged: (value) {
+                    soundService.setMuted(!value);
+                  },
+                  activeTrackColor: Colors.green,
+                  inactiveTrackColor: Colors.grey,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

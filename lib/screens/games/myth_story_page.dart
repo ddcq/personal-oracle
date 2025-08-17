@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/utils/image_utils.dart';
+import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:provider/provider.dart';
 
 class MythStoryPage extends StatefulWidget {
@@ -17,11 +18,20 @@ class MythStoryPage extends StatefulWidget {
 
 class _MythStoryPageState extends State<MythStoryPage> {
   late Future<List<String>> _unlockedCardIdsFuture;
+  late SoundService _soundService;
 
   @override
   void initState() {
     super.initState();
+    _soundService = Provider.of<SoundService>(context, listen: false);
+    _soundService.playStoryMusic();
     _unlockedCardIdsFuture = _getUnlockedCardIds();
+  }
+
+  @override
+  void dispose() {
+    _soundService.playMainMenuMusic();
+    super.dispose();
   }
 
   Future<List<String>> _getUnlockedCardIds() async {
@@ -57,19 +67,24 @@ class _MythStoryPageState extends State<MythStoryPage> {
           widget.mythStory.title,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.displayMedium?.copyWith(
-            fontFamily: 'AmaticSC',
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 30, // Adjusted font size for AppBar
-            letterSpacing: 2.0,
-            shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
-          ),
+                fontFamily: 'AmaticSC',
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 30, // Adjusted font size for AppBar
+                letterSpacing: 2.0,
+                shadows: [
+                  const Shadow(
+                      blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))
+                ],
+              ),
         ),
         centerTitle: true,
       ),
       body: Container(
         decoration: const BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
+          image: DecorationImage(
+              image: AssetImage('assets/images/backgrounds/landscape.jpg'),
+              fit: BoxFit.cover),
         ),
         child: SafeArea(
           child: Center(
@@ -100,14 +115,26 @@ class _MythStoryPageState extends State<MythStoryPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(card.title, style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.black)),
-                                    const SizedBox(height: 8.0),
-                                    if (isUnlocked) Image.asset(addAssetPrefix(card.imagePath)) else const Icon(Icons.lock, size: 50),
+                                    Text(card.title,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineSmall
+                                            ?.copyWith(color: Colors.black)),
                                     const SizedBox(height: 8.0),
                                     if (isUnlocked)
-                                      Text(card.detailedStory, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black))
+                                      Image.asset(addAssetPrefix(card.imagePath))
                                     else
-                                      const Text('Locked', style: TextStyle(color: Colors.black)),
+                                      const Icon(Icons.lock, size: 50),
+                                    const SizedBox(height: 8.0),
+                                    if (isUnlocked)
+                                      Text(card.detailedStory,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(color: Colors.black))
+                                    else
+                                      const Text('Locked',
+                                          style: TextStyle(color: Colors.black)),
                                   ],
                                 ),
                               ),
