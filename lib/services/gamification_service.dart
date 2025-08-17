@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:oracle_d_asgard/services/database_service.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/foundation.dart'; // Import for ChangeNotifier
-import 'package:oracle_d_asgard/data/stories_data.dart' show getCollectibleCards, getMythStories;
+
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
+import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
+import 'package:oracle_d_asgard/data/stories_data.dart';
+
 
 
 class GamificationService with ChangeNotifier {

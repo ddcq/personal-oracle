@@ -1,6 +1,7 @@
+import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
-import 'package:oracle_d_asgard/models/collectible_card.dart';
+
 
 List<MythStory> getMythStories() {
   return [
@@ -55,27 +56,9 @@ List<MythStory> getMythStories() {
         ),
       ],
       collectibleCards: [
-        CollectibleCard(
-          id: 'baldr_card',
-          title: 'Baldr le Bon',
-          description: 'Le dieu de la lumière, de la beauté et de la pureté. Sa mort fut le premier signe du Ragnarök.',
-          imagePath: 'cards/baldr_card.jpg',
-          tags: ['Baldr', 'Ragnarök'],
-        ),
-        CollectibleCard(
-          id: 'frigg_card',
-          title: 'Frigg la Mère',
-          description: 'Déesse de l\'amour, du mariage et de la maternité, épouse d\'Odin et mère de Baldr.',
-          imagePath: 'cards/frigg_card.jpg',
-          tags: ['Frigg', 'Odin', 'Baldr'],
-        ),
-        CollectibleCard(
-          id: 'gui_card',
-          title: 'Le Gui Mortel',
-          description: 'La seule plante capable de blesser Baldr, utilisée par Loki pour causer sa mort.',
-          imagePath: 'cards/gui_card.jpg',
-          tags: ['Gui', 'Baldr', 'Loki'],
-        ),
+        baldrCard,
+        friggCard,
+        guiCard,
       ],
     ),
     MythStory(
@@ -127,27 +110,9 @@ List<MythStory> getMythStories() {
         ),
       ],
       collectibleCards: [
-        CollectibleCard(
-          id: 'thor_card',
-          title: 'Thor le Protecteur',
-          description: 'Le dieu du tonnerre, protecteur d\'Asgard et des hommes, armé de son marteau Mjöllnir.',
-          imagePath: 'cards/thor_card.jpg',
-          tags: ['Thor', 'Mjöllnir'],
-        ),
-        CollectibleCard(
-          id: 'mjollnir_card',
-          title: 'Mjöllnir',
-          description: 'Le marteau légendaire de Thor, capable de contrôler la foudre et de revenir à son porteur.',
-          imagePath: 'cards/mjollnir_card.jpg',
-          tags: ['Mjöllnir', 'Thor'],
-        ),
-        CollectibleCard(
-          id: 'thrym_card',
-          title: 'Thrym le Géant',
-          description: 'Le roi des géants qui vola Mjöllnir et demanda Freyja en mariage.',
-          imagePath: 'cards/thrym_card.jpg',
-          tags: ['Thrym', 'Freyja', 'Mjöllnir'],
-        ),
+        thorCard,
+        mjollnirCard,
+        thrymCard,
       ],
     ),
     MythStory(
@@ -199,27 +164,9 @@ List<MythStory> getMythStories() {
         ),
       ],
       collectibleCards: [
-        CollectibleCard(
-          id: 'fenrir_card',
-          title: 'Fenrir le Loup',
-          description: 'Le loup gigantesque, fils de Loki, destiné à dévorer Odin lors du Ragnarök.',
-          imagePath: 'cards/fenrir_card.jpg',
-          tags: ['Fenrir', 'Loki', 'Odin', 'Ragnarök'],
-        ),
-        CollectibleCard(
-          id: 'tyr_card',
-          title: 'Týr le Sacrifié',
-          description: 'Le dieu de la guerre et de la justice, qui sacrifia sa main pour enchaîner Fenrir.',
-          imagePath: 'cards/tyr_card.jpg',
-          tags: ['Tyr', 'Fenrir'],
-        ),
-        CollectibleCard(
-          id: 'gleipnir_card',
-          title: 'Gleipnir',
-          description: 'La chaîne magique, fine comme un ruban, forgée par les nains pour lier Fenrir.',
-          imagePath: 'cards/gleipnir_card.jpg',
-          tags: ['Gleipnir', 'Fenrir'],
-        ),
+        fenrirCard,
+        tyrCard,
+        gleipnirCard,
       ],
     ),
     MythStory(
@@ -232,7 +179,7 @@ List<MythStory> getMythStories() {
           description: 'Avant toute création, il n\'y avait que le Ginnungagap, un vaste vide séparant le feu de Muspellheim et la glace de Niflheim.',
           imagePath: 'stories/creation_1.jpg',
           detailedStory:
-              'Au commencement des temps, avant que n\'existe aucun monde, aucune mer, aucun ciel, aucune terre, il n\'y avait que le Ginnungagap - le vide béant, l\'abîme primordial qui s\'étendait dans une solitude infinie.\n\nCe n\'était ni lumière ni ténèbres, ni chaud ni froid, mais un néant absolu où rien ne pouvait naître ni mourir, car rien n\'existait encore. Ce vide colossal séparait deux royaumes aux natures opposées, comme deux forces antagonistes attendant leur confrontation cosmique.\n\nAu nord du Ginnungagap s\'étendait Niflheim, le monde de glace et de brouillard éternel, d\'où coulaient les onze rivières Élivágar, charriant des eaux si froides qu\'elles gelaient instantanément dans le vide. Au sud brûlait Muspellheim, le royaume du feu éternel et inextinguible, gardé par le géant Surtr brandissant son épée flamboyante, dans l\'attente du jour où il incendierait tous les mondes.\n\nAinsi les forces primordiales se faisaient face dans l\'immensité du vide, préparant la création dans leur opposition même.',
+              'Au commencement des temps, avant que n\'existe aucun monde, aucune mer, aucun ciel, aucun terre, il n\'y avait que le Ginnungagap - le vide béant, l\'abîme primordial qui s\'étendait dans une solitude infinie.\n\nCe n\'était ni lumière ni ténèbres, ni chaud ni froid, mais un néant absolu où rien ne pouvait naître ni mourir, car rien n\'existait encore. Ce vide colossal séparait deux royaumes aux natures opposées, comme deux forces antagonistes attendant leur confrontation cosmique.\n\nAu nord du Ginnungagap s\'étendait Niflheim, le monde de glace et de brouillard éternel, d\'où coulaient les onze rivières Élivágar, charriant des eaux si froides qu\'elles gelaient instantanément dans le vide. Au sud brûlait Muspellheim, le royaume du feu éternel et inextinguible, gardé par le géant Surtr brandissant son épée flamboyante, dans l\'attente du jour où il incendierait tous les mondes.\n\nAinsi les forces primordiales se faisaient face dans l\'immensité du vide, préparant la création dans leur opposition même.',
         ),
         MythCard(
           id: '2',
@@ -270,27 +217,9 @@ List<MythStory> getMythStories() {
         ),
       ],
       collectibleCards: [
-        CollectibleCard(
-          id: 'ymir_card',
-          title: 'Ymir le Géant Primordial',
-          description: 'Le premier être vivant, dont le corps a servi à créer le monde.',
-          imagePath: 'cards/ymir_card.jpg',
-          tags: ['Ymir'],
-        ),
-        CollectibleCard(
-          id: 'audhumla_card',
-          title: 'Audhumla la Vache Cosmique',
-          description: 'La vache primordiale qui nourrit Ymir et révéla Buri, l\'ancêtre des dieux.',
-          imagePath: 'cards/audhumla_card.jpg',
-          tags: ['Audhumla', 'Ymir', 'Buri'],
-        ),
-        CollectibleCard(
-          id: 'ginnungagap_card',
-          title: 'Le Ginnungagap',
-          description: 'Le vide béant primordial d\'où toute la création a émergé.',
-          imagePath: 'cards/ginnungagap_card.jpg',
-          tags: ['Ginnungagap'],
-        ),
+        ymirCard,
+        audhumlaCard,
+        ginnungagapCard,
       ],
     ),
     MythStory(
@@ -341,34 +270,10 @@ List<MythStory> getMythStories() {
         ),
       ],
       collectibleCards: [
-        CollectibleCard(
-          id: 'sif_card',
-          title: 'Sif aux Cheveux d\'Or',
-          description: 'Déesse de la fertilité et épouse de Thor, célèbre pour sa magnifique chevelure dorée.',
-          imagePath: 'cards/sif_card.jpg',
-          tags: ['Sif', 'Thor'],
-        ),
-        CollectibleCard(
-          id: 'brokkr_sindri_card',
-          title: 'Brokkr et Sindri',
-          description: 'Les nains forgerons qui créèrent les plus grands trésors des dieux, dont Mjöllnir.',
-          imagePath: 'cards/brokkr_sindri_card.jpg',
-          tags: ['Brokkr', 'Sindri', 'Mjöllnir'],
-        ),
-        CollectibleCard(
-          id: 'draupnir_card',
-          title: 'Draupnir l\'Anneau',
-          description: 'L\'anneau magique d\'Odin, capable de produire huit autres anneaux d\'or toutes les neuf nuits.',
-          imagePath: 'cards/draupnir_card.jpg',
-          tags: ['Draupnir', 'Odin'],
-        ),
-        CollectibleCard(
-          id: 'gungnir_card',
-          title: 'Gungnir la Lance',
-          description: 'La lance d\'Odin qui ne manque jamais sa cible, symbole de son pouvoir et de sa sagesse.',
-          imagePath: 'cards/gungnir_card.jpg',
-          tags: ['Gungnir', 'Odin'],
-        ),
+        sifCard,
+        brokkrSindriCard,
+        draupnirCard,
+        gungnirCard,
       ],
     ),
     MythStory(
@@ -433,39 +338,10 @@ List<MythStory> getMythStories() {
         ),
       ],
       collectibleCards: [
-        CollectibleCard(
-          id: 'hrimthurs_card',
-          title: 'Hrimthurs le Bâtisseur',
-          description: 'Le géant qui proposa de construire la muraille d\'Asgard en échange de Freyja, du soleil et de la lune.',
-          imagePath: 'cards/hrimthurs_card.jpg',
-          tags: ['Hrimthurs', 'Freyja', 'Asgard'],
-        ),
-        CollectibleCard(
-          id: 'svadilfari_card',
-          title: 'Svadilfari le Cheval',
-          description: 'Le cheval magique de Hrimthurs, dont la vitesse et la force aidèrent à la construction de la muraille.',
-          imagePath: 'cards/svadilfari_card.jpg',
-          tags: ['Svadilfari', 'Hrimthurs'],
-        ),
-        CollectibleCard(
-          id: 'sleipnir_card',
-          title: 'Sleipnir le Cheval à Huit Pattes',
-          description: 'Le cheval d\'Odin, né de l\'union de Loki transformé en jument et de Svadilfari.',
-          imagePath: 'cards/sleipnir_card.jpg',
-          tags: ['Sleipnir', 'Odin', 'Loki', 'Svadilfari'],
-        ),
+        hrimthursCard,
+        svadilfariCard,
+        sleipnirCard,
       ],
     ),
   ];
-}
-
-List<CollectibleCard> getCollectibleCards() {
-  // extract Collectible cards from all stories
-  List<CollectibleCard> collectibleCards = [];
-  var mythStories = getMythStories();
-  for (var story in mythStories) {
-    collectibleCards.addAll(story.collectibleCards);
-  }
-
-  return collectibleCards;
 }
