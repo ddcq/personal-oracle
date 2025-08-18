@@ -57,7 +57,7 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
                       padding: const EdgeInsets.all(20),
                       margin: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withAlpha(128),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Column(

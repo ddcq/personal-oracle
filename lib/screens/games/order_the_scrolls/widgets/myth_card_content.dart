@@ -20,8 +20,8 @@ class MythCardContent extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(isDragging ? 16 : 20),
         boxShadow: isDragging
-            ? [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 6))]
-            : [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 8, offset: const Offset(0, 3))],
+            ? [BoxShadow(color: Colors.black.withAlpha(77), blurRadius: 12, offset: const Offset(0, 6))]
+            : [BoxShadow(color: Colors.black.withAlpha(38), blurRadius: 8, offset: const Offset(0, 3))],
         border: controller.getCardBorder(index),
       ),
       child: ClipRRect(
@@ -35,7 +35,7 @@ class MythCardContent extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.black.withOpacity(0.2), Colors.black.withOpacity(0.8)],
+                    colors: [Colors.black.withAlpha(51), Colors.black.withAlpha(204)],
                   ),
                 ),
               ),
@@ -54,7 +54,7 @@ class MythCardContent extends StatelessWidget {
                       color: Colors.white,
                       fontSize: isDragging ? 14 : 16,
                       fontWeight: FontWeight.bold,
-                      shadows: const [Shadow(offset: Offset(1, 1), blurRadius: 3, color: Colors.black)],
+                      shadows: [const Shadow(offset: Offset(1, 1), blurRadius: 3, color: Colors.black)],
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -70,7 +70,7 @@ class MythCardContent extends StatelessWidget {
                   Icons.open_with,
                   color: Colors.white,
                   size: 20,
-                  shadows: [Shadow(offset: Offset(1, 1), blurRadius: 3, color: Colors.black)],
+                  shadows: const [Shadow(offset: Offset(1, 1), blurRadius: 3, color: Colors.black)],
                 ),
               ),
             if (controller.validated)
@@ -83,7 +83,7 @@ class MythCardContent extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: controller.isCardCorrect(index) ? Colors.green : Colors.red,
                     shape: BoxShape.circle,
-                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 4, offset: const Offset(0, 2))],
+                    boxShadow: [BoxShadow(color: Colors.black.withAlpha(77), blurRadius: 4, offset: const Offset(0, 2))],
                   ),
                   child: Center(
                     child: Text(

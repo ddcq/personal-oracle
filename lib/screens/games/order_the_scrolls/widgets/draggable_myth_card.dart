@@ -74,9 +74,8 @@ class DraggableMythCard extends StatelessWidget {
             onLongPressEnd: (_) => onCardReleased(),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              transform: Matrix4.identity()
-                ..scale(isHovering ? 1.05 : 1.0)
-                ..translate(0.0, isHovering ? -4.0 : 0.0),
+              transform: Matrix4.translationValues(0.0, isHovering ? -4.0 : 0.0, 0.0) *
+                         Matrix4.diagonal3Values(isHovering ? 1.05 : 1.0, isHovering ? 1.05 : 1.0, 1.0),
               child: MythCardContent(
                 card: card,
                 index: index,
