@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/app_dialog.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart'; // Added import
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // Added import
-import 'package:google_fonts/google_fonts.dart'; // Added import
+
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class HelpDialog {
   static void show(BuildContext context) {
@@ -10,7 +11,7 @@ class HelpDialog {
     final textStyle = theme.textTheme.bodyLarge?.copyWith(
       color: const Color(0xFFC5CAE9),
       fontSize: 16.sp, // Use .sp for responsive font size
-      fontFamily: GoogleFonts.amarante().fontFamily, // Apply Amarante font
+      fontFamily: AppTextStyles.amarante,
     );
 
     showDialog(
@@ -19,7 +20,7 @@ class HelpDialog {
         title: 'Règles du jeu',
         icon: Icons.menu_book, // Changed icon to something more relevant for rules
         titleStyle: theme.textTheme.headlineSmall?.copyWith( // Added titleStyle parameter
-          fontFamily: 'AmaticSC',
+          fontFamily: AppTextStyles.amaticSC,
           color: Colors.white,
           fontWeight: FontWeight.bold,
           fontSize: 24.sp, // Adjusted font size

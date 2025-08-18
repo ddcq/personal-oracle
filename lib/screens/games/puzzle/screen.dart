@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'puzzle_screen.dart';
 import 'dart:math';
 import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 // =========================================
 // PUZZLE GAME - Les Runes Dispersées
@@ -20,13 +22,7 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/backgrounds/landscape.jpg'),
-            fit: BoxFit.cover,
-          ),
-        ),
+      body: AppBackground(
         child: SafeArea(
           child: Stack( // Wrap with a Stack
             children: [
@@ -38,7 +34,7 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
                       'Reconstitue les Runes Sacrées',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                            fontFamily: 'AmaticSC',
+                            fontFamily: AppTextStyles.amaticSC,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 60.sp,

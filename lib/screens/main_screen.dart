@@ -4,7 +4,8 @@ import 'package:oracle_d_asgard/screens/quiz_screen.dart';
 import 'package:oracle_d_asgard/screens/games/menu.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -12,10 +13,7 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
-        ),
+      body: AppBackground(
         child: SafeArea(
           child: Center(
             child: OrientationBuilder(
@@ -31,7 +29,7 @@ class MainScreen extends StatelessWidget {
                             'Oracle d’Asgard',
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                  fontFamily: 'AmaticSC',
+                                  fontFamily: AppTextStyles.amaticSC,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 70.sp,
@@ -103,7 +101,7 @@ class MainScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.5.sp,
                     color: Colors.white,
-                    fontFamily: GoogleFonts.amarante().fontFamily,
+                    fontFamily: AppTextStyles.amarante,
                   );
 
                   return Column(
@@ -118,7 +116,7 @@ class MainScreen extends StatelessWidget {
                               'Oracle d’Asgard',
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                    fontFamily: 'AmaticSC',
+                                    fontFamily: AppTextStyles.amaticSC,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: 2.0.sp,

@@ -6,6 +6,8 @@ import 'package:oracle_d_asgard/screens/games/snake/screen.dart';
 import 'package:oracle_d_asgard/screens/games/puzzle/screen.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 class MenuPrincipal extends StatelessWidget {
   MenuPrincipal({super.key});
@@ -38,10 +40,7 @@ class MenuPrincipal extends StatelessWidget {
           },
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
-        ),
+      body: AppBackground(
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -52,7 +51,7 @@ class MenuPrincipal extends StatelessWidget {
                     'Mini-Jeux',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      fontFamily: 'AmaticSC',
+                      fontFamily: AppTextStyles.amaticSC,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 70.sp,

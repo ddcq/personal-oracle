@@ -14,6 +14,8 @@ import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -84,10 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
-        ),
+      body: AppBackground(
         child: Consumer<GamificationService>(
           builder: (context, gamificationService, child) {
             return FutureBuilder<List<List<Map<String, dynamic>>>>(
@@ -135,7 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   deity.name,
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                    fontFamily: 'AmaticSC',
+                                    fontFamily: AppTextStyles.amaticSC,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 70,
@@ -213,7 +212,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Text(
                   'Musique d\'ambiance',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'AmaticSC', fontSize: 22),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC, fontSize: 22),
                 ),
                 Switch(
                   value: !soundService.isMuted,
@@ -237,7 +236,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Text(
         title,
         style: Theme.of(context).textTheme.displayMedium?.copyWith(
-          fontFamily: 'AmaticSC',
+          fontFamily: AppTextStyles.amaticSC,
           color: Colors.white,
           fontWeight: FontWeight.bold,
           fontSize: 40,
@@ -281,7 +280,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (scores.isEmpty) {
       return Text(
         'Aucun score de Snake pour l’instant.',
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: 'AmaticSC', fontSize: 20),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
       );
     }
     return Column(
@@ -292,7 +291,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: 'AmaticSC',
+            fontFamily: AppTextStyles.amaticSC,
             fontSize: 28,
             shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(3.0, 3.0))],
           ),
@@ -320,7 +319,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'AmaticSC',
+                            fontFamily: AppTextStyles.amaticSC,
                             fontSize: 22,
                           ),
                         ),
@@ -347,7 +346,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (cards.isEmpty) {
       return Text(
         'Aucune carte à collectionner débloquée pour l’instant.',
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: 'AmaticSC', fontSize: 20),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
       );
     }
     return GridView.builder(
@@ -372,7 +371,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (storyProgress.isEmpty) {
       return Text(
         'Aucune histoire débloquée pour l’instant.',
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: 'AmaticSC', fontSize: 20),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
       );
     }
     final allMythStories = getMythStories();

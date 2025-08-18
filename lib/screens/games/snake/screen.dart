@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class SnakeGame extends StatefulWidget {
   const SnakeGame({super.key});
@@ -133,7 +134,7 @@ class StartOverlay extends StatelessWidget {
               Text(
                 'Guide Jörmungandr',
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                  fontFamily: 'AmaticSC',
+                  fontFamily: AppTextStyles.amaticSC,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 40.sp,

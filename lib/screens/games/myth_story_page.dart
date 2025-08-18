@@ -5,6 +5,8 @@ import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:provider/provider.dart';
 
 class MythStoryPage extends StatefulWidget {
@@ -67,7 +69,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
           widget.mythStory.title,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                fontFamily: 'AmaticSC',
+                fontFamily: AppTextStyles.amaticSC,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 30, // Adjusted font size for AppBar
@@ -80,12 +82,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
         ),
         centerTitle: true,
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/backgrounds/landscape.jpg'),
-              fit: BoxFit.cover),
-        ),
+      body: AppBackground(
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(

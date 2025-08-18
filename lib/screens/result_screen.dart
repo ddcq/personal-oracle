@@ -8,6 +8,8 @@ import '../widgets/deity_card.dart'; // 👈 Import it
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/confetti_overlay.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 class ResultScreen extends StatefulWidget {
   final String deity;
@@ -44,10 +46,7 @@ class _ResultScreenState extends State<ResultScreen> {
         controller: _confettiController,
         child: Stack(
           children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
-              ),
+            AppBackground(
               child: Center(
                 child: SingleChildScrollView(
                   child: Padding(
@@ -61,7 +60,7 @@ class _ResultScreenState extends State<ResultScreen> {
                             'Félicitations !',
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                              fontFamily: 'AmaticSC',
+                              fontFamily: AppTextStyles.amaticSC,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 70.sp,

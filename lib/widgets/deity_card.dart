@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'dart:ui'; // For ImageFilter
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 import '../models/deity.dart'; // Make sure this model matches the structure from AppData
 
@@ -75,7 +76,7 @@ class _DeityCardState extends State<DeityCard> {
                       Text(
                         widget.deity.name,
                         style: TextStyle(
-                          fontFamily: 'AmaticSC',
+                          fontFamily: AppTextStyles.amaticSC,
                           fontSize: 48.sp,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -89,7 +90,7 @@ class _DeityCardState extends State<DeityCard> {
                       Text(
                         widget.deity.title,
                         style: TextStyle(
-                          fontFamily: 'AmaticSC',
+                          fontFamily: AppTextStyles.amaticSC,
                           fontSize: 28.sp,
                           color: Colors.white,
                           shadows: [Shadow(offset: Offset(2.0, 2.0), blurRadius: 4.0, color: Colors.black.withAlpha(120))],

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+
+import 'package:oracle_d_asgard/utils/text_styles.dart';
+
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'package:oracle_d_asgard/widgets/confetti_overlay.dart';
@@ -70,7 +73,7 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                     Text(
                       'Victoire !',
                       style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                        fontFamily: 'AmaticSC',
+                        fontFamily: AppTextStyles.amaticSC,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 70, // Adjust size as needed
@@ -84,7 +87,7 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                     Text(
                       widget.rewardCard.title,
                       style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                        fontFamily: 'AmaticSC',
+                        fontFamily: AppTextStyles.amaticSC,
                         color: Colors.amber,
                         fontWeight: FontWeight.bold,
                         fontSize: 30, // Adjust size as needed

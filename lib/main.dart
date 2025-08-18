@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
 
 void main() async {
@@ -67,8 +68,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             primarySwatch: Colors.blue,
             scaffoldBackgroundColor: AppConstants.primaryDark,
             textTheme: TextTheme(
-              headlineLarge: TextStyle(color: Colors.white, fontSize: 28.sp, fontWeight: FontWeight.bold),
-              headlineSmall: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.w600),
+              headlineLarge: TextStyle(color: Colors.white, fontSize: 28.sp, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC),
+              headlineSmall: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.w600, fontFamily: AppTextStyles.amaticSC),
               bodyMedium: TextStyle(color: Colors.white70, fontSize: 16.sp),
               bodySmall: TextStyle(color: Colors.white60, fontSize: 14.sp),
             ),

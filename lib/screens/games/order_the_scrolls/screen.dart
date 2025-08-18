@@ -6,7 +6,9 @@ import 'game_controller.dart';
 import './widgets/game_grid.dart';
 import './widgets/game_controls.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // Added import
-import 'package:google_fonts/google_fonts.dart'; // Added import
+
+import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 class OrderTheScrollsGame extends StatefulWidget {
   const OrderTheScrollsGame({super.key});
@@ -43,10 +45,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
           return Stack(
             children: [
               Scaffold(
-                body: Container( // Changed Scaffold background to Container with DecorationImage
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
-                  ),
+                body: AppBackground(
                   child: CustomScrollView(
                     slivers: [
                       SliverAppBar(
@@ -69,7 +68,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
                               Text(
                                 controller.selectedStory.title,
                                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                  fontFamily: 'AmaticSC',
+                                  fontFamily: AppTextStyles.amaticSC,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 24.sp, // Adjusted font size
@@ -83,7 +82,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
                                 style: TextStyle(
                                   color: Colors.white60,
                                   fontSize: 16.sp,
-                                  fontFamily: GoogleFonts.amarante().fontFamily,
+                                  fontFamily: AppTextStyles.amarante,
                                   shadows: [const Shadow(blurRadius: 10.0, color: Colors.black54, offset: Offset(2.0, 2.0))],
                                 ),
                               ),

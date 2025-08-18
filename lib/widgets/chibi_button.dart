@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class ChibiButton extends StatefulWidget {
   final String? text;
@@ -75,7 +75,7 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2.sp,
                     color: Colors.white,
-                    fontFamily: GoogleFonts.amarante().fontFamily,
+                    fontFamily: AppTextStyles.amarante,
                   ),
                 ),
               ),
