@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -11,70 +12,72 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Muraille d\'Asgard')),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'La Muraille d\'Asgard',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFFFD700), // Texte doré
+      body: AppBackground(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'La Muraille d\'Asgard',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFFD700), // Texte doré
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 24),
-              Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Color(0xFF0F3460),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Color(0xFFFFD700), width: 1),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'Règles du jeu:',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                SizedBox(height: 24),
+                Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF0F3460),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Color(0xFFFFD700), width: 1),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Règles du jeu:',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Construisez la muraille parfaite comme le géant bâtisseur.\nVotre objectif est de remplir toutes les cases jusqu\'à la ligne dorée sans laisser de trous inaccessibles (fermés de tous les côtés).',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white70, fontSize: 16),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Contrôles:\n←→ ou A/D pour bouger\n↑/W/Space/Q/E pour pivoter\n↓/S pour descendre\n(Les contrôles tactiles sont disponibles en jeu)',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white54, fontSize: 14),
-                    ),
-                  ],
+                      SizedBox(height: 16),
+                      Text(
+                        'Construisez la muraille parfaite comme le géant bâtisseur.\nVotre objectif est de remplir toutes les cases jusqu\'à la ligne dorée sans laisser de trous inaccessibles (fermés de tous les côtés).',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white70, fontSize: 16),
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Contrôles:\n←→ ou A/D pour bouger\n↑/W/Space/Q/E pour pivoter\n↓/S pour descendre\n(Les contrôles tactiles sont disponibles en jeu)',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white54, fontSize: 14),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 32),
-              
-              SizedBox(height: 16),
-              ChibiButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => GameScreen()),
-                  );
-                },
-                text: 'Construire le Mur',
-                color: const Color(0xFFFFD700), // Fond doré
-                textStyle: const TextStyle(fontSize: 20, color: Colors.black),
-              ),
-            ],
+                SizedBox(height: 32),
+                
+                SizedBox(height: 16),
+                ChibiButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => GameScreen()),
+                    );
+                  },
+                  text: 'Construire le Mur',
+                  color: const Color(0xFFFFD700), // Fond doré
+                  textStyle: const TextStyle(fontSize: 20, color: Colors.black),
+                ),
+              ],
+            ),
           ),
         ),
       ),
