@@ -107,7 +107,6 @@ class _QuizScreenState extends State<QuizScreen> {
                                   ),
                             ),
                           ),
-                          SizedBox(height: 20.h),
                         ],
                       ),
                     ),
@@ -124,7 +123,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           final gradientColors = traits.isNotEmpty ? TraitColors.gradients[traits.first] : null;
 
                           return Padding(
-                            padding: EdgeInsets.only(bottom: 15.h),
+                            padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 10.h),
                             child: AnswerButton(
                               text: answer.text,
                               onPressed: () => handleAnswer(index),
@@ -163,11 +162,11 @@ class _QuizScreenState extends State<QuizScreen> {
                             ),
                       ),
                     ),
-                    SizedBox(height: 20.h),
-                    ListView.separated(
+                    Expanded(
+                      child: ListView.separated(
                       shrinkWrap: true,
                       itemCount: question.answers.length,
-                      separatorBuilder: (context, index) => SizedBox(height: 15.h),
+                      separatorBuilder: (context, index) => SizedBox(height: 5.h),
                       itemBuilder: (context, index) {
                         final answer = question.answers[index];
                         final String letter = String.fromCharCode('A'.codeUnitAt(0) + index);
@@ -175,7 +174,7 @@ class _QuizScreenState extends State<QuizScreen> {
                         final gradientColors = traits.isNotEmpty ? TraitColors.gradients[traits.first] : null;
 
                         return Padding(
-                          padding: EdgeInsets.only(bottom: 15.h),
+                          padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 10.h),
                           child: AnswerButton(
                             text: answer.text,
                             onPressed: () => handleAnswer(index),
@@ -184,6 +183,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           ),
                         );
                       },
+                    ),
                     ),
                   ],
                 ),
