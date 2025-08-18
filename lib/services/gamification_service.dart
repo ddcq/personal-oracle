@@ -34,26 +34,9 @@ class GamificationService with ChangeNotifier {
     return await db.query('game_scores', where: 'game_name = ?', whereArgs: [gameName], orderBy: 'score DESC');
   }
 
-  Future<void> unlockTrophy(String trophyId) async {
-    final db = await _databaseService.database;
-    await db.insert(
-      'player_trophies',
-      {'trophy_id': trophyId, 'unlocked_at': DateTime.now().millisecondsSinceEpoch},
-      conflictAlgorithm: ConflictAlgorithm.ignore, // Avoid duplicate entries
-    );
-    notifyListeners(); // Notify listeners
-  }
+  
 
-  Future<bool> isTrophyUnlocked(String trophyId) async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query('player_trophies', where: 'trophy_id = ?', whereArgs: [trophyId]);
-    return result.isNotEmpty;
-  }
-
-  Future<List<Map<String, dynamic>>> getUnlockedTrophies() async {
-    final db = await _databaseService.database;
-    return await db.query('player_trophies');
-  }
+  
 
   Future<void> unlockCollectibleCard(String cardId) async {
     final db = await _databaseService.database;

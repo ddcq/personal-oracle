@@ -30,6 +30,7 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   void dispose() {
+    _confettiController.stop(); // Stop the confetti animation
     _confettiController.dispose();
     super.dispose();
   }

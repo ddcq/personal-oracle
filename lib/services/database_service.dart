@@ -37,13 +37,7 @@ class DatabaseService {
       )
     ''');
 
-    await db.execute('''
-      CREATE TABLE player_trophies (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        trophy_id TEXT NOT NULL UNIQUE,
-        unlocked_at INTEGER NOT NULL
-      )
-    ''');
+    
 
     await db.execute('''
       CREATE TABLE collectible_cards (

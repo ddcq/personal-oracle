@@ -93,7 +93,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return FutureBuilder<List<List<Map<String, dynamic>>>>(
               future: Future.wait([
                 gamificationService.getGameScores('Snake'),
-                gamificationService.getUnlockedTrophies(),
                 gamificationService.getUnlockedCollectibleCards(),
                 gamificationService.getUnlockedStoryProgress(),
               ]),
@@ -106,9 +105,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   return const Center(child: Text('No data available.'));
                 } else {
                   final List<Map<String, dynamic>> snakeScores = snapshot.data![0];
-                  final List<Map<String, dynamic>> unlockedTrophies = snapshot.data![1];
-                  final List<Map<String, dynamic>> unlockedCards = snapshot.data![2];
-                  final List<Map<String, dynamic>> storyProgress = snapshot.data![3];
+                  final List<Map<String, dynamic>> unlockedCards = snapshot.data![1];
+                  final List<Map<String, dynamic>> storyProgress = snapshot.data![2];
 
                   return ListView(
                     padding: const EdgeInsets.all(16.0),
@@ -183,9 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _buildSectionTitle('Scores de jeu'),
                       _buildGameScores(snakeScores),
                       const SizedBox(height: 20),
-                      _buildSectionTitle('Trophées'),
-                      _buildTrophies(unlockedTrophies),
-                      const SizedBox(height: 20),
+                      
                       _buildSectionTitle('Cartes à collectionner'),
                       _buildCollectibleCards(unlockedCards),
                       const SizedBox(height: 20),
@@ -345,40 +341,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildTrophies(List<Map<String, dynamic>> trophies) {
-    if (trophies.isEmpty) {
-      return Text(
-        'Aucun trophée débloqué pour l’instant.',
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: 'AmaticSC', fontSize: 20),
-      );
-    }
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 0.8),
-      itemCount: trophies.length,
-      itemBuilder: (context, index) {
-        final trophy = trophies[index];
-        return Card(
-          color: Colors.white.withAlpha(25),
-          elevation: 5,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.emoji_events, color: Colors.amber, size: 40),
-              const SizedBox(height: 8),
-              Text(
-                trophy['trophy_id'],
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'AmaticSC', fontSize: 20),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  
 
   Widget _buildCollectibleCards(List<Map<String, dynamic>> cards) {
     if (cards.isEmpty) {

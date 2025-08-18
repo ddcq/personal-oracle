@@ -173,9 +173,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       overlays.add('gameOverOverlay');
       pauseEngine();
       gamificationService.saveGameScore('Snake', gameState.score);
-      if (gameState.score > 50) {
-        gamificationService.unlockTrophy('snake_master');
-      }
+      
       if (gameState.score > 80) {
         gamificationService.unlockCollectibleCard('fenrir_card');
       }
