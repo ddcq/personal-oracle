@@ -66,21 +66,26 @@ class _QuizScreenState extends State<QuizScreen> {
             Navigator.pop(context);
           },
         ),
+        title: Text(
+          'Question ${currentQuestion + 1} sur ${AppData.questions.length}',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
       ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
         ),
-        child: SafeArea(
-          child: isLandscape
+        child: isLandscape
               ? Row(
                   children: <Widget>[
                     Expanded(
                       flex: 1,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          ProgressBar(progress: progress, displayText: 'Question ${currentQuestion + 1} sur ${AppData.questions.length}'),
+                          SizedBox(height: 20.h),
+                          ProgressBar(progress: progress),
                           Container(
                             padding: EdgeInsets.all(20.w),
                             margin: EdgeInsets.all(20.w),
@@ -92,8 +97,8 @@ class _QuizScreenState extends State<QuizScreen> {
                               question.question,
                               textAlign: TextAlign.center,
                               maxLines: 4, // Allow multiple lines for questions
-                              minFontSize: 10.sp,
-                              stepGranularity: 1.0.sp,
+                              minFontSize: 10.0,
+                              stepGranularity: 1.0,
                               style: Theme.of(context).textTheme.displayMedium?.copyWith(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -102,7 +107,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                   ),
                             ),
                           ),
-                          SizedBox.shrink(), // Spacer to push content up
+                          SizedBox(height: 20.h),
                         ],
                       ),
                     ),
@@ -133,9 +138,10 @@ class _QuizScreenState extends State<QuizScreen> {
                   ],
                 )
               : Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    ProgressBar(progress: progress, displayText: 'Question ${currentQuestion + 1} sur ${AppData.questions.length}'),
+                    SizedBox(height: 20.h),
+                    ProgressBar(progress: progress),
                     Container(
                       padding: EdgeInsets.all(20.w),
                       margin: EdgeInsets.all(20.w),
@@ -147,8 +153,8 @@ class _QuizScreenState extends State<QuizScreen> {
                         question.question,
                         textAlign: TextAlign.center,
                         maxLines: 4, // Allow multiple lines for questions
-                        minFontSize: 10.sp,
-                        stepGranularity: 1.0.sp,
+                        minFontSize: 10.0,
+                        stepGranularity: 1.0,
                         style: Theme.of(context).textTheme.displayMedium?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -157,6 +163,7 @@ class _QuizScreenState extends State<QuizScreen> {
                             ),
                       ),
                     ),
+                    SizedBox(height: 20.h),
                     ListView.separated(
                       shrinkWrap: true,
                       itemCount: question.answers.length,
@@ -180,7 +187,6 @@ class _QuizScreenState extends State<QuizScreen> {
                     ),
                   ],
                 ),
-        ),
       ),
     );
   }

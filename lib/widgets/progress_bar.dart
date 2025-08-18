@@ -24,8 +24,8 @@ class ProgressBar extends StatelessWidget {
             AutoSizeText(
               displayText!,
               maxLines: 1,
-              minFontSize: 10.sp,
-              stepGranularity: 1.0.sp,
+              minFontSize: 10.0,
+              stepGranularity: 1.0,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 22.sp,
@@ -75,8 +75,8 @@ class ProgressBar extends StatelessWidget {
                     child: AutoSizeText(
                       '${(progress * 100).round()}%',
                       maxLines: 1,
-                      minFontSize: 10.sp,
-                      stepGranularity: 1.0.sp,
+                      minFontSize: 10.0,
+                      stepGranularity: 1.0,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18.sp,

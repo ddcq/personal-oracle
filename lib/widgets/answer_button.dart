@@ -58,11 +58,11 @@ class AnswerButton extends StatelessWidget {
               child: AutoSizeText(
                 text,
                 maxLines: 2,
-                minFontSize: 10.sp,
-                stepGranularity: 1.0.sp,
+                minFontSize: 10.0,
+                stepGranularity: 1.0,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 22.sp,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1.2.sp,
                   shadows: [Shadow(blurRadius: 3.0.r, color: Colors.black54, offset: Offset(2.0.w, 2.0.h))],

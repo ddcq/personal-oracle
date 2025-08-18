@@ -54,23 +54,36 @@ class _ResultScreenState extends State<ResultScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          'Félicitations !',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                            fontFamily: 'AmaticSC',
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 70.sp,
-                            letterSpacing: 2.0.sp,
-                            shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+                        FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+                            'Félicitations !',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                              fontFamily: 'AmaticSC',
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 70.sp,
+                              letterSpacing: 2.0.sp,
+                              shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+                            ),
                           ),
                         ),
                         SizedBox(height: 16.h),
                         Text(
-                          'Votre Divinité Tutélaire est :',
+                          'Ta divinité gardienne est :',
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white70, fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              const Shadow(
+                                blurRadius: 10.0,
+                                color: Colors.black,
+                                offset: Offset(2.0, 2.0),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(height: 32.h),
                         DeityCard(deity: deityData),
