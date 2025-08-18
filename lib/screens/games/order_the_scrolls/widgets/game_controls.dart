@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../game_controller.dart';
-
+import 'package:oracle_d_asgard/widgets/chibi_button.dart'; // Added import
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // Added import for sp/h/w
 
 class GameControls extends StatelessWidget {
   final GameController controller;
@@ -16,25 +17,22 @@ class GameControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final buttonTextStyle = TextStyle( // Define a common text style for buttons
+      fontSize: 16.sp,
+      fontWeight: FontWeight.bold,
+      letterSpacing: 1.5.sp,
+      color: Colors.white,
+    );
+
     if (!controller.validated) {
       return SizedBox(
         width: double.infinity,
-        height: 50,
-        child: TextButton(
+        height: 50.h, // Adjusted height with .h
+        child: ChibiButton( // Replaced TextButton with ChibiButton
+          text: 'Valider l\'ordre',
+          color: const Color(0xFFF9A825), // Orange color from main screen
           onPressed: onValidate,
-          style: TextButton.styleFrom(
-            backgroundColor: const Color(0xFF6366F1),
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          ),
-          child: const Text(
-            'Valider l\'ordre',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          textStyle: buttonTextStyle,
         ),
       );
     }
@@ -46,7 +44,7 @@ class GameControls extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFFEF4444).withAlpha(51),
+              color: Colors.black.withAlpha(150), // Changed to black with alpha 150
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: const Color(0xFFEF4444),
@@ -63,13 +61,13 @@ class GameControls extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-        
+
         if (controller.isOrderCompletelyCorrect())
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF22C55E).withAlpha(51),
+              color: Colors.black.withAlpha(150), // Changed to black with alpha 150
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: const Color(0xFF22C55E),
@@ -86,27 +84,16 @@ class GameControls extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-        
-        const SizedBox(height: 12),
+
+        SizedBox(height: 12.h), // Adjusted height with .h
         SizedBox(
           width: double.infinity,
-          height: 50,
-          child: TextButton(
+          height: 50.h, // Adjusted height with .h
+          child: ChibiButton( // Replaced TextButton with ChibiButton
+            text: 'Rejouer avec un autre mythe',
+            color: const Color(0xFF1E88E5), // Blue color from main screen
             onPressed: onReset,
-            style: TextButton.styleFrom(
-              backgroundColor: const Color(0xFF06B6D4),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            ),
-            child: const Text(
-              'Rejouer avec un autre mythe',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            textStyle: buttonTextStyle,
           ),
         ),
       ],

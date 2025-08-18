@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/app_dialog.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart'; // Added import
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // Added import
+import 'package:google_fonts/google_fonts.dart'; // Added import
 
 class HelpDialog {
   static void show(BuildContext context) {
     final theme = Theme.of(context);
     final textStyle = theme.textTheme.bodyLarge?.copyWith(
       color: const Color(0xFFC5CAE9),
-      fontSize: 16,
+      fontSize: 16.sp, // Use .sp for responsive font size
+      fontFamily: GoogleFonts.amarante().fontFamily, // Apply Amarante font
     );
 
     showDialog(
       context: context,
       builder: (ctx) => AppDialog(
         title: 'Règles du jeu',
+        icon: Icons.menu_book, // Changed icon to something more relevant for rules
+        titleStyle: theme.textTheme.headlineSmall?.copyWith( // Added titleStyle parameter
+          fontFamily: 'AmaticSC',
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 24.sp, // Adjusted font size
+          letterSpacing: 1.5.sp,
+          shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
+        ),
         content: SingleChildScrollView(
           child: ListBody(
             children: [
@@ -45,23 +58,18 @@ class HelpDialog {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: const Color(0xFF81D4FA).withAlpha(51),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text(
-                'J\'ai compris !',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+          SizedBox( // Wrap ChibiButton in SizedBox for consistent height
+            width: double.infinity,
+            height: 50.h,
+            child: ChibiButton( // Replaced TextButton with ChibiButton
+              text: 'J\'ai compris !',
+              color: const Color(0xFFE53935), // Red color from main screen buttons
+              onPressed: () => Navigator.pop(ctx),
+              textStyle: TextStyle( // Define text style for ChibiButton
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5.sp,
+                color: Colors.white,
               ),
             ),
           ),
@@ -74,7 +82,7 @@ class HelpDialog {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('• ', style: TextStyle(color: Color(0xFF81D4FA), fontSize: 16)),
+        Text('• ', style: style?.copyWith(color: const Color(0xFF81D4FA))), // Use style for bullet point
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(bottom: 8.0),

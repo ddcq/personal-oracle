@@ -5,6 +5,7 @@ class AppDialog extends StatelessWidget {
   final Widget content;
   final List<Widget> actions;
   final IconData icon;
+  final TextStyle? titleStyle; // New parameter
 
   const AppDialog({
     super.key,
@@ -12,6 +13,7 @@ class AppDialog extends StatelessWidget {
     required this.content,
     this.actions = const [],
     this.icon = Icons.help_outline,
+    this.titleStyle, // Initialize new parameter
   });
 
   @override
@@ -27,7 +29,7 @@ class AppDialog extends StatelessWidget {
           const SizedBox(width: 12),
           Text(
             title,
-            style: theme.textTheme.headlineSmall?.copyWith(
+            style: titleStyle ?? theme.textTheme.headlineSmall?.copyWith( // Use titleStyle if provided
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),

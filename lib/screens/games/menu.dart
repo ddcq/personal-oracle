@@ -21,7 +21,7 @@ class MenuPrincipal extends StatelessWidget {
     ),
     _MiniJeuItem("Le Serpent de Midgard", const Color(0xFF22C55E), const Color(0xFF1A9B49), () => const SnakeGame()),
     _MiniJeuItem("Conquête de Territoire", const Color(0xFFFF6B35), const Color(0xFFCC552A), () => QixGameScreen()),
-    _MiniJeuItem("Accueil du Guerrier", const Color(0xFF10B981), const Color(0xFF0C8C64), () => WelcomeScreen()),
+    
   ];
 
   @override

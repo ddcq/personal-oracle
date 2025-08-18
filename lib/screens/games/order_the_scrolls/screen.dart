@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'game_controller.dart';
 import './widgets/game_grid.dart';
 import './widgets/game_controls.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // Added import
+import 'package:google_fonts/google_fonts.dart'; // Added import
 
 class OrderTheScrollsGame extends StatefulWidget {
   const OrderTheScrollsGame({super.key});
@@ -15,7 +17,7 @@ class OrderTheScrollsGame extends StatefulWidget {
 
 class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
   late GameController _gameController;
-  
+
 
   @override
   void initState() {
@@ -30,7 +32,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
     super.dispose();
   }
 
-  
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,124 +43,126 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
           return Stack(
             children: [
               Scaffold(
-                backgroundColor: const Color(0xFF0F0F23),
-                body: CustomScrollView(
-                  slivers: [
-                    SliverAppBar(
-                      expandedHeight: 120,
-                      floating: false,
-                      pinned: true,
-                      backgroundColor: const Color(0xFF1E1E2E),
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                const Color(0xFF1E1E2E),
-                                const Color(0xFF0F0F23),
-                              ],
-                            ),
-                          ),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(height: 20),
-                                Text(
-                                  controller.selectedStory.title,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                body: Container( // Changed Scaffold background to Container with DecorationImage
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
+                  ),
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverAppBar(
+                        expandedHeight: 120,
+                        floating: false,
+                        pinned: true,
+                        backgroundColor: Colors.transparent, // Changed to transparent
+                        leading: IconButton( // Explicitly define leading back button
+                          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        flexibleSpace: FlexibleSpaceBar(
+                          background: Container(), // Removed gradient background
+                          centerTitle: true, // Center title for better appearance
+                          title: Column(
+                            mainAxisAlignment: MainAxisAlignment.end, // Align to bottom
+                            children: [
+                              Text(
+                                controller.selectedStory.title,
+                                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                                  fontFamily: 'AmaticSC',
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24.sp, // Adjusted font size
+                                  letterSpacing: 2.0.sp,
+                                  shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
                                 ),
-                                const SizedBox(height: 8),
-                                const Text(
-                                  'Reconstitue l\'histoire',
-                                  style: TextStyle(
-                                    color: Colors.white60,
-                                    fontSize: 16,
-                                  ),
+                              ),
+                              SizedBox(height: 4.h),
+                              Text(
+                                'Reconstitue l\'histoire',
+                                style: TextStyle(
+                                  color: Colors.white60,
+                                  fontSize: 16.sp,
+                                  fontFamily: GoogleFonts.amarante().fontFamily,
+                                  shadows: [const Shadow(blurRadius: 10.0, color: Colors.black54, offset: Offset(2.0, 2.0))],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      actions: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 16),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF6366F1).withAlpha(51),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: IconButton(
-                            icon: const Icon(Icons.help_outline, color: Color(0xFF6366F1)),
-                            onPressed: () => HelpDialog.show(context),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SliverPadding(
-                      padding: const EdgeInsets.all(20),
-                      sliver: SliverList(
-                        delegate: SliverChildListDelegate([
+                        actions: [
                           Container(
+                            margin: const EdgeInsets.only(right: 16),
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  const Color(0xFF6366F1).withAlpha(51),
-                                  const Color(0xFF6366F1).withAlpha(12),
+                              color: const Color(0xFF6366F1).withAlpha(51),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: IconButton(
+                              icon: const Icon(Icons.help_outline, color: Colors.white),
+                              onPressed: () => HelpDialog.show(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.all(20),
+                        sliver: SliverList(
+                          delegate: SliverChildListDelegate([
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    const Color(0xFF6366F1).withAlpha(51),
+                                    const Color(0xFF6366F1).withAlpha(12),
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: const Color(0xFF6366F1).withAlpha(76),
+                                  width: 1,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF6366F1).withAlpha(25),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
                                 ],
                               ),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: const Color(0xFF6366F1).withAlpha(76),
-                                width: 1,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(0xFF6366F1).withAlpha(25),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: GameGrid(
+                                  controller: controller,
+                                  onCardReorder: (fromIndex, toIndex) {
+                                    controller.reorderCards(fromIndex, toIndex);
+                                  },
+                                  onDragStarted: () {
+                                    // Logique supplémentaire si nécessaire
+                                  },
+                                  onDragEnd: () {
+                                    controller.setDraggedIndex(null);
+                                  },
+                                  onCardPressed: (card) {},
+                                onCardReleased: () {},
                                 ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: GameGrid(
-                                controller: controller,
-                                onCardReorder: (fromIndex, toIndex) {
-                                  controller.reorderCards(fromIndex, toIndex);
-                                },
-                                onDragStarted: () {
-                                  // Logique supplémentaire si nécessaire
-                                },
-                                onDragEnd: () {
-                                  controller.setDraggedIndex(null);
-                                },
-                                onCardPressed: (card) {},
-                              onCardReleased: () {},
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                          GameControls(
-                            controller: controller,
-                            onValidate: () => controller.validateOrder(),
-                            onReset: () => controller.resetGame(),
-                          ),
-                        ]),
+                            const SizedBox(height: 20),
+                            GameControls(
+                              controller: controller,
+                              onValidate: () => controller.validateOrder(),
+                              onReset: () => controller.resetGame(),
+                            ),
+                          ]),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              
+
             ],
           );
         },

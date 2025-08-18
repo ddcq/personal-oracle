@@ -65,15 +65,18 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
               color: widget.color,
-              child: widget.child ?? Text(
-                widget.text!,
-                textAlign: TextAlign.center,
-                style: widget.textStyle ?? TextStyle(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2.sp,
-                  color: Colors.white,
-                  fontFamily: GoogleFonts.amarante().fontFamily,
+              child: widget.child ?? FittedBox(
+                fit: BoxFit.scaleDown, // Scale down if needed
+                child: Text(
+                  widget.text!,
+                  textAlign: TextAlign.center,
+                  style: widget.textStyle ?? TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.sp,
+                    color: Colors.white,
+                    fontFamily: GoogleFonts.amarante().fontFamily,
+                  ),
                 ),
               ),
             ),

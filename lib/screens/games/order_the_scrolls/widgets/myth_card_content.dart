@@ -20,8 +20,8 @@ class MythCardContent extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(isDragging ? 16 : 20),
         boxShadow: isDragging
-            ? [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 6))]
-            : [BoxShadow(color: Colors.black.withValues(alpha: 0.15), blurRadius: 8, offset: const Offset(0, 3))],
+            ? [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 6))]
+            : [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 8, offset: const Offset(0, 3))],
         border: controller.getCardBorder(index),
       ),
       child: ClipRRect(
@@ -35,7 +35,7 @@ class MythCardContent extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.black.withValues(alpha: 0.2), Colors.black.withValues(alpha: 0.8)],
+                    colors: [Colors.black.withOpacity(0.2), Colors.black.withOpacity(0.8)],
                   ),
                 ),
               ),
@@ -83,7 +83,7 @@ class MythCardContent extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: controller.isCardCorrect(index) ? Colors.green : Colors.red,
                     shape: BoxShape.circle,
-                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 4, offset: const Offset(0, 2))],
+                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 4, offset: const Offset(0, 2))],
                   ),
                   child: Center(
                     child: Text(
