@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
 class GameMenu extends StatelessWidget {
   final VoidCallback onStartGame;
@@ -57,22 +58,14 @@ class GameMenu extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-          ElevatedButton(
+          ChibiButton(
             onPressed: onStartGame,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFF6B35),
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Text(
-              '⚔️ Commencer la Conquête',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            text: '⚔️ Commencer la Conquête',
+            color: const Color(0xFFFF6B35),
+            textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],

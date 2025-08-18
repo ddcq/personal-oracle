@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/main_screen.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
 class DefeatScreen extends StatelessWidget {
   const DefeatScreen({super.key});
@@ -32,15 +33,11 @@ class DefeatScreen extends StatelessWidget {
                 const Spacer(),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
+                  child: ChibiButton(
                     onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainScreen()), (route) => false),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                    child: const Text('Retour au menu principal', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    text: 'Retour au menu principal',
+                    color: Colors.red,
+                    textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],

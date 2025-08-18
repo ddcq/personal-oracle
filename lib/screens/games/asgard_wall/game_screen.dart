@@ -7,6 +7,7 @@ import 'package:oracle_d_asgard/screens/games/asgard_wall/defeat_screen.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_components.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_data.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/victory_screen.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -669,21 +670,25 @@ class _GameScreenState extends State<GameScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(
-                      onPressed: gameActive ? movePieceLeft : null,
-                      child: Icon(Icons.arrow_left),
+                    ChibiButton(
+                      onPressed: gameActive ? movePieceLeft : () {},
+                      color: Colors.blueGrey, // Consistent color for game controls
+                      child: Icon(Icons.arrow_left, color: Colors.white),
                     ),
-                    ElevatedButton(
-                      onPressed: gameActive ? rotatePiece : null,
-                      child: Icon(Icons.rotate_right),
+                    ChibiButton(
+                      onPressed: gameActive ? rotatePiece : () {},
+                      color: Colors.blueGrey,
+                      child: Icon(Icons.rotate_right, color: Colors.white),
                     ),
-                    ElevatedButton(
-                      onPressed: gameActive ? dropPiece : null,
-                      child: Icon(Icons.arrow_downward),
+                    ChibiButton(
+                      onPressed: gameActive ? dropPiece : () {},
+                      color: Colors.blueGrey,
+                      child: Icon(Icons.arrow_downward, color: Colors.white),
                     ),
-                    ElevatedButton(
-                      onPressed: gameActive ? movePieceRight : null,
-                      child: Icon(Icons.arrow_right),
+                    ChibiButton(
+                      onPressed: gameActive ? movePieceRight : () {},
+                      color: Colors.blueGrey,
+                      child: Icon(Icons.arrow_right, color: Colors.white),
                     ),
                   ],
                 ),
@@ -691,13 +696,10 @@ class _GameScreenState extends State<GameScreen> {
                 SizedBox(height: 16),
 
                 // Bouton Nouvelle Partie (peut être utile pour redémarrer depuis le jeu)
-                ElevatedButton(
+                ChibiButton(
                   onPressed: startGame,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFFFD700), // Fond doré
-                    foregroundColor: Colors.black,
-                  ),
-                  child: Text('Redémarrer le Mur'),
+                  text: 'Redémarrer le Mur',
+                  color: const Color(0xFFFFD700), // Fond doré
                 ),
               ],
             ),

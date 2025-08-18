@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
 
 class VictoryScreen extends StatelessWidget {
@@ -52,40 +53,22 @@ class VictoryScreen extends StatelessWidget {
               ),
               SizedBox(height: 32),
               SizedBox(height: 32),
-              ElevatedButton.icon(
+              ChibiButton(
                 onPressed: () {
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GameScreen()));
                 },
-                icon: Icon(Icons.refresh, color: Colors.black),
-                label: Text(
-                  'Rejouer',
-                  style: TextStyle(fontSize: 20, color: Colors.black),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFFFD700),
-                  foregroundColor: Colors.black,
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  textStyle: TextStyle(fontWeight: FontWeight.bold),
-                  elevation: 8,
-                ),
+                text: 'Rejouer',
+                color: const Color(0xFFFFD700),
+                textStyle: const TextStyle(fontSize: 20, color: Colors.black),
               ),
               SizedBox(height: 16),
-              TextButton(
+              ChibiButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text(
-                  'Retour à l\'accueil',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                    decoration: TextDecoration.underline,
-                    decorationColor: Colors.white70,
-                  ),
-                ),
+                text: 'Retour à l\'accueil',
+                color: Colors.blueGrey, // Using a consistent color for secondary action
+                textStyle: const TextStyle(color: Colors.white70, fontSize: 16, decoration: TextDecoration.underline, decorationColor: Colors.white70),
               ),
             ],
           ),

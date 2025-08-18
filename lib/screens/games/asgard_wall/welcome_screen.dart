@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -62,31 +63,16 @@ class WelcomeScreen extends StatelessWidget {
               SizedBox(height: 32),
               
               SizedBox(height: 16),
-              ElevatedButton.icon(
+              ChibiButton(
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => GameScreen()),
                   );
                 },
-                icon: Icon(
-                  Icons.castle,
-                  color: Colors.black,
-                ), // Icône de château
-                label: Text(
-                  'Construire le Mur',
-                  style: TextStyle(fontSize: 20, color: Colors.black),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFFFD700), // Fond doré
-                  foregroundColor: Colors.black,
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  textStyle: TextStyle(fontWeight: FontWeight.bold),
-                  elevation: 8, // Ombre pour un effet 3D
-                ),
+                text: 'Construire le Mur',
+                color: const Color(0xFFFFD700), // Fond doré
+                textStyle: const TextStyle(fontSize: 20, color: Colors.black),
               ),
             ],
           ),

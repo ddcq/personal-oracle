@@ -203,13 +203,14 @@ class GameOverOverlay extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
+              ChibiButton(
                 onPressed: () {
                   game.overlays.remove('gameOverOverlay');
                   game.resetGame();
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF22C55E)),
-                child: const Text('Renaître', style: TextStyle(color: Colors.white)),
+                text: 'Renaître',
+                color: const Color(0xFF22C55E),
+                textStyle: const TextStyle(color: Colors.white),
               ),
             ],
           ),
