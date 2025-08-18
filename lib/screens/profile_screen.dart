@@ -413,7 +413,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   textAlign: TextAlign.center,
                   style: Theme.of(
                     context,
-                  ).textTheme.bodyLarge?.copyWith(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: 'AmaticSC', fontSize: 20),
+                  ).textTheme.bodyLarge?.copyWith(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
                 ),
                 const SizedBox(height: 8),
                 LinearProgressIndicator(value: progressPercentage, backgroundColor: Colors.grey[400], valueColor: AlwaysStoppedAnimation<Color>(Colors.brown)),

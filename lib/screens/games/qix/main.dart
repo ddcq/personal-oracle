@@ -4,6 +4,7 @@ import 'package:flame/game.dart';
 import 'package:oracle_d_asgard/widgets/progress_bar.dart';
 import 'qix_game.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 import 'defeat_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
@@ -54,10 +55,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Qix Basic')),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
-        ),
+      body: AppBackground(
         child: SafeArea(
           child: FutureBuilder<void>(
             future: _initializeGameFuture,

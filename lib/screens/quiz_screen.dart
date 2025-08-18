@@ -12,6 +12,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -72,10 +73,7 @@ class _QuizScreenState extends State<QuizScreen> {
         ),
         centerTitle: true,
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
-        ),
+      body: AppBackground(
         child: isLandscape
               ? Row(
                   children: <Widget>[
