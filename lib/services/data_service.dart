@@ -37,7 +37,7 @@ class DataService {
 
   // Historique des quiz complétés
   static Future<List<Map<String, dynamic>>> getQuizHistory() async {
-    // TODO: Implémenter la récupération de l'historique
+    // TODO: Implémenter la récupération de l’historique
     return [];
   }
 

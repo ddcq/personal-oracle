@@ -250,7 +250,7 @@ class Player extends PositionComponent {
     }
 
     // If the player is on an edge and the new position is the same as the current position
-    // (meaning they hit a boundary and couldn't move further in that direction),
+    // (meaning they hit a boundary and couldn’t move further in that direction),
     // return false to trigger _findNextAutoDirection.
     if (state == PlayerState.onEdge && newGridPosition == gridPosition) {
       return false;

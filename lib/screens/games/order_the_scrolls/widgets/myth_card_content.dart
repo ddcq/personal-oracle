@@ -70,7 +70,7 @@ class MythCardContent extends StatelessWidget {
                   Icons.open_with,
                   color: Colors.white,
                   size: 20,
-                  shadows: const [Shadow(offset: Offset(1, 1), blurRadius: 3, color: Colors.black)],
+                  shadows: [Shadow(offset: Offset(1, 1), blurRadius: 3, color: Colors.black)],
                 ),
               ),
             if (controller.validated)

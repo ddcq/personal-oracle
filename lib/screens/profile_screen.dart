@@ -58,6 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        title: Text('Profile', style: TextStyle(fontFamily: AppTextStyles.amaticSC)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -255,11 +256,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (difference.inDays == 0) {
       if (difference.inHours == 0) {
         if (difference.inMinutes == 0) {
-          return "À l'instant";
+          return "À l’instant";
         }
         return "Il y a ${difference.inMinutes} min";
       }
-      return "Aujourd'hui à ${DateFormat('HH:mm').format(timestamp)}";
+      return "Aujourd’hui à ${DateFormat('HH:mm').format(timestamp)}";
     } else if (difference.inDays == 1) {
       return "Hier à ${DateFormat('HH:mm').format(timestamp)}";
     } else if (difference.inDays < 7) {

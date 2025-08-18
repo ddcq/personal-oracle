@@ -3,6 +3,7 @@ import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:confetti/confetti.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/confetti_overlay.dart';
 
 import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_flame_game.dart';
@@ -72,7 +73,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Jeu de Puzzle')),
+      appBar: AppBar(title: Text('Jeu de Puzzle', style: TextStyle(fontFamily: AppTextStyles.amaticSC))),
       body: ConfettiOverlay(
         controller: _confettiController,
         child: GameWidget(

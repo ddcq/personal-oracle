@@ -104,7 +104,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     );
     add(_growthAnimationTimer);
 
-    // Initial call to initializeGame, but don't start the engine yet
+    // Initial call to initializeGame, but don’t start the engine yet
     initializeGame();
     pauseEngine(); // Pause engine until start button is pressed
   }

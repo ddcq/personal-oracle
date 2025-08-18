@@ -159,7 +159,7 @@ class GamificationService with ChangeNotifier {
         // Assuming mythCard.id corresponds to a story part ID.
         // This might need clarification: is a MythCard earned when its story part is unlocked,
         // or when the player completes the game associated with it?
-        // Based on the request "renvoi la prochaine MythCard à gagner dans l'ordre de l'histoire pour chaque MythStory non complétée",
+        // Based on the request "renvoi la prochaine MythCard à gagner dans l’ordre de l’histoire pour chaque MythStory non complétée",
         // it implies checking unlocked story parts.
         if (!partsUnlockedForStory.contains(mythCard.id)) {
           nextCard = mythCard;

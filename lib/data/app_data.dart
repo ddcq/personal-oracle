@@ -33,7 +33,7 @@ class AppData {
       icon: 'assets/images/heads/freya.png',
       traits: {'passion': 5, 'wisdom': 3, 'nature': 4},
       description: 'Passionnée et intuitive, tu suis ton cœur. Comme Freyja, tu apportes beauté et amour dans le monde.',
-      dailyChallenge: 'Exprime ta gratitude à quelqu\'un',
+      dailyChallenge: 'Exprime ta gratitude à quelqu’un',
       colors: [Color(0xFFDB2777), Color(0xFFBE185D)],
     ),
     'tyr': Deity(

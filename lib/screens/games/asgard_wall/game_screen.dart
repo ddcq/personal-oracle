@@ -8,6 +8,7 @@ import 'package:oracle_d_asgard/screens/games/asgard_wall/game_components.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_data.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/victory_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -16,29 +17,21 @@ class GameScreen extends StatefulWidget {
   State<GameScreen> createState() => _GameScreenState();
 }
 
-// game_logic.dart (Simulé : La logique et l'état du jeu)
-// Les méthodes et l'état de jeu sont gérés par _GameScreenState.
+// game_logic.dart (Simulé : La logique et l’état du jeu)
+// Les méthodes et l’état de jeu sont gérés par _GameScreenState.
 class _GameScreenState extends State<GameScreen> {
   static const int boardWidth = 10;
   static const int boardHeight = 20;
   static const int victoryHeight = 12;
 
   // Le plateau de jeu stocke la couleur de chaque cellule, qui sera maintenant la couleur du mur pour les blocs posés.
-  List<List<Color?>> board = List.generate(
-    boardHeight,
-    (index) => List.generate(boardWidth, (index) => null),
-  );
+  List<List<Color?>> board = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => null));
 
   // La couleur fixe pour les blocs du mur une fois qu'ils sont posés
-  Color wallBlockColor = Color(
-    0xFF6B5B95,
-  ); // Une couleur de pierre (violet/gris)
+  Color wallBlockColor = Color(0xFF6B5B95); // Une couleur de pierre (violet/gris)
 
-  // Animation pour l'effet de construction du mur, indiquant les blocs nouvellement posés.
-  List<List<bool>> justPlaced = List.generate(
-    boardHeight,
-    (index) => List.generate(boardWidth, (index) => false),
-  );
+  // Animation pour l’effet de construction du mur, indiquant les blocs nouvellement posés.
+  List<List<bool>> justPlaced = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => false));
 
   // Timer pour les effets visuels
   Timer? effectTimer;
@@ -69,19 +62,13 @@ class _GameScreenState extends State<GameScreen> {
 
   // Initialise ou réinitialise le jeu.
   void startGame() {
-    gameTimer?.cancel(); // Annule le timer précédent s'il existe
+    gameTimer?.cancel(); // Annule le timer précédent s’il existe
     effectTimer?.cancel(); // Annule le timer d'effets visuels précédent
 
     setState(() {
       // Réinitialise le plateau et les effets
-      board = List.generate(
-        boardHeight,
-        (index) => List.generate(boardWidth, (index) => null),
-      );
-      justPlaced = List.generate(
-        boardHeight,
-        (index) => List.generate(boardWidth, (index) => false),
-      );
+      board = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => null));
+      justPlaced = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => false));
       gameActive = true;
       currentPiece = []; // Vide la pièce actuelle
     });
@@ -120,7 +107,7 @@ class _GameScreenState extends State<GameScreen> {
   // Fait apparaître une nouvelle pièce en haut du plateau.
   void spawnNewPiece() {
     if (nextPieces.isEmpty) {
-      generateNextPieces(); // S'il n'y a plus de pièces, en génère de nouvelles.
+      generateNextPieces(); // S’il n’y a plus de pièces, en génère de nouvelles.
     }
 
     // Prend la première pièce de la queue
@@ -135,14 +122,9 @@ class _GameScreenState extends State<GameScreen> {
 
     currentRotationIndex = 0; // Commence toujours par la première rotation
 
-    // Définit la forme de la pièce actuelle basée sur l'index et la rotation
-    currentPiece = List.generate(
-      pieces[currentPieceIndex][currentRotationIndex].length,
-      (i) => List.from(pieces[currentPieceIndex][currentRotationIndex][i]),
-    );
-    pieceX =
-        (boardWidth - currentPiece[0].length) ~/
-        2; // Centre la pièce horizontalement
+    // Définit la forme de la pièce actuelle basée sur l’index et la rotation
+    currentPiece = List.generate(pieces[currentPieceIndex][currentRotationIndex].length, (i) => List.from(pieces[currentPieceIndex][currentRotationIndex][i]));
+    pieceX = (boardWidth - currentPiece[0].length) ~/ 2; // Centre la pièce horizontalement
     pieceY = 0; // Place la pièce en haut du plateau
 
     // Vérifie si le jeu est perdu (nouvelle pièce ne peut pas être placée au départ)
@@ -183,14 +165,10 @@ class _GameScreenState extends State<GameScreen> {
           int boardX = pieceX + col;
           int boardY = pieceY + row;
 
-          if (boardY >= 0 &&
-              boardY < boardHeight &&
-              boardX >= 0 &&
-              boardX < boardWidth) {
+          if (boardY >= 0 && boardY < boardHeight && boardX >= 0 && boardX < boardWidth) {
             // IMPORTANT: Les blocs posés prennent la couleur du mur
             board[boardY][boardX] = wallBlockColor;
-            justPlaced[boardY][boardX] =
-                true; // Marque comme nouvellement placé pour l'effet visuel
+            justPlaced[boardY][boardX] = true; // Marque comme nouvellement placé pour l’effet visuel
           }
         }
       }
@@ -215,13 +193,13 @@ class _GameScreenState extends State<GameScreen> {
   void _updateVisualEffects() {
     bool needsUpdate = false;
 
-    // Réduit progressivement l'effet "nouvellement placé"
+    // Réduit progressivement l’effet "nouvellement placé"
     for (int row = 0; row < boardHeight; row++) {
       for (int col = 0; col < boardWidth; col++) {
         if (justPlaced[row][col]) {
-          // Après quelques frames, enlève l'effet aléatoirement
+          // Après quelques frames, enlève l’effet aléatoirement
           if (Random().nextDouble() < 0.1) {
-            // 10% de chance de désactiver l'effet par frame
+            // 10% de chance de désactiver l’effet par frame
             justPlaced[row][col] = false;
             needsUpdate = true;
           }
@@ -252,7 +230,7 @@ class _GameScreenState extends State<GameScreen> {
           if (hasBlockAbove) {
             // Il y a un bloc au-dessus, vérifier si le trou est accessible
             if (!isTrueHole(col, row)) {
-              continue; // Ce n'est pas un vrai trou, continuer
+              continue; // Ce n’est pas un vrai trou, continuer
             } else {
               endGame(false); // Trou inaccessible détecté, le joueur perd
               return;
@@ -281,10 +259,10 @@ class _GameScreenState extends State<GameScreen> {
 
   // Vérifie si un trou est vraiment inaccessible (selon la logique du jeu).
   bool isTrueHole(int col, int row) {
-    // Un trou est considéré comme inaccessible s'il n'y a pas d'accès horizontal
+    // Un trou est considéré comme inaccessible s’il n’y a pas d'accès horizontal
     // sur au moins 2 cases consécutives de chaque côté
 
-    // Vérifier l'accès par la gauche (besoin de 2 cases libres consécutives)
+    // Vérifier l’accès par la gauche (besoin de 2 cases libres consécutives)
     bool leftAccess = false;
     if (col >= 2) {
       bool canAccessFromLeft = true;
@@ -297,7 +275,7 @@ class _GameScreenState extends State<GameScreen> {
       if (canAccessFromLeft) leftAccess = true;
     }
 
-    // Vérifier l'accès par la droite (besoin de 2 cases libres consécutives)
+    // Vérifier l’accès par la droite (besoin de 2 cases libres consécutives)
     bool rightAccess = false;
     if (col < boardWidth - 2) {
       bool canAccessFromRight = true;
@@ -310,7 +288,7 @@ class _GameScreenState extends State<GameScreen> {
       if (canAccessFromRight) rightAccess = true;
     }
 
-    // Si aucun accès n'est possible, c'est un vrai trou
+    // Si aucun accès n’est possible, c’est un vrai trou
     return !leftAccess && !rightAccess;
   }
 
@@ -349,8 +327,7 @@ class _GameScreenState extends State<GameScreen> {
     if (!gameActive) return;
 
     // Calculer la prochaine rotation
-    int nextRotationIndex =
-        (currentRotationIndex + 1) % pieces[currentPieceIndex].length;
+    int nextRotationIndex = (currentRotationIndex + 1) % pieces[currentPieceIndex].length;
     List<List<bool>> nextPiece = List.generate(
       pieces[currentPieceIndex][nextRotationIndex].length,
       (i) => List.from(pieces[currentPieceIndex][nextRotationIndex][i]),
@@ -396,7 +373,7 @@ class _GameScreenState extends State<GameScreen> {
   // Gère les événements de touche du clavier.
   bool handleKeyPress(KeyEvent event) {
     if (!gameActive) {
-      return false; // Ignore les touches si le jeu n'est pas actif
+      return false; // Ignore les touches si le jeu n’est pas actif
     }
 
     if (event is KeyDownEvent) {
@@ -445,7 +422,7 @@ class _GameScreenState extends State<GameScreen> {
     setState(() {
       gameActive = false;
     });
-    // Navigue vers l'écran de victoire ou de défaite
+    // Navigue vers l’écran de victoire ou de défaite
     if (won) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => VictoryScreen()));
     } else {
@@ -465,23 +442,19 @@ class _GameScreenState extends State<GameScreen> {
   Widget buildBoard() {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.white,
-          width: 2,
-        ), // Bordure blanche autour du plateau
+        border: Border.all(color: Colors.white, width: 2), // Bordure blanche autour du plateau
         borderRadius: BorderRadius.circular(8),
         // AJOUT : Image de fond pour le plateau
         image: DecorationImage(
           image: AssetImage('assets/images/backgrounds/asgard.jpg'),
-          fit: BoxFit.cover, // L'image couvrira le conteneur
-          // Optionnel : un filtre pour assombrir l'image et améliorer la lisibilité des blocs
+          fit: BoxFit.cover, // L’image couvrira le conteneur
+          // Optionnel : un filtre pour assombrir l’image et améliorer la lisibilité des blocs
           // colorFilter: ColorFilter.mode(Colors.black.withAlpha(128), BlendMode.dstATop),
         ),
       ),
       child: GridView.builder(
         shrinkWrap: true,
-        physics:
-            NeverScrollableScrollPhysics(), // Empêche le défilement du GridView
+        physics: NeverScrollableScrollPhysics(), // Empêche le défilement du GridView
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: boardWidth, // Nombre de colonnes
         ),
@@ -490,8 +463,7 @@ class _GameScreenState extends State<GameScreen> {
           int row = index ~/ boardWidth;
           int col = index % boardWidth;
 
-          Color? cellColor =
-              board[row][col]; // Couleur du bloc fixe sur le plateau
+          Color? cellColor = board[row][col]; // Couleur du bloc fixe sur le plateau
 
           // Affiche la pièce actuelle qui tombe
           if (gameActive && currentPiece.isNotEmpty) {
@@ -504,7 +476,7 @@ class _GameScreenState extends State<GameScreen> {
                 relativeCol < currentPiece[relativeRow].length &&
                 currentPiece[relativeRow][relativeCol] &&
                 cellColor == null) {
-              // Si c'est une partie de la pièce qui tombe et la cellule est vide
+              // Si c’est une partie de la pièce qui tombe et la cellule est vide
               cellColor = currentPieceColor;
             }
           }
@@ -515,10 +487,7 @@ class _GameScreenState extends State<GameScreen> {
           return Container(
             decoration: BoxDecoration(
               border: Border.all(
-                color: isVictoryLine
-                    ? Color(0xFFFFD700)
-                    : Colors
-                          .grey[700]!, // Bordure dorée pour la ligne de victoire
+                color: isVictoryLine ? Color(0xFFFFD700) : Colors.grey[700]!, // Bordure dorée pour la ligne de victoire
                 width: isVictoryLine ? 2 : 0.5,
               ),
             ),
@@ -532,35 +501,20 @@ class _GameScreenState extends State<GameScreen> {
                       // Couleur de base pour les blocs (couleur de la pièce en mouvement ou couleur du mur)
                       color: cellColor,
                       // Effet de brillance pour les blocs nouvellement placés
-                      boxShadow: justPlaced[row][col]
-                          ? [
-                              BoxShadow(
-                                color: Colors.white.withAlpha(128),
-                                blurRadius: 4,
-                                spreadRadius: 1,
-                              ),
-                            ]
-                          : null,
+                      boxShadow: justPlaced[row][col] ? [BoxShadow(color: Colors.white.withAlpha(128), blurRadius: 4, spreadRadius: 1)] : null,
                     ),
                     // Ajoute des bordures et des dégradés pour simuler des joints et la profondeur des pierres
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: justPlaced[row][col]
-                              ? Colors.white38
-                              : Colors
-                                    .black45, // Bordure plus claire pour les blocs nouvellement placés
+                          color: justPlaced[row][col] ? Colors.white38 : Colors.black45, // Bordure plus claire pour les blocs nouvellement placés
                           width: justPlaced[row][col] ? 1.0 : 0.5,
                         ),
                         // Effet de profondeur pour les pierres
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [
-                            Colors.white.withAlpha(25),
-                            Colors.transparent,
-                            Colors.black.withAlpha(25),
-                          ],
+                          colors: [Colors.white.withAlpha(25), Colors.transparent, Colors.black.withAlpha(25)],
                         ),
                       ),
                       // Icône de pierre ou autre effet pour les blocs nouvellement placés
@@ -576,7 +530,7 @@ class _GameScreenState extends State<GameScreen> {
                     ),
                   )
                 : Container(
-                    // Rendre les cases vides transparentes pour laisser l'image de fond apparaître
+                    // Rendre les cases vides transparentes pour laisser l’image de fond apparaître
                     color: Colors.transparent, // Transparent pour les cases vides
                   ),
           );
@@ -589,7 +543,7 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Muraille d\'Asgard'),
+        title: Text('Muraille d’Asgard', style: TextStyle(fontFamily: AppTextStyles.amaticSC)),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -601,109 +555,98 @@ class _GameScreenState extends State<GameScreen> {
         focusNode: focusNode,
         onKeyEvent: (node, event) {
           // Gère les événements clavier
-          return handleKeyPress(event)
-              ? KeyEventResult.handled
-              : KeyEventResult.ignored;
+          return handleKeyPress(event) ? KeyEventResult.handled : KeyEventResult.ignored;
         },
         child: GestureDetector(
-          // Permet de refocaliser le jeu en tapant n'importe où
+          // Permet de refocaliser le jeu en tapant n’importe où
           onTap: () => focusNode.requestFocus(),
           child: Column(
-              children: [
-                // Légende du jeu (réduite car les règles sont sur l'écran d'accueil)
-                Container(
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF0F3460), // Fond bleu foncé
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    'Construisez la muraille jusqu\'à la ligne dorée !',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFFFFD700), // Texte doré
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+            children: [
+              // Légende du jeu (réduite car les règles sont sur l’écran d’accueil)
+              Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Color(0xFF0F3460), // Fond bleu foncé
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                SizedBox(height: 16),
-
-                // Zone de jeu principale avec plateau et aperçu des pièces
-                Expanded(
-                  child: Row(
-                    children: [
-                      // Plateau de jeu (prend 3 parts de l'espace)
-                      Expanded(
-                        flex: 3,
-                        child: Center(
-                          child: AspectRatio(
-                            aspectRatio: boardWidth / boardHeight,
-                            child: buildBoard(),
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(width: 16),
-
-                      // Aperçu des prochaines pièces
-                      Expanded(
-                        flex: 1,
-                        child: NextPiecesPreview(
-                          nextPieces: nextPieces,
-                          nextPieceColors: nextPieceColors,
-                          piecesData: pieces,
-                        ),
-                      ),
-                    ],
+                child: Text(
+                  'Construisez la muraille jusqu’à la ligne dorée !',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xFFFFD700), // Texte doré
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: AppTextStyles.amaticSC,
                   ),
                 ),
+              ),
+              SizedBox(height: 16),
 
-                SizedBox(height: 16),
-
-                // Contrôles tactiles
-                Text(
-                  'Contrôles tactiles:',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // Zone de jeu principale avec plateau et aperçu des pièces
+              Expanded(
+                child: Row(
                   children: [
-                    ChibiButton(
-                      onPressed: gameActive ? movePieceLeft : () {},
-                      color: Colors.blueGrey, // Consistent color for game controls
-                      child: Icon(Icons.arrow_left, color: Colors.white),
+                    // Plateau de jeu (prend 3 parts de l’espace)
+                    Expanded(
+                      flex: 3,
+                      child: Center(
+                        child: AspectRatio(aspectRatio: boardWidth / boardHeight, child: buildBoard()),
+                      ),
                     ),
-                    ChibiButton(
-                      onPressed: gameActive ? rotatePiece : () {},
-                      color: Colors.blueGrey,
-                      child: Icon(Icons.rotate_right, color: Colors.white),
-                    ),
-                    ChibiButton(
-                      onPressed: gameActive ? dropPiece : () {},
-                      color: Colors.blueGrey,
-                      child: Icon(Icons.arrow_downward, color: Colors.white),
-                    ),
-                    ChibiButton(
-                      onPressed: gameActive ? movePieceRight : () {},
-                      color: Colors.blueGrey,
-                      child: Icon(Icons.arrow_right, color: Colors.white),
+
+                    SizedBox(width: 16),
+
+                    // Aperçu des prochaines pièces
+                    Expanded(
+                      flex: 1,
+                      child: NextPiecesPreview(nextPieces: nextPieces, nextPieceColors: nextPieceColors, piecesData: pieces),
                     ),
                   ],
                 ),
+              ),
 
-                SizedBox(height: 16),
+              SizedBox(height: 16),
 
-                // Bouton Nouvelle Partie (peut être utile pour redémarrer depuis le jeu)
-                ChibiButton(
-                  onPressed: startGame,
-                  text: 'Redémarrer le Mur',
-                  color: const Color(0xFFFFD700), // Fond doré
-                ),
-              ],
-            ),
+              // Contrôles tactiles
+              Text('Contrôles tactiles:', style: TextStyle(color: Colors.white70, fontSize: 14)),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ChibiButton(
+                    onPressed: gameActive ? movePieceLeft : () {},
+                    color: Colors.blueGrey, // Consistent color for game controls
+                    child: Icon(Icons.arrow_left, color: Colors.white),
+                  ),
+                  ChibiButton(
+                    onPressed: gameActive ? rotatePiece : () {},
+                    color: Colors.blueGrey,
+                    child: Icon(Icons.rotate_right, color: Colors.white),
+                  ),
+                  ChibiButton(
+                    onPressed: gameActive ? dropPiece : () {},
+                    color: Colors.blueGrey,
+                    child: Icon(Icons.arrow_downward, color: Colors.white),
+                  ),
+                  ChibiButton(
+                    onPressed: gameActive ? movePieceRight : () {},
+                    color: Colors.blueGrey,
+                    child: Icon(Icons.arrow_right, color: Colors.white),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 16),
+
+              // Bouton Nouvelle Partie (peut être utile pour redémarrer depuis le jeu)
+              ChibiButton(
+                onPressed: startGame,
+                text: 'Redémarrer le Mur',
+                color: const Color(0xFFFFD700), // Fond doré
+              ),
+            ],
           ),
+        ),
       ),
     );
   }

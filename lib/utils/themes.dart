@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class AppThemes {
   static ThemeData get darkTheme {
@@ -10,11 +11,11 @@ class AppThemes {
       scaffoldBackgroundColor: AppConstants.primaryDark,
       
       // AppBar theme
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: AppConstants.primaryDark,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: TextStyle(
+        titleTextStyle: TextStyle(fontFamily: AppTextStyles.amaticSC,
           color: AppConstants.accent,
           fontSize: 20,
           fontWeight: FontWeight.bold,

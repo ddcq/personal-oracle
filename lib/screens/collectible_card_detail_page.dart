@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/widgets/interactive_collectible_card.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class CollectibleCardDetailPage extends StatefulWidget {
   final CollectibleCard card;
@@ -20,7 +21,7 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(widget.card.title, style: const TextStyle(color: Colors.white)),
+        title: Text(widget.card.title, style: TextStyle(color: Colors.white, fontFamily: AppTextStyles.amaticSC)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white), // For back button

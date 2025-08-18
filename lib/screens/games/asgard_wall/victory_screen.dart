@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 
 class VictoryScreen extends StatelessWidget {
@@ -12,7 +13,7 @@ class VictoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Victoire !')),
+      appBar: AppBar(title: Text('Victoire !', style: TextStyle(fontFamily: AppTextStyles.amaticSC))),
       body: AppBackground(
         child: Center(
           child: SingleChildScrollView(
@@ -32,6 +33,7 @@ class VictoryScreen extends StatelessWidget {
                     fontSize: 36,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFFFFD700),
+                    fontFamily: AppTextStyles.amaticSC,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -68,7 +70,7 @@ class VictoryScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  text: 'Retour à l\'accueil',
+                  text: 'Retour à l’accueil',
                   color: Colors.blueGrey, // Using a consistent color for secondary action
                   textStyle: const TextStyle(color: Colors.white70, fontSize: 16, decoration: TextDecoration.underline, decorationColor: Colors.white70),
                 ),

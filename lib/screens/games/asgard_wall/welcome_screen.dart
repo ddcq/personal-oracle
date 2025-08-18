@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -11,7 +13,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Muraille d\'Asgard')),
+      appBar: AppBar(title: Text('Muraille d\'Asgard', style: TextStyle(fontFamily: AppTextStyles.amaticSC))),
       body: AppBackground(
         child: Center(
           child: SingleChildScrollView(
@@ -25,6 +27,7 @@ class WelcomeScreen extends StatelessWidget {
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFFFFD700), // Texte doré
+                    fontFamily: AppTextStyles.amaticSC,
                   ),
                   textAlign: TextAlign.center,
                 ),

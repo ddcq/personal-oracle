@@ -96,7 +96,7 @@ class GameLogic {
     // Check for food
     if (newHead == state.food) {
       state.score += (state.foodType == FoodType.golden) ? 50 : 10;
-      // Don't remove tail, generate new food
+      // Don’t remove tail, generate new food
       _generateNewFood(state);
     } else {
       newSnake.removeLast();

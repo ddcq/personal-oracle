@@ -13,8 +13,8 @@ class MenuPrincipal extends StatelessWidget {
   MenuPrincipal({super.key});
 
   final jeux = <_MiniJeuItem>[
-    _MiniJeuItem("Réordonne l'Histoire", const Color(0xFF6366F1), const Color(0xFF4A4CBB), () => OrderTheScrollsGame()),
-    _MiniJeuItem("La Muraille d'Asgard", const Color(0xFFEF4444), const Color(0xFFB71C1C), () => WelcomeScreen()),
+    _MiniJeuItem("Réordonne l’Histoire", const Color(0xFF6366F1), const Color(0xFF4A4CBB), () => OrderTheScrollsGame()),
+    _MiniJeuItem("La Muraille d’Asgard", const Color(0xFFEF4444), const Color(0xFFB71C1C), () => WelcomeScreen()),
     _MiniJeuItem(
       "Les Runes Dispersées",
       const Color(0xFF06B6D4),
@@ -29,8 +29,9 @@ class MenuPrincipal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true, // Permet au body de s'étendre derrière l'AppBar
+      extendBodyBehindAppBar: true, // Permet au body de s’étendre derrière l’AppBar
       appBar: AppBar(
+        title: Text('Games', style: TextStyle(fontFamily: AppTextStyles.amaticSC)),
         backgroundColor: Colors.white30, // Rend l'AppBar transparente
         elevation: 0, // Supprime l'ombre de l'AppBar
         leading: IconButton(

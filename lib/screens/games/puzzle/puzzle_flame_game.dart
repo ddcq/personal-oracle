@@ -163,7 +163,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     const double cornerRadius = 8.0;
     final RRect pieceRRect = RRect.fromRectAndRadius(destRect, const Radius.circular(cornerRadius));
 
-    // 1. Dessiner l'ombre portée pour l'effet de flottement
+    // 1. Dessiner l’ombre portée pour l’effet de flottement
     if (!pieceData.isLocked) {
       _shadowPaint
         ..color = Colors.black
@@ -174,16 +174,16 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
       canvas.drawRRect(pieceRRect.shift(currentShadowOffset), _shadowPaint);
     }
 
-    // Sauvegarder l'état du canvas avant de clipper
+    // Sauvegarder l’état du canvas avant de clipper
     canvas.save();
     // Appliquer le clipping pour les coins arrondis
     canvas.clipRRect(pieceRRect);
 
-    // 2. Dessiner l'image
+    // 2. Dessiner l’image
     canvas.drawImageRect(puzzleImage, _sourceRect, destRect, _paint);
 
-    // 3. Ajouter un biseau pour l'effet 3D
-    // Biseau interne (superposition sur l'image)
+    // 3. Ajouter un biseau pour l’effet 3D
+    // Biseau interne (superposition sur l’image)
     final Paint bevelPaint = Paint()
       ..shader = LinearGradient(
         begin: Alignment.topLeft,
@@ -197,7 +197,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
         ],
       ).createShader(destRect);
 
-    // Dessiner un rectangle par-dessus l'image avec le shader de gradient
+    // Dessiner un rectangle par-dessus l’image avec le shader de gradient
     canvas.drawRect(destRect, bevelPaint);
 
     // 4. Ajouter une bordure pour mieux définir la pièce
@@ -207,7 +207,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
       ..strokeWidth = 1.5;
     canvas.drawRRect(pieceRRect, borderPaint);
 
-    // Restaurer l'état du canvas
+    // Restaurer l’état du canvas
     canvas.restore();
   }
 
@@ -228,11 +228,11 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     position.x = pieceData.currentPosition.dx + offsetX;
     position.y = pieceData.currentPosition.dy + offsetY;
 
-    // Ajuster la priorité si l'état de verrouillage a changé
+    // Ajuster la priorité si l’état de verrouillage a changé
     if (pieceData.isLocked && priority != _lockedPriority) {
       priority = _lockedPriority;
     } else if (!pieceData.isLocked && priority == _lockedPriority) {
-      // Si elle était verrouillée mais ne l'est plus (cas peu probable mais pour robustesse)
+      // Si elle était verrouillée mais ne l’est plus (cas peu probable mais pour robustesse)
       priority = _defaultPriority;
     }
   }
@@ -251,7 +251,7 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     if (!pieceData.isLocked) {
       gameRef.puzzleGame.handlePieceDrop(pieceData.id, Offset(position.x - offsetX, position.y - offsetY));
     }
-    // Si la pièce n'est pas verrouillée après le drop, elle reste à la priorité par défaut
+    // Si la pièce n’est pas verrouillée après le drop, elle reste à la priorité par défaut
     // Si elle est verrouillée, update() la mettra à _lockedPriority
     if (!pieceData.isLocked) {
       priority = _defaultPriority;

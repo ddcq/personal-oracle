@@ -142,7 +142,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     _grid = List.generate(gridSize, (_) => List.generate(gridSize, (_) => game_constants.kGridFree));
 
     _boundaryPoints.clear();
-    _nonFreeCells = 0; // Initialize to 0 as border cells don't count
+    _nonFreeCells = 0; // Initialize to 0 as border cells don’t count
     _cellRects = {};
 
     // Initialize outer boundary
@@ -200,7 +200,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
 
     for (int y = 0; y < gridSize; y++) {
       for (int x = 0; x < gridSize; x++) {
-        // If a cell is free and hasn't been visited yet, it's part of a new region.
+        // If a cell is free and hasn’t been visited yet, it’s part of a new region.
         if (_grid[y][x] == game_constants.kGridFree && !visitedCells[y][x]) {
           FloodFillResult result = _floodFill(x, y, visitedCells);
           if (result.points.isNotEmpty) {

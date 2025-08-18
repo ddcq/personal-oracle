@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
-import './puzzle_model.dart'; // Le modèle pur créé à l'étape 1
+import './puzzle_model.dart'; // Le modèle pur créé à l’étape 1
 
 class PuzzleGame {
   List<PuzzlePieceData> pieces = [];
@@ -27,7 +27,7 @@ class PuzzleGame {
     }
   }
 
-  // Note: La logique de dispersion dépend de la taille de l'écran.
+  // Note: La logique de dispersion dépend de la taille de l’écran.
   // La classe devra la recevoir en paramètre.
   void scatterPieces(Size availableArea, Rect puzzleBoardBounds) {
     final Random random = Random();
@@ -44,7 +44,7 @@ class PuzzleGame {
       final randomGlobalY = random.nextDouble() * max(0, scatterHeight);
 
       // Convertit la position globale en position locale par rapport au plateau de jeu.
-      // La position du composant sera la position globale, car l'offset du plateau est ajouté plus tard.
+      // La position du composant sera la position globale, car l’offset du plateau est ajouté plus tard.
       final localRandomX = randomGlobalX - puzzleBoardBounds.left;
       final localRandomY = randomGlobalY - puzzleBoardBounds.top;
 
@@ -63,12 +63,12 @@ class PuzzleGame {
       if (isGameCompleted()) {
         onGameCompleted?.call();
       }
-      return true; // Indique que l'état a changé
+      return true; // Indique que l’état a changé
     }
     // La pièce reste où elle est déposée
     piece.currentPosition = droppedPosition;
     piece.isLocked = false;
-    return true; // L'état a changé
+    return true; // L’état a changé
   }
 
   bool isGameCompleted() {

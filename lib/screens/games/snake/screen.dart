@@ -45,9 +45,9 @@ class _SnakeGameState extends State<SnakeGame> {
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F23),
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '🐍 Le Serpent de Midgard',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC),
         ),
         backgroundColor: const Color(0xFF22C55E),
         iconTheme: const IconThemeData(color: Colors.white),

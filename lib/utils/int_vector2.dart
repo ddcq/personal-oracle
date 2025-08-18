@@ -63,7 +63,7 @@ class IntVector2 {
     IntVector2(x + 1, y + 1),
   ];
 
-  // Conversion vers Offset (si nécessaire pour l'affichage Flutter)
+  // Conversion vers Offset (si nécessaire pour l’affichage Flutter)
   Offset toOffset() => Offset(x.toDouble(), y.toDouble());
 
   @override
