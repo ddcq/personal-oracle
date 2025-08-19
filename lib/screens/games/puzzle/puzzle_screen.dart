@@ -23,14 +23,13 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   final int _rows = 5; // Default rows
   final int _cols = 5; // Default cols
   final String versionNumber = "Version 1.7";
-  late final ConfettiController _confettiController;
+  
 
   @override
   void initState() {
     super.initState();
     _game = PuzzleGame(rows: _rows, cols: _cols);
     _flameGame = PuzzleFlameGame(puzzleGame: _game, onRewardEarned: _showVictoryDialog);
-    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _resetGame();
@@ -75,22 +74,19 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(title: Text('Jeu de Puzzle', style: TextStyle(fontFamily: AppTextStyles.amaticSC))),
-      body: ConfettiOverlay(
-        controller: _confettiController,
-        child: GameWidget(
-          game: _flameGame,
-          overlayBuilderMap: {
-            'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
-              return VictoryPopup(
-                rewardCard: game.associatedCard!,
-                onDismiss: () {
-                  game.overlays.remove('victoryOverlay');
-                  _resetGame();
-                },
-              );
-            },
+      body: GameWidget(
+        game: _flameGame,
+        overlayBuilderMap: {
+          'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
+            return VictoryPopup(
+              rewardCard: game.associatedCard!,
+              onDismiss: () {
+                game.overlays.remove('victoryOverlay');
+                _resetGame();
+              },
+            );
           },
-        ),
+        },
       ),
     );
   }
