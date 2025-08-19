@@ -19,8 +19,14 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final GameLogic gameLogic = GameLogic();
   late GameState gameState;
   final GamificationService gamificationService;
+  final Function(int score) onGameOver;
+  final VoidCallback onResetGame;
 
-  SnakeFlameGame({required this.gamificationService});
+  SnakeFlameGame({
+    required this.gamificationService,
+    required this.onGameOver,
+    required this.onResetGame,
+  });
 
   static const int gameSpeed = 300; // milliseconds
   double timeSinceLastTick = 0;
@@ -173,9 +179,9 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     }
 
     if (!wasGameOver && gameState.isGameOver) {
-      overlays.add('gameOverOverlay');
       pauseEngine();
       gamificationService.saveGameScore('Snake', gameState.score);
+      onGameOver(gameState.score);
       
       if (gameState.score > 80) {
         final fenrirCardEpic = allCollectibleCards.firstWhere(
@@ -232,8 +238,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
 
   void resetGame() {
-    overlays.remove('gameOverOverlay');
     initializeGame();
-    startGame();
   }
 }
