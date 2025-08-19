@@ -5,11 +5,10 @@ import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/widgets/guide_jormungandr_popup.dart'; // Import the new popup
 
 class SnakeGame extends StatefulWidget {
   const SnakeGame({super.key});
@@ -24,7 +23,9 @@ class _SnakeGameState extends State<SnakeGame> {
   @override
   void initState() {
     super.initState();
-    // GamificationService is available after initState, so we initialize _game in didChangeDependencies
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showStartPopup();
+    });
   }
 
   @override
@@ -40,6 +41,20 @@ class _SnakeGameState extends State<SnakeGame> {
     super.didChangeDependencies();
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
     _game = SnakeFlameGame(gamificationService: gamificationService);
+  }
+
+  void _showStartPopup() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // User must interact with the button
+      builder: (BuildContext context) {
+        return GuideJormungandrPopup(
+          onStartGame: () {
+            _game.startGame();
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -75,14 +90,11 @@ class _SnakeGameState extends State<SnakeGame> {
                               child: GameWidget(
                                 game: _game,
                                 overlayBuilderMap: {
-                                  'startOverlay': (BuildContext context, SnakeFlameGame game) {
-                                    return StartOverlay(game: game);
-                                  },
                                   'gameOverOverlay': (BuildContext context, SnakeFlameGame game) {
                                     return GameOverOverlay(game: game);
                                   },
                                 },
-                                initialActiveOverlays: const ['startOverlay'],
+                                initialActiveOverlays: const [], // No initial overlay, handled by popup
                               ),
                             ),
                           ),
@@ -109,59 +121,7 @@ class _SnakeGameState extends State<SnakeGame> {
   }
 }
 
-class StartOverlay extends StatelessWidget {
-  final SnakeFlameGame game;
 
-  const StartOverlay({super.key, required this.game});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black54,
-      child: Center(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: const Color(0xFF0F0F23),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFF22C55E)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Guide Jörmungandr',
-                style: ChibiTextStyles.overlayTitle,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                'Aide le serpent-monde à grandir\nen dévorant les offrandes des mortels',
-                style: TextStyle(color: Colors.white70, fontSize: 14.sp),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                '⌨️ Contrôles:\n↑↓←→ Flèches | R: Recommencer',
-                style: TextStyle(color: Colors.white54, fontSize: 12.sp),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 16.h),
-              ChibiButton(
-                text: 'Réveiller le Serpent',
-                color: const Color(0xFF22C55E),
-                onPressed: () {
-                  game.overlays.remove('startOverlay');
-                  game.startGame();
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class GameOverOverlay extends StatelessWidget {
   final SnakeFlameGame game;
