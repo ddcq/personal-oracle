@@ -31,8 +31,8 @@ class MenuPrincipal extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true, // Permet au body de s’étendre derrière l’AppBar
       appBar: AppBar(
-        title: Text('Games', style: TextStyle(fontFamily: AppTextStyles.amaticSC)),
-        backgroundColor: Colors.white30, // Rend l'AppBar transparente
+        title: Text('Mini-Jeux', style: TextStyle(fontFamily: AppTextStyles.amaticSC, color: Colors.white, fontSize: 40.sp, shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))])),
+        backgroundColor: Colors.transparent, // Rend l'AppBar transparente
         elevation: 0, // Supprime l'ombre de l'AppBar
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white), // Icône de retour
@@ -48,19 +48,7 @@ class MenuPrincipal extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    'Mini-Jeux',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      fontFamily: AppTextStyles.amaticSC,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 70.sp,
-                      letterSpacing: 2.0.sp,
-                      shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
-                    ),
-                  ),
-                  SizedBox(height: 30.h),
+                  
                   // Generate ChibiButtons from the jeux list
                   ...jeux.map(
                     (jeu) => Padding(

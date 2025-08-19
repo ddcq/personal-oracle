@@ -70,12 +70,12 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
                 child: Text(
                   widget.text!,
                   textAlign: TextAlign.center,
-                  style: widget.textStyle ?? TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2.sp,
-                    color: Colors.white,
-                    fontFamily: AppTextStyles.amarante,
+                  style: (widget.textStyle ?? const TextStyle()).copyWith(
+                    fontSize: widget.textStyle?.fontSize ?? 24.sp,
+                    fontWeight: widget.textStyle?.fontWeight ?? FontWeight.bold,
+                    letterSpacing: widget.textStyle?.letterSpacing ?? 2.sp,
+                    color: widget.textStyle?.color ?? Colors.white,
+                    fontFamily: widget.textStyle?.fontFamily ?? AppTextStyles.amarante,
                   ),
                 ),
               ),

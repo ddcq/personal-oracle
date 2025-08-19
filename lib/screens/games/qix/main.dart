@@ -55,6 +55,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(title: Text('Qix Basic', style: TextStyle(fontFamily: AppTextStyles.amaticSC))),
       body: AppBackground(
         child: SafeArea(

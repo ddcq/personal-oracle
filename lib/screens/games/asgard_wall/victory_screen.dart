@@ -13,6 +13,7 @@ class VictoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(title: Text('Victoire !', style: TextStyle(fontFamily: AppTextStyles.amaticSC))),
       body: AppBackground(
         child: Center(
@@ -46,7 +47,7 @@ class VictoryScreen extends StatelessWidget {
                     border: Border.all(color: Colors.green[600]!, width: 2),
                   ),
                   child: Text(
-                    '🏰 La muraille d\'Asgard est parfaite !\nSleipnir peut naître !',
+                    '🏰 La muraille d’Asgard est parfaite !\nSleipnir peut naître !',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 20,

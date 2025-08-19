@@ -11,8 +11,9 @@ class DefeatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('Défaite...', style: TextStyle(fontFamily: AppTextStyles.amaticSC)),
+        title: Text('Défaite…', style: TextStyle(fontFamily: AppTextStyles.amaticSC)),
       ),
       body: AppBackground(
         child: Center(

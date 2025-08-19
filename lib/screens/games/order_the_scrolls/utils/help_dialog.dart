@@ -68,9 +68,7 @@ class HelpDialog {
               onPressed: () => Navigator.pop(ctx),
               textStyle: TextStyle( // Define text style for ChibiButton
                 fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
                 letterSpacing: 1.5.sp,
-                color: Colors.white,
               ),
             ),
           ),

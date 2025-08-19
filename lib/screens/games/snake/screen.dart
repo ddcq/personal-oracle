@@ -44,12 +44,12 @@ class _SnakeGameState extends State<SnakeGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F23),
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
           '🐍 Le Serpent de Midgard',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC),
         ),
-        backgroundColor: const Color(0xFF22C55E),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Column(
@@ -210,7 +210,7 @@ class GameOverOverlay extends StatelessWidget {
                 },
                 text: 'Renaître',
                 color: const Color(0xFF22C55E),
-                textStyle: const TextStyle(color: Colors.white),
+                
               ),
             ],
           ),

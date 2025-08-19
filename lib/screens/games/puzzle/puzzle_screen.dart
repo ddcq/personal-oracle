@@ -73,6 +73,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(title: Text('Jeu de Puzzle', style: TextStyle(fontFamily: AppTextStyles.amaticSC))),
       body: ConfettiOverlay(
         controller: _confettiController,

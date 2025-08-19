@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
-import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 
 class WelcomeScreen extends StatelessWidget {
@@ -12,26 +11,24 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Muraille d\'Asgard', style: TextStyle(fontFamily: AppTextStyles.amaticSC))),
-      body: AppBackground(
-        child: Center(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/backgrounds/landscape.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(title: Text('Muraille d’Asgard', style: TextStyle(fontFamily: AppTextStyles.amaticSC, fontSize: 48)), elevation: 0, backgroundColor: Colors.transparent),
+        body: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'La Muraille d\'Asgard',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFFFD700), // Texte doré
-                    fontFamily: AppTextStyles.amaticSC,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 24),
+                
                 Container(
                   padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -52,7 +49,7 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 16),
                       Text(
-                        'Construisez la muraille parfaite comme le géant bâtisseur.\nVotre objectif est de remplir toutes les cases jusqu\'à la ligne dorée sans laisser de trous inaccessibles (fermés de tous les côtés).',
+                        'Construisez la muraille parfaite comme le géant bâtisseur.\nVotre objectif est de remplir toutes les cases jusqu’à la ligne dorée sans laisser de trous inaccessibles (fermés de tous les côtés).',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white70, fontSize: 16),
                       ),

@@ -12,7 +12,7 @@ class AppThemes {
       
       // AppBar theme
       appBarTheme: AppBarTheme(
-        backgroundColor: AppConstants.primaryDark,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         titleTextStyle: TextStyle(fontFamily: AppTextStyles.amaticSC,
