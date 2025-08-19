@@ -4,7 +4,7 @@ import 'package:oracle_d_asgard/screens/quiz_screen.dart';
 import 'package:oracle_d_asgard/screens/games/menu.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/services/database_service.dart';
 
@@ -51,14 +51,7 @@ class _MainScreenState extends State<MainScreen> {
                               child: Text(
                                 'Oracle d’Asgard',
                                 textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                      fontFamily: AppTextStyles.amaticSC,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 70.sp,
-                                      letterSpacing: 2.0.sp,
-                                      shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
-                                    ),
+                                style: ChibiTextStyles.appBarTitle,
                               ),
                             ),
                           ),
@@ -84,7 +77,7 @@ class _MainScreenState extends State<MainScreen> {
                                   width: double.infinity,
                                   child: ChibiButton(
                                     text: 'Mini games',
-                                    color: const Color(0xFFF9A825), // Orange
+                                    color: ChibiColors.buttonOrange,
                                     onPressed: () {
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
                                     },
@@ -95,7 +88,7 @@ class _MainScreenState extends State<MainScreen> {
                                   width: double.infinity,
                                   child: ChibiButton(
                                     text: 'Quiz',
-                                    color: const Color(0xFF1E88E5), // Blue
+                                    color: ChibiColors.buttonBlue,
                                     onPressed: () {
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
                                     },
@@ -106,7 +99,7 @@ class _MainScreenState extends State<MainScreen> {
                                   width: double.infinity,
                                   child: ChibiButton(
                                     text: 'Profile',
-                                    color: const Color(0xFFE53935), // Red
+                                    color: ChibiColors.buttonRed,
                                     onPressed: () {
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
                                     },
@@ -118,14 +111,6 @@ class _MainScreenState extends State<MainScreen> {
                         ],
                       );
                     } else {
-                      // Landscape
-                      final buttonTextStyle = TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.5.sp,
-                        color: Colors.white,
-                        fontFamily: AppTextStyles.amarante,
-                      );
 
                       return Column(
                         children: <Widget>[
@@ -138,13 +123,7 @@ class _MainScreenState extends State<MainScreen> {
                                 child: Text(
                                   'Oracle d’Asgard',
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                        fontFamily: AppTextStyles.amaticSC,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 2.0.sp,
-                                        shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
-                                      ),
+                                  style: ChibiTextStyles.appBarTitle,
                                 ),
                               ),
                             ),
@@ -172,29 +151,26 @@ class _MainScreenState extends State<MainScreen> {
                                       children: <Widget>[
                                         ChibiButton(
                                           text: 'Mini games',
-                                          color: const Color(0xFFF9A825),
+                                          color: ChibiColors.buttonOrange,
                                           onPressed: () {
                                             Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
                                           },
-                                          textStyle: buttonTextStyle,
                                         ),
                                         SizedBox(height: 10.h),
                                         ChibiButton(
                                           text: 'Quiz',
-                                          color: const Color(0xFF1E88E5),
+                                          color: ChibiColors.buttonBlue,
                                           onPressed: () {
                                             Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
                                           },
-                                          textStyle: buttonTextStyle,
                                         ),
                                         SizedBox(height: 10.h),
                                         ChibiButton(
                                           text: 'Profile',
-                                          color: const Color(0xFFE53935),
+                                          color: ChibiColors.buttonRed,
                                           onPressed: () {
                                             Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
                                           },
-                                          textStyle: buttonTextStyle,
                                         ),
                                       ],
                                     ),

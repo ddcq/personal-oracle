@@ -2,9 +2,8 @@ import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
-import 'package:confetti/confetti.dart';
-import 'package:oracle_d_asgard/utils/text_styles.dart';
-import 'package:oracle_d_asgard/widgets/confetti_overlay.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 
 import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_flame_game.dart';
 
@@ -73,20 +72,24 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(title: Text('Jeu de Puzzle', style: TextStyle(fontFamily: AppTextStyles.amaticSC))),
-      body: GameWidget(
-        game: _flameGame,
-        overlayBuilderMap: {
-          'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
-            return VictoryPopup(
-              rewardCard: game.associatedCard!,
-              onDismiss: () {
-                game.overlays.remove('victoryOverlay');
-                _resetGame();
+      appBar: ChibiAppBar(titleText: 'Jeu de Puzzle'),
+      body: AppBackground(
+        child: SafeArea(
+          child: GameWidget(
+            game: _flameGame,
+            overlayBuilderMap: {
+              'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
+                return VictoryPopup(
+                  rewardCard: game.associatedCard!,
+                  onDismiss: () {
+                    game.overlays.remove('victoryOverlay');
+                    _resetGame();
+                  },
+                );
               },
-            );
-          },
-        },
+            },
+          ),
+        ),
       ),
     );
   }

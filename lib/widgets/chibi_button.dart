@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 class ChibiButton extends StatefulWidget {
   final String? text;
@@ -70,13 +70,7 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
                 child: Text(
                   widget.text!,
                   textAlign: TextAlign.center,
-                  style: (widget.textStyle ?? const TextStyle()).copyWith(
-                    fontSize: widget.textStyle?.fontSize ?? 24.sp,
-                    fontWeight: widget.textStyle?.fontWeight ?? FontWeight.bold,
-                    letterSpacing: widget.textStyle?.letterSpacing ?? 2.sp,
-                    color: widget.textStyle?.color ?? Colors.white,
-                    fontFamily: widget.textStyle?.fontFamily ?? AppTextStyles.amarante,
-                  ),
+                  style: widget.textStyle ?? ChibiTextStyles.buttonText,
                 ),
               ),
             ),
