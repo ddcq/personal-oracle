@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 class SnakeGame extends StatefulWidget {
   const SnakeGame({super.key});
@@ -42,70 +44,66 @@ class _SnakeGameState extends State<SnakeGame> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F0F23),
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Text(
-          '🐍 Le Serpent de Midgard',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final gameSize = constraints.biggest.shortestSide;
-                final wallThickness = gameSize / (GameState.gridSize + 2); // 1 cell for wall
-                final gameAreaSize = gameSize - (wallThickness * 2); // Inner game area
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        extendBodyBehindAppBar: true,
+        appBar: ChibiAppBar(titleText: '🐍 Le Serpent de Midgard'),
+        body: Column(
+          children: [
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final gameSize = constraints.biggest.shortestSide;
+                  final wallThickness = gameSize / (GameState.gridSize + 2); // 1 cell for wall
+                  final gameAreaSize = gameSize - (wallThickness * 2); // Inner game area
 
-                return Center(
-                  child: SizedBox(
-                    width: gameSize,
-                    height: gameSize,
-                    child: Stack(
-                      children: [
-                        // Background wall image for the entire gameSize area
-                        Positioned.fill(child: Image.asset('assets/images/backgrounds/wall.webp', fit: BoxFit.fill)),
-                        // Centered black square for the game area
-                        Center(
-                          child: Container(
-                            width: gameAreaSize,
-                            height: gameAreaSize,
-                            color: Colors.black, // Black square
-                            child: GameWidget(
-                              game: _game,
-                              overlayBuilderMap: {
-                                'startOverlay': (BuildContext context, SnakeFlameGame game) {
-                                  return StartOverlay(game: game);
+                  return Center(
+                    child: SizedBox(
+                      width: gameSize,
+                      height: gameSize,
+                      child: Stack(
+                        children: [
+                          // Background wall image for the entire gameSize area
+                          Positioned.fill(child: Image.asset('assets/images/backgrounds/wall.webp', fit: BoxFit.fill)),
+                          // Centered black square for the game area
+                          Center(
+                            child: Container(
+                              width: gameAreaSize,
+                              height: gameAreaSize,
+                              color: Colors.black, // Black square
+                              child: GameWidget(
+                                game: _game,
+                                overlayBuilderMap: {
+                                  'startOverlay': (BuildContext context, SnakeFlameGame game) {
+                                    return StartOverlay(game: game);
+                                  },
+                                  'gameOverOverlay': (BuildContext context, SnakeFlameGame game) {
+                                    return GameOverOverlay(game: game);
+                                  },
                                 },
-                                'gameOverOverlay': (BuildContext context, SnakeFlameGame game) {
-                                  return GameOverOverlay(game: game);
-                                },
-                              },
-                              initialActiveOverlays: const ['startOverlay'],
+                                initialActiveOverlays: const ['startOverlay'],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-          // Contrôles directionnels pour mobile
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: DirectionalPad(
-              onDirectionChanged: (Direction direction) {
-                _game.gameLogic.changeDirection(_game.gameState, direction);
-              },
+            // Contrôles directionnels pour mobile
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: DirectionalPad(
+                onDirectionChanged: (Direction direction) {
+                  _game.gameLogic.changeDirection(_game.gameState, direction);
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -133,14 +131,7 @@ class StartOverlay extends StatelessWidget {
             children: [
               Text(
                 'Guide Jörmungandr',
-                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                  fontFamily: AppTextStyles.amaticSC,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 40.sp,
-                  letterSpacing: 2.0.sp,
-                  shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
-                ),
+                style: ChibiTextStyles.overlayTitle,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 8.h),
@@ -210,7 +201,6 @@ class GameOverOverlay extends StatelessWidget {
                 },
                 text: 'Renaître',
                 color: const Color(0xFF22C55E),
-                
               ),
             ],
           ),

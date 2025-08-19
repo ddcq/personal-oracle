@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/main_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 class DefeatScreen extends StatelessWidget {
   const DefeatScreen({super.key});
@@ -8,10 +9,7 @@ class DefeatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF0F172A), Color(0xFF1E293B)]),
-        ),
+      body: AppBackground(
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24.0),
@@ -37,7 +35,6 @@ class DefeatScreen extends StatelessWidget {
                     onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainScreen()), (route) => false),
                     text: 'Retour au menu principal',
                     color: Colors.red,
-                    textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],

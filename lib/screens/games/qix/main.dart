@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:oracle_d_asgard/widgets/progress_bar.dart';
 import 'qix_game.dart';
-import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+
+import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 
 import 'defeat_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
@@ -56,7 +57,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(title: Text('Qix Basic', style: TextStyle(fontFamily: AppTextStyles.amaticSC))),
+      appBar: ChibiAppBar(titleText: 'Qix Basic'),
       body: AppBackground(
         child: SafeArea(
           child: FutureBuilder<void>(

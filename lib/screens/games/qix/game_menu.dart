@@ -62,11 +62,6 @@ class GameMenu extends StatelessWidget {
             onPressed: onStartGame,
             text: '⚔️ Commencer la Conquête',
             color: const Color(0xFFFF6B35),
-            textStyle: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
           ),
         ],
       ),

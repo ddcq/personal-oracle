@@ -7,7 +7,7 @@ import './widgets/game_grid.dart';
 import './widgets/game_controls.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // Added import
 
-import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 class OrderTheScrollsGame extends StatefulWidget {
@@ -67,22 +67,14 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
                             children: [
                               Text(
                                 controller.selectedStory.title,
-                                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                  fontFamily: AppTextStyles.amaticSC,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24.sp, // Adjusted font size
-                                  letterSpacing: 2.0.sp,
-                                  shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
-                                ),
+                                style: ChibiTextStyles.storyTitle,
                               ),
                               SizedBox(height: 4.h),
                               Text(
                                 'Reconstitue l\'histoire',
-                                style: TextStyle(
+                                style: ChibiTextStyles.buttonText.copyWith(
                                   color: Colors.white60,
                                   fontSize: 16.sp,
-                                  fontFamily: AppTextStyles.amarante,
                                   shadows: [const Shadow(blurRadius: 10.0, color: Colors.black54, offset: Offset(2.0, 2.0))],
                                 ),
                               ),

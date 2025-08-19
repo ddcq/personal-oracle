@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+
+import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 
@@ -12,9 +14,7 @@ class DefeatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Text('Défaite…', style: TextStyle(fontFamily: AppTextStyles.amaticSC)),
-      ),
+      appBar: ChibiAppBar(titleText: 'Défaite…'),
       body: AppBackground(
         child: Center(
           child: SingleChildScrollView(
@@ -63,7 +63,6 @@ class DefeatScreen extends StatelessWidget {
                   },
                   text: 'Réessayer',
                   color: const Color(0xFFFFD700),
-                  textStyle: const TextStyle(fontSize: 20, color: Colors.black),
                 ),
                 SizedBox(height: 16),
                 ChibiButton(
@@ -72,7 +71,6 @@ class DefeatScreen extends StatelessWidget {
                   },
                   text: 'Retour à l’accueil',
                   color: Colors.blueGrey, // Using a consistent color for secondary action
-                  textStyle: const TextStyle(color: Colors.white70, fontSize: 16, decoration: TextDecoration.underline, decorationColor: Colors.white70),
                 ),
               ],
             ),

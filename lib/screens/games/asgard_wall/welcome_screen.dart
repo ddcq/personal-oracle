@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'package:oracle_d_asgard/utils/text_styles.dart';
+
+import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 
 class WelcomeScreen extends StatelessWidget {
@@ -11,18 +13,11 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/backgrounds/landscape.jpg'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(title: Text('Muraille d’Asgard', style: TextStyle(fontFamily: AppTextStyles.amaticSC, fontSize: 48)), elevation: 0, backgroundColor: Colors.transparent),
-        body: Center(
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: ChibiAppBar(titleText: 'Muraille d’Asgard'),
+      body: AppBackground(
+        child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),
             child: Column(
@@ -74,7 +69,6 @@ class WelcomeScreen extends StatelessWidget {
                   },
                   text: 'Construire le Mur',
                   color: const Color(0xFFFFD700), // Fond doré
-                  textStyle: const TextStyle(fontSize: 20, color: Colors.black),
                 ),
               ],
             ),

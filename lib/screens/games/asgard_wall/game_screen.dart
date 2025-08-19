@@ -8,6 +8,9 @@ import 'package:oracle_d_asgard/screens/games/asgard_wall/game_components.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_data.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/victory_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+
+import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class GameScreen extends StatefulWidget {
@@ -541,28 +544,12 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/backgrounds/landscape.jpg'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          title: Text('Muraille d’Asgard', style: TextStyle(fontFamily: AppTextStyles.amaticSC)),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-        ),
-        body: Focus(
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
+      appBar: ChibiAppBar(titleText: 'Muraille d’Asgard'),
+      body: AppBackground(
+        child: Focus(
           focusNode: focusNode,
           onKeyEvent: (node, event) {
             // Gère les événements clavier
