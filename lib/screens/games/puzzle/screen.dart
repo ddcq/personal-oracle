@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'puzzle_screen.dart';
 import 'dart:math';
 import 'package:flutter/services.dart';
@@ -31,7 +32,7 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'Reconstitue les Runes Sacrées',
+                      'Les runes dispersées',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.displayMedium?.copyWith(
                             fontFamily: AppTextStyles.amaticSC,
@@ -48,7 +49,20 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
                             ],
                           ),
                     ),
-                    const Spacer(),
+                    Text(
+                      'Reconstitue les Runes Sacrées',
+                      textAlign: TextAlign.center,
+                      style: ChibiTextStyles.buttonText.copyWith(
+                        fontSize: 20.sp, // Increased font size
+                        shadows: [
+                          const Shadow(
+                            blurRadius: 10.0, // Added shadow
+                            color: Colors.black54,
+                            offset: Offset(2.0, 2.0),
+                          )
+                        ],
+                      ),
+                    ),
                     Container(
                       padding: const EdgeInsets.all(20),
                       margin: const EdgeInsets.all(20),

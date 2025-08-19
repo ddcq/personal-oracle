@@ -21,10 +21,12 @@ class _MainScreenState extends State<MainScreen> {
     try {
       await dbService.deleteDb();
       await dbService.reinitializeDb();
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Database cleared and rebuilt successfully!')),
       );
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to clear and rebuild database: $e')),
       );

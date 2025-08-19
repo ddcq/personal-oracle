@@ -57,7 +57,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: ChibiAppBar(titleText: 'Qix Basic'),
+      appBar: ChibiAppBar(titleText: 'Conquête de Territoire'),
       body: AppBackground(
         child: SafeArea(
           child: FutureBuilder<void>(

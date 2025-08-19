@@ -3,8 +3,9 @@ import 'package:oracle_d_asgard/utils/chibi_theme.dart'; // Import the new theme
 
 class ChibiAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleText;
+  final String? subtitleText;
 
-  const ChibiAppBar({super.key, required this.titleText});
+  const ChibiAppBar({super.key, required this.titleText, this.subtitleText});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +17,21 @@ class ChibiAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: FittedBox(
         fit: BoxFit.contain,
         alignment: Alignment.center,
-        child: Text(
-          titleText,
-          textAlign: TextAlign.center,
-          style: ChibiTextStyles.appBarTitle, // Use the new text style
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              titleText,
+              textAlign: TextAlign.center,
+              style: ChibiTextStyles.appBarTitle,
+            ),
+            if (subtitleText != null)
+              Text(
+                subtitleText!,
+                textAlign: TextAlign.center,
+                style: ChibiTextStyles.buttonText.copyWith(fontSize: 16),
+              ),
+          ],
         ),
       ),
     );

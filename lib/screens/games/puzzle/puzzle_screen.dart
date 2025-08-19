@@ -72,7 +72,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: ChibiAppBar(titleText: 'Jeu de Puzzle'),
+      appBar: ChibiAppBar(titleText: 'Les runes dispersées'),
       body: AppBackground(
         child: SafeArea(
           child: GameWidget(
