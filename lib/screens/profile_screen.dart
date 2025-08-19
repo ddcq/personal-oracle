@@ -17,6 +17,7 @@ import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -26,13 +27,14 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late Map<String, MythCard> _allMythCards;
-  late Map<String, CollectibleCard> _allCollectibleCards;
+  // Changed _allCollectibleCards to store all versions, keyed by id_version
+  
 
   @override
   void initState() {
     super.initState();
     _loadAllMythCards();
-    _loadAllCollectibleCards();
+    
   }
 
   void _loadAllMythCards() {
@@ -44,14 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  void _loadAllCollectibleCards() {
-    _allCollectibleCards = {};
-    for (var story in getMythStories()) {
-      for (var card in story.collectibleCards) {
-        _allCollectibleCards[card.id] = card;
-      }
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +85,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: AppBackground(
         child: Consumer<GamificationService>(
           builder: (context, gamificationService, child) {
-            return FutureBuilder<List<List<Map<String, dynamic>>>>(
+            return FutureBuilder<List<dynamic>>( // Changed type to dynamic
               future: Future.wait([
                 gamificationService.getGameScores('Snake'),
-                gamificationService.getUnlockedCollectibleCards(),
+                gamificationService.getUnlockedCollectibleCards(), // Returns List<CollectibleCard>
                 gamificationService.getUnlockedStoryProgress(),
               ]),
               builder: (context, snapshot) {
@@ -105,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   return const Center(child: Text('No data available.'));
                 } else {
                   final List<Map<String, dynamic>> snakeScores = snapshot.data![0];
-                  final List<Map<String, dynamic>> unlockedCards = snapshot.data![1];
+                  final List<CollectibleCard> unlockedCards = snapshot.data![1]; // Cast to List<CollectibleCard>
                   final List<Map<String, dynamic>> storyProgress = snapshot.data![2];
 
                   return ListView(
@@ -343,7 +338,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   
 
-  Widget _buildCollectibleCards(List<Map<String, dynamic>> cards) {
+  Widget _buildCollectibleCards(List<CollectibleCard> cards) { // Changed parameter type
     if (cards.isEmpty) {
       return Text(
         'Aucune carte à collectionner débloquée pour l’instant.',
@@ -356,12 +351,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 1.0),
       itemCount: cards.length,
       itemBuilder: (context, index) {
-        final cardData = cards[index];
-        final collectibleCard = _allCollectibleCards[cardData['card_id']];
-
-        if (collectibleCard == null) {
-          return const SizedBox.shrink(); // Should not happen
-        }
+        final collectibleCard = cards[index]; // Directly use the card object
 
         return InteractiveCollectibleCard(card: collectibleCard);
       },

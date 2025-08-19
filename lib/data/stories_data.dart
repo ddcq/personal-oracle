@@ -1,6 +1,7 @@
 import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
+import 'package:oracle_d_asgard/models/card_version.dart'; // Import CardVersion
 
 
 List<MythStory> getMythStories() {
@@ -56,9 +57,9 @@ List<MythStory> getMythStories() {
         ),
       ],
       collectibleCards: [
-        baldrCard,
-        friggCard,
-        guiCard,
+        allCollectibleCards.firstWhere((card) => card.id == 'baldr' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'frigg' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'gui' && card.version == CardVersion.epic),
       ],
     ),
     MythStory(
@@ -110,9 +111,9 @@ List<MythStory> getMythStories() {
         ),
       ],
       collectibleCards: [
-        thorCard,
-        mjollnirCard,
-        thrymCard,
+        allCollectibleCards.firstWhere((card) => card.id == 'thor' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'mjollnir' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'thrym' && card.version == CardVersion.epic),
       ],
     ),
     MythStory(
@@ -164,9 +165,9 @@ List<MythStory> getMythStories() {
         ),
       ],
       collectibleCards: [
-        fenrirCard,
-        tyrCard,
-        gleipnirCard,
+        allCollectibleCards.firstWhere((card) => card.id == 'fenrir' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'tyr' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'gleipnir' && card.version == CardVersion.epic),
       ],
     ),
     MythStory(
@@ -217,9 +218,9 @@ List<MythStory> getMythStories() {
         ),
       ],
       collectibleCards: [
-        ymirCard,
-        audhumlaCard,
-        ginnungagapCard,
+        allCollectibleCards.firstWhere((card) => card.id == 'ymir' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'audhumla' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'ginnungagap' && card.version == CardVersion.epic),
       ],
     ),
     MythStory(
@@ -270,10 +271,10 @@ List<MythStory> getMythStories() {
         ),
       ],
       collectibleCards: [
-        sifCard,
-        brokkrSindriCard,
-        draupnirCard,
-        gungnirCard,
+        allCollectibleCards.firstWhere((card) => card.id == 'sif' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'brokkr_sindri' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'draupnir' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'gungnir' && card.version == CardVersion.epic),
       ],
     ),
     MythStory(
@@ -338,9 +339,9 @@ List<MythStory> getMythStories() {
         ),
       ],
       collectibleCards: [
-        hrimthursCard,
-        svadilfariCard,
-        sleipnirCard,
+        allCollectibleCards.firstWhere((card) => card.id == 'hrimthurs' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'svadilfari' && card.version == CardVersion.epic),
+        allCollectibleCards.firstWhere((card) => card.id == 'sleipnir' && card.version == CardVersion.epic),
       ],
     ),
   ];

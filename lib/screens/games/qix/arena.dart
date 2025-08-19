@@ -11,7 +11,6 @@ import 'qix_game.dart';
 import 'qix.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
-
 class FloodFillResult {
   final List<IntVector2> points;
   final bool containsQix;
@@ -75,7 +74,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       _rewardCardImage = await game.images.load(rewardCardImagePath!);
     } else {
       // Load a default image if no reward card image is provided
-      _rewardCardImage = await game.images.load('assets/images/cards/fenrir_card.jpg');
+      _rewardCardImage = await game.images.load('assets/images/cards/chibi/fenrir.jpg');
     }
 
     // Pre-calculate sprites for filled areas

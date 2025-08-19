@@ -6,187 +6,224 @@ import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/services/database_service.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  Future<void> _clearAndRebuildDatabase() async {
+    final dbService = DatabaseService();
+    try {
+      await dbService.deleteDb();
+      await dbService.reinitializeDb();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Database cleared and rebuilt successfully!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to clear and rebuild database: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AppBackground(
-        child: SafeArea(
-          child: Center(
-            child: OrientationBuilder(
-              builder: (context, orientation) {
-                if (orientation == Orientation.portrait) {
-                  return Column(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 20.h),
-                          child: Text(
-                            'Oracle d’Asgard',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                  fontFamily: AppTextStyles.amaticSC,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 70.sp,
-                                  letterSpacing: 2.0.sp,
-                                  shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+      body: Stack(
+        children: [
+          AppBackground(
+            child: SafeArea(
+              child: Center(
+                child: OrientationBuilder(
+                  builder: (context, orientation) {
+                    if (orientation == Orientation.portrait) {
+                      return Column(
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 20.h),
+                              child: Text(
+                                'Oracle d’Asgard',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                                      fontFamily: AppTextStyles.amaticSC,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 70.sp,
+                                      letterSpacing: 2.0.sp,
+                                      shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+                                    ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
+                              child: ClipRect(
+                                child: Image.asset(
+                                  'assets/images/odin_chibi.png',
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  alignment: Alignment.topCenter,
                                 ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-                          child: ClipRect(
-                            child: Image.asset(
-                              'assets/images/odin_chibi.png',
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              alignment: Alignment.topCenter,
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 20.h),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              width: double.infinity,
-                              child: ChibiButton(
-                                text: 'Mini games',
-                                color: const Color(0xFFF9A825), // Orange
-                                onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
-                                },
-                              ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 20.h),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ChibiButton(
+                                    text: 'Mini games',
+                                    color: const Color(0xFFF9A825), // Orange
+                                    onPressed: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 10.h),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ChibiButton(
+                                    text: 'Quiz',
+                                    color: const Color(0xFF1E88E5), // Blue
+                                    onPressed: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 10.h),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ChibiButton(
+                                    text: 'Profile',
+                                    color: const Color(0xFFE53935), // Red
+                                    onPressed: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(height: 10.h),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ChibiButton(
-                                text: 'Quiz',
-                                color: const Color(0xFF1E88E5), // Blue
-                                onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
-                                },
-                              ),
-                            ),
-                            SizedBox(height: 10.h),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ChibiButton(
-                                text: 'Profile',
-                                color: const Color(0xFFE53935), // Red
-                                onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                } else {
-                  // Landscape
-                  final buttonTextStyle = TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5.sp,
-                    color: Colors.white,
-                    fontFamily: AppTextStyles.amarante,
-                  );
+                          ),
+                        ],
+                      );
+                    } else {
+                      // Landscape
+                      final buttonTextStyle = TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5.sp,
+                        color: Colors.white,
+                        fontFamily: AppTextStyles.amarante,
+                      );
 
-                  return Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.h),
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(maxHeight: 0.2.sh),
-                          child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Text(
-                              'Oracle d’Asgard',
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                    fontFamily: AppTextStyles.amaticSC,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 2.0.sp,
-                                    shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
-                                  ),
+                      return Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(maxHeight: 0.2.sh),
+                              child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: Text(
+                                  'Oracle d’Asgard',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                                        fontFamily: AppTextStyles.amaticSC,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 2.0.sp,
+                                        shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+                                      ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(16.w, 8.h, 8.w, 16.h),
-                                child: ClipRect(
-                                  child: Image.asset(
-                                    'assets/images/odin_chibi.png',
-                                    fit: BoxFit.cover,
-                                    alignment: Alignment.topCenter,
+                          Expanded(
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(16.w, 8.h, 8.w, 16.h),
+                                    child: ClipRect(
+                                      child: Image.asset(
+                                        'assets/images/odin_chibi.png',
+                                        fit: BoxFit.cover,
+                                        alignment: Alignment.topCenter,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(8.w, 8.h, 16.w, 16.h),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    ChibiButton(
-                                      text: 'Mini games',
-                                      color: const Color(0xFFF9A825),
-                                      onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
-                                      },
-                                      textStyle: buttonTextStyle,
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(8.w, 8.h, 16.w, 16.h),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        ChibiButton(
+                                          text: 'Mini games',
+                                          color: const Color(0xFFF9A825),
+                                          onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
+                                          },
+                                          textStyle: buttonTextStyle,
+                                        ),
+                                        SizedBox(height: 10.h),
+                                        ChibiButton(
+                                          text: 'Quiz',
+                                          color: const Color(0xFF1E88E5),
+                                          onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
+                                          },
+                                          textStyle: buttonTextStyle,
+                                        ),
+                                        SizedBox(height: 10.h),
+                                        ChibiButton(
+                                          text: 'Profile',
+                                          color: const Color(0xFFE53935),
+                                          onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                                          },
+                                          textStyle: buttonTextStyle,
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(height: 10.h),
-                                    ChibiButton(
-                                      text: 'Quiz',
-                                      color: const Color(0xFF1E88E5),
-                                      onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
-                                      },
-                                      textStyle: buttonTextStyle,
-                                    ),
-                                    SizedBox(height: 10.h),
-                                    ChibiButton(
-                                      text: 'Profile',
-                                      color: const Color(0xFFE53935),
-                                      onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
-                                      },
-                                      textStyle: buttonTextStyle,
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }
-              },
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                ),
+              ),
             ),
           ),
-        ),
+          Positioned(
+            bottom: 10.h,
+            right: 10.w,
+            child: Opacity(
+              opacity: 0.3,
+              child: IconButton(
+                icon: const Icon(Icons.settings, size: 20),
+                onPressed: _clearAndRebuildDatabase,
+                tooltip: 'Clear and Rebuild Database',
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

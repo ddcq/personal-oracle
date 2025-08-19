@@ -11,6 +11,9 @@ import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'game_logic.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
+import 'package:oracle_d_asgard/data/collectible_cards_data.dart'; // Import allCollectibleCards
+import 'package:oracle_d_asgard/models/card_version.dart'; // Import CardVersion
+import 'package:oracle_d_asgard/data/stories_data.dart'; // Import getMythStories
 
 class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final GameLogic gameLogic = GameLogic();
@@ -175,10 +178,22 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       gamificationService.saveGameScore('Snake', gameState.score);
       
       if (gameState.score > 80) {
-        gamificationService.unlockCollectibleCard('fenrir_card');
+        final fenrirCardEpic = allCollectibleCards.firstWhere(
+          (card) => card.id == 'fenrir_card' && card.version == CardVersion.epic,
+          orElse: () => throw Exception('Fenrir Epic card not found'),
+        );
+        gamificationService.unlockCollectibleCard(fenrirCardEpic);
       }
       if (gameState.score > 90) {
-        gamificationService.unlockStoryPart('Fenrir enchaîné', 'fenrir_story');
+        // Find the 'Fenrir enchaîné' story
+        final fenrirStory = getMythStories().firstWhere(
+          (story) => story.title == 'Fenrir enchaîné',
+          orElse: () => throw Exception('Fenrir enchaîné story not found'),
+        );
+        // Unlock the first part of the story
+        if (fenrirStory.correctOrder.isNotEmpty) {
+          gamificationService.unlockStoryPart(fenrirStory.title, fenrirStory.correctOrder.first.id);
+        }
       }
     }
   }

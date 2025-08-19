@@ -4,12 +4,13 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
+import 'package:flutter/services.dart';
 import './puzzle_game.dart';
 import './puzzle_model.dart';
 
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/models/myth_card.dart';
+
 import 'dart:math';
 
 class DashedRectangleComponent extends RectangleComponent {
@@ -48,10 +49,19 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
   late final ui.Image puzzleImage;
   final GamificationService _gamificationService = GamificationService();
   final Function(CollectibleCard rewardCard) onRewardEarned; // New callback
-  CollectibleCard? associatedCard;
+  CollectibleCard? associatedCard; // Changed type to CollectibleCard?
 
   PuzzleFlameGame({required this.puzzleGame, required this.onRewardEarned}) {
     puzzleGame.onGameCompleted = onGameCompletedFromPuzzleGame;
+  }
+
+  Future<bool> _assetExists(String path) async {
+    try {
+      await rootBundle.load('assets/images/$path');
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   @override
@@ -60,19 +70,20 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
 
     final unearnedContent = await _gamificationService.getUnearnedContent();
     final List<CollectibleCard> unearnedCollectibleCards = unearnedContent['unearned_collectible_cards'].cast<CollectibleCard>();
-    final List<MythCard> nextMythCardsToEarn = (unearnedContent['next_myth_cards_to_earn'] as List<Map<String, dynamic>>).map((e) => e['next_myth_card'] as MythCard).toList();
+
+    final List<CollectibleCard> availableCards = [];
+    for (var card in unearnedCollectibleCards) {
+      if (await _assetExists(card.imagePath)) {
+        availableCards.add(card);
+      }
+    }
 
     String imageToLoad;
-    if (unearnedCollectibleCards.isNotEmpty) {
+    if (availableCards.isNotEmpty) {
       final random = Random();
-      final selected = unearnedCollectibleCards[random.nextInt(unearnedCollectibleCards.length)];
+      final selected = availableCards[random.nextInt(availableCards.length)];
       imageToLoad = selected.imagePath;
       associatedCard = selected;
-    } else if (nextMythCardsToEarn.isNotEmpty) {
-      final random = Random();
-      final selectedMythCard = nextMythCardsToEarn[random.nextInt(nextMythCardsToEarn.length)];
-      imageToLoad = selectedMythCard.imagePath;
-      associatedCard = selectedMythCard;
     } else {
       // Fallback image if no unearned cards
       imageToLoad = 'home_illu.png';
@@ -103,8 +114,8 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
 
   void onGameCompletedFromPuzzleGame() async {
     if (associatedCard != null) {
-      await _gamificationService.unlockCollectibleCard(associatedCard!.id);
-      onRewardEarned(associatedCard!); 
+      await _gamificationService.unlockCollectibleCard(associatedCard!); // Pass the CollectibleCard object
+      onRewardEarned(associatedCard!);
     }
   }
 }

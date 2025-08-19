@@ -86,7 +86,9 @@ flutter:
   assets:
      - assets/
      - assets/images/
-     - assets/images/cards/
+     - assets/images/cards/chibi/
+     - assets/images/cards/premium/
+     - assets/images/cards/epic/
      - assets/images/stories/
      - assets/images/backgrounds/
      - assets/images/games/

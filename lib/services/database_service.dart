@@ -21,7 +21,7 @@ class DatabaseService {
     String path = join(documentsDirectory.path, 'oracle_d_asgard.db');
     return await openDatabase(
       path,
-      version: 3,
+      version: 4, // Increment version
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -37,13 +37,13 @@ class DatabaseService {
       )
     ''');
 
-    
-
     await db.execute('''
       CREATE TABLE collectible_cards (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        card_id TEXT NOT NULL UNIQUE,
-        unlocked_at INTEGER NOT NULL
+        card_id TEXT NOT NULL,
+        version TEXT NOT NULL, -- Added version column
+        unlocked_at INTEGER NOT NULL,
+        UNIQUE(card_id, version) -- Ensure unique combination of card_id and version
       )
     ''');
 
@@ -71,6 +71,16 @@ class DatabaseService {
         )
       ''');
     }
+    if (oldVersion < 4) { // Migration for version 4
+      await db.execute('''
+        ALTER TABLE collectible_cards ADD COLUMN version TEXT DEFAULT 'epic' NOT NULL;
+      ''');
+      // Add a unique constraint if it doesn't exist, or handle existing duplicates
+      // For simplicity, assuming no duplicates of card_id with different versions exist before this migration
+      await db.execute('''
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_card_id_version ON collectible_cards (card_id, version);
+      ''');
+    }
   }
 
   Future<void> _createStoryProgressTable(Database db) async {
@@ -82,5 +92,24 @@ class DatabaseService {
         unlocked_at INTEGER NOT NULL
       )
     ''');
+  }
+
+  Future<void> deleteDb() async {
+    if (_database != null && _database!.isOpen) {
+      await _database!.close();
+      _database = null;
+    }
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, 'oracle_d_asgard.db');
+    await deleteDatabase(path);
+    _database = null; // Ensure it's null so it gets reinitialized on next access
+  }
+
+  Future<void> reinitializeDb() async {
+    if (_database != null && _database!.isOpen) {
+      await _database!.close();
+      _database = null;
+    }
+    _database = await _initDatabase();
   }
 }

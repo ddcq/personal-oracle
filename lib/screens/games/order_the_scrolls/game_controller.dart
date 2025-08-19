@@ -5,6 +5,7 @@ import 'package:oracle_d_asgard/data/stories_data.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/models/collectible_card.dart';
 
 class GameController extends ChangeNotifier {
   late MythStory _selectedStory;
@@ -67,14 +68,18 @@ class GameController extends ChangeNotifier {
         // Unlock collectible card
         final availableCards = _selectedStory.collectibleCards;
         if (availableCards.isNotEmpty) {
-          final unlockedCards = await _gamificationService.getUnlockedCollectibleCards();
-          final unlockedCardIds = unlockedCards.map((e) => e['card_id']).toList();
-          
-          final uncollectedCards = availableCards.where((card) => !unlockedCardIds.contains(card.id)).toList();
+          final unearnedContent = await _gamificationService.getUnearnedContent();
+          final List<CollectibleCard> trulyWinnableCards = (unearnedContent['unearned_collectible_cards'] as List).cast<CollectibleCard>();
 
-          if (uncollectedCards.isNotEmpty) {
-            final cardToUnlock = uncollectedCards[random.nextInt(uncollectedCards.length)];
-            await _gamificationService.unlockCollectibleCard(cardToUnlock.id);
+          final List<CollectibleCard> winnableCardsFromThisStory = trulyWinnableCards.where((winnableCard) {
+            return availableCards.any((storyCard) =>
+                storyCard.id == winnableCard.id && storyCard.version == winnableCard.version);
+          }).toList();
+
+
+          if (winnableCardsFromThisStory.isNotEmpty) {
+            final cardToUnlock = winnableCardsFromThisStory[random.nextInt(winnableCardsFromThisStory.length)];
+            await _gamificationService.unlockCollectibleCard(cardToUnlock); // Pass the CollectibleCard object
           }
         }
       }

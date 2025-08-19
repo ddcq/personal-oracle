@@ -8,8 +8,7 @@ import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:oracle_d_asgard/data/stories_data.dart';
-
-
+import 'package:oracle_d_asgard/models/card_version.dart'; // Import CardVersion
 
 class GamificationService with ChangeNotifier {
   static final GamificationService _instance = GamificationService._internal();
@@ -34,41 +33,45 @@ class GamificationService with ChangeNotifier {
     return await db.query('game_scores', where: 'game_name = ?', whereArgs: [gameName], orderBy: 'score DESC');
   }
 
-  
-
-  
-
-  Future<void> unlockCollectibleCard(String cardId) async {
+  Future<void> unlockCollectibleCard(CollectibleCard card) async { // Modified to accept CollectibleCard
     final db = await _databaseService.database;
     await db.insert('collectible_cards', {
-      'card_id': cardId,
+      'card_id': card.id,
+      'version': card.version.toJson(), // Save version
       'unlocked_at': DateTime.now().millisecondsSinceEpoch,
     }, conflictAlgorithm: ConflictAlgorithm.ignore);
     notifyListeners(); // Notify listeners
   }
 
-  Future<bool> isCollectibleCardUnlocked(String cardId) async {
+  Future<bool> isCollectibleCardUnlocked(String cardId, CardVersion version) async { // Modified to accept version
     final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query('collectible_cards', where: 'card_id = ?', whereArgs: [cardId]);
+    final List<Map<String, dynamic>> result = await db.query(
+      'collectible_cards',
+      where: 'card_id = ? AND version = ?',
+      whereArgs: [cardId, version.toJson()],
+    );
     return result.isNotEmpty;
   }
 
-  Future<List<Map<String, dynamic>>> getUnlockedCollectibleCards() async {
+  Future<List<CollectibleCard>> getUnlockedCollectibleCards() async { // Modified return type
     final db = await _databaseService.database;
-    return await db.query('collectible_cards');
+    final List<Map<String, dynamic>> result = await db.query('collectible_cards');
+    return result.map((e) {
+      final cardId = e['card_id'] as String;
+      final version = CardVersion.fromJson(e['version'] as String);
+      // Find the corresponding CollectibleCard from allCollectibleCards
+      return allCollectibleCards.firstWhere(
+        (card) => card.id == cardId && card.version == version,
+        orElse: () => throw Exception('Unlocked card $cardId with version $version not found in allCollectibleCards'),
+      );
+    }).toList();
   }
 
   Future<List<String>> getUnlockedCollectibleCardImagePaths() async {
-    final unlockedCards = await getUnlockedCollectibleCards();
-    final allCollectibleCards = getCollectibleCards();
+    final unlockedCards = await getUnlockedCollectibleCards(); // Now returns CollectibleCard objects
 
     final unlockedImagePaths = <String>[];
-    for (var unlockedCardData in unlockedCards) {
-      final cardId = unlockedCardData['card_id'];
-      final card = allCollectibleCards.firstWhere(
-        (c) => c.id == cardId,
-        orElse: () => throw Exception('Card with ID $cardId not found in getCollectibleCards()'),
-      );
+    for (var card in unlockedCards) { // Iterate over CollectibleCard objects
       unlockedImagePaths.add(card.imagePath);
     }
     return unlockedImagePaths;
@@ -123,28 +126,43 @@ class GamificationService with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> getUnearnedContent({String? tag}) async {
-    final allCollectibleCards = getCollectibleCards();
     final allMythStories = getMythStories();
-    final unlockedCollectibleCards = await getUnlockedCollectibleCards();
+    final unlockedCollectibleCards = await getUnlockedCollectibleCards(); // Now returns CollectibleCard objects
     final unlockedStoryProgress = await getUnlockedStoryProgress();
 
-    final Set<String> unlockedCollectibleCardIds = unlockedCollectibleCards.map((c) => c['card_id'] as String).toSet();
+    // Create a map for quick lookup of unlocked cards by id and version
+    final Map<String, Map<CardVersion, bool>> unlockedCardVersions = {};
+    for (var card in unlockedCollectibleCards) {
+      unlockedCardVersions.putIfAbsent(card.id, () => {});
+      unlockedCardVersions[card.id]![card.version] = true;
+    }
+
+    // Filter CollectibleCards based on new logic
+    final List<CollectibleCard> unearnedCollectibleCards = [];
+    for (var card in allCollectibleCards) {
+      final bool hasChibi = unlockedCardVersions[card.id]?[CardVersion.chibi] ?? false;
+      final bool hasPremium = unlockedCardVersions[card.id]?[CardVersion.premium] ?? false;
+      final bool hasEpic = unlockedCardVersions[card.id]?[CardVersion.epic] ?? false;
+
+      if (tag != null && !card.tags.contains(tag)) {
+        continue; // Skip card if it doesn't match the tag
+      }
+
+      if (card.version == CardVersion.chibi && !hasChibi) {
+        unearnedCollectibleCards.add(card);
+      } else if (card.version == CardVersion.premium && hasChibi && !hasPremium) {
+        unearnedCollectibleCards.add(card);
+      } else if (card.version == CardVersion.epic && hasPremium && !hasEpic) {
+        unearnedCollectibleCards.add(card);
+      }
+    }
+
+    // Process MythStories (no change here, as it's not related to card versions)
     final Map<String, List<String>> unlockedStoryParts = {};
     for (var progress in unlockedStoryProgress) {
       unlockedStoryParts[progress['story_id'] as String] = List<String>.from(jsonDecode(progress['parts_unlocked']));
     }
 
-    // Filter CollectibleCards
-    final List<CollectibleCard> unearnedCollectibleCards = [];
-    for (var card in allCollectibleCards) {
-      if (!unlockedCollectibleCardIds.contains(card.id)) {
-        if (tag == null || card.tags.contains(tag)) {
-          unearnedCollectibleCards.add(card);
-        }
-      }
-    }
-
-    // Process MythStories
     final List<Map<String, dynamic>> nextMythCardsToEarn = [];
     for (var story in allMythStories) {
       if (tag != null && !story.tags.contains(tag)) {
@@ -155,12 +173,6 @@ class GamificationService with ChangeNotifier {
       MythCard? nextCard;
 
       for (var mythCard in story.correctOrder) {
-        // A MythCard is "earned" if its corresponding story part is unlocked.
-        // Assuming mythCard.id corresponds to a story part ID.
-        // This might need clarification: is a MythCard earned when its story part is unlocked,
-        // or when the player completes the game associated with it?
-        // Based on the request "renvoi la prochaine MythCard à gagner dans l’ordre de l’histoire pour chaque MythStory non complétée",
-        // it implies checking unlocked story parts.
         if (!partsUnlockedForStory.contains(mythCard.id)) {
           nextCard = mythCard;
           break; // Found the first unearned card in this story
