@@ -1,3 +1,4 @@
+import 'dart:math'; // Import for Random
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -7,24 +8,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_component.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import CollectibleCard
 
 import 'game_logic.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 import 'package:oracle_d_asgard/data/collectible_cards_data.dart'; // Import allCollectibleCards
-import 'package:oracle_d_asgard/models/card_version.dart'; // Import CardVersion
-import 'package:oracle_d_asgard/data/stories_data.dart'; // Import getMythStories
+// import 'package:oracle_d_asgard/models/card_version.dart'; // Import CardVersion - no longer needed directly here
+// import 'package:oracle_d_asgard/data/stories_data.dart'; // Import getMythStories - no longer needed directly here
 
 class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final GameLogic gameLogic = GameLogic();
   late GameState gameState;
   final GamificationService gamificationService;
-  final Function(int score) onGameOver;
+  final Function(int score, {required bool isVictory, CollectibleCard? wonCard}) onGameEnd; // Modified callback
   final VoidCallback onResetGame;
 
   SnakeFlameGame({
     required this.gamificationService,
-    required this.onGameOver,
+    required this.onGameEnd, // Modified callback
     required this.onResetGame,
   });
 
@@ -166,7 +168,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     // Interpolate snake position for smooth movement
   }
 
-  void tick() {
+  void tick() async { // Made tick() async
     final wasGameOver = gameState.isGameOver;
     final oldFoodType = gameState.foodType;
 
@@ -180,27 +182,24 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     if (!wasGameOver && gameState.isGameOver) {
       pauseEngine();
-      gamificationService.saveGameScore('Snake', gameState.score);
-      onGameOver(gameState.score);
-      
-      if (gameState.score > 80) {
-        final fenrirCardEpic = allCollectibleCards.firstWhere(
-          (card) => card.id == 'fenrir_card' && card.version == CardVersion.epic,
-          orElse: () => throw Exception('Fenrir Epic card not found'),
-        );
-        gamificationService.unlockCollectibleCard(fenrirCardEpic);
-      }
-      if (gameState.score > 90) {
-        // Find the 'Fenrir enchaîné' story
-        final fenrirStory = getMythStories().firstWhere(
-          (story) => story.title == 'Fenrir enchaîné',
-          orElse: () => throw Exception('Fenrir enchaîné story not found'),
-        );
-        // Unlock the first part of the story
-        if (fenrirStory.correctOrder.isNotEmpty) {
-          gamificationService.unlockStoryPart(fenrirStory.title, fenrirStory.correctOrder.first.id);
+      final bool isVictory = gameState.score >= 200;
+      CollectibleCard? wonCard;
+
+      if (isVictory) {
+        gamificationService.saveGameScore('Snake', gameState.score); // Moved inside if (isVictory)
+        // Select a random unearned card
+        final unearnedContent = await gamificationService.getUnearnedContent(); // Await the Future
+        final unearnedCards = unearnedContent['unearned_collectible_cards'] as List<CollectibleCard>;
+        if (unearnedCards.isNotEmpty) {
+          final random = Random();
+          wonCard = unearnedCards[random.nextInt(unearnedCards.length)];
+          gamificationService.unlockCollectibleCard(wonCard!); // Null assertion
+        } else {
+          // Handle case where all cards are already earned (optional: log, or award something else)
+          debugPrint('All collectible cards already earned. No new card awarded.');
         }
       }
+      onGameEnd(gameState.score, isVictory: isVictory, wonCard: wonCard);
     }
   }
 

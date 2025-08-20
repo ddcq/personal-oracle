@@ -1,7 +1,21 @@
 
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTextStyles {
   static const String amaticSC = 'AmaticSC';
   static final String amarante = GoogleFonts.amarante().fontFamily!;
+
+  static const TextStyle body = TextStyle(
+    fontFamily: amaticSC,
+    fontSize: 24,
+    color: Colors.white,
+  );
+
+  static const TextStyle cardTitle = TextStyle(
+    fontFamily: amaticSC,
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
 }

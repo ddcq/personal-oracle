@@ -9,8 +9,12 @@ import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/guide_jormungandr_popup.dart'; // Import the new popup
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart'; // Import the new game over popup
+import 'package:oracle_d_asgard/widgets/victory_popup.dart'; // Import the victory popup
+import 'package:oracle_d_asgard/widgets/confetti_overlay.dart'; // Import the confetti overlay
+import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import CollectibleCard
+import 'package:confetti/confetti.dart'; // Import ConfettiController
 
-class SnakeGame extends StatefulWidget {
+class SnakeGame extends StatefulWidget { // Temporary comment
   const SnakeGame({super.key});
 
   @override
@@ -19,10 +23,12 @@ class SnakeGame extends StatefulWidget {
 
 class _SnakeGameState extends State<SnakeGame> {
   late final SnakeFlameGame _game;
+  late final ConfettiController _confettiController;
 
   @override
   void initState() {
     super.initState();
+    _confettiController = ConfettiController(duration: const Duration(seconds: 3));
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showStartPopup();
     });
@@ -33,6 +39,7 @@ class _SnakeGameState extends State<SnakeGame> {
     _game.pauseEngine(); // Pause the game engine when the widget is disposed
     _game.removeAll(_game.children); // Remove all components from the game
     _game.onRemove(); // Clean up resources
+    _confettiController.dispose(); // Dispose the confetti controller
     super.dispose();
   }
 
@@ -42,8 +49,8 @@ class _SnakeGameState extends State<SnakeGame> {
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
     _game = SnakeFlameGame(
       gamificationService: gamificationService,
-      onGameOver: (score) {
-        _showGameOverPopup(score);
+      onGameEnd: (score, {required isVictory, CollectibleCard? wonCard}) {
+        _handleGameEnd(score, isVictory: isVictory, wonCard: wonCard);
       },
       onResetGame: () {
         _game.resetGame();
@@ -65,17 +72,30 @@ class _SnakeGameState extends State<SnakeGame> {
     );
   }
 
-  void _showGameOverPopup(int score) {
+  void _handleGameEnd(int score, {required bool isVictory, CollectibleCard? wonCard}) {
     showDialog(
       context: context,
       barrierDismissible: false, // User must interact with the button
       builder: (BuildContext context) {
-        return GameOverPopup(
-          score: score,
-          onResetGame: () {
-            _game.resetGame();
-          },
-        );
+        if (isVictory) {
+          return ConfettiOverlay(
+            controller: _confettiController,
+            child: VictoryPopup(
+              score: score,
+              wonCard: wonCard!,
+              onResetGame: () {
+                _game.resetGame();
+              },
+            ),
+          );
+        } else {
+          return GameOverPopup(
+            score: score,
+            onResetGame: () {
+              _game.resetGame();
+            },
+          );
+        }
       },
     );
   }
