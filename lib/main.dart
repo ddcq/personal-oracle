@@ -48,8 +48,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      Provider.of<SoundService>(context, listen: false).stopMusic();
+    final soundService = Provider.of<SoundService>(context, listen: false);
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      soundService.pauseMusic();
+    } else if (state == AppLifecycleState.resumed) {
+      soundService.resumeMusic();
     }
   }
 
