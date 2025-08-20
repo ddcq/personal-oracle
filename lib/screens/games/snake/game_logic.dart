@@ -40,10 +40,35 @@ class GameState {
 
   /// Creates a GameState with the default initial values.
   factory GameState.initial() {
+    final Random random = Random();
+    IntVector2 initialSnakeHead;
+    IntVector2 initialFood;
+
+    // Generate random initial snake head position
+    do {
+      initialSnakeHead = IntVector2(
+        random.nextInt(gridSize),
+        random.nextInt(gridSize),
+      );
+    } while (initialSnakeHead.x < 2 || initialSnakeHead.y < 2 || initialSnakeHead.x > gridSize - 3 || initialSnakeHead.y > gridSize - 3); // Ensure not too close to edges
+
+    // Generate random initial food position, not on snake
+    do {
+      initialFood = IntVector2(
+        random.nextInt(gridSize),
+        random.nextInt(gridSize),
+      );
+    } while (initialFood == initialSnakeHead);
+
     return GameState(
-      snake: [const IntVector2(10, 10)],
-      food: const IntVector2(15, 15),
+      snake: [initialSnakeHead],
+      food: initialFood,
       obstacles: [],
+      score: 0,
+      direction: dp.Direction.right,
+      nextDirection: dp.Direction.right,
+      isGameRunning: false,
+      isGameOver: false,
     );
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:math'; // Import for Random
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -13,9 +12,6 @@ import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import Collect
 import 'game_logic.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
-import 'package:oracle_d_asgard/data/collectible_cards_data.dart'; // Import allCollectibleCards
-// import 'package:oracle_d_asgard/models/card_version.dart'; // Import CardVersion - no longer needed directly here
-// import 'package:oracle_d_asgard/data/stories_data.dart'; // Import getMythStories - no longer needed directly here
 
 class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final GameLogic gameLogic = GameLogic();
@@ -46,7 +42,23 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   late final TimerComponent _growthAnimationTimer;
 
   // Snake component
-  late final SnakeComponent _snakeComponent;
+  late SnakeComponent _snakeComponent;
+
+  // Snake Sprites (declared as fields)
+  late final Sprite snakeHeadUpSprite;
+  late final Sprite snakeHeadRightSprite;
+  late final Sprite snakeHeadLeftSprite;
+  late final Sprite snakeHeadDownSprite;
+  late final Sprite snakeBodyHorizontalSprite;
+  late final Sprite snakeBodyVerticalSprite;
+  late final Sprite snakeBodyCornerTopLeftSprite;
+  late final Sprite snakeBodyCornerTopRightSprite;
+  late final Sprite snakeBodyCornerBottomLeftSprite;
+  late final Sprite snakeBodyCornerBottomRightSprite;
+  late final Sprite snakeTailUpSprite;
+  late final Sprite snakeTailRightSprite;
+  late final Sprite snakeTailLeftSprite;
+  late final Sprite snakeTailDownSprite;
 
   @override
   Future<void> onLoad() async {
@@ -68,20 +80,20 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     final image = await images.load('games/snake-graphics.png');
     final spriteSheet = SpriteSheet(image: image, srcSize: Vector2.all(64));
 
-    final snakeHeadUpSprite = spriteSheet.getSprite(0, 3);
-    final snakeHeadRightSprite = spriteSheet.getSprite(0, 4);
-    final snakeHeadLeftSprite = spriteSheet.getSprite(1, 3);
-    final snakeHeadDownSprite = spriteSheet.getSprite(1, 4);
-    final snakeBodyHorizontalSprite = spriteSheet.getSprite(0, 1);
-    final snakeBodyVerticalSprite = spriteSheet.getSprite(1, 2);
-    final snakeBodyCornerTopLeftSprite = spriteSheet.getSprite(0, 0);
-    final snakeBodyCornerTopRightSprite = spriteSheet.getSprite(0, 2);
-    final snakeBodyCornerBottomLeftSprite = spriteSheet.getSprite(1, 0);
-    final snakeBodyCornerBottomRightSprite = spriteSheet.getSprite(2, 2);
-    final snakeTailUpSprite = spriteSheet.getSprite(2, 3);
-    final snakeTailRightSprite = spriteSheet.getSprite(2, 4);
-    final snakeTailLeftSprite = spriteSheet.getSprite(3, 3);
-    final snakeTailDownSprite = spriteSheet.getSprite(3, 4);
+    snakeHeadUpSprite = spriteSheet.getSprite(0, 3);
+    snakeHeadRightSprite = spriteSheet.getSprite(0, 4);
+    snakeHeadLeftSprite = spriteSheet.getSprite(1, 3);
+    snakeHeadDownSprite = spriteSheet.getSprite(1, 4);
+    snakeBodyHorizontalSprite = spriteSheet.getSprite(0, 1);
+    snakeBodyVerticalSprite = spriteSheet.getSprite(1, 2);
+    snakeBodyCornerTopLeftSprite = spriteSheet.getSprite(0, 0);
+    snakeBodyCornerTopRightSprite = spriteSheet.getSprite(0, 2);
+    snakeBodyCornerBottomLeftSprite = spriteSheet.getSprite(1, 0);
+    snakeBodyCornerBottomRightSprite = spriteSheet.getSprite(2, 2);
+    snakeTailUpSprite = spriteSheet.getSprite(2, 3);
+    snakeTailRightSprite = spriteSheet.getSprite(2, 4);
+    snakeTailLeftSprite = spriteSheet.getSprite(3, 3);
+    snakeTailDownSprite = spriteSheet.getSprite(3, 4);
 
     _snakeComponent = SnakeComponent(
       gameState: gameState,
@@ -227,6 +239,41 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
 
   void resetGame() {
+    // Reinitialize gameState to its initial state
+    gameState = GameState.initial();
+
+    // Remove all existing components from the game
+    removeAll([_snakeComponent, _foodComponent, ..._obstacles]);
+    _obstacles.clear(); // Clear the list of obstacle components
+
+    // Re-create and re-add the snake component
+    _snakeComponent = SnakeComponent(
+      gameState: gameState,
+      cellSize: cellSize,
+      snakeBodyCornerBottomLeftSprite: snakeBodyCornerBottomLeftSprite,
+      snakeBodyCornerBottomRightSprite: snakeBodyCornerBottomRightSprite,
+      snakeBodyCornerTopLeftSprite: snakeBodyCornerTopLeftSprite,
+      snakeBodyCornerTopRightSprite: snakeBodyCornerTopRightSprite,
+      snakeBodyHorizontalSprite: snakeBodyHorizontalSprite,
+      snakeBodyVerticalSprite: snakeBodyVerticalSprite,
+      snakeHeadDownSprite: snakeHeadDownSprite,
+      snakeHeadLeftSprite: snakeHeadLeftSprite,
+      snakeHeadRightSprite: snakeHeadRightSprite,
+      snakeHeadUpSprite: snakeHeadUpSprite,
+      snakeTailDownSprite: snakeTailDownSprite,
+      snakeTailLeftSprite: snakeTailLeftSprite,
+      snakeTailRightSprite: snakeTailRightSprite,
+      snakeTailUpSprite: snakeTailUpSprite,
+    );
+    add(_snakeComponent);
+
+    // Re-add food component
+    add(_foodComponent);
+
+    // Re-initialize game state (generates new food and obstacles)
     initializeGame();
+
+    // Pause the game engine after reset, waiting for the user to start
+    pauseEngine();
   }
 }

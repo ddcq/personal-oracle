@@ -4,7 +4,7 @@ import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
 class SnakeComponent extends PositionComponent {
-  final GameState gameState;
+  GameState gameState;
   final double cellSize;
   final List<SpriteComponent> snakeSegments = [];
 
@@ -120,6 +120,11 @@ class SnakeComponent extends PositionComponent {
 
             snakeSegment.position = segment.toVector2() * cellSize;
     }
+  }
+
+  void updateGameState(GameState newGameState) {
+    gameState = newGameState;
+    initializeSnake();
   }
 
   Sprite _getSnakeHeadSprite(dp.Direction direction) {

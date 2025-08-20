@@ -22,7 +22,6 @@ class QixGameScreen extends StatefulWidget {
 
 class _QixGameScreenState extends State<QixGameScreen> {
   QixGame? _game;
-  Map<String, dynamic>? _unearnedContent;
   late Future<void> _initializeGameFuture;
   final ValueNotifier<bool> _showVictoryPopupNotifier = ValueNotifier<bool>(false);
 

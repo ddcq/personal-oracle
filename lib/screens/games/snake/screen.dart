@@ -93,6 +93,7 @@ class _SnakeGameState extends State<SnakeGame> {
             score: score,
             onResetGame: () {
               _game.resetGame();
+              _showStartPopup(); // Show the start popup again after reset
             },
           );
         }
