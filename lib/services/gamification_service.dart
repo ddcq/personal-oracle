@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:oracle_d_asgard/services/database_service.dart';
 import 'package:sqflite/sqflite.dart';
@@ -191,5 +192,20 @@ class GamificationService with ChangeNotifier {
       'unearned_collectible_cards': unearnedCollectibleCards,
       'next_myth_cards_to_earn': nextMythCardsToEarn,
     };
+  }
+
+  Future<CollectibleCard?> selectRandomUnearnedCollectibleCard() async {
+    final unearnedContent = await getUnearnedContent();
+    final unearnedCards = unearnedContent['unearned_collectible_cards'] as List<CollectibleCard>;
+
+    if (unearnedCards.isNotEmpty) {
+      final random = Random();
+      final wonCard = unearnedCards[random.nextInt(unearnedCards.length)];
+      await unlockCollectibleCard(wonCard);
+      return wonCard;
+    } else {
+      debugPrint('All collectible cards already earned. No new card awarded.');
+      return null;
+    }
   }
 }

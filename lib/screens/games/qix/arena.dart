@@ -23,6 +23,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   final int gridSize;
   final double cellSize;
   final String? rewardCardImagePath;
+  final ui.Image snakeHeadImage;
 
   late List<List<int>> _grid; // 0: free, 1: filled, 2: path, 3: edge
   final List<IntVector2> _currentDrawingPath = [];
@@ -35,7 +36,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late final Map<IntVector2, Rect> _cellRects;
   late QixComponent _qixComponent;
 
-  ArenaComponent({required this.gridSize, required this.cellSize, this.rewardCardImagePath}) {
+  ArenaComponent({required this.gridSize, required this.cellSize, this.rewardCardImagePath, required this.snakeHeadImage}) {
     var arenaDoubleSize = (gridSize * cellSize).toDouble();
     size = Vector2(arenaDoubleSize, arenaDoubleSize);
     position = Vector2.zero();
@@ -59,6 +60,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       isGridEdge: isPointOnBoundary,
       isPlayerPath: isPointOnCurrentDrawingPath,
       onGameOver: () => game.gameOver(),
+      snakeHeadImage: snakeHeadImage,
     );
     add(_qixComponent);
   }

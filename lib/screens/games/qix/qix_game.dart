@@ -14,6 +14,7 @@ class QixGame extends FlameGame with KeyboardEvents {
   late final ArenaComponent arena;
   late final Player player;
   late ui.Image characterSpriteSheet;
+  late ui.Image snakeHeadImage;
   final ValueNotifier<double> filledPercentageNotifier = ValueNotifier<double>(0.0);
   final VoidCallback onGameOver;
   final Function(CollectibleCard?) onWin;
@@ -27,11 +28,12 @@ class QixGame extends FlameGame with KeyboardEvents {
     await super.onLoad();
 
     characterSpriteSheet = await images.load('characters.png');
+    snakeHeadImage = await images.load('snake_head.png');
 
     final int gridSize = kGridSize;
     final double cellSize = (size.x < size.y ? size.x : size.y) / gridSize;
 
-    arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize, rewardCardImagePath: rewardCardImagePath);
+    arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize, rewardCardImagePath: rewardCardImagePath, snakeHeadImage: snakeHeadImage);
     player = Player(gridSize: gridSize, cellSize: cellSize, characterSpriteSheet: characterSpriteSheet, arena: arena, onPlayerStateChanged: onPlayerStateChanged);
     player.gridPosition = IntVector2(0, 0); // Start at the top-left edge
     player.targetGridPosition = IntVector2(player.gridPosition.x, player.gridPosition.y);

@@ -186,18 +186,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       CollectibleCard? wonCard;
 
       if (isVictory) {
-        gamificationService.saveGameScore('Snake', gameState.score); // Moved inside if (isVictory)
-        // Select a random unearned card
-        final unearnedContent = await gamificationService.getUnearnedContent(); // Await the Future
-        final unearnedCards = unearnedContent['unearned_collectible_cards'] as List<CollectibleCard>;
-        if (unearnedCards.isNotEmpty) {
-          final random = Random();
-          wonCard = unearnedCards[random.nextInt(unearnedCards.length)];
-          gamificationService.unlockCollectibleCard(wonCard!); // Null assertion
-        } else {
-          // Handle case where all cards are already earned (optional: log, or award something else)
-          debugPrint('All collectible cards already earned. No new card awarded.');
-        }
+        gamificationService.saveGameScore('Snake', gameState.score);
+        wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
       }
       onGameEnd(gameState.score, isVictory: isVictory, wonCard: wonCard);
     }

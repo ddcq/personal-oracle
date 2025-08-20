@@ -24,6 +24,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
   QixGame? _game;
   Map<String, dynamic>? _unearnedContent;
   late Future<void> _initializeGameFuture;
+  final ValueNotifier<bool> _showVictoryPopupNotifier = ValueNotifier<bool>(false);
 
   @override
   void initState() {
@@ -33,20 +34,13 @@ class _QixGameScreenState extends State<QixGameScreen> {
 
   Future<void> _initializeGame() async {
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
-    _unearnedContent = await gamificationService.getUnearnedContent();
-
-    CollectibleCard? selectedRewardCard;
-    String? rewardCardImagePath;
-
-    if (_unearnedContent != null && _unearnedContent!['unearned_collectible_cards'] != null && _unearnedContent!['unearned_collectible_cards'].isNotEmpty) {
-      selectedRewardCard = _unearnedContent!['unearned_collectible_cards'][0];
-      rewardCardImagePath = selectedRewardCard?.imagePath;
-    }
+    CollectibleCard? selectedRewardCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+    String? rewardCardImagePath = selectedRewardCard?.imagePath;
 
     _game = QixGame(
       onGameOver: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => DefeatScreen())),
       onWin: (CollectibleCard? collectibleCard) {
-        _game!.overlays.add('victoryOverlay');
+        _showVictoryPopupNotifier.value = true;
       },
       rewardCardImagePath: rewardCardImagePath,
       rewardCard: selectedRewardCard,
@@ -93,17 +87,6 @@ class _QixGameScreenState extends State<QixGameScreen> {
                                 aspectRatio: 1.0,
                                 child: GameWidget(
                                   game: _game!,
-                                  overlayBuilderMap: {
-                                    'victoryOverlay': (BuildContext context, QixGame game) {
-                                      return VictoryPopup(
-                                        rewardCard: game.rewardCard!,
-                                        onDismiss: () {
-                                          game.overlays.remove('victoryOverlay');
-                                          Navigator.of(context).pop(); // Go back to the previous screen (game menu)
-                                        },
-                                      );
-                                    },
-                                  },
                                 ),
                               ),
                             ),
@@ -157,7 +140,29 @@ class _QixGameScreenState extends State<QixGameScreen> {
                       ],
                     );
                   }
-                  return gameAndControls;
+                  return Stack(
+                    children: [
+                      gameAndControls,
+                      ValueListenableBuilder<bool>(
+                        valueListenable: _showVictoryPopupNotifier,
+                        builder: (context, showPopup, child) {
+                          if (showPopup) {
+                            return Positioned.fill(
+                              child: VictoryPopup(
+                                rewardCard: _game!.rewardCard!,
+                                onDismiss: () {
+                                  _showVictoryPopupNotifier.value = false;
+                                  Navigator.of(context).pop(); // Go back to the previous screen (game menu)
+                                },
+                              ),
+                            );
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                      ),
+                    ],
+                  );
                 }
               }
               return const Center(child: CircularProgressIndicator());

@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'dart:ui' as ui;
+
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/games/qix/constants.dart';
@@ -16,6 +18,7 @@ class QixComponent extends PositionComponent {
   final IsGridEdgeChecker isGridEdge;
   final IsPlayerPathChecker isPlayerPath;
   final OnGameOver onGameOver;
+  final ui.Image snakeHeadImage;
   double _moveTimer = 0.0;
   final double _moveInterval = 0.1; // Move every 0.1 seconds
 
@@ -26,11 +29,11 @@ class QixComponent extends PositionComponent {
     required this.isGridEdge,
     required this.isPlayerPath,
     required this.onGameOver,
-  }) : _gridPosition = gridPosition,
-       _direction = _getRandomDirection(),
-       super(position: gridPosition.toVector2() * cellSize, size: Vector2.all(cellSize)) {
-    _direction = _getRandomDirection();
-  }
+    required this.snakeHeadImage,
+  })  : _gridPosition = gridPosition,
+        _direction = _getRandomDirection(),
+        super(position: gridPosition.toVector2() * cellSize, size: Vector2.all(cellSize));
+
   IntVector2 get gridPosition => _gridPosition;
   set gridPosition(IntVector2 value) {
     _gridPosition = value;
@@ -90,8 +93,26 @@ class QixComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    // Draw a simple circle for now to represent the Qix
-    final paint = Paint()..color = Colors.red;
-    canvas.drawCircle(Offset(size.x / 2, size.y / 2), cellSize / 2, paint);
+
+    final angle = atan2(_direction.y.toDouble(), _direction.x.toDouble()) + pi / 2;
+    final paint = Paint();
+    final center = Offset(size.x / 2, size.y / 2);
+
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.rotate(angle);
+    canvas.translate(-center.dx, -center.dy);
+
+    final imageSize = size * 5;
+    final imageRect = Rect.fromCenter(center: center, width: imageSize.x, height: imageSize.y);
+
+    canvas.drawImageRect(
+      snakeHeadImage,
+      Rect.fromLTWH(0, 0, snakeHeadImage.width.toDouble(), snakeHeadImage.height.toDouble()),
+      imageRect,
+      paint,
+    );
+
+    canvas.restore();
   }
 }
