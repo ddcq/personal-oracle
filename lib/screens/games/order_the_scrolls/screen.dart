@@ -9,6 +9,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart'; // Added import
 
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class OrderTheScrollsGame extends StatefulWidget {
   const OrderTheScrollsGame({super.key});
@@ -42,6 +45,43 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
       value: _gameController,
       child: Consumer<GameController>(
         builder: (context, controller, child) {
+          if (controller.showIncorrectOrderPopup) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return GameOverPopup(
+                    content: Text(
+                      '❌ Désolé, l\'ordre est incorrect.',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: AppTextStyles.amaticSC, // Added font family
+                        shadows: [
+                          Shadow(
+                            blurRadius: 5.0,
+                            color: Colors.black,
+                            offset: Offset(1.0, 1.0),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    actions: [
+                      ChibiButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        text: 'Réessayer',
+                        color: const Color(0xFFF9A825),
+                      ),
+                    ],
+                  );
+                },
+              ).then((_) => controller.incorrectOrderPopupShown());
+            });
+          }
           return Stack(
             children: [
               Scaffold(

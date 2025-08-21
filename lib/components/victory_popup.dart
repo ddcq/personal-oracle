@@ -104,9 +104,11 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                     ),
                     const SizedBox(height: 20),
                     ChibiButton(
-                      text: 'Continuer',
-                      color: const Color(0xFF1E88E5), // Blue, matching one of the main screen buttons
-                      onPressed: widget.onDismiss,
+                      text: 'Menu principal',
+                      color: Colors.grey, // Changed color to grey
+                      onPressed: () {
+                        Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
+                      },
                     ),
                   ],
                 ),

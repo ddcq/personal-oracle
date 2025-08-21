@@ -39,29 +39,6 @@ class GameControls extends StatelessWidget {
 
     return Column(
       children: [
-        if (!controller.isOrderCompletelyCorrect())
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.black.withAlpha(150), // Changed to black with alpha 150
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: const Color(0xFFEF4444),
-                width: 2,
-              ),
-            ),
-            child: const Text(
-              '❌ Désolé, l\'ordre est incorrect.',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-
         if (controller.isOrderCompletelyCorrect())
           Container(
             width: double.infinity,

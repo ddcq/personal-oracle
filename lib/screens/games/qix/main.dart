@@ -7,8 +7,9 @@ import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
-
-import 'defeat_screen.dart';
+import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
@@ -38,7 +39,42 @@ class _QixGameScreenState extends State<QixGameScreen> {
     String? rewardCardImagePath = selectedRewardCard?.imagePath;
 
     _game = QixGame(
-      onGameOver: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => DefeatScreen())),
+      onGameOver: () {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return GameOverPopup(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'DÉFAITE !',
+                    style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: AppTextStyles.amaticSC, shadows: [Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0)),]),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    'Vous avez été vaincu. Réessayez !',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: AppTextStyles.amaticSC, shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(1.0, 1.0)),]),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              actions: [
+                ChibiButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => QixGameScreen()));
+                  },
+                  text: 'Réessayer',
+                  color: Colors.red,
+                ),
+              ],
+            );
+          },
+        );
+      },
       onWin: (CollectibleCard? collectibleCard) async { // Made async to await saveQixDifficulty
         _showVictoryPopupNotifier.value = true;
         await gamificationService.saveQixDifficulty(currentDifficulty + 1); // Increment and save difficulty

@@ -55,6 +55,9 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
     puzzleGame.onGameCompleted = onGameCompletedFromPuzzleGame;
   }
 
+  @override
+  Color backgroundColor() => Colors.transparent;
+
   Future<bool> _assetExists(String path) async {
     try {
       await rootBundle.load('assets/images/$path');

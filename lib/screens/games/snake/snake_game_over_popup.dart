@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class SnakeGameOverPopup extends StatelessWidget {
   final int score;
@@ -18,14 +19,38 @@ class SnakeGameOverPopup extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
+          Text(
             '⚰️ Ragnarök !',
-            style: TextStyle(color: Colors.red, fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: Colors.white, // Changed to white
+              fontSize: 36,
+              fontWeight: FontWeight.bold, // Added bold
+              fontFamily: AppTextStyles.amaticSC, // Added font family
+              shadows: [
+                Shadow(
+                  blurRadius: 10.0,
+                  color: Colors.black,
+                  offset: Offset(2.0, 2.0),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             'Jörmungandr a péri...\nScore final: $score',
-            style: const TextStyle(color: Colors.white70, fontSize: 16),
+            style: TextStyle(
+              color: Colors.white, // Changed to white
+              fontSize: 24,
+              fontWeight: FontWeight.bold, // Added bold
+              fontFamily: AppTextStyles.amaticSC, // Added font family
+              shadows: [
+                Shadow(
+                  blurRadius: 5.0,
+                  color: Colors.black,
+                  offset: Offset(1.0, 1.0),
+                ),
+              ],
+            ),
             textAlign: TextAlign.center,
           ),
         ],

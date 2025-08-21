@@ -441,8 +441,15 @@ class _GameScreenState extends State<GameScreen> {
                   style: TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.bold,
-                    color: Colors.red[700],
+                    color: Colors.white, // Changed to white
                     fontFamily: AppTextStyles.amaticSC,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 10.0,
+                        color: Colors.black,
+                        offset: Offset(2.0, 2.0),
+                      ),
+                    ],
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -454,6 +461,14 @@ class _GameScreenState extends State<GameScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
+                    fontFamily: AppTextStyles.amaticSC, // Added font family
+                    shadows: [
+                      Shadow(
+                        blurRadius: 5.0,
+                        color: Colors.black,
+                        offset: Offset(1.0, 1.0),
+                      ),
+                    ],
                   ),
                 ),
               ],

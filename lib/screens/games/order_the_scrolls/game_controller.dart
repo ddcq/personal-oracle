@@ -12,6 +12,7 @@ class GameController extends ChangeNotifier {
   late List<MythCard> _shuffledCards;
   bool _validated = false;
   int? _draggedIndex;
+  bool _showIncorrectOrderPopup = false;
 
   final GamificationService _gamificationService = GamificationService();
 
@@ -19,6 +20,7 @@ class GameController extends ChangeNotifier {
   List<MythCard> get shuffledCards => _shuffledCards;
   bool get validated => _validated;
   int? get draggedIndex => _draggedIndex;
+  bool get showIncorrectOrderPopup => _showIncorrectOrderPopup;
 
   void initializeGame() {
     loadNewStory();
@@ -83,8 +85,14 @@ class GameController extends ChangeNotifier {
           }
         }
       }
+    } else {
+      _showIncorrectOrderPopup = true;
     }
     notifyListeners();
+  }
+
+  void incorrectOrderPopupShown() {
+    _showIncorrectOrderPopup = false;
   }
 
   void resetGame() {
