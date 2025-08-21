@@ -20,8 +20,9 @@ class QixGame extends FlameGame with KeyboardEvents {
   final Function(CollectibleCard?) onWin;
   final String? rewardCardImagePath;
   final CollectibleCard? rewardCard;
+  final int difficulty;
 
-  QixGame({required this.onGameOver, required this.onWin, this.rewardCardImagePath, this.rewardCard});
+  QixGame({required this.onGameOver, required this.onWin, this.rewardCardImagePath, this.rewardCard, required this.difficulty});
 
   @override
   Future<void> onLoad() async {
@@ -33,8 +34,8 @@ class QixGame extends FlameGame with KeyboardEvents {
     final int gridSize = kGridSize;
     final double cellSize = (size.x < size.y ? size.x : size.y) / gridSize;
 
-    arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize, rewardCardImagePath: rewardCardImagePath, snakeHeadImage: snakeHeadImage);
-    player = Player(gridSize: gridSize, cellSize: cellSize, characterSpriteSheet: characterSpriteSheet, arena: arena, onPlayerStateChanged: onPlayerStateChanged);
+    arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize, rewardCardImagePath: rewardCardImagePath, snakeHeadImage: snakeHeadImage, difficulty: difficulty);
+    player = Player(gridSize: gridSize, cellSize: cellSize, characterSpriteSheet: characterSpriteSheet, arena: arena, onPlayerStateChanged: onPlayerStateChanged, difficulty: difficulty);
     player.gridPosition = IntVector2(0, 0); // Start at the top-left edge
     player.targetGridPosition = IntVector2(player.gridPosition.x, player.gridPosition.y);
     player.setDirection(Direction.right); // Start moving right along the edge automatically
@@ -44,9 +45,14 @@ class QixGame extends FlameGame with KeyboardEvents {
     arena.calculateFilledPercentage();
   }
 
+  double get winPercentage {
+    double calculatedPercentage = kBaseWinPercentage + (difficulty * kWinPercentageIncrementPerLevel);
+    return calculatedPercentage.clamp(kBaseWinPercentage, kMaxWinPercentage);
+  }
+
   void updateFilledPercentage(double percentage) {
     filledPercentageNotifier.value = percentage;
-    if (percentage >= kWinPercentage) {
+    if (percentage >= winPercentage) {
       win();
     }
   }

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart'; // For firstWhereOrNull
 import 'dart:convert';
 import 'dart:math';
 
@@ -61,11 +62,15 @@ class GamificationService with ChangeNotifier {
       final cardId = e['card_id'] as String;
       final version = CardVersion.fromJson(e['version'] as String);
       // Find the corresponding CollectibleCard from allCollectibleCards
-      return allCollectibleCards.firstWhere(
+      final CollectibleCard? foundCard = allCollectibleCards.firstWhereOrNull(
         (card) => card.id == cardId && card.version == version,
-        orElse: () => throw Exception('Unlocked card $cardId with version $version not found in allCollectibleCards'),
       );
-    }).toList();
+      if (foundCard == null) {
+        debugPrint('Warning: Unlocked card $cardId with version $version not found in allCollectibleCards. Skipping.');
+        return null; // Skip this card
+      }
+      return foundCard;
+    }).whereType<CollectibleCard>().toList();
   }
 
   Future<List<String>> getUnlockedCollectibleCardImagePaths() async {
@@ -124,6 +129,29 @@ class GamificationService with ChangeNotifier {
   Future<List<Map<String, dynamic>>> getQuizResults() async {
     final db = await _databaseService.database;
     return await db.query('quiz_results', orderBy: 'timestamp DESC');
+  }
+
+  Future<void> saveQixDifficulty(int level) async {
+    final db = await _databaseService.database;
+    await db.insert('game_settings', {
+      'setting_key': 'qix_difficulty',
+      'setting_value': level.toString(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    notifyListeners();
+  }
+
+  Future<int> getQixDifficulty() async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'game_settings',
+      where: 'setting_key = ?',
+      whereArgs: ['qix_difficulty'],
+    );
+    if (result.isNotEmpty) {
+      return int.parse(result.first['setting_value'] as String);
+    } else {
+      return 0; // Default difficulty
+    }
   }
 
   Future<Map<String, dynamic>> getUnearnedContent({String? tag}) async {

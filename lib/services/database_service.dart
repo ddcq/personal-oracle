@@ -21,7 +21,7 @@ class DatabaseService {
     String path = join(documentsDirectory.path, 'oracle_d_asgard.db');
     return await openDatabase(
       path,
-      version: 4, // Increment version
+      version: 5, // Increment version
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -56,6 +56,13 @@ class DatabaseService {
         timestamp INTEGER NOT NULL
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE game_settings (
+        setting_key TEXT PRIMARY KEY,
+        setting_value TEXT
+      )
+    ''');
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -79,6 +86,14 @@ class DatabaseService {
       // For simplicity, assuming no duplicates of card_id with different versions exist before this migration
       await db.execute('''
         CREATE UNIQUE INDEX IF NOT EXISTS idx_card_id_version ON collectible_cards (card_id, version);
+      ''');
+    }
+    if (oldVersion < 5) { // Migration for version 5
+      await db.execute('''
+        CREATE TABLE game_settings (
+          setting_key TEXT PRIMARY KEY,
+          setting_value TEXT
+        )
       ''');
     }
   }

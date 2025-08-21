@@ -12,7 +12,14 @@ const int kTempFillArea1 = 3;
 const int kTempFillArea2 = 4;
 const int kSeedScanArea = 5;
 
-const double kWinPercentage = 0.8;
+const double kBaseWinPercentage = 0.8;
+const double kWinPercentageIncrementPerLevel = 0.02;
+const double kMaxWinPercentage = 0.96;
+
+const double kBasePlayerSpeedCellsPerSecond = 10.0;
+const double kBaseMonsterSpeedCellsPerSecond = 5.0;
+const double kPlayerSpeedChangePerLevelCellsPerSecond = 0.5;
+const double kMonsterSpeedChangePerLevelCellsPerSecond = 3.0;
 
 const double gameWidth = 150.0;
 const double gameHeight = 200.0;

@@ -16,8 +16,8 @@ class Player extends PositionComponent {
   final double cellSize;
   IntVector2 gridPosition; // Logical grid position
   IntVector2 targetGridPosition; // Target grid position for smooth movement
-  final double _arenaTraversalTime = 2.0; // Time in seconds to traverse the entire arena
   late final double _moveSpeed; // Pixels per second
+  final int difficulty;
 
   PlayerState state = PlayerState.onEdge;
   List<IntVector2> currentPath = [];
@@ -27,13 +27,14 @@ class Player extends PositionComponent {
 
   late AnimatedCharacterComponent _characterSprite;
 
-  Player({required this.gridSize, required this.cellSize, required ui.Image characterSpriteSheet, required this.arena, required this.onPlayerStateChanged})
+  Player({required this.gridSize, required this.cellSize, required ui.Image characterSpriteSheet, required this.arena, required this.onPlayerStateChanged, required this.difficulty})
     : gridPosition = IntVector2(0, 0),
       targetGridPosition = IntVector2(0, 0) {
     size = Vector2.all(cellSize);
     anchor = Anchor.topLeft;
     position = gridPosition.toVector2() * cellSize;
-    _moveSpeed = (gridSize * cellSize) / _arenaTraversalTime;
+    final double playerSpeedCellsPerSecond = (game_constants.kBasePlayerSpeedCellsPerSecond - difficulty * game_constants.kPlayerSpeedChangePerLevelCellsPerSecond).clamp(1.0, double.infinity); // Ensure speed doesn't go below 1 cell/sec
+    _moveSpeed = playerSpeedCellsPerSecond * cellSize;
     _characterSprite = AnimatedCharacterComponent(
       characterSpriteSheet: characterSpriteSheet,
       characterIndex: 0, // Character1

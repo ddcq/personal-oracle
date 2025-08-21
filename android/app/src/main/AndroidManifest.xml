@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.ACCELEROMETER"/>
     <application
         android:label="Oracle d'Asgard"
         android:name="${applicationName}"
