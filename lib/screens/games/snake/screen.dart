@@ -6,6 +6,7 @@ import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/guide_jormungandr_popup.dart'; // Import the new popup
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart'; // Import the new game over popup
@@ -29,6 +30,18 @@ class _SnakeGameState extends State<SnakeGame> {
   void initState() {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+
+    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    _game = SnakeFlameGame(
+      gamificationService: gamificationService,
+      onGameEnd: (score, {required isVictory, CollectibleCard? wonCard}) {
+        _handleGameEnd(score, isVictory: isVictory, wonCard: wonCard);
+      },
+      onResetGame: () {
+        _game.resetGame();
+      },
+    );
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showStartPopup();
     });
@@ -41,21 +54,6 @@ class _SnakeGameState extends State<SnakeGame> {
     _game.onRemove(); // Clean up resources
     _confettiController.dispose(); // Dispose the confetti controller
     super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final gamificationService = Provider.of<GamificationService>(context, listen: false);
-    _game = SnakeFlameGame(
-      gamificationService: gamificationService,
-      onGameEnd: (score, {required isVictory, CollectibleCard? wonCard}) {
-        _handleGameEnd(score, isVictory: isVictory, wonCard: wonCard);
-      },
-      onResetGame: () {
-        _game.resetGame();
-      },
-    );
   }
 
   void _showStartPopup() {
@@ -89,12 +87,33 @@ class _SnakeGameState extends State<SnakeGame> {
             ),
           );
         } else {
-          return GameOverPopup(
-            score: score,
-            onResetGame: () {
-              _game.resetGame();
-              _showStartPopup(); // Show the start popup again after reset
-            },
+          return ActionPopup(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  '⚰️ Ragnarök !',
+                  style: TextStyle(color: Colors.red, fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Jörmungandr a péri...\nScore final: $score',
+                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            actions: [
+              ChibiButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _game.resetGame();
+                  _showStartPopup();
+                },
+                text: 'Renaître',
+                color: const Color(0xFF22C55E),
+              ),
+            ],
           );
         }
       },

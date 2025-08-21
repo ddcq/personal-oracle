@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
-class GameOverPopup extends StatelessWidget {
-  final int score;
-  final VoidCallback onResetGame;
+class ActionPopup extends StatelessWidget {
+  final Widget content;
+  final List<Widget> actions;
 
-  const GameOverPopup({super.key, required this.score, required this.onResetGame});
+  const ActionPopup({
+    super.key,
+    required this.content,
+    this.actions = const [],
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,24 +25,21 @@ class GameOverPopup extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              '⚰️ Ragnarök !',
-              style: TextStyle(color: Colors.red, fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Jörmungandr a péri...\nScore final: $score',
-              style: const TextStyle(color: Colors.white70, fontSize: 16),
-              textAlign: TextAlign.center,
+            Image.asset(
+              'assets/images/odin_sad.jpg',
+              height: 100,
             ),
             const SizedBox(height: 16),
+            content,
+            const SizedBox(height: 16),
+            ...actions,
+            const SizedBox(height: 8),
             ChibiButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                onResetGame(); // Trigger game reset
+                Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
               },
-              text: 'Renaître',
-              color: const Color(0xFF22C55E),
+              text: 'Menu principal',
+              color: Colors.grey,
             ),
           ],
         ),
