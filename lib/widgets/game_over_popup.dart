@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
-class ActionPopup extends StatelessWidget {
+class GameOverPopup extends StatelessWidget {
   final Widget content;
   final List<Widget> actions;
 
-  const ActionPopup({
+  const GameOverPopup({
     super.key,
     required this.content,
     this.actions = const [],

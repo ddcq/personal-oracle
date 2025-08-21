@@ -2,14 +2,13 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
+import 'package:oracle_d_asgard/screens/games/snake/snake_game_over_popup.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
-import 'package:oracle_d_asgard/widgets/guide_jormungandr_popup.dart'; // Import the new popup
-import 'package:oracle_d_asgard/widgets/game_over_popup.dart'; // Import the new game over popup
+import 'package:oracle_d_asgard/widgets/guide_jormungandr_popup.dart';
 import 'package:oracle_d_asgard/widgets/victory_popup.dart'; // Import the victory popup
 import 'package:oracle_d_asgard/widgets/confetti_overlay.dart'; // Import the confetti overlay
 import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import CollectibleCard
@@ -87,33 +86,12 @@ class _SnakeGameState extends State<SnakeGame> {
             ),
           );
         } else {
-          return ActionPopup(
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  '⚰️ Ragnarök !',
-                  style: TextStyle(color: Colors.red, fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Jörmungandr a péri...\nScore final: $score',
-                  style: const TextStyle(color: Colors.white70, fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-            actions: [
-              ChibiButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _game.resetGame();
-                  _showStartPopup();
-                },
-                text: 'Renaître',
-                color: const Color(0xFF22C55E),
-              ),
-            ],
+          return SnakeGameOverPopup(
+            score: score,
+            onResetGame: () {
+              _game.resetGame();
+              _showStartPopup();
+            },
           );
         }
       },

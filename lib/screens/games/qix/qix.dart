@@ -43,11 +43,7 @@ class QixComponent extends PositionComponent {
              1.0,
              double.infinity,
            ), // Monster speed increases with difficulty
-       super(position: gridPosition.toVector2() * cellSize, size: Vector2.all(cellSize)) {
-    print('Niveau de difficulté: $difficulty');
-    print('Vitesse du monstre: ${game_constants.kBaseMonsterSpeedCellsPerSecond + difficulty * game_constants.kMonsterSpeedChangePerLevelCellsPerSecond} cellules/seconde');
-    print('Vitesse du joueur: ${game_constants.kBasePlayerSpeedCellsPerSecond - difficulty * game_constants.kPlayerSpeedChangePerLevelCellsPerSecond} cellules/seconde');
-  }
+       super(position: gridPosition.toVector2() * cellSize, size: Vector2.all(cellSize));
 
   IntVector2 get gridPosition => _gridPosition;
   set gridPosition(IntVector2 value) {

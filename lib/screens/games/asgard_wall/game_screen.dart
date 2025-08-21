@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oracle_d_asgard/screens/games/asgard_wall/defeat_screen.dart';
+import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_components.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_data.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/victory_screen.dart';
@@ -420,16 +420,57 @@ class _GameScreenState extends State<GameScreen> {
 
   // Termine le jeu, affiche le message de victoire ou de défaite.
   void endGame(bool won) {
-    gameTimer?.cancel(); // Arrête le timer du jeu
-    effectTimer?.cancel(); // Arrête le timer des effets visuels
+    gameTimer?.cancel();
+    effectTimer?.cancel();
     setState(() {
       gameActive = false;
     });
-    // Navigue vers l’écran de victoire ou de défaite
     if (won) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => VictoryScreen()));
     } else {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DefeatScreen()));
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return GameOverPopup(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Défaite !',
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red[700],
+                    fontFamily: AppTextStyles.amaticSC,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  '💥 Un trou dans la muraille!\nLes Ases ne paieront pas le géant.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              ChibiButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  startGame();
+                },
+                text: 'Réessayer',
+                color: const Color(0xFFFFD700),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
