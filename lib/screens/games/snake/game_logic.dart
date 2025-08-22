@@ -1,11 +1,12 @@
 import 'dart:math';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
+import 'package:flutter/foundation.dart'; // For VoidCallback
 
 // ==========================================
 // ENUMS
 // ==========================================
-enum FoodType { regular, golden }
+enum FoodType { regular, golden, rotten }
 
 
 
@@ -17,6 +18,7 @@ class GameState {
   List<IntVector2> snake;
   IntVector2 food;
   FoodType foodType;
+  double foodAge; // Add this line
   List<IntVector2> obstacles;
   int score;
   dp.Direction direction;
@@ -30,6 +32,7 @@ class GameState {
     required this.snake,
     required this.food,
     this.foodType = FoodType.regular,
+    this.foodAge = 0.0, // Initialize foodAge
     required this.obstacles,
     this.score = 0,
     this.direction = dp.Direction.right,
@@ -63,6 +66,8 @@ class GameState {
     return GameState(
       snake: [initialSnakeHead],
       food: initialFood,
+      foodType: FoodType.regular,
+      foodAge: 0.0, // Initialize foodAge
       obstacles: [],
       score: 0,
       direction: dp.Direction.right,
@@ -77,6 +82,9 @@ class GameState {
 // GAME LOGIC
 // ==========================================
 class GameLogic {
+  VoidCallback? onRottenFoodEaten; // Add this line
+  late int level; // Add this line
+
   GameState updateGame(GameState state) {
     if (!state.isGameRunning || state.isGameOver) return state;
 
@@ -120,9 +128,15 @@ class GameLogic {
 
     // Check for food
     if (newHead == state.food) {
-      state.score += (state.foodType == FoodType.golden) ? 50 : 10;
-      // Don’t remove tail, generate new food
-      _generateNewFood(state);
+      if (state.foodType == FoodType.golden) {
+        state.score += 50;
+      } else if (state.foodType == FoodType.regular) {
+        state.score += 10;
+      } else if (state.foodType == FoodType.rotten) {
+        state.score -= (10 + (level * 10)); // Lose 10 points + 10 per level
+        onRottenFoodEaten?.call(); // Call the callback
+      }
+      generateNewFood(state);
     } else {
       newSnake.removeLast();
     }
@@ -131,7 +145,7 @@ class GameLogic {
     return state;
   }
 
-  void _generateNewFood(GameState state) {
+  void generateNewFood(GameState state) {
     Random random = Random();
     IntVector2 newFood;
     do {
@@ -147,6 +161,7 @@ class GameLogic {
       state.foodType = FoodType.regular;
     }
     state.food = newFood;
+    state.foodAge = 0.0;
   }
 
   void changeDirection(GameState state, dp.Direction newDirection) {
@@ -165,7 +180,7 @@ class GameLogic {
   List<IntVector2> generateObstacles(GameState state) {
     Random random = Random();
     List<IntVector2> newObstacles = [];
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < (5 + level); i++) { // Adjusted number of obstacles
       IntVector2 newObstacle;
       do {
         newObstacle = IntVector2(

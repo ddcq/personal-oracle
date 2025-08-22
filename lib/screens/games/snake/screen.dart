@@ -1,5 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'dart:async'; // For Completer
 import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_game_over_popup.dart';
@@ -22,35 +23,32 @@ class SnakeGame extends StatefulWidget { // Temporary comment
 }
 
 class _SnakeGameState extends State<SnakeGame> {
-  late final SnakeFlameGame _game;
+  SnakeFlameGame? _game; // Make it nullable
   late final ConfettiController _confettiController;
+  late int _currentLevel;
+  Future<int>? _initializeGameFuture;
 
   @override
   void initState() {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+    _initializeGameFuture = _initializeGame();
+  }
 
+  Future<int> _initializeGame() async { // Return int
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
-    _game = SnakeFlameGame(
-      gamificationService: gamificationService,
-      onGameEnd: (score, {required isVictory, CollectibleCard? wonCard}) {
-        _handleGameEnd(score, isVictory: isVictory, wonCard: wonCard);
-      },
-      onResetGame: () {
-        _game.resetGame();
-      },
-    );
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showStartPopup();
-    });
+    _currentLevel = await gamificationService.getSnakeDifficulty();
+    return _currentLevel;
   }
 
   @override
   void dispose() {
-    _game.pauseEngine(); // Pause the game engine when the widget is disposed
-    _game.removeAll(_game.children); // Remove all components from the game
-    _game.onRemove(); // Clean up resources
+    final game = _game;
+    if (game != null) {
+      game.pauseEngine();
+      game.removeAll(game.children);
+      game.onRemove();
+    }
     _confettiController.dispose(); // Dispose the confetti controller
     super.dispose();
   }
@@ -62,7 +60,7 @@ class _SnakeGameState extends State<SnakeGame> {
       builder: (BuildContext context) {
         return GuideJormungandrPopup(
           onStartGame: () {
-            _game.startGame();
+            _game?.startGame();
           },
         );
       },
@@ -81,7 +79,7 @@ class _SnakeGameState extends State<SnakeGame> {
               score: score,
               wonCard: wonCard!,
               onResetGame: () {
-                _game.resetGame();
+                _game?.resetGame();
               },
             ),
           );
@@ -89,7 +87,7 @@ class _SnakeGameState extends State<SnakeGame> {
           return SnakeGameOverPopup(
             score: score,
             onResetGame: () {
-              _game.resetGame();
+              _game?.resetGame();
               _showStartPopup();
             },
           );
@@ -105,51 +103,104 @@ class _SnakeGameState extends State<SnakeGame> {
         backgroundColor: Colors.transparent,
         extendBodyBehindAppBar: true,
         appBar: ChibiAppBar(titleText: '🐍 Le Serpent de Midgard'),
-        body: Column(
-          children: [
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final gameSize = constraints.biggest.shortestSide;
-                  final wallThickness = gameSize / (GameState.gridSize + 2); // 1 cell for wall
-                  final gameAreaSize = gameSize - (wallThickness * 2); // Inner game area
+        body: FutureBuilder<int>( // Specify the type of data
+          future: _initializeGameFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+              _currentLevel = snapshot.data!; // Get the level from snapshot
 
-                  return Center(
-                    child: SizedBox(
-                      width: gameSize,
-                      height: gameSize,
-                      child: Stack(
-                        children: [
-                          // Background wall image for the entire gameSize area
-                          Positioned.fill(child: Image.asset('assets/images/backgrounds/wall.webp', fit: BoxFit.fill)),
-                          // Centered black square for the game area
-                          Center(
-                            child: Container(
-                              width: gameAreaSize,
-                              height: gameAreaSize,
-                              color: Colors.black, // Black square
-                              child: GameWidget(
-                                game: _game,
-                              ),
+              if (_game == null) {
+                // Initialize _game here
+                final Completer<void> completer = Completer<void>();
+                _game = SnakeFlameGame(
+                  gamificationService: Provider.of<GamificationService>(context, listen: false),
+                  onGameEnd: (score, {required isVictory, CollectibleCard? wonCard}) async {
+                    if (isVictory) {
+                      await Provider.of<GamificationService>(context, listen: false).saveSnakeDifficulty(_currentLevel + 1);
+                    }
+                    _handleGameEnd(score, isVictory: isVictory, wonCard: wonCard);
+                  },
+                  onResetGame: () {
+                    _game!.resetGame(); // Use _game! because it's nullable
+                  },
+                  onRottenFoodEaten: () {
+                    _game!.shakeScreen(); // Use _game!
+                  },
+                  level: _currentLevel,
+                  onGameLoaded: () {
+                    completer.complete();
+                  },
+                  onScoreChanged: () {
+                    setState(() {});
+                  },
+                );
+
+                // Call _showStartPopup after the game is loaded
+                completer.future.then((_) {
+                  _showStartPopup();
+                });
+              }
+
+              // Game is initialized, show the game content
+              return Column(
+                children: [
+                  Expanded(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final gameSize = constraints.biggest.shortestSide;
+                        final wallThickness = gameSize / (GameState.gridSize + 2); // 1 cell for wall
+                        final gameAreaSize = gameSize - (wallThickness * 2); // Inner game area
+
+                        return Center(
+                          child: SizedBox(
+                            width: gameSize,
+                            height: gameSize,
+                            child: Stack(
+                              children: [
+                                // Background wall image for the entire gameSize area
+                                Positioned.fill(child: Image.asset('assets/images/backgrounds/wall.webp', fit: BoxFit.fill)),
+                                // Centered black square for the game area
+                                Center(
+                                  child: Container(
+                                    width: gameAreaSize,
+                                    height: gameAreaSize,
+                                    color: Colors.black, // Black square
+                                    child: GameWidget(
+                                      game: _game!, // Use _game!
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
-            // Contrôles directionnels pour mobile
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: DirectionalPad(
-                onDirectionChanged: (Direction direction) {
-                  _game.gameLogic.changeDirection(_game.gameState, direction);
-                },
-              ),
-            ),
-          ],
+                  ),
+                  // Add the new Text widget here
+                  Text(
+                    'Niveau: $_currentLevel | Score: ${_game!.gameState.score}', // Use _game!
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                  // Contrôles directionnels pour mobile
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: DirectionalPad(
+                      onDirectionChanged: (Direction direction) {
+                        _game!.gameLogic.changeDirection(_game!.gameState, direction); // Use _game!
+                      },
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              // Show a loading indicator while the game is initializing
+              return Center(child: CircularProgressIndicator());
+            }
+          },
         ),
       ),
     );

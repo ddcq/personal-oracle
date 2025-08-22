@@ -154,6 +154,29 @@ class GamificationService with ChangeNotifier {
     }
   }
 
+  Future<void> saveSnakeDifficulty(int level) async {
+    final db = await _databaseService.database;
+    await db.insert('game_settings', {
+      'setting_key': 'snake_difficulty',
+      'setting_value': level.toString(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    notifyListeners();
+  }
+
+  Future<int> getSnakeDifficulty() async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'game_settings',
+      where: 'setting_key = ?',
+      whereArgs: ['snake_difficulty'],
+    );
+    if (result.isNotEmpty) {
+      return int.parse(result.first['setting_value'] as String);
+    } else {
+      return 0; // Default difficulty
+    }
+  }
+
   Future<Map<String, dynamic>> getUnearnedContent({String? tag}) async {
     final allMythStories = getMythStories();
     final unlockedCollectibleCards = await getUnlockedCollectibleCards(); // Now returns CollectibleCard objects

@@ -53,7 +53,7 @@ class _GameOverPopupState extends State<GameOverPopup> with SingleTickerProvider
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.blueGrey[800]!.withOpacity(0.5), // Semi-transparent background color
+              color: Colors.blueGrey[800]!.withAlpha(128), // Semi-transparent background color
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: ChibiColors.buttonOrange), // Changed border color
               image: DecorationImage(
