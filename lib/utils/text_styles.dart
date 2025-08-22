@@ -18,4 +18,11 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     color: Colors.white,
   );
+
+  static const TextStyle victoryTitle = TextStyle(
+    fontFamily: amaticSC,
+    fontSize: 48,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
 }

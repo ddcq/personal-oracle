@@ -7,12 +7,14 @@ import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'package:oracle_d_asgard/widgets/confetti_overlay.dart';
 import 'package:confetti/confetti.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 class VictoryPopup extends StatefulWidget {
   final CollectibleCard rewardCard;
   final VoidCallback onDismiss;
+  final VoidCallback onSeeRewards;
 
-  const VictoryPopup({super.key, required this.rewardCard, required this.onDismiss});
+  const VictoryPopup({super.key, required this.rewardCard, required this.onDismiss, required this.onSeeRewards});
 
   @override
   State<VictoryPopup> createState() => _VictoryPopupState();
@@ -39,6 +41,7 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
     _confettiController = ConfettiController(duration: const Duration(seconds: 2));
 
     _controller.forward();
+    _confettiController.play();
   }
 
   @override
@@ -103,12 +106,22 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20),
-                    ChibiButton(
-                      text: 'Menu principal',
-                      color: Colors.grey, // Changed color to grey
-                      onPressed: () {
-                        Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
-                      },
+                    Column(
+                      children: [
+                        ChibiButton(
+                          text: 'Menu principal',
+                          color: ChibiColors.buttonOrange,
+                          onPressed: () {
+                            Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        ChibiButton(
+                          text: 'Voir mes récompenses',
+                          color: ChibiColors.buttonBlue,
+                          onPressed: widget.onSeeRewards,
+                        ),
+                      ],
                     ),
                   ],
                 ),

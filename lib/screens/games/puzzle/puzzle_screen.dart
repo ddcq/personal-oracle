@@ -2,6 +2,7 @@ import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
+import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 
@@ -84,6 +85,12 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
                   onDismiss: () {
                     game.overlays.remove('victoryOverlay');
                     _resetGame();
+                  },
+                  onSeeRewards: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                    );
                   },
                 );
               },

@@ -4,14 +4,15 @@ import 'dart:async'; // For Completer
 import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_game_over_popup.dart';
+import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/guide_jormungandr_popup.dart';
-import 'package:oracle_d_asgard/widgets/victory_popup.dart'; // Import the victory popup
-import 'package:oracle_d_asgard/widgets/confetti_overlay.dart'; // Import the confetti overlay
+import 'package:oracle_d_asgard/components/victory_popup.dart'; // Import the victory popup
+
 import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import CollectibleCard
 import 'package:confetti/confetti.dart'; // Import ConfettiController
 
@@ -73,15 +74,18 @@ class _SnakeGameState extends State<SnakeGame> {
       barrierDismissible: false, // User must interact with the button
       builder: (BuildContext context) {
         if (isVictory) {
-          return ConfettiOverlay(
-            controller: _confettiController,
-            child: VictoryPopup(
-              score: score,
-              wonCard: wonCard!,
-              onResetGame: () {
-                _game?.resetGame();
-              },
-            ),
+          return VictoryPopup(
+            rewardCard: wonCard!,
+            onDismiss: () {
+              Navigator.of(context).pop();
+              _game?.resetGame();
+            },
+            onSeeRewards: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
+              );
+            },
           );
         } else {
           return SnakeGameOverPopup(

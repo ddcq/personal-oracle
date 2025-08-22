@@ -1,6 +1,7 @@
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
+import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/widgets/progress_bar.dart';
 import 'qix_game.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
@@ -191,6 +192,13 @@ class _QixGameScreenState extends State<QixGameScreen> {
                                 onDismiss: () {
                                   _showVictoryPopupNotifier.value = false;
                                   Navigator.of(context).pop(); // Go back to the previous screen (game menu)
+                                },
+                                onSeeRewards: () {
+                                  _showVictoryPopupNotifier.value = false;
+                                  Navigator.of(context).pop(); // Go back to the previous screen (game menu)
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                                  );
                                 },
                               ),
                             );
