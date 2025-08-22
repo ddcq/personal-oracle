@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/sprite.dart';
+
 import 'package:flame/extensions.dart';
 import 'dart:async' as async;
 import 'dart:math';
@@ -55,10 +55,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
         return;
       }
       final random = Random();
-      camera.viewfinder.position = originalPosition + Vector2(
-        (random.nextDouble() - 0.5) * shakeIntensity * 2,
-        (random.nextDouble() - 0.5) * shakeIntensity * 2,
-      );
+      camera.viewfinder.position =
+          originalPosition + Vector2((random.nextDouble() - 0.5) * shakeIntensity * 2, (random.nextDouble() - 0.5) * shakeIntensity * 2);
     });
   }
 
@@ -81,21 +79,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   // Snake component
   late SnakeComponent _snakeComponent;
 
-  // Snake Sprites (declared as fields)
-  late final Sprite snakeHeadUpSprite;
-  late final Sprite snakeHeadRightSprite;
-  late final Sprite snakeHeadLeftSprite;
-  late final Sprite snakeHeadDownSprite;
-  late final Sprite snakeBodyHorizontalSprite;
-  late final Sprite snakeBodyVerticalSprite;
-  late final Sprite snakeBodyCornerTopLeftSprite;
-  late final Sprite snakeBodyCornerTopRightSprite;
-  late final Sprite snakeBodyCornerBottomLeftSprite;
-  late final Sprite snakeBodyCornerBottomRightSprite;
-  late final Sprite snakeTailUpSprite;
-  late final Sprite snakeTailRightSprite;
-  late final Sprite snakeTailLeftSprite;
-  late final Sprite snakeTailDownSprite;
+  late final Sprite snakeHeadSprite;
 
   @override
   Future<void> onLoad() async {
@@ -112,41 +96,13 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     rottenFoodSprite = await loadSprite('apple_rotten.png');
     obstacleSprite = await loadSprite('stone.png');
 
-    final image = await images.load('games/snake-graphics.png');
-    final spriteSheet = SpriteSheet(image: image, srcSize: Vector2.all(64));
-
-    snakeHeadUpSprite = spriteSheet.getSprite(0, 3);
-    snakeHeadRightSprite = spriteSheet.getSprite(0, 4);
-    snakeHeadLeftSprite = spriteSheet.getSprite(1, 3);
-    snakeHeadDownSprite = spriteSheet.getSprite(1, 4);
-    snakeBodyHorizontalSprite = spriteSheet.getSprite(0, 1);
-    snakeBodyVerticalSprite = spriteSheet.getSprite(1, 2);
-    snakeBodyCornerTopLeftSprite = spriteSheet.getSprite(0, 0);
-    snakeBodyCornerTopRightSprite = spriteSheet.getSprite(0, 2);
-    snakeBodyCornerBottomLeftSprite = spriteSheet.getSprite(1, 0);
-    snakeBodyCornerBottomRightSprite = spriteSheet.getSprite(2, 2);
-    snakeTailUpSprite = spriteSheet.getSprite(2, 3);
-    snakeTailRightSprite = spriteSheet.getSprite(2, 4);
-    snakeTailLeftSprite = spriteSheet.getSprite(3, 3);
-    snakeTailDownSprite = spriteSheet.getSprite(3, 4);
+    snakeHeadSprite = await loadSprite('snake_head.png');
 
     _snakeComponent = SnakeComponent(
       gameState: gameState,
       cellSize: cellSize,
-      snakeBodyCornerBottomLeftSprite: snakeBodyCornerBottomLeftSprite,
-      snakeBodyCornerBottomRightSprite: snakeBodyCornerBottomRightSprite,
-      snakeBodyCornerTopLeftSprite: snakeBodyCornerTopLeftSprite,
-      snakeBodyCornerTopRightSprite: snakeBodyCornerTopRightSprite,
-      snakeBodyHorizontalSprite: snakeBodyHorizontalSprite,
-      snakeBodyVerticalSprite: snakeBodyVerticalSprite,
-      snakeHeadDownSprite: snakeHeadDownSprite,
-      snakeHeadLeftSprite: snakeHeadLeftSprite,
-      snakeHeadRightSprite: snakeHeadRightSprite,
-      snakeHeadUpSprite: snakeHeadUpSprite,
-      snakeTailDownSprite: snakeTailDownSprite,
-      snakeTailLeftSprite: snakeTailLeftSprite,
-      snakeTailRightSprite: snakeTailRightSprite,
-      snakeTailUpSprite: snakeTailUpSprite,
+      snakeHeadSprite: snakeHeadSprite,
+      animationDuration: gameSpeed / 1000.0, // Initial animation duration
     );
     add(_snakeComponent);
 
@@ -188,7 +144,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       _obstacles.add(newObstacle);
       add(newObstacle);
     }
-    _snakeComponent.initializeSnake();
 
     _growthAnimationTimer.timer.stop(); // Reset growth animation timer
     _growthAnimationTimer.timer.reset();
@@ -210,7 +165,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     // Food aging logic
     gameState.foodAge += dt;
     final double foodRottingTime = 8.0 - (gameLogic.level * 0.5); // Adjusted rotting time
-    if (gameState.foodAge >= foodRottingTime) { // 8 seconds for each stage
+    if (gameState.foodAge >= foodRottingTime) {
+      // 8 seconds for each stage
       gameState.foodAge = 0.0; // Reset timer after state change
       if (gameState.foodType == FoodType.golden) {
         gameState.foodType = FoodType.regular;
@@ -234,12 +190,17 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     // Interpolate snake position for smooth movement
   }
 
-  void tick() async { // Made tick() async
+  void tick() async {
+    // Made tick() async
     final wasGameOver = gameState.isGameOver;
     final oldFoodType = gameState.foodType;
     final oldScore = gameState.score;
 
     gameState = gameLogic.updateGame(gameState);
+
+    // Update snake component with new game state and animation duration
+    _snakeComponent.updateGameState(gameState);
+    _snakeComponent.animationDuration = _calculateGameSpeed(gameState.score) / 1000.0;
 
     if (oldScore != gameState.score) {
       onScoreChanged?.call();
@@ -294,7 +255,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       return goldenFoodSprite;
     } else if (foodType == FoodType.regular) {
       return regularFoodSprite;
-    } else { // FoodType.rotten
+    } else {
+      // FoodType.rotten
       return rottenFoodSprite;
     }
   }
@@ -317,20 +279,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     _snakeComponent = SnakeComponent(
       gameState: gameState,
       cellSize: cellSize,
-      snakeBodyCornerBottomLeftSprite: snakeBodyCornerBottomLeftSprite,
-      snakeBodyCornerBottomRightSprite: snakeBodyCornerBottomRightSprite,
-      snakeBodyCornerTopLeftSprite: snakeBodyCornerTopLeftSprite,
-      snakeBodyCornerTopRightSprite: snakeBodyCornerTopRightSprite,
-      snakeBodyHorizontalSprite: snakeBodyHorizontalSprite,
-      snakeBodyVerticalSprite: snakeBodyVerticalSprite,
-      snakeHeadDownSprite: snakeHeadDownSprite,
-      snakeHeadLeftSprite: snakeHeadLeftSprite,
-      snakeHeadRightSprite: snakeHeadRightSprite,
-      snakeHeadUpSprite: snakeHeadUpSprite,
-      snakeTailDownSprite: snakeTailDownSprite,
-      snakeTailLeftSprite: snakeTailLeftSprite,
-      snakeTailRightSprite: snakeTailRightSprite,
-      snakeTailUpSprite: snakeTailUpSprite,
+      snakeHeadSprite: snakeHeadSprite,
+      animationDuration: gameSpeed / 1000.0, // Initial animation duration
     );
     add(_snakeComponent);
 
