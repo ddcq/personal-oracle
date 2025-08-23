@@ -9,6 +9,12 @@ import 'package:oracle_d_asgard/screens/games/asgard_wall/game_data.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/victory_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
+import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/models/collectible_card.dart';
+import 'package:oracle_d_asgard/components/victory_popup.dart';
+import 'package:provider/provider.dart';
+import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
@@ -426,7 +432,37 @@ class _GameScreenState extends State<GameScreen> {
       gameActive = false;
     });
     if (won) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => VictoryScreen()));
+      final gamificationService = Provider.of<GamificationService>(context, listen: false);
+      gamificationService.selectRandomUnearnedCollectibleCard().then((card) {
+        if (card != null) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return VictoryPopup(
+                rewardCard: card,
+                onDismiss: () {
+                  Navigator.of(context).pop();
+                  startGame();
+                },
+                onSeeRewards: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                },
+              );
+            },
+          );
+        } else {
+          // No card won, just show a simple victory message and restart
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return VictoryScreen();
+            },
+          );
+        }
+      });
     } else {
       showDialog(
         context: context,
@@ -443,13 +479,7 @@ class _GameScreenState extends State<GameScreen> {
                     fontWeight: FontWeight.bold,
                     color: Colors.white, // Changed to white
                     fontFamily: AppTextStyles.amaticSC,
-                    shadows: [
-                      Shadow(
-                        blurRadius: 10.0,
-                        color: Colors.black,
-                        offset: Offset(2.0, 2.0),
-                      ),
-                    ],
+                    shadows: [Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0))],
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -462,13 +492,7 @@ class _GameScreenState extends State<GameScreen> {
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontFamily: AppTextStyles.amaticSC, // Added font family
-                    shadows: [
-                      Shadow(
-                        blurRadius: 5.0,
-                        color: Colors.black,
-                        offset: Offset(1.0, 1.0),
-                      ),
-                    ],
+                    shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(1.0, 1.0))],
                   ),
                 ),
               ],
@@ -512,6 +536,7 @@ class _GameScreenState extends State<GameScreen> {
         ),
       ),
       child: GridView.builder(
+        padding: EdgeInsets.zero,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(), // Empêche le défilement du GridView
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -600,109 +625,110 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      extendBodyBehindAppBar: true,
-      appBar: ChibiAppBar(titleText: 'Muraille d’Asgard'),
-      body: AppBackground(
-        child: Focus(
-          focusNode: focusNode,
-          onKeyEvent: (node, event) {
-            // Gère les événements clavier
-            return handleKeyPress(event) ? KeyEventResult.handled : KeyEventResult.ignored;
-          },
-          child: GestureDetector(
-            // Permet de refocaliser le jeu en tapant n’importe où
-            onTap: () => focusNode.requestFocus(),
-            child: Column(
-              children: [
-                // Légende du jeu (réduite car les règles sont sur l’écran d’accueil)
-                Container(
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF0F3460), // Fond bleu foncé
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    'Construisez la muraille jusqu’à la ligne dorée !',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFFFFD700), // Texte doré
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: AppTextStyles.amaticSC,
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/backgrounds/landscape.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ), // The background is now at the bottom of the stack
+        Scaffold(
+          backgroundColor: Colors.transparent, // Make the scaffold transparent
+          extendBodyBehindAppBar: false, // The body does not extend behind the app bar
+          appBar: ChibiAppBar(
+            titleText: 'Muraille d’Asgard',
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.help_outline, color: Colors.white),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => const WelcomeScreenDialog(),
+                  );
+                },
+              ),
+            ],
+          ),
+          body: Focus(
+            focusNode: focusNode,
+            onKeyEvent: (node, event) {
+              // Gère les événements clavier
+              return handleKeyPress(event) ? KeyEventResult.handled : KeyEventResult.ignored;
+            },
+            child: GestureDetector(
+              // Permet de refocaliser le jeu en tapant n’importe où
+              onTap: () => focusNode.requestFocus(),
+              child: Column(
+                children: [
+                  // Zone de jeu principale avec plateau et aperçu des pièces
+                  Expanded(
+                    child: Row(
+                      children: [
+                        // Plateau de jeu (prend 3 parts de l’espace)
+                        Expanded(
+                          flex: 3,
+                          child: Center(
+                            child: AspectRatio(aspectRatio: boardWidth / boardHeight, child: buildBoard()),
+                          ),
+                        ),
+
+                        SizedBox(width: 16),
+
+                        // Aperçu des prochaines pièces
+                        Expanded(
+                          flex: 1,
+                          child: NextPiecesPreview(nextPieces: nextPieces, nextPieceColors: nextPieceColors, piecesData: pieces),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                SizedBox(height: 16),
 
-                // Zone de jeu principale avec plateau et aperçu des pièces
-                Expanded(
-                  child: Row(
+                  SizedBox(height: 16),
+
+                  
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // Plateau de jeu (prend 3 parts de l’espace)
-                      Expanded(
-                        flex: 3,
-                        child: Center(
-                          child: AspectRatio(aspectRatio: boardWidth / boardHeight, child: buildBoard()),
-                        ),
+                      ChibiButton(
+                        onPressed: gameActive ? movePieceLeft : () {},
+                        color: Colors.blueGrey, // Consistent color for game controls
+                        child: Icon(Icons.arrow_left, color: Colors.white),
                       ),
-
-                      SizedBox(width: 16),
-
-                      // Aperçu des prochaines pièces
-                      Expanded(
-                        flex: 1,
-                        child: NextPiecesPreview(nextPieces: nextPieces, nextPieceColors: nextPieceColors, piecesData: pieces),
+                      ChibiButton(
+                        onPressed: gameActive ? rotatePiece : () {},
+                        color: Colors.blueGrey,
+                        child: Icon(Icons.rotate_right, color: Colors.white),
+                      ),
+                      ChibiButton(
+                        onPressed: gameActive ? dropPiece : () {},
+                        color: Colors.blueGrey,
+                        child: Icon(Icons.arrow_downward, color: Colors.white),
+                      ),
+                      ChibiButton(
+                        onPressed: gameActive ? movePieceRight : () {},
+                        color: Colors.blueGrey,
+                        child: Icon(Icons.arrow_right, color: Colors.white),
                       ),
                     ],
                   ),
-                ),
 
-                SizedBox(height: 16),
+                  SizedBox(height: 16),
 
-                // Contrôles tactiles
-                Text('Contrôles tactiles:', style: TextStyle(color: Colors.white70, fontSize: 14)),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ChibiButton(
-                      onPressed: gameActive ? movePieceLeft : () {},
-                      color: Colors.blueGrey, // Consistent color for game controls
-                      child: Icon(Icons.arrow_left, color: Colors.white),
-                    ),
-                    ChibiButton(
-                      onPressed: gameActive ? rotatePiece : () {},
-                      color: Colors.blueGrey,
-                      child: Icon(Icons.rotate_right, color: Colors.white),
-                    ),
-                    ChibiButton(
-                      onPressed: gameActive ? dropPiece : () {},
-                      color: Colors.blueGrey,
-                      child: Icon(Icons.arrow_downward, color: Colors.white),
-                    ),
-                    ChibiButton(
-                      onPressed: gameActive ? movePieceRight : () {},
-                      color: Colors.blueGrey,
-                      child: Icon(Icons.arrow_right, color: Colors.white),
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 16),
-
-                // Bouton Nouvelle Partie (peut être utile pour redémarrer depuis le jeu)
-                ChibiButton(
-                  onPressed: startGame,
-                  text: 'Redémarrer le Mur',
-                  color: const Color(0xFFFFD700), // Fond doré
-                ),
-              ],
+                  // Bouton Nouvelle Partie (peut être utile pour redémarrer depuis le jeu)
+                  ChibiButton(
+                    onPressed: startGame,
+                    text: 'Redémarrer le Mur',
+                    color: const Color(0xFFFFD700), // Fond doré
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

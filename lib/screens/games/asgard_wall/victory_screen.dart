@@ -15,7 +15,7 @@ class VictoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       appBar: ChibiAppBar(titleText: 'Victoire !'),
       body: AppBackground(
         child: Center(

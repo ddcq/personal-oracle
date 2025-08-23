@@ -4,8 +4,14 @@ import 'package:oracle_d_asgard/utils/chibi_theme.dart'; // Import the new theme
 class ChibiAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleText;
   final String? subtitleText;
+  final List<Widget>? actions;
 
-  const ChibiAppBar({super.key, required this.titleText, this.subtitleText});
+  const ChibiAppBar({
+    super.key,
+    required this.titleText,
+    this.subtitleText,
+    this.actions,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +40,7 @@ class ChibiAppBar extends StatelessWidget implements PreferredSizeWidget {
           ],
         ),
       ),
+      actions: actions,
     );
   }
 

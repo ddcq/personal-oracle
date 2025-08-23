@@ -82,6 +82,7 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                         fontSize: 70, // Adjust size as needed
                         letterSpacing: 2.0,
                         shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+                        decoration: TextDecoration.none,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -96,13 +97,14 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                         fontSize: 30, // Adjust size as needed
                         letterSpacing: 1.0,
                         shadows: [const Shadow(blurRadius: 8.0, color: Colors.black87, offset: Offset(2.0, 2.0))],
+                        decoration: TextDecoration.none,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 5),
                     Text(
                       widget.rewardCard.description,
-                      style: const TextStyle(fontSize: 16, color: Colors.white70),
+                      style: const TextStyle(fontSize: 16, color: Colors.white70, decoration: TextDecoration.none),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20),
@@ -116,11 +118,7 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                           },
                         ),
                         const SizedBox(height: 10),
-                        ChibiButton(
-                          text: 'Voir mes récompenses',
-                          color: ChibiColors.buttonBlue,
-                          onPressed: widget.onSeeRewards,
-                        ),
+                        ChibiButton(text: 'Voir mes récompenses', color: ChibiColors.buttonBlue, onPressed: widget.onSeeRewards),
                       ],
                     ),
                   ],
