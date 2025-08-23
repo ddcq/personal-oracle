@@ -7,7 +7,7 @@ class WelcomeScreenDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: const Color(0xFF0F3460).withOpacity(0.85),
+      backgroundColor: const Color(0xFF0F3460).withAlpha(217),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: const BorderSide(color: Color(0xFFFFD700), width: 1),

@@ -11,12 +11,12 @@ import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
 import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:oracle_d_asgard/models/collectible_card.dart';
+
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
-import 'package:oracle_d_asgard/widgets/app_background.dart';
+
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class GameScreen extends StatefulWidget {
@@ -435,6 +435,7 @@ class _GameScreenState extends State<GameScreen> {
       final gamificationService = Provider.of<GamificationService>(context, listen: false);
       gamificationService.selectRandomUnearnedCollectibleCard().then((card) {
         if (card != null) {
+          if (!mounted) return;
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -454,6 +455,7 @@ class _GameScreenState extends State<GameScreen> {
           );
         } else {
           // No card won, just show a simple victory message and restart
+          if (!mounted) return;
           showDialog(
             context: context,
             barrierDismissible: false,

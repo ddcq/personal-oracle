@@ -252,8 +252,6 @@ class SnakeComponent extends PositionComponent {
     final paint = Paint()..color = const Color(0xFF006400); // Dark Green color
 
     for (int i = 0; i < gameState.snake.length; i++) {
-      final segment = gameState.snake[i];
-      final segmentPosition = segment.toVector2() * cellSize;
 
       if (i == 0) {
         // Head of the snake - Qix monster with rotation
@@ -292,15 +290,8 @@ class SnakeComponent extends PositionComponent {
         canvas.restore();
       } else {
         // Body and Tail segments - draw animated circles
-        final currentSegment = gameState.snake[i];
-        IntVector2? prevSegment;
-        if (i > 0) {
-          prevSegment = gameState.snake[i - 1];
-        }
-        IntVector2? nextSegment;
-        if (i < gameState.snake.length - 1) {
-          nextSegment = gameState.snake[i + 1];
-        }
+        
+        
 
         final currentSegmentCircles = _currentSegmentCircles[i];
         List<CircleData> previousSegmentCircles = [];

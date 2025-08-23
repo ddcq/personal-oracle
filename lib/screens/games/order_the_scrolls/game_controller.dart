@@ -13,6 +13,9 @@ class GameController extends ChangeNotifier {
   bool _validated = false;
   int? _draggedIndex;
   bool _showIncorrectOrderPopup = false;
+  bool _showVictoryPopup = false; // New property
+  MythCard? _selectedMythCard; 
+  CollectibleCard? _rewardCard; // New property for reward card
 
   final GamificationService _gamificationService = GamificationService();
 
@@ -21,6 +24,9 @@ class GameController extends ChangeNotifier {
   bool get validated => _validated;
   int? get draggedIndex => _draggedIndex;
   bool get showIncorrectOrderPopup => _showIncorrectOrderPopup;
+  bool get showVictoryPopup => _showVictoryPopup; // Getter for new property
+  MythCard? get selectedMythCard => _selectedMythCard; 
+  CollectibleCard? get rewardCard => _rewardCard; // Getter for new property
 
   void initializeGame() {
     loadNewStory();
@@ -32,6 +38,9 @@ class GameController extends ChangeNotifier {
     _shuffledCards = List<MythCard>.from(_selectedStory.correctOrder);
     _shuffledCards.shuffle();
     _validated = false;
+    _selectedMythCard = _shuffledCards.isNotEmpty ? _shuffledCards.first : null; 
+    _showVictoryPopup = false; // Reset on new game
+    _rewardCard = null; // Reset on new game
     notifyListeners();
   }
 
@@ -46,6 +55,11 @@ class GameController extends ChangeNotifier {
 
   void setDraggedIndex(int? index) {
     _draggedIndex = index;
+    notifyListeners();
+  }
+
+  void selectMythCard(MythCard card) { 
+    _selectedMythCard = card;
     notifyListeners();
   }
 
@@ -66,6 +80,8 @@ class GameController extends ChangeNotifier {
             break; // Unlock only one part per victory
           }
         }
+        _showVictoryPopup = true; // Show victory popup for story part
+        _rewardCard = null; // No specific card to show for story part
       } else {
         // Unlock collectible card
         final availableCards = _selectedStory.collectibleCards;
@@ -82,8 +98,10 @@ class GameController extends ChangeNotifier {
           if (winnableCardsFromThisStory.isNotEmpty) {
             final cardToUnlock = winnableCardsFromThisStory[random.nextInt(winnableCardsFromThisStory.length)];
             await _gamificationService.unlockCollectibleCard(cardToUnlock); // Pass the CollectibleCard object
+            _rewardCard = cardToUnlock; // Set the reward card
           }
         }
+        _showVictoryPopup = true; // Show victory popup for collectible card
       }
     } else {
       _showIncorrectOrderPopup = true;
@@ -93,6 +111,11 @@ class GameController extends ChangeNotifier {
 
   void incorrectOrderPopupShown() {
     _showIncorrectOrderPopup = false;
+  }
+
+  void victoryPopupShown() { // New method
+    _showVictoryPopup = false;
+    _rewardCard = null; // Clear reward card after shown
   }
 
   void resetGame() {
