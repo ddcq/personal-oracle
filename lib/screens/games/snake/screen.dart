@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
-import 'package:oracle_d_asgard/widgets/guide_jormungandr_popup.dart';
+import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
+
 import 'package:oracle_d_asgard/components/victory_popup.dart'; // Import the victory popup
 
 import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import CollectibleCard
@@ -55,17 +56,13 @@ class _SnakeGameState extends State<SnakeGame> {
   }
 
   void _showStartPopup() {
-    showDialog(
-      context: context,
-      barrierDismissible: false, // User must interact with the button
-      builder: (BuildContext context) {
-        return GuideJormungandrPopup(
-          onStartGame: () {
-            _game?.startGame();
-          },
-        );
-      },
-    );
+    GameHelpDialog.show(context, [
+      'Mangez les pommes pour grandir et marquez des points.',
+      'Évitez de toucher les murs ou votre propre corps.',
+      'Les pommes dorées donnent plus de points et des bonus.',
+      'Les pommes pourries vous font rétrécir ou perdre des points.',
+      'Le jeu devient plus rapide à chaque niveau.',
+    ]);
   }
 
   void _handleGameEnd(int score, {required bool isVictory, CollectibleCard? wonCard}) {
@@ -106,7 +103,28 @@ class _SnakeGameState extends State<SnakeGame> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         extendBodyBehindAppBar: true,
-        appBar: ChibiAppBar(titleText: '🐍 Le Serpent de Midgard'),
+        appBar: ChibiAppBar(
+          titleText: '🐍 Le Serpent de Midgard',
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.help_outline, color: Colors.white),
+              onPressed: () {
+                GameHelpDialog.show(
+                  context,
+                  [
+                    'Mangez les pommes pour grandir et marquez des points.',
+                    'Évitez de toucher les murs ou votre propre corps.',
+                    'Les pommes dorées donnent plus de points et des bonus.',
+                    'Les pommes pourries vous font rétrécir ou perdre des points.',
+                    'Le jeu devient plus rapide à chaque niveau.',
+                  ],
+                  onGamePaused: () => _game?.pauseEngine(),
+                  onGameResumed: () => _game?.resumeEngine(),
+                );
+              },
+            ),
+          ],
+        ),
         body: FutureBuilder<int>( // Specify the type of data
           future: _initializeGameFuture,
           builder: (context, snapshot) {
@@ -136,15 +154,15 @@ class _SnakeGameState extends State<SnakeGame> {
                   level: _currentLevel,
                   onGameLoaded: () {
                     completer.complete();
+                    _game?.startGame(); // Start the game automatically
                   },
                   onScoreChanged: () {
                     setState(() {});
                   },
                 );
 
-                // Call _showStartPopup after the game is loaded
                 completer.future.then((_) {
-                  _showStartPopup();
+                  // Removed _showStartPopup() as per user request.
                 });
               }
 

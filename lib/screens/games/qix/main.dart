@@ -4,6 +4,7 @@ import 'package:flame/game.dart';
 import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/widgets/progress_bar.dart';
 import 'qix_game.dart';
+import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 
@@ -90,7 +91,28 @@ class _QixGameScreenState extends State<QixGameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: ChibiAppBar(titleText: 'Conquête de Territoire'),
+      appBar: ChibiAppBar(
+        titleText: 'Conquête de Territoire',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: Colors.white),
+            onPressed: () {
+              GameHelpDialog.show(
+                context,
+                [
+                  'Tracez des lignes pour capturer des territoires. Évitez les ennemis et leurs lignes !',
+                  'Capturez plus de 75% du territoire pour gagner.',
+                  'Si un ennemi touche votre ligne en construction, vous perdez une vie.',
+                  'Si un ennemi touche votre corps, vous perdez une vie.',
+                  'Collectez les bonus pour des avantages temporaires.',
+                ],
+                onGamePaused: () => _game?.pauseEngine(),
+                onGameResumed: () => _game?.resumeEngine(),
+              );
+            },
+          ),
+        ],
+      ),
       body: AppBackground(
         child: SafeArea(
           child: FutureBuilder<void>(

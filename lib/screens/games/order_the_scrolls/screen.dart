@@ -138,12 +138,12 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
                 },
               ),
               actions: [
-                Container(
-                  margin: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(color: const Color(0xFF6366F1).withAlpha(51), borderRadius: BorderRadius.circular(12)),
-                  child: IconButton(
-                    icon: const Icon(Icons.help_outline, color: Colors.white),
-                    onPressed: () => HelpDialog.show(context),
+                IconButton(
+                  icon: const Icon(Icons.help_outline, color: Colors.white),
+                  onPressed: () => HelpDialog.show(
+                    context,
+                    onGamePaused: () => _animationController.stop(),
+                    onGameResumed: () => _animationController.forward(), // Or reset, depending on desired behavior
                   ),
                 ),
               ],

@@ -47,6 +47,7 @@ class _GameScreenState extends State<GameScreen> {
 
   Timer? gameTimer;
   bool gameActive = false;
+  bool _isPaused = false; // New flag for pausing game logic
   // gameWon et gameLost sont maintenant gérés par la navigation vers les écrans dédiés.
   FocusNode focusNode = FocusNode();
 
@@ -79,6 +80,7 @@ class _GameScreenState extends State<GameScreen> {
       board = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => null));
       justPlaced = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => false));
       gameActive = true;
+      _isPaused = false; // Ensure game is not paused on start
       currentPiece = []; // Vide la pièce actuelle
     });
 
@@ -87,16 +89,18 @@ class _GameScreenState extends State<GameScreen> {
 
     // Lance le timer du jeu pour la descente automatique des pièces
     gameTimer = Timer.periodic(Duration(milliseconds: 800), (timer) {
-      if (gameActive) {
+      if (gameActive && !_isPaused) {
         movePieceDown();
-      } else {
+      } else if (!gameActive) {
         timer.cancel();
       }
     });
 
     // Timer pour les effets visuels temporaires (ex: brillance des blocs nouvellement placés)
     effectTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-      _updateVisualEffects();
+      if (!_isPaused) {
+        _updateVisualEffects();
+      }
     });
   }
 
@@ -646,9 +650,14 @@ class _GameScreenState extends State<GameScreen> {
               IconButton(
                 icon: const Icon(Icons.help_outline, color: Colors.white),
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => const WelcomeScreenDialog(),
+                  WelcomeScreenDialog.show(
+                    context,
+                    onGamePaused: () {
+                      _isPaused = true;
+                    },
+                    onGameResumed: () {
+                      _isPaused = false;
+                    },
                   );
                 },
               ),

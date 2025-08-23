@@ -5,6 +5,7 @@ import 'package:flame/game.dart';
 import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
+import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 
 import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_flame_game.dart';
 
@@ -73,7 +74,26 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: ChibiAppBar(titleText: 'Les runes dispersées'),
+      appBar: ChibiAppBar(
+        titleText: 'Les runes dispersées',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: Colors.white),
+            onPressed: () {
+              GameHelpDialog.show(
+                context,
+                [
+                  'Réorganisez les tuiles pour former l\'image complète.',
+                  'Glissez les tuiles dans les espaces vides.',
+                  'Le but est de reconstituer l\'image le plus rapidement possible.',
+                ],
+                onGamePaused: () => _flameGame.pauseEngine(),
+                onGameResumed: () => _flameGame.resumeEngine(),
+              );
+            },
+          ),
+        ],
+      ),
       body: AppBackground(
         child: SafeArea(
           child: GameWidget(
