@@ -22,7 +22,6 @@ class OrderTheScrollsGame extends StatefulWidget {
 }
 
 class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTickerProviderStateMixin {
-  // Add SingleTickerProviderStateMixin
   late GameController _gameController;
 
   final Curve _currentCurve = Curves.easeOutCubic; // User's chosen curve
@@ -78,7 +77,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
                 builder: (BuildContext context) {
                   return GameOverPopup(
                     content: Text(
-                      '❌ Désolé, l\'ordre est incorrect.',
+                      '❌ Désolé, l’ordre est incorrect.',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -109,7 +108,8 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
                 barrierDismissible: false,
                 builder: (BuildContext context) {
                   return VictoryPopup(
-                    rewardCard: controller.rewardCard!, // Pass the reward card
+                    rewardCard: controller.rewardCard, // Pass the reward card
+                    unlockedStoryChapter: controller.unlockedStoryChapter, // Pass the unlocked story chapter
                     onDismiss: () {
                       Navigator.of(context).pop();
                       controller.victoryPopupShown(); // Reset popup state

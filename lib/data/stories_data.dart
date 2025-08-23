@@ -7,6 +7,20 @@ import 'package:oracle_d_asgard/models/card_version.dart'; // Import CardVersion
 List<MythStory> getMythStories() {
   return [
     MythStory(
+      title: 'Loading Story',
+      tags: [],
+      correctOrder: [
+        MythCard(
+          id: 'dummy_1',
+          title: 'Loading...',
+          description: 'Please wait while the game loads.',
+          imagePath: 'assets/images/odin_chibi.png', // A placeholder image
+          detailedStory: 'Loading...',
+        ),
+      ],
+      collectibleCards: [],
+    ),
+    MythStory(
       title: 'La mort de Baldr',
       tags: ['Baldr', 'Odin', 'Frigg', 'Asgard', 'Gui', 'Loki', 'Valhalla', 'Höd', 'Ragnarök'],
       correctOrder: [

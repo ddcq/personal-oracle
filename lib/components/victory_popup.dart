@@ -4,17 +4,19 @@ import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 import 'package:oracle_d_asgard/models/collectible_card.dart';
+import 'package:oracle_d_asgard/models/myth_card.dart'; // Import MythCard
 import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'package:oracle_d_asgard/widgets/confetti_overlay.dart';
 import 'package:confetti/confetti.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 class VictoryPopup extends StatefulWidget {
-  final CollectibleCard rewardCard;
+  final CollectibleCard? rewardCard; // Made nullable
+  final MythCard? unlockedStoryChapter; // New: unlocked story chapter
   final VoidCallback onDismiss;
   final VoidCallback onSeeRewards;
 
-  const VictoryPopup({super.key, required this.rewardCard, required this.onDismiss, required this.onSeeRewards});
+  const VictoryPopup({super.key, this.rewardCard, this.unlockedStoryChapter, required this.onDismiss, required this.onSeeRewards}); // rewardCard is no longer required
 
   @override
   State<VictoryPopup> createState() => _VictoryPopupState();
@@ -86,27 +88,72 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Image.asset(addAssetPrefix(widget.rewardCard.imagePath), height: 150, fit: BoxFit.contain),
-                    const SizedBox(height: 10),
-                    Text(
-                      widget.rewardCard.title,
-                      style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                        fontFamily: AppTextStyles.amaticSC,
-                        color: Colors.amber,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30, // Adjust size as needed
-                        letterSpacing: 1.0,
-                        shadows: [const Shadow(blurRadius: 8.0, color: Colors.black87, offset: Offset(2.0, 2.0))],
-                        decoration: TextDecoration.none,
+                    if (widget.rewardCard != null)
+                      ...[
+                      Image.asset(addAssetPrefix(widget.rewardCard!.imagePath), height: 150, fit: BoxFit.contain),
+                      const SizedBox(height: 10),
+                      Text(
+                        widget.rewardCard!.title,
+                        style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                          fontFamily: AppTextStyles.amaticSC,
+                          color: Colors.amber,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30, // Adjust size as needed
+                          letterSpacing: 1.0,
+                          shadows: [const Shadow(blurRadius: 8.0, color: Colors.black87, offset: Offset(2.0, 2.0))],
+                          decoration: TextDecoration.none,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      widget.rewardCard.description,
-                      style: const TextStyle(fontSize: 16, color: Colors.white70, decoration: TextDecoration.none),
-                      textAlign: TextAlign.center,
-                    ),
+                      const SizedBox(height: 5),
+                      Text(
+                        widget.rewardCard!.description,
+                        style: const TextStyle(fontSize: 16, color: Colors.white70, decoration: TextDecoration.none),
+                        textAlign: TextAlign.center,
+                      ),
+                      ]
+                    else if (widget.unlockedStoryChapter != null)
+                      ...[
+                        Image.asset(addAssetPrefix(widget.unlockedStoryChapter!.imagePath), height: 150, fit: BoxFit.contain),
+                        const SizedBox(height: 10),
+                        Text(
+                          widget.unlockedStoryChapter!.title,
+                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                            fontFamily: AppTextStyles.amaticSC,
+                            color: Colors.amber,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30, // Adjust size as needed
+                            letterSpacing: 1.0,
+                            shadows: [const Shadow(blurRadius: 8.0, color: Colors.black87, offset: Offset(2.0, 2.0))],
+                            decoration: TextDecoration.none,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          widget.unlockedStoryChapter!.description,
+                          style: const TextStyle(fontSize: 16, color: Colors.white70, decoration: TextDecoration.none),
+                          textAlign: TextAlign.center,
+                        ),
+                      ]
+                    else
+                      ...[
+                        const SizedBox(height: 20),
+                        Text(
+                          'Nouvelle partie de l\'histoire débloquée !',
+                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                            fontFamily: AppTextStyles.amaticSC,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30, // Adjust size as needed
+                            letterSpacing: 1.0,
+                            shadows: [const Shadow(blurRadius: 8.0, color: Colors.black87, offset: Offset(2.0, 2.0))],
+                            decoration: TextDecoration.none,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 20),
+                      ],
                     const SizedBox(height: 20),
                     Column(
                       children: [
@@ -117,8 +164,11 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                             Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
                           },
                         ),
-                        const SizedBox(height: 10),
-                        ChibiButton(text: 'Voir mes récompenses', color: ChibiColors.buttonBlue, onPressed: widget.onSeeRewards),
+                        if (widget.rewardCard != null)
+                          ...[
+                          const SizedBox(height: 10),
+                          ChibiButton(text: 'Voir mes récompenses', color: ChibiColors.buttonBlue, onPressed: widget.onSeeRewards),
+                          ],
                       ],
                     ),
                   ],
