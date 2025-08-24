@@ -143,7 +143,6 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
                   onPressed: () => HelpDialog.show(
                     context,
                     onGamePaused: () => _animationController.stop(),
-                    onGameResumed: () => _animationController.forward(), // Or reset, depending on desired behavior
                   ),
                 ),
               ],
