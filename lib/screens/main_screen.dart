@@ -78,7 +78,7 @@ class _MainScreenState extends State<MainScreen> {
                                 SizedBox(
                                   width: double.infinity,
                                   child: ChibiButton(
-                                    text: 'Mini games',
+                                    text: 'Amusons-nous',
                                     color: ChibiColors.buttonOrange,
                                     onPressed: () {
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
@@ -89,7 +89,7 @@ class _MainScreenState extends State<MainScreen> {
                                 SizedBox(
                                   width: double.infinity,
                                   child: ChibiButton(
-                                    text: 'Quiz',
+                                    text: 'Ma divinité gardienne',
                                     color: ChibiColors.buttonBlue,
                                     onPressed: () {
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
@@ -100,7 +100,7 @@ class _MainScreenState extends State<MainScreen> {
                                 SizedBox(
                                   width: double.infinity,
                                   child: ChibiButton(
-                                    text: 'Profile',
+                                    text: 'Mes récompenses',
                                     color: ChibiColors.buttonRed,
                                     onPressed: () {
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
@@ -152,7 +152,7 @@ class _MainScreenState extends State<MainScreen> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
                                         ChibiButton(
-                                          text: 'Mini games',
+                                          text: 'Amusons-nous',
                                           color: ChibiColors.buttonOrange,
                                           onPressed: () {
                                             Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
@@ -160,7 +160,7 @@ class _MainScreenState extends State<MainScreen> {
                                         ),
                                         SizedBox(height: 10.h),
                                         ChibiButton(
-                                          text: 'Quiz',
+                                          text: 'Ma divinité gardienne',
                                           color: ChibiColors.buttonBlue,
                                           onPressed: () {
                                             Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
@@ -168,7 +168,7 @@ class _MainScreenState extends State<MainScreen> {
                                         ),
                                         SizedBox(height: 10.h),
                                         ChibiButton(
-                                          text: 'Profile',
+                                          text: 'Mes récompenses',
                                           color: ChibiColors.buttonRed,
                                           onPressed: () {
                                             Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
