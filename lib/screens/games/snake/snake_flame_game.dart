@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:vibration/vibration.dart';
 
 import 'package:flame/extensions.dart';
 import 'dart:async' as async;
@@ -202,8 +203,26 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     _snakeComponent.updateGameState(gameState);
     _snakeComponent.animationDuration = _calculateGameSpeed(gameState.score) / 1000.0;
 
-    if (oldScore != gameState.score) {
+    if (oldScore < gameState.score) {
       onScoreChanged?.call();
+      // Vibrate based on food type
+      switch (oldFoodType) {
+        case FoodType.regular:
+          Vibration.vibrate(duration: 100);
+          break;
+        case FoodType.golden:
+          Vibration.vibrate(duration: 100, amplitude: 255);
+          break;
+        case FoodType.rotten:
+          // No vibration for rotten food
+          break;
+      }
+    } else if (oldScore > gameState.score) {
+      // Rotten apple eaten
+      onScoreChanged?.call();
+      Vibration.vibrate(duration: 200, amplitude: 255);
+      await Future.delayed(const Duration(milliseconds: 200));
+      Vibration.vibrate(duration: 200, amplitude: 255);
     }
 
     // Update food
@@ -214,6 +233,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     if (!wasGameOver && gameState.isGameOver) {
       pauseEngine();
+      Vibration.vibrate(duration: 500); // Game over vibration
       final bool isVictory = gameState.score >= 200;
       CollectibleCard? wonCard;
 
