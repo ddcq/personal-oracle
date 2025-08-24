@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flutter/foundation.dart'; // Import for VoidCallback
 import 'dart:ui' as ui; // For Image
 import 'arena.dart';
 
@@ -12,6 +13,7 @@ enum PlayerState { onEdge, drawing, dead, rescued }
 class Player extends PositionComponent {
   final ArenaComponent arena;
   final Function(PlayerState) onPlayerStateChanged;
+  final VoidCallback onSelfIntersection; // Add this line
   final int gridSize;
   final double cellSize;
   IntVector2 gridPosition; // Logical grid position
@@ -27,7 +29,7 @@ class Player extends PositionComponent {
 
   late AnimatedCharacterComponent _characterSprite;
 
-  Player({required this.gridSize, required this.cellSize, required ui.Image characterSpriteSheet, required this.arena, required this.onPlayerStateChanged, required this.difficulty})
+  Player({required this.gridSize, required this.cellSize, required ui.Image characterSpriteSheet, required this.arena, required this.onPlayerStateChanged, required this.onSelfIntersection, required this.difficulty})
     : gridPosition = IntVector2(0, 0),
       targetGridPosition = IntVector2(0, 0) {
     size = Vector2.all(cellSize);
@@ -242,7 +244,13 @@ class Player extends PositionComponent {
         arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
         state = PlayerState.onEdge;
         onPlayerStateChanged(state);
+        currentPath.clear(); // Clear the path when hitting an existing boundary
       } else {
+        // Check for self-intersection if drawing
+        if (currentPath.contains(newGridPosition)) {
+          onSelfIntersection();
+          return false; // Prevent further movement
+        }
         // Continue drawing path
         currentPath.add(IntVector2(newGridPosition.x, newGridPosition.y));
         arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
