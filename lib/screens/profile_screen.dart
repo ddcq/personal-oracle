@@ -31,6 +31,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? _profileName;
   final TextEditingController _nameController = TextEditingController();
   bool _isNameHovered = false;
+  String? _selectedDeityId;
+  bool _isDeityIconHovered = false;
 
   Future<List<dynamic>>? _mainDataFuture;
   Future<List<Map<String, dynamic>>>? _quizResultsFuture;
@@ -52,6 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         gamificationService.getUnlockedCollectibleCards(),
         gamificationService.getUnlockedStoryProgress(),
         gamificationService.getProfileName(),
+        gamificationService.getProfileDeityIcon(), // Load the selected deity icon
       ]);
       _quizResultsFuture = gamificationService.getQuizResults();
     }
@@ -100,6 +103,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 setState(() {
                   _profileName = _nameController.text;
                 });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showSelectDeityIconDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[900],
+          title: const Text('Choisir une icône de divinité', style: TextStyle(color: Colors.white)),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: GridView.builder(
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemCount: AppData.deities.length,
+              itemBuilder: (context, index) {
+                final deity = AppData.deities.values.elementAt(index);
+                final isSelected = _selectedDeityId == deity.id;
+                return GestureDetector(
+                  onTap: () {
+                    Provider.of<GamificationService>(context, listen: false).saveProfileDeityIcon(deity.id);
+                    setState(() {
+                      _selectedDeityId = deity.id;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: isSelected ? Colors.amber : Colors.transparent, width: 3),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Image.asset(deity.icon, fit: BoxFit.cover),
+                  ),
+                );
+              },
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Fermer', style: TextStyle(color: Colors.white70)),
+              onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
@@ -172,10 +227,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   final List<CollectibleCard> unlockedCards = snapshot.data![1];
                   final List<Map<String, dynamic>> storyProgress = snapshot.data![2];
                   final String? savedName = snapshot.data![3];
+                  final String? savedDeityIconId = snapshot.data![4]; // New: saved deity icon ID
 
                   // Set the initial name from saved data if it exists and local state is not set
                   if (_profileName == null && savedName != null) {
                     _profileName = savedName;
+                  }
+                  // Set the initial deity icon from saved data if it exists and local state is not set
+                  if (_selectedDeityId == null && savedDeityIconId != null) {
+                    _selectedDeityId = savedDeityIconId;
                   }
 
                   return ListView(
@@ -243,30 +303,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 20),
-                                Container(
-                                  width: 150,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15), // Rounded corners for the button effect
-                                    border: Border.all(
-                                      color: const Color(0xFFDAA520), // Darker gold for the main border
-                                      width: 5,
+                                GestureDetector(
+                                  onTap: () => _showSelectDeityIconDialog(context),
+                                  child: MouseRegion(
+                                    onEnter: (_) => setState(() => _isDeityIconHovered = true),
+                                    onExit: (_) => setState(() => _isDeityIconHovered = false),
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Container(
+                                          width: 150,
+                                          height: 150,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15),
+                                            border: Border.all(
+                                              color: const Color(0xFFDAA520),
+                                              width: 5,
+                                            ),
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                color: Color(0xFFDAA520),
+                                                offset: Offset(5, 5),
+                                              ),
+                                              BoxShadow(
+                                                color: Color(0xFFFFD700),
+                                                offset: Offset(-5, -5),
+                                              ),
+                                            ],
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: Image.asset(
+                                              AppData.deities[_selectedDeityId]?.icon ?? deity.icon,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        AnimatedOpacity(
+                                          duration: const Duration(milliseconds: 200),
+                                          opacity: _isDeityIconHovered ? 1.0 : 0.0,
+                                          child: Container(
+                                            width: 150,
+                                            height: 150,
+                                            decoration: BoxDecoration(
+                                              color: Colors.black.withOpacity(0.5),
+                                              borderRadius: BorderRadius.circular(15),
+                                            ),
+                                            child: const Icon(Icons.edit, color: Colors.white, size: 40),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Color(0xFFDAA520), // Darker gold for bottom-right shadow
-                                        offset: Offset(5, 5),
-                                      ),
-                                      BoxShadow(
-                                        color: Color(0xFFFFD700), // Lighter gold for top-left highlight
-                                        offset: Offset(-5, -5),
-                                      ),
-                                    ],
-                                  ),
-                                  child: ClipRRect(
-                                    // Use ClipRRect for rounded rectangle
-                                    borderRadius: BorderRadius.circular(10), // Slightly smaller radius for inner image
-                                    child: Image.asset(deity.icon, fit: BoxFit.cover),
                                   ),
                                 ),
                               ],
