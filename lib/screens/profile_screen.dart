@@ -54,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('Profile', style: TextStyle(fontFamily: AppTextStyles.amaticSC)),
+        
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -278,82 +278,193 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return Text(
         'Aucun score de Snake pour l’instant.',
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
+        textAlign: TextAlign.center,
       );
     }
+
+    final mutableScores = List<Map<String, dynamic>>.from(scores);
+    mutableScores.sort((a, b) => (b['score'] as int).compareTo(a['score'] as int));
+    final topScores = mutableScores.take(3).toList();
+
+    Widget? firstPlace;
+    Widget? secondPlace;
+    Widget? thirdPlace;
+
+    if (topScores.isNotEmpty) {
+      firstPlace = _buildPodiumPlace(topScores[0], 1);
+    }
+    if (topScores.length > 1) {
+      secondPlace = _buildPodiumPlace(topScores[1], 2);
+    }
+    if (topScores.length > 2) {
+      thirdPlace = _buildPodiumPlace(topScores[2], 3);
+    }
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Jeu du Serpent :',
+          'Podium du Serpent',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontFamily: AppTextStyles.amaticSC,
-            fontSize: 28,
-            shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(3.0, 3.0))],
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: AppTextStyles.amaticSC,
+                fontSize: 28,
+                shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(3.0, 3.0))],
+              ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            if (secondPlace != null) Flexible(child: secondPlace),
+            if (firstPlace != null) Flexible(child: firstPlace),
+            if (thirdPlace != null) Flexible(child: thirdPlace),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPodiumPlace(Map<String, dynamic> score, int rank) {
+    final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(score['timestamp']);
+
+    // Define properties for each rank
+    final podiumConfig = {
+      1: {'color': Colors.amber, 'height': 160.0, 'iconSize': 50.0, 'gradient': const LinearGradient(colors: [Color(0xFFFFFDE7), Colors.amber], begin: Alignment.topCenter, end: Alignment.bottomCenter)},
+      2: {'color': const Color(0xFFC0C0C0), 'height': 140.0, 'iconSize': 40.0, 'gradient': const LinearGradient(colors: [Color(0xFFF5F5F5), Color(0xFFBDBDBD)], begin: Alignment.topCenter, end: Alignment.bottomCenter)},
+      3: {'color': const Color(0xFFCD7F32), 'height': 120.0, 'iconSize': 40.0, 'gradient': const LinearGradient(colors: [Color(0xFFFFEADD), Color(0xFFD8A166)], begin: Alignment.topCenter, end: Alignment.bottomCenter)},
+    };
+
+    final config = podiumConfig[rank]!;
+    final Color color = config['color'] as Color;
+    final double height = config['height'] as double;
+    final double iconSize = config['iconSize'] as double;
+    final Gradient gradient = config['gradient'] as Gradient;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        // Trophy with a subtle glow
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: color.withOpacity(0.5),
+                blurRadius: 15,
+                spreadRadius: 5,
+              ),
+            ],
+          ),
+          child: Icon(
+            Icons.emoji_events,
+            color: color,
+            size: iconSize,
           ),
         ),
-        const SizedBox(height: 10),
-        ...scores.map((score) {
-          final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(score['timestamp']);
-          return Card(
-            color: Colors.brown[700], // Placeholder for wood texture
-            elevation: 5,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                children: [
-                  Icon(Icons.emoji_events, color: Colors.amber, size: 36), // Golden cup icon
-                  const SizedBox(width: 15),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Score: ${score['score']}',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: AppTextStyles.amaticSC,
-                            fontSize: 22,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          'Date: ${_formatRelativeTime(timestamp)}',
-                          style: const TextStyle(color: Colors.white70, fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+        const SizedBox(height: 8),
+        // Podium Block
+        Container(
+          width: 100,
+          height: height,
+          decoration: BoxDecoration(
+            gradient: gradient,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
             ),
-          );
-        }),
+            border: Border.all(color: Colors.black.withOpacity(0.2)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              )
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '$rank',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black.withOpacity(0.6),
+                    shadows: const [
+                      Shadow(
+                        color: Colors.white,
+                        blurRadius: 2,
+                        offset: Offset(1, 1),
+                      )
+                    ],
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  '${score['score']}',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Colors.black.withOpacity(0.8),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: AppTextStyles.amaticSC,
+                        fontSize: 26,
+                      ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  _formatRelativeTime(timestamp),
+                  style: TextStyle(color: Colors.black.withOpacity(0.7), fontSize: 12),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
 
   
 
-  Widget _buildCollectibleCards(List<CollectibleCard> cards) { // Changed parameter type
+  Widget _buildCollectibleCards(List<CollectibleCard> cards) {
     if (cards.isEmpty) {
       return Text(
         'Aucune carte à collectionner débloquée pour l’instant.',
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
       );
     }
+
+    final Map<String, CollectibleCard> highestTierCards = {};
+    const tierPriority = {'chibi': 1, 'premium': 2, 'epic': 3};
+
+    for (final card in cards) {
+      final currentCardPriority = tierPriority[card.version.name] ?? 0;
+      final existingCard = highestTierCards[card.title];
+
+      if (existingCard == null) {
+        highestTierCards[card.title] = card;
+      } else {
+        final existingCardPriority = tierPriority[existingCard.version.name] ?? 0;
+        if (currentCardPriority > existingCardPriority) {
+          highestTierCards[card.title] = card;
+        }
+      }
+    }
+
+    final filteredCards = highestTierCards.values.toList();
+    // Sort cards for a consistent display order, for example by name.
+    filteredCards.sort((a, b) => a.title.compareTo(b.title));
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 1.0),
-      itemCount: cards.length,
+      itemCount: filteredCards.length,
       itemBuilder: (context, index) {
-        final collectibleCard = cards[index]; // Directly use the card object
-
+        final collectibleCard = filteredCards[index];
         return InteractiveCollectibleCard(card: collectibleCard);
       },
     );
@@ -407,7 +518,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(13),
                       child: Image.asset(
-                        'assets/images/stories/' + lastChapterImagePath,
+                        'assets/images/stories/$lastChapterImagePath',
                         fit: BoxFit.cover,
                         color: Colors.black.withAlpha(102),
                         colorBlendMode: BlendMode.darken,
