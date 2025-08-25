@@ -13,6 +13,7 @@ import 'package:oracle_d_asgard/data/stories_data.dart';
 import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -74,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 final Deity? deity = AppData.deities[deityName.toLowerCase()];
                 if (deity != null) {
                   SharePlus.instance.share(
-                    ShareParams(text: 'Mon résultat au quiz Oracle d\'Asgard : Je suis ${deity.name} ! Découvrez votre divinité sur l\'application !'),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ShareParams(text: "Mon résultat au quiz Oracle d'Asgard : Je suis ${deity.name} ! Découvrez votre divinité sur l'application !"),
                   );
                 }
               }
@@ -379,37 +380,102 @@ class _ProfileScreenState extends State<ProfileScreen> {
           (story) => story.title == storyId,
           orElse: () => MythStory(title: 'Histoire inconnue', correctOrder: [], collectibleCards: []), // Fallback
         );
-        final unlockedParts = jsonDecode(progress['parts_unlocked']);
-        final int totalParts = mythStory.correctOrder.length;
-        final progressPercentage = totalParts > 0 ? unlockedParts.length / totalParts : 0.0;
+        final unlockedParts = jsonDecode(progress['parts_unlocked']) as List;
+        String? lastChapterImagePath;
+        if (unlockedParts.isNotEmpty) {
+          final lastUnlockedChapterId = unlockedParts.last;
+          final lastChapterMythCard = mythStory.correctOrder.firstWhere(
+            (card) => card.id == lastUnlockedChapterId,
+            orElse: () => mythStory.correctOrder.first, // Fallback to first if last not found
+          );
+          lastChapterImagePath = lastChapterMythCard.imagePath;
+        }
 
         return GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => MythStoryPage(mythStory: mythStory)));
           },
-          child: Card(
-            color: const Color(0xFFF5F5DC), // Beige color for paper effect
-            elevation: 5,
-            shape: RoundedRectangleBorder(
+          child: Container(
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              side: const BorderSide(color: Color(0xFF8B4513), width: 2), // Brown border for book effect
+              border: Border.all(color: const Color(0xFF8B4513), width: 2), // Brown border for book effect
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Stack(
               children: [
-                Icon(Icons.book, color: Colors.purpleAccent, size: 40), // Placeholder icon
-                const SizedBox(height: 8),
-                Text(
-                  mythStory.title,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
+                if (lastChapterImagePath != null)
+                  Positioned.fill(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(13),
+                      child: Image.asset(
+                        'assets/images/stories/' + lastChapterImagePath,
+                        fit: BoxFit.cover,
+                        color: Colors.black.withAlpha(102),
+                        colorBlendMode: BlendMode.darken,
+                      ),
+                    ),
+                  ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Text(
+                        mythStory.title,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: AppTextStyles.amaticSC,
+                              fontSize: 28,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 5.0,
+                                  color: Colors.black.withAlpha(178),
+                                  offset: const Offset(2.0, 2.0),
+                                ),
+                              ],
+                            ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: mythStory.correctOrder.map((chapter) {
+                          final isUnlocked = unlockedParts.contains(chapter.id);
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                            child: Container(
+                              width: 16,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: isUnlocked ? Colors.yellow : Colors.white.withAlpha(128),
+                                boxShadow: isUnlocked
+                                    ? [
+                                        const BoxShadow(
+                                          color: Colors.black26,
+                                          blurRadius: 4,
+                                          offset: Offset(2, 2),
+                                        ),
+                                      ]
+                                    : null,
+                              ),
+                              child: isUnlocked
+                                  ? SvgPicture.asset(
+                                      'assets/images/happy_face.svg',
+                                      width: 12,
+                                      height: 12,
+                                    )
+                                  : null,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                LinearProgressIndicator(value: progressPercentage, backgroundColor: Colors.grey[400], valueColor: AlwaysStoppedAnimation<Color>(Colors.brown)),
-                const SizedBox(height: 4),
-                Text('${(progressPercentage * 100).toStringAsFixed(0)}% Terminée', style: const TextStyle(color: Colors.black87, fontSize: 12)),
               ],
             ),
           ),
