@@ -177,6 +177,28 @@ class GamificationService with ChangeNotifier {
     }
   }
 
+  Future<void> saveProfileName(String name) async {
+    final db = await _databaseService.database;
+    await db.insert('game_settings', {
+      'setting_key': 'profile_name',
+      'setting_value': name,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    notifyListeners();
+  }
+
+  Future<String?> getProfileName() async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'game_settings',
+      where: 'setting_key = ?',
+      whereArgs: ['profile_name'],
+    );
+    if (result.isNotEmpty) {
+      return result.first['setting_value'] as String?;
+    }
+    return null;
+  }
+
   Future<Map<String, dynamic>> getUnearnedContent({String? tag}) async {
     final allMythStories = getMythStories();
     final unlockedCollectibleCards = await getUnlockedCollectibleCards(); // Now returns CollectibleCard objects

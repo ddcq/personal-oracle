@@ -28,16 +28,88 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late Map<String, MythCard> _allMythCards;
-  // Changed _allCollectibleCards to store all versions, keyed by id_version
-  
+  String? _profileName;
+  final TextEditingController _nameController = TextEditingController();
+  bool _isNameHovered = false;
+
+  Future<List<dynamic>>? _mainDataFuture;
+  Future<List<Map<String, dynamic>>>? _quizResultsFuture;
 
   @override
   void initState() {
     super.initState();
     _loadAllMythCards();
-    
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Initialize futures only once
+    if (_mainDataFuture == null) {
+      final gamificationService = Provider.of<GamificationService>(context, listen: false);
+      _mainDataFuture = Future.wait([
+        gamificationService.getGameScores('Snake'),
+        gamificationService.getUnlockedCollectibleCards(),
+        gamificationService.getUnlockedStoryProgress(),
+        gamificationService.getProfileName(),
+      ]);
+      _quizResultsFuture = gamificationService.getQuizResults();
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _showEditNameDialog(BuildContext context) async {
+    _nameController.text = _profileName ?? '';
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[900],
+          title: const Text('Changer le nom', style: TextStyle(color: Colors.white)),
+          content: TextField(
+            controller: _nameController,
+            autofocus: true,
+            style: const TextStyle(color: Colors.white),
+            decoration: const InputDecoration(
+              hintText: 'Nouveau nom',
+              hintStyle: TextStyle(color: Colors.white54),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white54),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Annuler', style: TextStyle(color: Colors.white70)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Sauvegarder', style: TextStyle(color: Colors.amber)),
+              onPressed: () {
+                Provider.of<GamificationService>(context, listen: false).saveProfileName(_nameController.text);
+                setState(() {
+                  _profileName = _nameController.text;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  // Changed _allCollectibleCards to store all versions, keyed by id_version
+  
   void _loadAllMythCards() {
     _allMythCards = {};
     for (var story in getMythStories()) {
@@ -86,12 +158,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: AppBackground(
         child: Consumer<GamificationService>(
           builder: (context, gamificationService, child) {
-            return FutureBuilder<List<dynamic>>( // Changed type to dynamic
-              future: Future.wait([
-                gamificationService.getGameScores('Snake'),
-                gamificationService.getUnlockedCollectibleCards(), // Returns List<CollectibleCard>
-                gamificationService.getUnlockedStoryProgress(),
-              ]),
+            return FutureBuilder<List<dynamic>>(
+              future: _mainDataFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -101,14 +169,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   return const Center(child: Text('No data available.'));
                 } else {
                   final List<Map<String, dynamic>> snakeScores = snapshot.data![0];
-                  final List<CollectibleCard> unlockedCards = snapshot.data![1]; // Cast to List<CollectibleCard>
+                  final List<CollectibleCard> unlockedCards = snapshot.data![1];
                   final List<Map<String, dynamic>> storyProgress = snapshot.data![2];
+                  final String? savedName = snapshot.data![3];
+
+                  // Set the initial name from saved data if it exists and local state is not set
+                  if (_profileName == null && savedName != null) {
+                    _profileName = savedName;
+                  }
 
                   return ListView(
                     padding: const EdgeInsets.all(16.0),
                     children: [
                       FutureBuilder<List<Map<String, dynamic>>>(
-                        future: gamificationService.getQuizResults(),
+                        future: _quizResultsFuture,
                         builder: (context, quizSnapshot) {
                           if (quizSnapshot.connectionState == ConnectionState.waiting) {
                             return const Center(child: CircularProgressIndicator());
@@ -125,18 +199,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               return const SizedBox.shrink(); // Deity not found
                             }
 
+                            // Set the name from deity if no saved name and no local state
+                            if (_profileName == null) {
+                              _profileName = deity.name;
+                            }
+
                             return Column(
                               children: [
-                                Text(
-                                  deity.name,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                    fontFamily: AppTextStyles.amaticSC,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 70,
-                                    letterSpacing: 2.0,
-                                    shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+                                GestureDetector(
+                                  onTap: () => _showEditNameDialog(context),
+                                  child: MouseRegion(
+                                    onEnter: (_) => setState(() => _isNameHovered = true),
+                                    onExit: (_) => setState(() => _isNameHovered = false),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            _profileName ?? deity.name,
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                                                  fontFamily: AppTextStyles.amaticSC,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 70,
+                                                  letterSpacing: 2.0,
+                                                  shadows: [
+                                                    const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))
+                                                  ],
+                                                ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        AnimatedOpacity(
+                                          duration: const Duration(milliseconds: 200),
+                                          opacity: _isNameHovered ? 1.0 : 0.0,
+                                          child: const Icon(Icons.edit, color: Colors.white, size: 20),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(height: 20),

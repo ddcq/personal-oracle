@@ -38,7 +38,7 @@ List<MythStory> getMythStories() {
           title: 'Le serment de Frigg',
           description:
               'Pour protéger son fils, Frigg, la mère de Baldr, fait jurer à tous les êtres et objets du monde de ne jamais lui faire de mal. Elle néglige toutefois une plante jugée insignifiante : le gui.',
-          imagePath: 'baldr_2.jpg',
+          imagePath: 'stories/baldr_2.jpg',
           detailedStory:
               'Frigg, la reine des cieux, ne pouvait tolérer cette menace. Son amour pour Baldr était infini, et l’idée même de le voir disparaître lui était plus insupportable que mille morts. Elle se mit donc en route, portée par la détresse et la détermination.\n\nÀ travers les vents glacés de Niflheim, les terres brûlantes de Muspellheim, les forêts profondes d’Alfheim jusqu’aux abysses de Helheim, elle fit prêter serment à toutes choses existantes. Aux pierres, de ne point heurter son fils. À l’eau, de ne point le noyer. Au feu, de ne pas le brûler. Aux animaux, de ne jamais l’attaquer. À chaque plante, à chaque métal, à chaque élément, elle extorqua une promesse sacrée de ne jamais nuire à Baldr.\n\nLorsque son œuvre fut achevée, Asgard respira de nouveau. Plus rien ne semblait pouvoir blesser le dieu bien-aimé. Mais, dans sa précipitation, Frigg jugea sans importance une plante modeste et discrète, un végétal insignifiant suspendu aux branches des vieux chênes : le gui. Trop jeune, trop frêle, pensa-t-elle. Il ne saurait blesser qui que ce soit.\n\nEt ainsi, elle passa son chemin.',
         ),

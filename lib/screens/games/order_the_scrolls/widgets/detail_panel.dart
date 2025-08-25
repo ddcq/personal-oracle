@@ -88,7 +88,7 @@ class DetailPanel extends StatelessWidget { // Changed to StatelessWidget
                           },
                           blendMode: BlendMode.dstIn, // Apply the gradient as a transparency mask
                           child: Image.asset(
-                            addAssetPrefix(selectedCard.imagePath),
+                            'assets/images/stories/${selectedCard.imagePath}',
                             fit: BoxFit.cover,
                             alignment: Alignment.topCenter, // Align image to top
                           ),

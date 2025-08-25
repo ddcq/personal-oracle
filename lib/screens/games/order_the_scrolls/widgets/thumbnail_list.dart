@@ -34,7 +34,7 @@ class ThumbnailList extends StatelessWidget {
                       child: Row(
                         children: [
                           Image.asset(
-                            addAssetPrefix(card.imagePath),
+                            'assets/images/stories/${card.imagePath}',
                             width: 55,
                             height: 55,
                             fit: BoxFit.cover,
@@ -108,7 +108,7 @@ class ThumbnailList extends StatelessWidget {
                                   bottomLeft: Radius.circular(12.0),
                                 ),
                                 child: Image.asset(
-                                  addAssetPrefix(card.imagePath),
+                                  'assets/images/stories/${card.imagePath}',
                                   width: 60,
                                   height: 60,
                                   fit: BoxFit.cover,
