@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import '../game_controller.dart';
 

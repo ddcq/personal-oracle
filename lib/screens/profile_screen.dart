@@ -260,9 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             }
 
                             // Set the name from deity if no saved name and no local state
-                            if (_profileName == null) {
-                              _profileName = deity.name;
-                            }
+                            _profileName ??= deity.name;
 
                             return Column(
                               children: [
@@ -346,7 +344,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             width: 150,
                                             height: 150,
                                             decoration: BoxDecoration(
-                                              color: Colors.black.withOpacity(0.5),
+                                              color: Colors.black.withAlpha(128),
                                               borderRadius: BorderRadius.circular(15),
                                             ),
                                             child: const Icon(Icons.edit, color: Colors.white, size: 40),
@@ -541,7 +539,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: color.withOpacity(0.5),
+                color: color.withAlpha(128),
                 blurRadius: 15,
                 spreadRadius: 5,
               ),
@@ -564,10 +562,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               topLeft: Radius.circular(10),
               topRight: Radius.circular(10),
             ),
-            border: Border.all(color: Colors.black.withOpacity(0.2)),
+            border: Border.all(color: Colors.black.withAlpha(51)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withAlpha(77),
                 blurRadius: 10,
                 offset: const Offset(0, 5),
               )
@@ -583,7 +581,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black.withOpacity(0.6),
+                    color: Colors.black.withAlpha(153),
                     shadows: const [
                       Shadow(
                         color: Colors.white,
@@ -597,7 +595,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text(
                   '${score['score']}',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.black.withOpacity(0.8),
+                        color: Colors.black.withAlpha(204),
                         fontWeight: FontWeight.bold,
                         fontFamily: AppTextStyles.amaticSC,
                         fontSize: 26,
@@ -606,7 +604,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 4),
                 Text(
                   _formatRelativeTime(timestamp),
-                  style: TextStyle(color: Colors.black.withOpacity(0.7), fontSize: 12),
+                  style: TextStyle(color: Colors.black.withAlpha(179), fontSize: 12),
                   textAlign: TextAlign.center,
                 ),
               ],

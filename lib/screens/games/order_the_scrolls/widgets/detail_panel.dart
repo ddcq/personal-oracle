@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
-import 'package:oracle_d_asgard/utils/image_utils.dart'; // Import image_utils
 import '../game_controller.dart';
 
 class DetailPanel extends StatelessWidget { // Changed to StatelessWidget
