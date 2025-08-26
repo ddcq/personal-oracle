@@ -29,7 +29,7 @@ Le projet a été intégralement réalisé à l’aide d’**IA** (génération 
 - **Flutter** (Dart)  
 - **Assets IA** pour les illustrations, fonds, icônes  
 - Architecture modulaire : séparation claire entre la logique, les vues, et les ressources  
-- Plugins Flutter utilisés : `flutter_svg`, `shared_preferences`, `audioplayers`, etc.  
+- Plugins Flutter utilisés : `shared_preferences`, `audioplayers`, etc.  
 
 ---
 

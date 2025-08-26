@@ -13,7 +13,7 @@ import 'package:oracle_d_asgard/data/stories_data.dart';
 import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -762,10 +762,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     : null,
                               ),
                               child: isUnlocked
-                                  ? SvgPicture.asset(
-                                      'assets/images/happy_face.svg',
-                                      width: 12,
-                                      height: 12,
+                                  ? const Icon(
+                                      Icons.sentiment_very_satisfied,
+                                      color: Colors.black,
+                                      size: 14,
                                     )
                                   : null,
                             ),
