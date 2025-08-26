@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
@@ -125,7 +126,18 @@ class _QixGameScreenState extends State<QixGameScreen> {
                   return const Center(child: Text('Error: Game not initialized.'));
                 } else {
                   final Orientation orientation = MediaQuery.of(context).orientation;
+                  final Size screenSize = MediaQuery.of(context).size;
+                  final double appBarHeight = AppBar().preferredSize.height; // Standard AppBar height
+                  final double statusBarHeight = MediaQuery.of(context).padding.top; // Status bar height
 
+                  // Estimate controls height (progress bar + directional pad + padding)
+                  // This is an approximation, adjust as needed
+                  const double controlsEstimatedHeight = 250.0; 
+
+                  double availableWidth = screenSize.width;
+                  double availableHeight = screenSize.height - appBarHeight - statusBarHeight;
+
+                  double arenaSize;
                   Widget percentageDisplay = ValueListenableBuilder<double>(
                     valueListenable: _game!.filledPercentageNotifier,
                     builder: (context, percentage, child) {
@@ -136,54 +148,52 @@ class _QixGameScreenState extends State<QixGameScreen> {
                   Widget gameAndControls;
 
                   if (orientation == Orientation.portrait) {
+                    // In portrait, game takes width, controls take remaining height
+                    arenaSize = math.min(availableWidth, availableHeight - controlsEstimatedHeight);
                     gameAndControls = Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              color: Colors.blue[900],
-                              child: AspectRatio(
-                                aspectRatio: 1.0,
-                                child: GameWidget(
-                                  game: _game!,
-                                ),
-                              ),
-                            ),
+                        SizedBox(
+                          width: arenaSize,
+                          height: arenaSize,
+                          child: Container(
+                            color: Colors.blue[900],
+                            child: GameWidget(game: _game!),
                           ),
                         ),
-                        Column(
-                          children: [
-                            Padding(padding: const EdgeInsets.all(8.0), child: percentageDisplay),
-                            Center(
-                              child: FittedBox(
-                                child: DirectionalPad(
-                                  onDirectionChanged: (Direction direction) {
-                                    _game!.handleDirectionChange(direction);
-                                  },
-                                ),
-                              ),
+                        const SizedBox(height: 16), // Spacing
+                        percentageDisplay,
+                        const SizedBox(height: 16), // Spacing
+                        Center(
+                          child: FittedBox(
+                            child: DirectionalPad(
+                              onDirectionChanged: (Direction direction) {
+                                _game!.handleDirectionChange(direction);
+                              },
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     );
                   } else {
                     // Orientation.landscape
+                    // Game takes height, controls take remaining width
+                    arenaSize = math.min(availableHeight, availableWidth - controlsEstimatedHeight);
                     gameAndControls = Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Center(
+                        SizedBox(
+                          width: arenaSize,
+                          height: arenaSize,
                           child: Container(
                             color: Colors.blue[900],
-                            child: AspectRatio(aspectRatio: 1.0, child: GameWidget(game: _game!)),
+                            child: GameWidget(game: _game!),
                           ),
                         ),
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
-                              // Use a column for percentage and directional pad in landscape
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 percentageDisplay,

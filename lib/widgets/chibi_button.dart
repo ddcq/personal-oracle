@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+import 'package:flutter/services.dart'; // Added for HapticFeedback
 
 class ChibiButton extends StatefulWidget {
   final String? text;
   final Widget? child;
   final Color color;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed; // Made nullable
   final TextStyle? textStyle;
 
-  const ChibiButton({super.key, this.text, required this.color, required this.onPressed, this.child, this.textStyle})
+  const ChibiButton({super.key, this.text, required this.color, this.onPressed, this.child, this.textStyle})
       : assert(text != null || child != null, 'Either text or child must be provided');
 
   @override
@@ -18,22 +19,27 @@ class ChibiButton extends StatefulWidget {
 
 class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStateMixin {
   double _scale = 1.0;
+  bool _isPressed = false; // New state variable
 
   void _onTapDown(_) {
     setState(() {
       _scale = 0.95;
+      _isPressed = true; // Set to true when pressed
     });
   }
 
   void _onTapUp(_) {
     setState(() {
       _scale = 1.0;
+      _isPressed = false; // Set to false when released
     });
+    HapticFeedback.mediumImpact();
   }
 
   void _onTapCancel() {
     setState(() {
       _scale = 1.0;
+      _isPressed = false; // Set to false if tap is cancelled
     });
   }
 
@@ -44,7 +50,7 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
     final Color borderColor = darken(widget.color, 0.3);
 
     return GestureDetector(
-      onTap: widget.onPressed,
+      onTap: widget.onPressed, // Keep original onPressed
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
       onTapCancel: _onTapCancel,
@@ -55,7 +61,11 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
           decoration: BoxDecoration(
-            gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [lightColor, widget.color, darkColor]),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: _isPressed ? [darkColor, widget.color, lightColor] : [lightColor, widget.color, darkColor], // Conditional gradient
+            ),
             borderRadius: BorderRadius.circular(16.r),
             boxShadow: [BoxShadow(color: Colors.black.withAlpha(64), offset: Offset(0, 4.h), blurRadius: 6.r)],
             border: Border.all(color: borderColor, width: 3.w),

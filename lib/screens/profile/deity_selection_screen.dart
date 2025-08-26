@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
@@ -241,7 +241,7 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
       text: 'Choisir',
       color: Colors.amber,
       onPressed: () async {
-        HapticFeedback.mediumImpact();
+        
         final gamificationService = Provider.of<GamificationService>(context, listen: false);
         final navigator = Navigator.of(context);
         await gamificationService.saveProfileDeityIcon(widget.deity.id);
