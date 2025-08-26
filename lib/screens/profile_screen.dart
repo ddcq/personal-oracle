@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:oracle_d_asgard/screens/games/myth_story_page.dart';
+import 'package:oracle_d_asgard/screens/profile/deity_selection_screen.dart';
 import 'package:oracle_d_asgard/widgets/interactive_collectible_card.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,6 @@ import 'package:share_plus/share_plus.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
-
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -46,7 +46,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Initialize futures only once
     if (_mainDataFuture == null) {
       final gamificationService = Provider.of<GamificationService>(context, listen: false);
       _mainDataFuture = Future.wait([
@@ -54,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         gamificationService.getUnlockedCollectibleCards(),
         gamificationService.getUnlockedStoryProgress(),
         gamificationService.getProfileName(),
-        gamificationService.getProfileDeityIcon(), // Load the selected deity icon
+        gamificationService.getProfileDeityIcon(),
       ]);
       _quizResultsFuture = gamificationService.getQuizResults();
     }
@@ -112,59 +111,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Future<void> _showSelectDeityIconDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.grey[900],
-          title: const Text('Choisir une icône de divinité', style: TextStyle(color: Colors.white)),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: GridView.builder(
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemCount: AppData.deities.length,
-              itemBuilder: (context, index) {
-                final deity = AppData.deities.values.elementAt(index);
-                final isSelected = _selectedDeityId == deity.id;
-                return GestureDetector(
-                  onTap: () {
-                    Provider.of<GamificationService>(context, listen: false).saveProfileDeityIcon(deity.id);
-                    setState(() {
-                      _selectedDeityId = deity.id;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: isSelected ? Colors.amber : Colors.transparent, width: 3),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Image.asset(deity.icon, fit: BoxFit.cover),
-                  ),
-                );
-              },
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Fermer', style: TextStyle(color: Colors.white70)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-  // Changed _allCollectibleCards to store all versions, keyed by id_version
-  
   void _loadAllMythCards() {
     _allMythCards = {};
     for (var story in getMythStories()) {
@@ -174,14 +120,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -202,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 final Deity? deity = AppData.deities[deityName.toLowerCase()];
                 if (deity != null) {
                   SharePlus.instance.share(
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ShareParams(text: "Mon résultat au quiz Oracle d'Asgard : Je suis ${deity.name} ! Découvrez votre divinité sur l'application !"),
+                    ShareParams(text: "Mon résultat au quiz Oracle d'Asgard : Je suis ${deity.name} ! Découvrez votre divinité sur l'application !"),
                   );
                 }
               }
@@ -227,13 +170,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   final List<CollectibleCard> unlockedCards = snapshot.data![1];
                   final List<Map<String, dynamic>> storyProgress = snapshot.data![2];
                   final String? savedName = snapshot.data![3];
-                  final String? savedDeityIconId = snapshot.data![4]; // New: saved deity icon ID
+                  final String? savedDeityIconId = snapshot.data![4];
 
-                  // Set the initial name from saved data if it exists and local state is not set
                   if (_profileName == null && savedName != null) {
                     _profileName = savedName;
                   }
-                  // Set the initial deity icon from saved data if it exists and local state is not set
                   if (_selectedDeityId == null && savedDeityIconId != null) {
                     _selectedDeityId = savedDeityIconId;
                   }
@@ -249,17 +190,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           } else if (quizSnapshot.hasError) {
                             return Center(child: Text('Error loading quiz result: ${quizSnapshot.error}'));
                           } else if (!quizSnapshot.hasData || quizSnapshot.data!.isEmpty) {
-                            return const SizedBox.shrink(); // No quiz results yet
+                            return const SizedBox.shrink();
                           } else {
                             final lastQuizResult = quizSnapshot.data!.first;
                             final deityName = lastQuizResult['deity_name'];
                             final Deity? deity = AppData.deities[deityName.toLowerCase()];
 
                             if (deity == null) {
-                              return const SizedBox.shrink(); // Deity not found
+                              return const SizedBox.shrink();
                             }
 
-                            // Set the name from deity if no saved name and no local state
                             _profileName ??= deity.name;
 
                             return Column(
@@ -302,7 +242,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 const SizedBox(height: 20),
                                 GestureDetector(
-                                  onTap: () => _showSelectDeityIconDialog(context),
+                                  onTap: () async {
+                                    final newDeityId = await Navigator.push<String>(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DeitySelectionScreen(
+                                          currentDeityId: _selectedDeityId ?? deity.id,
+                                        ),
+                                      ),
+                                    );
+
+                                    if (newDeityId != null && newDeityId != _selectedDeityId) {
+                                      setState(() {
+                                        _selectedDeityId = newDeityId;
+                                      });
+                                    }
+                                  },
                                   child: MouseRegion(
                                     onEnter: (_) => setState(() => _isDeityIconHovered = true),
                                     onExit: (_) => setState(() => _isDeityIconHovered = false),
@@ -371,7 +326,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 20),
                       _buildSectionTitle('Histoires débloquées'),
                       _buildUnlockedStories(storyProgress),
-                      const SizedBox(height: 50), // Add some bottom padding
+                      const SizedBox(height: 50),
                     ],
                   );
                 }
@@ -517,7 +472,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildPodiumPlace(Map<String, dynamic> score, int rank) {
     final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(score['timestamp']);
 
-    // Define properties for each rank
     final podiumConfig = {
       1: {'color': Colors.amber, 'height': 160.0, 'iconSize': 50.0, 'gradient': const LinearGradient(colors: [Color(0xFFFFFDE7), Colors.amber], begin: Alignment.topCenter, end: Alignment.bottomCenter)},
       2: {'color': const Color(0xFFC0C0C0), 'height': 140.0, 'iconSize': 40.0, 'gradient': const LinearGradient(colors: [Color(0xFFF5F5F5), Color(0xFFBDBDBD)], begin: Alignment.topCenter, end: Alignment.bottomCenter)},
@@ -533,7 +487,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        // Trophy with a subtle glow
         Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
@@ -552,7 +505,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
         const SizedBox(height: 8),
-        // Podium Block
         Container(
           width: 100,
           height: height,
@@ -615,8 +567,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  
-
   Widget _buildCollectibleCards(List<CollectibleCard> cards) {
     if (cards.isEmpty) {
       return Text(
@@ -643,7 +593,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     final filteredCards = highestTierCards.values.toList();
-    // Sort cards for a consistent display order, for example by name.
     filteredCards.sort((a, b) => a.title.compareTo(b.title));
 
     return GridView.builder(
@@ -697,7 +646,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: const Color(0xFF8B4513), width: 2), // Brown border for book effect
+              border: Border.all(color: const Color(0xFF8B4513), width: 2),
             ),
             child: Stack(
               children: [
