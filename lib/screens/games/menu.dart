@@ -5,10 +5,6 @@ import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
 import 'package:oracle_d_asgard/screens/games/snake/screen.dart';
 import 'package:oracle_d_asgard/screens/games/puzzle/screen.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/screen.dart';
-import 'package:oracle_d_asgard/components/victory_popup.dart';
-import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/models/card_version.dart';
-import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
@@ -27,39 +23,7 @@ class MenuPrincipal extends StatelessWidget {
     ),
     _MiniJeuItem("Le Serpent de Midgard", const Color(0xFF22C55E), () => const SnakeGame()),
     _MiniJeuItem("Conquête de Territoire", const Color(0xFFFF6B35), () => QixGameScreen()),
-    _MiniJeuItem(
-      "Debug: Victory Popup",
-      Colors.purple,
-      () => Builder(
-        builder: (context) {
-          return TextButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => VictoryPopup(
-                  rewardCard: CollectibleCard(
-                    id: 'debug_card',
-                    title: 'Carte de Débogage',
-                    description: 'Ceci est une carte de débogage.',
-                    imagePath: 'assets/images/odin_chibi.png', // Use an existing image
-                    version: CardVersion.chibi,
-                    tags: [],
-                  ),
-                  onDismiss: () {
-                    Navigator.of(context).pop();
-                  },
-                  onSeeRewards: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
-                  },
-                ),
-              );
-            },
-            child: const Text("Show Debug Victory Popup"),
-          );
-        },
-      ),
-    ),
+    
     
   ];
 
