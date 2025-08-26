@@ -80,12 +80,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             decoration: const InputDecoration(
               hintText: 'Nouveau nom',
               hintStyle: TextStyle(color: Colors.white54),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white54),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
-              ),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white54)),
+              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
             ),
           ),
           actions: <Widget>[
@@ -218,15 +214,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             _profileName ?? deity.name,
                                             textAlign: TextAlign.center,
                                             style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                                  fontFamily: AppTextStyles.amaticSC,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 70,
-                                                  letterSpacing: 2.0,
-                                                  shadows: [
-                                                    const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))
-                                                  ],
-                                                ),
+                                              fontFamily: AppTextStyles.amaticSC,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 70,
+                                              letterSpacing: 2.0,
+                                              shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+                                            ),
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
@@ -245,11 +239,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   onTap: () async {
                                     final newDeityId = await Navigator.push<String>(
                                       context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DeitySelectionScreen(
-                                          currentDeityId: _selectedDeityId ?? deity.id,
-                                        ),
-                                      ),
+                                      MaterialPageRoute(builder: (context) => DeitySelectionScreen(currentDeityId: _selectedDeityId ?? deity.id)),
                                     );
 
                                     if (newDeityId != null && newDeityId != _selectedDeityId) {
@@ -269,27 +259,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           height: 150,
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(15),
-                                            border: Border.all(
-                                              color: const Color(0xFFDAA520),
-                                              width: 5,
-                                            ),
+                                            border: Border.all(color: const Color(0xFFDAA520), width: 5),
                                             boxShadow: const [
-                                              BoxShadow(
-                                                color: Color(0xFFDAA520),
-                                                offset: Offset(5, 5),
-                                              ),
-                                              BoxShadow(
-                                                color: Color(0xFFFFD700),
-                                                offset: Offset(-5, -5),
-                                              ),
+                                              BoxShadow(color: Color(0xFFDAA520), offset: Offset(5, 5)),
+                                              BoxShadow(color: Color(0xFFFFD700), offset: Offset(-5, -5)),
                                             ],
                                           ),
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(10),
-                                            child: Image.asset(
-                                              AppData.deities[_selectedDeityId]?.icon ?? deity.icon,
-                                              fit: BoxFit.cover,
-                                            ),
+                                            child: Image.asset(AppData.deities[_selectedDeityId]?.icon ?? deity.icon, fit: BoxFit.cover),
                                           ),
                                         ),
                                         AnimatedOpacity(
@@ -298,10 +276,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           child: Container(
                                             width: 150,
                                             height: 150,
-                                            decoration: BoxDecoration(
-                                              color: Colors.black.withAlpha(128),
-                                              borderRadius: BorderRadius.circular(15),
-                                            ),
+                                            decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(15)),
                                             child: const Icon(Icons.edit, color: Colors.white, size: 40),
                                           ),
                                         ),
@@ -320,7 +295,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _buildSectionTitle('Scores de jeu'),
                       _buildGameScores(snakeScores),
                       const SizedBox(height: 20),
-                      
+
                       _buildSectionTitle('Cartes à collectionner'),
                       _buildCollectibleCards(unlockedCards),
                       const SizedBox(height: 20),
@@ -352,7 +327,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Text(
                   'Musique d\'ambiance',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC, fontSize: 22),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC, fontSize: 22),
                 ),
                 Switch(
                   value: !soundService.isMuted,
@@ -448,12 +425,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Text(
           'Podium du Serpent',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: AppTextStyles.amaticSC,
-                fontSize: 28,
-                shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(3.0, 3.0))],
-              ),
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: AppTextStyles.amaticSC,
+            fontSize: 28,
+            shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(3.0, 3.0))],
+          ),
         ),
         const SizedBox(height: 20),
         Row(
@@ -473,9 +450,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(score['timestamp']);
 
     final podiumConfig = {
-      1: {'color': Colors.amber, 'height': 160.0, 'iconSize': 50.0, 'gradient': const LinearGradient(colors: [Color(0xFFFFFDE7), Colors.amber], begin: Alignment.topCenter, end: Alignment.bottomCenter)},
-      2: {'color': const Color(0xFFC0C0C0), 'height': 140.0, 'iconSize': 40.0, 'gradient': const LinearGradient(colors: [Color(0xFFF5F5F5), Color(0xFFBDBDBD)], begin: Alignment.topCenter, end: Alignment.bottomCenter)},
-      3: {'color': const Color(0xFFCD7F32), 'height': 120.0, 'iconSize': 40.0, 'gradient': const LinearGradient(colors: [Color(0xFFFFEADD), Color(0xFFD8A166)], begin: Alignment.topCenter, end: Alignment.bottomCenter)},
+      1: {
+        'color': Colors.amber,
+        'height': 160.0,
+        'iconSize': 50.0,
+        'gradient': const LinearGradient(colors: [Color(0xFFFFFDE7), Colors.amber], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+      },
+      2: {
+        'color': const Color(0xFFC0C0C0),
+        'height': 140.0,
+        'iconSize': 40.0,
+        'gradient': const LinearGradient(colors: [Color(0xFFF5F5F5), Color(0xFFBDBDBD)], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+      },
+      3: {
+        'color': const Color(0xFFCD7F32),
+        'height': 120.0,
+        'iconSize': 40.0,
+        'gradient': const LinearGradient(colors: [Color(0xFFFFEADD), Color(0xFFD8A166)], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+      },
     };
 
     final config = podiumConfig[rank]!;
@@ -490,19 +482,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: color.withAlpha(128),
-                blurRadius: 15,
-                spreadRadius: 5,
-              ),
-            ],
+            boxShadow: [BoxShadow(color: color.withAlpha(128), blurRadius: 15, spreadRadius: 5)],
           ),
-          child: Icon(
-            Icons.emoji_events,
-            color: color,
-            size: iconSize,
-          ),
+          child: Icon(Icons.emoji_events, color: color, size: iconSize),
         ),
         const SizedBox(height: 8),
         Container(
@@ -510,18 +492,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           height: height,
           decoration: BoxDecoration(
             gradient: gradient,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-            ),
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
             border: Border.all(color: Colors.black.withAlpha(51)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withAlpha(77),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              )
-            ],
+            boxShadow: [BoxShadow(color: Colors.black.withAlpha(77), blurRadius: 10, offset: const Offset(0, 5))],
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -534,24 +507,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.black.withAlpha(153),
-                    shadows: const [
-                      Shadow(
-                        color: Colors.white,
-                        blurRadius: 2,
-                        offset: Offset(1, 1),
-                      )
-                    ],
+                    shadows: const [Shadow(color: Colors.white, blurRadius: 2, offset: Offset(1, 1))],
                   ),
                 ),
                 const Spacer(),
                 Text(
                   '${score['score']}',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.black.withAlpha(204),
-                        fontWeight: FontWeight.bold,
-                        fontFamily: AppTextStyles.amaticSC,
-                        fontSize: 26,
-                      ),
+                    color: Colors.black.withAlpha(204),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: AppTextStyles.amaticSC,
+                    fontSize: 26,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -672,18 +639,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mythStory.title,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: AppTextStyles.amaticSC,
-                              fontSize: 28,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 5.0,
-                                  color: Colors.black.withAlpha(178),
-                                  offset: const Offset(2.0, 2.0),
-                                ),
-                              ],
-                            ),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: AppTextStyles.amaticSC,
+                          fontSize: 28,
+                          shadows: [Shadow(blurRadius: 5.0, color: Colors.black.withAlpha(178), offset: const Offset(2.0, 2.0))],
+                        ),
                       ),
                     ),
                     Padding(
@@ -695,28 +656,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 2.0),
                             child: Container(
-                              width: 16,
-                              height: 16,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: isUnlocked ? Colors.yellow : Colors.white.withAlpha(128),
-                                boxShadow: isUnlocked
-                                    ? [
-                                        const BoxShadow(
-                                          color: Colors.black26,
-                                          blurRadius: 4,
-                                          offset: Offset(2, 2),
-                                        ),
-                                      ]
-                                    : null,
-                              ),
-                              child: isUnlocked
-                                  ? const Icon(
-                                      Icons.sentiment_very_satisfied,
-                                      color: Colors.black,
-                                      size: 14,
-                                    )
-                                  : null,
+                              width: 14,
+                              height: 18,
+                              decoration: BoxDecoration(shape: BoxShape.circle, color: isUnlocked ? Colors.transparent : Colors.white.withAlpha(100)),
+                              child: isUnlocked ? const Icon(Icons.emoji_emotions, color: Colors.yellow, size: 16) : null,
                             ),
                           );
                         }).toList(),

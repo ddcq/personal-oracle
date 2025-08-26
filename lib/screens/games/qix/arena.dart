@@ -55,7 +55,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     _filledSprites = {};
 
     _qixComponent = QixComponent(
-      gridPosition: initialQixPosition,
+      initialGridPosition: initialQixPosition,
       cellSize: cellSize,
       gridSize: gridSize,
       isGridEdge: isPointOnBoundary,

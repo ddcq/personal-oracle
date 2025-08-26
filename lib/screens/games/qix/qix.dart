@@ -4,29 +4,35 @@ import 'dart:ui' as ui;
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/games/qix/constants.dart' as game_constants;
+import 'package:oracle_d_asgard/screens/games/qix/qix_game.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 typedef IsGridEdgeChecker = bool Function(IntVector2 position);
 typedef IsPlayerPathChecker = bool Function(IntVector2 position);
 typedef OnGameOver = void Function();
 
-class QixComponent extends PositionComponent {
+class QixComponent extends PositionComponent with HasGameReference<QixGame> {
   final double cellSize;
-  IntVector2 _gridPosition;
-  IntVector2 _targetGridPosition; // For smooth movement
-  IntVector2 _direction;
   final int gridSize;
   final IsGridEdgeChecker isGridEdge;
   final IsPlayerPathChecker isPlayerPath;
   final OnGameOver onGameOver;
   final ui.Image snakeHeadImage;
   final int difficulty;
-  double _moveTimer = 0.0;
-  final double _moveInterval; // Time in seconds to move one cell
-  double _animationTime = 0.0; // For sinusoidal movement and rotation
+
+  late Vector2 virtualPosition;
+  late double angle;
+  late double speed;
+
+  IntVector2 get gridPosition => IntVector2(
+        (virtualPosition.x / cellSize).round(),
+        (virtualPosition.y / cellSize).round(),
+      );
+
+  double _animationTime = 0.0;
 
   QixComponent({
-    required IntVector2 gridPosition,
+    required IntVector2 initialGridPosition,
     required this.cellSize,
     required this.gridSize,
     required this.isGridEdge,
@@ -34,89 +40,81 @@ class QixComponent extends PositionComponent {
     required this.onGameOver,
     required this.snakeHeadImage,
     required this.difficulty,
-  }) : _gridPosition = gridPosition,
-       _targetGridPosition = gridPosition, // Initialize target to current position
-       _direction = _getRandomDirection(),
-       _moveInterval =
-           1.0 /
-           (game_constants.kBaseMonsterSpeedCellsPerSecond + difficulty * game_constants.kMonsterSpeedChangePerLevelCellsPerSecond).clamp(
-             1.0,
-             double.infinity,
-           ), // Monster speed increases with difficulty
-       super(position: gridPosition.toVector2() * cellSize, size: Vector2.all(cellSize));
+  }) : super(size: Vector2.all(cellSize)) {
+    virtualPosition = initialGridPosition.toVector2() * cellSize;
+    angle = math.Random().nextDouble() * 2 * math.pi;
+    speed = (game_constants.kBaseMonsterSpeedCellsPerSecond +
+            difficulty * game_constants.kMonsterSpeedChangePerLevelCellsPerSecond)
+        .clamp(1.0, double.infinity) * cellSize;
 
-  IntVector2 get gridPosition => _gridPosition;
-  set gridPosition(IntVector2 value) {
-    _gridPosition = value;
-    position = _gridPosition.toVector2() * cellSize;
+    position = virtualPosition;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+    _animationTime += dt;
 
-    _animationTime += dt; // Update animation time for smooth effects
+    // --- Homing logic ---
+    final playerPosition = game.player.position;
+    final vectorToPlayer = playerPosition - virtualPosition;
+    final angleToPlayer = math.atan2(vectorToPlayer.y, vectorToPlayer.x);
 
-    // Smoothly move towards the target grid position
-    Vector2 targetPixelPosition = _targetGridPosition.toVector2() * cellSize;
-    final double moveSpeed = cellSize / _moveInterval; // Pixels per second
+    // Normalize angle difference to be between -pi and pi
+    double angleDifference = angleToPlayer - angle;
+    while (angleDifference < -math.pi) angleDifference += 2 * math.pi;
+    while (angleDifference > math.pi) angleDifference -= 2 * math.pi;
 
-    // Move towards target
-    position.moveToTarget(targetPixelPosition, moveSpeed * dt);
-
-    // Check if monster has arrived at the target cell
-    if (position.distanceTo(targetPixelPosition) < 0.1) {
-      position = targetPixelPosition; // Snap to target to avoid floating point inaccuracies
-
-      _moveTimer += dt; // Advance the timer only when at the target cell
-      if (_moveTimer >= _moveInterval) {
-        _moveTimer = 0.0; // Reset the timer
-
-        _gridPosition = _targetGridPosition; // Update current grid position
-
-        // Determine next direction based on potential bounces from _gridPosition
-        IntVector2 potentialNextGridPosition = _gridPosition + _direction;
-        IntVector2 newDirection = _direction;
-
-        // Check for horizontal bounce
-        if (isGridEdge(IntVector2(potentialNextGridPosition.x, _gridPosition.y))) {
-          newDirection = newDirection * game_constants.kDirectionDownLeft;
-        }
-
-        // Check for vertical bounce
-        if (isGridEdge(IntVector2(_gridPosition.x, potentialNextGridPosition.y))) {
-          newDirection = newDirection * game_constants.kDirectionUpRight;
-        }
-        _direction = newDirection; // Update the monster's direction
-
-        // Calculate new target grid position
-        _targetGridPosition = _gridPosition + _direction;
-
-        // Check for collision with player's path
-        if (isPlayerPath(_targetGridPosition)) {
-          onGameOver();
-          return; // Stop further movement if game is over
-        }
-
-        // Ensure the Qix stays within bounds (this is still important for initial placement and edge cases)
-        _targetGridPosition = _targetGridPosition.clamp(0, gridSize - 1, 0, gridSize - 1);
-      }
+    // Turn towards the player by 1 degree
+    const double turnStep = 0.002; // 0.002 radians
+    if (angleDifference.abs() > turnStep) {
+      angle += angleDifference.sign * turnStep;
+    } else {
+      angle = angleToPlayer;
     }
-  }
+    // --- End Homing logic ---
 
-  static IntVector2 _getRandomDirection() {
-    final math.Random random = math.Random();
-    final int directionIndex = random.nextInt(4);
-    switch (directionIndex) {
-      case 0:
-        return game_constants.kDirectionDownLeft;
-      case 1:
-        return game_constants.kDirectionDownRight;
-      case 2:
-        return game_constants.kDirectionUpLeft;
-      case 3:
-      default:
-        return game_constants.kDirectionUpRight;
+    // Calculate potential next position
+    final double velocityX = math.cos(angle) * speed;
+    final double velocityY = math.sin(angle) * speed;
+    final nextVirtualPosition = virtualPosition + Vector2(velocityX, velocityY) * dt;
+    final nextGridPosition = IntVector2(
+      (nextVirtualPosition.x / cellSize).round(),
+      (nextVirtualPosition.y / cellSize).round(),
+    );
+
+    // Collision detection using isGridEdge
+    if (isGridEdge(nextGridPosition)) {
+      final currentGridPos = gridPosition;
+      bool bounced = false;
+
+      // Check for horizontal collision (hitting a vertical wall)
+      if (isGridEdge(IntVector2(nextGridPosition.x, currentGridPos.y))) {
+        angle = math.pi - angle;
+        bounced = true;
+      }
+      
+      // Check for vertical collision (hitting a horizontal wall)
+      if (isGridEdge(IntVector2(currentGridPos.x, nextGridPosition.y))) {
+        angle = -angle;
+        bounced = true;
+      }
+
+      if (!bounced) {
+        angle = angle + math.pi; 
+      }
+
+      angle += (math.Random().nextDouble() - 0.5) * 0.6; // Increased random perturbation
+
+    } else {
+      virtualPosition = nextVirtualPosition;
+    }
+
+    position = virtualPosition;
+
+    if (isPlayerPath(gridPosition)) {
+      onGameOver();
+      return;
     }
   }
 
@@ -124,30 +122,25 @@ class QixComponent extends PositionComponent {
   void render(Canvas canvas) {
     super.render(canvas);
 
-    // Sinusoidal movement (slight up/down or left/right wobble)
-    // Sinusoidal wobble and head bobbing
-    final double wobbleMagnitude = cellSize * 2;
+    final double wobbleMagnitude = cellSize * 0.25; // Restored magnitude for a visible effect
     final double wobbleFrequency = 5.0;
     final double wobbleOffset = math.sin(_animationTime * wobbleFrequency) * wobbleMagnitude;
 
-    // Perpendicular vector for wobble
-    final directionVector = Vector2(_direction.x.toDouble(), _direction.y.toDouble()).normalized();
-    final renderOffset = Vector2(directionVector.y, -directionVector.x) * wobbleOffset;
+    final perpendicularAngle = angle + math.pi / 2;
+    final renderOffset = Vector2(math.cos(perpendicularAngle), math.sin(perpendicularAngle)) * wobbleOffset;
 
     final double maxRotation = math.pi / 12;
     final double rotation = -math.cos(_animationTime * wobbleFrequency) * maxRotation;
-    final double angle = math.atan2(_direction.y.toDouble(), _direction.x.toDouble()) + math.pi / 2;
+    final double visualAngle = angle + math.pi / 2;
 
     final center = Offset(size.x / 2, size.y / 2);
 
     canvas.save();
     canvas.translate(center.dx + renderOffset.x, center.dy + renderOffset.y);
-    canvas.rotate(angle + rotation);
+    canvas.rotate(visualAngle + rotation);
     canvas.translate(-center.dx, -center.dy);
 
-    // Precompute imageRect only once
     final imageRect = Rect.fromCenter(center: center, width: size.x * 5, height: size.y * 5);
-
     final paint = Paint();
     canvas.drawImageRect(snakeHeadImage, Rect.fromLTWH(0, 0, snakeHeadImage.width.toDouble(), snakeHeadImage.height.toDouble()), imageRect, paint);
 
