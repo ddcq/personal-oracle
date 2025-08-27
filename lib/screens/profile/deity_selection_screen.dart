@@ -112,6 +112,8 @@ class _DeityCard extends StatefulWidget {
 class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
   late final Animation<double> _scaleAnimation;
+  late final ScrollController _scrollController;
+  bool _showScrollIndicator = false;
 
   @override
   void initState() {
@@ -121,12 +123,35 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
       CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack),
     );
     _animationController.forward();
+
+    _scrollController = ScrollController();
+    _scrollController.addListener(_updateScrollIndicatorVisibility);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateScrollIndicatorVisibility();
+    });
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    _scrollController.removeListener(_updateScrollIndicatorVisibility);
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _updateScrollIndicatorVisibility() {
+    if (!_scrollController.hasClients) return;
+
+    final bool isScrollable = _scrollController.position.maxScrollExtent > 0;
+    final bool isAtBottom = _scrollController.position.pixels >= _scrollController.position.maxScrollExtent;
+
+    final bool shouldShow = isScrollable && !isAtBottom;
+
+    if (_showScrollIndicator != shouldShow) {
+      setState(() {
+        _showScrollIndicator = shouldShow;
+      });
+    }
   }
 
   @override
@@ -166,19 +191,75 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
               ),
             ],
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 20),
-              _buildDeityImage(),
-              const SizedBox(height: 20),
-              _buildDeityName(),
-              const SizedBox(height: 15),
-              _buildDeityDescription(),
-              const Spacer(),
-              _buildSelectButton(context),
-              const SizedBox(height: 30),
-            ],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Stack(
+                children: [
+                  Center(
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 20),
+                            _buildDeityImage(),
+                            const SizedBox(height: 20),
+                            _buildDeityName(),
+                            const SizedBox(height: 15),
+                            _buildDeityDescription(),
+                            const SizedBox(height: 30),
+                            _buildSelectButton(context),
+                            const SizedBox(height: 30),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (_showScrollIndicator)
+                    Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: IgnorePointer(
+                          child: Container(
+                            height: constraints.maxHeight * 0.1,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(30)),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.black.withAlpha(0),
+                                  Colors.black.withAlpha(100),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (_showScrollIndicator)
+                    Positioned(
+                      bottom: 10,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_downward, color: Colors.white),
+                          onPressed: () {
+                            _scrollController.animateTo(
+                              _scrollController.position.maxScrollExtent,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeOut,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
         ),
       ),
