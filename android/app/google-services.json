@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "170017535362",
+    "project_id": "oracle-asgard",
+    "storage_bucket": "oracle-asgard.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170017535362:android:9cde7182d4fe81c9cd4b9b",
+        "android_client_info": {
+          "package_name": "com.example.oracle_d_asgard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw_1d4qjPfssrpT_fgEcleNx1ZIc7wRVg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

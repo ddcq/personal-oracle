@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'screens/main_screen.dart'; // 👈 Nouveau fichier avec MainScreen
 import 'utils/constants.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:oracle_d_asgard/firebase_options.dart';
+
 import 'package:oracle_d_asgard/services/database_service.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +16,9 @@ import 'package:oracle_d_asgard/services/sound_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await DatabaseService().database;
   runApp(
     MultiProvider(
