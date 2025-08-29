@@ -16,6 +16,66 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      title:
+          '⚔️ Les Ases et les Vanes : guerre et réconciliation (version chronologique stricte)',
+      correctOrder: [
+        MythCard(
+          id: 'av_1',
+          title: 'L’ombre qui saigne : Heiðr et le seiðr',
+          description:
+              'Heiðr apporte le seiðr à Asgard, révélant convoitise et crainte. Percée et brûlée trois fois, elle renaît, et la guerre devient inéluctable.',
+          imagePath: 'stories/ases_vanes_1.jpg',
+          detailedStory:
+              'La grande salle grondait comme une coque prise dans la houle. Les Ases avaient invité la devineresse venue du sud des vents. On la nommait Heiðr, étincelle de regards, porteuse du seiðr. Elle parlait d’or rouge et de désirs tordus. Ses mots dévoilaient la chair du destin. Odin écoutait sans cligner, la main posée sur une lance sans nom. Les flammes vacillaient comme si elles craignaient sa voix. Alors des murmures devinrent couteaux. On accusa la sorcière d’avoir mordu le cœur de la salle. Des piques tombèrent comme la grêle. Elle fut percée, puis brûlée, puis encore. Trois fois, la cendre fut cendre. Trois fois, la femme se releva, plus dure que le fer. Les yeux de Thor s’assombrirent, mais il resta les poings nus. Le seiðr avait dévoilé trop de failles. La querelle venait de trouver son nom. La guerre leva la tête derrière les poutres.',
+        ),
+        MythCard(
+          id: 'av_2',
+          title: 'Le premier javelot : la guerre commence',
+          description:
+              'Un premier javelot ouvre les hostilités. Les Vanes déchaînent leur magie de terre et de mer, les Ases opposent discipline et courage, et le champ devient tornade.',
+          imagePath: 'stories/ases_vanes_2.jpg',
+          detailedStory:
+              'Sur le seuil d’Asgard, un javelot fendit l’air comme un verdict. Il se planta dans la terre noire et le tonnerre répondit. Les cornes sonnèrent, les étendards cognèrent le vent. Les Vanes sortirent des brumes, la peau marquée par la mer et les moissons. Ils portaient une magie qui sentait la tourbe et la sève. Les Ases alignèrent leurs boucliers, austères, polis par les anciens pactes. Le sol vibrait sous les pas, avalant le silence. Des cris déchirèrent le ciel. La première mêlée eut la saveur du fer humide. Odin menait d’un regard, sa lance traçant des arcs sobres. Thor frappait avec la force brute de l’orage, sans outil ni talisman. Freyja, aux Vanes, lança des tissages invisibles qui dénouaient la peur. Les éclairs passaient comme des bêtes affolées. La poussière s’accrocha aux dieux. Le jour vacilla, coupé en deux. La guerre avait un visage. Et il n’était pas miséricordieux.',
+        ),
+        MythCard(
+          id: 'av_3',
+          title: 'Le siège et les illusions',
+          description:
+              'Les Vanes assiègent Asgard à coups d’illusions et de brume. Les Ases résistent, guidés par Heimdall et la prouesse brute, sans gain décisif.',
+          imagePath: 'stories/ases_vanes_3.jpg',
+          detailedStory:
+              'Les Vanes se coulèrent jusqu’aux remparts d’Asgard, pareils à une marée qui grimpe la falaise. Les portes gémirent comme des bêtes captives. Des brouillards dressés par leurs rites brouillaient la vue et dépliaient des routes fantômes. Les Ases, d’abord surpris, serrèrent les rangs. Tyr posa sa main fidèle sur le bois des traverses. Heimdall entendit les pas qui n’existaient pas et guida vers les pas qui saignaient. Des archers tirèrent sur des silhouettes qui n’étaient que vent. Des brasiers roulèrent depuis les tours et léchèrent la nuit. Thor, torse bandé, empoigna un madrier et renversa une échelle comme on casse un juron. Freyja murmura depuis l’autre rive, et les flammes hésitèrent. La pierre buvait la sueur des dieux. Chaque cri paraissait double, comme si la bataille avait deux bouches. Au matin, l’ennemi tenait toujours les fossés. Les Ases tenaient toujours le seuil. Le monde restait suspendu entre deux serments.',
+        ),
+        MythCard(
+          id: 'av_4',
+          title: 'La lassitude des dieux : l’échange des otages',
+          description:
+              'Épuisés, Ases et Vanes scellent une trêve par l’échange d’otages : Njörd, Freyr, Freyja contre Hoenir et Mímir. La guerre se couche, mais ne dort pas.',
+          imagePath: 'stories/ases_vanes_4.jpg',
+          detailedStory:
+              'La guerre avait trop mordu pour mordre encore. Les camps comptèrent leurs absences et trouvèrent un gouffre. Alors on parla de trêve, d’une voix râpeuse. Les Vanes vinrent au milieu du champ, les mains ouvertes mais prêtes. Les Ases répondirent avec le poids de leurs serments. Le vent rabattit les fumées et dévoila des regards en charbons. On décida un pont fait d’hôtes vivants. Njörd avançait, la mer dans la barbe et le sel aux paupières. Freyr souriait comme un blé mûr en hiver. Freyja marchait silencieuse, mais les runes se tournaient vers elle. En retour, Asgard confia Hoenir, grand d’allure, prompt à décider si d’autres décidaient pour lui. Avec lui, Mímir, gardien d’un savoir qui mord. Les poignées de mains eurent la rugosité du chanvre. Les boucliers se redressèrent, mais un souffle plus doux passait entre eux. La guerre posa la tête, sans pour autant fermer l’œil.',
+        ),
+        MythCard(
+          id: 'av_5',
+          title: 'La tête qui parle, le miel de la paix : Mímir et Kvasir',
+          description:
+              'Les Vanes décapitent Mímir et renvoient sa tête aux Ases, qu’Odin ranime. Pour éviter la reprise de la guerre, tous créent Kvasir à partir d’un serment commun.',
+          imagePath: 'stories/ases_vanes_5.jpg',
+          detailedStory:
+              'Chez les Vanes, Hoenir hésita souvent, comme un gouvernail sans vent. Sans Mímir, il se taisait, et le conseil devint une barque immobile. La colère regonfla les voiles. On prit Mímir et on lui retira la voix d’un seul coup de lame. Sa tête roula, mais son savoir ne voulut pas tomber. Les Vanes renvoyèrent le lourd message à Asgard. Odin recueillit la tête, l’oignit d’herbes et d’incantations. Les lèvres mortes reparlèrent, chargées de sel et de fer. On eut peur de la rechute. Alors, pour sceller la paix au-delà des rancœurs, les deux camps crachèrent leur promesse dans un même vasque. De cette écume de serments naquit Kvasir, sage qui buvait les questions comme de l’eau claire. Il parla d’un monde tenu par deux mains différentes. Il parla d’un avenir où la force et la fécondité partagent la même table. Les dieux, un instant, respirèrent ensemble.',
+        ),
+        MythCard(
+          id: 'av_6',
+          title: 'L’alliance fragile et l’arbre qui écoute',
+          description:
+              'Les Vanes et les Ases apprennent à se tresser sans se confondre. Par la mémoire de Mímir et la sagesse de Kvasir, l’alliance tient, vigilante.',
+          imagePath: 'stories/ases_vanes_6.jpg',
+          detailedStory:
+              'La paix n’était pas un chant, mais un fil qu’on retord jour après jour. Njörd apprivoisa les ports d’Asgard et les routes d’écume. Freyr prêta aux champs des promesses plus fiables. Freyja enseigna le seiðr sans le laisser dévorer les cœurs. Les Ases acceptèrent de regarder la terre autrement. Les Vanes apprirent à marcher sur des pierres plus dures. Thor gardait ses poings comme des enclumes patientes. Odin consultait la tête de Mímir quand les nuits se faisaient trop étroites. Kvasir passait entre les maisons avec des mots qui apaisent. On releva des pallissades, mais on ouvrit des portes. Les enfants jouèrent au pied des remparts réparés. Le vent, parfois, apportait encore des bruits de fer. Alors Yggdrasil frissonnait comme pour rappeler l’addition payée. La paix tenait, non par oubli, mais par mémoire. Et les dieux connurent un matin sans cris.',
+        ),
+      ],
+    ),
+    MythStory(
       title: 'La mort de Baldr',
       correctOrder: [
         MythCard(
@@ -71,7 +131,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '1',
           title: 'Mjöllnir est volé',
-          description: 'Le géant Thrym dérobe le marteau magique Mjöllnir, privant ainsi les dieux de leur plus grande arme de défense contre le chaos.',
+          description:
+              'Le géant Thrym dérobe le marteau magique Mjöllnir, privant ainsi les dieux de leur plus grande arme de défense contre le chaos.',
           imagePath: 'thor_1.jpg',
           detailedStory:
               'Un matin, Thor se réveilla dans une rage terrible qui fit trembler tout Asgard. Son marteau Mjöllnir, sa plus précieuse possession, avait disparu ! Cette arme légendaire, forgée par les nains dans les profondeurs de Svartalfheim, était capable de contrôler la foudre et de pulvériser les montagnes.\n\nSans Mjöllnir, Thor n’était plus qu’un dieu ordinaire. Pire encore, sans cette arme divine, tous les dieux d’Asgard étaient vulnérables face aux forces du chaos qui menaçaient constamment les neuf mondes.\n\nLes recherches commencèrent immédiatement. Heimdall scruta les horizons avec sa vue perçante, Odin envoya ses corbeaux Hugin et Munin aux quatre coins du cosmos, mais le marteau demeurait introuvable. C’est alors que les soupçons se portèrent vers les géants, éternels ennemis des dieux.',
@@ -97,7 +158,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '4',
           title: 'Le festin',
-          description: 'Lors du banquet de mariage, Thor mange et boit avec une voracité telle que les géants commencent à douter de son identité féminine.',
+          description:
+              'Lors du banquet de mariage, Thor mange et boit avec une voracité telle que les géants commencent à douter de son identité féminine.',
           imagePath: 'thor_4.jpg',
           detailedStory:
               'Le stratagème sembla d’abord fonctionner parfaitement. Thrym accueillit sa "fiancée" avec une joie débordante et organisa immédiatement un grand banquet nuptial. Tous les géants de Jötunheim furent conviés pour célébrer cette union extraordinaire.\n\nMais au cours du festin, Thor ne put contenir son appétit légendaire. Oubliant son rôle, il dévora un bœuf entier, huit saumons, et engloutit tous les mets destinés aux femmes. Il vida ensuite trois tonneaux entiers d’hydromel d’un trait, éveillant les soupçons des géants.\n\n"Par ma barbe !" s’exclama Thrym, les yeux écarquillés. "Je n’ai jamais vu une femme manger et boire avec un tel appétit ! Pourquoi la belle Freyja se montre-t-elle si vorace ?\n\nLoki, toujours prompt à mentir, répondit avec aplomb : "Noble Thrym, Freyja était si excitée par ce mariage qu’elle n’a pas touché à la nourriture depuis huit jours et huit nuits ! C’est la faim qui la rend si affamée."',
@@ -128,7 +190,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '2',
           title: 'Les chaînes échouent',
-          description: 'Les dieux tentent de le lier avec des chaînes solides, mais Fenrir brise chaque lien, révélant une force surnaturelle incontrôlable.',
+          description:
+              'Les dieux tentent de le lier avec des chaînes solides, mais Fenrir brise chaque lien, révélant une force surnaturelle incontrôlable.',
           imagePath: 'fenrir_2.jpg',
           detailedStory:
               'Quand Fenrir devint si grand qu’il dominait même les plus imposants des dieux, la peur s’installa à Asgard. Les prophéties annonçaient qu’il dévorerait Odin lors du Ragnarök, et sa puissance grandissante rendait cette menace de plus en plus réelle.\n\nLes dieux décidèrent alors de l’enchaîner. Ils présentèrent cela comme un jeu, un défi pour tester sa force légendaire. Fenrir, encore naïf malgré sa taille, accepta de se laisser lier par Leyding, la plus solide des chaînes forgées par les nains.\n\nMais d’un simple mouvement d’épaules, le loup brisa Leyding comme un vulgaire fil. Les maillons de fer volèrent dans toutes les directions. Les dieux, feignant l’admiration, tentèrent alors avec Dromi, une chaîne encore plus massive et résistante.\n\nFenrir la réduisit en miettes d’un seul élan, révélant une force si surnaturelle que les dieux comprirent qu’aucune chaîne ordinaire ne pourrait jamais retenir cette créature du chaos.',
@@ -145,7 +208,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '4',
           title: 'Le défi',
-          description: 'Soupçonneux, Fenrir accepte d’être enchaîné avec Gleipnir uniquement si un dieu place sa main dans sa gueule en gage de bonne foi.',
+          description:
+              'Soupçonneux, Fenrir accepte d’être enchaîné avec Gleipnir uniquement si un dieu place sa main dans sa gueule en gage de bonne foi.',
           imagePath: 'fenrir_4.jpg',
           detailedStory:
               'Quand les dieux présentèrent Gleipnir à Fenrir, le loup, désormais méfiant après les tentatives précédentes, examina attentivement ce lien étrange. Malgré son apparence fragile, quelque chose dans cette chaîne éveillait ses instincts les plus profonds.\n\n"Cette chaîne me semble suspecte, dit Fenrir en reniflant Gleipnir. Elle paraît faible, mais je sens en elle une magie puissante. Si c’est encore un de vos jeux, pourquoi ne pas utiliser des chaînes ordinaires ?\n\nLes dieux tentèrent de le rassurer, prétendant que c’était justement parce qu’il avait brisé les chaînes précédentes qu’ils voulaient tester cette nouvelle création des nains.\n\nMais Fenrir posa ses conditions d’une voix grave qui fit trembler les fondations d’Asgard : "J’accepte de me laisser enchaîner avec ce lien, mais seulement si l’un d’entre vous place sa main dans ma gueule en gage de bonne foi. Ainsi, si vous me trompez, au moins l’un de vous paiera le prix de cette trahison."',
@@ -167,7 +231,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '1',
           title: 'Ginnungagap',
-          description: 'Avant toute création, il n’y avait que le Ginnungagap, un vaste vide séparant le feu de Muspellheim et la glace de Niflheim.',
+          description:
+              'Avant toute création, il n’y avait que le Ginnungagap, un vaste vide séparant le feu de Muspellheim et la glace de Niflheim.',
           imagePath: 'creation_1.jpg',
           detailedStory:
               'Au commencement des temps, avant que n’existe aucun monde, aucune mer, aucun ciel, aucun terre, il n’y avait que le Ginnungagap - le vide béant, l’abîme primordial qui s’étendait dans une solitude infinie.\n\nCe n’était ni lumière ni ténèbres, ni chaud ni froid, mais un néant absolu où rien ne pouvait naître ni mourir, car rien n’existait encore. Ce vide colossal séparait deux royaumes aux natures opposées, comme deux forces antagonistes attendant leur confrontation cosmique.\n\nAu nord du Ginnungagap s’étendait Niflheim, le monde de glace et de brouillard éternel, d’où coulaient les onze rivières Élivágar, charriant des eaux si froides qu’elles gelaient instantanément dans le vide. Au sud brûlait Muspellheim, le royaume du feu éternel et inextinguible, gardé par le géant Surtr brandissant son épée flamboyante, dans l’attente du jour où il incendierait tous les mondes.\n\nAinsi les forces primordiales se faisaient face dans l’immensité du vide, préparant la création dans leur opposition même.',
@@ -184,7 +249,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '3',
           title: 'Naissance d’Ymir',
-          description: 'De cette union primordiale naît Ymir, le premier géant, ainsi que la vache Audhumla, nourricière du géant. La vie se propage.',
+          description:
+              'De cette union primordiale naît Ymir, le premier géant, ainsi que la vache Audhumla, nourricière du géant. La vie se propage.',
           imagePath: 'creation_3.jpg',
           detailedStory:
               'De l’eau primordiale, un être colossal émergea : Ymir, le premier géant, aussi connu sous le nom d’Aurgelmir. Sa chair était faite de glace fondue, ses os de roches anciennes, et ses yeux brillaient d’une lueur froide comme les étoiles naissantes.\n\nÀ côté de lui, une vache immense nommée Audhumla apparut, nourrie par les gouttes d’eau sucrée qui s’étaient formées dans le Ginnungagap. Audhumla était la source de vie pour Ymir, lui fournissant le lait nécessaire à sa survie. En léchant la glace des montagnes, elle découvrit bientôt Buri, le premier dieu, dont la descendance allait donner naissance aux Ases.\n\nAinsi naquit la première génération de géants et de dieux, marquant le début de l’histoire du monde. Ymir devint le père des géants, tandis qu’Audhumla nourrissait les êtres qui allaient façonner l’univers.',
@@ -192,7 +258,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '4',
           title: 'La mort d’Ymir',
-          description: 'Les premiers dieux, Odin et ses frères, tuent Ymir pour mettre fin au chaos. Son sang noie presque tous les autres géants.',
+          description:
+              'Les premiers dieux, Odin et ses frères, tuent Ymir pour mettre fin au chaos. Son sang noie presque tous les autres géants.',
           imagePath: 'creation_4.jpg',
           detailedStory:
               'Les dieux, conscients que Ymir représentait une menace pour l’équilibre du cosmos, décidèrent de mettre fin à son règne chaotique. Odin, Vili et Vé, les trois frères divins, s’unirent pour affronter le géant primordial.\n\nDans une bataille épique, ils parvinrent à tuer Ymir. Son corps colossal s’effondra dans le Ginnungagap, et son sang se mit à couler en torrents. Ce sang inonda presque tous les autres géants, les noyant dans un océan de chaos.\n\nMais les dieux ne se contentèrent pas de tuer Ymir. Ils utilisèrent son corps pour façonner le monde : sa chair devint la terre, ses os les montagnes, son sang les mers et les rivières, et son crâne le ciel. Ainsi, de la mort du géant naquit l’univers tel que nous le connaissons.',
@@ -214,7 +281,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '1',
           title: 'Cheveux de Sif',
-          description: 'Loki coupe les magnifiques cheveux dorés de Sif, l’épouse de Thor, par pur amusement. Ce geste irrite profondément Thor.',
+          description:
+              'Loki coupe les magnifiques cheveux dorés de Sif, l’épouse de Thor, par pur amusement. Ce geste irrite profondément Thor.',
           imagePath: 'forge_1.jpg',
           detailedStory:
               'Dans les temps anciens, Loki, le dieu de la malice et de la ruse, s’ennuyait profondément. Pour se divertir, il décida de jouer un tour à Thor, le dieu du tonnerre. Profitant d’un moment d’inattention, il coupa les magnifiques cheveux dorés de Sif, l’épouse de Thor.\n\nSif était connue pour sa beauté éclatante et ses cheveux resplendissants qui brillaient comme l’or au soleil. Lorsque Thor découvrit ce qu’avait fait Loki, sa colère fut telle qu’elle fit trembler les fondations d’Asgard. Il jura de se venger et de faire payer à Loki son affront.',
@@ -240,7 +308,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '4',
           title: 'Création de Mjöllnir',
-          description: 'Malgré les ruses de Loki, les nains forgent plusieurs merveilles, dont Mjöllnir, un marteau redoutable capable de contrôler la foudre.',
+          description:
+              'Malgré les ruses de Loki, les nains forgent plusieurs merveilles, dont Mjöllnir, un marteau redoutable capable de contrôler la foudre.',
           imagePath: 'forge_4.jpg',
           detailedStory:
               'Brokkr et Sindri, avec leur talent inégalé, commencèrent à forger les trésors. Le premier fut Draupnir, un anneau magique capable de produire huit autres anneaux d’or chaque neuf nuits. Ensuite, ils créèrent Gungnir, la lance d’Odin qui ne manquait jamais sa cible.\n\nMais le chef-d’œuvre fut Mjöllnir, le marteau de Thor. Malgré les tentatives de Loki pour saboter le processus en transformant Brokkr en une mouche pour le distraire, les nains restèrent concentrés. Mjöllnir fut forgé avec une telle puissance qu’il pouvait contrôler la foudre et revenir dans la main de Thor après avoir été lancé.',
@@ -248,7 +317,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '5',
           title: 'Offrande à Thor',
-          description: 'Les trésors sont offerts aux dieux. Thor, émerveillé par Mjöllnir, accepte le pardon de Loki, bien que le manche soit un peu court.',
+          description:
+              'Les trésors sont offerts aux dieux. Thor, émerveillé par Mjöllnir, accepte le pardon de Loki, bien que le manche soit un peu court.',
           imagePath: 'forge_5.jpg',
           detailedStory:
               'Lorsque les nains présentèrent leurs créations aux dieux, Thor fut immédiatement attiré par Mjöllnir. Il le prit en main, ressentant la puissance du marteau qui pulsait à travers lui. "C’est un trésor digne de mon épouse Sif !" s’exclama-t-il, oubliant presque sa colère contre Loki.\n\nBien que le manche du marteau fût un peu court, ce qui le rendait difficile à manier pour un dieu de sa stature, Thor accepta le cadeau avec gratitude. Il savait que Mjöllnir serait un atout précieux dans ses combats contre les géants et les forces du chaos.\n\nLoki, soulagé, put enfin respirer. Il avait réussi à réparer son erreur et à apaiser la colère de Thor, au prix de quelques frayeurs supplémentaires. Les dieux célébrèrent la creation de ces trésors magiques, renforçant ainsi leur lien avec les nains et leur pouvoir sur les neuf mondes.',
@@ -261,7 +331,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '1',
           title: 'Les Dieux cherchent à protéger Asgard',
-          description: 'Après la guerre contre les Vanes, les Ases décident de reconstruire la forteresse d’Asgard.',
+          description:
+              'Après la guerre contre les Vanes, les Ases décident de reconstruire la forteresse d’Asgard.',
           imagePath: 'wall_1.jpg',
           detailedStory:
               'La guerre entre les Ases et les Vanes, deux clans divins, avait laissé de profondes cicatrices dans les mondes. Bien qu’une paix ait finalement été conclue, elle n’effaça pas les destructions causées par les combats, notamment la perte de la muraille qui protégeait Asgard. Les dieux comprirent que, pour préserver leur royaume des incursions futures, une défense solide et inviolable était nécessaire. Ainsi, les Ases se réunirent au Thing, l’assemblée sacrée, et discutèrent longuement de la manière de rebâtir leur cité. Tous étaient d’accord : la nouvelle forteresse devrait surpasser l’ancienne, être digne du royaume des dieux et capable de tenir tête aux géants eux-mêmes.',
@@ -269,7 +340,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '2',
           title: 'Le géant bâtisseur propose son aide',
-          description: 'Un inconnu se présente et propose de bâtir la muraille en échange d’un prix exorbitant.',
+          description:
+              'Un inconnu se présente et propose de bâtir la muraille en échange d’un prix exorbitant.',
           imagePath: 'wall_2.jpg',
           detailedStory:
               'Alors que les Ases débattaient de la meilleure façon de reconstruire leur forteresse, un géant mystérieux, connu sous le nom de Hrimthurs, se présenta devant eux. Il proposa de bâtir une muraille inébranlable en échange d’un prix exorbitant : la main de Freyja, la déesse de l’amour et de la beauté, ainsi que le soleil et la lune. Les dieux, bien que réticents, virent dans cette offre une opportunité unique. Hrimthurs affirma qu’il pouvait terminer la construction en seulement six mois, mais il devait travailler sans interruption, jour et nuit. Les Ases acceptèrent à contrecœur, mais avec un plan secret pour empêcher le géant de réussir.',
@@ -277,7 +349,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '3',
           title: 'Le géant commence la construction',
-          description: 'Le géant commence à travailler, mais les dieux réalisent qu’il pourrait réussir.',
+          description:
+              'Le géant commence à travailler, mais les dieux réalisent qu’il pourrait réussir.',
           imagePath: 'wall_3.jpg',
           detailedStory:
               'Hrimthurs se mit immédiatement au travail, utilisant sa force colossale pour soulever d’énormes blocs de pierre et les placer avec une précision incroyable. Les Ases observaient, inquiets, alors que le géant avançait à un rythme alarmant. En quelques semaines, une grande partie de la muraille était déjà érigée. Les dieux commencèrent à craindre que Hrimthurs ne termine son ouvrage avant la fin du délai imparti. Ils savaient qu’ils devaient agir rapidement pour empêcher cela, mais comment ?',
@@ -285,7 +358,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '4',
           title: 'L’intervention de Loki',
-          description: 'Loki, le dieu de la malice, propose un plan pour retarder le géant.',
+          description:
+              'Loki, le dieu de la malice, propose un plan pour retarder le géant.',
           imagePath: 'wall_4.jpg',
           detailedStory:
               'Loki, toujours prêt à semer le trouble, eut une idée. Il se transforma en jument et se présenta devant le cheval du géant, Svadilfari. Le cheval, attiré par la jument, se mit à la poursuivre, laissant Hrimthurs sans son aide pour transporter les lourds blocs de pierre. Pendant ce temps, Loki, sous sa forme équine, mena le cheval loin du chantier, le retardant considérablement. Le géant, frustré par l’absence de son cheval, tenta de continuer seul, mais il était évident qu’il ne pourrait pas terminer la muraille à temps sans son fidèle compagnon.',
@@ -293,7 +367,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '5',
           title: 'La colère du géant',
-          description: 'Le géant, furieux de ne pas pouvoir terminer à temps, se rend compte qu’il a été trompé.',
+          description:
+              'Le géant, furieux de ne pas pouvoir terminer à temps, se rend compte qu’il a été trompé.',
           imagePath: 'wall_5.jpg',
           detailedStory:
               'Lorsque Hrimthurs réalisa qu’il ne pourrait pas terminer la muraille à temps, sa colère fut immense. Il comprit qu’il avait été dupé par les Ases et par Loki. Furieux, il se mit à détruire ce qu’il avait construit, jurant de se venger. Les dieux, voyant le géant en colère, se préparèrent à se défendre. Ils savaient que Hrimthurs ne les laisserait pas s’en tirer si facilement. Mais Loki, toujours rusé, avait un plan pour mettre fin à cette menace.',
@@ -301,7 +376,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '6',
           title: 'La bataille finale',
-          description: 'Les dieux affrontent le géant dans une bataille épique pour protéger Asgard.',
+          description:
+              'Les dieux affrontent le géant dans une bataille épique pour protéger Asgard.',
           imagePath: 'wall_6.jpg',
           detailedStory:
               'La colère du géant Hrimthurs se transforma en rage lorsqu’il comprit qu’il avait été trompé. Il se mit à détruire la muraille qu’il avait construite, mais les dieux ne le laissèrent pas faire. Odin, Thor et les autres Ases se préparèrent à combattre le géant. Une bataille épique s’ensuit, avec des éclairs de magie et des coups de marteau résonnant dans tout Asgard. Hrimthurs, bien que puissant, fut finalement vaincu par la ruse de Loki et la force des dieux. Alors qu’il tombait, il jura de se venger un jour, mais pour l’instant, Asgard était sauvé.',
@@ -309,7 +385,8 @@ List<MythStory> getMythStories() {
         MythCard(
           id: '7',
           title: 'La reconstruction d’Asgard',
-          description: 'Après la victoire, les dieux reconstruisent Asgard et célèbrent leur triomphe.',
+          description:
+              'Après la victoire, les dieux reconstruisent Asgard et célèbrent leur triomphe.',
           imagePath: 'assets/images/stories/wall_7.jpg',
           detailedStory:
               'Après la victoire sur Hrimthurs, les dieux se mirent à reconstruire Asgard. Ils utilisèrent les pierres de la muraille détruite pour ériger une nouvelle forteresse, encore plus solide que la précédente. Les Ases célébrèrent leur triomphe avec de grandes fêtes, honorant Loki pour son rôle crucial dans la défaite du géant. Ils comprirent que, même si la ruse et la tromperie n’étaient pas toujours les meilleures solutions, elles pouvaient parfois être nécessaires pour protéger leur royaume. La nouvelle muraille d’Asgard devint un symbole de leur force et de leur unité, et les dieux jurèrent de toujours veiller sur leur royaume, prêts à affronter toute menace qui pourrait surgir à l’avenir.',

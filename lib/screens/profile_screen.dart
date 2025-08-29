@@ -593,7 +593,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final storyId = progress['story_id'];
         final mythStory = allMythStories.firstWhere(
           (story) => story.title == storyId,
-          orElse: () => MythStory(title: 'Histoire inconnue', correctOrder: [], collectibleCards: []), // Fallback
+          orElse: () => MythStory(title: 'Histoire inconnue', correctOrder: []), // Fallback
         );
         final unlockedParts = jsonDecode(progress['parts_unlocked']) as List;
         String? lastChapterImagePath;
