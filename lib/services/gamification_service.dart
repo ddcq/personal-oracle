@@ -221,7 +221,7 @@ class GamificationService with ChangeNotifier {
     return null;
   }
 
-  Future<Map<String, dynamic>> getUnearnedContent({String? tag}) async {
+  Future<Map<String, dynamic>> getUnearnedContent() async {
     final allMythStories = getMythStories();
     final unlockedCollectibleCards = await getUnlockedCollectibleCards(); // Now returns CollectibleCard objects
     final unlockedStoryProgress = await getUnlockedStoryProgress();
@@ -240,10 +240,6 @@ class GamificationService with ChangeNotifier {
       final bool hasPremium = unlockedCardVersions[card.id]?[CardVersion.premium] ?? false;
       final bool hasEpic = unlockedCardVersions[card.id]?[CardVersion.epic] ?? false;
 
-      if (tag != null && !card.tags.contains(tag)) {
-        continue; // Skip card if it doesn't match the tag
-      }
-
       if (card.version == CardVersion.chibi && !hasChibi) {
         unearnedCollectibleCards.add(card);
       } else if (card.version == CardVersion.premium && hasChibi && !hasPremium) {
@@ -261,10 +257,6 @@ class GamificationService with ChangeNotifier {
 
     final List<Map<String, dynamic>> nextMythCardsToEarn = [];
     for (var story in allMythStories) {
-      if (tag != null && !story.tags.contains(tag)) {
-        continue; // Skip story if it doesn't match the tag
-      }
-
       final List<String> partsUnlockedForStory = unlockedStoryParts[story.title] ?? [];
       MythCard? nextCard;
 

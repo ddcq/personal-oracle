@@ -1,14 +1,10 @@
-import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
-import 'package:oracle_d_asgard/models/card_version.dart'; // Import CardVersion
-
 
 List<MythStory> getMythStories() {
   return [
     MythStory(
       title: 'Loading Story',
-      tags: [],
       correctOrder: [
         MythCard(
           id: 'dummy_1',
@@ -18,11 +14,9 @@ List<MythStory> getMythStories() {
           detailedStory: 'Loading...',
         ),
       ],
-      collectibleCards: [],
     ),
     MythStory(
       title: 'La mort de Baldr',
-      tags: ['Baldr', 'Odin', 'Frigg', 'Asgard', 'Gui', 'Loki', 'Valhalla', 'Höd', 'Ragnarök'],
       correctOrder: [
         MythCard(
           id: '1',
@@ -70,15 +64,9 @@ List<MythStory> getMythStories() {
               'Le silence s’abattit avant même que la flèche n’atteigne sa cible. Elle fendit l’air, presque invisible, presque irréelle. Puis elle se planta dans la poitrine de Baldr avec une précision terrible.\n\nIl poussa un cri, un seul. Un son bref, déchirant, qui glaça le sang des immortels. Puis il s’effondra, comme frappé par la foudre.\n\nUn silence de mort enveloppa Asgard. Les rires cessèrent, les sourires s’éteignirent. L’incompréhension précéda l’horreur, qui bientôt se mua en désespoir. Frigg accourut, tomba à genoux, enlaça le corps inerte de son fils, hurlant un chagrin que même les étoiles entendirent.\n\nHöd, découvrant ce qu’il avait fait, laissa tomber son arc et sanglota, inconsolable. Il n’avait été que l’instrument, le jouet d’un esprit malin. Mais cela n’ôta rien à la tragédie.\n\nEt Loki, maître de la discorde, s’éclipsa dans les ombres, le sourire aux lèvres.\n\nBaldr était mort. Et avec lui, une part irremplaçable de la lumière du monde. Ce jour-là, les dieux comprirent que le crépuscule approchait. Le fil du destin avait été tranché. Ragnarök, le crépuscule des dieux, s’était mis en marche.',
         ),
       ],
-      collectibleCards: [
-        allCollectibleCards.firstWhere((card) => card.id == 'baldr' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'frigg' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'gui' && card.version == CardVersion.epic),
-      ],
     ),
     MythStory(
       title: 'Le marteau de Thor',
-      tags: ['Thor', 'Mjöllnir', 'Asgard', 'Heimdall', 'Odin', 'Hugin', 'Munin', 'Thrym', 'Freyja', 'Brísingamen', 'Valhalla', 'Loki'],
       correctOrder: [
         MythCard(
           id: '1',
@@ -124,15 +112,9 @@ List<MythStory> getMythStories() {
               'Thrym, rassuré par l’explication de Loki, décida de procéder à la cérémonie. Selon la tradition, il ordonna qu’on apporte le marteau de Thor pour bénir l’union et le placer sur les genoux de la mariée, symbole de fertilité et de protection.\n\nDès que Mjöllnir fut posé sur ses genoux, Thor sentit sa force divine revenir en lui comme un torrent. Ses yeux s’enflammèrent de joie et de rage contenues. D’un geste puissant, il arracha son voile et déchira sa robe de mariée.\n\n"Je suis Thor, fils d’Odin !" rugit-it en brandissant son marteau. "Et voici ma réponse à votre chantage !\n\nLa foudre jaillit de Mjöllnir tandis que Thor massacrait Thrym et tous les géants présents dans un déchaînement de violence divine. Les éclairs illuminèrent la salle du festin transformée en champ de bataille, et le tonnerre résonna dans tout Jötunheim.\n\nAinsi Thor récupéra-t-il son marteau, et jamais plus les géants n’osèrent défier ouvertement le dieu du tonnerre.',
         ),
       ],
-      collectibleCards: [
-        allCollectibleCards.firstWhere((card) => card.id == 'thor' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'mjollnir' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'thrym' && card.version == CardVersion.epic),
-      ],
     ),
     MythStory(
       title: 'Fenrir enchaîné',
-      tags: ['Fenrir', 'Loki', 'Angrboda', 'Tyr', 'Odin', 'Ragnarök', 'Leyding', 'Dromi', 'Gleipnir', 'Asgard'],
       correctOrder: [
         MythCard(
           id: '1',
@@ -178,15 +160,9 @@ List<MythStory> getMythStories() {
               'Un lourd silence tomba sur l’assemblée des dieux. Tous savaient qu’ils s’apprêtaient à trahir Fenrir, et que celui qui placerait sa main dans la gueule du loup la perdrait à coup sûr. Personne n’osait se porter volontaire.\n\nSeul Tyr, le dieu du courage et de l’honneur, s’avança. Il était le seul à avoir nourri Fenrir, le seul en qui le loup avait encore confiance. Sans hésitation, fidèle à sa réputation de bravoure, il tendit sa main droite et la plaça entre les mâchoires redoutables de la bête.\n\nGleipnir fut alors attaché autour des pattes de Fenrir. Le loup tenta de le briser comme les chaînes précédentes, bandant tous ses muscles, tirant de toutes ses forces. Mais plus il luttait, plus le lien magique se resserrait.\n\nRéalisant qu’il avait été dupé et qu’il resterait prisonnier pour l’éternité, Fenrir leva ses yeux jaunes vers Tyr. Un regard de tristesse et de rage mêlées passa entre le dieu et la bête. Puis, d’un coup sec, Fenrir referma sa mâchoire, arrachant la main de Tyr dans un craquement sinistre.\n\nFenrir fut ensuite traîné vers une île déserte et attaché à un rocher au plus profond de la terre, où il demeure enchaîné jusqu’au Ragnarök, le jour où il brisera enfin ses liens pour dévorer Odin.\n\nAinsi Tyr perdit-il sa main, mais gagna l’éternelle reconnaissance des dieux pour son sacrifice héroïque qui sauva les neuf mondes... du moins temporairement.',
         ),
       ],
-      collectibleCards: [
-        allCollectibleCards.firstWhere((card) => card.id == 'fenrir' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'tyr' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'gleipnir' && card.version == CardVersion.epic),
-      ],
     ),
     MythStory(
       title: 'La naissance du monde',
-      tags: ['Ginnungagap', 'Muspellheim', 'Niflheim', 'Surtr', 'Ymir', 'Audhumla', 'Buri', 'Odin', 'Vili', 'Vé', 'Midgard'],
       correctOrder: [
         MythCard(
           id: '1',
@@ -231,15 +207,9 @@ List<MythStory> getMythStories() {
               'Les dieux, après avoir vaincu Ymir, se mirent à l’œuvre pour façonner le monde à partir de son corps colossal. Ils commencèrent par diviser son corps en deux moitiés égales, créant ainsi la terre et le ciel.\n\nLa chair d’Ymir devint la terre fertile, couverte de forêts luxuriantes et de plaines verdoyantes. Ses os furent brisés et érigés en montagnes majestueuses, formant les chaînes montagneuses qui traversent le monde. Son sang, qui avait inondé les géants, fut canalisé pour former les mers profondes et les rivières sinueuses.\n\nLe crâne d’Ymir fut soulevé pour créer le ciel, soutenu par quatre nains représentant les points cardinaux : Nord, Sud, Est et Ouest. Les étoiles furent placées dans le ciel comme des lanternes scintillantes, tandis que la lune et le soleil furent créés pour réguler le temps.\n\nAinsi naquit Midgard, le monde des hommes, au centre de l’univers, entouré par les neuf mondes interconnectés. Les dieux avaient façonné un cosmos harmonieux à partir du chaos primordial.',
         ),
       ],
-      collectibleCards: [
-        allCollectibleCards.firstWhere((card) => card.id == 'ymir' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'audhumla' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'ginnungagap' && card.version == CardVersion.epic),
-      ],
     ),
     MythStory(
       title: 'La forge de Mjöllnir',
-      tags: ['Loki', 'Thor', 'Sif', 'Asgard', 'Brokkr', 'Sindri', 'Svartalfheim', 'Draupnir', 'Gungnir', 'Mjöllnir', 'Odin'],
       correctOrder: [
         MythCard(
           id: '1',
@@ -284,16 +254,9 @@ List<MythStory> getMythStories() {
               'Lorsque les nains présentèrent leurs créations aux dieux, Thor fut immédiatement attiré par Mjöllnir. Il le prit en main, ressentant la puissance du marteau qui pulsait à travers lui. "C’est un trésor digne de mon épouse Sif !" s’exclama-t-il, oubliant presque sa colère contre Loki.\n\nBien que le manche du marteau fût un peu court, ce qui le rendait difficile à manier pour un dieu de sa stature, Thor accepta le cadeau avec gratitude. Il savait que Mjöllnir serait un atout précieux dans ses combats contre les géants et les forces du chaos.\n\nLoki, soulagé, put enfin respirer. Il avait réussi à réparer son erreur et à apaiser la colère de Thor, au prix de quelques frayeurs supplémentaires. Les dieux célébrèrent la creation de ces trésors magiques, renforçant ainsi leur lien avec les nains et leur pouvoir sur les neuf mondes.',
         ),
       ],
-      collectibleCards: [
-        allCollectibleCards.firstWhere((card) => card.id == 'sif' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'brokkr_sindri' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'draupnir' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'gungnir' && card.version == CardVersion.epic),
-      ],
     ),
     MythStory(
       title: 'La Muraille d’Asgard',
-      tags: ['Ases', 'Vanes', 'Asgard', 'Hrimthurs', 'Freyja', 'Loki', 'Svadilfari', 'Odin', 'Thor', 'Sleipnir'],
       correctOrder: [
         MythCard(
           id: '1',
@@ -351,11 +314,6 @@ List<MythStory> getMythStories() {
           detailedStory:
               'Après la victoire sur Hrimthurs, les dieux se mirent à reconstruire Asgard. Ils utilisèrent les pierres de la muraille détruite pour ériger une nouvelle forteresse, encore plus solide que la précédente. Les Ases célébrèrent leur triomphe avec de grandes fêtes, honorant Loki pour son rôle crucial dans la défaite du géant. Ils comprirent que, même si la ruse et la tromperie n’étaient pas toujours les meilleures solutions, elles pouvaient parfois être nécessaires pour protéger leur royaume. La nouvelle muraille d’Asgard devint un symbole de leur force et de leur unité, et les dieux jurèrent de toujours veiller sur leur royaume, prêts à affronter toute menace qui pourrait surgir à l’avenir.',
         ),
-      ],
-      collectibleCards: [
-        allCollectibleCards.firstWhere((card) => card.id == 'hrimthurs' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'svadilfari' && card.version == CardVersion.epic),
-        allCollectibleCards.firstWhere((card) => card.id == 'sleipnir' && card.version == CardVersion.epic),
       ],
     ),
   ];
