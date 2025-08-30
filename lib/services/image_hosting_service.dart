@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -15,23 +14,19 @@ class ImageHostingService {
     final localFile = await _getLocalFile(imagePath);
 
     if (await localFile.exists()) {
-      print('Image found in cache: \${localFile.path}');
       return localFile;
     } else {
-      print('Image not found in cache, downloading from Firebase Hosting: \$imagePath');
       try {
         final imageUrl = '$_firebaseHostingBaseUrl/\$imagePath';
         final response = await http.get(Uri.parse(imageUrl));
 
         if (response.statusCode == 200) {
           await localFile.writeAsBytes(response.bodyBytes);
-          print('Image downloaded and cached: \${localFile.path}');
           return localFile;
         } else {
           throw Exception('Failed to download image from \$imageUrl: \${response.statusCode}');
         }
       } catch (e) {
-        print('Error downloading image \$imagePath: \$e');
         rethrow;
       }
     }
