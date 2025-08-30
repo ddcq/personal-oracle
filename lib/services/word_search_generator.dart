@@ -90,13 +90,19 @@ WordSearchGridResult generateWordSearchGrid({
     }
 
     if (finalEmptyCellCount < 11) {
-      final List<String> possibleSecretWords = secretWords
+      final List<String> fittingWords = secretWords
           .where((sw) => sw.isNotEmpty && sw.length <= finalEmptyCellCount)
           .toList();
 
       final String secretWord;
-      if (possibleSecretWords.isNotEmpty) {
-        secretWord = possibleSecretWords[random.nextInt(possibleSecretWords.length)];
+      if (fittingWords.isNotEmpty) {
+        // Find the maximum length among fitting words
+        final int maxLength = fittingWords.fold(0, (maxLen, word) => max(maxLen, word.length));
+        // Filter to only include words of that maximum length
+        final List<String> longestFittingWords = fittingWords
+            .where((sw) => sw.length == maxLength)
+            .toList();
+        secretWord = longestFittingWords[random.nextInt(longestFittingWords.length)];
       } else {
         secretWord = "DEFAULT"; // Fallback if no secret word fits
       }
@@ -122,13 +128,17 @@ WordSearchGridResult generateWordSearchGrid({
 
   int emptyCellCount = width * height; // It's a fresh empty grid
 
-  final List<String> possibleSecretWords = secretWords
+  final List<String> fittingWords = secretWords
       .where((sw) => sw.isNotEmpty && sw.length <= emptyCellCount)
       .toList();
 
   final String secretWord;
-  if (possibleSecretWords.isNotEmpty) {
-    secretWord = possibleSecretWords[random.nextInt(possibleSecretWords.length)];
+  if (fittingWords.isNotEmpty) {
+    final int maxLength = fittingWords.fold(0, (maxLen, word) => max(maxLen, word.length));
+    final List<String> longestFittingWords = fittingWords
+        .where((sw) => sw.length == maxLength)
+        .toList();
+    secretWord = longestFittingWords[random.nextInt(longestFittingWords.length)];
   } else {
     secretWord = "DEFAULT"; // Fallback if no secret word fits
   }
