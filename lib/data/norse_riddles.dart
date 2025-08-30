@@ -32,19 +32,11 @@ const List<NorseRiddle> norseRiddles = [
   ),
   NorseRiddle(
     name: 'THOR',
-    clues: [
-      'Mon char est tiré par des boucs.',
-      'Je suis le protecteur de Midgard et le fils d’Odin.',
-      'Le tonnerre gronde quand je lance mon marteau.',
-    ],
+    clues: ['Mon char est tiré par des boucs.', 'Je suis le protecteur de Midgard et le fils d’Odin.', 'Le tonnerre gronde quand je lance mon marteau.'],
   ),
   NorseRiddle(
     name: 'LOKI',
-    clues: [
-      'Je suis le père de monstres et le maître de la tromperie.',
-      'Mon sang s’est mêlé à celui d’Odin.',
-      'Je change de forme comme je change d’avis.',
-    ],
+    clues: ['Je suis le père de monstres et le maître de la tromperie.', 'Mon sang s’est mêlé à celui d’Odin.', 'Je change de forme comme je change d’avis.'],
   ),
   // 5 Letters
   NorseRiddle(
@@ -74,19 +66,11 @@ const List<NorseRiddle> norseRiddles = [
   ),
   NorseRiddle(
     name: 'ASGARD',
-    clues: [
-      'Je suis la forteresse des dieux Ases.',
-      'Mes murs ont été construits par un géant et son cheval.',
-      'Le pont arc-en-ciel mène à mes portes.',
-    ],
+    clues: ['Je suis la forteresse des dieux Ases.', 'Mes murs ont été construits par un géant et son cheval.', 'Le pont arc-en-ciel mène à mes portes.'],
   ),
   NorseRiddle(
     name: 'HUGINN',
-    clues: [
-      'Chaque matin, je pars pour ne revenir qu’au soir.',
-      'Je suis la Pensée qui vole pour le Père de Tout.',
-      'Mon frère est la Mémoire.',
-    ],
+    clues: ['Chaque matin, je pars pour ne revenir qu’au soir.', 'Je suis la Pensée qui vole pour le Père de Tout.', 'Mon frère est la Mémoire.'],
   ),
   // 7 Letters
   NorseRiddle(
@@ -99,19 +83,11 @@ const List<NorseRiddle> norseRiddles = [
   ),
   NorseRiddle(
     name: 'MJOLNIR',
-    clues: [
-      'Je reviens toujours à la main de mon maître.',
-      'Mon vol dans le ciel est le son du tonnerre.',
-      'Je suis le broyeur, terreur des géants.',
-    ],
+    clues: ['Je reviens toujours à la main de mon maître.', 'Mon vol dans le ciel est le son du tonnerre.', 'Je suis le broyeur, terreur des géants.'],
   ),
   NorseRiddle(
     name: 'MIDGARD',
-    clues: [
-      'Je suis le royaume des mortels.',
-      'Un serpent géant entoure mes côtes.',
-      'Je suis protégé par le fils d’Odin au marteau.',
-    ],
+    clues: ['Je suis le royaume des mortels.', 'Un serpent géant entoure mes côtes.', 'Je suis protégé par le fils d’Odin au marteau.'],
   ),
   NorseRiddle(
     name: 'VALHALLA',
@@ -131,14 +107,6 @@ const List<NorseRiddle> norseRiddles = [
     ],
   ),
   NorseRiddle(
-    name: 'YGGDRASIL',
-    clues: [
-      'Mes racines unissent trois mondes.',
-      'Je suis l’Arbre du Monde, un frêne éternel.',
-      'Un aigle, un écureuil et un dragon vivent en moi.',
-    ],
-  ),
-  NorseRiddle(
     name: 'RAGNAROK',
     clues: [
       'Je suis le crépuscule des dieux.',
@@ -146,7 +114,46 @@ const List<NorseRiddle> norseRiddles = [
       'Je suis une fin, mais aussi un nouveau commencement.',
     ],
   ),
+  // 9 Letters
+  NorseRiddle(
+    name: 'YGGDRASIL',
+    clues: ['Mes racines unissent trois mondes.', 'Je suis l’Arbre du Monde, un frêne éternel.', 'Un aigle, un écureuil et un dragon vivent en moi.'],
+  ),
+  NorseRiddle(
+    name: 'VALKYRIES',
+    clues: [
+      'Nous chevauchons les cieux, choisissant les morts au combat.',
+      'Nous servons Odin, portant les héros au Valhalla.',
+      'Nos noms résonnent sur les champs de bataille.',
+    ],
+  ),
+  NorseRiddle(
+    name: 'JOTUNHEIM',
+    clues: [
+      'Je suis le royaume des géants, au-delà de Midgard.',
+      'Mes montagnes sont froides et mes habitants redoutables.',
+      'C’est ici que Thor vient souvent chercher querelle.',
+    ],
+  ),
   // 10 Letters
+  NorseRiddle(
+    name: 'NIDAVELLIR',
+    clues: [
+      'Mes forges résonnent des coups de marteau.',
+      'Je suis le royaume souterrain des artisans du métal.',
+      'C’est ici que naissent les plus grands trésors des dieux.',
+      'Mes habitants fuient la lumière du soleil.',
+    ],
+  ),
+  NorseRiddle(
+    name: 'HVERGELMIR',
+    clues: [
+      'Je suis la source de toutes les rivières, au cœur de Niflheim.',
+      'Mon chaudron bouillonne, et mes eaux gèlent tout sur leur passage.',
+      'C’est de moi que naissent les onze fleuves d’Élivágar.',
+    ],
+  ),
+  // 11 Letters
   NorseRiddle(
     name: 'GJALLARHORN',
     clues: [
@@ -155,7 +162,6 @@ const List<NorseRiddle> norseRiddles = [
       'J’annoncerai le début de la bataille finale.',
     ],
   ),
-  // 11 Letters
   NorseRiddle(
     name: 'JORMUNGANDR',
     clues: [

@@ -48,20 +48,42 @@ class WordSearchController with ChangeNotifier {
   }
 
   Future<void> _initialize() async {
-    _nextChapter = await selectNextChapterToWin(_gamificationService);
+    int generationAttempts = 0;
+    const maxGenerationAttempts = 10; // Limit attempts to find a valid grid
 
-    if (_nextChapter == null) {
-      isLoading = false;
-      notifyListeners();
-      return;
-    }
+    do {
+      generationAttempts++;
+      if (generationAttempts > maxGenerationAttempts) {
+        isLoading = false;
+        _instructionClue = "Impossible de générer une grille. Réessayez plus tard.";
+        notifyListeners();
+        return;
+      }
 
-    _mythCard = _nextChapter!.chapter;
+      _nextChapter = await selectNextChapterToWin(_gamificationService);
 
-    final wordsToPlace = extractLongWordsFromMythCard(_mythCard).map(normalizeForWordSearch).toSet().toList();
-    final secretWords = norseRiddles.map((r) => normalizeForWordSearch(r.name)).toList()..sort((a, b) => b.length.compareTo(a.length));
+      if (_nextChapter == null) {
+        isLoading = false;
+        _instructionClue = "Toutes les histoires ont été complétées ou ne contiennent pas de mots valides.";
+        notifyListeners();
+        return;
+      }
 
-    _gridResult = generateWordSearchGrid(wordsToPlace: wordsToPlace, secretWords: secretWords, width: 8, height: 10);
+      _mythCard = _nextChapter!.chapter;
+
+      final wordsToPlace = extractLongWordsFromMythCard(_mythCard).map(normalizeForWordSearch).toSet().toList();
+      
+      // If no words can be extracted from this MythCard, try another one.
+      if (wordsToPlace.isEmpty) {
+        continue; // Restart the do-while loop with a new myth card
+      }
+
+      final secretWords = norseRiddles.map((r) => normalizeForWordSearch(r.name)).toList()..sort((a, b) => b.length.compareTo(a.length));
+
+      _gridResult = generateWordSearchGrid(wordsToPlace: wordsToPlace, secretWords: secretWords, width: 8, height: 10);
+
+      // Loop continues if _gridResult.placedWords is empty.
+    } while (_gridResult.placedWords.isEmpty);
 
     // Sort the list once and store it.
     _sortedWordsToFind = List<String>.from(_gridResult.placedWords);
@@ -132,7 +154,7 @@ class WordSearchController with ChangeNotifier {
   // --- Phase 2: Secret Word Logic ---
   void handleGridTap(int row, int col) {
     if (isSecretWordError) {
-      return; // Prevent input during error flash
+      return;
     }
 
     final tappedLetter = grid[row][col];

@@ -8,11 +8,7 @@ import 'package:oracle_d_asgard/models/myth_card.dart';
 /// 5 characters.
 Set<String> extractLongWordsFromMythCard(MythCard card) {
   final words = <String>{};
-  final textSources = [
-    card.title,
-    card.description,
-    card.detailedStory,
-  ];
+  final textSources = [card.title, card.description, card.detailedStory];
 
   final combinedText = textSources.join(' ');
 
@@ -21,7 +17,7 @@ Set<String> extractLongWordsFromMythCard(MythCard card) {
 
   wordRegex.allMatches(combinedText.toLowerCase()).forEach((match) {
     final word = match.group(0)!;
-    if (word.length > 5) {
+    if (word.length > 4) {
       words.add(word);
     }
   });
@@ -31,17 +27,67 @@ Set<String> extractLongWordsFromMythCard(MythCard card) {
 
 /// A map of characters with diacritics to their base characters.
 const _diacritics = {
-  'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a',
-  'Ò': 'O', 'Ó': 'O', 'Ô': 'O', 'Õ': 'O', 'Ö': 'O', 'Ø': 'O', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ø': 'o',
-  'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e',
-  'Ç': 'C', 'ç': 'c',
-  'Ð': 'D', 'ð': 'd',
-  'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i',
-  'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U', 'ù': 'u', 'ú': 'u', 'û': 'u', 'ü': 'u',
-  'Ñ': 'N', 'ñ': 'n',
-  'Š': 'S', 'š': 's',
-  'Ÿ': 'Y', 'ÿ': 'y', 'ý': 'y',
-  'Ž': 'Z', 'ž': 'z'
+  'À': 'A',
+  'Á': 'A',
+  'Â': 'A',
+  'Ã': 'A',
+  'Ä': 'A',
+  'Å': 'A',
+  'à': 'a',
+  'á': 'a',
+  'â': 'a',
+  'ã': 'a',
+  'ä': 'a',
+  'å': 'a',
+  'Ò': 'O',
+  'Ó': 'O',
+  'Ô': 'O',
+  'Õ': 'O',
+  'Ö': 'O',
+  'Ø': 'O',
+  'ò': 'o',
+  'ó': 'o',
+  'ô': 'o',
+  'õ': 'o',
+  'ö': 'o',
+  'ø': 'o',
+  'È': 'E',
+  'É': 'E',
+  'Ê': 'E',
+  'Ë': 'E',
+  'è': 'e',
+  'é': 'e',
+  'ê': 'e',
+  'ë': 'e',
+  'Ç': 'C',
+  'ç': 'c',
+  'Ð': 'D',
+  'ð': 'd',
+  'Ì': 'I',
+  'Í': 'I',
+  'Î': 'I',
+  'Ï': 'I',
+  'ì': 'i',
+  'í': 'i',
+  'î': 'i',
+  'ï': 'i',
+  'Ù': 'U',
+  'Ú': 'U',
+  'Û': 'U',
+  'Ü': 'U',
+  'ù': 'u',
+  'ú': 'u',
+  'û': 'u',
+  'ü': 'u',
+  'Ñ': 'N',
+  'ñ': 'n',
+  'Š': 'S',
+  'š': 's',
+  'Ÿ': 'Y',
+  'ÿ': 'y',
+  'ý': 'y',
+  'Ž': 'Z',
+  'ž': 'z',
 };
 
 /// Removes diacritics (accents) from a string.

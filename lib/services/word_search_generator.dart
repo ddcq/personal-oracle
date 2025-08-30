@@ -28,7 +28,7 @@ WordSearchGridResult generateWordSearchGrid({
   final random = Random();
   int attempts = 0;
 
-  while (attempts < 50) {
+  while (attempts < 100) {
     attempts++;
 
     final grid = List.generate(height, (_) => List<String?>.filled(width, null));
@@ -90,7 +90,17 @@ WordSearchGridResult generateWordSearchGrid({
     }
 
     if (finalEmptyCellCount < 11) {
-      final secretWord = secretWords.firstWhere((sw) => sw.isNotEmpty && sw.length <= finalEmptyCellCount, orElse: () => "DEFAULT");
+      final List<String> possibleSecretWords = secretWords
+          .where((sw) => sw.isNotEmpty && sw.length <= finalEmptyCellCount)
+          .toList();
+
+      final String secretWord;
+      if (possibleSecretWords.isNotEmpty) {
+        secretWord = possibleSecretWords[random.nextInt(possibleSecretWords.length)];
+      } else {
+        secretWord = "DEFAULT"; // Fallback if no secret word fits
+      }
+
       int secretLetterIndex = 0;
       for (var r = 0; r < height; r++) {
         for (var c = 0; c < width; c++) {
@@ -105,7 +115,36 @@ WordSearchGridResult generateWordSearchGrid({
     }
   }
 
-  return generateWordSearchGrid(wordsToPlace: [], secretWords: secretWords, width: width, height: height);
+  // Fallback if no valid grid could be generated after all attempts.
+  // Return a mostly empty grid, filled with the secret word.
+  final grid = List.generate(height, (_) => List<String?>.filled(width, null));
+  final placedWords = <String>[]; // No words were successfully placed under the criteria
+
+  int emptyCellCount = width * height; // It's a fresh empty grid
+
+  final List<String> possibleSecretWords = secretWords
+      .where((sw) => sw.isNotEmpty && sw.length <= emptyCellCount)
+      .toList();
+
+  final String secretWord;
+  if (possibleSecretWords.isNotEmpty) {
+    secretWord = possibleSecretWords[random.nextInt(possibleSecretWords.length)];
+  } else {
+    secretWord = "DEFAULT"; // Fallback if no secret word fits
+  }
+
+  int secretLetterIndex = 0;
+  for (var r = 0; r < height; r++) {
+    for (var c = 0; c < width; c++) {
+      if (grid[r][c] == null) {
+        grid[r][c] = secretWord[secretLetterIndex % secretWord.length];
+        secretLetterIndex++;
+      }
+    }
+  }
+
+  final finalGrid = grid.map((row) => row.map((cell) => cell!).toList()).toList();
+  return WordSearchGridResult(grid: finalGrid, placedWords: placedWords, secretWordUsed: secretWord);
 }
 
 
@@ -137,15 +176,13 @@ bool _canPlaceWordAt(
         sharesLetter = true;
         overlapCount++;
       }
-    } else {
+    } else { // This 'else' is now correctly attached to 'if (existingLetter != null)'
       newLettersCount++;
     }
   }
 
   if (overlapCount > 3) return false;
 
-  // A word is only valid if it places at least one new letter on the board.
-  // This rule implicitly handles the first word correctly, as all its letters are new.
   if (!isFirstWord && newLettersCount == 0) {
     return false;
   }

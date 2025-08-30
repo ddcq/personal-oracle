@@ -28,7 +28,7 @@ class _WordSearchView extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: ChibiAppBar(titleText: 'L\'Œil d\'Odin'),
+      appBar: ChibiAppBar(titleText: 'L’Œil d’Odin'),
       body: Stack(
         children: [
           AppBackground(

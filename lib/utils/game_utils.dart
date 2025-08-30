@@ -24,9 +24,12 @@ class NextChapter {
 /// to be won, or `null` if all chapters across all stories have been earned.
 Future<NextChapter?> selectNextChapterToWin(GamificationService gamificationService) async {
   final allStories = getMythStories();
+  // Filter out the dummy 'Loading Story'
+  final realStories = allStories.where((story) => story.title != 'Loading Story').toList();
+
   final List<NextChapter> earnableChapters = [];
 
-  for (var story in allStories) {
+  for (var story in realStories) { // Iterate over realStories
     final progress = await gamificationService.getStoryProgress(story.title);
     // Decode the list of unlocked part IDs, or start with an empty list.
     final unlockedParts = progress != null ? jsonDecode(progress['parts_unlocked']) as List<dynamic> : [];

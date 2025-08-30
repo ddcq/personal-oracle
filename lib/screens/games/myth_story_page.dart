@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:oracle_d_asgard/utils/image_utils.dart';
+
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -69,16 +69,13 @@ class _MythStoryPageState extends State<MythStoryPage> {
           widget.mythStory.title,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                fontFamily: AppTextStyles.amaticSC,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 30, // Adjusted font size for AppBar
-                letterSpacing: 2.0,
-                shadows: [
-                  const Shadow(
-                      blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))
-                ],
-              ),
+            fontFamily: AppTextStyles.amaticSC,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 30, // Adjusted font size for AppBar
+            letterSpacing: 2.0,
+            shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+          ),
         ),
         centerTitle: true,
       ),
@@ -112,26 +109,14 @@ class _MythStoryPageState extends State<MythStoryPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(card.title,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineSmall
-                                            ?.copyWith(color: Colors.black)),
+                                    Text(card.title, style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.black)),
+                                    const SizedBox(height: 8.0),
+                                    if (isUnlocked) Image.asset('assets/images/stories/${card.imagePath}') else const Icon(Icons.lock, size: 50),
                                     const SizedBox(height: 8.0),
                                     if (isUnlocked)
-                                      Image.asset(addAssetPrefix(card.imagePath))
+                                      Text(card.detailedStory, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black))
                                     else
-                                      const Icon(Icons.lock, size: 50),
-                                    const SizedBox(height: 8.0),
-                                    if (isUnlocked)
-                                      Text(card.detailedStory,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(color: Colors.black))
-                                    else
-                                      const Text('Locked',
-                                          style: TextStyle(color: Colors.black)),
+                                      const Text('Locked', style: TextStyle(color: Colors.black)),
                                   ],
                                 ),
                               ),

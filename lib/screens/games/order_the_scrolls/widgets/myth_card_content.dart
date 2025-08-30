@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
-import 'package:oracle_d_asgard/utils/image_utils.dart';
+
 import '../game_controller.dart';
 
 class MythCardContent extends StatelessWidget {
@@ -28,7 +28,7 @@ class MythCardContent extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         child: Stack(
           children: [
-            Positioned.fill(child: Image.asset(addAssetPrefix(card.imagePath), fit: BoxFit.cover)),
+            Positioned.fill(child: Image.asset('assets/images/stories/${card.imagePath}', fit: BoxFit.cover)),
             Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
