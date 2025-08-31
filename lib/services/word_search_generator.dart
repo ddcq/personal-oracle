@@ -1,17 +1,11 @@
 import 'dart:math';
 
-import 'package:oracle_d_asgard/data/stories_data.dart'; // New import
-import 'package:oracle_d_asgard/utils/text_utils.dart'; // New import
+import 'package:oracle_d_asgard/utils/random_picker.dart';
 
 /// Represents the result of the word search generation.
 class WordSearchGridResult {
-  /// The generated grid, with all cells filled.
   final List<List<String>> grid;
-
-  /// The list of words that were successfully placed in the grid.
   final List<String> placedWords;
-
-  /// The secret word used to fill the remaining empty cells.
   final String secretWordUsed;
 
   WordSearchGridResult({
@@ -23,7 +17,8 @@ class WordSearchGridResult {
 
 /// Generates a word search grid based on a specific set of rules.
 WordSearchGridResult generateWordSearchGrid({
-  required List<String> wordsToPlace,
+  required List<String> longWords,
+  required List<String> shortWords,
   required List<String> secretWords,
   required int width,
   required int height,
@@ -40,74 +35,54 @@ WordSearchGridResult generateWordSearchGrid({
     attempts++;
 
     final grid = List.generate(height, (_) => List<String?>.filled(width, null));
-    final availableWords = wordsToPlace.toSet().toList();
     final placedWords = <String>[];
-
     int emptyCells = width * height;
-    while (emptyCells > 11 && availableWords.isNotEmpty) {
-      bool wordWasPlaced = false;
-      availableWords.shuffle(random);
 
-      for (final word in List.of(availableWords)) {
-        final possiblePlacements = <_Placement>[];
-        final isFirstWord = placedWords.isEmpty;
+    final availableLongWords = longWords.toSet().toList();
+    final availableShortWords = shortWords.toSet().toList();
 
-        for (var r = 0; r < height; r++) {
-          for (var c = 0; c < width; c++) {
-            for (final dir in directions) {
-              if (_canPlaceWordAt(grid, word, r, c, dir, width, height, isFirstWord: isFirstWord)) {
-                possiblePlacements.add(_Placement(r, c, dir));
-              }
-            }
-          }
+    // --- Placement loop for long words ---
+    bool wordWasPlacedInPass = true;
+    while (wordWasPlacedInPass) {
+      wordWasPlacedInPass = false;
+      availableLongWords.shuffle(random);
+      for (final word in List.of(availableLongWords)) {
+        int placedCount = _tryPlaceWord(grid, word, placedWords, directions, width, height, random, emptyCells);
+        if (placedCount > 0) {
+          emptyCells -= placedCount;
+          availableLongWords.remove(word);
+          wordWasPlacedInPass = true;
+          break; // Restart the loop with the shuffled list
         }
-
-        if (possiblePlacements.isNotEmpty) {
-          final placement = possiblePlacements[random.nextInt(possiblePlacements.length)];
-          for (var i = 0; i < word.length; i++) {
-            grid[placement.row + i * placement.dir.dy][placement.col + i * placement.dir.dx] = word[i];
-          }
-          placedWords.add(word);
-          availableWords.remove(word);
-          wordWasPlaced = true;
-          break;
-        }
-      }
-
-      if (!wordWasPlaced) break;
-
-      int currentEmpty = 0;
-      for (var r = 0; r < height; r++) {
-        for (var c = 0; c < width; c++) {
-          if (grid[r][c] == null) currentEmpty++;
-        }
-      }
-      emptyCells = currentEmpty;
-    }
-
-    int finalEmptyCellCount = 0;
-    for (var r = 0; r < height; r++) {
-      for (var c = 0; c < width; c++) {
-        if (grid[r][c] == null) finalEmptyCellCount++;
       }
     }
 
-    if (finalEmptyCellCount < 11) {
-      final List<String> fittingWords = secretWords
-          .where((sw) => sw.isNotEmpty && sw.length <= finalEmptyCellCount)
-          .toList();
+    // --- Placement loop for short words ---
+    wordWasPlacedInPass = true;
+    while (wordWasPlacedInPass) {
+      wordWasPlacedInPass = false;
+      availableShortWords.shuffle(random);
+      for (final word in List.of(availableShortWords)) {
+        int placedCount = _tryPlaceWord(grid, word, placedWords, directions, width, height, random, emptyCells);
+        if (placedCount > 0) {
+          emptyCells -= placedCount;
+          availableShortWords.remove(word);
+          wordWasPlacedInPass = true;
+          break; // Restart the loop with the shuffled list
+        }
+      }
+    }
+
+    if (emptyCells < 11) {
+      final List<String> fittingWords = secretWords.where((sw) => sw.isNotEmpty && sw.length <= emptyCells).toList();
 
       final String secretWord;
       if (fittingWords.isNotEmpty) {
-        // Find the maximum length among fitting words
         final int maxLength = fittingWords.fold(0, (maxLen, word) => max(maxLen, word.length));
-        // Filter to only include words of that maximum length
-        final List<String> longestFittingWords = fittingWords
-            .where((sw) => sw.length == maxLength)
-            .toList();
+        final List<String> longestFittingWords = fittingWords.where((sw) => sw.length == maxLength).toList();
         secretWord = longestFittingWords[random.nextInt(longestFittingWords.length)];
       } else {
-        secretWord = "DEFAULT"; // Fallback if no secret word fits
+        secretWord = "DEFAULT";
       }
 
       int secretLetterIndex = 0;
@@ -120,128 +95,101 @@ WordSearchGridResult generateWordSearchGrid({
         }
       }
       final finalGrid = grid.map((row) => row.map((cell) => cell!).toList()).toList();
-      return WordSearchGridResult(grid: finalGrid, placedWords: placedWords, secretWordUsed: secretWord);
+
+      if (_isGridValid(finalGrid, placedWords, directions, width, height)) {
+        return WordSearchGridResult(grid: finalGrid, placedWords: placedWords, secretWordUsed: secretWord);
+      }
     }
   }
 
-  // --- Fallback strategy: Try to generate a grid with all words from all stories ---
-  final allStories = getMythStories();
-  final Set<String> globalWordsToPlace = {};
-  for (var story in allStories) {
-    for (var card in story.correctOrder) {
-      globalWordsToPlace.addAll(extractLongWordsFromMythCard(card).map(normalizeForWordSearch));
-    }
-  }
+  // --- Final Fallback ---
+  final finalFallbackGrid = List.generate(height, (_) => List.generate(width, (_) => '?'));
+  return WordSearchGridResult(grid: finalFallbackGrid, placedWords: [], secretWordUsed: "");
+}
 
-  final fallbackGrid = List.generate(height, (_) => List<String?>.filled(width, null));
-  final fallbackPlacedWords = <String>[];
-  final fallbackAvailableWords = globalWordsToPlace.toList();
-
-  int fallbackAttempts = 0;
-  while (fallbackAttempts < 10 && fallbackAvailableWords.isNotEmpty) {
-    fallbackAttempts++;
-    bool fallbackWordWasPlaced = false;
-    fallbackAvailableWords.shuffle(random);
-
-    for (final word in List.of(fallbackAvailableWords)) {
-      final possiblePlacements = <_Placement>[];
-      final isFirstWord = fallbackPlacedWords.isEmpty;
-
-      for (var r = 0; r < height; r++) {
-        for (var c = 0; c < width; c++) {
-          for (final dir in directions) {
-            if (_canPlaceWordAt(fallbackGrid, word, r, c, dir, width, height, isFirstWord: isFirstWord)) {
-              possiblePlacements.add(_Placement(r, c, dir));
+bool _isGridValid(List<List<String>> grid, List<String> placedWords, List<_Direction> directions, int width, int height) {
+  for (final word in placedWords) {
+    int occurrences = 0;
+    for (var r = 0; r < height; r++) {
+      for (var c = 0; c < width; c++) {
+        for (final dir in directions) {
+          String currentWord = '';
+          for (var i = 0; i < word.length; i++) {
+            final newR = r + i * dir.dy;
+            final newC = c + i * dir.dx;
+            if (newR >= 0 && newR < height && newC >= 0 && newC < width) {
+              currentWord += grid[newR][newC];
+            } else {
+              break;
             }
+          }
+          if (currentWord == word) {
+            occurrences++;
           }
         }
       }
-
-      if (possiblePlacements.isNotEmpty) {
-        final placement = possiblePlacements[random.nextInt(possiblePlacements.length)];
-        for (var i = 0; i < word.length; i++) {
-          fallbackGrid[placement.row + i * placement.dir.dy][placement.col + i * placement.dir.dx] = word[i];
-        }
-        fallbackPlacedWords.add(word);
-        fallbackAvailableWords.remove(word);
-        fallbackWordWasPlaced = true;
-        break;
-      }
     }
-    if (!fallbackWordWasPlaced) break;
+    if (occurrences != 1) return false;
   }
-
-  int finalFallbackEmptyCellCount = 0;
-  for (var r = 0; r < height; r++) {
-    for (var c = 0; c < width; c++) {
-      if (fallbackGrid[r][c] == null) finalFallbackEmptyCellCount++;
-    }
-  }
-
-  if (finalFallbackEmptyCellCount < 11 && fallbackPlacedWords.isNotEmpty) {
-    final List<String> fittingWords = secretWords
-        .where((sw) => sw.isNotEmpty && sw.length <= finalFallbackEmptyCellCount)
-        .toList();
-
-    final String secretWord;
-    if (fittingWords.isNotEmpty) {
-      final int maxLength = fittingWords.fold(0, (maxLen, word) => max(maxLen, word.length));
-      final List<String> longestFittingWords = fittingWords
-          .where((sw) => sw.length == maxLength)
-          .toList();
-      secretWord = longestFittingWords[random.nextInt(longestFittingWords.length)];
-    } else {
-      secretWord = "DEFAULT";
-    }
-
-    int secretLetterIndex = 0;
-    for (var r = 0; r < height; r++) {
-      for (var c = 0; c < width; c++) {
-        if (fallbackGrid[r][c] == null) {
-          fallbackGrid[r][c] = secretWord[secretLetterIndex % secretWord.length];
-          secretLetterIndex++;
-        }
-      }
-    }
-    final finalGrid = fallbackGrid.map((row) => row.map((cell) => cell!).toList()).toList();
-    return WordSearchGridResult(grid: finalGrid, placedWords: fallbackPlacedWords, secretWordUsed: secretWord);
-  }
-
-  // --- Final Fallback: Return a mostly empty grid if all attempts fail ---
-  final finalFallbackGrid = List.generate(height, (_) => List<String?>.filled(width, null));
-  final placedWordsFinalFallback = <String>[];
-
-  int emptyCellCountFinalFallback = width * height;
-
-  final List<String> fittingWordsFinalFallback = secretWords
-      .where((sw) => sw.isNotEmpty && sw.length <= emptyCellCountFinalFallback)
-      .toList();
-
-  final String secretWordFinalFallback;
-  if (fittingWordsFinalFallback.isNotEmpty) {
-    final int maxLength = fittingWordsFinalFallback.fold(0, (maxLen, word) => max(maxLen, word.length));
-    final List<String> longestFittingWords = fittingWordsFinalFallback
-        .where((sw) => sw.length == maxLength)
-        .toList();
-    secretWordFinalFallback = longestFittingWords[random.nextInt(longestFittingWords.length)];
-  } else {
-    secretWordFinalFallback = "DEFAULT";
-  }
-
-  int secretLetterIndexFinalFallback = 0;
-  for (var r = 0; r < height; r++) {
-    for (var c = 0; c < width; c++) {
-      if (finalFallbackGrid[r][c] == null) {
-        finalFallbackGrid[r][c] = secretWordFinalFallback[secretLetterIndexFinalFallback % secretWordFinalFallback.length];
-        secretLetterIndexFinalFallback++;
-      }
-    }
-  }
-
-  final finalGridFinalFallback = finalFallbackGrid.map((row) => row.map((cell) => cell!).toList()).toList();
-  return WordSearchGridResult(grid: finalGridFinalFallback, placedWords: placedWordsFinalFallback, secretWordUsed: secretWordFinalFallback);
+  return true;
 }
 
+int _tryPlaceWord(
+  List<List<String?>> grid,
+  String word,
+  List<String> placedWords,
+  List<_Direction> directions,
+  int width,
+  int height,
+  Random random,
+  int emptyCells,
+) {
+  final possiblePlacements = <_Placement>[];
+  final isFirstWord = placedWords.isEmpty;
+
+  for (var r = 0; r < height; r++) {
+    for (var c = 0; c < width; c++) {
+      final directionPicker = UniqueRandomPicker(directions);
+      while(directionPicker.isNotEmpty) {
+        final dir = directionPicker.pick()!;
+        if (_canPlaceWordAt(grid, word, r, c, dir, width, height, isFirstWord: isFirstWord)) {
+          possiblePlacements.add(_Placement(r, c, dir));
+        }
+      }
+    }
+  }
+
+  final placementPicker = UniqueRandomPicker(possiblePlacements);
+
+  while (placementPicker.isNotEmpty) {
+    final placement = placementPicker.pick()!;
+    int newLetters = _calculateNewLetters(grid, word, placement);
+
+    if (emptyCells - newLetters < 3) {
+      continue;
+    }
+
+    for (var i = 0; i < word.length; i++) {
+      grid[placement.row + i * placement.dir.dy][placement.col + i * placement.dir.dx] = word[i];
+    }
+    placedWords.add(word);
+    return newLetters;
+  }
+
+  return 0;
+}
+
+int _calculateNewLetters(List<List<String?>> grid, String word, _Placement placement) {
+  int newLettersCount = 0;
+  for (var i = 0; i < word.length; i++) {
+    final r = placement.row + i * placement.dir.dy;
+    final c = placement.col + i * placement.dir.dx;
+    if (grid[r][c] == null) {
+      newLettersCount++;
+    }
+  }
+  return newLettersCount;
+}
 
 bool _canPlaceWordAt(
   List<List<String?>> grid,
@@ -271,16 +219,13 @@ bool _canPlaceWordAt(
         sharesLetter = true;
         overlapCount++;
       }
-    } else { // This 'else' is now correctly attached to 'if (existingLetter != null)'
+    } else {
       newLettersCount++;
     }
   }
 
   if (overlapCount > 3) return false;
-
-  if (!isFirstWord && newLettersCount == 0) {
-    return false;
-  }
+  if (!isFirstWord && newLettersCount == 0) return false;
 
   return isFirstWord || sharesLetter;
 }

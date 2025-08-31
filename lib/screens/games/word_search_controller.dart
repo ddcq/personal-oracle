@@ -71,16 +71,31 @@ class WordSearchController with ChangeNotifier {
 
       _mythCard = _nextChapter!.chapter;
 
-      final wordsToPlace = extractLongWordsFromMythCard(_mythCard).map(normalizeForWordSearch).toSet().toList();
+      final wordsToPlace = extractWordsFromMythCard(_mythCard).map(normalizeForWordSearch).toSet().toList();
       
       // If no words can be extracted from this MythCard, try another one.
       if (wordsToPlace.isEmpty) {
         continue; // Restart the do-while loop with a new myth card
       }
 
+      // NEW: Separate words by length
+      final longWords = wordsToPlace.where((word) => word.length >= 5).toList();
+      final shortWords = wordsToPlace.where((word) => word.length == 4).toList();
+
+      // If there are not enough long words, we might not be able to generate a good grid.
+      if (longWords.isEmpty) {
+        continue; 
+      }
+
       final secretWords = norseRiddles.map((r) => normalizeForWordSearch(r.name)).toList()..sort((a, b) => b.length.compareTo(a.length));
 
-      _gridResult = generateWordSearchGrid(wordsToPlace: wordsToPlace, secretWords: secretWords, width: 8, height: 10);
+      _gridResult = generateWordSearchGrid(
+        longWords: longWords,
+        shortWords: shortWords,
+        secretWords: secretWords, 
+        width: 8, 
+        height: 10
+      );
 
       // Loop continues if _gridResult.placedWords is empty.
     } while (_gridResult.placedWords.isEmpty);

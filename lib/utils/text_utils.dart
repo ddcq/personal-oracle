@@ -1,12 +1,12 @@
 import 'package:oracle_d_asgard/models/myth_card.dart';
 
-/// Extracts a set of unique words longer than 5 characters from a MythCard.
+/// Extracts a set of unique words with 4 or more characters from a MythCard.
 ///
 /// This function processes the title, description, and detailed story
 /// associated with the given [card]. It splits the text into words, converts
-/// them to lowercase, and collects all unique words that have more than
-/// 5 characters.
-Set<String> extractLongWordsFromMythCard(MythCard card) {
+/// them to lowercase, and collects all unique words that have 4 or more
+/// characters.
+Set<String> extractWordsFromMythCard(MythCard card) {
   final words = <String>{};
   final textSources = [card.title, card.description, card.detailedStory];
 
@@ -17,7 +17,7 @@ Set<String> extractLongWordsFromMythCard(MythCard card) {
 
   wordRegex.allMatches(combinedText.toLowerCase()).forEach((match) {
     final word = match.group(0)!;
-    if (word.length > 4) {
+    if (word.length >= 4) {
       words.add(word);
     }
   });
