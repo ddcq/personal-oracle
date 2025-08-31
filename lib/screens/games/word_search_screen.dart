@@ -109,7 +109,7 @@ class _Grid extends StatelessWidget {
                   final isConfirmed = controller.confirmedSelection.contains(offset);
                   return Container(
                     decoration: BoxDecoration(
-                      color: isConfirmed ? ChibiColors.buttonBlue.withAlpha(150) : isSelected ? ChibiColors.buttonOrange.withAlpha(150) : Colors.black.withAlpha(102),
+                      color: isSelected ? ChibiColors.buttonOrange.withAlpha(150) : isConfirmed ? ChibiColors.buttonBlue.withAlpha(150) : Colors.black.withAlpha(102),
                       border: Border.all(color: Colors.white.withAlpha(150)),
                     ),
                     child: Center(
