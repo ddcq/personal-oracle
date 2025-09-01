@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:provider/provider.dart';
-import 'package:oracle_d_asgard/screens/games/word_search_controller.dart';
+import 'package:oracle_d_asgard/screens/games/word_search/word_search_controller.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
@@ -12,10 +12,7 @@ class WordSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => WordSearchController(),
-      child: const _WordSearchView(),
-    );
+    return ChangeNotifierProvider(create: (_) => WordSearchController(), child: const _WordSearchView());
   }
 }
 
@@ -39,11 +36,7 @@ class _WordSearchView extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            controller.instructionClue,
-                            style: ChibiTextStyles.storyTitle,
-                            textAlign: TextAlign.center,
-                          ),
+                          child: Text(controller.instructionClue, style: ChibiTextStyles.storyTitle, textAlign: TextAlign.center),
                         ),
                         Expanded(
                           flex: 3,
@@ -87,16 +80,22 @@ class _Grid extends StatelessWidget {
           builder: (context, constraints) {
             final size = Size(constraints.maxWidth, constraints.maxHeight);
             return GestureDetector(
-              onPanStart: controller.gamePhase == GamePhase.searchingWords ? (details) {
-                _handleInteraction(details.localPosition, size);
-              } : null,
-              onPanUpdate: controller.gamePhase == GamePhase.searchingWords ? (details) {
-                _handleInteraction(details.localPosition, size, isUpdate: true);
-              } : null,
+              onPanStart: controller.gamePhase == GamePhase.searchingWords
+                  ? (details) {
+                      _handleInteraction(details.localPosition, size);
+                    }
+                  : null,
+              onPanUpdate: controller.gamePhase == GamePhase.searchingWords
+                  ? (details) {
+                      _handleInteraction(details.localPosition, size, isUpdate: true);
+                    }
+                  : null,
               onPanEnd: controller.gamePhase == GamePhase.searchingWords ? (_) => controller.endSelection() : null,
-              onTapUp: controller.gamePhase == GamePhase.unscramblingSecret ? (details) {
-                _handleInteraction(details.localPosition, size, isTap: true);
-              } : null,
+              onTapUp: controller.gamePhase == GamePhase.unscramblingSecret
+                  ? (details) {
+                      _handleInteraction(details.localPosition, size, isTap: true);
+                    }
+                  : null,
               child: GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: controller.grid[0].length),
@@ -109,11 +108,18 @@ class _Grid extends StatelessWidget {
                   final isConfirmed = controller.confirmedSelection.contains(offset);
                   return Container(
                     decoration: BoxDecoration(
-                      color: isSelected ? ChibiColors.buttonOrange.withAlpha(150) : isConfirmed ? ChibiColors.buttonBlue.withAlpha(150) : Colors.black.withAlpha(102),
+                      color: isSelected
+                          ? ChibiColors.buttonOrange.withAlpha(150)
+                          : isConfirmed
+                          ? ChibiColors.buttonBlue.withAlpha(150)
+                          : Colors.black.withAlpha(102),
                       border: Border.all(color: Colors.white.withAlpha(150)),
                     ),
                     child: Center(
-                      child: Text(controller.grid[row][col], style: ChibiTextStyles.buttonText.copyWith(fontFamily: 'NotoSansRunic', fontSize: 18.sp)),
+                      child: Text(
+                        controller.grid[row][col],
+                        style: ChibiTextStyles.buttonText.copyWith(fontFamily: 'NotoSansRunic', fontSize: 18.sp),
+                      ),
                     ),
                   );
                 },
@@ -158,15 +164,29 @@ class _WordList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(12.0),
-      decoration: BoxDecoration(color: Colors.black.withAlpha(102), borderRadius: BorderRadius.circular(15.0), border: Border.all(color: Colors.white.withAlpha(150), width: 2)),
+      decoration: BoxDecoration(
+        color: Colors.black.withAlpha(102),
+        borderRadius: BorderRadius.circular(15.0),
+        border: Border.all(color: Colors.white.withAlpha(150), width: 2),
+      ),
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Wrap(
-            spacing: 16.0, runSpacing: 8.0, alignment: WrapAlignment.center,
+            spacing: 16.0,
+            runSpacing: 8.0,
+            alignment: WrapAlignment.center,
             children: controller.wordsToFind.map((word) {
               final isFound = controller.foundWords.contains(word);
-              return Text(word, style: ChibiTextStyles.buttonText.copyWith(decoration: isFound ? TextDecoration.lineThrough : TextDecoration.none, color: isFound ? Colors.white.withAlpha(128) : Colors.white, decorationColor: ChibiColors.buttonRed, decorationThickness: 2.0));
+              return Text(
+                word,
+                style: ChibiTextStyles.buttonText.copyWith(
+                  decoration: isFound ? TextDecoration.lineThrough : TextDecoration.none,
+                  color: isFound ? Colors.white.withAlpha(128) : Colors.white,
+                  decorationColor: ChibiColors.buttonRed,
+                  decorationThickness: 2.0,
+                ),
+              );
             }).toList(),
           ),
         ),
@@ -194,13 +214,16 @@ class _SecretWordInput extends StatelessWidget {
             children: List.generate(controller.secretWord.length, (index) {
               final letter = (index < controller.currentSecretWordGuess.length) ? controller.currentSecretWordGuess[index] : '';
               return Container(
-                width: 35, height: 50,
+                width: 35,
+                height: 50,
                 decoration: BoxDecoration(
                   color: controller.isSecretWordError ? ChibiColors.buttonRed.withAlpha(180) : Colors.black.withAlpha(102),
                   border: Border.all(color: Colors.white.withAlpha(150), width: 2),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Center(child: Text(letter, style: ChibiTextStyles.storyTitle.copyWith(fontSize: 30.sp))),
+                child: Center(
+                  child: Text(letter, style: ChibiTextStyles.storyTitle.copyWith(fontSize: 30.sp)),
+                ),
               );
             }),
           ),
