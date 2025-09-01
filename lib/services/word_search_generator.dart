@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/utils/random_picker.dart';
 
 /// Represents the result of the word search generation.
@@ -13,6 +14,13 @@ class WordSearchGridResult {
     required this.placedWords,
     required this.secretWordUsed,
   });
+}
+
+class _PlacedWord {
+  final String word;
+  final List<IntVector2> coordinates;
+
+  _PlacedWord(this.word, this.coordinates);
 }
 
 /// Generates a word search grid based on a specific set of rules.
@@ -35,13 +43,12 @@ WordSearchGridResult generateWordSearchGrid({
     attempts++;
 
     final grid = List.generate(height, (_) => List<String?>.filled(width, null));
-    final placedWords = <String>[];
+    final placedWords = <_PlacedWord>[];
     int emptyCells = width * height;
 
     final availableLongWords = longWords.toSet().toList();
     final availableShortWords = shortWords.toSet().toList();
 
-    // --- Placement loop for long words ---
     bool wordWasPlacedInPass = true;
     while (wordWasPlacedInPass) {
       wordWasPlacedInPass = false;
@@ -52,12 +59,11 @@ WordSearchGridResult generateWordSearchGrid({
           emptyCells -= placedCount;
           availableLongWords.remove(word);
           wordWasPlacedInPass = true;
-          break; // Restart the loop with the shuffled list
+          break;
         }
       }
     }
 
-    // --- Placement loop for short words ---
     wordWasPlacedInPass = true;
     while (wordWasPlacedInPass) {
       wordWasPlacedInPass = false;
@@ -68,9 +74,13 @@ WordSearchGridResult generateWordSearchGrid({
           emptyCells -= placedCount;
           availableShortWords.remove(word);
           wordWasPlacedInPass = true;
-          break; // Restart the loop with the shuffled list
+          break;
         }
       }
+    }
+
+    if (!_areWordsNotObscured(placedWords)) {
+      continue; // Restart if any word is completely obscured
     }
 
     if (emptyCells < 11) {
@@ -95,16 +105,43 @@ WordSearchGridResult generateWordSearchGrid({
         }
       }
       final finalGrid = grid.map((row) => row.map((cell) => cell!).toList()).toList();
+      final placedWordStrings = placedWords.map((pw) => pw.word).toList();
 
-      if (_isGridValid(finalGrid, placedWords, directions, width, height)) {
-        return WordSearchGridResult(grid: finalGrid, placedWords: placedWords, secretWordUsed: secretWord);
+      if (_isGridValid(finalGrid, placedWordStrings, directions, width, height)) {
+        return WordSearchGridResult(grid: finalGrid, placedWords: placedWordStrings, secretWordUsed: secretWord);
       }
     }
   }
 
-  // --- Final Fallback ---
   final finalFallbackGrid = List.generate(height, (_) => List.generate(width, (_) => '?'));
   return WordSearchGridResult(grid: finalFallbackGrid, placedWords: [], secretWordUsed: "");
+}
+
+bool _areWordsNotObscured(List<_PlacedWord> placedWords) {
+  if (placedWords.isEmpty) return true;
+
+  for (int i = 0; i < placedWords.length; i++) {
+    final currentWord = placedWords[i];
+    final otherWordsCoords = <IntVector2>{};
+    for (int j = 0; j < placedWords.length; j++) {
+      if (i == j) continue;
+      otherWordsCoords.addAll(placedWords[j].coordinates);
+    }
+
+    bool hasUniqueLetter = false;
+    for (final coord in currentWord.coordinates) {
+      if (!otherWordsCoords.contains(coord)) {
+        hasUniqueLetter = true;
+        break;
+      }
+    }
+
+    if (!hasUniqueLetter) {
+      return false; // This word is completely obscured by others
+    }
+  }
+
+  return true;
 }
 
 bool _isGridValid(List<List<String>> grid, List<String> placedWords, List<_Direction> directions, int width, int height) {
@@ -137,7 +174,7 @@ bool _isGridValid(List<List<String>> grid, List<String> placedWords, List<_Direc
 int _tryPlaceWord(
   List<List<String?>> grid,
   String word,
-  List<String> placedWords,
+  List<_PlacedWord> placedWords,
   List<_Direction> directions,
   int width,
   int height,
@@ -169,10 +206,14 @@ int _tryPlaceWord(
       continue;
     }
 
+    final coordinates = <IntVector2>[];
     for (var i = 0; i < word.length; i++) {
-      grid[placement.row + i * placement.dir.dy][placement.col + i * placement.dir.dx] = word[i];
+      final r = placement.row + i * placement.dir.dy;
+      final c = placement.col + i * placement.dir.dx;
+      grid[r][c] = word[i];
+      coordinates.add(IntVector2(c, r));
     }
-    placedWords.add(word);
+    placedWords.add(_PlacedWord(word, coordinates));
     return newLetters;
   }
 
