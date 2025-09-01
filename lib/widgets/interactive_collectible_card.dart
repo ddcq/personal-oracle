@@ -51,8 +51,8 @@ class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard>
 
         setState(() {
           // Calculate rotation relative to initial inclination
-          _rotationX = (event.y - _initialAccelerometerY) * 0.3; // Adjust multiplier for sensitivity
-          _rotationY = (event.x - _initialAccelerometerX) * 0.3; // Adjust multiplier for sensitivity
+          _rotationX = (event.y - _initialAccelerometerY) * 0.1; // Adjust multiplier for sensitivity
+          _rotationY = (event.x - _initialAccelerometerX) * 0.1; // Adjust multiplier for sensitivity
         });
       });
     }
