@@ -12,7 +12,11 @@ class WordSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(create: (_) => WordSearchController(), child: const _WordSearchView());
+    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    return ChangeNotifierProvider(
+      create: (_) => WordSearchController(gamificationService),
+      child: const _WordSearchView(),
+    );
   }
 }
 
@@ -25,7 +29,21 @@ class _WordSearchView extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: ChibiAppBar(titleText: 'L’Œil d’Odin'),
+      appBar: ChibiAppBar(
+        titleText: 'L’Œil d’Odin',
+        actions: [
+          if (!controller.isLoading)
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Text(
+                  'Niveau: ${controller.level}',
+                  style: ChibiTextStyles.appBarTitle,
+                ),
+              ),
+            ),
+        ],
+      ),
       body: Stack(
         children: [
           AppBackground(

@@ -12,8 +12,11 @@ import 'package:oracle_d_asgard/utils/text_utils.dart';
 enum GamePhase { searchingWords, unscramblingSecret, victory }
 
 class WordSearchController with ChangeNotifier {
-  final GamificationService _gamificationService = GamificationService();
+  final GamificationService _gamificationService;
   final Random _random = Random();
+
+  // Game Level
+  late int level;
 
   // Game State
   bool isLoading = true;
@@ -43,11 +46,12 @@ class WordSearchController with ChangeNotifier {
   String get instructionClue => _instructionClue;
   NextChapter? get unlockedChapter => _nextChapter;
 
-  WordSearchController() {
+  WordSearchController(this._gamificationService) {
     _initialize();
   }
 
   Future<void> _initialize() async {
+    level = await _gamificationService.getWordSearchDifficulty();
     int generationAttempts = 0;
     const maxGenerationAttempts = 10; // Limit attempts to find a valid grid
 
@@ -89,12 +93,15 @@ class WordSearchController with ChangeNotifier {
 
       final secretWords = norseRiddles.map((r) => normalizeForWordSearch(r.name)).toList()..sort((a, b) => b.length.compareTo(a.length));
 
+      final height = 5 + level;
+      final width = 3 + level;
+
       _gridResult = generateWordSearchGrid(
         longWords: longWords,
         shortWords: shortWords,
-        secretWords: secretWords, 
-        width: 8, 
-        height: 10
+        secretWords: secretWords,
+        width: width,
+        height: height,
       );
 
       // Loop continues if _gridResult.placedWords is empty.
@@ -195,6 +202,9 @@ class WordSearchController with ChangeNotifier {
   void _onSecretWordSuccess() async {
     if (_nextChapter != null) {
       await _gamificationService.unlockStoryPart(_nextChapter!.story.title, _nextChapter!.chapter.id);
+      if (level < 10) {
+        await _gamificationService.saveWordSearchDifficulty(level + 1);
+      }
     }
     gamePhase = GamePhase.victory;
     notifyListeners();
