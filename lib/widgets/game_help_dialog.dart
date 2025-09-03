@@ -28,11 +28,7 @@ class GameHelpDialog {
           letterSpacing: 1.5.sp,
           shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
         ),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: rules.map((rule) => _buildRule(rule, textStyle)).toList(),
-          ),
-        ),
+        content: SingleChildScrollView(child: ListBody(children: rules.map((rule) => _buildRule(rule, textStyle)).toList())),
         actions: [
           SizedBox(
             width: double.infinity,

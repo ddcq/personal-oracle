@@ -140,10 +140,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
               actions: [
                 IconButton(
                   icon: const Icon(Icons.help_outline, color: Colors.white),
-                  onPressed: () => HelpDialog.show(
-                    context,
-                    onGamePaused: () => _animationController.stop(),
-                  ),
+                  onPressed: () => HelpDialog.show(context, onGamePaused: () => _animationController.stop()),
                 ),
               ],
             ),

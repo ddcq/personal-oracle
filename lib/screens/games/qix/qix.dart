@@ -24,10 +24,7 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
   late double _moveAngle;
   late double speed;
 
-  IntVector2 get gridPosition => IntVector2(
-        (virtualPosition.x / cellSize).round(),
-        (virtualPosition.y / cellSize).round(),
-      );
+  IntVector2 get gridPosition => IntVector2((virtualPosition.x / cellSize).round(), (virtualPosition.y / cellSize).round());
 
   double _animationTime = 0.0;
 
@@ -43,9 +40,9 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
   }) : super(size: Vector2.all(cellSize)) {
     virtualPosition = initialGridPosition.toVector2() * cellSize;
     _moveAngle = math.Random().nextDouble() * 2 * math.pi;
-    speed = (game_constants.kBaseMonsterSpeedCellsPerSecond +
-            difficulty * game_constants.kMonsterSpeedChangePerLevelCellsPerSecond)
-        .clamp(1.0, double.infinity) * cellSize;
+    speed =
+        (game_constants.kBaseMonsterSpeedCellsPerSecond + difficulty * game_constants.kMonsterSpeedChangePerLevelCellsPerSecond).clamp(1.0, double.infinity) *
+        cellSize;
 
     position = virtualPosition;
   }
@@ -62,8 +59,12 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
 
     // Normalize angle difference to be between -pi and pi
     double angleDifference = angleToPlayer - _moveAngle;
-    while (angleDifference < -math.pi) { angleDifference += 2 * math.pi; }
-    while (angleDifference > math.pi) { angleDifference -= 2 * math.pi; }
+    while (angleDifference < -math.pi) {
+      angleDifference += 2 * math.pi;
+    }
+    while (angleDifference > math.pi) {
+      angleDifference -= 2 * math.pi;
+    }
 
     // Turn towards the player by 1 degree
     const double turnStep = 0.002; // 0.002 radians
@@ -78,10 +79,7 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
     final double velocityX = math.cos(_moveAngle) * speed;
     final double velocityY = math.sin(_moveAngle) * speed;
     final nextVirtualPosition = virtualPosition + Vector2(velocityX, velocityY) * dt;
-    final nextGridPosition = IntVector2(
-      (nextVirtualPosition.x / cellSize).round(),
-      (nextVirtualPosition.y / cellSize).round(),
-    );
+    final nextGridPosition = IntVector2((nextVirtualPosition.x / cellSize).round(), (nextVirtualPosition.y / cellSize).round());
 
     // Collision detection using isGridEdge
     if (isGridEdge(nextGridPosition)) {
@@ -93,7 +91,7 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
         _moveAngle = math.pi - _moveAngle;
         bounced = true;
       }
-      
+
       // Check for vertical collision (hitting a horizontal wall)
       if (isGridEdge(IntVector2(currentGridPos.x, nextGridPosition.y))) {
         _moveAngle = -_moveAngle;
@@ -101,11 +99,10 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
       }
 
       if (!bounced) {
-        _moveAngle = _moveAngle + math.pi; 
+        _moveAngle = _moveAngle + math.pi;
       }
 
       _moveAngle += (math.Random().nextDouble() - 0.5) * 0.6; // Increased random perturbation
-
     } else {
       virtualPosition = nextVirtualPosition;
     }

@@ -34,8 +34,22 @@ class QixGame extends FlameGame with KeyboardEvents {
     final int gridSize = kGridSize;
     final double cellSize = (size.x < size.y ? size.x : size.y) / gridSize;
 
-    arena = ArenaComponent(gridSize: gridSize, cellSize: cellSize, rewardCardImagePath: rewardCardImagePath, snakeHeadImage: snakeHeadImage, difficulty: difficulty);
-    player = Player(gridSize: gridSize, cellSize: cellSize, characterSpriteSheet: characterSpriteSheet, arena: arena, onPlayerStateChanged: onPlayerStateChanged, onSelfIntersection: gameOver, difficulty: difficulty);
+    arena = ArenaComponent(
+      gridSize: gridSize,
+      cellSize: cellSize,
+      rewardCardImagePath: rewardCardImagePath,
+      snakeHeadImage: snakeHeadImage,
+      difficulty: difficulty,
+    );
+    player = Player(
+      gridSize: gridSize,
+      cellSize: cellSize,
+      characterSpriteSheet: characterSpriteSheet,
+      arena: arena,
+      onPlayerStateChanged: onPlayerStateChanged,
+      onSelfIntersection: gameOver,
+      difficulty: difficulty,
+    );
     player.gridPosition = IntVector2(0, 0); // Start at the top-left edge
     player.targetGridPosition = IntVector2(player.gridPosition.x, player.gridPosition.y);
     player.setDirection(Direction.right); // Start moving right along the edge automatically

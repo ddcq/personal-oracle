@@ -111,7 +111,17 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
 
     // Ajouter les pièces de puzzle
     for (var pieceData in puzzleGame.pieces) {
-      add(PuzzlePieceComponent(pieceData: pieceData, gameRef: this, offsetX: offsetX, offsetY: offsetY, puzzleImage: puzzleImage, puzzleSize: puzzleGame.cols, pieceSize: pieceSize));
+      add(
+        PuzzlePieceComponent(
+          pieceData: pieceData,
+          gameRef: this,
+          offsetX: offsetX,
+          offsetY: offsetY,
+          puzzleImage: puzzleImage,
+          puzzleSize: puzzleGame.cols,
+          pieceSize: pieceSize,
+        ),
+      );
     }
   }
 

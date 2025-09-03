@@ -18,28 +18,18 @@ class GameMenu extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xFFFF6B35).withAlpha(25),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: const Color(0xFFFF6B35).withAlpha(76),
-              ),
+              border: Border.all(color: const Color(0xFFFF6B35).withAlpha(76)),
             ),
             child: const Column(
               children: [
                 Text(
                   '🌲 YGGDRASIL 🌲',
-                  style: TextStyle(
-                    color: Color(0xFFFF6B35),
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(color: Color(0xFFFF6B35), fontSize: 28, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 16),
                 Text(
                   'Les Neuf Royaumes',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 12),
@@ -58,11 +48,7 @@ class GameMenu extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-          ChibiButton(
-            onPressed: onStartGame,
-            text: '⚔️ Commencer la Conquête',
-            color: const Color(0xFFFF6B35),
-          ),
+          ChibiButton(onPressed: onStartGame, text: '⚔️ Commencer la Conquête', color: const Color(0xFFFF6B35)),
         ],
       ),
     );

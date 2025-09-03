@@ -29,13 +29,24 @@ class Player extends PositionComponent {
 
   late AnimatedCharacterComponent _characterSprite;
 
-  Player({required this.gridSize, required this.cellSize, required ui.Image characterSpriteSheet, required this.arena, required this.onPlayerStateChanged, required this.onSelfIntersection, required this.difficulty})
-    : gridPosition = IntVector2(0, 0),
-      targetGridPosition = IntVector2(0, 0) {
+  Player({
+    required this.gridSize,
+    required this.cellSize,
+    required ui.Image characterSpriteSheet,
+    required this.arena,
+    required this.onPlayerStateChanged,
+    required this.onSelfIntersection,
+    required this.difficulty,
+  }) : gridPosition = IntVector2(0, 0),
+       targetGridPosition = IntVector2(0, 0) {
     size = Vector2.all(cellSize);
     anchor = Anchor.topLeft;
     position = gridPosition.toVector2() * cellSize;
-    final double playerSpeedCellsPerSecond = (game_constants.kBasePlayerSpeedCellsPerSecond - difficulty * game_constants.kPlayerSpeedChangePerLevelCellsPerSecond).clamp(1.0, double.infinity); // Ensure speed doesn't go below 1 cell/sec
+    final double playerSpeedCellsPerSecond =
+        (game_constants.kBasePlayerSpeedCellsPerSecond - difficulty * game_constants.kPlayerSpeedChangePerLevelCellsPerSecond).clamp(
+          1.0,
+          double.infinity,
+        ); // Ensure speed doesn't go below 1 cell/sec
     _moveSpeed = playerSpeedCellsPerSecond * cellSize;
     _characterSprite = AnimatedCharacterComponent(
       characterSpriteSheet: characterSpriteSheet,

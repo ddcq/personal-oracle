@@ -21,7 +21,7 @@ class WordSearchController with ChangeNotifier {
   // Game State
   bool isLoading = true;
   GamePhase gamePhase = GamePhase.searchingWords;
-  
+
   // Game Data
   late WordSearchGridResult _gridResult;
   late MythCard _mythCard;
@@ -76,7 +76,7 @@ class WordSearchController with ChangeNotifier {
       _mythCard = _nextChapter!.chapter;
 
       final wordsToPlace = extractWordsFromMythCard(_mythCard).map(normalizeForWordSearch).toSet().toList();
-      
+
       // If no words can be extracted from this MythCard, try another one.
       if (wordsToPlace.isEmpty) {
         continue; // Restart the do-while loop with a new myth card
@@ -88,7 +88,7 @@ class WordSearchController with ChangeNotifier {
 
       // If there are not enough long words, we might not be able to generate a good grid.
       if (longWords.isEmpty) {
-        continue; 
+        continue;
       }
 
       final secretWords = norseRiddles.map((r) => normalizeForWordSearch(r.name)).toList()..sort((a, b) => b.length.compareTo(a.length));
@@ -97,16 +97,185 @@ class WordSearchController with ChangeNotifier {
       final width = 3 + level;
 
       const stopWords = {
-        'MAIS', 'DONC', 'POUR', 'AVEC', 'SANS', 'SOUS', 'DANS', 'QUOI', 'DONT', 'NOUS', 'VOUS', 'ILS', 'CETTE', 'NOTRE', 'VOTRE', 'LEUR', 'PLUS', 'MOINS', 'BIEN', 'TRES', 'TOUT', 'TOUS', 'TOUTE', 'TOUTES', 'RIEN', 'PERSONNE', 'AUCUN', 'AUCUNE', 'AUTRE', 'AUTRES', 'MEME', 'MEMES', 'COMME', 'ALORS', 'AUSSI', 'ENCORE', 'JAMAIS', 'TOUJOURS', 'SOUVENT', 'PARFOIS', 'DEPUIS', 'AVANT', 'APRES', 'PENDANT', 'ENTRE', 'VERS', 'CONTRE', 'CHEZ', 'JUSQUE', 'SELON', 'MALGRE', 'PARMI', 'HORS', 'SAUF', 'VOICI', 'VOILA',
+        'MAIS',
+        'DONC',
+        'POUR',
+        'AVEC',
+        'SANS',
+        'SOUS',
+        'DANS',
+        'QUOI',
+        'DONT',
+        'NOUS',
+        'VOUS',
+        'ILS',
+        'CETTE',
+        'NOTRE',
+        'VOTRE',
+        'LEUR',
+        'PLUS',
+        'MOINS',
+        'BIEN',
+        'TRES',
+        'TOUT',
+        'TOUS',
+        'TOUTE',
+        'TOUTES',
+        'RIEN',
+        'PERSONNE',
+        'AUCUN',
+        'AUCUNE',
+        'AUTRE',
+        'AUTRES',
+        'MEME',
+        'MEMES',
+        'COMME',
+        'ALORS',
+        'AUSSI',
+        'ENCORE',
+        'JAMAIS',
+        'TOUJOURS',
+        'SOUVENT',
+        'PARFOIS',
+        'DEPUIS',
+        'AVANT',
+        'APRES',
+        'PENDANT',
+        'ENTRE',
+        'VERS',
+        'CONTRE',
+        'CHEZ',
+        'JUSQUE',
+        'SELON',
+        'MALGRE',
+        'PARMI',
+        'HORS',
+        'SAUF',
+        'VOICI',
+        'VOILA',
         // verbes
         'ETRE', 'AVOIR', 'FAIRE', 'ALLER', 'POUVOIR',
-        'SOMMES', 'ETES', 'SONT', 'ETAIS', 'ETAIT', 'ETIONS', 'ETIEZ', 'ETAIENT', 'FUMES', 'FUTES', 'FURENT', 'SERAI', 'SERAS', 'SERA', 'SERONS', 'SEREZ', 'SERONT', 'SOIS', 'SOIT', 'SOYONS', 'SOYEZ', 'SOIENT', 'ETANT',
-        'AVONS', 'AVEZ', 'ONT', 'AVAIS', 'AVAIT', 'AVIONS', 'AVIEZ', 'AVAIENT', 'EUMES', 'EUTES', 'EURENT', 'AURAI', 'AURAS', 'AURA', 'AURONS', 'AUREZ', 'AURONT', 'AIES', 'AYONS', 'AYEZ', 'AIENT', 'AYANT',
-        'FAIS', 'FAIT', 'FAISONS', 'FAITES', 'FONT', 'FAISAIS', 'FAISAIT', 'FAISIONS', 'FAISIEZ', 'FAISAIENT', 'FIMES', 'FITES', 'FIRENT', 'FERAI', 'FERAS', 'FERA', 'FERONS', 'FEREZ', 'FERONT',
-        'ALLONS', 'ALLEZ', 'VONT', 'ALLAIS', 'ALLAIT', 'ALLIONS', 'ALLIEZ', 'ALLAIENT', 'ALLAI', 'ALLAS', 'ALLA', 'ALLAMES', 'ALLATES', 'ALLERENT', 'IRAI', 'IRAS', 'IRA', 'IRONS', 'IREZ', 'IRONT',
-        'PEUX', 'PEUT', 'POUVONS', 'POUVEZ', 'PEUVENT', 'POUVAIS', 'POUVAIT', 'POUVIONS', 'POUVIEZ', 'POUVAIENT', 'PUMES', 'PUTES', 'PURENT', 'POURRAI', 'POURRAS', 'POURRA', 'POURRONS', 'POURREZ', 'POURRONT',
+        'SOMMES',
+        'ETES',
+        'SONT',
+        'ETAIS',
+        'ETAIT',
+        'ETIONS',
+        'ETIEZ',
+        'ETAIENT',
+        'FUMES',
+        'FUTES',
+        'FURENT',
+        'SERAI',
+        'SERAS',
+        'SERA',
+        'SERONS',
+        'SEREZ',
+        'SERONT',
+        'SOIS',
+        'SOIT',
+        'SOYONS',
+        'SOYEZ',
+        'SOIENT',
+        'ETANT',
+        'AVONS',
+        'AVEZ',
+        'ONT',
+        'AVAIS',
+        'AVAIT',
+        'AVIONS',
+        'AVIEZ',
+        'AVAIENT',
+        'EUMES',
+        'EUTES',
+        'EURENT',
+        'AURAI',
+        'AURAS',
+        'AURA',
+        'AURONS',
+        'AUREZ',
+        'AURONT',
+        'AIES',
+        'AYONS',
+        'AYEZ',
+        'AIENT',
+        'AYANT',
+        'FAIS',
+        'FAIT',
+        'FAISONS',
+        'FAITES',
+        'FONT',
+        'FAISAIS',
+        'FAISAIT',
+        'FAISIONS',
+        'FAISIEZ',
+        'FAISAIENT',
+        'FIMES',
+        'FITES',
+        'FIRENT',
+        'FERAI',
+        'FERAS',
+        'FERA',
+        'FERONS',
+        'FEREZ',
+        'FERONT',
+        'ALLONS',
+        'ALLEZ',
+        'VONT',
+        'ALLAIS',
+        'ALLAIT',
+        'ALLIONS',
+        'ALLIEZ',
+        'ALLAIENT',
+        'ALLAI',
+        'ALLAS',
+        'ALLA',
+        'ALLAMES',
+        'ALLATES',
+        'ALLERENT',
+        'IRAI',
+        'IRAS',
+        'IRA',
+        'IRONS',
+        'IREZ',
+        'IRONT',
+        'PEUX',
+        'PEUT',
+        'POUVONS',
+        'POUVEZ',
+        'PEUVENT',
+        'POUVAIS',
+        'POUVAIT',
+        'POUVIONS',
+        'POUVIEZ',
+        'POUVAIENT',
+        'PUMES',
+        'PUTES',
+        'PURENT',
+        'POURRAI',
+        'POURRAS',
+        'POURRA',
+        'POURRONS',
+        'POURREZ',
+        'POURRONT',
         // autres
-        'AINSI', 'CEPENDANT', 'CHAQUE', 'COMMENT', 'ENFIN', 'ENSUITE', 'PARCE', 'QUAND', 'QUEL', 'QUELLE', 'QUELLES', 'QUELS', 'TANDIS', 'TANT', 'TELLE', 'TELLES', 'TELS',
+        'AINSI',
+        'CEPENDANT',
+        'CHAQUE',
+        'COMMENT',
+        'ENFIN',
+        'ENSUITE',
+        'PARCE',
+        'QUAND',
+        'QUEL',
+        'QUELLE',
+        'QUELLES',
+        'QUELS',
+        'TANDIS',
+        'TANT',
+        'TELLE',
+        'TELLES',
+        'TELS',
       };
 
       _gridResult = generateWordSearchGrid(
@@ -126,7 +295,10 @@ class WordSearchController with ChangeNotifier {
     _sortedWordsToFind.sort();
 
     final secretWordName = _gridResult.secretWordUsed;
-    final riddle = norseRiddles.firstWhere((r) => normalizeForWordSearch(r.name) == secretWordName, orElse: () => const NorseRiddle(name: '?', clues: ['Trouvez les mots cachés.']));
+    final riddle = norseRiddles.firstWhere(
+      (r) => normalizeForWordSearch(r.name) == secretWordName,
+      orElse: () => const NorseRiddle(name: '?', clues: ['Trouvez les mots cachés.']),
+    );
     _instructionClue = riddle.clues[_random.nextInt(riddle.clues.length)];
 
     isLoading = false;
@@ -151,7 +323,11 @@ class WordSearchController with ChangeNotifier {
     }
 
     final direction = _snapAngleToDirection(atan2(deltaY, deltaX));
-    int steps = (direction.dx == 0) ? deltaY.abs().toInt() : (direction.dy == 0) ? deltaX.abs().toInt() : max(deltaX.abs(), deltaY.abs()).toInt();
+    int steps = (direction.dx == 0)
+        ? deltaY.abs().toInt()
+        : (direction.dy == 0)
+        ? deltaX.abs().toInt()
+        : max(deltaX.abs(), deltaY.abs()).toInt();
 
     final newSelection = [for (var i = 0; i <= steps; i++) Offset(startOffset.dx + direction.dx * i, startOffset.dy + direction.dy * i)];
     currentSelection.clear();
@@ -230,15 +406,24 @@ class WordSearchController with ChangeNotifier {
     final normalizedDegrees = (degrees + 360) % 360;
     final snappedAngle = (normalizedDegrees / 45).round() * 45;
     switch (snappedAngle % 360) {
-      case 0: return _Direction(1, 0);   // E
-      case 45: return _Direction(1, 1);  // SE
-      case 90: return _Direction(0, 1);  // S
-      case 135: return _Direction(-1, 1); // SW
-      case 180: return _Direction(-1, 0); // W
-      case 225: return _Direction(-1, -1);// NW
-      case 270: return _Direction(0, -1); // N
-      case 315: return _Direction(1, -1); // NE
-      default: return _Direction(1, 0);
+      case 0:
+        return _Direction(1, 0); // E
+      case 45:
+        return _Direction(1, 1); // SE
+      case 90:
+        return _Direction(0, 1); // S
+      case 135:
+        return _Direction(-1, 1); // SW
+      case 180:
+        return _Direction(-1, 0); // W
+      case 225:
+        return _Direction(-1, -1); // NW
+      case 270:
+        return _Direction(0, -1); // N
+      case 315:
+        return _Direction(1, -1); // NE
+      default:
+        return _Direction(1, 0);
     }
   }
 }

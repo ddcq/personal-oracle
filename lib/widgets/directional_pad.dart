@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
-enum Direction {
-  up,
-  down,
-  left,
-  right,
-}
+enum Direction { up, down, left, right }
 
 class DirectionalPad extends StatelessWidget {
   final ValueChanged<Direction> onDirectionChanged;

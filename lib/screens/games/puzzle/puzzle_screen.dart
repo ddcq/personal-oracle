@@ -24,7 +24,6 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   final int _rows = 5; // Default rows
   final int _cols = 5; // Default cols
   final String versionNumber = "Version 1.7";
-  
 
   @override
   void initState() {
@@ -108,9 +107,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
                   },
                   onSeeRewards: () {
                     Navigator.of(context).pop(); // Close the dialog
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const ProfileScreen()),
-                    );
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
                   },
                 );
               },

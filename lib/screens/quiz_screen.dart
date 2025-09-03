@@ -123,93 +123,88 @@ class _QuizScreenState extends State<QuizScreen> {
       ),
       body: AppBackground(
         child: isLandscape
-              ? Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 20.h),
-                          ProgressBar(progress: progress),
-                          Container(
-                            padding: EdgeInsets.all(20.w),
-                            margin: EdgeInsets.all(20.w),
-                            decoration: BoxDecoration(
-                              color: const Color.fromRGBO(0, 0, 0, 0.5), // Semi-transparent background
-                              borderRadius: BorderRadius.circular(15.r),
-                            ),
-                            child: AutoSizeText(
-                              question.question,
-                              textAlign: TextAlign.center,
-                              maxLines: 4, // Allow multiple lines for questions
-                              minFontSize: 10.0,
-                              stepGranularity: 1.0,
-                              style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.sp, // Max font size
-                                    shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
-                                  ),
-                            ),
+            ? Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 20.h),
+                        ProgressBar(progress: progress),
+                        Container(
+                          padding: EdgeInsets.all(20.w),
+                          margin: EdgeInsets.all(20.w),
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(0, 0, 0, 0.5), // Semi-transparent background
+                            borderRadius: BorderRadius.circular(15.r),
                           ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: question.answers.length,
-                        separatorBuilder: (context, index) => SizedBox(height: 15.h),
-                        itemBuilder: (context, index) {
-                          final answer = question.answers[index];
-                          final String letter = String.fromCharCode('A'.codeUnitAt(0) + index);
-                          final traits = answer.scores.keys.toList();
-                          final gradientColors = traits.isNotEmpty ? TraitColors.gradients[traits.first] : null;
-
-                          return Padding(
-                            padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 10.h),
-                            child: AnswerButton(
-                              text: answer.text,
-                              onPressed: () => handleAnswer(index),
-                              letter: letter,
-                              gradientColors: gradientColors,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 20.h),
-                    ProgressBar(progress: progress),
-                    Container(
-                      padding: EdgeInsets.all(20.w),
-                      margin: EdgeInsets.all(20.w),
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(0, 0, 0, 0.5), // Semi-transparent background
-                        borderRadius: BorderRadius.circular(15.r),
-                      ),
-                      child: AutoSizeText(
-                        question.question,
-                        textAlign: TextAlign.center,
-                        maxLines: 4, // Allow multiple lines for questions
-                        minFontSize: 10.0,
-                        stepGranularity: 1.0,
-                        style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                          child: AutoSizeText(
+                            question.question,
+                            textAlign: TextAlign.center,
+                            maxLines: 4, // Allow multiple lines for questions
+                            minFontSize: 10.0,
+                            stepGranularity: 1.0,
+                            style: Theme.of(context).textTheme.displayMedium?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 20.sp, // Max font size
                               shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
                             ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: question.answers.length,
+                      separatorBuilder: (context, index) => SizedBox(height: 15.h),
+                      itemBuilder: (context, index) {
+                        final answer = question.answers[index];
+                        final String letter = String.fromCharCode('A'.codeUnitAt(0) + index);
+                        final traits = answer.scores.keys.toList();
+                        final gradientColors = traits.isNotEmpty ? TraitColors.gradients[traits.first] : null;
+
+                        return Padding(
+                          padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 10.h),
+                          child: AnswerButton(text: answer.text, onPressed: () => handleAnswer(index), letter: letter, gradientColors: gradientColors),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 20.h),
+                  ProgressBar(progress: progress),
+                  Container(
+                    padding: EdgeInsets.all(20.w),
+                    margin: EdgeInsets.all(20.w),
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(0, 0, 0, 0.5), // Semi-transparent background
+                      borderRadius: BorderRadius.circular(15.r),
+                    ),
+                    child: AutoSizeText(
+                      question.question,
+                      textAlign: TextAlign.center,
+                      maxLines: 4, // Allow multiple lines for questions
+                      minFontSize: 10.0,
+                      stepGranularity: 1.0,
+                      style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp, // Max font size
+                        shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
                       ),
                     ),
-                    Expanded(
-                      child: ListView.separated(
+                  ),
+                  Expanded(
+                    child: ListView.separated(
                       shrinkWrap: true,
                       itemCount: question.answers.length,
                       separatorBuilder: (context, index) => SizedBox(height: 5.h),
@@ -221,18 +216,13 @@ class _QuizScreenState extends State<QuizScreen> {
 
                         return Padding(
                           padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 10.h),
-                          child: AnswerButton(
-                            text: answer.text,
-                            onPressed: () => handleAnswer(index),
-                            letter: letter,
-                            gradientColors: gradientColors,
-                          ),
+                          child: AnswerButton(text: answer.text, onPressed: () => handleAnswer(index), letter: letter, gradientColors: gradientColors),
                         );
                       },
                     ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
       ),
     );
   }

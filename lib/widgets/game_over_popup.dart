@@ -6,11 +6,7 @@ class GameOverPopup extends StatefulWidget {
   final Widget content;
   final List<Widget> actions;
 
-  const GameOverPopup({
-    super.key,
-    required this.content,
-    this.actions = const [],
-  });
+  const GameOverPopup({super.key, required this.content, this.actions = const []});
 
   @override
   State<GameOverPopup> createState() => _GameOverPopupState();
@@ -56,18 +52,12 @@ class _GameOverPopupState extends State<GameOverPopup> with SingleTickerProvider
               color: Colors.blueGrey[800]!.withAlpha(128), // Semi-transparent background color
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: ChibiColors.buttonOrange), // Changed border color
-              image: DecorationImage(
-                image: AssetImage('assets/images/backgrounds/defeated.jpg'),
-                fit: BoxFit.cover,
-              ),
+              image: DecorationImage(image: AssetImage('assets/images/backgrounds/defeated.jpg'), fit: BoxFit.cover),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset(
-                  'assets/images/odin_sad.png',
-                  height: 100,
-                ),
+                Image.asset('assets/images/odin_sad.png', height: 100),
                 const SizedBox(height: 16),
                 widget.content, // Use widget.content
                 const SizedBox(height: 16),

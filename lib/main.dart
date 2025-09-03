@@ -12,15 +12,12 @@ import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   if (Platform.isIOS || Platform.isAndroid) {
     await MobileAds.instance.initialize();
   }
@@ -66,8 +63,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       soundService.resumeMusic();
     }
   }
-
-  
 
   @override
   Widget build(BuildContext context) {

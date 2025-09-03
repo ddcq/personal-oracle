@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:flutter/services.dart'; // Added for HapticFeedback
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 class ChibiButton extends StatefulWidget {
   final String? text;
@@ -11,7 +11,7 @@ class ChibiButton extends StatefulWidget {
   final TextStyle? textStyle;
 
   const ChibiButton({super.key, this.text, required this.color, this.onPressed, this.child, this.textStyle})
-      : assert(text != null || child != null, 'Either text or child must be provided');
+    : assert(text != null || child != null, 'Either text or child must be provided');
 
   @override
   State<ChibiButton> createState() => _ChibiButtonState();
@@ -75,14 +75,12 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
               color: widget.color,
-              child: widget.child ?? FittedBox(
-                fit: BoxFit.scaleDown, // Scale down if needed
-                child: Text(
-                  widget.text!,
-                  textAlign: TextAlign.center,
-                  style: widget.textStyle ?? ChibiTextStyles.buttonText,
-                ),
-              ),
+              child:
+                  widget.child ??
+                  FittedBox(
+                    fit: BoxFit.scaleDown, // Scale down if needed
+                    child: Text(widget.text!, textAlign: TextAlign.center, style: widget.textStyle ?? ChibiTextStyles.buttonText),
+                  ),
             ),
           ),
         ),

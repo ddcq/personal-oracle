@@ -4,12 +4,12 @@ import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'dart:collection';
+import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 import 'player.dart';
 import 'constants.dart' as game_constants;
 import 'qix_game.dart';
 import 'qix.dart';
-import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 class FloodFillResult {
   final List<IntVector2> points;
@@ -37,10 +37,8 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late final Map<IntVector2, Rect> _cellRects;
   late QixComponent _qixComponent;
 
-  ArenaComponent({required this.gridSize, required this.cellSize, this.rewardCardImagePath, required this.snakeHeadImage, required this.difficulty}) {
-    var arenaDoubleSize = (gridSize * cellSize).toDouble();
-    size = Vector2(arenaDoubleSize, arenaDoubleSize);
-    position = Vector2.zero();
+  ArenaComponent({required this.gridSize, required this.cellSize, this.rewardCardImagePath, required this.snakeHeadImage, required this.difficulty})
+    : super(size: Vector2(gridSize * cellSize, gridSize * cellSize), position: Vector2.zero()) {
     _initializeGrid();
     final Random random = Random();
     final IntVector2 initialQixPosition = IntVector2(20 + random.nextInt(gridSize - 40), 20 + random.nextInt(gridSize - 40));

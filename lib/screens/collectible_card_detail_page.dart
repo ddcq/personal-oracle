@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/widgets/interactive_collectible_card.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
@@ -15,13 +14,15 @@ class CollectibleCardDetailPage extends StatefulWidget {
 }
 
 class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(widget.card.title, style: TextStyle(color: Colors.white, fontFamily: AppTextStyles.amaticSC)),
+        title: Text(
+          widget.card.title,
+          style: TextStyle(color: Colors.white, fontFamily: AppTextStyles.amaticSC),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white), // For back button

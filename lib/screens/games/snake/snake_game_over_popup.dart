@@ -7,11 +7,7 @@ class SnakeGameOverPopup extends StatelessWidget {
   final int score;
   final VoidCallback onResetGame;
 
-  const SnakeGameOverPopup({
-    super.key,
-    required this.score,
-    required this.onResetGame,
-  });
+  const SnakeGameOverPopup({super.key, required this.score, required this.onResetGame});
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +22,7 @@ class SnakeGameOverPopup extends StatelessWidget {
               fontSize: 36,
               fontWeight: FontWeight.bold, // Added bold
               fontFamily: AppTextStyles.amaticSC, // Added font family
-              shadows: [
-                Shadow(
-                  blurRadius: 10.0,
-                  color: Colors.black,
-                  offset: Offset(2.0, 2.0),
-                ),
-              ],
+              shadows: [Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0))],
             ),
           ),
           const SizedBox(height: 8),
@@ -43,13 +33,7 @@ class SnakeGameOverPopup extends StatelessWidget {
               fontSize: 24,
               fontWeight: FontWeight.bold, // Added bold
               fontFamily: AppTextStyles.amaticSC, // Added font family
-              shadows: [
-                Shadow(
-                  blurRadius: 5.0,
-                  color: Colors.black,
-                  offset: Offset(1.0, 1.0),
-                ),
-              ],
+              shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(1.0, 1.0))],
             ),
             textAlign: TextAlign.center,
           ),

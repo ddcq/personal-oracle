@@ -67,12 +67,18 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
                   );
                 },
               ),
-              _buildNavigationArrow(isLeft: true, onPressed: () {
-                _pageController.previousPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
-              }),
-              _buildNavigationArrow(isLeft: false, onPressed: () {
-                _pageController.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
-              }),
+              _buildNavigationArrow(
+                isLeft: true,
+                onPressed: () {
+                  _pageController.previousPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+                },
+              ),
+              _buildNavigationArrow(
+                isLeft: false,
+                onPressed: () {
+                  _pageController.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+                },
+              ),
             ],
           ),
         ),
@@ -85,10 +91,7 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
       left: isLeft ? 10 : null,
       right: isLeft ? null : 10,
       child: Container(
-        decoration: BoxDecoration(
-          color: Colors.black.withAlpha(120),
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: Colors.black.withAlpha(120), shape: BoxShape.circle),
         child: IconButton(
           icon: Icon(isLeft ? Icons.arrow_back_ios_new : Icons.arrow_forward_ios, color: Colors.white),
           onPressed: onPressed,
@@ -119,9 +122,7 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
   void initState() {
     super.initState();
     _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack),
-    );
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack));
     _animationController.forward();
 
     _scrollController = ScrollController();
@@ -165,10 +166,7 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
           value = (1 - ((page - widget.pageIndex).abs() * 0.4)).clamp(0.0, 1.0);
         }
 
-        return Transform.scale(
-          scale: value,
-          child: child,
-        );
+        return Transform.scale(scale: value, child: child);
       },
       child: ScaleTransition(
         scale: _scaleAnimation,
@@ -179,16 +177,8 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
             borderRadius: BorderRadius.circular(30),
             border: Border.all(color: Colors.amber.withAlpha(150), width: 2),
             boxShadow: [
-              BoxShadow(
-                color: Colors.black.withAlpha(150),
-                blurRadius: 20,
-                spreadRadius: 5,
-              ),
-              BoxShadow(
-                color: Colors.amber.withAlpha(70),
-                blurRadius: 30,
-                spreadRadius: -10,
-              ),
+              BoxShadow(color: Colors.black.withAlpha(150), blurRadius: 20, spreadRadius: 5),
+              BoxShadow(color: Colors.amber.withAlpha(70), blurRadius: 30, spreadRadius: -10),
             ],
           ),
           child: LayoutBuilder(
@@ -229,10 +219,7 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
                               gradient: LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
-                                colors: [
-                                  Colors.black.withAlpha(0),
-                                  Colors.black.withAlpha(100),
-                                ],
+                                colors: [Colors.black.withAlpha(0), Colors.black.withAlpha(100)],
                               ),
                             ),
                           ),
@@ -274,13 +261,7 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
         shape: BoxShape.circle,
         image: DecorationImage(image: AssetImage(widget.deity.icon), fit: BoxFit.cover),
         border: Border.all(color: Colors.amber, width: 6),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(200),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withAlpha(200), blurRadius: 15, offset: const Offset(0, 8))],
       ),
     );
   }
@@ -294,9 +275,7 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
         fontSize: 50,
         color: Colors.white,
         fontWeight: FontWeight.bold,
-        shadows: [
-          const Shadow(color: Colors.black, blurRadius: 10, offset: Offset(2, 2)),
-        ],
+        shadows: [const Shadow(color: Colors.black, blurRadius: 10, offset: Offset(2, 2))],
       ),
     );
   }
@@ -307,12 +286,7 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
       child: Text(
         widget.deity.description,
         textAlign: TextAlign.center,
-        style: TextStyle(
-          fontFamily: AppTextStyles.amarante,
-          fontSize: 18,
-          color: Colors.white.withAlpha(200),
-          height: 1.4,
-        ),
+        style: TextStyle(fontFamily: AppTextStyles.amarante, fontSize: 18, color: Colors.white.withAlpha(200), height: 1.4),
       ),
     );
   }
@@ -322,7 +296,6 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
       text: 'Choisir',
       color: Colors.amber,
       onPressed: () async {
-        
         final gamificationService = Provider.of<GamificationService>(context, listen: false);
         final navigator = Navigator.of(context);
         await gamificationService.saveProfileDeityIcon(widget.deity.id);

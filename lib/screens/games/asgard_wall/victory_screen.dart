@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
-
 
 class VictoryScreen extends StatelessWidget {
   const VictoryScreen({super.key});
@@ -32,12 +30,7 @@ class VictoryScreen extends StatelessWidget {
                 SizedBox(height: 24),
                 Text(
                   'Victoire !',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFFFD700),
-                    fontFamily: AppTextStyles.amaticSC,
-                  ),
+                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFFFFD700), fontFamily: AppTextStyles.amaticSC),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 16),
@@ -51,11 +44,7 @@ class VictoryScreen extends StatelessWidget {
                   child: Text(
                     '🏰 La muraille d’Asgard est parfaite !\nSleipnir peut naître !',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                 ),
                 SizedBox(height: 32),

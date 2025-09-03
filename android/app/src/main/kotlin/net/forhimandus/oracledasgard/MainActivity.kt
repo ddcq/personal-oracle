@@ -1,4 +1,4 @@
-package com.example.personal_oracle
+package net.forhimandus.oracledasgard
 
 import io.flutter.embedding.android.FlutterActivity
 

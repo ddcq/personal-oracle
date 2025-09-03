@@ -4,8 +4,5 @@ class MythStory {
   final String title;
   final List<MythCard> correctOrder;
 
-  MythStory({
-    required this.title,
-    required this.correctOrder,
-  });
+  MythStory({required this.title, required this.correctOrder});
 }

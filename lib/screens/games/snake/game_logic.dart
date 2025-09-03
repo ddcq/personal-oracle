@@ -8,8 +8,6 @@ import 'package:flutter/foundation.dart'; // For VoidCallback
 // ==========================================
 enum FoodType { regular, golden, rotten }
 
-
-
 // ==========================================
 // GAME STATE
 // ==========================================
@@ -49,18 +47,15 @@ class GameState {
 
     // Generate random initial snake head position
     do {
-      initialSnakeHead = IntVector2(
-        random.nextInt(gridSize),
-        random.nextInt(gridSize),
-      );
-    } while (initialSnakeHead.x < 2 || initialSnakeHead.y < 2 || initialSnakeHead.x > gridSize - 3 || initialSnakeHead.y > gridSize - 3); // Ensure not too close to edges
+      initialSnakeHead = IntVector2(random.nextInt(gridSize), random.nextInt(gridSize));
+    } while (initialSnakeHead.x < 2 ||
+        initialSnakeHead.y < 2 ||
+        initialSnakeHead.x > gridSize - 3 ||
+        initialSnakeHead.y > gridSize - 3); // Ensure not too close to edges
 
     // Generate random initial food position, not on snake
     do {
-      initialFood = IntVector2(
-        random.nextInt(gridSize),
-        random.nextInt(gridSize),
-      );
+      initialFood = IntVector2(random.nextInt(gridSize), random.nextInt(gridSize));
     } while (initialFood == initialSnakeHead);
 
     return GameState(
@@ -108,8 +103,7 @@ class GameLogic {
     }
 
     // Handle screen boundaries (game over)
-    if (newHead.x < 0 || newHead.x >= GameState.gridSize ||
-        newHead.y < 0 || newHead.y >= GameState.gridSize) {
+    if (newHead.x < 0 || newHead.x >= GameState.gridSize || newHead.y < 0 || newHead.y >= GameState.gridSize) {
       state.isGameRunning = false;
       state.isGameOver = true;
       return state;
@@ -149,10 +143,7 @@ class GameLogic {
     Random random = Random();
     IntVector2 newFood;
     do {
-      newFood = IntVector2(
-        random.nextInt(GameState.gridSize),
-        random.nextInt(GameState.gridSize),
-      );
+      newFood = IntVector2(random.nextInt(GameState.gridSize), random.nextInt(GameState.gridSize));
     } while (state.snake.contains(newFood) || state.obstacles.contains(newFood));
 
     if (random.nextDouble() < 0.15) {
@@ -180,13 +171,11 @@ class GameLogic {
   List<IntVector2> generateObstacles(GameState state) {
     Random random = Random();
     List<IntVector2> newObstacles = [];
-    for (int i = 0; i < (5 + level); i++) { // Adjusted number of obstacles
+    for (int i = 0; i < (5 + level); i++) {
+      // Adjusted number of obstacles
       IntVector2 newObstacle;
       do {
-        newObstacle = IntVector2(
-          random.nextInt(GameState.gridSize),
-          random.nextInt(GameState.gridSize),
-        );
+        newObstacle = IntVector2(random.nextInt(GameState.gridSize), random.nextInt(GameState.gridSize));
       } while (state.snake.contains(newObstacle) || state.food == newObstacle || newObstacles.contains(newObstacle));
       newObstacles.add(newObstacle);
     }

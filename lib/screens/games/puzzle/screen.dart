@@ -25,7 +25,8 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
     return Scaffold(
       body: AppBackground(
         child: SafeArea(
-          child: Stack( // Wrap with a Stack
+          child: Stack(
+            // Wrap with a Stack
             children: [
               Center(
                 child: Column(
@@ -35,19 +36,13 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
                       'Les runes dispersées',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                            fontFamily: AppTextStyles.amaticSC,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 60.sp,
-                            letterSpacing: 2.0.sp,
-                            shadows: [
-                              const Shadow(
-                                blurRadius: 15.0,
-                                color: Colors.black87,
-                                offset: Offset(4.0, 4.0),
-                              )
-                            ],
-                          ),
+                        fontFamily: AppTextStyles.amaticSC,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 60.sp,
+                        letterSpacing: 2.0.sp,
+                        shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+                      ),
                     ),
                     Text(
                       'Reconstitue les Runes Sacrées',
@@ -59,17 +54,14 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
                             blurRadius: 10.0, // Added shadow
                             color: Colors.black54,
                             offset: Offset(2.0, 2.0),
-                          )
+                          ),
                         ],
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.all(20),
                       margin: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withAlpha(128),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                      decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(20)),
                       child: Column(
                         children: [
                           const PuzzleImageTile(size: 80),
@@ -89,18 +81,15 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
                         text: 'Commencer le Puzzle',
                         color: const Color(0xFF06B6D4),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PuzzleScreen()),
-                          );
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const PuzzleScreen()));
                         },
                       ),
                     ),
                   ],
                 ),
               ),
-              Positioned( // Add the back button
+              Positioned(
+                // Add the back button
                 top: 10,
                 left: 10,
                 child: IconButton(
@@ -149,11 +138,7 @@ class _PuzzleImageTileState extends State<PuzzleImageTile> {
   @override
   Widget build(BuildContext context) {
     if (_image == null || _tileIndex == null) {
-      return SizedBox(
-        width: widget.size,
-        height: widget.size,
-        child: const CircularProgressIndicator(),
-      );
+      return SizedBox(width: widget.size, height: widget.size, child: const CircularProgressIndicator());
     }
     return CustomPaint(
       size: Size(widget.size, widget.size),
@@ -179,12 +164,7 @@ class PuzzleTilePainter extends CustomPainter {
     final int tileCol = tileIndex % tilesPerRow;
     final int tileRow = tileIndex ~/ tilesPerRow;
 
-    final Rect sourceRect = Rect.fromLTWH(
-      tileCol * tileWidth,
-      tileRow * tileHeight,
-      tileWidth,
-      tileHeight,
-    );
+    final Rect sourceRect = Rect.fromLTWH(tileCol * tileWidth, tileRow * tileHeight, tileWidth, tileHeight);
 
     final Rect destRect = Rect.fromLTWH(0, 0, size.width, size.height);
 

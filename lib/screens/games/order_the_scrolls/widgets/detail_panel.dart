@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import '../game_controller.dart';
 
-class DetailPanel extends StatelessWidget { // Changed to StatelessWidget
+class DetailPanel extends StatelessWidget {
+  // Changed to StatelessWidget
   final GameController controller;
   final bool isEnlarged; // New parameter
   final VoidCallback onToggleEnlargement; // New parameter
@@ -38,7 +39,8 @@ class DetailPanel extends StatelessWidget { // Changed to StatelessWidget
 
     return GestureDetector(
       onTap: onToggleEnlargement, // Use the callback
-      child: AnimatedContainer( // Animated container for the frame
+      child: AnimatedContainer(
+        // Animated container for the frame
         duration: const Duration(milliseconds: 300), // Animation duration
         curve: Curves.easeInOut, // Animation curve
         height: double.infinity, // Make the container take all available height
@@ -48,27 +50,24 @@ class DetailPanel extends StatelessWidget { // Changed to StatelessWidget
           color: Colors.black.withAlpha(((isEnlarged ? enlargedOpacity : normalOpacity) * 255).round()), // Animated opacity
           borderRadius: BorderRadius.circular(12), // Rounded corners
           border: Border.all(color: Colors.amber, width: 2), // Amber border
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(77),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
+          boxShadow: [BoxShadow(color: Colors.black.withAlpha(77), blurRadius: 10, offset: const Offset(0, 5))],
         ),
-        child: Padding( // Add padding here
+        child: Padding(
+          // Add padding here
           padding: EdgeInsets.fromLTRB(
             0, // No left padding for the image
             0, // No top padding for the image
             0, // No right padding for the image
             isEnlarged ? enlargedPadding : normalPadding, // Only bottom padding
           ),
-          child: Column( // Main column for image and description
+          child: Column(
+            // Main column for image and description
             children: [
               // Image, Gradient, and Title Stack
               ClipRRect(
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(10)), // Match container's top radius
-                child: SizedBox( // Replaced AspectRatio with SizedBox
+                child: SizedBox(
+                  // Replaced AspectRatio with SizedBox
                   height: 200.0, // Fixed height for the image container
                   child: Stack(
                     children: [
@@ -97,20 +96,15 @@ class DetailPanel extends StatelessWidget { // Changed to StatelessWidget
                         left: 16,
                         right: 16,
                         bottom: 16,
-                        child: AnimatedDefaultTextStyle( // Animated font size for title
+                        child: AnimatedDefaultTextStyle(
+                          // Animated font size for title
                           duration: const Duration(milliseconds: 300),
                           style: TextStyle(
                             fontFamily: AppTextStyles.amaticSC,
                             fontSize: isEnlarged ? enlargedFontSize + 16 : normalFontSize + 20, // Adjust title font size
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
-                            shadows: [
-                              Shadow(
-                                blurRadius: 5.0,
-                                color: Colors.black,
-                                offset: Offset(2.0, 2.0),
-                              ),
-                            ],
+                            shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(2.0, 2.0))],
                           ),
                           textAlign: TextAlign.center,
                           child: Text(selectedCard.title),
@@ -121,7 +115,8 @@ class DetailPanel extends StatelessWidget { // Changed to StatelessWidget
                 ),
               ),
               // Description
-              Expanded( // Make description scrollable and take remaining space
+              Expanded(
+                // Make description scrollable and take remaining space
                 child: SingleChildScrollView(
                   padding: EdgeInsets.fromLTRB(
                     isEnlarged ? enlargedPadding : normalPadding, // Apply horizontal padding here
@@ -129,7 +124,8 @@ class DetailPanel extends StatelessWidget { // Changed to StatelessWidget
                     isEnlarged ? enlargedPadding : normalPadding, // Apply horizontal padding here
                     isEnlarged ? enlargedPadding : normalPadding, // Apply bottom padding here
                   ),
-                  child: AnimatedDefaultTextStyle( // Animated font size for description
+                  child: AnimatedDefaultTextStyle(
+                    // Animated font size for description
                     duration: const Duration(milliseconds: 300),
                     style: TextStyle(
                       fontSize: isEnlarged ? enlargedFontSize : normalFontSize, // Animated font size

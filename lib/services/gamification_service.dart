@@ -35,7 +35,8 @@ class GamificationService with ChangeNotifier {
     return await db.query('game_scores', where: 'game_name = ?', whereArgs: [gameName], orderBy: 'score DESC');
   }
 
-  Future<void> unlockCollectibleCard(CollectibleCard card) async { // Modified to accept CollectibleCard
+  Future<void> unlockCollectibleCard(CollectibleCard card) async {
+    // Modified to accept CollectibleCard
     final db = await _databaseService.database;
     await db.insert('collectible_cards', {
       'card_id': card.id,
@@ -45,39 +46,39 @@ class GamificationService with ChangeNotifier {
     notifyListeners(); // Notify listeners
   }
 
-  Future<bool> isCollectibleCardUnlocked(String cardId, CardVersion version) async { // Modified to accept version
+  Future<bool> isCollectibleCardUnlocked(String cardId, CardVersion version) async {
+    // Modified to accept version
     final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'collectible_cards',
-      where: 'card_id = ? AND version = ?',
-      whereArgs: [cardId, version.toJson()],
-    );
+    final List<Map<String, dynamic>> result = await db.query('collectible_cards', where: 'card_id = ? AND version = ?', whereArgs: [cardId, version.toJson()]);
     return result.isNotEmpty;
   }
 
-  Future<List<CollectibleCard>> getUnlockedCollectibleCards() async { // Modified return type
+  Future<List<CollectibleCard>> getUnlockedCollectibleCards() async {
+    // Modified return type
     final db = await _databaseService.database;
     final List<Map<String, dynamic>> result = await db.query('collectible_cards');
-    return result.map((e) {
-      final cardId = e['card_id'] as String;
-      final version = CardVersion.fromJson(e['version'] as String);
-      // Find the corresponding CollectibleCard from allCollectibleCards
-      final CollectibleCard? foundCard = allCollectibleCards.firstWhereOrNull(
-        (card) => card.id == cardId && card.version == version,
-      );
-      if (foundCard == null) {
-        debugPrint('Warning: Unlocked card $cardId with version $version not found in allCollectibleCards. Skipping.');
-        return null; // Skip this card
-      }
-      return foundCard;
-    }).whereType<CollectibleCard>().toList();
+    return result
+        .map((e) {
+          final cardId = e['card_id'] as String;
+          final version = CardVersion.fromJson(e['version'] as String);
+          // Find the corresponding CollectibleCard from allCollectibleCards
+          final CollectibleCard? foundCard = allCollectibleCards.firstWhereOrNull((card) => card.id == cardId && card.version == version);
+          if (foundCard == null) {
+            debugPrint('Warning: Unlocked card $cardId with version $version not found in allCollectibleCards. Skipping.');
+            return null; // Skip this card
+          }
+          return foundCard;
+        })
+        .whereType<CollectibleCard>()
+        .toList();
   }
 
   Future<List<String>> getUnlockedCollectibleCardImagePaths() async {
     final unlockedCards = await getUnlockedCollectibleCards(); // Now returns CollectibleCard objects
 
     final unlockedImagePaths = <String>[];
-    for (var card in unlockedCards) { // Iterate over CollectibleCard objects
+    for (var card in unlockedCards) {
+      // Iterate over CollectibleCard objects
       unlockedImagePaths.add(card.imagePath);
     }
     return unlockedImagePaths;
@@ -133,20 +134,13 @@ class GamificationService with ChangeNotifier {
 
   Future<void> saveQixDifficulty(int level) async {
     final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': 'qix_difficulty',
-      'setting_value': level.toString(),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('game_settings', {'setting_key': 'qix_difficulty', 'setting_value': level.toString()}, conflictAlgorithm: ConflictAlgorithm.replace);
     notifyListeners();
   }
 
   Future<int> getQixDifficulty() async {
     final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['qix_difficulty'],
-    );
+    final List<Map<String, dynamic>> result = await db.query('game_settings', where: 'setting_key = ?', whereArgs: ['qix_difficulty']);
     if (result.isNotEmpty) {
       return int.parse(result.first['setting_value'] as String);
     } else {
@@ -156,20 +150,13 @@ class GamificationService with ChangeNotifier {
 
   Future<void> saveSnakeDifficulty(int level) async {
     final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': 'snake_difficulty',
-      'setting_value': level.toString(),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('game_settings', {'setting_key': 'snake_difficulty', 'setting_value': level.toString()}, conflictAlgorithm: ConflictAlgorithm.replace);
     notifyListeners();
   }
 
   Future<int> getSnakeDifficulty() async {
     final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['snake_difficulty'],
-    );
+    final List<Map<String, dynamic>> result = await db.query('game_settings', where: 'setting_key = ?', whereArgs: ['snake_difficulty']);
     if (result.isNotEmpty) {
       return int.parse(result.first['setting_value'] as String);
     } else {
@@ -188,11 +175,7 @@ class GamificationService with ChangeNotifier {
 
   Future<int> getWordSearchDifficulty() async {
     final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['word_search_difficulty'],
-    );
+    final List<Map<String, dynamic>> result = await db.query('game_settings', where: 'setting_key = ?', whereArgs: ['word_search_difficulty']);
     if (result.isNotEmpty) {
       return int.parse(result.first['setting_value'] as String);
     } else {
@@ -202,20 +185,13 @@ class GamificationService with ChangeNotifier {
 
   Future<void> saveProfileName(String name) async {
     final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': 'profile_name',
-      'setting_value': name,
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('game_settings', {'setting_key': 'profile_name', 'setting_value': name}, conflictAlgorithm: ConflictAlgorithm.replace);
     notifyListeners();
   }
 
   Future<String?> getProfileName() async {
     final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['profile_name'],
-    );
+    final List<Map<String, dynamic>> result = await db.query('game_settings', where: 'setting_key = ?', whereArgs: ['profile_name']);
     if (result.isNotEmpty) {
       return result.first['setting_value'] as String?;
     }
@@ -224,20 +200,13 @@ class GamificationService with ChangeNotifier {
 
   Future<void> saveProfileDeityIcon(String deityId) async {
     final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': 'profile_deity_icon',
-      'setting_value': deityId,
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('game_settings', {'setting_key': 'profile_deity_icon', 'setting_value': deityId}, conflictAlgorithm: ConflictAlgorithm.replace);
     notifyListeners();
   }
 
   Future<String?> getProfileDeityIcon() async {
     final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['profile_deity_icon'],
-    );
+    final List<Map<String, dynamic>> result = await db.query('game_settings', where: 'setting_key = ?', whereArgs: ['profile_deity_icon']);
     if (result.isNotEmpty) {
       return result.first['setting_value'] as String?;
     }
@@ -291,17 +260,11 @@ class GamificationService with ChangeNotifier {
       }
 
       if (nextCard != null) {
-        nextMythCardsToEarn.add({
-          'story_title': story.title,
-          'next_myth_card': nextCard,
-        });
+        nextMythCardsToEarn.add({'story_title': story.title, 'next_myth_card': nextCard});
       }
     }
 
-    return {
-      'unearned_collectible_cards': unearnedCollectibleCards,
-      'next_myth_cards_to_earn': nextMythCardsToEarn,
-    };
+    return {'unearned_collectible_cards': unearnedCollectibleCards, 'next_myth_cards_to_earn': nextMythCardsToEarn};
   }
 
   Future<CollectibleCard?> selectRandomUnearnedCollectibleCard() async {

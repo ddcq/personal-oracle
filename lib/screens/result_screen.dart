@@ -75,13 +75,7 @@ class _ResultScreenState extends State<ResultScreen> {
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            shadows: [
-                              const Shadow(
-                                blurRadius: 10.0,
-                                color: Colors.black,
-                                offset: Offset(2.0, 2.0),
-                              ),
-                            ],
+                            shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0))],
                           ),
                         ),
                         SizedBox(height: 32.h),

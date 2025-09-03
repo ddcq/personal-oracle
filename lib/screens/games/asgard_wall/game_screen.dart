@@ -635,10 +635,7 @@ class _GameScreenState extends State<GameScreen> {
       children: [
         Container(
           decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/backgrounds/landscape.jpg'),
-              fit: BoxFit.cover,
-            ),
+            image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
           ),
         ), // The background is now at the bottom of the stack
         Scaffold(
@@ -699,7 +696,6 @@ class _GameScreenState extends State<GameScreen> {
 
                   SizedBox(height: 16),
 
-                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

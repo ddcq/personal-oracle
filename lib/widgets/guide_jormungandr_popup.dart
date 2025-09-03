@@ -22,11 +22,7 @@ class GuideJormungandrPopup extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Guide Jörmungandr',
-              style: ChibiTextStyles.overlayTitle,
-              textAlign: TextAlign.center,
-            ),
+            Text('Guide Jörmungandr', style: ChibiTextStyles.overlayTitle, textAlign: TextAlign.center),
             SizedBox(height: 8.h),
             Text(
               '''Aide le serpent-monde à grandir

@@ -123,8 +123,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  
-
   void _showRewardedAd() async {
     setState(() {
       _isAdLoading = true;
@@ -148,57 +146,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _showSnackBar('''Échec de l'affichage de la publicité. Veuillez réessayer.''');
             },
           );
-          ad.show(onUserEarnedReward: (ad, reward) async {
-            // Reward the user
-            final gamificationService = Provider.of<GamificationService>(context, listen: false);
-            CollectibleCard? wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+          ad.show(
+            onUserEarnedReward: (ad, reward) async {
+              // Reward the user
+              final gamificationService = Provider.of<GamificationService>(context, listen: false);
+              CollectibleCard? wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
 
-            if (wonCard != null) {
-              // Show success dialog
-              if (mounted) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Félicitations !'),
-                      content: Text('Vous avez gagné une nouvelle carte : ${wonCard.title} (${wonCard.version.name}) !'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text('OK'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  }
-                );
+              if (wonCard != null) {
+                // Show success dialog
+                if (mounted) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Félicitations !'),
+                        content: Text('Vous avez gagné une nouvelle carte : ${wonCard.title} (${wonCard.version.name}) !'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              } else {
+                // All cards collected
+                if (mounted) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Collection Complète !'),
+                        content: const Text('Vous avez déjà toutes les cartes !'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
               }
-            } else {
-              // All cards collected
-              if (mounted) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Collection Complète !'),
-                      content: const Text('Vous avez déjà toutes les cartes !'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text('OK'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  }
-                );
-              }
-            }
-            // Refresh the UI to show the new card
-            setState(() {});
-          });
+              // Refresh the UI to show the new card
+              setState(() {});
+            },
+          );
         },
         onAdFailedToLoad: (LoadAdError error) {
           setState(() {
@@ -213,9 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _showSnackBar(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 

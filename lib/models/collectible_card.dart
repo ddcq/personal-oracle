@@ -24,31 +24,15 @@ class CollectibleCard {
       description: json['description'] as String,
       imagePath: json['imagePath'] as String,
       tags: List<String>.from(json['tags'] as List? ?? []),
-      version: json['version'] != null
-          ? CardVersion.fromJson(json['version'])
-          : CardVersion.epic,
+      version: json['version'] != null ? CardVersion.fromJson(json['version']) : CardVersion.epic,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'description': description,
-      'imagePath': imagePath,
-      'tags': tags,
-      'version': version.toJson(),
-    };
+    return {'id': id, 'title': title, 'description': description, 'imagePath': imagePath, 'tags': tags, 'version': version.toJson()};
   }
 
-  CollectibleCard copyWith({
-    String? id,
-    String? title,
-    String? description,
-    String? imagePath,
-    List<String>? tags,
-    CardVersion? version,
-  }) {
+  CollectibleCard copyWith({String? id, String? title, String? description, String? imagePath, List<String>? tags, CardVersion? version}) {
     return CollectibleCard(
       id: id ?? this.id,
       title: title ?? this.title,

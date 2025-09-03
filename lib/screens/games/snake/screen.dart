@@ -17,7 +17,8 @@ import 'package:oracle_d_asgard/components/victory_popup.dart'; // Import the vi
 import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import CollectibleCard
 import 'package:confetti/confetti.dart'; // Import ConfettiController
 
-class SnakeGame extends StatefulWidget { // Temporary comment
+class SnakeGame extends StatefulWidget {
+  // Temporary comment
   const SnakeGame({super.key});
 
   @override
@@ -37,7 +38,8 @@ class _SnakeGameState extends State<SnakeGame> {
     _initializeGameFuture = _initializeGame();
   }
 
-  Future<int> _initializeGame() async { // Return int
+  Future<int> _initializeGame() async {
+    // Return int
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
     _currentLevel = await gamificationService.getSnakeDifficulty();
     return _currentLevel;
@@ -79,9 +81,7 @@ class _SnakeGameState extends State<SnakeGame> {
             },
             onSeeRewards: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const ProfileScreen()),
-              );
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
             },
           );
         } else {
@@ -125,7 +125,8 @@ class _SnakeGameState extends State<SnakeGame> {
             ),
           ],
         ),
-        body: FutureBuilder<int>( // Specify the type of data
+        body: FutureBuilder<int>(
+          // Specify the type of data
           future: _initializeGameFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
@@ -228,7 +229,3 @@ class _SnakeGameState extends State<SnakeGame> {
     );
   }
 }
-
-
-
-

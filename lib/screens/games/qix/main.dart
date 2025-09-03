@@ -53,13 +53,25 @@ class _QixGameScreenState extends State<QixGameScreen> {
                 children: [
                   Text(
                     'DÉFAITE !',
-                    style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: AppTextStyles.amaticSC, shadows: [Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0)),]),
+                    style: TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontFamily: AppTextStyles.amaticSC,
+                      shadows: [Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0))],
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 32),
                   Text(
                     'Vous avez été vaincu. Réessayez !',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: AppTextStyles.amaticSC, shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(1.0, 1.0)),]),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontFamily: AppTextStyles.amaticSC,
+                      shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(1.0, 1.0))],
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -78,7 +90,8 @@ class _QixGameScreenState extends State<QixGameScreen> {
           },
         );
       },
-      onWin: (CollectibleCard? collectibleCard) async { // Made async to await saveQixDifficulty
+      onWin: (CollectibleCard? collectibleCard) async {
+        // Made async to await saveQixDifficulty
         _showVictoryPopupNotifier.value = true;
         await gamificationService.saveQixDifficulty(currentDifficulty + 1); // Increment and save difficulty
       },
@@ -132,7 +145,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
 
                   // Estimate controls height (progress bar + directional pad + padding)
                   // This is an approximation, adjust as needed
-                  const double controlsEstimatedHeight = 250.0; 
+                  const double controlsEstimatedHeight = 250.0;
 
                   double availableWidth = screenSize.width;
                   double availableHeight = screenSize.height - appBarHeight - statusBarHeight;
@@ -228,9 +241,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
                                 onSeeRewards: () {
                                   _showVictoryPopupNotifier.value = false;
                                   Navigator.of(context).pop(); // Go back to the previous screen (game menu)
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(builder: (context) => const ProfileScreen()),
-                                  );
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
                                 },
                               ),
                             );

@@ -9,11 +9,7 @@ class WordSearchGridResult {
   final List<String> placedWords;
   final String secretWordUsed;
 
-  WordSearchGridResult({
-    required this.grid,
-    required this.placedWords,
-    required this.secretWordUsed,
-  });
+  WordSearchGridResult({required this.grid, required this.placedWords, required this.secretWordUsed});
 }
 
 class _PlacedWord {
@@ -36,8 +32,14 @@ WordSearchGridResult generateWordSearchGrid({
   int attempts = 0;
 
   final directions = [
-    _Direction(1, 0), _Direction(-1, 0), _Direction(0, 1), _Direction(0, -1),
-    _Direction(1, 1), _Direction(-1, -1), _Direction(1, -1), _Direction(-1, 1),
+    _Direction(1, 0),
+    _Direction(-1, 0),
+    _Direction(0, 1),
+    _Direction(0, -1),
+    _Direction(1, 1),
+    _Direction(-1, -1),
+    _Direction(1, -1),
+    _Direction(-1, 1),
   ];
 
   while (attempts < 100) {
@@ -192,7 +194,7 @@ int _tryPlaceWord(
   for (var r = 0; r < height; r++) {
     for (var c = 0; c < width; c++) {
       final directionPicker = UniqueRandomPicker(directions);
-      while(directionPicker.isNotEmpty) {
+      while (directionPicker.isNotEmpty) {
         final dir = directionPicker.pick()!;
         if (_canPlaceWordAt(grid, word, r, c, dir, width, height, isFirstWord: isFirstWord)) {
           possiblePlacements.add(_Placement(r, c, dir));
@@ -237,16 +239,7 @@ int _calculateNewLetters(List<List<String?>> grid, String word, _Placement place
   return newLettersCount;
 }
 
-bool _canPlaceWordAt(
-  List<List<String?>> grid,
-  String word,
-  int row,
-  int col,
-  _Direction dir,
-  int width,
-  int height, {
-  required bool isFirstWord,
-}) {
+bool _canPlaceWordAt(List<List<String?>> grid, String word, int row, int col, _Direction dir, int width, int height, {required bool isFirstWord}) {
   bool sharesLetter = false;
   int overlapCount = 0;
   int newLettersCount = 0;

@@ -27,14 +27,10 @@ class _MainScreenState extends State<MainScreen> {
       await dbService.deleteDb();
       await dbService.reinitializeDb();
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Database cleared and rebuilt successfully!')),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Database cleared and rebuilt successfully!')));
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to clear and rebuild database: $e')),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to clear and rebuild database: $e')));
     }
   }
 
@@ -89,23 +85,14 @@ class _MainScreenState extends State<MainScreen> {
                             alignment: Alignment.topCenter,
                             child: Padding(
                               padding: EdgeInsets.only(top: 20.h),
-                              child: Text(
-                                'Oracle d’Asgard',
-                                textAlign: TextAlign.center,
-                                style: ChibiTextStyles.appBarTitle,
-                              ),
+                              child: Text('Oracle d’Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle),
                             ),
                           ),
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
                               child: ClipRect(
-                                child: Image.asset(
-                                  'assets/images/odin_chibi.png',
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  alignment: Alignment.topCenter,
-                                ),
+                                child: Image.asset('assets/images/odin_chibi.png', fit: BoxFit.cover, width: double.infinity, alignment: Alignment.topCenter),
                               ),
                             ),
                           ),
@@ -152,7 +139,6 @@ class _MainScreenState extends State<MainScreen> {
                         ],
                       );
                     } else {
-
                       return Column(
                         children: <Widget>[
                           Padding(
@@ -161,11 +147,7 @@ class _MainScreenState extends State<MainScreen> {
                               constraints: BoxConstraints(maxHeight: 0.2.sh),
                               child: FittedBox(
                                 fit: BoxFit.contain,
-                                child: Text(
-                                  'Oracle d’Asgard',
-                                  textAlign: TextAlign.center,
-                                  style: ChibiTextStyles.appBarTitle,
-                                ),
+                                child: Text('Oracle d’Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle),
                               ),
                             ),
                           ),
@@ -176,11 +158,7 @@ class _MainScreenState extends State<MainScreen> {
                                   child: Padding(
                                     padding: EdgeInsets.fromLTRB(16.w, 8.h, 8.w, 16.h),
                                     child: ClipRect(
-                                      child: Image.asset(
-                                        'assets/images/odin_chibi.png',
-                                        fit: BoxFit.cover,
-                                        alignment: Alignment.topCenter,
-                                      ),
+                                      child: Image.asset('assets/images/odin_chibi.png', fit: BoxFit.cover, alignment: Alignment.topCenter),
                                     ),
                                   ),
                                 ),
@@ -233,11 +211,7 @@ class _MainScreenState extends State<MainScreen> {
             right: 10.w,
             child: Opacity(
               opacity: 0.3,
-              child: IconButton(
-                icon: const Icon(Icons.settings, size: 20),
-                onPressed: _clearAndRebuildDatabase,
-                tooltip: 'Clear and Rebuild Database',
-              ),
+              child: IconButton(icon: const Icon(Icons.settings, size: 20), onPressed: _clearAndRebuildDatabase, tooltip: 'Clear and Rebuild Database'),
             ),
           ),
           if (_isBannerAdLoaded && _bannerAd != null)

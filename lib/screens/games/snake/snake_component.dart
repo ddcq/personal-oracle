@@ -252,7 +252,6 @@ class SnakeComponent extends PositionComponent {
     final paint = Paint()..color = const Color(0xFF006400); // Dark Green color
 
     for (int i = 0; i < gameState.snake.length; i++) {
-
       if (i == 0) {
         // Head of the snake - Qix monster with rotation
         double rotationAngle = 0; // Default: Up
@@ -290,8 +289,6 @@ class SnakeComponent extends PositionComponent {
         canvas.restore();
       } else {
         // Body and Tail segments - draw animated circles
-        
-        
 
         final currentSegmentCircles = _currentSegmentCircles[i];
         List<CircleData> previousSegmentCircles = [];

@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/utils/chibi_theme.dart'; // Import the new theme file
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 class ChibiAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleText;
   final String? subtitleText;
   final List<Widget>? actions;
 
-  const ChibiAppBar({
-    super.key,
-    required this.titleText,
-    this.subtitleText,
-    this.actions,
-  });
+  const ChibiAppBar({super.key, required this.titleText, this.subtitleText, this.actions});
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +38,7 @@ class ChibiAppBar extends StatelessWidget implements PreferredSizeWidget {
                 overflow: TextOverflow.ellipsis, // Add ellipsis if it still overflows horizontally
               ),
               if (subtitleText != null)
-                Text(
-                  subtitleText!,
-                  textAlign: TextAlign.center,
-                  style: subtitleStyle,
-                  softWrap: false,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                Text(subtitleText!, textAlign: TextAlign.center, style: subtitleStyle, softWrap: false, overflow: TextOverflow.ellipsis),
             ],
           );
         },
