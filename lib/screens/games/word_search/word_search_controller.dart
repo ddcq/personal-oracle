@@ -96,12 +96,26 @@ class WordSearchController with ChangeNotifier {
       final height = 5 + level;
       final width = 3 + level;
 
+      const stopWords = {
+        'MAIS', 'DONC', 'POUR', 'AVEC', 'SANS', 'SOUS', 'DANS', 'QUOI', 'DONT', 'NOUS', 'VOUS', 'ILS', 'CETTE', 'NOTRE', 'VOTRE', 'LEUR', 'PLUS', 'MOINS', 'BIEN', 'TRES', 'TOUT', 'TOUS', 'TOUTE', 'TOUTES', 'RIEN', 'PERSONNE', 'AUCUN', 'AUCUNE', 'AUTRE', 'AUTRES', 'MEME', 'MEMES', 'COMME', 'ALORS', 'AUSSI', 'ENCORE', 'JAMAIS', 'TOUJOURS', 'SOUVENT', 'PARFOIS', 'DEPUIS', 'AVANT', 'APRES', 'PENDANT', 'ENTRE', 'VERS', 'CONTRE', 'CHEZ', 'JUSQUE', 'SELON', 'MALGRE', 'PARMI', 'HORS', 'SAUF', 'VOICI', 'VOILA',
+        // verbes
+        'ETRE', 'AVOIR', 'FAIRE', 'ALLER', 'POUVOIR',
+        'SOMMES', 'ETES', 'SONT', 'ETAIS', 'ETAIT', 'ETIONS', 'ETIEZ', 'ETAIENT', 'FUMES', 'FUTES', 'FURENT', 'SERAI', 'SERAS', 'SERA', 'SERONS', 'SEREZ', 'SERONT', 'SOIS', 'SOIT', 'SOYONS', 'SOYEZ', 'SOIENT', 'ETANT',
+        'AVONS', 'AVEZ', 'ONT', 'AVAIS', 'AVAIT', 'AVIONS', 'AVIEZ', 'AVAIENT', 'EUMES', 'EUTES', 'EURENT', 'AURAI', 'AURAS', 'AURA', 'AURONS', 'AUREZ', 'AURONT', 'AIES', 'AYONS', 'AYEZ', 'AIENT', 'AYANT',
+        'FAIS', 'FAIT', 'FAISONS', 'FAITES', 'FONT', 'FAISAIS', 'FAISAIT', 'FAISIONS', 'FAISIEZ', 'FAISAIENT', 'FIMES', 'FITES', 'FIRENT', 'FERAI', 'FERAS', 'FERA', 'FERONS', 'FEREZ', 'FERONT',
+        'ALLONS', 'ALLEZ', 'VONT', 'ALLAIS', 'ALLAIT', 'ALLIONS', 'ALLIEZ', 'ALLAIENT', 'ALLAI', 'ALLAS', 'ALLA', 'ALLAMES', 'ALLATES', 'ALLERENT', 'IRAI', 'IRAS', 'IRA', 'IRONS', 'IREZ', 'IRONT',
+        'PEUX', 'PEUT', 'POUVONS', 'POUVEZ', 'PEUVENT', 'POUVAIS', 'POUVAIT', 'POUVIONS', 'POUVIEZ', 'POUVAIENT', 'PUMES', 'PUTES', 'PURENT', 'POURRAI', 'POURRAS', 'POURRA', 'POURRONS', 'POURREZ', 'POURRONT',
+        // autres
+        'AINSI', 'CEPENDANT', 'CHAQUE', 'COMMENT', 'ENFIN', 'ENSUITE', 'PARCE', 'QUAND', 'QUEL', 'QUELLE', 'QUELLES', 'QUELS', 'TANDIS', 'TANT', 'TELLE', 'TELLES', 'TELS',
+      };
+
       _gridResult = generateWordSearchGrid(
         longWords: longWords,
         shortWords: shortWords,
         secretWords: secretWords,
         width: width,
         height: height,
+        stopWords: stopWords,
       );
 
       // Loop continues if _gridResult.placedWords is empty.

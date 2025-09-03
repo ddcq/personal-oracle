@@ -30,6 +30,7 @@ WordSearchGridResult generateWordSearchGrid({
   required List<String> secretWords,
   required int width,
   required int height,
+  required Set<String> stopWords,
 }) {
   final random = Random();
   int attempts = 0;
@@ -46,33 +47,37 @@ WordSearchGridResult generateWordSearchGrid({
     final placedWords = <_PlacedWord>[];
     int emptyCells = width * height;
 
-    final availableLongWords = longWords.toSet().toList();
-    final availableShortWords = shortWords.toSet().toList();
+    // Partition words based on the new rules
+    final priorityWords = longWords.where((word) => !stopWords.contains(word)).toList();
+    final longStopWords = longWords.where((word) => stopWords.contains(word)).toList();
+    final secondaryWords = [...shortWords, ...longStopWords];
 
+    // Place priority words
     bool wordWasPlacedInPass = true;
     while (wordWasPlacedInPass) {
       wordWasPlacedInPass = false;
-      availableLongWords.shuffle(random);
-      for (final word in List.of(availableLongWords)) {
+      priorityWords.shuffle(random);
+      for (final word in List.of(priorityWords)) {
         int placedCount = _tryPlaceWord(grid, word, placedWords, directions, width, height, random, emptyCells);
         if (placedCount > 0) {
           emptyCells -= placedCount;
-          availableLongWords.remove(word);
+          priorityWords.remove(word);
           wordWasPlacedInPass = true;
           break;
         }
       }
     }
 
+    // Place secondary words
     wordWasPlacedInPass = true;
     while (wordWasPlacedInPass) {
       wordWasPlacedInPass = false;
-      availableShortWords.shuffle(random);
-      for (final word in List.of(availableShortWords)) {
+      secondaryWords.shuffle(random);
+      for (final word in List.of(secondaryWords)) {
         int placedCount = _tryPlaceWord(grid, word, placedWords, directions, width, height, random, emptyCells);
         if (placedCount > 0) {
           emptyCells -= placedCount;
-          availableShortWords.remove(word);
+          secondaryWords.remove(word);
           wordWasPlacedInPass = true;
           break;
         }
