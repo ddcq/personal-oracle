@@ -16,17 +16,6 @@ class ConfettiOverlay extends StatefulWidget {
 }
 
 class _ConfettiOverlayState extends State<ConfettiOverlay> {
-  @override
-  void initState() {
-    super.initState();
-    widget.controller.play();
-  }
-
-  @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

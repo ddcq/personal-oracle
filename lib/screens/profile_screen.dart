@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:oracle_d_asgard/screens/games/myth_story_page.dart';
 import 'package:oracle_d_asgard/screens/profile/deity_selection_screen.dart';
@@ -15,6 +17,9 @@ import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:share_plus/share_plus.dart';
 
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // For .sw and .h extensions
+import 'package:oracle_d_asgard/widgets/chibi_button.dart'; // For ChibiButton
+
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -27,6 +32,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool _isAdLoading = false;
+
   late Map<String, MythCard> _allMythCards;
   String? _profileName;
   final TextEditingController _nameController = TextEditingController();
@@ -113,6 +120,102 @@ class _ProfileScreenState extends State<ProfileScreen> {
       for (var card in story.correctOrder) {
         _allMythCards[card.id] = card;
       }
+    }
+  }
+
+  
+
+  void _showRewardedAd() async {
+    setState(() {
+      _isAdLoading = true;
+    });
+
+    RewardedAd.load(
+      adUnitId: 'ca-app-pub-9329709593733606/7159103317',
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          setState(() {
+            _isAdLoading = false;
+          });
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+            },
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              ad.dispose();
+              // Handle error, maybe show a message to the user
+              _showSnackBar('''Échec de l'affichage de la publicité. Veuillez réessayer.''');
+            },
+          );
+          ad.show(onUserEarnedReward: (ad, reward) async {
+            // Reward the user
+            final gamificationService = Provider.of<GamificationService>(context, listen: false);
+            CollectibleCard? wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+
+            if (wonCard != null) {
+              // Show success dialog
+              if (mounted) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Félicitations !'),
+                      content: Text('Vous avez gagné une nouvelle carte : ${wonCard.title} (${wonCard.version.name}) !'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text('OK'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  }
+                );
+              }
+            } else {
+              // All cards collected
+              if (mounted) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Collection Complète !'),
+                      content: const Text('Vous avez déjà toutes les cartes !'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text('OK'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  }
+                );
+              }
+            }
+            // Refresh the UI to show the new card
+            setState(() {});
+          });
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          setState(() {
+            _isAdLoading = false;
+          });
+          // Handle error, maybe show a message to the user
+          _showSnackBar('''Échec du chargement de la publicité. Veuillez réessayer.''');
+        },
+      ),
+    );
+  }
+
+  void _showSnackBar(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
     }
   }
 
@@ -301,6 +404,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 20),
                       _buildSectionTitle('Histoires débloquées'),
                       _buildUnlockedStories(storyProgress),
+                      const SizedBox(height: 20), // Spacing before the new button
+                      SizedBox(
+                        width: 0.8.sw,
+                        child: ChibiButton(
+                          text: _isAdLoading ? 'Chargement...' : 'Gagner une carte (pub)',
+                          color: Colors.green, // A new color for this button
+                          onPressed: _isAdLoading ? null : _showRewardedAd,
+                        ),
+                      ),
                       const SizedBox(height: 50),
                     ],
                   );

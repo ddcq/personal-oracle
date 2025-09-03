@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/screens/quiz_screen.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/services/database_service.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,6 +18,9 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  BannerAd? _bannerAd;
+  bool _isBannerAdLoaded = false;
+
   Future<void> _clearAndRebuildDatabase() async {
     final dbService = DatabaseService();
     try {
@@ -31,6 +36,40 @@ class _MainScreenState extends State<MainScreen> {
         SnackBar(content: Text('Failed to clear and rebuild database: $e')),
       );
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isIOS || Platform.isAndroid) {
+      _loadBannerAd();
+    }
+  }
+
+  @override
+  void dispose() {
+    if (Platform.isIOS || Platform.isAndroid) {
+      _bannerAd?.dispose();
+    }
+    super.dispose();
+  }
+
+  void _loadBannerAd() {
+    _bannerAd = BannerAd(
+      adUnitId: 'ca-app-pub-9329709593733606/5595843851',
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _isBannerAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          ad.dispose();
+        },
+      ),
+    )..load();
   }
 
   @override
@@ -201,6 +240,20 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
+          if (_isBannerAdLoaded && _bannerAd != null)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: _bannerAd!.size.width.toDouble(),
+                  height: _bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: _bannerAd!),
+                ),
+              ),
+            ),
         ],
       ),
     );

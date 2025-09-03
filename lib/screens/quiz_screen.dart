@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/data/app_data.dart';
 import '../models/question.dart';
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -22,9 +24,41 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
+  InterstitialAd? _interstitialAd;
   int currentQuestion = 0;
 
   Map<String, int> scores = {for (var trait in AppConstants.personalityTraits) trait: 0};
+
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isIOS || Platform.isAndroid) {
+      _loadInterstitialAd();
+    }
+  }
+
+  @override
+  void dispose() {
+    if (Platform.isIOS || Platform.isAndroid) {
+      _interstitialAd?.dispose();
+    }
+    super.dispose();
+  }
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: 'ca-app-pub-9329709593733606/2265869288',
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          _interstitialAd = ad;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          _interstitialAd = null;
+        },
+      ),
+    );
+  }
 
   void handleAnswer(int answerIndex) {
     final answer = AppData.questions[currentQuestion].answers[answerIndex];
@@ -40,7 +74,21 @@ class _QuizScreenState extends State<QuizScreen> {
         currentQuestion++;
       });
     } else {
-      _navigateToResult();
+      if (_interstitialAd != null) {
+        _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+          onAdDismissedFullScreenContent: (ad) {
+            ad.dispose();
+            _navigateToResult();
+          },
+          onAdFailedToShowFullScreenContent: (ad, error) {
+            ad.dispose();
+            _navigateToResult();
+          },
+        );
+        _interstitialAd!.show();
+      } else {
+        _navigateToResult();
+      }
     }
   }
 
