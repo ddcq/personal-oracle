@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/screens/games/word_search/word_search_controller.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -13,10 +14,7 @@ class WordSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
-    return ChangeNotifierProvider(
-      create: (_) => WordSearchController(gamificationService),
-      child: const _WordSearchView(),
-    );
+    return ChangeNotifierProvider(create: (_) => WordSearchController(gamificationService), child: const _WordSearchView());
   }
 }
 
@@ -36,10 +34,7 @@ class _WordSearchView extends StatelessWidget {
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0),
-                child: Text(
-                  'Niveau: ${controller.level}',
-                  style: ChibiTextStyles.appBarTitle,
-                ),
+                child: Text('Niveau: ${controller.level}', style: ChibiTextStyles.appBarTitle),
               ),
             ),
         ],
