@@ -16,6 +16,51 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      title: 'La Pêche du Serpent',
+      correctOrder: [
+        MythCard(
+          id: '1',
+          title: 'La quête du chaudron',
+          description: 'Un dieu sans marteau demande à un géant de l’aider à trouver un chaudron immense.',
+          imagePath: 'peche_1.jpg',
+          detailedStory:
+              'Dans les premières lueurs d’un matin sans soleil, un guerrier au regard de feu franchit les portes d’une caverne glacée. Sa démarche ferme résonnait dans le silence de la demeure du colosse qui l’habitait : un géant à la peau dure comme le givre, aux yeux pareils à des abîmes sans fond. Le jeune dieu n’était pas venu pour défier cet être colossal, mais pour quémander son aide. Il cherchait un chaudron d’une taille démesurée, assez vaste pour contenir l’hydromel des dieux. Le géant, d’abord amusé, laissa s’échapper un rire grave qui fit vibrer les murs de pierre. Puis son amusement se mua en méfiance : que voulait ce guerrier des cieux dans son royaume gelé ? Pourtant, sous le poids des regards, une alliance fragile se scella. Le colosse accepta, non sans arrière-pensée, de l’accompagner en mer. L’air se fit lourd de promesses de tempête, et déjà le destin du monde semblait prêt à basculer dans les flots. Entre ces deux êtres si dissemblables, une tension sourde naissait, faite d’orgueil, de défi et de crainte. Nul ne pouvait encore deviner que leur pacte mènerait à l’affrontement d’une créature dont la taille défiait l’imagination elle-même. Ainsi commença la quête qui devait mettre à l’épreuve le courage et la folie des dieux comme des géants.',
+        ),
+        MythCard(
+          id: '2',
+          title: 'Le sacrifice du taureau',
+          description: 'Le géant exige un appât digne des profondeurs, et un dieu arrache la tête d’un taureau.',
+          imagePath: 'peche_2.jpg',
+          detailedStory:
+              'Sous un ciel chargé de nuages noirs, le géant posa son exigence d’une voix grondante : seul un appât digne des abysses pouvait attirer la créature qu’ils cherchaient à piéger. Le dieu, sans hésiter, se dirigea vers le troupeau du colosse, choisissant le plus robuste des taureaux. L’animal, conscient de son destin, mugissait en défi, ses sabots labourant la terre gelée. Mais le jeune guerrier n’avait ni peur ni pitié : il agrippa les cornes et, dans un élan de force inhumaine, abattit la bête. Le sang chaud s’écoula sur la neige, formant une rivière écarlate qui contrastait avec l’éclat blafard de la glace. Le géant observa en silence, partagé entre la colère de la perte et l’admiration devant une telle brutalité. Le dieu souleva la tête du taureau, ses bras ruisselant de sang, et la brandit comme un trophée offert aux océans. L’air embaumait l’odeur du fer et de la mort, et déjà les mouettes tournaient en cercles au-dessus de la scène. Dans ce sacrifice, il n’y avait ni gloire ni beauté, seulement la nécessité brutale d’un pacte scellé dans le sang. Le vent se mit à hurler, comme si la mer elle-même avait senti l’offrande et réclamait désormais le reste. Ainsi fut forgé l’appât qui allait réveiller les profondeurs interdites.',
+        ),
+        MythCard(
+          id: '3',
+          title: 'L’océan sans fin',
+          description: 'Les deux compagnons embarquent sur une frêle barque et s’avancent dans l’océan en furie.',
+          imagePath: 'peche_3.jpg',
+          detailedStory:
+              'Ils embarquèrent dans une barque trop petite pour contenir tant de puissance et d’orgueil. Le géant, massif, saisit les rames et fendit les vagues avec des gestes lents mais puissants. À ses côtés, le dieu fixait l’horizon, ses yeux brillant d’une flamme que ni le vent ni le froid ne pouvaient éteindre. La mer se déchaînait, ses lames immenses s’écrasant contre le bois fragile qui gémissait sous l’assaut. Les nuages s’amoncelaient, lourds de tonnerre et de pluie, avalant le ciel dans un chaos d’ombres mouvantes. Le jeune guerrier lia la tête sanglante du taureau à un hameçon forgé de fer sombre, ses mains rapides malgré le roulis qui menaçait de les précipiter à la mer. Chaque clapotis résonnait comme un tambour funèbre, chaque rafale rappelait qu’ils naviguaient aux frontières du monde connu. Le silence entre eux était lourd, non d’inimitié, mais d’une crainte partagée : celle de ce qu’ils allaient convoquer des profondeurs. Le géant serrait les mâchoires, ses yeux inquiets se détournant de temps à autre vers son compagnon imprudent. Et pourtant, ni l’un ni l’autre n’aurait reculé. Car déjà, dans le fracas des vagues, ils devinaient que quelque chose remuait sous la surface, prêt à répondre à leur défi.',
+        ),
+        MythCard(
+          id: '4',
+          title: 'La morsure des profondeurs',
+          description: 'Le serpent du monde surgit de l’océan et le dieu lutte à mains nues pour le retenir.',
+          imagePath: 'peche_4.jpg',
+          detailedStory:
+              'Le silence de l’océan se rompit dans un fracas monstrueux lorsque la ligne tendue vibra comme un éclair de métal. Le dieu tira de toutes ses forces, et soudain les flots s’ouvrirent pour laisser émerger une horreur ancienne. Des écailles sombres comme la nuit, des yeux brûlant d’une lueur jaune, et des anneaux qui semblaient cercler le monde lui-même : le serpent des profondeurs surgissait, vomissant des torrents d’écume et de fureur. La barque se cabra, menaçant de se briser sous le poids de la bête. Le guerrier, les pieds plantés dans le bois trempé, tenait la corde comme s’il voulait retenir l’océan entier. Ses muscles saillaient, ses veines éclataient, son cri se mêlait au rugissement du tonnerre. Le géant, pris d’une terreur glaciale, recula, ses yeux écarquillés fixés sur la gueule béante qui aurait pu engloutir montagnes et citadelles. Le serpent, enragé, se tordait, ses anneaux fracassant les vagues en tempêtes, son souffle empestant la mort et le chaos. Chaque seconde de lutte semblait défier le temps lui-même, suspendu entre la victoire impossible et la catastrophe certaine. Les cieux se fendirent, éclairs illuminant cette lutte titanesque comme si les dieux eux-mêmes retenaient leur souffle devant ce duel.',
+        ),
+        MythCard(
+          id: '5',
+          title: 'Le combat inachevé',
+          description: 'Alors que le dieu allait frapper, le géant rompit la ligne et le serpent disparut dans les flots.',
+          imagePath: 'peche_5.jpg',
+          detailedStory:
+              'Le guerrier, le regard incandescent, s’était préparé à lever son poing contre la monstruosité qu’il tenait à sa merci. Chaque fibre de son être hurlait de poursuivre l’affrontement, d’abattre sur le serpent du monde la colère qui l’animait. Mais derrière lui, son compagnon géant, saisi d’une peur viscérale, vit déjà la fin de toute chose dans les anneaux de la bête. Son instinct, plus fort que son orgueil, prit le dessus. Dans un geste désespéré, il abattit sa hache sur la ligne tendue. Le fer trancha net, et la corde vibra comme un cri brisé. En un instant, le monstre se retira dans l’abîme, ses anneaux disparaissant sous les flots comme si la mer refermait une plaie béante. La barque, libérée de cette tension insoutenable, tangua violemment, faillant se briser sur elle-même. Le dieu se tourna, furieux, ses yeux flamboyants accusant le colosse de lâcheté. Mais il était trop tard : la mer s’était apaisée, et seule la tempête du ciel grondait encore. Ce combat inachevé laissait derrière lui un goût amer, un pressentiment terrible. Car tous deux savaient désormais que le serpent reviendrait. Et lorsque viendrait ce jour, ce ne serait plus sur une barque fragile, mais au cœur même du crépuscule des dieux.',
+        ),
+      ],
+    ),
+    MythStory(
       title: 'Les Ases et les Vanes',
       correctOrder: [
         MythCard(
