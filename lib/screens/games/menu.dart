@@ -25,8 +25,8 @@ class MenuPrincipal extends StatelessWidget {
     ),
     _MiniJeuItem("Le Serpent de Midgard", const Color(0xFF22C55E), () => const SnakeGame()),
     _MiniJeuItem("Conquête de Territoire", const Color(0xFFFF6B35), () => QixGameScreen()),
-    _MiniJeuItem("L'Œil d'Odin", const Color(0xFF8B5CF6), () => const WordSearchScreen()),
-    _MiniJeuItem("Chibi Démineur", Colors.brown, () => const MinesweeperScreen()),
+    _MiniJeuItem("L’Œil d’Odin", const Color(0xFF8B5CF6), () => const WordSearchScreen()),
+    _MiniJeuItem("Le Butin d’Andvari", Colors.brown, () => const MinesweeperScreen()),
   ];
 
   @override

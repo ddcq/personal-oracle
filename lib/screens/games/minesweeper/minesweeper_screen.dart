@@ -68,7 +68,7 @@ class _MinesweeperView extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: ChibiAppBar(titleText: 'Chibi Démineur'),
+      appBar: ChibiAppBar(titleText: 'Le Butin d’Andvari'),
       body: AppBackground(
         child: SafeArea(
           child: Column(
