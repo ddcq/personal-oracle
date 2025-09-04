@@ -29,15 +29,6 @@ class _WordSearchView extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
         titleText: 'L’Œil d’Odin',
-        actions: [
-          if (!controller.isLoading)
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: Text('Niveau: ${controller.level}', style: ChibiTextStyles.appBarTitle),
-              ),
-            ),
-        ],
       ),
       body: Stack(
         children: [
@@ -47,10 +38,6 @@ class _WordSearchView extends StatelessWidget {
                   ? const Center(child: CircularProgressIndicator())
                   : Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(controller.instructionClue, style: ChibiTextStyles.storyTitle, textAlign: TextAlign.center),
-                        ),
                         Expanded(
                           flex: 3,
                           child: Padding(
@@ -226,7 +213,20 @@ class _SecretWordInput extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Épelez le mot secret...", style: ChibiTextStyles.storyTitle),
+          Text(
+            controller.instructionClue,
+            style: ChibiTextStyles.storyTitle.copyWith(
+              fontSize: 28.sp,
+              shadows: [
+                const Shadow(
+                  blurRadius: 20.0,
+                  color: Colors.black,
+                  offset: Offset(5.0, 5.0),
+                ),
+              ],
+            ),
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 15),
           Wrap(
             alignment: WrapAlignment.center,
