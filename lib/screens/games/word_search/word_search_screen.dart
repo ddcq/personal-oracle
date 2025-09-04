@@ -86,59 +86,69 @@ class _Grid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 8 / 10,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final size = Size(constraints.maxWidth, constraints.maxHeight);
-          return GestureDetector(
-            onPanStart: controller.gamePhase == GamePhase.searchingWords
-                ? (details) {
-                    _handleInteraction(details.localPosition, size);
-                  }
-                : null,
-            onPanUpdate: controller.gamePhase == GamePhase.searchingWords
-                ? (details) {
-                    _handleInteraction(details.localPosition, size, isUpdate: true);
-                  }
-                : null,
-            onPanEnd: controller.gamePhase == GamePhase.searchingWords ? (_) => controller.endSelection() : null,
-            onTapUp: controller.gamePhase == GamePhase.unscramblingSecret
-                ? (details) {
-                    _handleInteraction(details.localPosition, size, isTap: true);
-                  }
-                : null,
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: controller.grid[0].length),
-              itemCount: controller.grid.length * controller.grid[0].length,
-              itemBuilder: (context, index) {
-                final row = index ~/ controller.grid[0].length;
-                final col = index % controller.grid[0].length;
-                final offset = Offset(col.toDouble(), row.toDouble());
-                final isSelected = controller.currentSelection.contains(offset);
-                final isConfirmed = controller.confirmedSelection.contains(offset);
-                return Container(
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? ChibiColors.buttonOrange.withAlpha(150)
-                        : isConfirmed
-                        ? ChibiColors.buttonBlue.withAlpha(150)
-                        : Colors.black.withAlpha(102),
-                    border: Border.all(color: Colors.white.withAlpha(150)),
-                  ),
-                  child: Center(
-                    child: Text(
-                      controller.grid[row][col],
-                      style: ChibiTextStyles.buttonText.copyWith(fontFamily: 'NotoSansRunic', fontSize: 18.sp),
-                    ),
-                  ),
-                );
-              },
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = Size(constraints.maxWidth, constraints.maxHeight);
+        final columnCount = controller.grid[0].length;
+        final rowCount = controller.grid.length;
+
+        // Handle potential division by zero if constraints are not properly defined yet
+        if (constraints.maxHeight == 0 || columnCount == 0) {
+          return const SizedBox.shrink(); // Or a placeholder
+        }
+
+        final childAspectRatio = (constraints.maxWidth / columnCount) / (constraints.maxHeight / rowCount);
+
+        return GestureDetector(
+          onPanStart: controller.gamePhase == GamePhase.searchingWords
+              ? (details) {
+                  _handleInteraction(details.localPosition, size);
+                }
+              : null,
+          onPanUpdate: controller.gamePhase == GamePhase.searchingWords
+              ? (details) {
+                  _handleInteraction(details.localPosition, size, isUpdate: true);
+                }
+              : null,
+          onPanEnd: controller.gamePhase == GamePhase.searchingWords ? (_) => controller.endSelection() : null,
+          onTapUp: controller.gamePhase == GamePhase.unscramblingSecret
+              ? (details) {
+                  _handleInteraction(details.localPosition, size, isTap: true);
+                }
+              : null,
+          child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columnCount,
+              childAspectRatio: childAspectRatio,
             ),
-          );
-        },
-      ),
+            itemCount: rowCount * columnCount,
+            itemBuilder: (context, index) {
+              final row = index ~/ columnCount;
+              final col = index % columnCount;
+              final offset = Offset(col.toDouble(), row.toDouble());
+              final isSelected = controller.currentSelection.contains(offset);
+              final isConfirmed = controller.confirmedSelection.contains(offset);
+              return Container(
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? ChibiColors.buttonOrange.withAlpha(150)
+                      : isConfirmed
+                      ? ChibiColors.buttonBlue.withAlpha(150)
+                      : Colors.black.withAlpha(102),
+                  border: Border.all(color: Colors.white.withAlpha(150)),
+                ),
+                child: Center(
+                  child: Text(
+                    controller.grid[row][col],
+                    style: ChibiTextStyles.buttonText.copyWith(fontFamily: 'NotoSansRunic', fontSize: 18.sp),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
