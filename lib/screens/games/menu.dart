@@ -7,6 +7,7 @@ import 'package:oracle_d_asgard/screens/games/puzzle/screen.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/screens/games/word_search/word_search_screen.dart';
+import 'package:oracle_d_asgard/screens/games/minesweeper/minesweeper_screen.dart';
 
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -25,6 +26,7 @@ class MenuPrincipal extends StatelessWidget {
     _MiniJeuItem("Le Serpent de Midgard", const Color(0xFF22C55E), () => const SnakeGame()),
     _MiniJeuItem("Conquête de Territoire", const Color(0xFFFF6B35), () => QixGameScreen()),
     _MiniJeuItem("L'Œil d'Odin", const Color(0xFF8B5CF6), () => const WordSearchScreen()),
+    _MiniJeuItem("Chibi Démineur", Colors.brown, () => const MinesweeperScreen()),
   ];
 
   @override
