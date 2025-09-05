@@ -60,21 +60,29 @@ class MinesweeperController with ChangeNotifier {
     }
   }
 
+  void _forEachAdjacentCell(int row, int col, Function(int, int) callback) {
+    for (int x = -1; x <= 1; x++) {
+      for (int y = -1; y <= 1; y++) {
+        if (x == 0 && y == 0) continue;
+        int newRow = row + x;
+        int newCol = col + y;
+        if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
+          callback(newRow, newCol);
+        }
+      }
+    }
+  }
+
   void _calculateAdjacentMines() {
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols; j++) {
         if (!board[i][j].hasMine) {
           int count = 0;
-          for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-              if (x == 0 && y == 0) continue;
-              int newRow = i + x;
-              int newCol = j + y;
-              if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols && board[newRow][newCol].hasMine) {
-                count++;
-              }
+          _forEachAdjacentCell(i, j, (newRow, newCol) {
+            if (board[newRow][newCol].hasMine) {
+              count++;
             }
-          }
+          });
           board[i][j].adjacentMines = count;
         }
       }
@@ -86,16 +94,11 @@ class MinesweeperController with ChangeNotifier {
       for (int j = 0; j < cols; j++) {
         if (!board[i][j].hasTreasure) {
           int count = 0;
-          for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-              if (x == 0 && y == 0) continue;
-              int newRow = i + x;
-              int newCol = j + y;
-              if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols && board[newRow][newCol].hasTreasure) {
-                count++;
-              }
+          _forEachAdjacentCell(i, j, (newRow, newCol) {
+            if (board[newRow][newCol].hasTreasure) {
+              count++;
             }
-          }
+          });
           board[i][j].adjacentTreasures = count;
         }
       }
@@ -132,34 +135,20 @@ class MinesweeperController with ChangeNotifier {
       // First click on a treasure, just reveal it. Do nothing else.
       // The second click will be handled by the 'if (board[row][col].isRevealed)' block above.
     } else if (board[row][col].adjacentMines == 0 && board[row][col].adjacentTreasures == 0) {
-      for (int x = -1; x <= 1; x++) {
-        for (int y = -1; y <= 1; y++) {
-          if (x == 0 && y == 0) continue;
-          int newRow = row + x;
-          int newCol = col + y;
-          if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
-            revealCell(newRow, newCol);
-          }
-        }
-      }
+      _forEachAdjacentCell(row, col, (newRow, newCol) {
+        revealCell(newRow, newCol);
+      });
     }
     notifyListeners();
   }
 
   void _updateAdjacentCounts(int row, int col) {
-    for (int x = -1; x <= 1; x++) {
-      for (int y = -1; y <= 1; y++) {
-        if (x == 0 && y == 0) continue;
-        int newRow = row + x;
-        int newCol = col + y;
-        if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
-          // Only decrement if the cell is not a mine or treasure itself
-          if (!board[newRow][newCol].hasMine && !board[newRow][newCol].hasTreasure) {
-            board[newRow][newCol].adjacentTreasures--;
-          }
-        }
+    _forEachAdjacentCell(row, col, (newRow, newCol) {
+      // Only decrement if the cell is not a mine or treasure itself
+      if (!board[newRow][newCol].hasMine && !board[newRow][newCol].hasTreasure) {
+        board[newRow][newCol].adjacentTreasures--;
       }
-    }
+    });
   }
 
   void toggleFlag(int row, int col) {

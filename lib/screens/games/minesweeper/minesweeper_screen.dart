@@ -192,12 +192,26 @@ String _getRuneForTreasures(int count) {
 class _RuneLegend extends StatelessWidget {
   const _RuneLegend();
 
+  List<Widget> _buildRuneTexts(Map<int, String> runes, TextStyle style, {String Function(int)? suffixBuilder}) {
+    return runes.entries.map((entry) {
+      final suffix = suffixBuilder != null ? suffixBuilder(entry.key) : '';
+      return Text('${entry.value} (${entry.key}$suffix)', style: style);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double uniformFontSize = MediaQuery.of(context).size.width * 0.04; // Responsive font size
     TextStyle legendTextStyle = ChibiTextStyles.buttonText.copyWith(fontSize: uniformFontSize);
     TextStyle mineRuneTextStyle = legendTextStyle.copyWith(color: Colors.red);
     TextStyle treasureRuneTextStyle = legendTextStyle.copyWith(color: Colors.yellow);
+
+    final Map<int, String> mineRunes = {
+      1: 'ᛚ', 2: 'ᚨ', 3: 'ᚾ', 4: 'ᛋ', 5: 'ᚱ', 6: 'ᚹ', 7: 'ᛟ', 8: 'ᛞ'
+    };
+    final Map<int, String> treasureRunes = {
+      1: 'ᛇ', 2: 'ᛏ'
+    };
 
     return Container(
       padding: const EdgeInsets.all(8.0),
@@ -217,18 +231,10 @@ class _RuneLegend extends StatelessWidget {
             runSpacing: 4.0,
             children: [
               Text('Mines :', style: legendTextStyle),
-              Text('ᛚ (1)', style: mineRuneTextStyle),
-              Text('ᚨ (2)', style: mineRuneTextStyle),
-              Text('ᚾ (3)', style: mineRuneTextStyle),
-              Text('ᛋ (4)', style: mineRuneTextStyle),
-              Text('ᚱ (5)', style: mineRuneTextStyle),
-              Text('ᚹ (6)', style: mineRuneTextStyle),
-              Text('ᛟ (7)', style: mineRuneTextStyle),
-              Text('ᛞ (8)', style: mineRuneTextStyle),
+              ..._buildRuneTexts(mineRunes, mineRuneTextStyle),
               const SizedBox(width: 16), // Spacer
               Text('Trésors :', style: legendTextStyle),
-              Text('ᛇ (1)', style: treasureRuneTextStyle),
-              Text('ᛏ (2+)', style: treasureRuneTextStyle),
+              ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, suffixBuilder: (count) => count == 1 ? '' : '+'),
             ],
           ),
         ],
