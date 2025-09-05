@@ -37,6 +37,19 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   }
 
   void _resetGame() {
+    final dimensions = _calculatePuzzleDimensions(context);
+
+    // Update the game with the new piece size and board dimensions
+    _game.pieceSize = dimensions['pieceSize'];
+    _game.rows = _rows;
+    _game.cols = _cols;
+
+    setState(() {
+      _game.initializeAndScatter(dimensions['puzzleBoardBounds'], MediaQuery.of(context).size);
+    });
+  }
+
+  Map<String, dynamic> _calculatePuzzleDimensions(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final bool isPortrait = screenHeight > screenWidth;
@@ -55,14 +68,10 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
 
     final Rect puzzleBoardBounds = Rect.fromLTWH(boardX, boardY, calculatedPuzzleWidth, calculatedPuzzleHeight);
 
-    // Update the game with the new piece size and board dimensions
-    _game.pieceSize = calculatedPieceSize;
-    _game.rows = _rows;
-    _game.cols = _cols;
-
-    setState(() {
-      _game.initializeAndScatter(puzzleBoardBounds, MediaQuery.of(context).size);
-    });
+    return {
+      'pieceSize': calculatedPieceSize,
+      'puzzleBoardBounds': puzzleBoardBounds,
+    };
   }
 
   void _showVictoryDialog(CollectibleCard rewardCard) {

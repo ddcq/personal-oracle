@@ -14,6 +14,9 @@ import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'dart:math';
 
 class DashedRectangleComponent extends RectangleComponent {
+  static const double _dashLength = 5.0;
+  static const double _spaceLength = 5.0;
+
   DashedRectangleComponent({required Rect rect}) : super(position: Vector2(rect.left, rect.top), size: Vector2(rect.width, rect.height)) {
     paint = Paint()
       ..color = Colors.grey
@@ -24,10 +27,10 @@ class DashedRectangleComponent extends RectangleComponent {
   @override
   void render(Canvas canvas) {
     final Path path = Path();
-    _drawDashedLine(path, Offset.zero, Offset(size.x, 0), 5.0, 5.0);
-    _drawDashedLine(path, Offset(size.x, 0), Offset(size.x, size.y), 5.0, 5.0);
-    _drawDashedLine(path, Offset(size.x, size.y), Offset(0, size.y), 5.0, 5.0);
-    _drawDashedLine(path, Offset(0, size.y), Offset.zero, 5.0, 5.0);
+    _drawDashedLine(path, Offset.zero, Offset(size.x, 0), _dashLength, _spaceLength);
+    _drawDashedLine(path, Offset(size.x, 0), Offset(size.x, size.y), _dashLength, _spaceLength);
+    _drawDashedLine(path, Offset(size.x, size.y), Offset(0, size.y), _dashLength, _spaceLength);
+    _drawDashedLine(path, Offset(0, size.y), Offset.zero, _dashLength, _spaceLength);
     canvas.drawPath(path, paint);
   }
 
@@ -70,29 +73,7 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
-    final unearnedContent = await _gamificationService.getUnearnedContent();
-    final List<CollectibleCard> unearnedCollectibleCards = unearnedContent['unearned_collectible_cards'].cast<CollectibleCard>();
-
-    final List<CollectibleCard> availableCards = [];
-    for (var card in unearnedCollectibleCards) {
-      if (await _assetExists(card.imagePath)) {
-        availableCards.add(card);
-      }
-    }
-
-    String imageToLoad;
-    if (availableCards.isNotEmpty) {
-      final random = Random();
-      final selected = availableCards[random.nextInt(availableCards.length)];
-      imageToLoad = selected.imagePath;
-      associatedCard = selected;
-    } else {
-      // Fallback image if no unearned cards
-      imageToLoad = 'home_illu.png';
-      associatedCard = null; // No specific card to unlock
-    }
-    puzzleImage = await Flame.images.load(imageToLoad);
+    await _loadImageForPuzzle();
 
     // Dessiner le plateau de jeu en pointillés
     final double pieceSize = puzzleGame.pieceSize;
@@ -125,6 +106,31 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
     }
   }
 
+  Future<void> _loadImageForPuzzle() async {
+    final unearnedContent = await _gamificationService.getUnearnedContent();
+    final List<CollectibleCard> unearnedCollectibleCards = unearnedContent['unearned_collectible_cards'].cast<CollectibleCard>();
+
+    final List<CollectibleCard> availableCards = [];
+    for (var card in unearnedCollectibleCards) {
+      if (await _assetExists(card.imagePath)) {
+        availableCards.add(card);
+      }
+    }
+
+    String imageToLoad;
+    if (availableCards.isNotEmpty) {
+      final random = Random();
+      final selected = availableCards[random.nextInt(availableCards.length)];
+      imageToLoad = selected.imagePath;
+      associatedCard = selected;
+    } else {
+      // Fallback image if no unearned cards
+      imageToLoad = 'home_illu.png';
+      associatedCard = null; // No specific card to unlock
+    }
+    puzzleImage = await Flame.images.load(imageToLoad);
+  }
+
   void onGameCompletedFromPuzzleGame() async {
     if (associatedCard != null) {
       await _gamificationService.unlockCollectibleCard(associatedCard!); // Pass the CollectibleCard object
@@ -134,6 +140,17 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
 }
 
 class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
+  static const double _cornerRadius = 8.0;
+  static const double _borderStrokeWidth = 1.5;
+  static const double _shadowBlurRadiusDefault = 5.0;
+  static const double _shadowBlurRadiusDragging = 10.0;
+  static const int _shadowAlphaDefault = 102;
+  static const int _shadowAlphaDragging = 178;
+  static const int _bevelAlphaLight = 89;
+  static const int _bevelAlphaMedium = 25;
+  static const int _bevelAlphaDark = 115;
+  static const int _borderAlpha = 51;
+
   final PuzzlePieceData pieceData;
   final PuzzleFlameGame gameRef;
   final double offsetX;
@@ -184,15 +201,14 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   @override
   void render(Canvas canvas) {
     final Rect destRect = size.toRect();
-    const double cornerRadius = 8.0;
-    final RRect pieceRRect = RRect.fromRectAndRadius(destRect, const Radius.circular(cornerRadius));
+    final RRect pieceRRect = RRect.fromRectAndRadius(destRect, const Radius.circular(_cornerRadius));
 
     // 1. Dessiner l’ombre portée pour l’effet de flottement
     if (!pieceData.isLocked) {
       _shadowPaint
         ..color = Colors.black
-            .withAlpha((_isDragging ? 178 : 102)) // Ombre plus prononcée
-        ..maskFilter = MaskFilter.blur(BlurStyle.normal, _isDragging ? 10.0 : 5.0); // Flou plus important
+            .withAlpha((_isDragging ? _shadowAlphaDragging : _shadowAlphaDefault)) // Ombre plus prononcée
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, _isDragging ? _shadowBlurRadiusDragging : _shadowBlurRadiusDefault); // Flou plus important
 
       final Offset currentShadowOffset = _isDragging ? _draggingShadowOffset : _defaultShadowOffset;
       canvas.drawRRect(pieceRRect.shift(currentShadowOffset), _shadowPaint);
@@ -214,10 +230,10 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
         end: Alignment.bottomRight,
         stops: const [0.0, 0.4, 0.6, 1.0],
         colors: [
-          Colors.white.withAlpha(89), // Lumière en haut à gauche
-          Colors.white.withAlpha(25),
-          Colors.black.withAlpha(25),
-          Colors.black.withAlpha(115), // Ombre en bas à droite
+          Colors.white.withAlpha(_bevelAlphaLight), // Lumière en haut à gauche
+          Colors.white.withAlpha(_bevelAlphaMedium),
+          Colors.black.withAlpha(_bevelAlphaMedium),
+          Colors.black.withAlpha(_bevelAlphaDark), // Ombre en bas à droite
         ],
       ).createShader(destRect);
 
@@ -226,9 +242,9 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
 
     // 4. Ajouter une bordure pour mieux définir la pièce
     final Paint borderPaint = Paint()
-      ..color = Colors.black.withAlpha(51)
+      ..color = Colors.black.withAlpha(_borderAlpha)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
+      ..strokeWidth = _borderStrokeWidth;
     canvas.drawRRect(pieceRRect, borderPaint);
 
     // Restaurer l’état du canvas

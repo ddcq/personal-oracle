@@ -3,6 +3,7 @@ import 'dart:ui';
 import './puzzle_model.dart'; // Le modèle pur créé à l’étape 1
 
 class PuzzleGame {
+  static const double _snapThreshold = 20.0;
   List<PuzzlePieceData> pieces = [];
   late int rows;
   late int cols;
@@ -54,10 +55,9 @@ class PuzzleGame {
 
   bool handlePieceDrop(int pieceId, Offset droppedPosition) {
     final piece = pieces.firstWhere((p) => p.id == pieceId);
-    final double snapThreshold = 20.0;
     final double distance = (droppedPosition - piece.targetPosition).distance;
 
-    if (distance < snapThreshold) {
+    if (distance < _snapThreshold) {
       piece.currentPosition = piece.targetPosition;
       piece.isLocked = true;
       if (isGameCompleted()) {
