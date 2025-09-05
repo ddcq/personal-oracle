@@ -30,14 +30,14 @@ class _MinesweeperView extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return GameOverPopup(
-              content: const Text('BOOM! You hit a mine.'),
+              content: const Text('BOUM ! Vous avez touché une mine.'),
               actions: [
                 ChibiButton(
                   onPressed: () {
                     controller.initializeGame();
                     Navigator.of(context).pop();
                   },
-                  text: 'Restart',
+                  text: 'Recommencer',
                   color: ChibiColors.buttonBlue,
                 ),
               ],
@@ -72,7 +72,7 @@ class _MinesweeperView extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('Treasures Found: ${controller.treasuresFound} / ${controller.treasureCount}', style: ChibiTextStyles.storyTitle),
+                child: Text('Trésors trouvés: ${controller.treasuresFound} / ${controller.treasureCount}', style: ChibiTextStyles.storyTitle),
               ),
               _RuneLegend(),
               Expanded(
@@ -216,7 +216,7 @@ class _RuneLegend extends StatelessWidget {
             spacing: 8.0,
             runSpacing: 4.0,
             children: [
-              Text('Mines:', style: legendTextStyle),
+              Text('Mines :', style: legendTextStyle),
               Text('ᛚ (1)', style: mineRuneTextStyle),
               Text('ᚨ (2)', style: mineRuneTextStyle),
               Text('ᚾ (3)', style: mineRuneTextStyle),
@@ -226,7 +226,7 @@ class _RuneLegend extends StatelessWidget {
               Text('ᛟ (7)', style: mineRuneTextStyle),
               Text('ᛞ (8)', style: mineRuneTextStyle),
               const SizedBox(width: 16), // Spacer
-              Text('Trésors:', style: legendTextStyle),
+              Text('Trésors :', style: legendTextStyle),
               Text('ᛇ (1)', style: treasureRuneTextStyle),
               Text('ᛏ (2+)', style: treasureRuneTextStyle),
             ],
