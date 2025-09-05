@@ -73,26 +73,34 @@ class _SnakeGameState extends State<SnakeGame> {
       barrierDismissible: false, // User must interact with the button
       builder: (BuildContext context) {
         if (isVictory) {
-          return VictoryPopup(
-            rewardCard: wonCard!,
-            onDismiss: () {
-              Navigator.of(context).pop();
-              _game?.resetGame();
-            },
-            onSeeRewards: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
-            },
-          );
+          return _buildVictoryDialog(wonCard!); // Pass wonCard directly
         } else {
-          return SnakeGameOverPopup(
-            score: score,
-            onResetGame: () {
-              _game?.resetGame();
-              _showStartPopup();
-            },
-          );
+          return _buildGameOverDialog(score);
         }
+      },
+    );
+  }
+
+  Widget _buildVictoryDialog(CollectibleCard wonCard) {
+    return VictoryPopup(
+      rewardCard: wonCard,
+      onDismiss: () {
+        Navigator.of(context).pop();
+        _game?.resetGame();
+      },
+      onSeeRewards: () {
+        Navigator.of(context).pop();
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
+      },
+    );
+  }
+
+  Widget _buildGameOverDialog(int score) {
+    return SnakeGameOverPopup(
+      score: score,
+      onResetGame: () {
+        _game?.resetGame();
+        _showStartPopup();
       },
     );
   }
@@ -136,87 +144,16 @@ class _SnakeGameState extends State<SnakeGame> {
               _currentLevel = snapshot.data!; // Get the level from snapshot
 
               if (_game == null) {
-                // Initialize _game here
-                final Completer<void> completer = Completer<void>();
-                _game = SnakeFlameGame(
-                  gamificationService: Provider.of<GamificationService>(context, listen: false),
-                  onGameEnd: (score, {required isVictory, CollectibleCard? wonCard}) async {
-                    if (isVictory) {
-                      await Provider.of<GamificationService>(context, listen: false).saveSnakeDifficulty(_currentLevel + 1);
-                    }
-                    _handleGameEnd(score, isVictory: isVictory, wonCard: wonCard);
-                  },
-                  onResetGame: () {
-                    _game!.resetGame(); // Use _game! because it's nullable
-                  },
-                  onRottenFoodEaten: () {
-                    _game!.shakeScreen(); // Use _game!
-                  },
-                  level: _currentLevel,
-                  onGameLoaded: () {
-                    completer.complete();
-                    _game?.startGame(); // Start the game automatically
-                  },
-                  onScoreChanged: () {
-                    setState(() {});
-                  },
-                );
-
-                completer.future.then((_) {
-                  // Removed _showStartPopup() as per user request.
-                });
+                _game = _createSnakeFlameGame(_currentLevel);
               }
 
               // Game is initialized, show the game content
               return Column(
                 children: [
                   Expanded(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        final gameSize = constraints.biggest.shortestSide;
-                        final wallThickness = gameSize / (GameState.gridSize + 2); // 1 cell for wall
-                        final gameAreaSize = gameSize - (wallThickness * 2); // Inner game area
-
-                        return Center(
-                          child: SizedBox(
-                            width: gameSize,
-                            height: gameSize,
-                            child: Stack(
-                              children: [
-                                // Background wall image for the entire gameSize area
-                                Positioned.fill(child: Image.asset('assets/images/backgrounds/wall.webp', fit: BoxFit.fill)),
-                                // Centered black square for the game area
-                                Center(
-                                  child: Container(
-                                    width: gameAreaSize,
-                                    height: gameAreaSize,
-                                    color: Colors.black, // Black square
-                                    child: GameWidget(
-                                      game: _game!, // Use _game!
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    child: _buildGameArea(context),
                   ),
-                  // Add the new Text widget here
-                  Text(
-                    'Niveau: $_currentLevel | Score: ${_game!.gameState.score}', // Use _game!
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                  ),
-                  // Contrôles directionnels pour mobile
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: DirectionalPad(
-                      onDirectionChanged: (Direction direction) {
-                        _game!.gameLogic.changeDirection(_game!.gameState, direction); // Use _game!
-                      },
-                    ),
-                  ),
+                  _buildGameInfoAndControls(),
                 ],
               );
             } else {
@@ -226,6 +163,92 @@ class _SnakeGameState extends State<SnakeGame> {
           },
         ),
       ),
+    );
+  }
+
+  SnakeFlameGame _createSnakeFlameGame(int level) {
+    final Completer<void> completer = Completer<void>();
+    final game = SnakeFlameGame(
+      gamificationService: Provider.of<GamificationService>(context, listen: false),
+      onGameEnd: (score, {required isVictory, CollectibleCard? wonCard}) async {
+        if (isVictory) {
+          await Provider.of<GamificationService>(context, listen: false).saveSnakeDifficulty(_currentLevel + 1);
+        }
+        _handleGameEnd(score, isVictory: isVictory, wonCard: wonCard);
+      },
+      onResetGame: () {
+        _game!.resetGame(); // Use _game! because it's nullable
+      },
+      onRottenFoodEaten: () {
+        _game!.shakeScreen(); // Use _game!
+      },
+      level: level,
+      onGameLoaded: () {
+        completer.complete();
+        _game?.startGame(); // Start the game automatically
+      },
+      onScoreChanged: () {
+        setState(() {});
+      },
+    );
+    completer.future.then((_) {
+      // Removed _showStartPopup() as per user request.
+    });
+    return game;
+  }
+
+  Widget _buildGameArea(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final gameSize = constraints.biggest.shortestSide;
+        final wallThickness = gameSize / (GameState.gridSize + 2); // 1 cell for wall
+        final gameAreaSize = gameSize - (wallThickness * 2); // Inner game area
+
+        return Center(
+          child: SizedBox(
+            width: gameSize,
+            height: gameSize,
+            child: Stack(
+              children: [
+                // Background wall image for the entire gameSize area
+                Positioned.fill(child: Image.asset('assets/images/backgrounds/wall.webp', fit: BoxFit.fill)),
+                // Centered black square for the game area
+                Center(
+                  child: Container(
+                    width: gameAreaSize,
+                    height: gameAreaSize,
+                    color: Colors.black, // Black square
+                    child: GameWidget(
+                      game: _game!, // Use _game!
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildGameInfoAndControls() {
+    return Column(
+      children: [
+        // Add the new Text widget here
+        Text(
+          'Niveau: $_currentLevel | Score: ${_game!.gameState.score}', // Use _game!
+          style: TextStyle(color: Colors.white, fontSize: 12),
+        ),
+        // Contrôles directionnels pour mobile
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: DirectionalPad(
+            onDirectionChanged: (Direction direction) {
+              _game!.gameLogic.changeDirection(_game!.gameState, direction); // Use _game!
+            },
+          ),
+        ),
+      ],
     );
   }
 }

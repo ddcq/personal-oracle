@@ -17,6 +17,23 @@ import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
 class SnakeFlameGame extends FlameGame with KeyboardEvents {
+  static const double _shakeIntensity = 10.0;
+  static const int _shakeDurationMs = 200;
+  static const int _shakeIntervalMs = 50;
+  static const int _gameSpeedInitial = 300; // milliseconds
+  static const double _growthAnimationPeriod = 0.15;
+  static const double _foodRottingTimeBase = 8.0;
+  static const double _foodRottingTimeLevelFactor = 0.5;
+  static const int _vibrationDurationShort = 100;
+  static const int _vibrationDurationMedium = 200;
+  static const int _vibrationDurationLong = 500;
+  static const int _vibrationAmplitudeHigh = 255;
+  static const int _victoryScoreThreshold = 200;
+  static const int _speedReductionScoreInterval = 20;
+  static const double _speedReductionFactor = 20.0;
+  static const double _speedAccelerationPerLevel = 0.1;
+  static const int _minGameSpeed = 50;
+
   final GameLogic gameLogic = GameLogic();
   late GameState gameState;
   final GamificationService gamificationService;
@@ -45,23 +62,20 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
   void shakeScreen() {
     final originalPosition = camera.viewfinder.position.clone();
-    const double shakeIntensity = 10.0;
-    const int shakeDurationMs = 200; // 0.2 seconds
 
     // Simple shake by rapidly changing camera position
-    async.Timer.periodic(const Duration(milliseconds: 50), (timer) {
-      if (timer.tick * 50 > shakeDurationMs) {
+    async.Timer.periodic(const Duration(milliseconds: _shakeIntervalMs), (timer) {
+      if (timer.tick * _shakeIntervalMs > _shakeDurationMs) {
         timer.cancel();
         camera.viewfinder.position = originalPosition; // Reset camera position
         return;
       }
       final random = Random();
       camera.viewfinder.position =
-          originalPosition + Vector2((random.nextDouble() - 0.5) * shakeIntensity * 2, (random.nextDouble() - 0.5) * shakeIntensity * 2);
+          originalPosition + Vector2((random.nextDouble() - 0.5) * _shakeIntensity * 2, (random.nextDouble() - 0.5) * _shakeIntensity * 2);
     });
   }
 
-  static const int gameSpeed = 300; // milliseconds
   double timeSinceLastTick = 0;
 
   late final double cellSize;
@@ -103,7 +117,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       gameState: gameState,
       cellSize: cellSize,
       snakeHeadSprite: snakeHeadSprite,
-      animationDuration: gameSpeed / 1000.0, // Initial animation duration
+      animationDuration: _gameSpeedInitial / 1000.0, // Initial animation duration
     );
     add(_snakeComponent);
 
@@ -113,7 +127,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     // Initialize growth animation timer
     _growthAnimationTimer = TimerComponent(
-      period: 0.15, // 150 milliseconds
+      period: _growthAnimationPeriod, // 150 milliseconds
       autoStart: false,
       onTick: () {},
     );
@@ -165,7 +179,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     // Food aging logic
     gameState.foodAge += dt;
-    final double foodRottingTime = 8.0 - (gameLogic.level * 0.5); // Adjusted rotting time
+    final double foodRottingTime = _foodRottingTimeBase - (gameLogic.level * _foodRottingTimeLevelFactor); // Adjusted rotting time
     if (gameState.foodAge >= foodRottingTime) {
       // 8 seconds for each stage
       gameState.foodAge = 0.0; // Reset timer after state change
@@ -191,6 +205,12 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     // Interpolate snake position for smooth movement
   }
 
+  double _calculateGameSpeed(int currentScore) {
+    final double baseSpeedReduction = (currentScore ~/ _speedReductionScoreInterval) * _speedReductionFactor;
+    final double acceleratedSpeedReduction = baseSpeedReduction * (1 + gameLogic.level * _speedAccelerationPerLevel); // 10% faster per level
+    return (_gameSpeedInitial - acceleratedSpeedReduction).clamp(_minGameSpeed, _gameSpeedInitial).toDouble();
+  }
+
   void tick() async {
     // Made tick() async
     final wasGameOver = gameState.isGameOver;
@@ -208,10 +228,10 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       // Vibrate based on food type
       switch (oldFoodType) {
         case FoodType.regular:
-          Vibration.vibrate(duration: 100);
+          Vibration.vibrate(duration: _vibrationDurationShort);
           break;
         case FoodType.golden:
-          Vibration.vibrate(duration: 100, amplitude: 255);
+          Vibration.vibrate(duration: _vibrationDurationShort, amplitude: _vibrationAmplitudeHigh);
           break;
         case FoodType.rotten:
           // No vibration for rotten food
@@ -220,9 +240,9 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     } else if (oldScore > gameState.score) {
       // Rotten apple eaten
       onScoreChanged?.call();
-      Vibration.vibrate(duration: 200, amplitude: 255);
-      await Future.delayed(const Duration(milliseconds: 200));
-      Vibration.vibrate(duration: 200, amplitude: 255);
+      Vibration.vibrate(duration: _vibrationDurationMedium, amplitude: _vibrationAmplitudeHigh);
+      await Future.delayed(const Duration(milliseconds: _vibrationDurationMedium));
+      Vibration.vibrate(duration: _vibrationDurationMedium, amplitude: _vibrationAmplitudeHigh);
     }
 
     // Update food
@@ -233,8 +253,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     if (!wasGameOver && gameState.isGameOver) {
       pauseEngine();
-      Vibration.vibrate(duration: 500); // Game over vibration
-      final bool isVictory = gameState.score >= 200;
+      Vibration.vibrate(duration: _vibrationDurationLong); // Game over vibration
+      final bool isVictory = gameState.score >= _victoryScoreThreshold;
       CollectibleCard? wonCard;
 
       if (isVictory) {
@@ -281,12 +301,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     }
   }
 
-  double _calculateGameSpeed(int currentScore) {
-    final double baseSpeedReduction = (currentScore ~/ 20) * 20.0;
-    final double acceleratedSpeedReduction = baseSpeedReduction * (1 + gameLogic.level * 0.1); // 10% faster per level
-    return (300 - acceleratedSpeedReduction).clamp(50, 300).toDouble();
-  }
-
   void resetGame() {
     // Reinitialize gameState to its initial state
     gameState = GameState.initial();
@@ -300,7 +314,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       gameState: gameState,
       cellSize: cellSize,
       snakeHeadSprite: snakeHeadSprite,
-      animationDuration: gameSpeed / 1000.0, // Initial animation duration
+      animationDuration: _gameSpeedInitial / 1000.0, // Initial animation duration
     );
     add(_snakeComponent);
 
