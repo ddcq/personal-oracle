@@ -61,61 +61,55 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
-      title: 'Les Ases et les Vanes',
+      title: 'La Guerre des Ases et des Vanes',
       correctOrder: [
         MythCard(
           id: '1',
-          title: 'L’ombre qui saigne : Heiðr et le seiðr',
-          description:
-              'Heiðr apporte le seiðr à Asgard, révélant convoitise et crainte. Percée et brûlée trois fois, elle renaît, et la guerre devient inéluctable.',
+          title: 'L’ombre de la discorde',
+          description: 'La magie des Vanes émerveille mais inquiète les Ases, et la méfiance s’installe.',
           imagePath: 'ases_vanes_1.jpg',
           detailedStory:
-              'La grande salle grondait comme une coque prise dans la houle. Les Ases avaient invité la devineresse venue du sud des vents. On la nommait Heiðr, étincelle de regards, porteuse du seiðr. Elle parlait d’or rouge et de désirs tordus. Ses mots dévoilaient la chair du destin. Odin écoutait sans cligner, la main posée sur une lance sans nom. Les flammes vacillaient comme si elles craignaient sa voix. Alors des murmures devinrent couteaux. On accusa la sorcière d’avoir mordu le cœur de la salle. Des piques tombèrent comme la grêle. Elle fut percée, puis brûlée, puis encore. Trois fois, la cendre fut cendre. Trois fois, la femme se releva, plus dure que le fer. Les yeux de Thor s’assombrirent, mais il resta les poings nus. Le seiðr avait dévoilé trop de failles. La querelle venait de trouver son nom. La guerre leva la tête derrière les poutres.',
+              'Dans la grande salle des dieux du ciel, les flammes des torches projetaient sur les murs des ombres vacillantes qui semblaient écouter les murmures des immortels. Les Vanes, maîtres des champs et des récoltes, avaient introduit une magie nouvelle, née de la terre et des saisons, qui fascinait autant qu’elle effrayait. Les Ases, guerriers d’Asgard, regardaient cette puissance d’un œil méfiant : ce savoir étranger remettait en cause leur autorité. Parmi eux, certains y voyaient une chance, d’autres une menace. Les mots échangés se transformèrent en accusations, et les accusations en colères à peine contenues. Le silence entre deux discours n’était plus celui du respect, mais celui d’un orage prêt à éclater. L’avidité se mêlait à la crainte, et l’orgueil à la jalousie. Le vent qui soufflait contre les portes de la salle semblait lui-même annoncer une rupture. Quand le regard des uns devint trop lourd, quand les mains se crispèrent sur les accoudoirs, chacun comprit que le fil qui unissait ces deux clans était sur le point de se rompre. L’équilibre fragile du monde s’inclinait déjà vers le chaos.',
         ),
         MythCard(
           id: '2',
-          title: 'Le premier javelot : la guerre commence',
-          description:
-              'Un premier javelot ouvre les hostilités. Les Vanes déchaînent leur magie de terre et de mer, les Ases opposent discipline et courage, et le champ devient tornade.',
+          title: 'L’étincelle de la guerre',
+          description: 'Un conflit éclate après que les Ases aient tenté de détruire une magicienne vane.',
           imagePath: 'ases_vanes_2.jpg',
           detailedStory:
-              'Sur le seuil d’Asgard, un javelot fendit l’air comme un verdict. Il se planta dans la terre noire et le tonnerre répondit. Les cornes sonnèrent, les étendards cognèrent le vent. Les Vanes sortirent des brumes, la peau marquée par la mer et les moissons. Ils portaient une magie qui sentait la tourbe et la sève. Les Ases alignèrent leurs boucliers, austères, polis par les anciens pactes. Le sol vibrait sous les pas, avalant le silence. Des cris déchirèrent le ciel. La première mêlée eut la saveur du fer humide. Odin menait d’un regard, sa lance traçant des arcs sobres. Thor frappait avec la force brute de l’orage, sans outil ni talisman. Freyja, aux Vanes, lança des tissages invisibles qui dénouaient la peur. Les éclairs passaient comme des bêtes affolées. La poussière s’accrocha aux dieux. Le jour vacilla, coupé en deux. La guerre avait un visage. Et il n’était pas miséricordieux.',
+              'La tension trouva son incarnation dans une femme venue des Vanes, messagère et maîtresse des arcanes de la fertilité. Sa beauté éclatante et son savoir mystérieux troublaient l’ordre établi. Les Ases, incapables de supporter une telle indépendance, tentèrent de la réduire au silence par le feu. Mais trois fois les flammes dévorèrent son corps, et trois fois elle renaquit, plus forte, plus rayonnante, comme si la terre elle-même refusait de la céder aux flammes. Cet affrontement révéla au grand jour l’abîme qui séparait les deux peuples. Les Vanes, outrés de ce sacrilège, se levèrent en armes, appelant les vents et les moissons à leur aide. Les Ases, blessés dans leur fierté, saisirent leurs lances et se préparèrent au combat. La guerre n’éclata pas dans un cri, mais dans un silence funeste, lorsque chacun sut qu’aucun retour en arrière n’était possible. Le premier sang coula bientôt, et avec lui se brisa l’illusion d’une paix durable. Désormais, l’air était chargé de cendres et de malédictions.',
         ),
         MythCard(
           id: '3',
-          title: 'Le siège et les illusions',
-          description:
-              'Les Vanes assiègent Asgard à coups d’illusions et de brume. Les Ases résistent, guidés par Heimdall et la prouesse brute, sans gain décisif.',
+          title: 'La guerre des dieux',
+          description: 'Ases et Vanes s’affrontent sans répit, ravageant terres et cieux.',
           imagePath: 'ases_vanes_3.jpg',
           detailedStory:
-              'Les Vanes se coulèrent jusqu’aux remparts d’Asgard, pareils à une marée qui grimpe la falaise. Les portes gémirent comme des bêtes captives. Des brouillards dressés par leurs rites brouillaient la vue et dépliaient des routes fantômes. Les Ases, d’abord surpris, serrèrent les rangs. Tyr posa sa main fidèle sur le bois des traverses. Heimdall entendit les pas qui n’existaient pas et guida vers les pas qui saignaient. Des archers tirèrent sur des silhouettes qui n’étaient que vent. Des brasiers roulèrent depuis les tours et léchèrent la nuit. Thor, torse bandé, empoigna un madrier et renversa une échelle comme on casse un juron. Freyja murmura depuis l’autre rive, et les flammes hésitèrent. La pierre buvait la sueur des dieux. Chaque cri paraissait double, comme si la bataille avait deux bouches. Au matin, l’ennemi tenait toujours les fossés. Les Ases tenaient toujours le seuil. Le monde restait suspendu entre deux serments.',
+              'Alors s’ouvrit une guerre que nul mortel n’aurait pu concevoir. Les Ases frappaient avec la violence du tonnerre, leurs armes forgées dans le feu des forges éternelles. Les Vanes ripostaient en invoquant la fécondité des terres, transformant les champs en pièges vivants, faisant jaillir des torrents et des forêts là où il n’y avait que désolation. Chaque bataille déchirait le monde, chaque victoire semblait aussitôt se transformer en défaite. Les murs d’Asgard tremblaient, et les plaines des Vanes se couvraient de cendres. Aucun camp ne reculait, et pourtant aucun n’avançait. La guerre, interminable, devenait une blessure qui ne se refermait pas. Les chants des scaldes ne racontaient plus des triomphes, mais des ravages sans fin. Les vents portaient la fumée des incendies jusque dans les royaumes des mortels, et même Yggdrasil, l’arbre cosmique, semblait gémir sous le poids de cette discorde. Dans les regards des dieux, on ne lisait plus la fierté, mais la lassitude d’un affrontement stérile. Pourtant, nul ne voulait céder le premier.',
         ),
         MythCard(
           id: '4',
-          title: 'La lassitude des dieux : l’échange des otages',
-          description:
-              'Épuisés, Ases et Vanes scellent une trêve par l’échange d’otages : Njörd, Freyr, Freyja contre Hoenir et Mímir. La guerre se couche, mais ne dort pas.',
+          title: 'Les otages du destin',
+          description: 'Épuisés, les dieux échangent des otages pour sceller une trêve fragile.',
           imagePath: 'ases_vanes_4.jpg',
           detailedStory:
-              'La guerre avait trop mordu pour mordre encore. Les camps comptèrent leurs absences et trouvèrent un gouffre. Alors on parla de trêve, d’une voix râpeuse. Les Vanes vinrent au milieu du champ, les mains ouvertes mais prêtes. Les Ases répondirent avec le poids de leurs serments. Le vent rabattit les fumées et dévoila des regards en charbons. On décida un pont fait d’hôtes vivants. Njörd avançait, la mer dans la barbe et le sel aux paupières. Freyr souriait comme un blé mûr en hiver. Freyja marchait silencieuse, mais les runes se tournaient vers elle. En retour, Asgard confia Hoenir, grand d’allure, prompt à décider si d’autres décidaient pour lui. Avec lui, Mímir, gardien d’un savoir qui mord. Les poignées de mains eurent la rugosité du chanvre. Les boucliers se redressèrent, mais un souffle plus doux passait entre eux. La guerre posa la tête, sans pour autant fermer l’œil.',
+              'Quand le sang eut trop coulé, quand les armes devinrent aussi lourdes que les cœurs, une idée germa des ruines de la bataille. Les deux clans, incapables de vaincre, décidèrent de tenter un acte de confiance : l’échange d’otages. Les Vanes envoyèrent deux de leurs plus sages, un frère et une sœur dont la beauté et la puissance surpassaient celles des champs et des rivières. Les Ases, de leur côté, offrirent un maître des runes, gardien des secrets anciens, et un autre dieu à la langue acérée. Cet échange fut scellé non dans la joie, mais dans la méfiance, chaque pas franchi étant alourdi par le soupçon. Les otages traversèrent les plaines et les forteresses ennemies, portant avec eux les espoirs fragiles d’une paix encore incertaine. L’air était tendu comme une corde d’arc, et chaque regard jeté sur eux pouvait à tout instant devenir une menace. Pourtant, à travers cet acte de prudence, un frêle équilibre commença à renaître. Pour la première fois depuis longtemps, les dieux ne brandissaient pas leurs armes, mais leurs serments.',
         ),
         MythCard(
           id: '5',
-          title: 'La tête qui parle, le miel de la paix : Mímir et Kvasir',
-          description:
-              'Les Vanes décapitent Mímir et renvoient sa tête aux Ases, qu’Odin ranime. Pour éviter la reprise de la guerre, tous créent Kvasir à partir d’un serment commun.',
+          title: 'La réconciliation des dieux',
+          description: 'Les otages tiennent parole, et les dieux apprennent à unir leurs forces.',
           imagePath: 'ases_vanes_5.jpg',
           detailedStory:
-              'Chez les Vanes, Hoenir hésita souvent, comme un gouvernail sans vent. Sans Mímir, il se taisait, et le conseil devint une barque immobile. La colère regonfla les voiles. On prit Mímir et on lui retira la voix d’un seul coup de lame. Sa tête roula, mais son savoir ne voulut pas tomber. Les Vanes renvoyèrent le lourd message à Asgard. Odin recueillit la tête, l’oignit d’herbes et d’incantations. Les lèvres mortes reparlèrent, chargées de sel et de fer. On eut peur de la rechute. Alors, pour sceller la paix au-delà des rancœurs, les deux camps crachèrent leur promesse dans un même vasque. De cette écume de serments naquit Kvasir, sage qui buvait les questions comme de l’eau claire. Il parla d’un monde tenu par deux mains différentes. Il parla d’un avenir où la force et la fécondité partagent la même table. Les dieux, un instant, respirèrent ensemble.',
+              'Le temps fit son œuvre, et peu à peu, les otages devinrent plus que des garants : ils devinrent des ponts. Les Vanes, accueillis parmi les Ases, enseignèrent l’art de la magie de la terre, dévoilant les secrets des récoltes et des saisons. Les Ases, en retour, partagèrent la rigueur de leurs runes, le courage de leurs batailles et la discipline de leurs lois. Les rancunes ne disparurent pas en un souffle, mais à travers des années de patience et d’épreuves partagées, les liens se tissèrent. Les enfants de ces unions divines portaient en eux deux héritages, celui du tonnerre et celui de la fertilité. Les festins remplacèrent les guerres, et les chants célébrèrent à nouveau la puissance de l’union plutôt que la désolation des combats. Mais au fond de chaque regard, une ombre subsistait : le souvenir de la guerre n’était jamais loin, comme une cicatrice que le temps ne pouvait effacer. Pourtant, pour un temps, la paix régnait, fragile mais réelle.',
         ),
         MythCard(
           id: '6',
-          title: 'L’alliance fragile et l’arbre qui écoute',
-          description:
-              'Les Vanes et les Ases apprennent à se tresser sans se confondre. Par la mémoire de Mímir et la sagesse de Kvasir, l’alliance tient, vigilante.',
+          title: 'L’alliance scellée',
+          description: 'Ases et Vanes unissent définitivement leurs forces, préparant l’avenir.',
           imagePath: 'ases_vanes_6.jpg',
           detailedStory:
-              'La paix n’était pas un chant, mais un fil qu’on retord jour après jour. Njörd apprivoisa les ports d’Asgard et les routes d’écume. Freyr prêta aux champs des promesses plus fiables. Freyja enseigna le seiðr sans le laisser dévorer les cœurs. Les Ases acceptèrent de regarder la terre autrement. Les Vanes apprirent à marcher sur des pierres plus dures. Thor gardait ses poings comme des enclumes patientes. Odin consultait la tête de Mímir quand les nuits se faisaient trop étroites. Kvasir passait entre les maisons avec des mots qui apaisent. On releva des pallissades, mais on ouvrit des portes. Les enfants jouèrent au pied des remparts réparés. Le vent, parfois, apportait encore des bruits de fer. Alors Yggdrasil frissonnait comme pour rappeler l’addition payée. La paix tenait, non par oubli, mais par mémoire. Et les dieux connurent un matin sans cris.',
+              'La fin de la guerre ne fut pas une victoire, mais une reconnaissance mutuelle. Les Ases comprirent qu’ils ne pouvaient régner seuls sur le ciel et la guerre, et les Vanes acceptèrent que la terre et la fécondité devaient s’unir à la force et à la loi. Une nouvelle ère s’ouvrit, où les deux clans si longtemps ennemis siégeaient côte à côte dans les halls d’Asgard. Les serments prononcés résonnaient comme des pierres posées dans le lit d’un fleuve : solides, mais soumis aux flots du destin. Les dieux savaient que les épreuves ne manqueraient pas, que le chaos n’avait pas disparu, mais ils comprirent que seule leur union pouvait donner une chance de survie lors du crépuscule annoncé. Ainsi, de la cendre de la discorde naquit l’alliance. Les scaldes chantèrent alors non pas la gloire d’une victoire, mais la sagesse d’un compromis, et ces chants résonnèrent jusque dans les royaumes des mortels. Les Vanes et les Ases devinrent un seul peuple divin, liés non par le sang versé, mais par le sang partagé.',
         ),
       ],
     ),
