@@ -23,7 +23,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   static const Color _pathColor = Colors.blue;
   static const double _pathStrokeWidth = 2.0;
   static const int _qixInitialPositionPadding = 20;
-  static const String _defaultRewardCardImagePath = 'assets/images/cards/chibi/fenrir.jpg';
+  static const String _defaultRewardCardImagePath = 'cards/chibi/fenrir.jpg';
 
   late ui.Image _rewardCardImage;
   final int gridSize;
@@ -47,10 +47,14 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     : super(size: Vector2(gridSize * cellSize, gridSize * cellSize), position: Vector2.zero()) {
     _initializeGrid();
     final Random random = Random();
-    final IntVector2 initialQixPosition = IntVector2(_qixInitialPositionPadding + random.nextInt(gridSize - 2 * _qixInitialPositionPadding), _qixInitialPositionPadding + random.nextInt(gridSize - 2 * _qixInitialPositionPadding));
+    final IntVector2 initialQixPosition = IntVector2(
+      _qixInitialPositionPadding + random.nextInt(gridSize - 2 * _qixInitialPositionPadding),
+      _qixInitialPositionPadding + random.nextInt(gridSize - 2 * _qixInitialPositionPadding),
+    );
 
     _boundaryPaint = Paint()
-      ..color = _boundaryColor.shade900 // Use a darker shade for boundary
+      ..color = _boundaryColor
+          .shade900 // Use a darker shade for boundary
       ..isAntiAlias = false;
     _pathPaint = Paint()
       ..color = _pathColor

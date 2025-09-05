@@ -16,6 +16,59 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      title: 'Le Châtiment de Loki',
+      correctOrder: [
+        MythCard(
+          id: '1',
+          title: 'La fuite du fauteur de troubles',
+          description: 'Après la mort de Baldr, le dieu rusé fuit la colère des Ases.',
+          imagePath: 'chatiment_1.jpg',
+          detailedStory:
+              'Lorsque la lumière de Baldr s’éteignit, abattue par un trait guidé par la perfidie, un silence lourd s’installa dans les halls des dieux. Tous comprirent que derrière ce crime se cachait la main du fauteur de troubles, celui dont les rires couvraient les trahisons. Pris de peur et d’orgueil, il s’enfuit, changeant de forme comme on change de masque : parfois poisson glissant dans les rivières, parfois oiseau battant l’air des falaises, parfois vieux vagabond au regard fuyant. Mais nul déguisement ne pouvait effacer la marque de sa trahison. Dans les forêts profondes, il se bâtit une cabane solitaire, aux quatre portes ouvertes vers l’horizon, afin de guetter de tous côtés. Le soir, assis devant le feu, ses pensées tourbillonnaient : ruse contre loyauté, liberté contre fatalité. Pourtant, au fond de lui, il savait que les pas des dieux se rapprochaient. Le vent portait déjà des murmures de vengeance, et l’écho des pas de ses poursuivants se mêlait aux battements de son cœur. La fuite n’était pas une délivrance, mais un sursis, et le destin resserrait sa toile autour de lui.',
+        ),
+        MythCard(
+          id: '2',
+          title: 'La traque des dieux',
+          description: 'Les Ases se rassemblent et jurent de capturer le traître.',
+          imagePath: 'chatiment_2.jpg',
+          detailedStory:
+              'Dans la grande assemblée des Ases, les visages n’étaient plus marqués par la colère, mais par une détermination glaciale. Le Père de Tout leva son unique œil vers les cieux et jura que le traître ne trouverait aucun refuge sous la voûte du monde. Les dieux se mirent en chasse, chacun apportant sa force ou sa ruse. Les faucons planaient pour scruter les forêts, les loups reniflaient la piste dans la neige, et les guerriers sillonnaient les vallées. Le sol lui-même semblait vouloir livrer celui qui avait semé la discorde, car chaque pierre roulait sous ses pas et chaque vent portait son odeur. Les Vanes, alliés des Ases depuis la réconciliation, prêtaient également leurs dons pour retrouver le fugitif. Ainsi, la traque ne ressemblait pas à une chasse ordinaire, mais à un châtiment cosmique où toute la nature conspirait contre le fuyard. Les jours s’étiraient, mais la certitude grandissait : nul ne peut échapper éternellement à ceux qu’il a trahis, surtout quand la mémoire des dieux est longue comme l’éternité. La vengeance n’était plus une promesse, mais une certitude inscrite dans chaque pas de cette traque implacable.',
+        ),
+        MythCard(
+          id: '3',
+          title: 'La capture au filet',
+          description: 'Transformé en saumon, le fugitif tente d’échapper aux dieux mais finit piégé.',
+          imagePath: 'chatiment_3.jpg',
+          detailedStory:
+              'Poussé dans ses retranchements, il choisit de se glisser dans le courant d’une rivière glacée, prenant la forme d’un saumon brillant, ses écailles luisant comme des lames sous la lune. Pensant ainsi déjouer ses poursuivants, il se dissimula dans les profondeurs, bondissant de rocher en rocher. Mais les dieux, instruits par leur savoir, tressèrent un filet immense, aussi vaste que la vallée, tissé de cordes enchantées. Ils descendirent la rivière, resserrant leur piège avec la patience d’un chasseur sûr de sa proie. Le saumon se débattit, bondissant hors de l’eau, ses muscles bandés dans une ultime tentative de fuite. Mais deux mains puissantes l’attrapèrent par la queue, et malgré ses contorsions, il fut arraché aux flots et jeté sur la berge. Reprenant sa forme véritable, il se retrouva au milieu d’un cercle de visages impitoyables, le filet encore autour de lui comme une toile de destin. Ses ruses l’avaient porté loin, mais l’heure de rendre des comptes était enfin venue. Dans ses yeux brillait encore l’éclat de la défiance, mais sous cet éclat perçait l’ombre de la peur.',
+        ),
+        MythCard(
+          id: '4',
+          title: 'Le jugement sans pitié',
+          description: 'Les dieux décident d’un châtiment qui marquera l’éternité.',
+          imagePath: 'chatiment_4.jpg',
+          detailedStory:
+              'Entouré des Ases, il ne trouva ni pitié ni indulgence. Chaque dieu rappela ses fautes, chaque mot tombant comme un marteau sur une enclume. La mort de Baldr, l’humiliation des dieux, les ruses accumulées depuis l’aube des temps : tout fut évoqué dans une litanie d’accusations. Certains réclamèrent son exécution immédiate, mais le Père de Tout leva la main. Non, sa mort serait trop douce. Son châtiment devait refléter ses crimes et durer aussi longtemps que le monde existerait. Alors ils imaginèrent une peine qui allierait douleur et éternité. Le traître serait enchaîné dans les profondeurs, et le venin d’une bête immonde coulerait sur lui sans relâche. Mais avant même d’accomplir cette sentence, ils infligèrent un premier supplice : ses fils furent transformés, l’un contre l’autre, et de leurs entrailles, les dieux forgèrent les liens qui devaient l’attacher. Ce geste scella non seulement son sort, mais détruisit aussi sa descendance, brisant tout ce qu’il aurait pu espérer transmettre. Le jugement était rendu, et il ne restait plus qu’à l’exécuter.',
+        ),
+        MythCard(
+          id: '5',
+          title: 'L’enchaînement sous la pierre',
+          description: 'Cloué aux entrailles de ses propres enfants, il est fixé à la roche éternelle.',
+          imagePath: 'chatiment_5.jpg',
+          detailedStory:
+              'Dans une caverne profonde, les dieux accomplirent leur sentence. Le traître fut couché sur une pierre polie par le froid, ses membres écartés par des liens tissés dans les chairs de ses propres fils. Les dieux les plus puissants tirèrent sur ces chaînes organiques, les clouant à la roche de sorte qu’aucun mouvement n’était possible. Le plafond de la caverne était noir, strié de fissures d’où s’écoulaient des gouttes glacées. Autour de lui, les dieux observaient en silence, certains satisfaits, d’autres troublés par la cruauté de la scène. Le condamné, malgré la douleur atroce, lança encore quelques mots de défi, jurant que cette injustice ne resterait pas impunie. Mais ses voix ne rencontrèrent que le silence des cavernes. Enchaîné, il devint une ombre parmi les pierres, une promesse d’orage pour l’avenir. Ses cris résonnaient contre les parois, mais aucun ne vint les apaiser. La roche elle-même semblait boire son désespoir, se nourrissant de sa souffrance pour l’éternité.',
+        ),
+        MythCard(
+          id: '6',
+          title: 'Le venin et la fidélité',
+          description: 'Un serpent venimeux goutte sur lui, mais son épouse tente d’adoucir son supplice.',
+          imagePath: 'chatiment_6.jpg',
+          detailedStory:
+              'Au-dessus de son visage, les dieux suspendirent un serpent dont les crocs distillaient goutte à goutte un venin corrosif. Chaque perle tombait comme une flamme acide, brûlant sa peau et arrachant des hurlements qui secouaient la caverne. Pourtant, il ne fut pas laissé seul. Sa compagne, fidèle malgré ses fautes, demeura à ses côtés. Elle tenait un bol qu’elle plaçait sous la gueule du serpent, recueillant le poison pour épargner son bien-aimé. Mais lorsque le récipient était plein, elle devait le vider, et durant ce court instant, le venin tombait directement sur son visage. Alors ses cris emplissaient la terre entière, et les secousses de son corps ébranlaient les montagnes, faisant trembler les royaumes des hommes. Ainsi commença son supplice éternel : lié par le sang de ses fils, tourmenté par le venin d’une bête, et sauvé par l’amour d’une femme. Ce châtiment, plus cruel qu’une mort, devint une cicatrice vivante du cosmos, un présage de la fureur qu’il déchaînerait un jour, lorsque viendrait le crépuscule des dieux.',
+        ),
+      ],
+    ),
+    MythStory(
       title: 'La Pêche du Serpent',
       correctOrder: [
         MythCard(

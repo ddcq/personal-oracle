@@ -90,12 +90,19 @@ class _MinesweeperView extends StatelessWidget {
                       return GestureDetector(
                         onTap: () => controller.revealCell(row, col),
                         onLongPress: () => controller.toggleFlag(row, col),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: cell.isRevealed ? Colors.grey[800] : Colors.grey[600],
-                            border: Border.all(color: Colors.grey[900]!),
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          transitionBuilder: (Widget child, Animation<double> animation) {
+                            return ScaleTransition(scale: animation, child: child);
+                          },
+                          child: Container(
+                            key: ValueKey('${row}_${col}_${cell.isRevealed}_${cell.isFlagged}'), // Unique key for animation
+                            decoration: BoxDecoration(
+                              color: cell.isRevealed ? Colors.grey[800] : Colors.grey[600],
+                              border: Border.all(color: Colors.grey[900]!),
+                            ),
+                            child: Center(child: _buildCellContent(cell, context)),
                           ),
-                          child: Center(child: _buildCellContent(cell, context)),
                         ),
                       );
                     },
@@ -117,10 +124,10 @@ class _MinesweeperView extends StatelessWidget {
       return const SizedBox.shrink();
     }
     if (cell.hasMine) {
-      return const Icon(Icons.warning, color: Colors.red); // Placeholder for mine
+      return Image.asset('assets/images/explosion.png', key: const ValueKey('explosion'), width: 40, height: 40); // Explosion animation
     }
     if (cell.hasTreasure) {
-      return const Icon(Icons.star, color: Colors.yellow); // Placeholder for treasure
+      return Image.asset('assets/images/sparkle.png', key: const ValueKey('sparkle'), width: 40, height: 40); // Placeholder for treasure
     }
     if (cell.adjacentMines > 0 || cell.adjacentTreasures > 0) {
       List<Widget> counts = [];
