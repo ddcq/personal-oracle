@@ -12,6 +12,13 @@ typedef IsPlayerPathChecker = bool Function(IntVector2 position);
 typedef OnGameOver = void Function();
 
 class QixComponent extends PositionComponent with HasGameReference<QixGame> {
+  static const double _turnStep = 0.002;
+  static const double _randomPerturbationFactor = 0.6;
+  static const double _wobbleMagnitudeFactor = 0.25;
+  static const double _wobbleFrequency = 5.0;
+  static const double _maxRotationFactor = 1 / 12; // Multiplied by math.pi
+  static const double _imageScaleFactor = 5.0;
+
   final double cellSize;
   final int gridSize;
   final IsGridEdgeChecker isGridEdge;
@@ -67,9 +74,8 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
     }
 
     // Turn towards the player by 1 degree
-    const double turnStep = 0.002; // 0.002 radians
-    if (angleDifference.abs() > turnStep) {
-      _moveAngle += angleDifference.sign * turnStep;
+    if (angleDifference.abs() > _turnStep) {
+      _moveAngle += angleDifference.sign * _turnStep;
     } else {
       _moveAngle = angleToPlayer;
     }
@@ -102,7 +108,7 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
         _moveAngle = _moveAngle + math.pi;
       }
 
-      _moveAngle += (math.Random().nextDouble() - 0.5) * 0.6; // Increased random perturbation
+      _moveAngle += (math.Random().nextDouble() - 0.5) * _randomPerturbationFactor; // Increased random perturbation
     } else {
       virtualPosition = nextVirtualPosition;
     }
@@ -119,15 +125,14 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
   void render(Canvas canvas) {
     super.render(canvas);
 
-    final double wobbleMagnitude = cellSize * 0.25; // Restored magnitude for a visible effect
-    final double wobbleFrequency = 5.0;
-    final double wobbleOffset = math.sin(_animationTime * wobbleFrequency) * wobbleMagnitude;
+    final double wobbleMagnitude = cellSize * _wobbleMagnitudeFactor; // Restored magnitude for a visible effect
+    final double wobbleOffset = math.sin(_animationTime * _wobbleFrequency) * wobbleMagnitude;
 
     final perpendicularAngle = _moveAngle + math.pi / 2;
     final renderOffset = Vector2(math.cos(perpendicularAngle), math.sin(perpendicularAngle)) * wobbleOffset;
 
-    final double maxRotation = math.pi / 12;
-    final double rotation = -math.cos(_animationTime * wobbleFrequency) * maxRotation;
+    final double maxRotation = math.pi * _maxRotationFactor;
+    final double rotation = -math.cos(_animationTime * _wobbleFrequency) * maxRotation;
     final double visualAngle = _moveAngle + math.pi / 2;
 
     final center = Offset(size.x / 2, size.y / 2);
@@ -137,7 +142,7 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
     canvas.rotate(visualAngle + rotation);
     canvas.translate(-center.dx, -center.dy);
 
-    final imageRect = Rect.fromCenter(center: center, width: size.x * 5, height: size.y * 5);
+    final imageRect = Rect.fromCenter(center: center, width: size.x * _imageScaleFactor, height: size.y * _imageScaleFactor);
     final paint = Paint();
     canvas.drawImageRect(snakeHeadImage, Rect.fromLTWH(0, 0, snakeHeadImage.width.toDouble(), snakeHeadImage.height.toDouble()), imageRect, paint);
 

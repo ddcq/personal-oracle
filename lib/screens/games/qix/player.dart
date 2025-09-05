@@ -11,6 +11,10 @@ import 'package:oracle_d_asgard/components/animated_character_component.dart'; /
 enum PlayerState { onEdge, drawing, dead, rescued }
 
 class Player extends PositionComponent {
+  static const int _characterIndex = 0;
+  static const double _characterSpriteScale = 4.0;
+  static const double _positionSnapThreshold = 0.1;
+
   final ArenaComponent arena;
   final Function(PlayerState) onPlayerStateChanged;
   final VoidCallback onSelfIntersection; // Add this line
@@ -50,8 +54,8 @@ class Player extends PositionComponent {
     _moveSpeed = playerSpeedCellsPerSecond * cellSize;
     _characterSprite = AnimatedCharacterComponent(
       characterSpriteSheet: characterSpriteSheet,
-      characterIndex: 0, // Character1
-      size: Vector2.all(cellSize * 4), // 4 times the cell size
+      characterIndex: _characterIndex, // Character1
+      size: Vector2.all(cellSize * _characterSpriteScale), // 4 times the cell size
       anchor: Anchor.center, // Center the sprite on the player component
       position: Vector2.all(cellSize / 2), // Center the character within the cell
     );
@@ -103,7 +107,7 @@ class Player extends PositionComponent {
 
     // Smoothly move towards the target grid position
     Vector2 targetPixelPosition = targetGridPosition.toVector2() * cellSize;
-    if (position.distanceTo(targetPixelPosition) > 0.1) {
+    if (position.distanceTo(targetPixelPosition) > _positionSnapThreshold) {
       position.moveToTarget(targetPixelPosition, _moveSpeed * dt);
     } else {
       position = targetPixelPosition; // Snap to target to avoid floating point inaccuracies
@@ -124,20 +128,36 @@ class Player extends PositionComponent {
   }
 
   void _findNextAutoDirection() {
+    dp.Direction? oppositeDirection = _getOppositeDirection(currentDirection);
+    List<dp.Direction> possibleDirections = _getPossibleDirections(oppositeDirection);
+
+    if (state == PlayerState.onEdge) {
+      _handleOnEdgeState(possibleDirections);
+    } else {
+      _handleDrawingState(possibleDirections);
+    }
+    // Update the character sprite's direction after currentDirection might have changed
+    _characterSprite.direction = _mapDirectionToCharacterDirection(currentDirection);
+  }
+
+  dp.Direction? _getOppositeDirection(dp.Direction? direction) {
+    switch (direction) {
+      case dp.Direction.up:
+        return dp.Direction.down;
+      case dp.Direction.down:
+        return dp.Direction.up;
+      case dp.Direction.left:
+        return dp.Direction.right;
+      case dp.Direction.right:
+        return dp.Direction.left;
+      default:
+        return null;
+    }
+  }
+
+  List<dp.Direction> _getPossibleDirections(dp.Direction? oppositeDirection) {
     List<dp.Direction> possibleDirections = [];
     List<dp.Direction> allDirections = [dp.Direction.up, dp.Direction.down, dp.Direction.left, dp.Direction.right];
-
-    // Determine the opposite direction to prevent U-turns
-    dp.Direction? oppositeDirection;
-    if (currentDirection == dp.Direction.up) {
-      oppositeDirection = dp.Direction.down;
-    } else if (currentDirection == dp.Direction.down) {
-      oppositeDirection = dp.Direction.up;
-    } else if (currentDirection == dp.Direction.left) {
-      oppositeDirection = dp.Direction.right;
-    } else if (currentDirection == dp.Direction.right) {
-      oppositeDirection = dp.Direction.left;
-    }
 
     for (dp.Direction dir in allDirections) {
       if (dir != oppositeDirection) {
@@ -147,46 +167,46 @@ class Player extends PositionComponent {
         }
       }
     }
+    return possibleDirections;
+  }
 
-    if (state == PlayerState.onEdge) {
-      List<dp.Direction> edgeDirections = [];
-      for (dp.Direction dir in possibleDirections) {
-        IntVector2 nextPos = _getNewGridPosition(dir);
-        bool isNextPosEdge = arena.getGridValue(nextPos.x, nextPos.y) == game_constants.kGridEdge;
-        if (isNextPosEdge) {
-          edgeDirections.add(dir);
-        }
+  void _handleOnEdgeState(List<dp.Direction> possibleDirections) {
+    List<dp.Direction> edgeDirections = [];
+    for (dp.Direction dir in possibleDirections) {
+      IntVector2 nextPos = _getNewGridPosition(dir);
+      bool isNextPosEdge = arena.getGridValue(nextPos.x, nextPos.y) == game_constants.kGridEdge;
+      if (isNextPosEdge) {
+        edgeDirections.add(dir);
       }
+    }
 
-      if (edgeDirections.length == 1) {
-        currentDirection = edgeDirections.first;
+    if (edgeDirections.length == 1) {
+      currentDirection = edgeDirections.first;
+      _isManualInput = false;
+    } else if (edgeDirections.length > 1) {
+      // Prioritize continuing straight if possible
+      if (currentDirection != null && edgeDirections.contains(currentDirection)) {
+        currentDirection = currentDirection;
         _isManualInput = false;
-      } else if (edgeDirections.length > 1) {
-        // Prioritize continuing straight if possible
-        if (currentDirection != null && edgeDirections.contains(currentDirection)) {
-          currentDirection = currentDirection;
-          _isManualInput = false;
-        } else {
-          // If no straight continuation, pick the first available edge direction
-          currentDirection = edgeDirections.first;
-          _isManualInput = false;
-        }
       } else {
-        currentDirection = null;
+        // If no straight continuation, pick the first available edge direction
+        currentDirection = edgeDirections.first;
         _isManualInput = false;
       }
     } else {
-      // Original logic for drawing state
-      if (possibleDirections.length == 1) {
-        currentDirection = possibleDirections.first;
-        _isManualInput = false;
-      } else {
-        currentDirection = null;
-        _isManualInput = false;
-      }
+      currentDirection = null;
+      _isManualInput = false;
     }
-    // Update the character sprite's direction after currentDirection might have changed
-    _characterSprite.direction = _mapDirectionToCharacterDirection(currentDirection);
+  }
+
+  void _handleDrawingState(List<dp.Direction> possibleDirections) {
+    if (possibleDirections.length == 1) {
+      currentDirection = possibleDirections.first;
+      _isManualInput = false;
+    } else {
+      currentDirection = null;
+      _isManualInput = false;
+    }
   }
 
   bool _canMove(dp.Direction direction) {
@@ -201,26 +221,38 @@ class Player extends PositionComponent {
     }
 
     // Check if the new position is within bounds after clamping
-    if (!newGridPosition.isInBounds(0, gridSize - 1, 0, gridSize - 1)) {
+    if (!_isWithinBounds(newGridPosition)) {
       return false; // Cannot move further in this direction (hit boundary)
     }
 
     // Check if the new position is traversable
-    if (!arena.isTraversable(newGridPosition.x, newGridPosition.y)) {
+    if (!_isTraversable(newGridPosition)) {
       return false;
     }
 
     // If on edge, only allow moving off the edge with manual input
-    bool isNewPositionOnEdge = arena.getGridValue(newGridPosition.x, newGridPosition.y) == game_constants.kGridEdge;
-    if (state == PlayerState.onEdge && !isNewPositionOnEdge && !_isManualInput) {
+    if (state == PlayerState.onEdge && _isMovingOffEdge(newGridPosition)) {
       return false;
     }
     return true;
   }
 
+  bool _isWithinBounds(IntVector2 position) {
+    return position.isInBounds(0, gridSize - 1, 0, gridSize - 1);
+  }
+
+  bool _isTraversable(IntVector2 position) {
+    return arena.isTraversable(position.x, position.y);
+  }
+
+  bool _isMovingOffEdge(IntVector2 newGridPosition) {
+    bool isNewPositionOnEdge = arena.getGridValue(newGridPosition.x, newGridPosition.y) == game_constants.kGridEdge;
+    return !isNewPositionOnEdge && !_isManualInput;
+  }
+
   bool move(dp.Direction direction) {
     // Only allow new move if player has reached the current target
-    if (position.distanceTo(targetGridPosition.toVector2() * cellSize) > 0.1) {
+    if (position.distanceTo(targetGridPosition.toVector2() * cellSize) > _positionSnapThreshold) {
       return false;
     }
 
@@ -233,40 +265,10 @@ class Player extends PositionComponent {
     // Clamp to grid boundaries
     newGridPosition = newGridPosition.clamp(0, gridSize - 1, 0, gridSize - 1);
 
-    // If on edge, only allow moving off the edge with manual input
-    bool isNewPositionOnEdge = arena.getGridValue(newGridPosition.x, newGridPosition.y) == game_constants.kGridEdge;
-
     if (state == PlayerState.onEdge) {
-      if (!isNewPositionOnEdge) {
-        // Moving off the edge
-        state = PlayerState.drawing;
-        pathStartGridPosition = IntVector2(gridPosition.x, gridPosition.y);
-        currentPath.add(IntVector2(gridPosition.x, gridPosition.y));
-        currentPath.add(IntVector2(newGridPosition.x, newGridPosition.y));
-        arena.startPath(IntVector2(gridPosition.x, gridPosition.y));
-        arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
-      }
-      // If still on edge, just update target position
-      targetGridPosition = newGridPosition;
+      _handleOnEdgeMovement(newGridPosition);
     } else if (state == PlayerState.drawing) {
-      // Currently drawing a path
-      if (isNewPositionOnEdge) {
-        // Hit an existing boundary
-        arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
-        state = PlayerState.onEdge;
-        onPlayerStateChanged(state);
-        currentPath.clear(); // Clear the path when hitting an existing boundary
-      } else {
-        // Check for self-intersection if drawing
-        if (currentPath.contains(newGridPosition)) {
-          onSelfIntersection();
-          return false; // Prevent further movement
-        }
-        // Continue drawing path
-        currentPath.add(IntVector2(newGridPosition.x, newGridPosition.y));
-        arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
-      }
-      targetGridPosition = newGridPosition;
+      _handleDrawingMovement(newGridPosition);
     }
 
     // If the player is on an edge and the new position is the same as the current position
@@ -277,6 +279,42 @@ class Player extends PositionComponent {
     }
 
     return true;
+  }
+
+  void _handleOnEdgeMovement(IntVector2 newGridPosition) {
+    bool isNewPositionOnEdge = arena.getGridValue(newGridPosition.x, newGridPosition.y) == game_constants.kGridEdge;
+    if (!isNewPositionOnEdge) {
+      // Moving off the edge
+      state = PlayerState.drawing;
+      pathStartGridPosition = IntVector2(gridPosition.x, gridPosition.y);
+      currentPath.add(IntVector2(gridPosition.x, gridPosition.y));
+      currentPath.add(IntVector2(newGridPosition.x, newGridPosition.y));
+      arena.startPath(IntVector2(gridPosition.x, gridPosition.y));
+      arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
+    }
+    // If still on edge, just update target position
+    targetGridPosition = newGridPosition;
+  }
+
+  void _handleDrawingMovement(IntVector2 newGridPosition) {
+    bool isNewPositionOnEdge = arena.getGridValue(newGridPosition.x, newGridPosition.y) == game_constants.kGridEdge;
+    if (isNewPositionOnEdge) {
+      // Hit an existing boundary
+      arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
+      state = PlayerState.onEdge;
+      onPlayerStateChanged(state);
+      currentPath.clear(); // Clear the path when hitting an existing boundary
+    } else {
+      // Check for self-intersection if drawing
+      if (currentPath.contains(newGridPosition)) {
+        onSelfIntersection();
+        return; // Prevent further movement
+      }
+      // Continue drawing path
+      currentPath.add(IntVector2(newGridPosition.x, newGridPosition.y));
+      arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));
+    }
+    targetGridPosition = newGridPosition;
   }
 
   IntVector2 _getNewGridPosition(dp.Direction direction) {

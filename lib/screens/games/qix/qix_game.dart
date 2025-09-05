@@ -97,16 +97,20 @@ class QixGame extends FlameGame with KeyboardEvents {
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     super.onKeyEvent(event, keysPressed);
 
+    final Map<LogicalKeyboardKey, Direction> keyDirectionMap = {
+      LogicalKeyboardKey.arrowLeft: Direction.left,
+      LogicalKeyboardKey.arrowRight: Direction.right,
+      LogicalKeyboardKey.arrowUp: Direction.up,
+      LogicalKeyboardKey.arrowDown: Direction.down,
+    };
+
     if (event is KeyDownEvent) {
       Direction? newDirection;
-      if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
-        newDirection = Direction.left;
-      } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
-        newDirection = Direction.right;
-      } else if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-        newDirection = Direction.up;
-      } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
-        newDirection = Direction.down;
+      for (final entry in keyDirectionMap.entries) {
+        if (keysPressed.contains(entry.key)) {
+          newDirection = entry.value;
+          break;
+        }
       }
       if (newDirection != null) {
         player.setDirection(newDirection, isManual: true);

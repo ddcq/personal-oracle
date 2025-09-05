@@ -19,6 +19,12 @@ class FloodFillResult {
 }
 
 class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
+  static const MaterialColor _boundaryColor = Colors.blue;
+  static const Color _pathColor = Colors.blue;
+  static const double _pathStrokeWidth = 2.0;
+  static const int _qixInitialPositionPadding = 20;
+  static const String _defaultRewardCardImagePath = 'assets/images/cards/chibi/fenrir.jpg';
+
   late ui.Image _rewardCardImage;
   final int gridSize;
   final double cellSize;
@@ -41,14 +47,14 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     : super(size: Vector2(gridSize * cellSize, gridSize * cellSize), position: Vector2.zero()) {
     _initializeGrid();
     final Random random = Random();
-    final IntVector2 initialQixPosition = IntVector2(20 + random.nextInt(gridSize - 40), 20 + random.nextInt(gridSize - 40));
+    final IntVector2 initialQixPosition = IntVector2(_qixInitialPositionPadding + random.nextInt(gridSize - 2 * _qixInitialPositionPadding), _qixInitialPositionPadding + random.nextInt(gridSize - 2 * _qixInitialPositionPadding));
 
     _boundaryPaint = Paint()
-      ..color = Colors.blue[900]!
+      ..color = _boundaryColor.shade900 // Use a darker shade for boundary
       ..isAntiAlias = false;
     _pathPaint = Paint()
-      ..color = Colors.blue
-      ..strokeWidth = 2.0
+      ..color = _pathColor
+      ..strokeWidth = _pathStrokeWidth
       ..style = PaintingStyle.stroke;
     _filledSprites = {};
 
@@ -76,7 +82,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       _rewardCardImage = await game.images.load(rewardCardImagePath!);
     } else {
       // Load a default image if no reward card image is provided
-      _rewardCardImage = await game.images.load('assets/images/cards/chibi/fenrir.jpg');
+      _rewardCardImage = await game.images.load(_defaultRewardCardImagePath);
     }
 
     // Pre-calculate sprites for filled areas
@@ -147,15 +153,16 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     _cellRects = {};
 
     // Initialize outer boundary
-    for (int x = 0; x < gridSize; x++) {
-      _grid[0][x] = game_constants.kGridEdge;
-      _grid[gridSize - 1][x] = game_constants.kGridEdge;
-      _grid[x][0] = game_constants.kGridEdge;
-      _grid[x][gridSize - 1] = game_constants.kGridEdge;
-      _boundaryPoints.add(IntVector2(x, 0));
-      _boundaryPoints.add(IntVector2(x, gridSize - 1));
-      _boundaryPoints.add(IntVector2(0, x));
-      _boundaryPoints.add(IntVector2(gridSize - 1, x));
+    for (int i = 0; i < gridSize; i++) {
+      _setGridValue(i, 0, game_constants.kGridEdge);
+      _setGridValue(i, gridSize - 1, game_constants.kGridEdge);
+      _setGridValue(0, i, game_constants.kGridEdge);
+      _setGridValue(gridSize - 1, i, game_constants.kGridEdge);
+
+      _boundaryPoints.add(IntVector2(i, 0));
+      _boundaryPoints.add(IntVector2(i, gridSize - 1));
+      _boundaryPoints.add(IntVector2(0, i));
+      _boundaryPoints.add(IntVector2(gridSize - 1, i));
     }
 
     // Pre-calculate Rects for all grid cells
@@ -187,43 +194,14 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   List<IntVector2> fillArea(List<IntVector2> playerPath, IntVector2 pathStartGridPosition, IntVector2 pathEndGridPosition) {
     List<IntVector2> newlyFilledPoints = [];
 
-    // Step 1: Mark the player's path as a permanent edge on the grid.
-    // This ensures the drawn line becomes part of the game's boundaries.
-    for (var point in playerPath) {
-      _setGridValue(point.x, point.y, game_constants.kGridEdge);
-      _boundaryPoints.add(point);
-    }
+    _markPlayerPathAsEdge(playerPath);
 
-    // Step 2: Identify all distinct enclosed regions within the arena.
-    // This is done by performing flood-fill operations from all 'free' (unfilled) cells.
-    List<FloodFillResult> identifiedRegions = [];
     List<List<bool>> visitedCells = List.generate(gridSize, (_) => List.generate(gridSize, (_) => false));
+    List<FloodFillResult> identifiedRegions = _identifyEnclosedRegions(visitedCells);
 
-    for (int y = 0; y < gridSize; y++) {
-      for (int x = 0; x < gridSize; x++) {
-        // If a cell is free and hasn’t been visited yet, it’s part of a new region.
-        if (_grid[y][x] == game_constants.kGridFree && !visitedCells[y][x]) {
-          FloodFillResult result = _floodFill(x, y, visitedCells);
-          if (result.points.isNotEmpty) {
-            identifiedRegions.add(result);
-          }
-        }
-      }
-    }
-
-    // Step 3: Determine which of the identified regions contains the Qix (enemy).
-    // The region containing the Qix should NOT be filled.
     int qixContainingRegionIndex = identifiedRegions.indexWhere((region) => region.containsQix);
 
-    // Step 4: Fill all regions that do NOT contain the Qix.
-    // These are the areas successfully claimed by the player.
-    for (int i = 0; i < identifiedRegions.length; i++) {
-      if (i == qixContainingRegionIndex) continue;
-      for (final point in identifiedRegions[i].points) {
-        _setGridValue(point.x, point.y, game_constants.kGridFilled);
-        newlyFilledPoints.add(point);
-      }
-    }
+    _fillRegionsExcludingQix(identifiedRegions, qixContainingRegionIndex, newlyFilledPoints);
 
     // After filling, re-evaluate edges that might have become fully enclosed
     // and convert them to filled areas.
@@ -232,11 +210,48 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     return newlyFilledPoints;
   }
 
+  void _markPlayerPathAsEdge(List<IntVector2> playerPath) {
+    for (var point in playerPath) {
+      _setGridValue(point.x, point.y, game_constants.kGridEdge);
+      _boundaryPoints.add(point);
+    }
+  }
+
+  List<FloodFillResult> _identifyEnclosedRegions(List<List<bool>> visitedCells) {
+    List<FloodFillResult> identifiedRegions = [];
+    for (int y = 0; y < gridSize; y++) {
+      for (int x = 0; x < gridSize; x++) {
+        if (_grid[y][x] == game_constants.kGridFree && !visitedCells[y][x]) {
+          FloodFillResult result = _floodFill(x, y, visitedCells);
+          if (result.points.isNotEmpty) {
+            identifiedRegions.add(result);
+          }
+        }
+      }
+    }
+    return identifiedRegions;
+  }
+
+  void _fillRegionsExcludingQix(List<FloodFillResult> identifiedRegions, int qixContainingRegionIndex, List<IntVector2> newlyFilledPoints) {
+    for (int i = 0; i < identifiedRegions.length; i++) {
+      if (i == qixContainingRegionIndex) continue;
+      for (final point in identifiedRegions[i].points) {
+        _setGridValue(point.x, point.y, game_constants.kGridFilled);
+        newlyFilledPoints.add(point);
+      }
+    }
+  }
+
   void _demoteEnclosedEdges(List<IntVector2> newlyFilledPoints, List<IntVector2> playerPath) {
-    // Create a set to store unique points to check to avoid redundant processing
+    Set<IntVector2> pointsToCheck = _getPointsToCheck(newlyFilledPoints, playerPath);
+    final Set<IntVector2> demotedPoints = {};
+    _processPointsForDemotion(pointsToCheck, demotedPoints);
+    _boundaryPoints.removeWhere((p) => demotedPoints.contains(p));
+  }
+
+  Set<IntVector2> _getPointsToCheck(List<IntVector2> newlyFilledPoints, List<IntVector2> playerPath) {
     Set<IntVector2> pointsToCheck = {};
 
-    // Add all newly filled points and their immediate neighbors to the set
     for (IntVector2 filledPoint in newlyFilledPoints) {
       pointsToCheck.add(filledPoint);
       for (int dy = -1; dy <= 1; dy++) {
@@ -250,7 +265,6 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       }
     }
 
-    // Add all points from the player's path and their immediate neighbors to the set
     for (IntVector2 pathPoint in playerPath) {
       pointsToCheck.add(pathPoint);
       for (final neighbor in pathPoint.allNeighbors) {
@@ -259,16 +273,16 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
         }
       }
     }
+    return pointsToCheck;
+  }
 
-    final Set<IntVector2> demotedPoints = {};
-    // Iterate only over the points that might have changed their enclosure status
+  void _processPointsForDemotion(Set<IntVector2> pointsToCheck, Set<IntVector2> demotedPoints) {
     for (IntVector2 p in pointsToCheck) {
       int x = p.x;
       int y = p.y;
 
       if (_grid[y][x] == game_constants.kGridEdge) {
         bool isEnclosed = true;
-        // Check 8 neighbors
         for (IntVector2 neighbor in p.allNeighbors) {
           if (neighbor.isInBounds(0, gridSize - 1, 0, gridSize - 1) && _isFree(neighbor)) {
             isEnclosed = false;
@@ -282,7 +296,6 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
         }
       }
     }
-    _boundaryPoints.removeWhere((p) => demotedPoints.contains(p));
   }
 
   FloodFillResult _floodFill(int startX, int startY, List<List<bool>> visited) {
