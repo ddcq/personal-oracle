@@ -37,12 +37,31 @@ class GameController extends ChangeNotifier {
   CollectibleCard? get rewardCard => _rewardCard; // Getter for new property
   MythCard? get unlockedStoryChapter => _unlockedStoryChapter; // Getter for unlocked story chapter
 
-  Future<void> initializeGame() async {
-    loadNewStory();
-  }
-
   Future<void> loadNewStory() async {
     final allStories = getMythStories();
+    final selected = await _findNextEarnableStoryAndChapter(allStories);
+
+    if (selected != null) {
+      _selectedStory = selected['story'];
+      _nextChapterToUnlock = selected['chapter'];
+      _allChaptersEarned = false;
+    } else {
+      final random = Random();
+      _selectedStory = allStories[random.nextInt(allStories.length)];
+      _nextChapterToUnlock = null;
+      _allChaptersEarned = true;
+    }
+    _rewardCard = null;
+
+    _shuffledCards = List<MythCard>.from(_selectedStory.correctOrder);
+    _shuffledCards.shuffle();
+    _validated = false;
+    _selectedMythCard = _shuffledCards.isNotEmpty ? _shuffledCards.first : null;
+    _showVictoryPopup = false; // Reset on new game
+    notifyListeners();
+  }
+
+  Future<Map<String, dynamic>?> _findNextEarnableStoryAndChapter(List<MythStory> allStories) async {
     final List<Map<String, dynamic>> earnableChapters = [];
 
     for (var story in allStories) {
@@ -63,25 +82,11 @@ class GameController extends ChangeNotifier {
       }
     }
 
-    final random = Random();
     if (earnableChapters.isNotEmpty) {
-      final selected = earnableChapters[random.nextInt(earnableChapters.length)];
-      _selectedStory = selected['story'];
-      _nextChapterToUnlock = selected['chapter'];
-      _allChaptersEarned = false;
-    } else {
-      _selectedStory = allStories[random.nextInt(allStories.length)];
-      _nextChapterToUnlock = null;
-      _allChaptersEarned = true;
+      final random = Random();
+      return earnableChapters[random.nextInt(earnableChapters.length)];
     }
-    _rewardCard = null;
-
-    _shuffledCards = List<MythCard>.from(_selectedStory.correctOrder);
-    _shuffledCards.shuffle();
-    _validated = false;
-    _selectedMythCard = _shuffledCards.isNotEmpty ? _shuffledCards.first : null;
-    _showVictoryPopup = false; // Reset on new game
-    notifyListeners();
+    return null;
   }
 
   void reorderCards(int fromIndex, int toIndex) {
@@ -106,24 +111,36 @@ class GameController extends ChangeNotifier {
   void validateOrder() async {
     _validated = true;
     if (isOrderCompletelyCorrect()) {
-      if (_allChaptersEarned) {
-        final unearnedContent = await _gamificationService.getUnearnedContent();
-        final cards = (unearnedContent['unearned_collectible_cards'] as List).cast<CollectibleCard>();
-        if (cards.isNotEmpty) {
-          final card = cards[Random().nextInt(cards.length)];
-          await _gamificationService.unlockCollectibleCard(card);
-          _rewardCard = card;
-        }
-      } else if (_nextChapterToUnlock != null) {
-        await _gamificationService.unlockStoryPart(_selectedStory.title, _nextChapterToUnlock!.id);
-        _unlockedStoryChapter = _nextChapterToUnlock;
-        _rewardCard = null;
-      }
+      await _handleVictoryReward();
       _showVictoryPopup = true;
     } else {
       _showIncorrectOrderPopup = true;
     }
     notifyListeners();
+  }
+
+  Future<void> _handleVictoryReward() async {
+    if (_allChaptersEarned) {
+      await _handleAllChaptersEarnedReward();
+    } else if (_nextChapterToUnlock != null) {
+      await _handleChapterUnlockReward();
+    }
+  }
+
+  Future<void> _handleAllChaptersEarnedReward() async {
+    final unearnedContent = await _gamificationService.getUnearnedContent();
+    final cards = (unearnedContent['unearned_collectible_cards'] as List).cast<CollectibleCard>();
+    if (cards.isNotEmpty) {
+      final card = cards[Random().nextInt(cards.length)];
+      await _gamificationService.unlockCollectibleCard(card);
+      _rewardCard = card;
+    }
+  }
+
+  Future<void> _handleChapterUnlockReward() async {
+    await _gamificationService.unlockStoryPart(_selectedStory.title, _nextChapterToUnlock!.id);
+    _unlockedStoryChapter = _nextChapterToUnlock;
+    _rewardCard = null;
   }
 
   void incorrectOrderPopupShown() {

@@ -44,7 +44,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
   void initState() {
     super.initState();
     _gameController = GameController();
-    _gameController.initializeGame();
+    _gameController.loadNewStory();
 
     _animationController = AnimationController(
       vsync: this,
@@ -72,57 +72,12 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
         builder: (context, controller, child) {
           if (controller.showIncorrectOrderPopup) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return GameOverPopup(
-                    content: Text(
-                      '❌ Désolé, l’ordre est incorrect.',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: AppTextStyles.amaticSC, // Added font family
-                        shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(1.0, 1.0))],
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    actions: [
-                      ChibiButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        text: 'Réessayer',
-                        color: const Color(0xFFF9A825),
-                      ),
-                    ],
-                  );
-                },
-              ).then((_) => controller.incorrectOrderPopupShown());
+              _showIncorrectOrderDialog(controller);
             });
           } else if (controller.showVictoryPopup) {
             // Handle victory popup
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return VictoryPopup(
-                    rewardCard: controller.rewardCard, // Pass the reward card
-                    unlockedStoryChapter: controller.unlockedStoryChapter, // Pass the unlocked story chapter
-                    onDismiss: () {
-                      Navigator.of(context).pop();
-                      controller.victoryPopupShown(); // Reset popup state
-                      controller.resetGame(); // Start a new game
-                    },
-                    onSeeRewards: () {
-                      Navigator.of(context).pop();
-                      controller.victoryPopupShown(); // Reset popup state
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
-                    },
-                  );
-                },
-              );
+              _showVictoryDialog(controller);
             });
           }
           return Scaffold(
@@ -205,6 +160,59 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
           );
         },
       ),
+    );
+  }
+
+  void _showIncorrectOrderDialog(GameController controller) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return GameOverPopup(
+          content: Text(
+            '❌ Désolé, l’ordre est incorrect.',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontFamily: AppTextStyles.amaticSC, // Added font family
+              shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(1.0, 1.0))],
+            ),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            ChibiButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              text: 'Réessayer',
+              color: const Color(0xFFF9A825),
+            ),
+          ],
+        );
+      },
+    ).then((_) => controller.incorrectOrderPopupShown());
+  }
+
+  void _showVictoryDialog(GameController controller) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return VictoryPopup(
+          rewardCard: controller.rewardCard, // Pass the reward card
+          unlockedStoryChapter: controller.unlockedStoryChapter, // Pass the unlocked story chapter
+          onDismiss: () {
+            Navigator.of(context).pop();
+            controller.victoryPopupShown(); // Reset popup state
+            controller.resetGame(); // Start a new game
+          },
+          onSeeRewards: () {
+            Navigator.of(context).pop();
+            controller.victoryPopupShown(); // Reset popup state
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+          },
+        );
+      },
     );
   }
 }
