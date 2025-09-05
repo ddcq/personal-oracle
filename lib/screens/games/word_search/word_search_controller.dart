@@ -51,42 +51,37 @@ class WordSearchController with ChangeNotifier {
   }
 
   Future<void> _initialize() async {
+    isLoading = true;
+    notifyListeners();
+
     level = await _gamificationService.getWordSearchDifficulty();
     int generationAttempts = 0;
     const maxGenerationAttempts = 10; // Limit attempts to find a valid grid
 
+    bool gridGenerated = false;
     do {
       generationAttempts++;
       if (generationAttempts > maxGenerationAttempts) {
-        isLoading = false;
-        _instructionClue = "Impossible de générer une grille. Réessayez plus tard.";
-        notifyListeners();
+        _handleGenerationFailure("Impossible de générer une grille. Réessayez plus tard.");
         return;
       }
 
-      _nextChapter = await selectNextChapterToWin(_gamificationService);
-
+      _nextChapter = await _selectNextChapterToWin();
       if (_nextChapter == null) {
-        isLoading = false;
-        _instructionClue = "Toutes les histoires ont été complétées ou ne contiennent pas de mots valides.";
-        notifyListeners();
+        _handleGenerationFailure("Toutes les histoires ont été complétées ou ne contiennent pas de mots valides.");
         return;
       }
 
       _mythCard = _nextChapter!.chapter;
+      final wordsToPlace = _extractAndNormalizeWords(_mythCard);
 
-      final wordsToPlace = extractWordsFromMythCard(_mythCard).map(normalizeForWordSearch).toSet().toList();
-
-      // If no words can be extracted from this MythCard, try another one.
       if (wordsToPlace.isEmpty) {
         continue; // Restart the do-while loop with a new myth card
       }
 
-      // NEW: Separate words by length
       final longWords = wordsToPlace.where((word) => word.length >= 5).toList();
       final shortWords = wordsToPlace.where((word) => word.length == 4).toList();
 
-      // If there are not enough long words, we might not be able to generate a good grid.
       if (longWords.isEmpty) {
         continue;
       }
@@ -96,214 +91,231 @@ class WordSearchController with ChangeNotifier {
       final height = 5 + level;
       final width = 3 + level;
 
-      const stopWords = {
-        'MAIS',
-        'DONC',
-        'POUR',
-        'AVEC',
-        'SANS',
-        'SOUS',
-        'DANS',
-        'QUOI',
-        'DONT',
-        'NOUS',
-        'VOUS',
-        'ILS',
-        'CETTE',
-        'NOTRE',
-        'VOTRE',
-        'LEUR',
-        'PLUS',
-        'MOINS',
-        'BIEN',
-        'TRES',
-        'TOUT',
-        'TOUS',
-        'TOUTE',
-        'TOUTES',
-        'RIEN',
-        'PERSONNE',
-        'AUCUN',
-        'AUCUNE',
-        'AUTRE',
-        'AUTRES',
-        'MEME',
-        'MEMES',
-        'COMME',
-        'ALORS',
-        'AUSSI',
-        'ENCORE',
-        'JAMAIS',
-        'TOUJOURS',
-        'SOUVENT',
-        'PARFOIS',
-        'DEPUIS',
-        'AVANT',
-        'APRES',
-        'PENDANT',
-        'ENTRE',
-        'VERS',
-        'CONTRE',
-        'CHEZ',
-        'JUSQUE',
-        'SELON',
-        'MALGRE',
-        'PARMI',
-        'HORS',
-        'SAUF',
-        'VOICI',
-        'VOILA',
-        // verbes
-        'ETRE', 'AVOIR', 'FAIRE', 'ALLER', 'POUVOIR',
-        'SOMMES',
-        'ETES',
-        'SONT',
-        'ETAIS',
-        'ETAIT',
-        'ETIONS',
-        'ETIEZ',
-        'ETAIENT',
-        'FUMES',
-        'FUTES',
-        'FURENT',
-        'SERAI',
-        'SERAS',
-        'SERA',
-        'SERONS',
-        'SEREZ',
-        'SERONT',
-        'SOIS',
-        'SOIT',
-        'SOYONS',
-        'SOYEZ',
-        'SOIENT',
-        'ETANT',
-        'AVONS',
-        'AVEZ',
-        'ONT',
-        'AVAIS',
-        'AVAIT',
-        'AVIONS',
-        'AVIEZ',
-        'AVAIENT',
-        'EUMES',
-        'EUTES',
-        'EURENT',
-        'AURAI',
-        'AURAS',
-        'AURA',
-        'AURONS',
-        'AUREZ',
-        'AURONT',
-        'AIES',
-        'AYONS',
-        'AYEZ',
-        'AIENT',
-        'AYANT',
-        'FAIS',
-        'FAIT',
-        'FAISONS',
-        'FAITES',
-        'FONT',
-        'FAISAIS',
-        'FAISAIT',
-        'FAISIONS',
-        'FAISIEZ',
-        'FAISAIENT',
-        'FIMES',
-        'FITES',
-        'FIRENT',
-        'FERAI',
-        'FERAS',
-        'FERA',
-        'FERONS',
-        'FEREZ',
-        'FERONT',
-        'ALLONS',
-        'ALLEZ',
-        'VONT',
-        'ALLAIS',
-        'ALLAIT',
-        'ALLIONS',
-        'ALLIEZ',
-        'ALLAIENT',
-        'ALLAI',
-        'ALLAS',
-        'ALLA',
-        'ALLAMES',
-        'ALLATES',
-        'ALLERENT',
-        'IRAI',
-        'IRAS',
-        'IRA',
-        'IRONS',
-        'IREZ',
-        'IRONT',
-        'PEUX',
-        'PEUT',
-        'POUVONS',
-        'POUVEZ',
-        'PEUVENT',
-        'POUVAIS',
-        'POUVAIT',
-        'POUVIONS',
-        'POUVIEZ',
-        'POUVAIENT',
-        'PUMES',
-        'PUTES',
-        'PURENT',
-        'POURRAI',
-        'POURRAS',
-        'POURRA',
-        'POURRONS',
-        'POURREZ',
-        'POURRONT',
-        // autres
-        'AINSI',
-        'CEPENDANT',
-        'CHAQUE',
-        'COMMENT',
-        'ENFIN',
-        'ENSUITE',
-        'PARCE',
-        'QUAND',
-        'QUEL',
-        'QUELLE',
-        'QUELLES',
-        'QUELS',
-        'TANDIS',
-        'TANT',
-        'TELLE',
-        'TELLES',
-        'TELS',
-      };
-
       _gridResult = generateWordSearchGrid(
         longWords: longWords,
         shortWords: shortWords,
         secretWords: secretWords,
         width: width,
         height: height,
-        stopWords: stopWords,
+        stopWords: _stopWords,
       );
 
-      // Loop continues if _gridResult.placedWords is empty.
-    } while (_gridResult.placedWords.isEmpty);
+      gridGenerated = _gridResult.placedWords.isNotEmpty;
+    } while (!gridGenerated);
 
-    // Sort the list once and store it.
     _sortedWordsToFind = List<String>.from(_gridResult.placedWords);
     _sortedWordsToFind.sort();
 
+    _selectRiddle();
+
+    isLoading = false;
+    notifyListeners();
+  }
+
+  void _handleGenerationFailure(String message) {
+    isLoading = false;
+    _instructionClue = message;
+    notifyListeners();
+  }
+
+  Future<NextChapter?> _selectNextChapterToWin() async {
+    return await selectNextChapterToWin(_gamificationService);
+  }
+
+  List<String> _extractAndNormalizeWords(MythCard mythCard) {
+    return extractWordsFromMythCard(mythCard).map(normalizeForWordSearch).toSet().toList();
+  }
+
+  void _selectRiddle() {
     final secretWordName = _gridResult.secretWordUsed;
     final riddle = norseRiddles.firstWhere(
       (r) => normalizeForWordSearch(r.name) == secretWordName,
       orElse: () => const NorseRiddle(name: '?', clues: ['Trouvez les mots cachés.']),
     );
     _instructionClue = riddle.clues[_random.nextInt(riddle.clues.length)];
-
-    isLoading = false;
-    notifyListeners();
   }
+
+  static const Set<String> _stopWords = {
+    'MAIS',
+    'DONC',
+    'POUR',
+    'AVEC',
+    'SANS',
+    'SOUS',
+    'DANS',
+    'QUOI',
+    'DONT',
+    'NOUS',
+    'VOUS',
+    'ILS',
+    'CETTE',
+    'NOTRE',
+    'VOTRE',
+    'LEUR',
+    'PLUS',
+    'MOINS',
+    'BIEN',
+    'TRES',
+    'TOUT',
+    'TOUS',
+    'TOUTE',
+    'TOUTES',
+    'RIEN',
+    'PERSONNE',
+    'AUCUN',
+    'AUCUNE',
+    'AUTRE',
+    'AUTRES',
+    'MEME',
+    'MEMES',
+    'COMME',
+    'ALORS',
+    'AUSSI',
+    'ENCORE',
+    'JAMAIS',
+    'TOUJOURS',
+    'SOUVENT',
+    'PARFOIS',
+    'DEPUIS',
+    'AVANT',
+    'APRES',
+    'PENDANT',
+    'ENTRE',
+    'VERS',
+    'CONTRE',
+    'CHEZ',
+    'JUSQUE',
+    'SELON',
+    'MALGRE',
+    'PARMI',
+    'HORS',
+    'SAUF',
+    'VOICI',
+    'VOILA',
+    // verbes
+    'ETRE', 'AVOIR', 'FAIRE', 'ALLER', 'POUVOIR',
+    'SOMMES',
+    'ETES',
+    'SONT',
+    'ETAIS',
+    'ETAIT',
+    'ETIONS',
+    'ETIEZ',
+    'ETAIENT',
+    'FUMES',
+    'FUTES',
+    'FURENT',
+    'SERAI',
+    'SERAS',
+    'SERA',
+    'SERONS',
+    'SEREZ',
+    'SERONT',
+    'SOIS',
+    'SOIT',
+    'SOYONS',
+    'SOYEZ',
+    'SOIENT',
+    'ETANT',
+    'AVONS',
+    'AVEZ',
+    'ONT',
+    'AVAIS',
+    'AVAIT',
+    'AVIONS',
+    'AVIEZ',
+    'AVAIENT',
+    'EUMES',
+    'EUTES',
+    'EURENT',
+    'AURAI',
+    'AURAS',
+    'AURA',
+    'AURONS',
+    'AUREZ',
+    'AURONT',
+    'AIES',
+    'AYONS',
+    'AYEZ',
+    'AIENT',
+    'AYANT',
+    'FAIS',
+    'FAIT',
+    'FAISONS',
+    'FAITES',
+    'FONT',
+    'FAISAIS',
+    'FAISAIT',
+    'FAISIONS',
+    'FAISIEZ',
+    'FAISAIENT',
+    'FIMES',
+    'FITES',
+    'FIRENT',
+    'FERAI',
+    'FERAS',
+    'FERA',
+    'FERONS',
+    'FEREZ',
+    'FERONT',
+    'ALLONS',
+    'ALLEZ',
+    'VONT',
+    'ALLAIS',
+    'ALLAIT',
+    'ALLIONS',
+    'ALLIEZ',
+    'ALLAIENT',
+    'ALLAI',
+    'ALLAS',
+    'ALLA',
+    'ALLAMES',
+    'ALLATES',
+    'ALLERENT',
+    'IRAI',
+    'IRAS',
+    'IRA',
+    'IRONS',
+    'IREZ',
+    'IRONT',
+    'PEUX',
+    'PEUT',
+    'POUVONS',
+    'POUVEZ',
+    'PEUVENT',
+    'POUVAIS',
+    'POUVAIT',
+    'POUVIONS',
+    'POUVIEZ',
+    'POUVAIENT',
+    'PUMES',
+    'PUTES',
+    'PURENT',
+    'POURRAI',
+    'POURRAS',
+    'POURRA',
+    'POURRONS',
+    'POURREZ',
+    'POURRONT',
+    // autres
+    'AINSI',
+    'CEPENDANT',
+    'CHAQUE',
+    'COMMENT',
+    'ENFIN',
+    'ENSUITE',
+    'PARCE',
+    'QUAND',
+    'QUEL',
+    'QUELLE',
+    'QUELLES',
+    'QUELS',
+    'TANDIS',
+    'TANT',
+    'TELLE',
+    'TELLES',
+    'TELS',
+  };
 
   // --- Phase 1: Word Search Logic ---
   void startSelection(Offset offset) {
@@ -317,22 +329,28 @@ class WordSearchController with ChangeNotifier {
       return;
     }
     final startOffset = currentSelection.first;
-    final deltaX = offset.dx - startOffset.dx, deltaY = offset.dy - startOffset.dy;
-    if (deltaX == 0 && deltaY == 0) {
-      return;
-    }
+    final _SelectionStepsResult stepsResult = _calculateSelectionSteps(startOffset, offset);
 
+    final newSelection = _generateNewSelection(startOffset, stepsResult.direction, stepsResult.steps);
+    currentSelection.clear();
+    currentSelection.addAll(newSelection);
+    notifyListeners();
+  }
+
+  _SelectionStepsResult _calculateSelectionSteps(Offset startOffset, Offset endOffset) {
+    final deltaX = endOffset.dx - startOffset.dx;
+    final deltaY = endOffset.dy - startOffset.dy;
     final direction = _snapAngleToDirection(atan2(deltaY, deltaX));
     int steps = (direction.dx == 0)
         ? deltaY.abs().toInt()
         : (direction.dy == 0)
         ? deltaX.abs().toInt()
         : max(deltaX.abs(), deltaY.abs()).toInt();
+    return _SelectionStepsResult(direction, steps);
+  }
 
-    final newSelection = [for (var i = 0; i <= steps; i++) Offset(startOffset.dx + direction.dx * i, startOffset.dy + direction.dy * i)];
-    currentSelection.clear();
-    currentSelection.addAll(newSelection);
-    notifyListeners();
+  List<Offset> _generateNewSelection(Offset startOffset, _Direction direction, int steps) {
+    return [for (var i = 0; i <= steps; i++) Offset(startOffset.dx + direction.dx * i, startOffset.dy + direction.dy * i)];
   }
 
   void endSelection() {
@@ -342,6 +360,13 @@ class WordSearchController with ChangeNotifier {
       return;
     }
     String selectedWord = currentSelection.map((offset) => grid[offset.dy.toInt()][offset.dx.toInt()]).join('');
+    _checkAndConfirmWord(selectedWord);
+
+    currentSelection.clear();
+    notifyListeners();
+  }
+
+  void _checkAndConfirmWord(String selectedWord) {
     String reversedSelectedWord = selectedWord.split('').reversed.join('');
 
     if (wordsToFind.contains(selectedWord)) {
@@ -349,9 +374,6 @@ class WordSearchController with ChangeNotifier {
     } else if (wordsToFind.contains(reversedSelectedWord)) {
       _confirmWord(reversedSelectedWord);
     }
-
-    currentSelection.clear();
-    notifyListeners();
   }
 
   void _confirmWord(String word) {
@@ -402,10 +424,8 @@ class WordSearchController with ChangeNotifier {
 
   // --- Helpers ---
   _Direction _snapAngleToDirection(double angle) {
-    final degrees = angle * 180 / pi;
-    final normalizedDegrees = (degrees + 360) % 360;
-    final snappedAngle = (normalizedDegrees / 45).round() * 45;
-    switch (snappedAngle % 360) {
+    final int snappedAngleDegrees = ((angle * 180 / pi) / 45).round() * 45;
+    switch (snappedAngleDegrees % 360) {
       case 0:
         return _Direction(1, 0); // E
       case 45:
@@ -426,9 +446,27 @@ class WordSearchController with ChangeNotifier {
         return _Direction(1, 0);
     }
   }
+
+  void resetGame() {
+    isLoading = true;
+    gamePhase = GamePhase.searchingWords;
+    foundWords.clear();
+    currentSelection.clear();
+    confirmedSelection.clear();
+    currentSecretWordGuess = '';
+    isSecretWordError = false;
+    _initialize();
+  }
 }
 
 class _Direction {
   final int dx, dy;
   _Direction(this.dx, this.dy);
+}
+
+class _SelectionStepsResult {
+  final _Direction direction;
+  final int steps;
+
+  _SelectionStepsResult(this.direction, this.steps);
 }

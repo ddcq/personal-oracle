@@ -25,6 +25,8 @@ class _WordSearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = context.watch<WordSearchController>();
 
+    _showVictoryDialog(context, controller); // Call the new method here
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
@@ -53,17 +55,33 @@ class _WordSearchView extends StatelessWidget {
                     ),
             ),
           ),
-          if (controller.gamePhase == GamePhase.victory && controller.unlockedChapter != null)
-            VictoryPopup(
-              unlockedStoryChapter: controller.unlockedChapter!.chapter,
-              onDismiss: () => Navigator.of(context).pop(),
-              onSeeRewards: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              },
-            ),
         ],
       ),
     );
+  }
+
+  void _showVictoryDialog(BuildContext context, WordSearchController controller) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.gamePhase == GamePhase.victory && controller.unlockedChapter != null) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return VictoryPopup(
+              unlockedStoryChapter: controller.unlockedChapter!.chapter,
+              onDismiss: () {
+                Navigator.of(context).pop();
+                controller.resetGame(); // Assuming you have a resetGame method in your controller
+              },
+              onSeeRewards: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+            );
+          },
+        );
+      }
+    });
   }
 }
 
@@ -116,22 +134,7 @@ class _Grid extends StatelessWidget {
               final offset = Offset(col.toDouble(), row.toDouble());
               final isSelected = controller.currentSelection.contains(offset);
               final isConfirmed = controller.confirmedSelection.contains(offset);
-              return Container(
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? ChibiColors.buttonOrange.withAlpha(150)
-                      : isConfirmed
-                      ? ChibiColors.buttonBlue.withAlpha(150)
-                      : Colors.black.withAlpha(102),
-                  border: Border.all(color: Colors.white.withAlpha(150)),
-                ),
-                child: Center(
-                  child: Text(
-                    controller.grid[row][col],
-                    style: ChibiTextStyles.buttonText.copyWith(fontFamily: 'NotoSansRunic', fontSize: 18.sp),
-                  ),
-                ),
-              );
+              return _buildGridCell(isSelected, isConfirmed, controller.grid[row][col]);
             },
           ),
         );
@@ -162,6 +165,25 @@ class _Grid extends StatelessWidget {
     }
     return null;
   }
+
+  Widget _buildGridCell(bool isSelected, bool isConfirmed, String text) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isSelected
+            ? ChibiColors.buttonOrange.withAlpha(150)
+            : isConfirmed
+            ? ChibiColors.buttonBlue.withAlpha(150)
+            : Colors.black.withAlpha(102),
+        border: Border.all(color: Colors.white.withAlpha(150)),
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: ChibiTextStyles.buttonText.copyWith(fontFamily: 'NotoSansRunic', fontSize: 18.sp),
+        ),
+      ),
+    );
+  }
 }
 
 class _WordList extends StatelessWidget {
@@ -186,18 +208,22 @@ class _WordList extends StatelessWidget {
             alignment: WrapAlignment.center,
             children: controller.wordsToFind.map((word) {
               final isFound = controller.foundWords.contains(word);
-              return Text(
-                word,
-                style: ChibiTextStyles.buttonText.copyWith(
-                  decoration: isFound ? TextDecoration.lineThrough : TextDecoration.none,
-                  color: isFound ? Colors.white.withAlpha(128) : Colors.white,
-                  decorationColor: ChibiColors.buttonRed,
-                  decorationThickness: 2.0,
-                ),
-              );
+              return _buildWordText(word, isFound);
             }).toList(),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildWordText(String word, bool isFound) {
+    return Text(
+      word,
+      style: ChibiTextStyles.buttonText.copyWith(
+        decoration: isFound ? TextDecoration.lineThrough : TextDecoration.none,
+        color: isFound ? Colors.white.withAlpha(128) : Colors.white,
+        decorationColor: ChibiColors.buttonRed,
+        decorationThickness: 2.0,
       ),
     );
   }
@@ -234,21 +260,25 @@ class _SecretWordInput extends StatelessWidget {
             runSpacing: 4.0, // Vertical spacing for wrapping
             children: List.generate(controller.secretWord.length, (index) {
               final letter = (index < controller.currentSecretWordGuess.length) ? controller.currentSecretWordGuess[index] : '';
-              return Container(
-                width: 35,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: controller.isSecretWordError ? ChibiColors.buttonRed.withAlpha(180) : Colors.black.withAlpha(102),
-                  border: Border.all(color: Colors.white.withAlpha(150), width: 2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(
-                  child: Text(letter, style: ChibiTextStyles.storyTitle.copyWith(fontSize: 30.sp)),
-                ),
-              );
+              return _buildLetterContainer(letter, controller.isSecretWordError);
             }),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLetterContainer(String letter, bool isError) {
+    return Container(
+      width: 35,
+      height: 50,
+      decoration: BoxDecoration(
+        color: isError ? ChibiColors.buttonRed.withAlpha(180) : Colors.black.withAlpha(102),
+        border: Border.all(color: Colors.white.withAlpha(150), width: 2),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Center(
+        child: Text(letter, style: ChibiTextStyles.storyTitle.copyWith(fontSize: 30.sp)),
       ),
     );
   }
