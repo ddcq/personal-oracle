@@ -23,7 +23,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   static const Color _pathColor = Colors.blue;
   static const double _pathStrokeWidth = 2.0;
   static const int _qixInitialPositionPadding = 20;
-  static const String _defaultRewardCardImagePath = 'cards/chibi/fenrir.jpg';
+  static const String _defaultRewardCardImagePath = 'cards/chibi/fenrir.webp';
 
   late ui.Image _rewardCardImage;
   final int gridSize;
