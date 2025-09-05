@@ -15,8 +15,9 @@ class VictoryPopup extends StatefulWidget {
   final MythCard? unlockedStoryChapter; // New: unlocked story chapter
   final VoidCallback onDismiss;
   final VoidCallback onSeeRewards;
+  final bool isGenericVictory; // New: to force generic victory message
 
-  const VictoryPopup({super.key, this.rewardCard, this.unlockedStoryChapter, required this.onDismiss, required this.onSeeRewards});
+  const VictoryPopup({super.key, this.rewardCard, this.unlockedStoryChapter, required this.onDismiss, required this.onSeeRewards, this.isGenericVictory = false});
 
   @override
   State<VictoryPopup> createState() => _VictoryPopupState();
@@ -88,7 +89,29 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                       ),
                     ),
                     const SizedBox(height: 20),
-                    if (widget.rewardCard != null) ...[
+                    if (widget.isGenericVictory || (widget.rewardCard == null && widget.unlockedStoryChapter == null)) ...[
+                      Image.asset('assets/images/odin-happy.webp', height: 150, fit: BoxFit.contain),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Félicitations !',
+                        style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                          fontFamily: AppTextStyles.amaticSC,
+                          color: Colors.amber,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30, // Adjust size as needed
+                          letterSpacing: 1.0,
+                          shadows: [const Shadow(blurRadius: 8.0, color: Colors.black87, offset: Offset(2.0, 2.0))],
+                          decoration: TextDecoration.none,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        'Vous avez accompli un exploit digne des dieux !',
+                        style: const TextStyle(fontSize: 16, color: Colors.white70, decoration: TextDecoration.none),
+                        textAlign: TextAlign.center,
+                      ),
+                    ] else if (widget.rewardCard != null) ...[
                       Image.asset(addAssetPrefix(widget.rewardCard!.imagePath), height: 150, fit: BoxFit.contain),
                       const SizedBox(height: 10),
                       Text(
@@ -132,22 +155,6 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                         style: const TextStyle(fontSize: 16, color: Colors.white70, decoration: TextDecoration.none),
                         textAlign: TextAlign.center,
                       ),
-                    ] else ...[
-                      const SizedBox(height: 20),
-                      Text(
-                        'Nouvelle partie de l\'histoire débloquée !',
-                        style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                          fontFamily: AppTextStyles.amaticSC,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30, // Adjust size as needed
-                          letterSpacing: 1.0,
-                          shadows: [const Shadow(blurRadius: 8.0, color: Colors.black87, offset: Offset(2.0, 2.0))],
-                          decoration: TextDecoration.none,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 20),
                     ],
                     const SizedBox(height: 20),
                     Column(

@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_components.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_data.dart';
-import 'package:oracle_d_asgard/screens/games/asgard_wall/victory_screen.dart';
+
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
 import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
@@ -471,7 +471,17 @@ class _GameScreenState extends State<GameScreen> {
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
-            return VictoryScreen();
+            return VictoryPopup(
+              isGenericVictory: true,
+              onDismiss: () {
+                Navigator.of(context).pop();
+                startGame();
+              },
+              onSeeRewards: () {
+                Navigator.of(context).pop();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+              },
+            );
           },
         );
       }

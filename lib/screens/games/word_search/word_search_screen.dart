@@ -68,7 +68,7 @@ class _WordSearchView extends StatelessWidget {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return VictoryPopup(
-              unlockedStoryChapter: controller.unlockedChapter!.chapter,
+              unlockedStoryChapter: controller.unlockedChapter?.chapter,
               onDismiss: () {
                 Navigator.of(context).pop();
                 controller.resetGame(); // Assuming you have a resetGame method in your controller
@@ -179,7 +179,7 @@ class _Grid extends StatelessWidget {
       child: Center(
         child: Text(
           text,
-          style: ChibiTextStyles.buttonText.copyWith(fontFamily: 'NotoSansRunic', fontSize: 18.sp),
+          style: ChibiTextStyles.buttonText.copyWith(fontSize: 18.sp),
         ),
       ),
     );

@@ -233,7 +233,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
                           if (showPopup) {
                             return Positioned.fill(
                               child: VictoryPopup(
-                                rewardCard: _game!.rewardCard!,
+                                rewardCard: _game!.rewardCard,
                                 onDismiss: () {
                                   _showVictoryPopupNotifier.value = false;
                                   Navigator.of(context).pop(); // Go back to the previous screen (game menu)

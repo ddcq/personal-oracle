@@ -122,9 +122,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: NotoSansRunic
-      fonts:
-        - asset: assets/fonts/NotoSansRunic-Regular.ttf
+    
     - family: AmaticSC
       fonts:
         - asset: assets/fonts/AmaticSC-Bold.ttf

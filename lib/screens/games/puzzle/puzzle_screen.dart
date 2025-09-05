@@ -74,7 +74,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     };
   }
 
-  void _showVictoryDialog(CollectibleCard rewardCard) {
+  void _showVictoryDialog(CollectibleCard? rewardCard) {
     _flameGame.overlays.add('victoryOverlay');
   }
 
@@ -109,7 +109,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
             overlayBuilderMap: {
               'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
                 return VictoryPopup(
-                  rewardCard: game.associatedCard!,
+                  rewardCard: game.associatedCard,
                   onDismiss: () {
                     game.overlays.remove('victoryOverlay');
                     _resetGame();

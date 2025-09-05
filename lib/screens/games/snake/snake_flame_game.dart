@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -228,10 +229,14 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       // Vibrate based on food type
       switch (oldFoodType) {
         case FoodType.regular:
-          Vibration.vibrate(duration: _vibrationDurationShort);
+          if (Platform.isAndroid || Platform.isIOS) {
+            Vibration.vibrate(duration: _vibrationDurationShort);
+          }
           break;
         case FoodType.golden:
-          Vibration.vibrate(duration: _vibrationDurationShort, amplitude: _vibrationAmplitudeHigh);
+          if (Platform.isAndroid || Platform.isIOS) {
+            Vibration.vibrate(duration: _vibrationDurationShort, amplitude: _vibrationAmplitudeHigh);
+          }
           break;
         case FoodType.rotten:
           // No vibration for rotten food
@@ -240,9 +245,13 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     } else if (oldScore > gameState.score) {
       // Rotten apple eaten
       onScoreChanged?.call();
-      Vibration.vibrate(duration: _vibrationDurationMedium, amplitude: _vibrationAmplitudeHigh);
+      if (Platform.isAndroid || Platform.isIOS) {
+        Vibration.vibrate(duration: _vibrationDurationMedium, amplitude: _vibrationAmplitudeHigh);
+      }
       await Future.delayed(const Duration(milliseconds: _vibrationDurationMedium));
-      Vibration.vibrate(duration: _vibrationDurationMedium, amplitude: _vibrationAmplitudeHigh);
+      if (Platform.isAndroid || Platform.isIOS) {
+        Vibration.vibrate(duration: _vibrationDurationMedium, amplitude: _vibrationAmplitudeHigh);
+      }
     }
 
     // Update food
@@ -253,7 +262,9 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     if (!wasGameOver && gameState.isGameOver) {
       pauseEngine();
-      Vibration.vibrate(duration: _vibrationDurationLong); // Game over vibration
+      if (Platform.isAndroid || Platform.isIOS) {
+        Vibration.vibrate(duration: _vibrationDurationLong); // Game over vibration
+      }
       final bool isVictory = gameState.score >= _victoryScoreThreshold;
       CollectibleCard? wonCard;
 

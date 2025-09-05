@@ -73,7 +73,7 @@ class _SnakeGameState extends State<SnakeGame> {
       barrierDismissible: false, // User must interact with the button
       builder: (BuildContext context) {
         if (isVictory) {
-          return _buildVictoryDialog(wonCard!); // Pass wonCard directly
+          return _buildVictoryDialog(wonCard); // Pass wonCard directly
         } else {
           return _buildGameOverDialog(score);
         }
@@ -81,7 +81,7 @@ class _SnakeGameState extends State<SnakeGame> {
     );
   }
 
-  Widget _buildVictoryDialog(CollectibleCard wonCard) {
+  Widget _buildVictoryDialog(CollectibleCard? wonCard) {
     return VictoryPopup(
       rewardCard: wonCard,
       onDismiss: () {
@@ -143,9 +143,7 @@ class _SnakeGameState extends State<SnakeGame> {
               }
               _currentLevel = snapshot.data!; // Get the level from snapshot
 
-              if (_game == null) {
-                _game = _createSnakeFlameGame(_currentLevel);
-              }
+              _game ??= _createSnakeFlameGame(_currentLevel);
 
               // Game is initialized, show the game content
               return Column(

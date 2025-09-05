@@ -1,3 +1,4 @@
+import 'package:oracle_d_asgard/utils/image_picker_utils.dart';
 import 'dart:ui' as ui;
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
@@ -51,7 +52,7 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
   final PuzzleGame puzzleGame;
   late final ui.Image puzzleImage;
   final GamificationService _gamificationService = GamificationService();
-  final Function(CollectibleCard rewardCard) onRewardEarned; // New callback
+  final Function(CollectibleCard? rewardCard) onRewardEarned; // New callback
   CollectibleCard? associatedCard; // Changed type to CollectibleCard?
 
   PuzzleFlameGame({required this.puzzleGame, required this.onRewardEarned}) {
@@ -125,7 +126,7 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
       associatedCard = selected;
     } else {
       // Fallback image if no unearned cards
-      imageToLoad = 'home_illu.png';
+      imageToLoad = getRandomCardImagePath();
       associatedCard = null; // No specific card to unlock
     }
     puzzleImage = await Flame.images.load(imageToLoad);
@@ -134,8 +135,8 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
   void onGameCompletedFromPuzzleGame() async {
     if (associatedCard != null) {
       await _gamificationService.unlockCollectibleCard(associatedCard!); // Pass the CollectibleCard object
-      onRewardEarned(associatedCard!);
     }
+    onRewardEarned(associatedCard);
   }
 }
 
