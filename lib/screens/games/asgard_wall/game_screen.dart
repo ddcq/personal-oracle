@@ -227,7 +227,17 @@ class _GameScreenState extends State<GameScreen> {
 
   // Vérifie si le joueur a gagné ou perdu.
   void checkVictoryCondition() {
-    // Vérifier s'il y a des trous inaccessibles dans le mur jusqu'à la hauteur de victoire
+    if (_checkInaccessibleHoles()) {
+      endGame(false); // Trou inaccessible détecté, le joueur perd
+      return;
+    }
+
+    if (_checkWallComplete()) {
+      endGame(true); // Victoire !
+    }
+  }
+
+  bool _checkInaccessibleHoles() {
     for (int row = boardHeight - 1; row >= boardHeight - victoryHeight; row--) {
       for (int col = 0; col < boardWidth; col++) {
         if (board[row][col] == null) {
@@ -245,29 +255,24 @@ class _GameScreenState extends State<GameScreen> {
             if (!isTrueHole(col, row)) {
               continue; // Ce n’est pas un vrai trou, continuer
             } else {
-              endGame(false); // Trou inaccessible détecté, le joueur perd
-              return;
+              return true; // Trou inaccessible détecté
             }
           }
         }
       }
     }
+    return false;
+  }
 
-    // Vérifier si le mur est complètement rempli jusqu'à la hauteur de victoire
-    bool wallComplete = true;
+  bool _checkWallComplete() {
     for (int row = boardHeight - 1; row >= boardHeight - victoryHeight; row--) {
       for (int col = 0; col < boardWidth; col++) {
         if (board[row][col] == null) {
-          wallComplete = false;
-          break;
+          return false;
         }
       }
-      if (!wallComplete) break;
     }
-
-    if (wallComplete) {
-      endGame(true); // Victoire !
-    }
+    return true;
   }
 
   // Vérifie si un trou est vraiment inaccessible (selon la logique du jeu).
@@ -275,30 +280,25 @@ class _GameScreenState extends State<GameScreen> {
     // Un trou est considéré comme inaccessible s’il n’y a pas d'accès horizontal
     // sur au moins 2 cases consécutives de chaque côté
 
+    bool canAccessFromDirection(int startCol, int endCol) {
+      for (int checkCol = startCol; checkCol <= endCol; checkCol++) {
+        if (checkCol < 0 || checkCol >= boardWidth || board[row][checkCol] != null) {
+          return false;
+        }
+      }
+      return true;
+    }
+
     // Vérifier l’accès par la gauche (besoin de 2 cases libres consécutives)
     bool leftAccess = false;
     if (col >= 2) {
-      bool canAccessFromLeft = true;
-      for (int checkCol = col - 1; checkCol >= col - 2; checkCol--) {
-        if (board[row][checkCol] != null) {
-          canAccessFromLeft = false;
-          break;
-        }
-      }
-      if (canAccessFromLeft) leftAccess = true;
+      leftAccess = canAccessFromDirection(col - 2, col - 1);
     }
 
     // Vérifier l’accès par la droite (besoin de 2 cases libres consécutives)
     bool rightAccess = false;
     if (col < boardWidth - 2) {
-      bool canAccessFromRight = true;
-      for (int checkCol = col + 1; checkCol <= col + 2; checkCol++) {
-        if (board[row][checkCol] != null) {
-          canAccessFromRight = false;
-          break;
-        }
-      }
-      if (canAccessFromRight) rightAccess = true;
+      rightAccess = canAccessFromDirection(col + 1, col + 2);
     }
 
     // Si aucun accès n’est possible, c’est un vrai trou
@@ -436,87 +436,95 @@ class _GameScreenState extends State<GameScreen> {
       gameActive = false;
     });
     if (won) {
-      final gamificationService = Provider.of<GamificationService>(context, listen: false);
-      gamificationService.selectRandomUnearnedCollectibleCard().then((card) {
-        if (card != null) {
-          if (!mounted) return;
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return VictoryPopup(
-                rewardCard: card,
-                onDismiss: () {
-                  Navigator.of(context).pop();
-                  startGame();
-                },
-                onSeeRewards: () {
-                  Navigator.of(context).pop();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
-                },
-              );
-            },
-          );
-        } else {
-          // No card won, just show a simple victory message and restart
-          if (!mounted) return;
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return VictoryScreen();
-            },
-          );
-        }
-      });
+      _showWinDialog();
     } else {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return GameOverPopup(
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Défaite !',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white, // Changed to white
-                    fontFamily: AppTextStyles.amaticSC,
-                    shadows: [Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0))],
-                  ),
-                  textAlign: TextAlign.center,
+      _showLossDialog();
+    }
+  }
+
+  void _showWinDialog() {
+    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    gamificationService.selectRandomUnearnedCollectibleCard().then((card) {
+      if (card != null) {
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return VictoryPopup(
+              rewardCard: card,
+              onDismiss: () {
+                Navigator.of(context).pop();
+                startGame();
+              },
+              onSeeRewards: () {
+                Navigator.of(context).pop();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+              },
+            );
+          },
+        );
+      } else {
+        // No card won, just show a simple victory message and restart
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return VictoryScreen();
+          },
+        );
+      }
+    });
+  }
+
+  void _showLossDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return GameOverPopup(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Défaite !',
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white, // Changed to white
+                  fontFamily: AppTextStyles.amaticSC,
+                  shadows: [Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0))],
                 ),
-                SizedBox(height: 16),
-                Text(
-                  '💥 Un trou dans la muraille!\nLes Ases ne paieront pas le géant.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontFamily: AppTextStyles.amaticSC, // Added font family
-                    shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(1.0, 1.0))],
-                  ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
+              Text(
+                '💥 Un trou dans la muraille!\nLes Ases ne paieront pas le géant.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontFamily: AppTextStyles.amaticSC, // Added font family
+                  shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(1.0, 1.0))],
                 ),
-              ],
-            ),
-            actions: [
-              ChibiButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  startGame();
-                },
-                text: 'Réessayer',
-                color: const Color(0xFFFFD700),
               ),
             ],
-          );
-        },
-      );
-    }
+          ),
+          actions: [
+            ChibiButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                startGame();
+              },
+              text: 'Réessayer',
+              color: const Color(0xFFFFD700),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -571,61 +579,65 @@ class _GameScreenState extends State<GameScreen> {
             }
           }
 
-          // Marque la ligne de victoire avec une bordure dorée
-          bool isVictoryLine = row == boardHeight - victoryHeight;
-
-          return Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: isVictoryLine ? Color(0xFFFFD700) : Colors.grey[700]!, // Bordure dorée pour la ligne de victoire
-                width: isVictoryLine ? 2 : 0.5,
-              ),
-            ),
-            child:
-                cellColor !=
-                    null // Si la cellule contient un bloc (fixe ou tombant)
-                ? AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    decoration: BoxDecoration(
-                      // Couleur de base pour les blocs (couleur de la pièce en mouvement ou couleur du mur)
-                      color: cellColor,
-                      // Effet de brillance pour les blocs nouvellement placés
-                      boxShadow: justPlaced[row][col] ? [BoxShadow(color: Colors.white.withAlpha(128), blurRadius: 4, spreadRadius: 1)] : null,
-                    ),
-                    // Ajoute des bordures et des dégradés pour simuler des joints et la profondeur des pierres
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: justPlaced[row][col] ? Colors.white38 : Colors.black45, // Bordure plus claire pour les blocs nouvellement placés
-                          width: justPlaced[row][col] ? 1.0 : 0.5,
-                        ),
-                        // Effet de profondeur pour les pierres
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Colors.white.withAlpha(25), Colors.transparent, Colors.black.withAlpha(25)],
-                        ),
-                      ),
-                      // Icône de pierre ou autre effet pour les blocs nouvellement placés
-                      child: justPlaced[row][col]
-                          ? Center(
-                              child: Icon(
-                                Icons.hexagon, // Symbole de pierre
-                                color: Colors.white.withAlpha(76),
-                                size: 12,
-                              ),
-                            )
-                          : null,
-                    ),
-                  )
-                : Container(
-                    // Rendre les cases vides transparentes pour laisser l’image de fond apparaître
-                    color: Colors.transparent, // Transparent pour les cases vides
-                  ),
-          );
+          return _buildCell(row, col, cellColor);
         },
       ),
+    );
+  }
+
+  Widget _buildCell(int row, int col, Color? cellColor) {
+    // Marque la ligne de victoire avec une bordure dorée
+    bool isVictoryLine = row == boardHeight - victoryHeight;
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: isVictoryLine ? Color(0xFFFFD700) : Colors.grey[700]!, // Bordure dorée pour la ligne de victoire
+          width: isVictoryLine ? 2 : 0.5,
+        ),
+      ),
+      child:
+          cellColor !=
+              null // Si la cellule contient un bloc (fixe ou tombant)
+          ? AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              decoration: BoxDecoration(
+                // Couleur de base pour les blocs (couleur de la pièce en mouvement ou couleur du mur)
+                color: cellColor,
+                // Effet de brillance pour les blocs nouvellement placés
+                boxShadow: justPlaced[row][col] ? [BoxShadow(color: Colors.white.withAlpha(128), blurRadius: 4, spreadRadius: 1)] : null,
+              ),
+              // Ajoute des bordures et des dégradés pour simuler des joints et la profondeur des pierres
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: justPlaced[row][col] ? Colors.white38 : Colors.black45, // Bordure plus claire pour les blocs nouvellement placés
+                    width: justPlaced[row][col] ? 1.0 : 0.5,
+                  ),
+                  // Effet de profondeur pour les pierres
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Colors.white.withAlpha(25), Colors.transparent, Colors.black.withAlpha(25)],
+                  ),
+                ),
+                // Icône de pierre ou autre effet pour les blocs nouvellement placés
+                child: justPlaced[row][col]
+                    ? Center(
+                        child: Icon(
+                          Icons.hexagon, // Symbole de pierre
+                          color: Colors.white.withAlpha(76),
+                          size: 12,
+                        ),
+                      )
+                    : null,
+              ),
+            )
+          : Container(
+              // Rendre les cases vides transparentes pour laisser l’image de fond apparaître
+              color: Colors.transparent, // Transparent pour les cases vides
+            ),
     );
   }
 
