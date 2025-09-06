@@ -23,10 +23,10 @@ class WordSearchController with ChangeNotifier {
   GamePhase gamePhase = GamePhase.searchingWords;
 
   // Game Data
-  late WordSearchGridResult _gridResult;
-  late MythCard _mythCard;
-  late String _instructionClue;
-  late List<String> _sortedWordsToFind;
+  WordSearchGridResult _gridResult = const WordSearchGridResult(grid: [], placedWords: [], secretWordUsed: '');
+  MythCard? _mythCard;
+  String _instructionClue = '';
+  List<String> _sortedWordsToFind = [];
   NextChapter? _nextChapter;
 
   // Word Search State (Phase 1)
@@ -42,7 +42,7 @@ class WordSearchController with ChangeNotifier {
   List<List<String>> get grid => _gridResult.grid;
   List<String> get wordsToFind => _sortedWordsToFind; // Now returns the pre-sorted list
   String get secretWord => _gridResult.secretWordUsed;
-  MythCard get mythCard => _mythCard;
+  MythCard get mythCard => _mythCard ?? MythCard(id: 'default', title: 'Default', imagePath: '', description: '', isCorrect: false);
   String get instructionClue => _instructionClue;
   NextChapter? get unlockedChapter => _nextChapter;
 
