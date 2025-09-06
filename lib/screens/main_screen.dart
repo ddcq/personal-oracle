@@ -86,7 +86,14 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 20.h),
+                            padding: EdgeInsets.fromLTRB(
+                              20.w,
+                              0,
+                              20.w,
+                              _isBannerAdLoaded && _bannerAd != null
+                                  ? 20.h + _bannerAd!.size.height.toDouble()
+                                  : 20.h,
+                            ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [

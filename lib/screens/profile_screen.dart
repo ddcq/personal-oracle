@@ -24,6 +24,7 @@ import 'package:oracle_d_asgard/widgets/chibi_button.dart'; // For ChibiButton
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/components/victory_popup.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -159,17 +160,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Félicitations !'),
-                        content: Text('Vous avez gagné une nouvelle carte : ${wonCard.title} (${wonCard.version.name}) !'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
+                      return VictoryPopup(
+                        rewardCard: wonCard,
+                        onDismiss: () {
+                          Navigator.of(context).pop();
+                        },
+                        onSeeRewards: () {
+                          Navigator.of(context).pop();
+                          // The user is already on the profile screen,
+                          // so just popping the dialog is enough.
+                          // The setState(() {}); after the ad show will refresh the cards.
+                        },
                       );
                     },
                   );
