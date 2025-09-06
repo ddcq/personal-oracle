@@ -35,6 +35,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _isAdLoading = false;
+  int _tapCount = 0;
+  bool _showHiddenButtons = false;
 
   late Map<String, MythCard> _allMythCards;
   String? _profileName;
@@ -425,7 +427,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _buildSectionTitle('Cartes à collectionner'),
                       _buildCollectibleCards(unlockedCards),
                       const SizedBox(height: 20),
-                      _buildSectionTitle('Histoires débloquées'),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _tapCount++;
+                            if (_tapCount >= 5) {
+                              _showHiddenButtons = true;
+                            }
+                          });
+                        },
+                        child: _buildSectionTitle('Histoires débloquées'),
+                      ),
                       _buildUnlockedStories(storyProgress),
                       const SizedBox(height: 20), // Spacing before the new button
                       SizedBox(
@@ -437,20 +449,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       const SizedBox(height: 50),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Opacity(
-                            opacity: 0.3,
-                            child: IconButton(icon: const Icon(Icons.delete_forever, size: 20), onPressed: _clearAndRebuildDatabase, tooltip: 'Clear and Rebuild Database'),
-                          ),
-                          SizedBox(width: 20.w),
-                          Opacity(
-                            opacity: 0.3,
-                            child: IconButton(icon: const Icon(Icons.book, size: 20), onPressed: _unlockAllStories, tooltip: 'Unlock All Stories'),
-                          ),
-                        ],
-                      ),
+                      if (_showHiddenButtons)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(icon: const Icon(Icons.delete_forever, size: 20), onPressed: _clearAndRebuildDatabase, tooltip: 'Clear and Rebuild Database'),
+                            SizedBox(width: 20.w),
+                            IconButton(icon: const Icon(Icons.book, size: 20), onPressed: _unlockAllStories, tooltip: 'Unlock All Stories'),
+                          ],
+                        ),
                       const SizedBox(height: 50),
                     ],
                   );
