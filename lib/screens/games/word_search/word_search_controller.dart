@@ -68,8 +68,8 @@ class WordSearchController with ChangeNotifier {
 
       _nextChapter = await _selectNextChapterToWin();
       if (_nextChapter == null) {
-        _handleGenerationFailure("Toutes les histoires ont été complétées ou ne contiennent pas de mots valides.");
-        return;
+        // If all stories are completed, select a random chapter from all stories
+        _nextChapter = await selectRandomChapterFromAllStories();
       }
 
       _mythCard = _nextChapter!.chapter;

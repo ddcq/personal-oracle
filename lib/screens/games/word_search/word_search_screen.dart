@@ -62,13 +62,15 @@ class _WordSearchView extends StatelessWidget {
 
   void _showVictoryDialog(BuildContext context, WordSearchController controller) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (controller.gamePhase == GamePhase.victory && controller.unlockedChapter != null) {
+      if (controller.gamePhase == GamePhase.victory) {
+        final bool isGenericVictory = controller.unlockedChapter == null;
         showDialog(
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
             return VictoryPopup(
               unlockedStoryChapter: controller.unlockedChapter?.chapter,
+              isGenericVictory: isGenericVictory,
               onDismiss: () {
                 Navigator.of(context).pop();
                 controller.resetGame(); // Assuming you have a resetGame method in your controller

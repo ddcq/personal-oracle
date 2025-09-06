@@ -54,3 +54,18 @@ Future<NextChapter?> selectNextChapterToWin(GamificationService gamificationServ
     return null;
   }
 }
+
+/// Selects a random chapter from all available stories, regardless of unlock status.
+/// This is used when all stories have been completed, to allow continuous play.
+Future<NextChapter> selectRandomChapterFromAllStories() async {
+  final allStories = getMythStories();
+  final random = Random();
+
+  // Select a random story
+  final randomStory = allStories[random.nextInt(allStories.length)];
+
+  // Select a random chapter from the chosen story
+  final randomChapter = randomStory.correctOrder[random.nextInt(randomStory.correctOrder.length)];
+
+  return NextChapter(story: randomStory, chapter: randomChapter);
+}
