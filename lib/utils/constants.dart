@@ -7,6 +7,13 @@ class AppConstants {
   static const Color cardDark = Color(0xFF334155);
   static const Color borderDark = Color(0xFF475569);
   static const Color accent = Colors.amber;
+
+  static const Color primaryLight = Color(0xFFFFFFFF);
+  static const Color secondaryLight = Color(0xFFF0F0F0);
+  static const Color cardLight = Color(0xFFE0E0E0);
+  static const Color borderLight = Color(0xFFD0D0D0);
+  static const Color textLight = Color(0xFF333333);
+  static const Color textDark = Color(0xFFFFFFFF);
   
   // Traits de personnalité
   static const List<String> personalityTraits = [

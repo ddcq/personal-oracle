@@ -8,6 +8,7 @@ import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:provider/provider.dart';
+import 'package:oracle_d_asgard/providers/theme_provider.dart';
 
 class MythStoryPage extends StatefulWidget {
   final MythStory mythStory;
@@ -48,20 +49,30 @@ class _MythStoryPageState extends State<MythStoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.onPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.share, color: Colors.white),
+            icon: Icon(Icons.share, color: Theme.of(context).colorScheme.onPrimary),
             onPressed: () {
               // Add share functionality here if needed
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              themeProvider.themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+            onPressed: () {
+              themeProvider.toggleTheme();
             },
           ),
         ],
@@ -70,7 +81,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.displayMedium?.copyWith(
             fontFamily: AppTextStyles.amaticSC,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
             fontWeight: FontWeight.bold,
             fontSize: 30, // Adjusted font size for AppBar
             letterSpacing: 2.0,
@@ -102,21 +113,21 @@ class _MythStoryPageState extends State<MythStoryPage> {
                             final card = widget.mythStory.correctOrder[index];
                             final isUnlocked = unlockedCardIds.contains(card.id);
                             return Card(
-                              color: Colors.white, // Explicitly set card color to white
+                              color: Theme.of(context).cardColor, // Use theme's card color
                               margin: const EdgeInsets.all(8.0),
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(card.title, style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.black)),
+                                    Text(card.title, style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Theme.of(context).colorScheme.onSurface)),
                                     const SizedBox(height: 8.0),
-                                    if (isUnlocked) Image.asset('assets/images/stories/${card.imagePath}') else const Icon(Icons.lock, size: 50),
+                                    if (isUnlocked) Image.asset('assets/images/stories/${card.imagePath}') else Icon(Icons.lock, size: 50, color: Theme.of(context).colorScheme.onSurface),
                                     const SizedBox(height: 8.0),
                                     if (isUnlocked)
-                                      Text(card.detailedStory, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.black))
+                                      Text(card.detailedStory, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface))
                                     else
-                                      const Text('Locked', style: TextStyle(color: Colors.black)),
+                                      Text('Locked', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                                   ],
                                 ),
                               ),

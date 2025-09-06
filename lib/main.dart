@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'screens/main_screen.dart'; // 👈 Nouveau fichier avec MainScreen
-import 'utils/constants.dart';
+import 'package:oracle_d_asgard/utils/themes.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:oracle_d_asgard/firebase_options.dart';
@@ -12,8 +12,8 @@ import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
+import 'package:oracle_d_asgard/providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +27,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => GamificationService()),
         ChangeNotifierProvider(create: (context) => SoundService()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ],
       child: const MyApp(),
     ),
@@ -73,17 +74,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       builder: (context, child) {
         return MaterialApp(
           title: 'Oracle Nordique',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            scaffoldBackgroundColor: AppConstants.primaryDark,
-            textTheme: TextTheme(
-              headlineLarge: TextStyle(color: Colors.white, fontSize: 28.sp, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC),
-              headlineSmall: TextStyle(color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.w600, fontFamily: AppTextStyles.amaticSC),
-              bodyMedium: TextStyle(color: Colors.white70, fontSize: 16.sp),
-              bodySmall: TextStyle(color: Colors.white60, fontSize: 14.sp),
-            ),
-            cardTheme: CardThemeData(color: Colors.white.withAlpha(25), elevation: 4),
-          ),
+          theme: AppThemes.lightTheme,
+          darkTheme: AppThemes.darkTheme,
+          themeMode: Provider.of<ThemeProvider>(context).themeMode,
           home: const MainScreen(), // 👈 Utilise MainScreen au lieu de WelcomeScreen
           debugShowCheckedModeBanner: false,
         );
