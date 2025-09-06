@@ -31,7 +31,12 @@ class QuizService {
     String bestMatch = 'odin';
     int bestScore = -1;
 
+    final List<String> allowedDeityIds = ['odin', 'loki', 'freya', 'frigg', 'thor', 'tyr'];
+
     AppData.deities.forEach((key, deity) {
+      if (!allowedDeityIds.contains(key)) {
+        return; // Skip if not an allowed deity
+      }
       int matchScore = 0;
       deity.traits.forEach((trait, weight) {
         matchScore += (scores[trait] ?? 0) * weight;
