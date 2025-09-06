@@ -7,6 +7,7 @@ import 'package:oracle_d_asgard/screens/games/word_search/word_search_controller
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 
 class WordSearchScreen extends StatelessWidget {
   const WordSearchScreen({super.key});
@@ -31,6 +32,23 @@ class _WordSearchView extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
         titleText: 'L’Œil d’Odin',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: Colors.white),
+            onPressed: () {
+              GameHelpDialog.show(
+                context,
+                [
+                  'Trouvez tous les mots cachés dans la grille.',
+                  'Les mots peuvent être horizontaux, verticaux ou diagonaux, et peuvent être lus dans les deux sens.',
+                  'Sélectionnez les lettres en faisant glisser votre doigt sur la grille.',
+                  'Une fois tous les mots trouvés, un mot secret vous sera demandé.',
+                  'Utilisez les lettres restantes pour former le mot secret et valider votre victoire.',
+                ],
+              );
+            },
+          ),
+        ],
       ),
       body: Stack(
         children: [

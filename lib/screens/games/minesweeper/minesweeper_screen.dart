@@ -4,6 +4,7 @@ import './minesweeper_controller.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
@@ -65,7 +66,26 @@ class _MinesweeperView extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: ChibiAppBar(titleText: 'Le Butin d’Andvari'),
+      appBar: ChibiAppBar(titleText: 'Le Butin d’Andvari',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: Colors.white),
+            onPressed: () {
+              GameHelpDialog.show(
+                context,
+                [
+                  'Le but est de trouver tous les trésors sans déclencher de mines.',
+                  'Appuyez sur une case pour la révéler. Si c\'est une mine, la partie est perdue.',
+                  'Si la case révélée contient un chiffre ou une rune, cela indique le nombre de mines ou de trésors adjacents.',
+                  'Appuyez longuement sur une case pour y placer ou retirer un drapeau, marquant ainsi une mine suspectée.',
+                  'Les runes rouges indiquent les mines adjacentes, les runes jaunes indiquent les trésors adjacents.',
+                  'Trouvez tous les trésors pour gagner la partie !',
+                ],
+              );
+            },
+          ),
+        ],
+      ),
       body: AppBackground(
         child: SafeArea(
           child: Column(

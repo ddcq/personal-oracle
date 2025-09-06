@@ -110,7 +110,6 @@ class _SnakeGameState extends State<SnakeGame> {
     return AppBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        extendBodyBehindAppBar: true,
         appBar: ChibiAppBar(
           titleText: '🐍 Le Serpent de Midgard',
           actions: [
@@ -133,32 +132,34 @@ class _SnakeGameState extends State<SnakeGame> {
             ),
           ],
         ),
-        body: FutureBuilder<int>(
-          // Specify the type of data
-          future: _initializeGameFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
+        body: SafeArea(
+          child: FutureBuilder<int>(
+            // Specify the type of data
+            future: _initializeGameFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                _currentLevel = snapshot.data!; // Get the level from snapshot
+
+                _game ??= _createSnakeFlameGame(_currentLevel);
+
+                // Game is initialized, show the game content
+                return Column(
+                  children: [
+                    Expanded(
+                      child: _buildGameArea(context),
+                    ),
+                    _buildGameInfoAndControls(),
+                  ],
+                );
+              } else {
+                // Show a loading indicator while the game is initializing
+                return Center(child: CircularProgressIndicator());
               }
-              _currentLevel = snapshot.data!; // Get the level from snapshot
-
-              _game ??= _createSnakeFlameGame(_currentLevel);
-
-              // Game is initialized, show the game content
-              return Column(
-                children: [
-                  Expanded(
-                    child: _buildGameArea(context),
-                  ),
-                  _buildGameInfoAndControls(),
-                ],
-              );
-            } else {
-              // Show a loading indicator while the game is initializing
-              return Center(child: CircularProgressIndicator());
-            }
-          },
+            },
+          ),
         ),
       ),
     );
