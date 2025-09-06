@@ -23,8 +23,8 @@ class WordSearchController with ChangeNotifier {
   GamePhase gamePhase = GamePhase.searchingWords;
 
   // Game Data
-  WordSearchGridResult _gridResult = const WordSearchGridResult(grid: [], placedWords: [], secretWordUsed: '');
-  MythCard? _mythCard;
+  WordSearchGridResult _gridResult = WordSearchGridResult(grid: [], placedWords: [], secretWordUsed: '');
+  MythCard? _mythCard = MythCard(id: 'default', title: 'Default', imagePath: '', description: '', detailedStory: '');
   String _instructionClue = '';
   List<String> _sortedWordsToFind = [];
   NextChapter? _nextChapter;
@@ -42,7 +42,7 @@ class WordSearchController with ChangeNotifier {
   List<List<String>> get grid => _gridResult.grid;
   List<String> get wordsToFind => _sortedWordsToFind; // Now returns the pre-sorted list
   String get secretWord => _gridResult.secretWordUsed;
-  MythCard get mythCard => _mythCard ?? MythCard(id: 'default', title: 'Default', imagePath: '', description: '', isCorrect: false);
+  MythCard get mythCard => _mythCard!;
   String get instructionClue => _instructionClue;
   NextChapter? get unlockedChapter => _nextChapter;
 
@@ -73,7 +73,7 @@ class WordSearchController with ChangeNotifier {
       }
 
       _mythCard = _nextChapter!.chapter;
-      final wordsToPlace = _extractAndNormalizeWords(_mythCard);
+      final wordsToPlace = _extractAndNormalizeWords(_mythCard!);
 
       if (wordsToPlace.isEmpty) {
         continue; // Restart the do-while loop with a new myth card
