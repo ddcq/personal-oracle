@@ -118,6 +118,16 @@ class GamificationService with ChangeNotifier {
     return await db.query('story_progress');
   }
 
+  Future<void> unlockStory(String storyId, List<String> allParts) async {
+    final db = await _databaseService.database;
+    await db.insert('story_progress', {
+      'story_id': storyId,
+      'parts_unlocked': jsonEncode(allParts),
+      'unlocked_at': DateTime.now().millisecondsSinceEpoch,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    notifyListeners();
+  }
+
   Future<void> saveQuizResult(String deityName) async {
     final db = await _databaseService.database;
     await db.insert('quiz_results', {
