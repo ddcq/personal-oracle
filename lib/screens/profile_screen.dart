@@ -1,3 +1,4 @@
+import 'package:oracle_d_asgard/services/database_service.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -217,6 +218,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _clearAndRebuildDatabase() async {
+    final dbService = DatabaseService();
+    try {
+      await dbService.deleteDb();
+      await dbService.reinitializeDb();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Database cleared and rebuilt successfully!')));
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to clear and rebuild database: $e')));
+    }
+  }
+
+  Future<void> _unlockAllStories() async {
+    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    final allStories = getMythStories();
+    for (var story in allStories) {
+      await gamificationService.unlockStory(story.title, story.correctOrder.map((card) => card.id).toList());
+    }
+    setState(() {}); // Refresh the UI
+    _showSnackBar('Toutes les histoires ont été débloquées !');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -410,6 +434,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: Colors.green, // A new color for this button
                           onPressed: _isAdLoading ? null : _showRewardedAd,
                         ),
+                      ),
+                      const SizedBox(height: 50),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Opacity(
+                            opacity: 0.3,
+                            child: IconButton(icon: const Icon(Icons.delete_forever, size: 20), onPressed: _clearAndRebuildDatabase, tooltip: 'Clear and Rebuild Database'),
+                          ),
+                          SizedBox(width: 20.w),
+                          Opacity(
+                            opacity: 0.3,
+                            child: IconButton(icon: const Icon(Icons.book, size: 20), onPressed: _unlockAllStories, tooltip: 'Unlock All Stories'),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 50),
                     ],

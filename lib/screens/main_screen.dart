@@ -21,18 +21,7 @@ class _MainScreenState extends State<MainScreen> {
   BannerAd? _bannerAd;
   bool _isBannerAdLoaded = false;
 
-  Future<void> _clearAndRebuildDatabase() async {
-    final dbService = DatabaseService();
-    try {
-      await dbService.deleteDb();
-      await dbService.reinitializeDb();
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Database cleared and rebuilt successfully!')));
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to clear and rebuild database: $e')));
-    }
-  }
+  
 
   @override
   void initState() {
@@ -209,14 +198,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 10.h,
-            right: 10.w,
-            child: Opacity(
-              opacity: 0.3,
-              child: IconButton(icon: const Icon(Icons.settings, size: 20), onPressed: _clearAndRebuildDatabase, tooltip: 'Clear and Rebuild Database'),
-            ),
-          ),
+          
           if (_isBannerAdLoaded && _bannerAd != null)
             Positioned(
               bottom: 0,
