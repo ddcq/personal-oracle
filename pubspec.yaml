@@ -75,7 +75,7 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/images/icons/icon_loki.jpg"
-  min_sdk_android: 21 # android min sdk min:16, default 21
+  min_sdk_android: 19 # android min sdk min:16, default 21
   web:
     generate: true
   windows:

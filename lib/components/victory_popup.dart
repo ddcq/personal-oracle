@@ -157,19 +157,26 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                       ),
                     ],
                     const SizedBox(height: 20),
-                    Column(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ChibiButton(
-                          text: 'Menu principal',
                           color: ChibiColors.buttonOrange,
                           onPressed: () {
                             Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
                           },
+                          child: const Icon(Icons.home, color: Colors.white, size: 32),
                         ),
-                        if (widget.rewardCard != null) ...[
-                          const SizedBox(height: 10),
-                          ChibiButton(text: 'Voir mes récompenses', color: ChibiColors.buttonBlue, onPressed: widget.onSeeRewards),
-                        ],
+                        ChibiButton(
+                          color: ChibiColors.buttonGreen,
+                          onPressed: widget.onDismiss, // Assuming onDismiss is for replaying
+                          child: const Icon(Icons.replay, color: Colors.white, size: 32),
+                        ),
+                        ChibiButton(
+                          color: ChibiColors.buttonBlue,
+                          onPressed: widget.onSeeRewards,
+                          child: const Icon(Icons.emoji_events, color: Colors.white, size: 32),
+                        ),
                       ],
                     ),
                   ],
