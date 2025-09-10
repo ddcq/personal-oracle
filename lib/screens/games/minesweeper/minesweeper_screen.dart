@@ -228,7 +228,7 @@ class _RuneLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double uniformFontSize = MediaQuery.of(context).size.width * 0.04; // Responsive font size
+    final double uniformFontSize = MediaQuery.of(context).size.width * 0.035; // Slightly smaller font
     TextStyle legendTextStyle = ChibiTextStyles.buttonText.copyWith(fontSize: uniformFontSize);
     TextStyle mineRuneTextStyle = legendTextStyle.copyWith(color: Colors.red);
     TextStyle treasureRuneTextStyle = legendTextStyle.copyWith(color: Colors.yellow);
@@ -241,7 +241,7 @@ class _RuneLegend extends StatelessWidget {
     };
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(6.0), // Slightly less padding
       margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       decoration: BoxDecoration(
         color: Colors.black.withAlpha(102),
@@ -253,30 +253,15 @@ class _RuneLegend extends StatelessWidget {
         children: [
           Text('Légende des Runes:', style: legendTextStyle),
           const SizedBox(height: 4),
-          Text('Ces runes anciennes vous guideront:', style: legendTextStyle.copyWith(fontSize: uniformFontSize * 0.8)), // New introductory text
-          const SizedBox(height: 8),
-          Row( // Use Row to separate Mine and Treasure legends
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Wrap(
+            spacing: 8.0,
+            runSpacing: 2.0, // Reduced runSpacing
             children: [
-              Expanded( // Mines column
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Mines (Rouge):', style: legendTextStyle), // Added color hint
-                    ..._buildRuneTexts(mineRunes, mineRuneTextStyle),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 16), // Spacer between columns
-              Expanded( // Treasures column
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Trésors (Jaune):', style: legendTextStyle), // Added color hint
-                    ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, suffixBuilder: (count) => count == 1 ? '' : '+'),
-                  ],
-                ),
-              ),
+              Text('Mines (Rouge):', style: legendTextStyle),
+              ..._buildRuneTexts(mineRunes, mineRuneTextStyle, suffixBuilder: (count) => 'M'), // Add 'M' suffix
+              const SizedBox(width: 16), // Spacer
+              Text('Trésors (Jaune):', style: legendTextStyle),
+              ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, suffixBuilder: (count) => count == 1 ? 'T' : 'T+'), // Add 'T' or 'T+' suffix
             ],
           ),
         ],
