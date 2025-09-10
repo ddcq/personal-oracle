@@ -18,6 +18,24 @@ class MinesweeperScreen extends StatelessWidget {
   }
 }
 
+const List<String> mineRunes = [
+  '', // 0: No rune
+  'ᛚ', // 1: Laguz
+  'ᚨ', // 2: Ansuz
+  'ᚾ', // 3: Nauthiz
+  'ᛋ', // 4: Sowilo
+  'ᚱ', // 5: Raido
+  'ᚹ', // 6: Wunjo
+  'ᛟ', // 7: Othala
+  'ᛞ', // 8: Dagaz
+];
+
+const List<String> treasureRunes = [
+  '', // 0: No rune
+  'ᛇ', // 1: Eiwaz
+  'ᛏ', // 2: Tiwaz
+];
+
 class _MinesweeperView extends StatelessWidget {
   const _MinesweeperView();
 
@@ -32,16 +50,13 @@ class _MinesweeperView extends StatelessWidget {
           builder: (BuildContext context) {
             return GameOverPopup(
               content: const Text('BOUM ! Vous avez touché une mine.'),
-              actions: [
-                ChibiButton(
-                  onPressed: () {
-                    controller.initializeGame();
-                    Navigator.of(context).pop();
-                  },
-                  text: 'Recommencer',
-                  color: ChibiColors.buttonBlue,
-                ),
-              ],
+              onReplay: () {
+                controller.initializeGame();
+                Navigator.of(context).pop();
+              },
+              onMenu: () {
+                Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
+              },
             );
           },
         );
@@ -180,18 +195,7 @@ class _MinesweeperView extends StatelessWidget {
 }
 
 String _getRuneForMines(int count) {
-  const runes = [
-    '', // 0 mines (no rune)
-    'ᛚ', // 1: Laguz
-    'ᚨ', // 2: Ansuz
-    'ᚾ', // 3: Nauthiz
-    'ᛋ', // 4: Sowilo
-    'ᚱ', // 5: Raido
-    'ᚹ', // 6: Wunjo
-    'ᛟ', // 7: Othala
-    'ᛞ', // 8: Dagaz
-  ];
-  return (count >= 1 && count <= 8) ? runes[count] : '';
+  return (count >= 1 && count <= 8) ? mineRunes[count] : '';
 }
 
 String _getRuneForTreasures(int count) {
@@ -206,17 +210,18 @@ String _getRuneForTreasures(int count) {
 class _RuneLegend extends StatelessWidget {
   const _RuneLegend();
 
-  List<Widget> _buildRuneTexts(Map<int, String> runes, TextStyle runeStyle, TextStyle valueStyle, {String Function(int)? suffixBuilder}) {
-    return runes.entries.map((entry) {
-      final suffix = suffixBuilder != null ? suffixBuilder(entry.key) : '';
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(entry.value, style: runeStyle),
-                    Text('${entry.key}$suffix', style: valueStyle), // Removed parentheses
-        ],
-      );
-    }).toList();
+  List<Widget> _buildRuneTexts(List<String> runes, TextStyle runeStyle, TextStyle valueStyle, {String Function(int)? suffixBuilder}) {
+    return [
+      for (int i = 1; i < runes.length; i++)
+        if (runes[i].isNotEmpty)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(runes[i], style: runeStyle),
+              Text('$i${suffixBuilder?.call(i) ?? ''}', style: valueStyle),
+            ],
+          ),
+    ];
   }
 
   @override
@@ -226,9 +231,6 @@ class _RuneLegend extends StatelessWidget {
     TextStyle mineRuneTextStyle = legendTextStyle.copyWith(color: Colors.red, fontSize: uniformFontSize * 1.5); // Larger for rune
     TextStyle treasureRuneTextStyle = legendTextStyle.copyWith(color: Colors.yellow, fontSize: uniformFontSize * 1.5); // Larger for rune
     TextStyle valueTextStyle = legendTextStyle.copyWith(fontSize: uniformFontSize * 0.8); // Smaller for value
-
-    final Map<int, String> mineRunes = {1: 'ᛚ', 2: 'ᚨ', 3: 'ᚾ', 4: 'ᛋ', 5: 'ᚱ', 6: 'ᚹ', 7: 'ᛟ', 8: 'ᛞ'};
-    final Map<int, String> treasureRunes = {1: 'ᛇ', 2: 'ᛏ'};
 
     return Container(
       padding: const EdgeInsets.all(6.0),
@@ -244,14 +246,14 @@ class _RuneLegend extends StatelessWidget {
           Text('Légende des Runes:', style: legendTextStyle),
           const SizedBox(height: 4),
           Wrap(
-            spacing: 8.0,
+            spacing: 2.0,
             runSpacing: 4.0, // Increased runSpacing to accommodate vertical layout
             children: [
-              Image.asset('assets/images/explosion.png', width: 24, height: 24), // Mine image
+              Image.asset('assets/images/explosion.png', width: 32, height: 32), // Mine image
               const SizedBox(width: 4), // Small space between image and runes
-              ..._buildRuneTexts(mineRunes, mineRuneTextStyle, valueTextStyle, suffixBuilder: (count) => ''),
+              ..._buildRuneTexts(mineRunes, mineRuneTextStyle, valueTextStyle),
               const SizedBox(width: 16),
-              Image.asset('assets/images/sparkle.png', width: 24, height: 24), // Treasure image
+              Image.asset('assets/images/sparkle.png', width: 32, height: 32), // Treasure image
               const SizedBox(width: 4), // Small space between image and runes
               ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, valueTextStyle, suffixBuilder: (count) => count > 1 ? '+' : ''),
             ],

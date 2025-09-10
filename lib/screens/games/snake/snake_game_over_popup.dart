@@ -39,16 +39,12 @@ class SnakeGameOverPopup extends StatelessWidget {
           ),
         ],
       ),
-      actions: [
-        ChibiButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            onResetGame();
-          },
-          text: 'Renaître',
-          color: const Color(0xFF22C55E),
-        ),
-      ],
+      onReplay: () {
+        Navigator.of(context).pop();
+        onResetGame();
+      },
+      onMenu: () {
+        Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
+      },
     );
-  }
 }

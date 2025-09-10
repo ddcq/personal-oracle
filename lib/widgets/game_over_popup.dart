@@ -4,9 +4,15 @@ import 'package:oracle_d_asgard/utils/chibi_theme.dart'; // Import ChibiColors
 
 class GameOverPopup extends StatefulWidget {
   final Widget content;
-  final List<Widget> actions;
+  final VoidCallback onReplay;
+  final VoidCallback onMenu;
 
-  const GameOverPopup({super.key, required this.content, this.actions = const []});
+  const GameOverPopup({
+    super.key,
+    required this.content,
+    required this.onReplay,
+    required this.onMenu,
+  });
 
   @override
   State<GameOverPopup> createState() => _GameOverPopupState();
@@ -59,16 +65,22 @@ class _GameOverPopupState extends State<GameOverPopup> with SingleTickerProvider
               children: [
                 Image.asset('assets/images/odin_sad.png', height: 100),
                 const SizedBox(height: 16),
-                widget.content, // Use widget.content
+                widget.content,
                 const SizedBox(height: 16),
-                ...widget.actions, // Use widget.actions
-                const SizedBox(height: 8),
-                ChibiButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
-                  },
-                  text: 'Menu principal',
-                  color: Colors.grey,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ChibiButton(
+                      color: ChibiColors.buttonGreen,
+                      onPressed: widget.onReplay,
+                      child: const Icon(Icons.replay, color: Colors.white, size: 32),
+                    ),
+                    ChibiButton(
+                      color: ChibiColors.buttonOrange,
+                      onPressed: widget.onMenu,
+                      child: const Icon(Icons.home, color: Colors.white, size: 32),
+                    ),
+                  ],
                 ),
               ],
             ),
