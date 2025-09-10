@@ -10,6 +10,7 @@ import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
+import 'package:oracle_d_asgard/screens/profile_screen.dart' as screens;
 
 class MinesweeperScreen extends StatelessWidget {
   const MinesweeperScreen({super.key});
@@ -85,7 +86,7 @@ class _MinesweeperView extends StatelessWidget {
                 },
                 onSeeRewards: () {
                   Navigator.of(context).pop(); // Close the dialog
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfileScreen()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => screens.ProfileScreen()));
                 },
               );
             },
