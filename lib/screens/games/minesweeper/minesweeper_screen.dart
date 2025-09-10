@@ -66,22 +66,20 @@ class _MinesweeperView extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: ChibiAppBar(titleText: 'Le Butin d’Andvari',
+      appBar: ChibiAppBar(
+        titleText: 'Le Butin d’Andvari',
         actions: [
           IconButton(
             icon: const Icon(Icons.help_outline, color: Colors.white),
             onPressed: () {
-              GameHelpDialog.show(
-                context,
-                [
-                  'Le but est de trouver tous les trésors sans déclencher de mines.',
-                  'Appuyez sur une case pour la révéler. Si c\'est une mine, la partie est perdue.',
-                  'Si la case révélée contient une rune, cela indique le nombre de mines ou de trésors adjacents.',
-                  'Les runes rouges indiquent les mines adjacentes, les runes jaunes indiquent les trésors adjacents.',
-                  'Appuyez longuement sur une case pour y placer ou retirer un drapeau, marquant ainsi une mine suspectée.',
-                  'Trouvez tous les trésors pour gagner la partie !',
-                ],
-              );
+              GameHelpDialog.show(context, [
+                'Le but est de trouver tous les trésors sans déclencher de mines.',
+                'Appuyez sur une case pour la révéler. Si c\'est une mine, la partie est perdue.',
+                'Si la case révélée contient une rune, cela indique le nombre de mines ou de trésors adjacents.',
+                'Les runes rouges indiquent les mines adjacentes, les runes jaunes indiquent les trésors adjacents.',
+                'Appuyez longuement sur une case pour y placer ou retirer un drapeau, marquant ainsi une mine suspectée.',
+                'Trouvez tous les trésors pour gagner la partie !',
+              ]);
             },
           ),
         ],
@@ -175,36 +173,25 @@ class _MinesweeperView extends StatelessWidget {
           ),
         );
       }
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: counts.toList(),
-      );
+      return Row(mainAxisSize: MainAxisSize.min, children: counts.toList());
     }
     return const SizedBox.shrink();
   }
 }
 
 String _getRuneForMines(int count) {
-  switch (count) {
-    case 1:
-      return 'ᛚ'; // Laguz
-    case 2:
-      return 'ᚨ'; // Ansuz
-    case 3:
-      return 'ᚾ'; // Nauthiz
-    case 4:
-      return 'ᛋ'; // Sowilo
-    case 5:
-      return 'ᚱ'; // Raido
-    case 6:
-      return 'ᚹ'; // Wunjo
-    case 7:
-      return 'ᛟ'; // Othala
-    case 8:
-      return 'ᛞ'; // Dagaz
-    default:
-      return '';
-  }
+  const runes = [
+    '', // 0 mines (no rune)
+    'ᛚ', // 1: Laguz
+    'ᚨ', // 2: Ansuz
+    'ᚾ', // 3: Nauthiz
+    'ᛋ', // 4: Sowilo
+    'ᚱ', // 5: Raido
+    'ᚹ', // 6: Wunjo
+    'ᛟ', // 7: Othala
+    'ᛞ', // 8: Dagaz
+  ];
+  return (count >= 1 && count <= 8) ? runes[count] : '';
 }
 
 String _getRuneForTreasures(int count) {
@@ -219,29 +206,32 @@ String _getRuneForTreasures(int count) {
 class _RuneLegend extends StatelessWidget {
   const _RuneLegend();
 
-  List<Widget> _buildRuneTexts(Map<int, String> runes, TextStyle style, {String Function(int)? suffixBuilder}) {
+  List<Widget> _buildRuneTexts(Map<int, String> runes, TextStyle runeStyle, TextStyle valueStyle, {String Function(int)? suffixBuilder}) {
     return runes.entries.map((entry) {
       final suffix = suffixBuilder != null ? suffixBuilder(entry.key) : '';
-      return Text('${entry.value} (${entry.key}$suffix)', style: style);
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(entry.value, style: runeStyle),
+          Text('(${entry.key}$suffix)', style: valueStyle),
+        ],
+      );
     }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final double uniformFontSize = MediaQuery.of(context).size.width * 0.035; // Slightly smaller font
+    final double uniformFontSize = MediaQuery.of(context).size.width * 0.035;
     TextStyle legendTextStyle = ChibiTextStyles.buttonText.copyWith(fontSize: uniformFontSize);
-    TextStyle mineRuneTextStyle = legendTextStyle.copyWith(color: Colors.red);
-    TextStyle treasureRuneTextStyle = legendTextStyle.copyWith(color: Colors.yellow);
+    TextStyle mineRuneTextStyle = legendTextStyle.copyWith(color: Colors.red, fontSize: uniformFontSize * 1.5); // Larger for rune
+    TextStyle treasureRuneTextStyle = legendTextStyle.copyWith(color: Colors.yellow, fontSize: uniformFontSize * 1.5); // Larger for rune
+    TextStyle valueTextStyle = legendTextStyle.copyWith(fontSize: uniformFontSize * 0.8); // Smaller for value
 
-    final Map<int, String> mineRunes = {
-      1: 'ᛚ', 2: 'ᚨ', 3: 'ᚾ', 4: 'ᛋ', 5: 'ᚱ', 6: 'ᚹ', 7: 'ᛟ', 8: 'ᛞ'
-    };
-    final Map<int, String> treasureRunes = {
-      1: 'ᛇ', 2: 'ᛏ'
-    };
+    final Map<int, String> mineRunes = {1: 'ᛚ', 2: 'ᚨ', 3: 'ᚾ', 4: 'ᛋ', 5: 'ᚱ', 6: 'ᚹ', 7: 'ᛟ', 8: 'ᛞ'};
+    final Map<int, String> treasureRunes = {1: 'ᛇ', 2: 'ᛏ'};
 
     return Container(
-      padding: const EdgeInsets.all(6.0), // Slightly less padding
+      padding: const EdgeInsets.all(6.0),
       margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       decoration: BoxDecoration(
         color: Colors.black.withAlpha(102),
@@ -255,13 +245,13 @@ class _RuneLegend extends StatelessWidget {
           const SizedBox(height: 4),
           Wrap(
             spacing: 8.0,
-            runSpacing: 2.0, // Reduced runSpacing
+            runSpacing: 4.0, // Increased runSpacing to accommodate vertical layout
             children: [
               Text('Mines (Rouge):', style: legendTextStyle),
-              ..._buildRuneTexts(mineRunes, mineRuneTextStyle, suffixBuilder: (count) => 'M'), // Add 'M' suffix
-              const SizedBox(width: 16), // Spacer
+              ..._buildRuneTexts(mineRunes, mineRuneTextStyle, valueTextStyle, suffixBuilder: (count) => 'M'),
+              const SizedBox(width: 16),
               Text('Trésors (Jaune):', style: legendTextStyle),
-              ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, suffixBuilder: (count) => count == 1 ? 'T' : 'T+'), // Add 'T' or 'T+' suffix
+              ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, valueTextStyle, suffixBuilder: (count) => count == 1 ? 'T' : 'T+'),
             ],
           ),
         ],
