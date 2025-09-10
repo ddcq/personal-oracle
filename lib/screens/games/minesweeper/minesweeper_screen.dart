@@ -213,7 +213,7 @@ class _RuneLegend extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(entry.value, style: runeStyle),
-          Text('(${entry.key}$suffix)', style: valueStyle),
+                    Text('${entry.key}$suffix', style: valueStyle), // Removed parentheses
         ],
       );
     }).toList();
@@ -249,11 +249,11 @@ class _RuneLegend extends StatelessWidget {
             children: [
               Image.asset('assets/images/explosion.png', width: 24, height: 24), // Mine image
               const SizedBox(width: 4), // Small space between image and runes
-              ..._buildRuneTexts(mineRunes, mineRuneTextStyle, valueTextStyle, suffixBuilder: (count) => 'M'),
+              ..._buildRuneTexts(mineRunes, mineRuneTextStyle, valueTextStyle, suffixBuilder: (count) => ''),
               const SizedBox(width: 16),
               Image.asset('assets/images/sparkle.png', width: 24, height: 24), // Treasure image
               const SizedBox(width: 4), // Small space between image and runes
-              ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, valueTextStyle, suffixBuilder: (count) => count == 1 ? 'T' : 'T+'),
+              ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, valueTextStyle, suffixBuilder: (count) => count > 1 ? '+' : ''),
             ],
           ),
         ],
