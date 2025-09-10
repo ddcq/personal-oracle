@@ -47,6 +47,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     setState(() {
       _game.initializeAndScatter(dimensions['puzzleBoardBounds'], MediaQuery.of(context).size);
     });
+    _flameGame.reset();
   }
 
   Map<String, dynamic> _calculatePuzzleDimensions(BuildContext context) {

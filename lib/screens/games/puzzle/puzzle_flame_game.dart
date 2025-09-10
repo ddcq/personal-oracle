@@ -138,6 +138,45 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
     }
     onRewardEarned(associatedCard);
   }
+
+  void reset() async {
+    // Remove all existing puzzle pieces and dashed rectangles
+    removeAll(children.whereType<PuzzlePieceComponent>());
+    removeAll(children.whereType<DashedRectangleComponent>());
+
+    // Reload a new image for the puzzle
+    await _loadImageForPuzzle();
+
+    // Re-add dashed rectangles
+    final double pieceSize = puzzleGame.pieceSize;
+    final double boardWidth = pieceSize * puzzleGame.cols;
+    final double boardHeight = pieceSize * puzzleGame.rows;
+
+    final double offsetX = (size.x - boardWidth) / 2;
+    final double offsetY = (size.y - boardHeight) / 2;
+
+    for (int i = 0; i < puzzleGame.rows; i++) {
+      for (int j = 0; j < puzzleGame.cols; j++) {
+        final Rect rect = Rect.fromLTWH(offsetX + j * pieceSize, offsetY + i * pieceSize, pieceSize, pieceSize);
+        add(DashedRectangleComponent(rect: rect));
+      }
+    }
+
+    // Re-add puzzle pieces
+    for (var pieceData in puzzleGame.pieces) {
+      add(
+        PuzzlePieceComponent(
+          pieceData: pieceData,
+          gameRef: this,
+          offsetX: offsetX,
+          offsetY: offsetY,
+          puzzleImage: puzzleImage,
+          puzzleSize: puzzleGame.cols,
+          pieceSize: pieceSize,
+        ),
+      );
+    }
+  }
 }
 
 class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
