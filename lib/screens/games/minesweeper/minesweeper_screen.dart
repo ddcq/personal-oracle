@@ -8,6 +8,8 @@ import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/models/collectible_card.dart';
 
 class MinesweeperScreen extends StatelessWidget {
   const MinesweeperScreen({super.key});
@@ -61,21 +63,33 @@ class _MinesweeperView extends StatelessWidget {
           },
         );
       } else if (controller.isGameWon) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return VictoryPopup(
-              unlockedStoryChapter: null, // You can add rewards here
-              onDismiss: () {
-                controller.initializeGame();
-                Navigator.of(context).pop();
-              },
-              onSeeRewards: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              },
-            );
-          },
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          final gamificationService = Provider.of<GamificationService>(context, listen: false);
+          CollectibleCard? wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+
+          if (!context.mounted) return;
+
+          if (wonCard != null) {
+            await gamificationService.unlockCollectibleCard(wonCard);
+          }
+
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return VictoryPopup(
+                rewardCard: wonCard,
+                unlockedStoryChapter: null,
+                onDismiss: () {
+                  controller.initializeGame();
+                  Navigator.of(context).pop();
+                },
+                onSeeRewards: () {
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+              );
+            },
+          );
+        });
       }
     });
 
