@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
+import 'package:flame/game.dart' hide Route;
 import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/widgets/progress_bar.dart';
 import 'qix_game.dart';
