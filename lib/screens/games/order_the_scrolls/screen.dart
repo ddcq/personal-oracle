@@ -179,15 +179,12 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
             ),
             textAlign: TextAlign.center,
           ),
-          actions: [
-            ChibiButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              text: 'Réessayer',
-              color: const Color(0xFFF9A825),
-            ),
-          ],
+          onReplay: () {
+            Navigator.of(context).pop();
+          },
+          onMenu: () {
+            Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
+          },
         );
       },
     ).then((_) => controller.incorrectOrderPopupShown());

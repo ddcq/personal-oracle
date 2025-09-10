@@ -47,4 +47,5 @@ class SnakeGameOverPopup extends StatelessWidget {
         Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
       },
     );
+  }
 }

@@ -522,16 +522,13 @@ class _GameScreenState extends State<GameScreen> {
               ),
             ],
           ),
-          actions: [
-            ChibiButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                startGame();
-              },
-              text: 'Réessayer',
-              color: const Color(0xFFFFD700),
-            ),
-          ],
+          onReplay: () {
+            Navigator.of(context).pop();
+            startGame();
+          },
+          onMenu: () {
+            Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
+          },
         );
       },
     );

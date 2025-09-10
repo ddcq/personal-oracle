@@ -76,16 +76,13 @@ class _QixGameScreenState extends State<QixGameScreen> {
                   ),
                 ],
               ),
-              actions: [
-                ChibiButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Close the dialog
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => QixGameScreen()));
-                  },
-                  text: 'Réessayer',
-                  color: Colors.red,
-                ),
-              ],
+              onReplay: () {
+                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => QixGameScreen()));
+              },
+              onMenu: () {
+                Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
+              },
             );
           },
         );
