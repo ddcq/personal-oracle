@@ -87,6 +87,7 @@ class _SnakeGameState extends State<SnakeGame> {
       onDismiss: () {
         Navigator.of(context).pop();
         _game?.resetGame();
+        _game?.startGame();
       },
       onSeeRewards: () {
         Navigator.of(context).pop();
