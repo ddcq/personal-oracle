@@ -76,9 +76,9 @@ class _MinesweeperView extends StatelessWidget {
                 [
                   'Le but est de trouver tous les trésors sans déclencher de mines.',
                   'Appuyez sur une case pour la révéler. Si c\'est une mine, la partie est perdue.',
-                  'Si la case révélée contient un chiffre ou une rune, cela indique le nombre de mines ou de trésors adjacents.',
-                  'Appuyez longuement sur une case pour y placer ou retirer un drapeau, marquant ainsi une mine suspectée.',
+                  'Si la case révélée contient une rune, cela indique le nombre de mines ou de trésors adjacents.',
                   'Les runes rouges indiquent les mines adjacentes, les runes jaunes indiquent les trésors adjacents.',
+                  'Appuyez longuement sur une case pour y placer ou retirer un drapeau, marquant ainsi une mine suspectée.',
                   'Trouvez tous les trésors pour gagner la partie !',
                 ],
               );
@@ -253,15 +253,30 @@ class _RuneLegend extends StatelessWidget {
         children: [
           Text('Légende des Runes:', style: legendTextStyle),
           const SizedBox(height: 4),
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 4.0,
+          Text('Ces runes anciennes vous guideront:', style: legendTextStyle.copyWith(fontSize: uniformFontSize * 0.8)), // New introductory text
+          const SizedBox(height: 8),
+          Row( // Use Row to separate Mine and Treasure legends
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Mines :', style: legendTextStyle),
-              ..._buildRuneTexts(mineRunes, mineRuneTextStyle),
-              const SizedBox(width: 16), // Spacer
-              Text('Trésors :', style: legendTextStyle),
-              ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, suffixBuilder: (count) => count == 1 ? '' : '+'),
+              Expanded( // Mines column
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Mines (Rouge):', style: legendTextStyle), // Added color hint
+                    ..._buildRuneTexts(mineRunes, mineRuneTextStyle),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16), // Spacer between columns
+              Expanded( // Treasures column
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Trésors (Jaune):', style: legendTextStyle), // Added color hint
+                    ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, suffixBuilder: (count) => count == 1 ? '' : '+'),
+                  ],
+                ),
+              ),
             ],
           ),
         ],
