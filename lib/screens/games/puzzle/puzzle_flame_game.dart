@@ -50,7 +50,7 @@ class DashedRectangleComponent extends RectangleComponent {
 
 class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
   final PuzzleGame puzzleGame;
-  late final ui.Image puzzleImage;
+  late ui.Image puzzleImage;
   final GamificationService _gamificationService = GamificationService();
   final Function(CollectibleCard? rewardCard) onRewardEarned; // New callback
   CollectibleCard? associatedCard; // Changed type to CollectibleCard?
