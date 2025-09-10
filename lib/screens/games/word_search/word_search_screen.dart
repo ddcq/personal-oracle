@@ -94,8 +94,8 @@ class _WordSearchView extends StatelessWidget {
                 controller.resetGame(); // Assuming you have a resetGame method in your controller
               },
               onSeeRewards: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).popUntil((route) => route.isFirst);
+                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
               },
             );
           },
