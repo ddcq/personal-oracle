@@ -84,7 +84,8 @@ class _MinesweeperView extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 onSeeRewards: () {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
                 },
               );
             },
