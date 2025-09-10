@@ -247,10 +247,12 @@ class _RuneLegend extends StatelessWidget {
             spacing: 8.0,
             runSpacing: 4.0, // Increased runSpacing to accommodate vertical layout
             children: [
-              Text('Mines (Rouge):', style: legendTextStyle),
+              Image.asset('assets/images/explosion.png', width: 24, height: 24), // Mine image
+              const SizedBox(width: 4), // Small space between image and runes
               ..._buildRuneTexts(mineRunes, mineRuneTextStyle, valueTextStyle, suffixBuilder: (count) => 'M'),
               const SizedBox(width: 16),
-              Text('Trésors (Jaune):', style: legendTextStyle),
+              Image.asset('assets/images/sparkle.png', width: 24, height: 24), // Treasure image
+              const SizedBox(width: 4), // Small space between image and runes
               ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, valueTextStyle, suffixBuilder: (count) => count == 1 ? 'T' : 'T+'),
             ],
           ),
