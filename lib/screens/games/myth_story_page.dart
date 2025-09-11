@@ -9,6 +9,7 @@ import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/providers/theme_provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart'; // Import AdMob
 
 class MythStoryPage extends StatefulWidget {
   final MythStory mythStory;
@@ -22,6 +23,7 @@ class MythStoryPage extends StatefulWidget {
 class _MythStoryPageState extends State<MythStoryPage> {
   late Future<List<String>> _unlockedCardIdsFuture;
   late SoundService _soundService;
+  bool _isAdLoading = false; // New: Ad loading state
 
   @override
   void initState() {
@@ -45,6 +47,56 @@ class _MythStoryPageState extends State<MythStoryPage> {
       return List<String>.from(unlockedParts);
     }
     return [];
+  }
+
+  void _showSnackBar(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    }
+  }
+
+  void _showRewardedAd(String chapterId) async {
+    setState(() {
+      _isAdLoading = true;
+    });
+
+    RewardedAd.load(
+      adUnitId: 'ca-app-pub-9329709593733606/7159103317', // Use your AdMob rewarded ad unit ID
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          setState(() {
+            _isAdLoading = false;
+          });
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+            },
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              ad.dispose();
+              _showSnackBar('''Échec de l'affichage de la publicité. Veuillez réessayer.''');
+            },
+          );
+          ad.show(
+            onUserEarnedReward: (ad, reward) async {
+              final gamificationService = Provider.of<GamificationService>(context, listen: false);
+              await gamificationService.unlockStoryPart(widget.mythStory.title, chapterId);
+              setState(() {
+                _unlockedCardIdsFuture = _getUnlockedCardIds(); // Refresh unlocked chapters
+              });
+              _showSnackBar('''Chapitre débloqué avec succès !
+''');
+            },
+          );
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          setState(() {
+            _isAdLoading = false;
+          });
+          _showSnackBar('''Échec du chargement de la publicité. Veuillez réessayer.''');
+        },
+      ),
+    );
   }
 
   @override
@@ -127,7 +179,22 @@ class _MythStoryPageState extends State<MythStoryPage> {
                                     if (isUnlocked)
                                       Text(card.detailedStory, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface))
                                     else
-                                      Text('Locked', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            'Chapitre verrouillé',
+                                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                                          ),
+                                          const SizedBox(height: 8.0),
+                                          _isAdLoading
+                                              ? const CircularProgressIndicator()
+                                              : ElevatedButton.icon(
+                                                  onPressed: () => _showRewardedAd(card.id),
+                                                  icon: const Icon(Icons.play_arrow),
+                                                  label: const Text('Débloquer avec une pub'),
+                                                ),
+                                        ],
+                                      ),
                                   ],
                                 ),
                               ),
