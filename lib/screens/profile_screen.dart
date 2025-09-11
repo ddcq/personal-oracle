@@ -182,51 +182,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onUserEarnedReward: (ad, reward) async {
               // Reward the user
               final gamificationService = Provider.of<GamificationService>(context, listen: false);
-              CollectibleCard? wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+              CollectibleCard? wonCard = _nextAdRewardCard;
 
               if (wonCard != null) {
-                // Show success dialog
-                if (mounted) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return VictoryPopup(
-                        rewardCard: wonCard,
-                        hideReplayButton: true, // Hide replay button for ad rewards
-                        onDismiss: () {
-                          Navigator.of(context).pop();
-                        },
-                        onSeeRewards: () {
-                          Navigator.of(context).pop();
-                          // The user is already on the profile screen,
-                          // so just popping the dialog is enough.
-                          // The setState(() {}); after the ad show will refresh the cards.
-                        },
-                      );
-                    },
-                  );
-                }
+                await gamificationService.unlockCollectibleCard(wonCard);
+                _showRewardDialog(rewardCard: wonCard);
               } else {
-                // All cards collected
-                if (mounted) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Collection Complète !'),
-                        content: const Text('Vous avez déjà toutes les cartes !'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
+                _showRewardDialog(
+                  title: 'Collection Complète !',
+                  content: 'Vous avez déjà toutes les cartes !',
+                );
               }
               // Refresh the UI to show the new card
               _refreshProfileData();
@@ -274,70 +239,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 final unlockedStory = await gamificationService.selectRandomUnearnedMythStory(_nextAdRewardStory!); // Unlock the first chapter of the selected story
 
                 if (unlockedStory != null) {
-                  if (mounted) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return VictoryPopup(
-                          unlockedStoryChapter: unlockedStory.correctOrder.first, // Pass the first chapter of the unlocked story
-                          hideReplayButton: true, // Hide replay button for ad rewards
-                          onDismiss: () {
-                            Navigator.of(context).pop();
-                          },
-                          onSeeRewards: () {
-                            Navigator.of(context).pop();
-                            // The user is already on the profile screen,
-                            // so just popping the dialog is enough.
-                            // The setState(() {}); after the ad show will refresh the stories.
-                          },
-                        );
-                      },
-                    );
-                  }
+                  _showRewardDialog(unlockedStoryChapter: unlockedStory.correctOrder.first);
                 } else {
-                  // This case should ideally not be reached if _nextAdRewardStory is not null
-                  // and selectRandomUnearnedMythStory correctly handles unlocking.
-                  // It implies all chapters of the selected story are already unlocked.
-                  if (mounted) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Histoire déjà débloquée !'),
-                          content: const Text('Vous avez déjà débloqué tous les chapitres de cette histoire.'),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('OK'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }
-                }
-              } else {
-                if (mounted) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Toutes les histoires sont débloquées !'),
-                        content: const Text('Vous avez déjà débloqué toutes les histoires disponibles.'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
+                  _showRewardDialog(
+                    title: 'Histoire déjà débloquée !',
+                    content: 'Vous avez déjà débloqué tous les chapitres de cette histoire.',
                   );
                 }
+              } else {
+                _showRewardDialog(
+                  title: 'Toutes les histoires sont débloquées !',
+                  content: 'Vous avez déjà débloqué toutes les histoires disponibles.',
+                );
               }
               _refreshProfileData(); // Refresh the UI to show the new story progress
             },
@@ -1004,66 +917,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget? _buildAdRewardStoryButton() {
-    if (_nextAdRewardStory == null) {
-      return null;
-    }
+  
 
-    return GestureDetector(
-      onTap: _isAdLoading ? null : _showRewardedStoryAd,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Colors.white.withAlpha(150), width: 2),
-          boxShadow: [BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10, offset: Offset(0, 5))],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(13),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Image.asset(
-                'assets/images/stories/${_nextAdRewardStory!.correctOrder.first.imagePath}',
-                fit: BoxFit.cover,
-                color: Colors.black.withAlpha(153),
-                colorBlendMode: BlendMode.darken,
-              ),
-              Center(
-                child: _isAdLoading
-                    ? const Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: CircularProgressIndicator(color: Colors.white),
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.menu_book, color: Colors.white, size: MediaQuery.of(context).size.width / 6),
-                          Text(
-                            _nextAdRewardStory!.title,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '(pub)',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white70),
-                          ),
-                        ],
-                      ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+  
+  void _showRewardDialog({
+    CollectibleCard? rewardCard,
+    MythCard? unlockedStoryChapter,
+    String? title,
+    String? content,
+  }) {
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          if (rewardCard != null || unlockedStoryChapter != null) {
+            return VictoryPopup(
+              rewardCard: rewardCard,
+              unlockedStoryChapter: unlockedStoryChapter,
+              hideReplayButton: true,
+              onDismiss: () {
+                Navigator.of(context).pop();
+              },
+              onSeeRewards: () {
+                Navigator.of(context).pop();
+              },
+            );
+          } else {
+            return AlertDialog(
+              title: Text(title ?? ''),
+              content: Text(content ?? ''),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          }
+        },
+      );
+    }
   }
+}
 
-  Widget? _buildAdRewardButton(GamificationService gamificationService) {
-    if (_nextAdRewardCard == null) {
-      return null;
-    }
+class _AdRewardButtonWidget extends StatelessWidget {
+  final String imagePath;
+  final String title;
+  final IconData icon;
+  final bool isAdLoading;
+  final VoidCallback onTap;
 
+  const _AdRewardButtonWidget({
+    required this.imagePath,
+    required this.title,
+    required this.icon,
+    required this.isAdLoading,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _isAdLoading ? null : _showRewardedAd,
+      onTap: isAdLoading ? null : onTap,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
@@ -1076,13 +993,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             fit: StackFit.expand,
             children: [
               Image.asset(
-                'assets/images/${_nextAdRewardCard!.imagePath}',
+                imagePath,
                 fit: BoxFit.cover,
                 color: Colors.black.withAlpha(153),
                 colorBlendMode: BlendMode.darken,
               ),
               Center(
-                child: _isAdLoading
+                child: isAdLoading
                     ? const Padding(
                         padding: EdgeInsets.only(top: 8.0),
                         child: CircularProgressIndicator(color: Colors.white),
@@ -1090,9 +1007,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.help_outline, color: Colors.white, size: MediaQuery.of(context).size.width / 6),
+                          Icon(icon, color: Colors.white, size: MediaQuery.of(context).size.width / 6),
                           Text(
-                            _nextAdRewardCard!.title,
+                            title,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                           ),
