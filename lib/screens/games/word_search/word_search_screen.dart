@@ -8,6 +8,7 @@ import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
+import 'package:oracle_d_asgard/screens/profile_screen.dart' as screens;
 
 class WordSearchScreen extends StatelessWidget {
   const WordSearchScreen({super.key});
@@ -95,7 +96,7 @@ class _WordSearchView extends StatelessWidget {
               },
               onSeeRewards: () {
                 Navigator.of(context).pop(); // Close the dialog
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const screens.ProfileScreen()));
               },
             );
           },

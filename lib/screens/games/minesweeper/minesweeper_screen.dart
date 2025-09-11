@@ -7,7 +7,7 @@ import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/screens/profile_screen.dart' as screens;
@@ -68,11 +68,11 @@ class _MinesweeperView extends StatelessWidget {
           final gamificationService = Provider.of<GamificationService>(context, listen: false);
           CollectibleCard? wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
 
-          if (!context.mounted) return;
-
           if (wonCard != null) {
             await gamificationService.unlockCollectibleCard(wonCard);
           }
+
+          if (!context.mounted) return;
 
           showDialog(
             context: context,

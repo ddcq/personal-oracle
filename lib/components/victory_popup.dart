@@ -16,8 +16,9 @@ class VictoryPopup extends StatefulWidget {
   final VoidCallback onDismiss;
   final VoidCallback onSeeRewards;
   final bool isGenericVictory; // New: to force generic victory message
+  final bool hideReplayButton;
 
-  const VictoryPopup({super.key, this.rewardCard, this.unlockedStoryChapter, required this.onDismiss, required this.onSeeRewards, this.isGenericVictory = false});
+  const VictoryPopup({super.key, this.rewardCard, this.unlockedStoryChapter, required this.onDismiss, required this.onSeeRewards, this.isGenericVictory = false, this.hideReplayButton = false});
 
   @override
   State<VictoryPopup> createState() => _VictoryPopupState();
@@ -167,11 +168,12 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                           },
                           child: const Icon(Icons.home, color: Colors.white, size: 32),
                         ),
-                        ChibiButton(
-                          color: ChibiColors.buttonGreen,
-                          onPressed: widget.onDismiss, // Assuming onDismiss is for replaying
-                          child: const Icon(Icons.replay, color: Colors.white, size: 32),
-                        ),
+                        if (!widget.hideReplayButton)
+                          ChibiButton(
+                            color: ChibiColors.buttonGreen,
+                            onPressed: widget.onDismiss, // Assuming onDismiss is for replaying
+                            child: const Icon(Icons.replay, color: Colors.white, size: 32),
+                          ),
                         ChibiButton(
                           color: ChibiColors.buttonBlue,
                           onPressed: widget.onSeeRewards,

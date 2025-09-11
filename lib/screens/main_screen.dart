@@ -136,19 +136,15 @@ class _MainScreenState extends State<MainScreen> {
                     } else {
                       return Column(
                         children: <Widget>[
-                          Column(
-                            children: [
-                              SizedBox(height: 16.h),
-                              ConstrainedBox(
-                                constraints: BoxConstraints(maxHeight: 0.2.sh),
-                                child: FittedBox(
-                                  fit: BoxFit.contain,
-                                  child: Text('Oracle d’Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle),
-                                ),
-                              ),
-                              SizedBox(height: 16.h),
-                            ],
+                          SizedBox(height: 16.h),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(maxHeight: 0.2.sh),
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Text('Oracle d’Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle),
+                            ),
                           ),
+                          SizedBox(height: 16.h),
                           Expanded(
                             child: Row(
                               children: <Widget>[

@@ -67,10 +67,7 @@ class WordSearchController with ChangeNotifier {
       }
 
       _nextChapter = await _selectNextChapterToWin();
-      if (_nextChapter == null) {
-        // If all stories are completed, select a random chapter from all stories
-        _nextChapter = await selectRandomChapterFromAllStories();
-      }
+      _nextChapter ??= await selectRandomChapterFromAllStories();
 
       _mythCard = _nextChapter!.chapter;
       final wordsToPlace = _extractAndNormalizeWords(_mythCard!);

@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart'; // Import for ChangeNotifier
 
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
+import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:oracle_d_asgard/data/stories_data.dart';
 import 'package:oracle_d_asgard/models/card_version.dart'; // Import CardVersion
@@ -85,6 +86,7 @@ class GamificationService with ChangeNotifier {
   }
 
   Future<void> unlockStoryPart(String storyId, String partId) async {
+    print('Attempting to unlock story part: storyId=$storyId, partId=$partId');
     final db = await _databaseService.database;
     final List<Map<String, dynamic>> existing = await db.query('story_progress', where: 'story_id = ?', whereArgs: [storyId]);
 
@@ -93,6 +95,9 @@ class GamificationService with ChangeNotifier {
       if (!parts.contains(partId)) {
         parts.add(partId);
         await db.update('story_progress', {'parts_unlocked': jsonEncode(parts)}, where: 'story_id = ?', whereArgs: [storyId]);
+        print('Updated existing story progress for $storyId with new part $partId. Current parts: $parts');
+      } else {
+        print('Story part $partId already unlocked for $storyId.');
       }
     } else {
       await db.insert('story_progress', {
@@ -100,6 +105,7 @@ class GamificationService with ChangeNotifier {
         'parts_unlocked': jsonEncode([partId]),
         'unlocked_at': DateTime.now().millisecondsSinceEpoch,
       }, conflictAlgorithm: ConflictAlgorithm.ignore);
+      print('Inserted new story progress for $storyId with part $partId.');
     }
     notifyListeners();
   }
@@ -108,14 +114,18 @@ class GamificationService with ChangeNotifier {
     final db = await _databaseService.database;
     final List<Map<String, dynamic>> result = await db.query('story_progress', where: 'story_id = ?', whereArgs: [storyId]);
     if (result.isNotEmpty) {
+      print('Retrieved story progress for $storyId: ${result.first}');
       return result.first;
     }
+    print('No story progress found for $storyId.');
     return null;
   }
 
   Future<List<Map<String, dynamic>>> getUnlockedStoryProgress() async {
     final db = await _databaseService.database;
-    return await db.query('story_progress');
+    final result = await db.query('story_progress');
+    print('Retrieved all unlocked story progress: $result');
+    return result;
   }
 
   Future<void> unlockStory(String storyId, List<String> allParts) async {
@@ -224,7 +234,7 @@ class GamificationService with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> getUnearnedContent() async {
-    final allMythStories = getMythStories();
+    final allMythStories = getMythStories().where((story) => story.title != 'Loading Story').toList();
     final unlockedCollectibleCards = await getUnlockedCollectibleCards(); // Now returns CollectibleCard objects
     final unlockedStoryProgress = await getUnlockedStoryProgress();
 
@@ -257,49 +267,57 @@ class GamificationService with ChangeNotifier {
       unlockedStoryParts[progress['story_id'] as String] = List<String>.from(jsonDecode(progress['parts_unlocked']));
     }
 
-    final List<Map<String, dynamic>> nextMythCardsToEarn = [];
+    final List<MythStory> unearnedMythStories = [];
     for (var story in allMythStories) {
       final List<String> partsUnlockedForStory = unlockedStoryParts[story.title] ?? [];
-      MythCard? nextCard;
-
+      bool hasUnearnedChapter = false;
       for (var mythCard in story.correctOrder) {
         if (!partsUnlockedForStory.contains(mythCard.id)) {
-          nextCard = mythCard;
-          break; // Found the first unearned card in this story
+          hasUnearnedChapter = true;
+          break;
         }
       }
-
-      if (nextCard != null) {
-        nextMythCardsToEarn.add({'story_title': story.title, 'next_myth_card': nextCard});
+      if (hasUnearnedChapter) {
+        unearnedMythStories.add(story);
       }
     }
 
-    return {'unearned_collectible_cards': unearnedCollectibleCards, 'next_myth_cards_to_earn': nextMythCardsToEarn};
+    return {'unearned_collectible_cards': unearnedCollectibleCards, 'unearned_myth_stories': unearnedMythStories};
   }
 
-  Future<MythCard?> getRandomUnearnedStoryChapter() async {
+  Future<MythStory?> getRandomUnearnedMythStory() async {
     final unearnedContent = await getUnearnedContent();
-    final nextMythCardsToEarn = unearnedContent['next_myth_cards_to_earn'] as List<Map<String, dynamic>>;
+    final unearnedMythStories = unearnedContent['unearned_myth_stories'] as List<MythStory>;
 
-    if (nextMythCardsToEarn.isNotEmpty) {
+    if (unearnedMythStories.isNotEmpty) {
       final random = Random();
-      final selectedEntry = nextMythCardsToEarn[random.nextInt(nextMythCardsToEarn.length)];
-      return selectedEntry['next_myth_card'] as MythCard;
+      return unearnedMythStories[random.nextInt(unearnedMythStories.length)];
     }
     return null;
   }
 
-  Future<MythCard?> selectRandomUnearnedStoryChapter() async {
-    final selectedChapter = await getRandomUnearnedStoryChapter();
-    if (selectedChapter != null) {
-      final allMythStories = getMythStories();
-      final parentStory = allMythStories.firstWhereOrNull((story) => story.correctOrder.any((card) => card.id == selectedChapter.id));
-      if (parentStory != null) {
-        await unlockStoryPart(parentStory.title, selectedChapter.id);
-        return selectedChapter;
+  Future<MythStory?> selectRandomUnearnedMythStory(MythStory story) async {
+    final unlockedStoryProgress = await getUnlockedStoryProgress();
+    final Map<String, List<String>> unlockedStoryParts = {};
+    for (var progress in unlockedStoryProgress) {
+      unlockedStoryParts[progress['story_id'] as String] = List<String>.from(jsonDecode(progress['parts_unlocked']));
+    }
+
+    final List<String> partsUnlockedForStory = unlockedStoryParts[story.title] ?? [];
+    MythCard? firstUnearnedChapter;
+
+    for (var mythCard in story.correctOrder) {
+      if (!partsUnlockedForStory.contains(mythCard.id)) {
+        firstUnearnedChapter = mythCard;
+        break;
       }
     }
-    debugPrint('All story chapters already earned. No new chapter awarded.');
+
+    if (firstUnearnedChapter != null) {
+      await unlockStoryPart(story.title, firstUnearnedChapter.id);
+      return story;
+    }
+    print('All chapters for story ${story.title} already earned.');
     return null;
   }
 

@@ -2,6 +2,7 @@ import 'package:oracle_d_asgard/services/database_service.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart'; // For firstWhereOrNull
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
@@ -49,14 +50,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<List<Map<String, dynamic>>>? _quizResultsFuture;
 
   CollectibleCard? _nextAdRewardCard; // New: to store the next card from ad
-  MythCard? _nextAdRewardStoryChapter; // New: to store the next story chapter from ad
+  MythStory? _nextAdRewardStory; // New: to store the next story to unlock from ad
 
   @override
   void initState() {
     super.initState();
     _loadAllMythCards();
     _loadNextAdRewardCard(); // New: load the next card
-    _loadNextAdRewardStoryChapter(); // New: load the next story chapter
+    _loadNextAdRewardStory(); // New: load the next story
   }
 
   Future<void> _loadNextAdRewardCard() async {
@@ -65,25 +66,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {}); // Update UI after loading
   }
 
-  Future<void> _loadNextAdRewardStoryChapter() async {
+  Future<void> _loadNextAdRewardStory() async {
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
-    _nextAdRewardStoryChapter = await gamificationService.getRandomUnearnedStoryChapter();
+    _nextAdRewardStory = await gamificationService.getRandomUnearnedMythStory();
     setState(() {}); // Update UI after loading
+  }
+
+  Future<void> _refreshProfileData() async {
+    print('Refreshing profile data...');
+    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    _mainDataFuture = Future.wait([
+      gamificationService.getGameScores('Snake'),
+      gamificationService.getUnlockedCollectibleCards(),
+      gamificationService.getUnlockedStoryProgress(),
+      gamificationService.getProfileName(),
+      gamificationService.getProfileDeityIcon(),
+    ]);
+    _quizResultsFuture = gamificationService.getQuizResults();
+    await _loadNextAdRewardCard();
+    await _loadNextAdRewardStory();
+    setState(() {
+      print('setState called in _refreshProfileData');
+    });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_mainDataFuture == null) {
-      final gamificationService = Provider.of<GamificationService>(context, listen: false);
-      _mainDataFuture = Future.wait([
-        gamificationService.getGameScores('Snake'),
-        gamificationService.getUnlockedCollectibleCards(),
-        gamificationService.getUnlockedStoryProgress(),
-        gamificationService.getProfileName(),
-        gamificationService.getProfileDeityIcon(),
-      ]);
-      _quizResultsFuture = gamificationService.getQuizResults();
+      _refreshProfileData();
     }
   }
 
@@ -181,6 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     builder: (BuildContext context) {
                       return VictoryPopup(
                         rewardCard: wonCard,
+                        hideReplayButton: true, // Hide replay button for ad rewards
                         onDismiss: () {
                           Navigator.of(context).pop();
                         },
@@ -217,7 +229,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }
               }
               // Refresh the UI to show the new card
-              setState(() {});
+              _refreshProfileData();
             },
           );
         },
@@ -248,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ad.fullScreenContentCallback = FullScreenContentCallback(
             onAdDismissedFullScreenContent: (ad) {
               ad.dispose();
-              _loadNextAdRewardStoryChapter(); // Reload next story chapter after ad
+              _loadNextAdRewardStory(); // Reload next story after ad
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
               ad.dispose();
@@ -258,27 +270,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ad.show(
             onUserEarnedReward: (ad, reward) async {
               final gamificationService = Provider.of<GamificationService>(context, listen: false);
-              MythCard? unlockedChapter = await gamificationService.selectRandomUnearnedStoryChapter();
+              if (_nextAdRewardStory != null) {
+                final unlockedStory = await gamificationService.selectRandomUnearnedMythStory(_nextAdRewardStory!); // Unlock the first chapter of the selected story
 
-              if (unlockedChapter != null) {
-                if (mounted) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Nouveau chapitre débloqué !'),
-                        content: Text('Vous avez débloqué le chapitre "${unlockedChapter.title}" !'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                if (unlockedStory != null) {
+                  if (mounted) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return VictoryPopup(
+                          unlockedStoryChapter: unlockedStory.correctOrder.first, // Pass the first chapter of the unlocked story
+                          hideReplayButton: true, // Hide replay button for ad rewards
+                          onDismiss: () {
+                            Navigator.of(context).pop();
+                          },
+                          onSeeRewards: () {
+                            Navigator.of(context).pop();
+                            // The user is already on the profile screen,
+                            // so just popping the dialog is enough.
+                            // The setState(() {}); after the ad show will refresh the stories.
+                          },
+                        );
+                      },
+                    );
+                  }
+                } else {
+                  // This case should ideally not be reached if _nextAdRewardStory is not null
+                  // and selectRandomUnearnedMythStory correctly handles unlocking.
+                  // It implies all chapters of the selected story are already unlocked.
+                  if (mounted) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Histoire déjà débloquée !'),
+                          content: const Text('Vous avez déjà débloqué tous les chapitres de cette histoire.'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 }
               } else {
                 if (mounted) {
@@ -287,7 +325,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: const Text('Toutes les histoires sont débloquées !'),
-                        content: const Text('Vous avez déjà débloqué tous les chapitres d\'histoire disponibles.'),
+                        content: const Text('Vous avez déjà débloqué toutes les histoires disponibles.'),
                         actions: <Widget>[
                           TextButton(
                             child: const Text('OK'),
@@ -301,7 +339,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 }
               }
-              setState(() {}); // Refresh the UI to show the new story progress
+              _refreshProfileData(); // Refresh the UI to show the new story progress
             },
           );
         },
@@ -846,6 +884,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildUnlockedStories(List<Map<String, dynamic>> storyProgress) {
+    print('Building unlocked stories with storyProgress: $storyProgress');
     if (storyProgress.isEmpty) {
       final adRewardStoryButton = _buildAdRewardStoryButton();
       if (adRewardStoryButton != null) {
@@ -966,7 +1005,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget? _buildAdRewardStoryButton() {
-    if (_nextAdRewardStoryChapter == null) {
+    if (_nextAdRewardStory == null) {
       return null;
     }
 
@@ -984,27 +1023,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
             fit: StackFit.expand,
             children: [
               Image.asset(
-                'assets/images/stories/${_nextAdRewardStoryChapter!.imagePath}',
+                'assets/images/stories/${_nextAdRewardStory!.correctOrder.first.imagePath}',
                 fit: BoxFit.cover,
                 color: Colors.black.withAlpha(153),
                 colorBlendMode: BlendMode.darken,
               ),
               Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.menu_book, color: Colors.white, size: MediaQuery.of(context).size.width / 6),
-                    Text(
-                      '(pub)',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                    if (_isAdLoading)
-                      const Padding(
+                child: _isAdLoading
+                    ? const Padding(
                         padding: EdgeInsets.only(top: 8.0),
                         child: CircularProgressIndicator(color: Colors.white),
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.menu_book, color: Colors.white, size: MediaQuery.of(context).size.width / 6),
+                          Text(
+                            _nextAdRewardStory!.title,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '(pub)',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white70),
+                          ),
+                        ],
                       ),
-                  ],
-                ),
               ),
             ],
           ),
@@ -1038,21 +1082,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 colorBlendMode: BlendMode.darken,
               ),
               Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.help_outline, color: Colors.white, size: MediaQuery.of(context).size.width / 6),
-                    Text(
-                      '(pub)',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                    if (_isAdLoading)
-                      const Padding(
+                child: _isAdLoading
+                    ? const Padding(
                         padding: EdgeInsets.only(top: 8.0),
                         child: CircularProgressIndicator(color: Colors.white),
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.help_outline, color: Colors.white, size: MediaQuery.of(context).size.width / 6),
+                          Text(
+                            _nextAdRewardCard!.title,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '(pub)',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white70),
+                          ),
+                        ],
                       ),
-                  ],
-                ),
               ),
             ],
           ),
