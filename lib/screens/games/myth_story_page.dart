@@ -155,6 +155,14 @@ class _MythStoryPageState extends State<MythStoryPage> {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else {
                     final unlockedCardIds = snapshot.data ?? [];
+                    String? firstLockedChapterId;
+                    for (var chapter in widget.mythStory.correctOrder) {
+                      if (!unlockedCardIds.contains(chapter.id)) {
+                        firstLockedChapterId = chapter.id;
+                        break;
+                      }
+                    }
+
                     return Column(
                       children: [
                         ListView.builder(
@@ -164,6 +172,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
                           itemBuilder: (context, index) {
                             final card = widget.mythStory.correctOrder[index];
                             final isUnlocked = unlockedCardIds.contains(card.id);
+                            final isFirstLockedChapter = (card.id == firstLockedChapterId);
                             return Card(
                               color: Theme.of(context).cardColor, // Use theme's card color
                               margin: const EdgeInsets.all(8.0),
@@ -178,7 +187,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
                                     const SizedBox(height: 8.0),
                                     if (isUnlocked)
                                       Text(card.detailedStory, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface))
-                                    else
+                                    else if (isFirstLockedChapter)
                                       Column(
                                         children: [
                                           Text(
@@ -194,7 +203,9 @@ class _MythStoryPageState extends State<MythStoryPage> {
                                                   label: const Text('Débloquer avec une pub'),
                                                 ),
                                         ],
-                                      ),
+                                      )
+                                    else
+                                      Text('Chapitre verrouillé', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                                   ],
                                 ),
                               ),
