@@ -20,10 +20,9 @@ import 'package:share_plus/share_plus.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // For .sw and .h extensions
 
-
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
-import 'package:oracle_d_asgard/utils/image_utils.dart';
+
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 
@@ -50,17 +49,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<List<Map<String, dynamic>>>? _quizResultsFuture;
 
   CollectibleCard? _nextAdRewardCard; // New: to store the next card from ad
+  MythCard? _nextAdRewardStoryChapter; // New: to store the next story chapter from ad
 
   @override
   void initState() {
     super.initState();
     _loadAllMythCards();
     _loadNextAdRewardCard(); // New: load the next card
+    _loadNextAdRewardStoryChapter(); // New: load the next story chapter
   }
 
   Future<void> _loadNextAdRewardCard() async {
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
-    _nextAdRewardCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+    _nextAdRewardCard = await gamificationService.getRandomUnearnedCollectibleCard(); // Assuming this method exists or will be created
+    setState(() {}); // Update UI after loading
+  }
+
+  Future<void> _loadNextAdRewardStoryChapter() async {
+    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    _nextAdRewardStoryChapter = await gamificationService.getRandomUnearnedStoryChapter();
     setState(() {}); // Update UI after loading
   }
 
@@ -219,6 +226,89 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _isAdLoading = false;
           });
           // Handle error, maybe show a message to the user
+          _showSnackBar('''Échec du chargement de la publicité. Veuillez réessayer.''');
+        },
+      ),
+    );
+  }
+
+  void _showRewardedStoryAd() async {
+    setState(() {
+      _isAdLoading = true;
+    });
+
+    RewardedAd.load(
+      adUnitId: 'ca-app-pub-9329709593733606/7159103317', // Same ad unit ID for now
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          setState(() {
+            _isAdLoading = false;
+          });
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+              _loadNextAdRewardStoryChapter(); // Reload next story chapter after ad
+            },
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              ad.dispose();
+              _showSnackBar('''Échec de l'affichage de la publicité. Veuillez réessayer.''');
+            },
+          );
+          ad.show(
+            onUserEarnedReward: (ad, reward) async {
+              final gamificationService = Provider.of<GamificationService>(context, listen: false);
+              MythCard? unlockedChapter = await gamificationService.selectRandomUnearnedStoryChapter();
+
+              if (unlockedChapter != null) {
+                if (mounted) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Nouveau chapitre débloqué !'),
+                        content: Text('Vous avez débloqué le chapitre "${unlockedChapter.title}" !'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              } else {
+                if (mounted) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Toutes les histoires sont débloquées !'),
+                        content: const Text('Vous avez déjà débloqué tous les chapitres d\'histoire disponibles.'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              }
+              setState(() {}); // Refresh the UI to show the new story progress
+            },
+          );
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          setState(() {
+            _isAdLoading = false;
+          });
           _showSnackBar('''Échec du chargement de la publicité. Veuillez réessayer.''');
         },
       ),
@@ -454,7 +544,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            IconButton(icon: const Icon(Icons.delete_forever, size: 20), onPressed: _clearAndRebuildDatabase, tooltip: 'Clear and Rebuild Database'),
+                            IconButton(
+                              icon: const Icon(Icons.delete_forever, size: 20),
+                              onPressed: _clearAndRebuildDatabase,
+                              tooltip: 'Clear and Rebuild Database',
+                            ),
                             SizedBox(width: 20.w),
                             IconButton(icon: const Icon(Icons.book, size: 20), onPressed: _unlockAllStories, tooltip: 'Unlock All Stories'),
                           ],
@@ -747,95 +841,149 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     final allMythStories = getMythStories();
 
+    final adRewardStoryButton = _buildAdRewardStoryButton();
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 1.0),
-      itemCount: storyProgress.length,
+      itemCount: storyProgress.length + (adRewardStoryButton != null ? 1 : 0),
       itemBuilder: (context, index) {
-        final progress = storyProgress[index];
-        final storyId = progress['story_id'];
-        final mythStory = allMythStories.firstWhere(
-          (story) => story.title == storyId,
-          orElse: () => MythStory(title: 'Histoire inconnue', correctOrder: []), // Fallback
-        );
-        final unlockedParts = jsonDecode(progress['parts_unlocked']) as List;
-        String? lastChapterImagePath;
-        if (unlockedParts.isNotEmpty) {
-          final lastUnlockedChapterId = unlockedParts.last;
-          final lastChapterMythCard = mythStory.correctOrder.firstWhere(
-            (card) => card.id == lastUnlockedChapterId,
-            orElse: () => mythStory.correctOrder.first, // Fallback to first if last not found
+        if (index < storyProgress.length) {
+          final progress = storyProgress[index];
+          final storyId = progress['story_id'];
+          final mythStory = allMythStories.firstWhere(
+            (story) => story.title == storyId,
+            orElse: () => MythStory(title: 'Histoire inconnue', correctOrder: []), // Fallback
           );
-          lastChapterImagePath = lastChapterMythCard.imagePath;
-        }
+          final unlockedParts = jsonDecode(progress['parts_unlocked']) as List;
+          String? lastChapterImagePath;
+          if (unlockedParts.isNotEmpty) {
+            final lastUnlockedChapterId = unlockedParts.last;
+            final lastChapterMythCard = mythStory.correctOrder.firstWhere(
+              (card) => card.id == lastUnlockedChapterId,
+              orElse: () => mythStory.correctOrder.first, // Fallback to first if last not found
+            );
+            lastChapterImagePath = lastChapterMythCard.imagePath;
+          }
 
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MythStoryPage(mythStory: mythStory)));
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: const Color(0xFF8B4513), width: 2),
-            ),
-            child: Stack(
-              children: [
-                if (lastChapterImagePath != null)
-                  Positioned.fill(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(13),
-                      child: Image.asset(
-                        'assets/images/stories/$lastChapterImagePath',
-                        fit: BoxFit.cover,
-                        color: Colors.black.withAlpha(102),
-                        colorBlendMode: BlendMode.darken,
-                      ),
-                    ),
-                  ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: Text(
-                        mythStory.title,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: AppTextStyles.amaticSC,
-                          fontSize: 28,
-                          shadows: [Shadow(blurRadius: 5.0, color: Colors.black.withAlpha(178), offset: const Offset(2.0, 2.0))],
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MythStoryPage(mythStory: mythStory)));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: const Color(0xFF8B4513), width: 2),
+              ),
+              child: Stack(
+                children: [
+                  if (lastChapterImagePath != null)
+                    Positioned.fill(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(13),
+                        child: Image.asset(
+                          'assets/images/stories/$lastChapterImagePath',
+                          fit: BoxFit.cover,
+                          color: Colors.black.withAlpha(102),
+                          colorBlendMode: BlendMode.darken,
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: mythStory.correctOrder.map((chapter) {
-                          final isUnlocked = unlockedParts.contains(chapter.id);
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: Container(
-                              width: 14,
-                              height: 18,
-                              decoration: BoxDecoration(shape: BoxShape.circle, color: isUnlocked ? Colors.transparent : Colors.white.withAlpha(100)),
-                              child: isUnlocked ? const Icon(Icons.emoji_emotions, color: Colors.yellow, size: 16) : null,
-                            ),
-                          );
-                        }).toList(),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: Text(
+                          mythStory.title,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: AppTextStyles.amaticSC,
+                            fontSize: 28,
+                            shadows: [Shadow(blurRadius: 5.0, color: Colors.black.withAlpha(178), offset: const Offset(2.0, 2.0))],
+                          ),
+                        ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: mythStory.correctOrder.map((chapter) {
+                            final isUnlocked = unlockedParts.contains(chapter.id);
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                              child: Container(
+                                width: 14,
+                                height: 18,
+                                decoration: BoxDecoration(shape: BoxShape.circle, color: isUnlocked ? Colors.transparent : Colors.white.withAlpha(100)),
+                                child: isUnlocked ? const Icon(Icons.emoji_emotions, color: Colors.yellow, size: 16) : null,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return adRewardStoryButton!;
+        }
+      },
+    );
+  }
+
+  Widget? _buildAdRewardStoryButton() {
+    if (_nextAdRewardStoryChapter == null) {
+      return null;
+    }
+
+    return GestureDetector(
+      onTap: _isAdLoading ? null : _showRewardedStoryAd,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Colors.white.withAlpha(150), width: 2),
+          boxShadow: [BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10, offset: Offset(0, 5))],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(13),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                'assets/images/stories/${_nextAdRewardStoryChapter!.imagePath}',
+                fit: BoxFit.cover,
+                color: Colors.black.withAlpha(153),
+                colorBlendMode: BlendMode.darken,
+              ),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.menu_book, color: Colors.white, size: MediaQuery.of(context).size.width / 6),
+                    Text(
+                      '(pub)',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
+                    if (_isAdLoading)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 8.0),
+                        child: CircularProgressIndicator(color: Colors.white),
+                      ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -850,9 +998,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           border: Border.all(color: Colors.white.withAlpha(150), width: 2),
-          boxShadow: [
-            BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10, offset: Offset(0, 5)),
-          ],
+          boxShadow: [BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10, offset: Offset(0, 5))],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(13),
@@ -860,7 +1006,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             fit: StackFit.expand,
             children: [
               Image.asset(
-                addAssetPrefix(_nextAdRewardCard!.imagePath),
+                'assets/images/${_nextAdRewardCard!.imagePath}',
                 fit: BoxFit.cover,
                 color: Colors.black.withAlpha(153),
                 colorBlendMode: BlendMode.darken,
@@ -869,15 +1015,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.help_outline, color: Colors.white, size: 40), // Big '?'
+                    Icon(Icons.help_outline, color: Colors.white, size: MediaQuery.of(context).size.width / 6),
                     Text(
                       '(pub)',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: AppTextStyles.amaticSC,
-                        fontSize: 18,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                     if (_isAdLoading)
                       const Padding(

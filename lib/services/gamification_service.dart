@@ -277,18 +277,51 @@ class GamificationService with ChangeNotifier {
     return {'unearned_collectible_cards': unearnedCollectibleCards, 'next_myth_cards_to_earn': nextMythCardsToEarn};
   }
 
-  Future<CollectibleCard?> selectRandomUnearnedCollectibleCard() async {
+  Future<MythCard?> getRandomUnearnedStoryChapter() async {
+    final unearnedContent = await getUnearnedContent();
+    final nextMythCardsToEarn = unearnedContent['next_myth_cards_to_earn'] as List<Map<String, dynamic>>;
+
+    if (nextMythCardsToEarn.isNotEmpty) {
+      final random = Random();
+      final selectedEntry = nextMythCardsToEarn[random.nextInt(nextMythCardsToEarn.length)];
+      return selectedEntry['next_myth_card'] as MythCard;
+    }
+    return null;
+  }
+
+  Future<MythCard?> selectRandomUnearnedStoryChapter() async {
+    final selectedChapter = await getRandomUnearnedStoryChapter();
+    if (selectedChapter != null) {
+      final allMythStories = getMythStories();
+      final parentStory = allMythStories.firstWhereOrNull((story) => story.correctOrder.any((card) => card.id == selectedChapter.id));
+      if (parentStory != null) {
+        await unlockStoryPart(parentStory.title, selectedChapter.id);
+        return selectedChapter;
+      }
+    }
+    debugPrint('All story chapters already earned. No new chapter awarded.');
+    return null;
+  }
+
+  Future<CollectibleCard?> getRandomUnearnedCollectibleCard() async {
     final unearnedContent = await getUnearnedContent();
     final unearnedCards = unearnedContent['unearned_collectible_cards'] as List<CollectibleCard>;
 
     if (unearnedCards.isNotEmpty) {
       final random = Random();
-      final wonCard = unearnedCards[random.nextInt(unearnedCards.length)];
-      await unlockCollectibleCard(wonCard);
-      return wonCard;
+      return unearnedCards[random.nextInt(unearnedCards.length)];
     } else {
       debugPrint('All collectible cards already earned. No new card awarded.');
       return null;
     }
+  }
+
+  Future<CollectibleCard?> selectRandomUnearnedCollectibleCard() async {
+    final selectedCard = await getRandomUnearnedCollectibleCard();
+    if (selectedCard != null) {
+      await unlockCollectibleCard(selectedCard);
+      return selectedCard;
+    }
+    return null;
   }
 }
