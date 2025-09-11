@@ -834,10 +834,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildUnlockedStories(List<Map<String, dynamic>> storyProgress) {
     if (storyProgress.isEmpty) {
-      return Text(
-        'Aucune histoire débloquée pour l’instant.',
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
-      );
+      final adRewardStoryButton = _buildAdRewardStoryButton();
+      if (adRewardStoryButton != null) {
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 1.0),
+          itemCount: 1,
+          itemBuilder: (context, index) {
+            return adRewardStoryButton;
+          },
+        );
+      } else {
+        return Text(
+          'Aucune histoire débloquée pour l’instant.',
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
+        );
+      }
     }
     final allMythStories = getMythStories();
 
