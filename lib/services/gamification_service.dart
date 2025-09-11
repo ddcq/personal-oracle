@@ -270,18 +270,13 @@ class GamificationService with ChangeNotifier {
     final List<MythStory> unearnedMythStories = [];
     for (var story in allMythStories) {
       final List<String> partsUnlockedForStory = unlockedStoryParts[story.title] ?? [];
-      bool hasUnearnedChapter = false;
-      for (var mythCard in story.correctOrder) {
-        if (!partsUnlockedForStory.contains(mythCard.id)) {
-          hasUnearnedChapter = true;
-          break;
-        }
-      }
-      if (hasUnearnedChapter) {
+      if (partsUnlockedForStory.isEmpty) { // Only add stories with no unlocked chapters
         unearnedMythStories.add(story);
+        print('Adding story to unearnedMythStories: ${story.title}');
       }
     }
 
+    print('Final unearnedMythStories count: ${unearnedMythStories.length}');
     return {'unearned_collectible_cards': unearnedCollectibleCards, 'unearned_myth_stories': unearnedMythStories};
   }
 
