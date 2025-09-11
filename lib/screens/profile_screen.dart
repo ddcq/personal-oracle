@@ -739,7 +739,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildCollectibleCards(List<CollectibleCard> cards, GamificationService gamificationService) {
     if (cards.isEmpty) {
-      final adRewardButton = _buildAdRewardButton(gamificationService);
+      final adRewardButton = _nextAdRewardCard != null ? _AdRewardButtonWidget(
+        imagePath: 'assets/images/${_nextAdRewardCard!.imagePath}',
+        title: _nextAdRewardCard!.title,
+        icon: Icons.help_outline,
+        isAdLoading: _isAdLoading,
+        onTap: _showRewardedAd,
+      ) : null;
       if (adRewardButton != null) {
         return GridView.builder(
           shrinkWrap: true,
@@ -778,7 +784,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final filteredCards = highestTierCards.values.toList();
     filteredCards.sort((a, b) => a.title.compareTo(b.title));
 
-    final adRewardButton = _buildAdRewardButton(gamificationService);
+    final adRewardButton = _nextAdRewardCard != null ? _AdRewardButtonWidget(
+      imagePath: 'assets/images/${_nextAdRewardCard!.imagePath}',
+      title: _nextAdRewardCard!.title,
+      icon: Icons.help_outline,
+      isAdLoading: _isAdLoading,
+      onTap: _showRewardedAd,
+    ) : null;
 
     return GridView.builder(
       shrinkWrap: true,
@@ -797,9 +809,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildUnlockedStories(List<Map<String, dynamic>> storyProgress) {
-    print('Building unlocked stories with storyProgress: $storyProgress');
+    
     if (storyProgress.isEmpty) {
-      final adRewardStoryButton = _buildAdRewardStoryButton();
+      final adRewardStoryButton = _nextAdRewardStory != null ? _AdRewardButtonWidget(
+        imagePath: 'assets/images/stories/${_nextAdRewardStory!.correctOrder.first.imagePath}',
+        title: _nextAdRewardStory!.title,
+        icon: Icons.menu_book,
+        isAdLoading: _isAdLoading,
+        onTap: _showRewardedStoryAd,
+      ) : null;
       if (adRewardStoryButton != null) {
         return GridView.builder(
           shrinkWrap: true,
@@ -819,7 +837,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     final allMythStories = getMythStories();
 
-    final adRewardStoryButton = _buildAdRewardStoryButton();
+    final adRewardStoryButton = _nextAdRewardStory != null ? _AdRewardButtonWidget(
+      imagePath: 'assets/images/stories/${_nextAdRewardStory!.correctOrder.first.imagePath}',
+      title: _nextAdRewardStory!.title,
+      icon: Icons.menu_book,
+      isAdLoading: _isAdLoading,
+      onTap: _showRewardedStoryAd,
+    ) : null;
 
     return GridView.builder(
       shrinkWrap: true,
