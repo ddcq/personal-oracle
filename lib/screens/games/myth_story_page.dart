@@ -112,12 +112,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.share, color: Theme.of(context).colorScheme.onPrimary),
-            onPressed: () {
-              // Add share functionality here if needed
-            },
-          ),
+          
           IconButton(
             icon: Icon(
               themeProvider.themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
