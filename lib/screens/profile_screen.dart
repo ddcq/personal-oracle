@@ -19,10 +19,11 @@ import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // For .sw and .h extensions
-import 'package:oracle_d_asgard/widgets/chibi_button.dart'; // For ChibiButton
+
 
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 
@@ -48,10 +49,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<List<dynamic>>? _mainDataFuture;
   Future<List<Map<String, dynamic>>>? _quizResultsFuture;
 
+  CollectibleCard? _nextAdRewardCard; // New: to store the next card from ad
+
   @override
   void initState() {
     super.initState();
     _loadAllMythCards();
+    _loadNextAdRewardCard(); // New: load the next card
+  }
+
+  Future<void> _loadNextAdRewardCard() async {
+    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    _nextAdRewardCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+    setState(() {}); // Update UI after loading
   }
 
   @override
@@ -425,7 +435,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 20),
 
                       _buildSectionTitle('Cartes à collectionner'),
-                      _buildCollectibleCards(unlockedCards),
+                      _buildCollectibleCards(unlockedCards, gamificationService),
                       const SizedBox(height: 20),
                       GestureDetector(
                         onTap: () {
@@ -439,15 +449,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: _buildSectionTitle('Histoires débloquées'),
                       ),
                       _buildUnlockedStories(storyProgress),
-                      const SizedBox(height: 20), // Spacing before the new button
-                      SizedBox(
-                        width: 0.8.sw,
-                        child: ChibiButton(
-                          text: _isAdLoading ? 'Chargement...' : 'Gagner une carte (pub)',
-                          color: Colors.green, // A new color for this button
-                          onPressed: _isAdLoading ? null : _showRewardedAd,
-                        ),
-                      ),
                       const SizedBox(height: 50),
                       if (_showHiddenButtons)
                         Row(
@@ -691,7 +692,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildCollectibleCards(List<CollectibleCard> cards) {
+  Widget _buildCollectibleCards(List<CollectibleCard> cards, GamificationService gamificationService) {
     if (cards.isEmpty) {
       return Text(
         'Aucune carte à collectionner débloquée pour l’instant.',
@@ -719,14 +720,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final filteredCards = highestTierCards.values.toList();
     filteredCards.sort((a, b) => a.title.compareTo(b.title));
 
+    final adRewardButton = _buildAdRewardButton(gamificationService);
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 1.0),
-      itemCount: filteredCards.length,
+      itemCount: filteredCards.length + (adRewardButton != null ? 1 : 0),
       itemBuilder: (context, index) {
-        final collectibleCard = filteredCards[index];
-        return InteractiveCollectibleCard(card: collectibleCard);
+        if (index < filteredCards.length) {
+          final collectibleCard = filteredCards[index];
+          return InteractiveCollectibleCard(card: collectibleCard);
+        } else {
+          return adRewardButton!;
+        }
       },
     );
   }
@@ -829,6 +836,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget? _buildAdRewardButton(GamificationService gamificationService) {
+    if (_nextAdRewardCard == null) {
+      return null;
+    }
+
+    return GestureDetector(
+      onTap: _isAdLoading ? null : _showRewardedAd,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Colors.white.withAlpha(150), width: 2),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10, offset: Offset(0, 5)),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(13),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                addAssetPrefix(_nextAdRewardCard!.imagePath),
+                fit: BoxFit.cover,
+                color: Colors.black.withAlpha(153),
+                colorBlendMode: BlendMode.darken,
+              ),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.help_outline, color: Colors.white, size: 40), // Big '?'
+                    Text(
+                      '(pub)',
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: AppTextStyles.amaticSC,
+                        fontSize: 18,
+                      ),
+                    ),
+                    if (_isAdLoading)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 8.0),
+                        child: CircularProgressIndicator(color: Colors.white),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
