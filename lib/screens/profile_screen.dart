@@ -788,10 +788,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildCollectibleCards(List<CollectibleCard> cards, GamificationService gamificationService) {
     if (cards.isEmpty) {
-      return Text(
-        'Aucune carte à collectionner débloquée pour l’instant.',
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
-      );
+      final adRewardButton = _buildAdRewardButton(gamificationService);
+      if (adRewardButton != null) {
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 1.0),
+          itemCount: 1,
+          itemBuilder: (context, index) {
+            return adRewardButton;
+          },
+        );
+      } else {
+        return Text(
+          'Aucune carte à collectionner débloquée pour l’instant.',
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
+        );
+      }
     }
 
     final Map<String, CollectibleCard> highestTierCards = {};
