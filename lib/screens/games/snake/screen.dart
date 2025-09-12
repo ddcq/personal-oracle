@@ -57,15 +57,7 @@ class _SnakeGameState extends State<SnakeGame> {
     super.dispose();
   }
 
-  void _showStartPopup() {
-    GameHelpDialog.show(context, [
-      'Mangez les pommes pour grandir et marquez des points.',
-      'Évitez de toucher les murs ou votre propre corps.',
-      'Les pommes dorées donnent plus de points et des bonus.',
-      'Les pommes pourries vous font rétrécir ou perdre des points.',
-      'Le jeu devient plus rapide à chaque niveau.',
-    ]);
-  }
+  
 
   void _handleGameEnd(int score, {required bool isVictory, CollectibleCard? wonCard}) {
     showDialog(
@@ -101,7 +93,7 @@ class _SnakeGameState extends State<SnakeGame> {
       score: score,
       onResetGame: () {
         _game?.resetGame();
-        _showStartPopup();
+        _game?.startGame(); // Start the game after reset
       },
     );
   }
@@ -234,11 +226,6 @@ class _SnakeGameState extends State<SnakeGame> {
   Widget _buildGameInfoAndControls() {
     return Column(
       children: [
-        // Add the new Text widget here
-        Text(
-          'Niveau: $_currentLevel | Score: ${_game!.gameState.score}', // Use _game!
-          style: TextStyle(color: Colors.white, fontSize: 12),
-        ),
         // Contrôles directionnels pour mobile
         Padding(
           padding: const EdgeInsets.all(16.0),

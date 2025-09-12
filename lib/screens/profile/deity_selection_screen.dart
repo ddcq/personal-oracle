@@ -175,83 +175,86 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
       },
       child: ScaleTransition(
         scale: _scaleAnimation,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
-          decoration: BoxDecoration(
-            color: Colors.black.withAlpha(100),
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: Colors.amber.withAlpha(150), width: 2),
-            boxShadow: [
-              BoxShadow(color: Colors.black.withAlpha(150), blurRadius: 20, spreadRadius: 5),
-              BoxShadow(color: Colors.amber.withAlpha(70), blurRadius: 30, spreadRadius: -10),
-            ],
-          ),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Stack(
-                children: [
-                  Center(
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(height: 20),
-                            _buildDeityImage(),
-                            const SizedBox(height: 20),
-                            _buildDeityName(),
-                            const SizedBox(height: 15),
-                            _buildDeityDescription(),
-                            const SizedBox(height: 30),
-                            _buildSelectButton(context),
-                            const SizedBox(height: 30),
-                          ],
+        child: GestureDetector(
+          onTap: _selectDeity,
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.black.withAlpha(100),
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(color: Colors.amber.withAlpha(150), width: 2),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withAlpha(150), blurRadius: 20, spreadRadius: 5),
+                BoxShadow(color: Colors.amber.withAlpha(70), blurRadius: 30, spreadRadius: -10),
+              ],
+            ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return Stack(
+                  children: [
+                    Center(
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(height: 20),
+                              _buildDeityImage(),
+                              const SizedBox(height: 20),
+                              _buildDeityName(),
+                              const SizedBox(height: 15),
+                              _buildDeityDescription(),
+                              const SizedBox(height: 30),
+                              _buildSelectButton(context),
+                              const SizedBox(height: 30),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  if (_showScrollIndicator)
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: IgnorePointer(
-                          child: Container(
-                            height: constraints.maxHeight * 0.1,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(30)),
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [Colors.black.withAlpha(0), Colors.black.withAlpha(100)],
+                    if (_showScrollIndicator) ...[
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: IgnorePointer(
+                            child: Container(
+                              height: constraints.maxHeight * 0.1,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(30)),
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [Colors.black.withAlpha(0), Colors.black.withAlpha(100)],
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  if (_showScrollIndicator)
-                    Positioned(
-                      bottom: 10,
-                      left: 0,
-                      right: 0,
-                      child: Center(
-                        child: IconButton(
-                          icon: const Icon(Icons.arrow_downward, color: Colors.white),
-                          onPressed: () {
-                            _scrollController.animateTo(
-                              _scrollController.position.maxScrollExtent,
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeOut,
-                            );
-                          },
+                      Positioned(
+                        bottom: 10,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: IconButton(
+                            icon: const Icon(Icons.arrow_downward, color: Colors.white),
+                            onPressed: () {
+                              _scrollController.animateTo(
+                                _scrollController.position.maxScrollExtent,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeOut,
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                ],
-              );
-            },
+                    ],
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -296,17 +299,19 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
     );
   }
 
+  void _selectDeity() async {
+    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    final navigator = Navigator.of(context);
+    await gamificationService.saveProfileDeityIcon(widget.deity.id);
+    if (!mounted) return;
+    navigator.pop(widget.deity.id);
+  }
+
   Widget _buildSelectButton(BuildContext context) {
     return ChibiButton(
       text: 'Choisir',
       color: Colors.amber,
-      onPressed: () async {
-        final gamificationService = Provider.of<GamificationService>(context, listen: false);
-        final navigator = Navigator.of(context);
-        await gamificationService.saveProfileDeityIcon(widget.deity.id);
-        if (!mounted) return;
-        navigator.pop(widget.deity.id);
-      },
+      onPressed: _selectDeity,
     );
   }
 }

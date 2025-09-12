@@ -46,6 +46,25 @@ class GameState {
     IntVector2 initialSnakeHead = _generateRandomPosition(random, _initialSnakeHeadPadding, gridSize - _initialSnakeHeadPadding - 1);
     IntVector2 initialFood = _generateRandomPosition(random, 0, gridSize - 1, exclude: [initialSnakeHead]);
 
+    // Determine the best initial direction
+    Map<dp.Direction, int> distances = {
+      dp.Direction.up: _calculateStraightDistance(initialSnakeHead, dp.Direction.up, gridSize),
+      dp.Direction.down: _calculateStraightDistance(initialSnakeHead, dp.Direction.down, gridSize),
+      dp.Direction.left: _calculateStraightDistance(initialSnakeHead, dp.Direction.left, gridSize),
+      dp.Direction.right: _calculateStraightDistance(initialSnakeHead, dp.Direction.right, gridSize),
+    };
+
+    dp.Direction bestDirection = dp.Direction.right; // Default if all are 0 or tied
+    int maxDistance = -1;
+
+    // Find the direction with the maximum distance
+    distances.forEach((direction, distance) {
+      if (distance > maxDistance) {
+        maxDistance = distance;
+        bestDirection = direction;
+      }
+    });
+
     return GameState(
       snake: [initialSnakeHead],
       food: initialFood,
@@ -53,8 +72,8 @@ class GameState {
       foodAge: 0.0, // Initialize foodAge
       obstacles: [],
       score: 0,
-      direction: dp.Direction.right,
-      nextDirection: dp.Direction.right,
+      direction: bestDirection,
+      nextDirection: bestDirection,
       isGameRunning: false,
       isGameOver: false,
     );
@@ -66,6 +85,33 @@ class GameState {
       position = IntVector2(random.nextInt(max - min + 1) + min, random.nextInt(max - min + 1) + min);
     } while (exclude != null && exclude.contains(position));
     return position;
+  }
+
+  static int _calculateStraightDistance(IntVector2 start, dp.Direction direction, int gridSize) {
+    int distance = 0;
+    IntVector2 current = start;
+    while (true) {
+      switch (direction) {
+        case dp.Direction.up:
+          current = IntVector2(current.x, current.y - 1);
+          break;
+        case dp.Direction.down:
+          current = IntVector2(current.x, current.y + 1);
+          break;
+        case dp.Direction.left:
+          current = IntVector2(current.x - 1, current.y);
+          break;
+        case dp.Direction.right:
+          current = IntVector2(current.x + 1, current.y);
+          break;
+      }
+
+      if (current.x < 0 || current.x >= gridSize || current.y < 0 || current.y >= gridSize) {
+        break; // Hit a wall
+      }
+      distance++;
+    }
+    return distance;
   }
 }
 

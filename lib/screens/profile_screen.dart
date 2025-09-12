@@ -2,7 +2,7 @@ import 'package:oracle_d_asgard/services/database_service.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart'; // For firstWhereOrNull
+
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +26,7 @@ import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -42,9 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late Map<String, MythCard> _allMythCards;
   String? _profileName;
   final TextEditingController _nameController = TextEditingController();
-  bool _isNameHovered = false;
   String? _selectedDeityId;
-  bool _isDeityIconHovered = false;
 
   Future<List<dynamic>>? _mainDataFuture;
   Future<List<Map<String, dynamic>>>? _quizResultsFuture;
@@ -73,7 +72,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _refreshProfileData() async {
-    print('Refreshing profile data...');
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
     _mainDataFuture = Future.wait([
       gamificationService.getGameScores('Snake'),
@@ -85,9 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _quizResultsFuture = gamificationService.getQuizResults();
     await _loadNextAdRewardCard();
     await _loadNextAdRewardStory();
-    setState(() {
-      print('setState called in _refreshProfileData');
-    });
+    setState(() {});
   }
 
   @override
@@ -110,35 +106,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.grey[900],
-          title: const Text('Changer le nom', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.white.withAlpha(230),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: Colors.amber, width: 3),
+          ),
+          title: Text(
+            'Changer le nom',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontFamily: AppTextStyles.amaticSC,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                ),
+          ),
           content: TextField(
             controller: _nameController,
             autofocus: true,
-            style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
+            style: const TextStyle(color: Colors.black87),
+            decoration: InputDecoration(
               hintText: 'Nouveau nom',
-              hintStyle: TextStyle(color: Colors.white54),
-              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white54)),
-              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+              hintStyle: TextStyle(color: Colors.black.withAlpha(128)),
+              enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.black54)),
+              focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
             ),
           ),
           actions: <Widget>[
-            TextButton(
-              child: const Text('Annuler', style: TextStyle(color: Colors.white70)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Sauvegarder', style: TextStyle(color: Colors.amber)),
-              onPressed: () {
-                Provider.of<GamificationService>(context, listen: false).saveProfileName(_nameController.text);
-                setState(() {
-                  _profileName = _nameController.text;
-                });
-                Navigator.of(context).pop();
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ChibiButton(
+                  color: Colors.grey,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Icon(Icons.cancel, color: Colors.white),
+                ),
+                ChibiButton(
+                  color: Colors.amber,
+                  onPressed: () {
+                    Provider.of<GamificationService>(context, listen: false).saveProfileName(_nameController.text);
+                    setState(() {
+                      _profileName = _nameController.text;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Icon(Icons.save, color: Colors.white),
+                ),
+              ],
             ),
           ],
         );
@@ -188,10 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 await gamificationService.unlockCollectibleCard(wonCard);
                 _showRewardDialog(rewardCard: wonCard);
               } else {
-                _showRewardDialog(
-                  title: 'Collection Complète !',
-                  content: 'Vous avez déjà toutes les cartes !',
-                );
+                _showRewardDialog(title: 'Collection Complète !', content: 'Vous avez déjà toutes les cartes !');
               }
               // Refresh the UI to show the new card
               _refreshProfileData();
@@ -236,21 +249,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onUserEarnedReward: (ad, reward) async {
               final gamificationService = Provider.of<GamificationService>(context, listen: false);
               if (_nextAdRewardStory != null) {
-                final unlockedStory = await gamificationService.selectRandomUnearnedMythStory(_nextAdRewardStory!); // Unlock the first chapter of the selected story
+                final unlockedStory = await gamificationService.selectRandomUnearnedMythStory(
+                  _nextAdRewardStory!,
+                ); // Unlock the first chapter of the selected story
 
                 if (unlockedStory != null) {
                   _showRewardDialog(unlockedStoryChapter: unlockedStory.correctOrder.first);
                 } else {
-                  _showRewardDialog(
-                    title: 'Histoire déjà débloquée !',
-                    content: 'Vous avez déjà débloqué tous les chapitres de cette histoire.',
-                  );
+                  _showRewardDialog(title: 'Histoire déjà débloquée !', content: 'Vous avez déjà débloqué tous les chapitres de cette histoire.');
                 }
               } else {
-                _showRewardDialog(
-                  title: 'Toutes les histoires sont débloquées !',
-                  content: 'Vous avez déjà débloqué toutes les histoires disponibles.',
-                );
+                _showRewardDialog(title: 'Toutes les histoires sont débloquées !', content: 'Vous avez déjà débloqué toutes les histoires disponibles.');
               }
               _refreshProfileData(); // Refresh the UI to show the new story progress
             },
@@ -355,7 +364,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   }
 
                   return ListView(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: EdgeInsets.only(top: kToolbarHeight, left: 16.0, right: 16.0, bottom: 16.0),
                     children: [
                       FutureBuilder<List<Map<String, dynamic>>>(
                         future: _quizResultsFuture,
@@ -381,10 +390,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               children: [
                                 GestureDetector(
                                   onTap: () => _showEditNameDialog(context),
-                                  child: MouseRegion(
-                                    onEnter: (_) => setState(() => _isNameHovered = true),
-                                    onExit: (_) => setState(() => _isNameHovered = false),
-                                    child: Row(
+                                  child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
@@ -404,14 +410,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ),
                                         const SizedBox(width: 8),
-                                        AnimatedOpacity(
-                                          duration: const Duration(milliseconds: 200),
-                                          opacity: _isNameHovered ? 1.0 : 0.0,
-                                          child: const Icon(Icons.edit, color: Colors.white, size: 20),
-                                        ),
+                                        const Icon(Icons.edit, color: Colors.white, size: 20),
                                       ],
                                     ),
-                                  ),
                                 ),
                                 const SizedBox(height: 20),
                                 GestureDetector(
@@ -427,40 +428,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       });
                                     }
                                   },
-                                  child: MouseRegion(
-                                    onEnter: (_) => setState(() => _isDeityIconHovered = true),
-                                    onExit: (_) => setState(() => _isDeityIconHovered = false),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Container(
-                                          width: 150,
-                                          height: 150,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(15),
-                                            border: Border.all(color: const Color(0xFFDAA520), width: 5),
-                                            boxShadow: const [
-                                              BoxShadow(color: Color(0xFFDAA520), offset: Offset(5, 5)),
-                                              BoxShadow(color: Color(0xFFFFD700), offset: Offset(-5, -5)),
-                                            ],
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
-                                            child: Image.asset(AppData.deities[_selectedDeityId]?.icon ?? deity.icon, fit: BoxFit.cover),
-                                          ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 150,
+                                        height: 150,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(15),
+                                          border: Border.all(color: const Color(0xFFDAA520), width: 5),
+                                          boxShadow: const [
+                                            BoxShadow(color: Color(0xFFDAA520), offset: Offset(5, 5)),
+                                            BoxShadow(color: Color(0xFFFFD700), offset: Offset(-5, -5)),
+                                          ],
                                         ),
-                                        AnimatedOpacity(
-                                          duration: const Duration(milliseconds: 200),
-                                          opacity: _isDeityIconHovered ? 1.0 : 0.0,
-                                          child: Container(
-                                            width: 150,
-                                            height: 150,
-                                            decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(15)),
-                                            child: const Icon(Icons.edit, color: Colors.white, size: 40),
-                                          ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(10),
+                                          child: Image.asset(AppData.deities[_selectedDeityId]?.icon ?? deity.icon, fit: BoxFit.cover),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      const Icon(Icons.edit, color: Colors.white, size: 20),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -520,7 +510,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Consumer<SoundService>(
       builder: (context, soundService, child) {
         return Card(
-          color: Colors.white.withAlpha(25),
+          color: Colors.black.withAlpha(100),
           elevation: 5,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: Padding(
@@ -739,13 +729,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildCollectibleCards(List<CollectibleCard> cards, GamificationService gamificationService) {
     if (cards.isEmpty) {
-      final adRewardButton = _nextAdRewardCard != null ? _AdRewardButtonWidget(
-        imagePath: 'assets/images/${_nextAdRewardCard!.imagePath}',
-        title: _nextAdRewardCard!.title,
-        icon: Icons.help_outline,
-        isAdLoading: _isAdLoading,
-        onTap: _showRewardedAd,
-      ) : null;
+      final adRewardButton = _nextAdRewardCard != null
+          ? _AdRewardButtonWidget(
+              imagePath: 'assets/images/${_nextAdRewardCard!.imagePath}',
+              title: _nextAdRewardCard!.title,
+              icon: Icons.help_outline,
+              isAdLoading: _isAdLoading,
+              onTap: _showRewardedAd,
+            )
+          : null;
       if (adRewardButton != null) {
         return GridView.builder(
           shrinkWrap: true,
@@ -784,13 +776,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final filteredCards = highestTierCards.values.toList();
     filteredCards.sort((a, b) => a.title.compareTo(b.title));
 
-    final adRewardButton = _nextAdRewardCard != null ? _AdRewardButtonWidget(
-      imagePath: 'assets/images/${_nextAdRewardCard!.imagePath}',
-      title: _nextAdRewardCard!.title,
-      icon: Icons.help_outline,
-      isAdLoading: _isAdLoading,
-      onTap: _showRewardedAd,
-    ) : null;
+    final adRewardButton = _nextAdRewardCard != null
+        ? _AdRewardButtonWidget(
+            imagePath: 'assets/images/${_nextAdRewardCard!.imagePath}',
+            title: _nextAdRewardCard!.title,
+            icon: Icons.help_outline,
+            isAdLoading: _isAdLoading,
+            onTap: _showRewardedAd,
+          )
+        : null;
 
     return GridView.builder(
       shrinkWrap: true,
@@ -809,15 +803,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildUnlockedStories(List<Map<String, dynamic>> storyProgress) {
-    
     if (storyProgress.isEmpty) {
-      final adRewardStoryButton = _nextAdRewardStory != null ? _AdRewardButtonWidget(
-        imagePath: 'assets/images/stories/${_nextAdRewardStory!.correctOrder.first.imagePath}',
-        title: _nextAdRewardStory!.title,
-        icon: Icons.menu_book,
-        isAdLoading: _isAdLoading,
-        onTap: _showRewardedStoryAd,
-      ) : null;
+      final adRewardStoryButton = _nextAdRewardStory != null
+          ? _AdRewardButtonWidget(
+              imagePath: 'assets/images/stories/${_nextAdRewardStory!.correctOrder.first.imagePath}',
+              title: _nextAdRewardStory!.title,
+              icon: Icons.menu_book,
+              isAdLoading: _isAdLoading,
+              onTap: _showRewardedStoryAd,
+            )
+          : null;
       if (adRewardStoryButton != null) {
         return GridView.builder(
           shrinkWrap: true,
@@ -837,13 +832,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     final allMythStories = getMythStories();
 
-    final adRewardStoryButton = _nextAdRewardStory != null ? _AdRewardButtonWidget(
-      imagePath: 'assets/images/stories/${_nextAdRewardStory!.correctOrder.first.imagePath}',
-      title: _nextAdRewardStory!.title,
-      icon: Icons.menu_book,
-      isAdLoading: _isAdLoading,
-      onTap: _showRewardedStoryAd,
-    ) : null;
+    final adRewardStoryButton = _nextAdRewardStory != null
+        ? _AdRewardButtonWidget(
+            imagePath: 'assets/images/stories/${_nextAdRewardStory!.correctOrder.first.imagePath}',
+            title: _nextAdRewardStory!.title,
+            icon: Icons.menu_book,
+            isAdLoading: _isAdLoading,
+            onTap: _showRewardedStoryAd,
+          )
+        : null;
 
     return GridView.builder(
       shrinkWrap: true,
@@ -941,15 +938,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  
-
-  
-  void _showRewardDialog({
-    CollectibleCard? rewardCard,
-    MythCard? unlockedStoryChapter,
-    String? title,
-    String? content,
-  }) {
+  void _showRewardDialog({CollectibleCard? rewardCard, MythCard? unlockedStoryChapter, String? title, String? content}) {
     if (mounted) {
       showDialog(
         context: context,
@@ -993,13 +982,7 @@ class _AdRewardButtonWidget extends StatelessWidget {
   final bool isAdLoading;
   final VoidCallback onTap;
 
-  const _AdRewardButtonWidget({
-    required this.imagePath,
-    required this.title,
-    required this.icon,
-    required this.isAdLoading,
-    required this.onTap,
-  });
+  const _AdRewardButtonWidget({required this.imagePath, required this.title, required this.icon, required this.isAdLoading, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -1016,12 +999,7 @@ class _AdRewardButtonWidget extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
-                color: Colors.black.withAlpha(153),
-                colorBlendMode: BlendMode.darken,
-              ),
+              Image.asset(imagePath, fit: BoxFit.cover, color: Colors.black.withAlpha(153), colorBlendMode: BlendMode.darken),
               Center(
                 child: isAdLoading
                     ? const Padding(
@@ -1037,10 +1015,7 @@ class _AdRewardButtonWidget extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                           ),
-                          Text(
-                            '(pub)',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white70),
-                          ),
+                          Text('(pub)', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white70)),
                         ],
                       ),
               ),

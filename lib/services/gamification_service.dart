@@ -86,7 +86,6 @@ class GamificationService with ChangeNotifier {
   }
 
   Future<void> unlockStoryPart(String storyId, String partId) async {
-    print('Attempting to unlock story part: storyId=$storyId, partId=$partId');
     final db = await _databaseService.database;
     final List<Map<String, dynamic>> existing = await db.query('story_progress', where: 'story_id = ?', whereArgs: [storyId]);
 
@@ -95,9 +94,7 @@ class GamificationService with ChangeNotifier {
       if (!parts.contains(partId)) {
         parts.add(partId);
         await db.update('story_progress', {'parts_unlocked': jsonEncode(parts)}, where: 'story_id = ?', whereArgs: [storyId]);
-        print('Updated existing story progress for $storyId with new part $partId. Current parts: $parts');
       } else {
-        print('Story part $partId already unlocked for $storyId.');
       }
     } else {
       await db.insert('story_progress', {
@@ -105,7 +102,6 @@ class GamificationService with ChangeNotifier {
         'parts_unlocked': jsonEncode([partId]),
         'unlocked_at': DateTime.now().millisecondsSinceEpoch,
       }, conflictAlgorithm: ConflictAlgorithm.ignore);
-      print('Inserted new story progress for $storyId with part $partId.');
     }
     notifyListeners();
   }
@@ -114,17 +110,15 @@ class GamificationService with ChangeNotifier {
     final db = await _databaseService.database;
     final List<Map<String, dynamic>> result = await db.query('story_progress', where: 'story_id = ?', whereArgs: [storyId]);
     if (result.isNotEmpty) {
-      print('Retrieved story progress for $storyId: ${result.first}');
       return result.first;
     }
-    print('No story progress found for $storyId.');
     return null;
   }
 
   Future<List<Map<String, dynamic>>> getUnlockedStoryProgress() async {
     final db = await _databaseService.database;
     final result = await db.query('story_progress');
-    print('Retrieved all unlocked story progress: $result');
+    
     return result;
   }
 
@@ -272,11 +266,11 @@ class GamificationService with ChangeNotifier {
       final List<String> partsUnlockedForStory = unlockedStoryParts[story.title] ?? [];
       if (partsUnlockedForStory.isEmpty) { // Only add stories with no unlocked chapters
         unearnedMythStories.add(story);
-        print('Adding story to unearnedMythStories: ${story.title}');
+        
       }
     }
 
-    print('Final unearnedMythStories count: ${unearnedMythStories.length}');
+    
     return {'unearned_collectible_cards': unearnedCollectibleCards, 'unearned_myth_stories': unearnedMythStories};
   }
 
@@ -312,7 +306,6 @@ class GamificationService with ChangeNotifier {
       await unlockStoryPart(story.title, firstUnearnedChapter.id);
       return story;
     }
-    print('All chapters for story ${story.title} already earned.');
     return null;
   }
 

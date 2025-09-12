@@ -254,7 +254,6 @@ class _StoryContent extends StatefulWidget {
   final double fontSize;
 
   const _StoryContent({
-    super.key,
     required this.mythStory,
     required this.unlockedCardIds,
     required this.firstLockedChapterId,

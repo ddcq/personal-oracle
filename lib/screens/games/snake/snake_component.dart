@@ -30,9 +30,9 @@ class SnakeComponent extends PositionComponent {
   // New fields for animation
   final List<List<CircleData>> _previousSegmentCircles = [];
   final List<List<CircleData>> _currentSegmentCircles = [];
-  Offset _previousHeadPosition = Offset.zero;
-  Offset _currentHeadPosition = Offset.zero;
-  double _animationProgress = 0.0;
+  Offset _previousHeadPosition;
+  Offset _currentHeadPosition;
+  double _animationProgress;
   double _animationDuration; // Removed final
   final Curve _animationCurve = Curves.linear; // Easing curve for animation
 
@@ -42,95 +42,84 @@ class SnakeComponent extends PositionComponent {
   }
 
   SnakeComponent({required this.gameState, required this.cellSize, required this.snakeHeadSprite, required double animationDuration})
-    : _animationDuration = animationDuration,
-      _top = Vector2(cellSize * 0.5, cellSize * 0.18),
-      _bottom = Vector2(cellSize * 0.5, cellSize * 0.82),
-      _left = Vector2(cellSize * 0.18, cellSize * 0.5),
-      _right = Vector2(cellSize * 0.82, cellSize * 0.5),
-      _smallRadius = cellSize * 0.25,
-      _halfCellOffset = Vector2(cellSize * 0.5, cellSize * 0.5) {
+      : _animationDuration = animationDuration,
+        _previousHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset(),
+        _currentHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset(),
+        _animationProgress = 0.0 {
+    _top = Vector2(cellSize * 0.5, cellSize * 0.18);
+    _bottom = Vector2(cellSize * 0.5, cellSize * 0.82);
+    _left = Vector2(cellSize * 0.18, cellSize * 0.5);
+    _right = Vector2(cellSize * 0.82, cellSize * 0.5);
+    _smallRadius = cellSize * 0.25;
+    _halfCellOffset = Vector2(cellSize * 0.5, cellSize * 0.5);
     _cornerCenters = {
       // Top-Left (snake turns from up to left, or from left to up)
-      [0, -1, -1, 0] // prev: up, next: left
-      : [
+      [0, -1, -1, 0]: [
         _top,
         Vector2(cellSize * 0.4, cellSize * 0.4),
         _left,
       ],
-      [-1, 0, 0, -1] // prev: left, next: up
-      : [
+      [-1, 0, 0, -1]: [
         _left,
         Vector2(cellSize * 0.4, cellSize * 0.4),
         _top,
       ],
       // Top-Right (snake turns from up to right, or from right to up)
-      [0, -1, 1, 0] // prev: up, next: right
-      : [
+      [0, -1, 1, 0]: [
         _top,
         Vector2(cellSize * 0.6, cellSize * 0.4),
         _right,
       ],
-      [1, 0, 0, -1] // prev: right, next: up
-      : [
+      [1, 0, 0, -1]: [
         _right,
         Vector2(cellSize * 0.6, cellSize * 0.4),
         _top,
       ],
       // Bottom-Left (snake turns from down to left, or from left to down)
-      [0, 1, -1, 0] // prev: down, next: left
-      : [
+      [0, 1, -1, 0]: [
         _bottom,
         Vector2(cellSize * 0.4, cellSize * 0.6),
         _left,
       ],
-      // Bottom-Left (snake turns from down to left, or from left to down)
-      [-1, 0, 0, 1] // prev: left, next: down
-      : [
+      [-1, 0, 0, 1]: [
         _left,
         Vector2(cellSize * 0.4, cellSize * 0.6),
         _bottom,
       ],
       // Bottom-Right (snake turns from down to right, or from right to down)
-      [0, 1, 1, 0] // prev: down, next: right
-      : [
+      [0, 1, 1, 0]: [
         _bottom,
         Vector2(cellSize * 0.6, cellSize * 0.6),
         _right,
       ],
-      [1, 0, 0, 1] // prev: right, next: down
-      : [
+      [1, 0, 0, 1]: [
         _right,
         Vector2(cellSize * 0.6, cellSize * 0.6),
         _bottom,
       ],
       // Horizontal segment
-      [-1, 0, 1, 0] // prev: left, next: right
-      : [
+      [-1, 0, 1, 0]: [
         _left,
         _halfCellOffset,
         _right,
       ],
-      [1, 0, -1, 0] // prev: right, next: left
-      : [
+      [1, 0, -1, 0]: [
         _right,
         _halfCellOffset,
         _left,
       ],
       // Vertical segment
-      [0, -1, 0, 1] // prev: up, next: down
-      : [
+      [0, -1, 0, 1]: [
         _top,
         _halfCellOffset,
         _bottom,
       ],
-      [0, 1, 0, -1] // prev: down, next: up
-      : [
+      [0, 1, 0, -1]: [
         _bottom,
         _halfCellOffset,
         _top,
       ],
     };
-    _populateCurrentSegmentCircles(); // Initialize current circles
   }
 
   // Helper method to get circles for a single segment
