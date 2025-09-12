@@ -69,12 +69,14 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
               ),
               _buildNavigationArrow(
                 isLeft: true,
+                isVisible: _currentPage > 0,
                 onPressed: () {
                   _pageController.previousPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
                 },
               ),
               _buildNavigationArrow(
                 isLeft: false,
+                isVisible: _currentPage < deities.length - 1,
                 onPressed: () {
                   _pageController.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
                 },
@@ -86,7 +88,10 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
     );
   }
 
-  Widget _buildNavigationArrow({required bool isLeft, required VoidCallback onPressed}) {
+  Widget _buildNavigationArrow({required bool isLeft, required bool isVisible, required VoidCallback onPressed}) {
+    if (!isVisible) {
+      return const SizedBox.shrink();
+    }
     return Positioned(
       left: isLeft ? 10 : null,
       right: isLeft ? null : 10,
