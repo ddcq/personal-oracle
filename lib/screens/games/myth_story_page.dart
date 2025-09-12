@@ -10,6 +10,7 @@ import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/providers/theme_provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart'; // Import AdMob
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MythStoryPage extends StatefulWidget {
   final MythStory mythStory;
@@ -24,6 +25,9 @@ class _MythStoryPageState extends State<MythStoryPage> {
   late Future<List<String>> _unlockedCardIdsFuture;
   late SoundService _soundService;
   bool _isAdLoading = false; // New: Ad loading state
+  double _fontSize = 16.0;
+  static const double _minFontSize = 12.0;
+  static const double _maxFontSize = 24.0;
 
   @override
   void initState() {
@@ -31,12 +35,28 @@ class _MythStoryPageState extends State<MythStoryPage> {
     _soundService = Provider.of<SoundService>(context, listen: false);
     _soundService.playStoryMusic();
     _unlockedCardIdsFuture = _getUnlockedCardIds();
+    _loadFontSize();
   }
 
   @override
   void dispose() {
     _soundService.playMainMenuMusic();
     super.dispose();
+  }
+
+  Future<void> _loadFontSize() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _fontSize = prefs.getDouble('storyFontSize') ?? 16.0;
+    });
+  }
+
+  Future<void> _saveFontSize(double value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('storyFontSize', value);
+    setState(() {
+      _fontSize = value;
+    });
   }
 
   Future<List<String>> _getUnlockedCardIds() async {
@@ -99,6 +119,51 @@ class _MythStoryPageState extends State<MythStoryPage> {
     );
   }
 
+  void _showFontSizeDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Taille de la police'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Slider(
+                    value: _fontSize,
+                    min: _minFontSize,
+                    max: _maxFontSize,
+                    divisions: (_maxFontSize - _minFontSize).toInt(),
+                    label: _fontSize.round().toString(),
+                    onChanged: (double value) {
+                      setState(() {
+                        _fontSize = value;
+                      });
+                      _saveFontSize(value);
+                    },
+                  ),
+                  Text(
+                    'Exemple de texte',
+                    style: TextStyle(fontSize: _fontSize),
+                  ),
+                ],
+              );
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Fermer'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -112,7 +177,10 @@ class _MythStoryPageState extends State<MythStoryPage> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
-          
+          IconButton(
+            icon: Icon(Icons.format_size, color: Theme.of(context).colorScheme.onPrimary),
+            onPressed: _showFontSizeDialog,
+          ),
           IconButton(
             icon: Icon(
               themeProvider.themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
@@ -158,56 +226,13 @@ class _MythStoryPageState extends State<MythStoryPage> {
                       }
                     }
 
-                    return Column(
-                      children: [
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: widget.mythStory.correctOrder.length,
-                          itemBuilder: (context, index) {
-                            final card = widget.mythStory.correctOrder[index];
-                            final isUnlocked = unlockedCardIds.contains(card.id);
-                            final isFirstLockedChapter = (card.id == firstLockedChapterId);
-                            return Card(
-                              color: Theme.of(context).cardColor, // Use theme's card color
-                              margin: const EdgeInsets.all(8.0),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(card.title, style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Theme.of(context).colorScheme.onSurface)),
-                                    const SizedBox(height: 8.0),
-                                    if (isUnlocked) Image.asset('assets/images/stories/${card.imagePath}') else Icon(Icons.lock, size: 50, color: Theme.of(context).colorScheme.onSurface),
-                                    const SizedBox(height: 8.0),
-                                    if (isUnlocked)
-                                      Text(card.detailedStory, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface))
-                                    else if (isFirstLockedChapter)
-                                      Column(
-                                        children: [
-                                          Text(
-                                            'Chapitre verrouillé',
-                                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                                          ),
-                                          const SizedBox(height: 8.0),
-                                          _isAdLoading
-                                              ? const CircularProgressIndicator()
-                                              : ElevatedButton.icon(
-                                                  onPressed: () => _showRewardedAd(card.id),
-                                                  icon: const Icon(Icons.play_arrow),
-                                                  label: const Text('Débloquer avec une pub'),
-                                                ),
-                                        ],
-                                      )
-                                    else
-                                      Text('Chapitre verrouillé', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                    return _StoryContent(
+                      mythStory: widget.mythStory,
+                      unlockedCardIds: unlockedCardIds,
+                      firstLockedChapterId: firstLockedChapterId,
+                      isAdLoading: _isAdLoading,
+                      showRewardedAd: _showRewardedAd,
+                      fontSize: _fontSize,
                     );
                   }
                 },
@@ -216,6 +241,86 @@ class _MythStoryPageState extends State<MythStoryPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _StoryContent extends StatefulWidget {
+  final MythStory mythStory;
+  final List<String> unlockedCardIds;
+  final String? firstLockedChapterId;
+  final bool isAdLoading;
+  final Function(String) showRewardedAd;
+  final double fontSize;
+
+  const _StoryContent({
+    super.key,
+    required this.mythStory,
+    required this.unlockedCardIds,
+    required this.firstLockedChapterId,
+    required this.isAdLoading,
+    required this.showRewardedAd,
+    required this.fontSize,
+  });
+
+  @override
+  State<_StoryContent> createState() => _StoryContentState();
+}
+
+class _StoryContentState extends State<_StoryContent> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListView.builder(
+          key: ValueKey(widget.fontSize),
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: widget.mythStory.correctOrder.length,
+          itemBuilder: (context, index) {
+            final card = widget.mythStory.correctOrder[index];
+            final isUnlocked = widget.unlockedCardIds.contains(card.id);
+            final isFirstLockedChapter = (card.id == widget.firstLockedChapterId);
+            return Card(
+              color: Theme.of(context).cardColor, // Use theme's card color
+              margin: const EdgeInsets.all(8.0),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(card.title, style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Theme.of(context).colorScheme.onSurface)),
+                    const SizedBox(height: 8.0),
+                    if (isUnlocked) Image.asset('assets/images/stories/${card.imagePath}') else Icon(Icons.lock, size: 50, color: Theme.of(context).colorScheme.onSurface),
+                    const SizedBox(height: 8.0),
+                    if (isUnlocked)
+                      Text(card.detailedStory, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface, fontSize: widget.fontSize))
+                    else if (isFirstLockedChapter)
+                      Column(
+                        children: [
+                          Text(
+                            'Chapitre verrouillé',
+                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                          ),
+                          const SizedBox(height: 8.0),
+                          widget.isAdLoading
+                              ? const CircularProgressIndicator()
+                              : ElevatedButton.icon(
+                                  onPressed: () => widget.showRewardedAd(card.id),
+                                  icon: const Icon(Icons.play_arrow),
+                                  label: const Text('Débloquer avec une pub'),
+                                ),
+                        ],
+                      )
+                    else
+                      Text('Chapitre verrouillé', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
