@@ -10,6 +10,10 @@ class ThumbnailList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    double fontSize;
+    fontSize = screenWidth * 0.05; // 8% of screen width
+
     return ListView.builder(
       itemCount: controller.shuffledCards.length,
       itemBuilder: (context, index) {
@@ -38,7 +42,7 @@ class ThumbnailList extends StatelessWidget {
                           Expanded(
                             child: Text(
                               card.title,
-                              style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: AppTextStyles.amaticSC),
+                              style: TextStyle(color: Colors.white, fontSize: fontSize + 2, fontFamily: AppTextStyles.amaticSC),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -99,7 +103,7 @@ class ThumbnailList extends StatelessWidget {
                                 card.title,
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: fontSize,
                                   fontFamily: AppTextStyles.amaticSC,
                                   shadows: [Shadow(blurRadius: 2.0, color: Colors.black.withAlpha(128), offset: const Offset(1.0, 1.0))],
                                 ),

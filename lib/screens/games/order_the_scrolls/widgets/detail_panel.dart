@@ -29,13 +29,23 @@ class DetailPanel extends StatelessWidget {
       );
     }
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    double normalFontSize;
+    if (screenWidth > 1200) {
+      normalFontSize = 20;
+    } else if (screenWidth > 800) {
+      normalFontSize = 18;
+    } else {
+      normalFontSize = 16;
+    }
+    final enlargedFontSize = normalFontSize + 4;
+    final double titleFontSize = screenWidth > 800 ? 40 : 36;
+
     // Define normal and enlarged states
     final double normalPadding = 16.0;
     final double enlargedPadding = 32.0;
     final double normalOpacity = 0.6;
     final double enlargedOpacity = 0.8;
-    final double normalFontSize = 16.0;
-    final double enlargedFontSize = 20.0;
 
     return GestureDetector(
       onTap: onToggleEnlargement, // Use the callback
@@ -101,7 +111,7 @@ class DetailPanel extends StatelessWidget {
                           duration: const Duration(milliseconds: 300),
                           style: TextStyle(
                             fontFamily: AppTextStyles.amaticSC,
-                            fontSize: isEnlarged ? enlargedFontSize + 16 : normalFontSize + 20, // Adjust title font size
+                            fontSize: titleFontSize, // Adjust title font size
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                             shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(2.0, 2.0))],

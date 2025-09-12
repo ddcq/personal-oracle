@@ -10,7 +10,7 @@ List<MythStory> getMythStories() {
           id: 'dummy_1',
           title: 'Loading...',
           description: 'Please wait while the game loads.',
-          imagePath: 'assets/images/odin_chibi.png', // A placeholder image
+          imagePath: 'loading.webp', // A placeholder image
           detailedStory: 'Loading...',
         ),
       ],
