@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:oracle_d_asgard/utils/text_styles.dart';
-import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'puzzle_screen.dart';
 import 'dart:math';
 import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/widgets/screen_title.dart';
 
 // =========================================
 // PUZZLE GAME - Les Runes Dispersées
@@ -22,83 +22,46 @@ class PuzzleGameScreen extends StatefulWidget {
 class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
   @override
   Widget build(BuildContext context) {
+    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final Widget puzzleLayout = Container(
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
+      decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        children: [
+          const PuzzleImageTile(size: 80),
+          const SizedBox(height: 16),
+          Text(
+            'Assemble les fragments des anciennes runes pour déverrouiller leur pouvoir mystique',
+            style: TextStyle(color: Colors.white, fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    final Widget startButton = ChibiButton(
+      text: 'Commencer le Puzzle',
+      color: const Color(0xFF06B6D4),
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const PuzzleScreen()));
+      },
+    );
     return Scaffold(
+      backgroundColor: Colors.transparent, // Make the scaffold transparent
+      extendBodyBehindAppBar: false,
+      appBar: ChibiAppBar(titleText: 'Les runes dispersées'),
       body: AppBackground(
         child: SafeArea(
-          child: Stack(
-            // Wrap with a Stack
-            children: [
-              Center(
-                child: Column(
+          child: isLandscape
+              ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'Les runes dispersées',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                        fontFamily: AppTextStyles.amaticSC,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 60.sp,
-                        letterSpacing: 2.0.sp,
-                        shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
-                      ),
-                    ),
-                    Text(
-                      'Reconstitue les Runes Sacrées',
-                      textAlign: TextAlign.center,
-                      style: ChibiTextStyles.buttonText.copyWith(
-                        fontSize: 20.sp, // Increased font size
-                        shadows: [
-                          const Shadow(
-                            blurRadius: 10.0, // Added shadow
-                            color: Colors.black54,
-                            offset: Offset(2.0, 2.0),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      margin: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(20)),
-                      child: Column(
-                        children: [
-                          const PuzzleImageTile(size: 80),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Assemble les fragments des anciennes runes pour déverrouiller leur pouvoir mystique',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 20.h),
-                      child: ChibiButton(
-                        text: 'Commencer le Puzzle',
-                        color: const Color(0xFF06B6D4),
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const PuzzleScreen()));
-                        },
-                      ),
-                    ),
+                    Flexible(child: puzzleLayout),
+                    const SizedBox(width: 20),
+                    startButton,
                   ],
-                ),
-              ),
-              Positioned(
-                // Add the back button
-                top: 10,
-                left: 10,
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-            ],
-          ),
+                )
+              : Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[puzzleLayout, const Spacer(), startButton]),
         ),
       ),
     );

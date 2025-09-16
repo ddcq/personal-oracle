@@ -30,6 +30,15 @@ class ChibiTextStyles {
     shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
   );
 
+  static TextStyle get dialogText => TextStyle(
+    color: Colors.white,
+    decoration: TextDecoration.none,
+    fontFamily: AppTextStyles.amarante,
+    fontSize: 20.sp,
+    letterSpacing: 1.5.sp,
+    shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(2.0, 2.0))],
+  );
+
   static TextStyle get overlayTitle => TextStyle(
     fontFamily: AppTextStyles.amaticSC,
     color: Colors.white,

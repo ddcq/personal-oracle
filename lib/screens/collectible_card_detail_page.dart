@@ -38,29 +38,89 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
               ],
             ),
           ),
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
+          child: OrientationBuilder(
+            builder: (context, orientation) {
+              if (orientation == Orientation.portrait) {
+                return _buildPortraitLayout();
+              } else {
+                return LayoutBuilder(builder: (context, constraints) {
+                  return _buildLandscapeLayout(constraints);
+                });
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPortraitLayout() {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InteractiveCollectibleCard(card: widget.card),
+            const SizedBox(height: 20),
+            Text(
+              widget.card.title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              widget.card.description,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white70, fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLandscapeLayout(BoxConstraints constraints) {
+    final cardSize = constraints.maxHeight * 0.8;
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: cardSize,
+              height: cardSize,
+              child: InteractiveCollectibleCard(card: widget.card),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  InteractiveCollectibleCard(card: widget.card),
-                  const SizedBox(height: 20),
                   Text(
                     widget.card.title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   Text(
                     widget.card.description,
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                     style: const TextStyle(color: Colors.white70, fontSize: 18),
                   ),
                 ],
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

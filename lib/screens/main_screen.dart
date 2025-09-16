@@ -20,8 +20,6 @@ class _MainScreenState extends State<MainScreen> {
   BannerAd? _bannerAd;
   bool _isBannerAdLoaded = false;
 
-  
-
   @override
   void initState() {
     super.initState();
@@ -63,144 +61,128 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           AppBackground(
             child: SafeArea(
-              child: Center(
-                child: OrientationBuilder(
-                  builder: (context, orientation) {
-                    if (orientation == Orientation.portrait) {
-                      return Column(
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 20.h),
-                              child: Text('Oracle d’Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle),
+              child: OrientationBuilder(
+                builder: (context, orientation) {
+                  if (orientation == Orientation.portrait) {
+                    return Column(
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 20.h),
+                            child: Text('Oracle d’Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
+                            child: ClipRect(
+                              child: Image.asset('assets/images/odin_chibi.png', fit: BoxFit.cover, width: double.infinity, alignment: Alignment.topCenter),
                             ),
                           ),
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
-                              child: ClipRect(
-                                child: Image.asset('assets/images/odin_chibi.png', fit: BoxFit.cover, width: double.infinity, alignment: Alignment.topCenter),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, _isBannerAdLoaded && _bannerAd != null ? 20.h + _bannerAd!.size.height.toDouble() : 20.h),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                width: double.infinity,
+                                child: ChibiButton(
+                                  text: 'Amusons-nous',
+                                  color: ChibiColors.buttonOrange,
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
+                                  },
+                                ),
                               ),
+                              SizedBox(height: 10.h),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ChibiButton(
+                                  text: 'Ma divinité gardienne',
+                                  color: ChibiColors.buttonBlue,
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
+                                  },
+                                ),
+                              ),
+                              SizedBox(height: 10.h),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ChibiButton(
+                                  text: 'Mes récompenses',
+                                  color: ChibiColors.buttonRed,
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(16.w, 8.h, 8.w, 16.h),
+                            child: ClipRect(
+                              child: Image.asset('assets/images/odin_chibi.png', fit: BoxFit.cover, alignment: Alignment.topCenter),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(
-                              20.w,
-                              0,
-                              20.w,
-                              _isBannerAdLoaded && _bannerAd != null
-                                  ? 20.h + _bannerAd!.size.height.toDouble()
-                                  : 20.h,
-                            ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(8.w, 8.h, 16.w, 16.h),
                             child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: ChibiButton(
-                                    text: 'Amusons-nous',
-                                    color: ChibiColors.buttonOrange,
-                                    onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
-                                    },
-                                  ),
-                                ),
-                                SizedBox(height: 10.h),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: ChibiButton(
-                                    text: 'Ma divinité gardienne',
-                                    color: ChibiColors.buttonBlue,
-                                    onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
-                                    },
-                                  ),
-                                ),
-                                SizedBox(height: 10.h),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: ChibiButton(
-                                    text: 'Mes récompenses',
-                                    color: ChibiColors.buttonRed,
-                                    onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    } else {
-                      return Column(
-                        children: <Widget>[
-                          SizedBox(height: 16.h),
-                          ConstrainedBox(
-                            constraints: BoxConstraints(maxHeight: 0.2.sh),
-                            child: FittedBox(
-                              fit: BoxFit.contain,
-                              child: Text('Oracle d’Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle),
-                            ),
-                          ),
-                          SizedBox(height: 16.h),
-                          Expanded(
-                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(16.w, 8.h, 8.w, 16.h),
-                                    child: ClipRect(
-                                      child: Image.asset('assets/images/odin_chibi.png', fit: BoxFit.cover, alignment: Alignment.topCenter),
-                                    ),
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(maxHeight: 0.2.sh),
+                                  child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: Text('Oracle d’Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle),
                                   ),
                                 ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(8.w, 8.h, 16.w, 16.h),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        ChibiButton(
-                                          text: 'Amusons-nous',
-                                          color: ChibiColors.buttonOrange,
-                                          onPressed: () {
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
-                                          },
-                                        ),
-                                        SizedBox(height: 10.h),
-                                        ChibiButton(
-                                          text: 'Ma divinité gardienne',
-                                          color: ChibiColors.buttonBlue,
-                                          onPressed: () {
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
-                                          },
-                                        ),
-                                        SizedBox(height: 10.h),
-                                        ChibiButton(
-                                          text: 'Mes récompenses',
-                                          color: ChibiColors.buttonRed,
-                                          onPressed: () {
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                SizedBox(height: 16.h),
+                                ChibiButton(
+                                  text: 'Amusons-nous',
+                                  color: ChibiColors.buttonOrange,
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
+                                  },
+                                ),
+                                SizedBox(height: 10.h),
+                                ChibiButton(
+                                  text: 'Ma divinité gardienne',
+                                  color: ChibiColors.buttonBlue,
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
+                                  },
+                                ),
+                                SizedBox(height: 10.h),
+                                ChibiButton(
+                                  text: 'Mes récompenses',
+                                  color: ChibiColors.buttonRed,
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                                  },
                                 ),
                               ],
                             ),
                           ),
-                        ],
-                      );
-                    }
-                  },
-                ),
+                        ),
+                      ],
+                    );
+                  }
+                },
               ),
             ),
           ),
-          
+
           if (_isBannerAdLoaded && _bannerAd != null)
             Positioned(
               bottom: 0,

@@ -192,27 +192,14 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
               builder: (context, constraints) {
                 return Stack(
                   children: [
-                    Center(
-                      child: SingleChildScrollView(
-                        controller: _scrollController,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(height: 20),
-                              _buildDeityImage(),
-                              const SizedBox(height: 20),
-                              _buildDeityName(),
-                              const SizedBox(height: 15),
-                              _buildDeityDescription(),
-                              const SizedBox(height: 30),
-                              _buildSelectButton(context),
-                              const SizedBox(height: 30),
-                            ],
-                          ),
-                        ),
-                      ),
+                    OrientationBuilder(
+                      builder: (context, orientation) {
+                        if (orientation == Orientation.portrait) {
+                          return _buildPortraitLayout(context);
+                        } else {
+                          return _buildLandscapeLayout(context);
+                        }
+                      },
                     ),
                     if (_showScrollIndicator) ...[
                       Positioned.fill(
@@ -258,6 +245,53 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildPortraitLayout(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 20),
+              _buildDeityImage(),
+              const SizedBox(height: 20),
+              _buildDeityName(),
+              const SizedBox(height: 15),
+              _buildDeityDescription(),
+              const SizedBox(height: 30),
+              _buildSelectButton(context),
+              const SizedBox(height: 30),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLandscapeLayout(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(padding: const EdgeInsets.all(20.0), child: _buildDeityImage()),
+        Expanded(
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 20, 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [_buildDeityName(), const SizedBox(height: 15), _buildDeityDescription(), const SizedBox(height: 30), _buildSelectButton(context)],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -308,10 +342,6 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
   }
 
   Widget _buildSelectButton(BuildContext context) {
-    return ChibiButton(
-      text: 'Choisir',
-      color: Colors.amber,
-      onPressed: _selectDeity,
-    );
+    return ChibiButton(text: 'Choisir', color: Colors.amber, onPressed: _selectDeity);
   }
 }

@@ -243,7 +243,7 @@ class _RuneLegend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double uniformFontSize = MediaQuery.of(context).size.width * 0.035;
-    TextStyle legendTextStyle = ChibiTextStyles.buttonText.copyWith(fontSize: uniformFontSize);
+    TextStyle legendTextStyle = ChibiTextStyles.dialogText.copyWith(fontSize: uniformFontSize);
     TextStyle mineRuneTextStyle = legendTextStyle.copyWith(color: Colors.red, fontSize: uniformFontSize * 1.5); // Larger for rune
     TextStyle treasureRuneTextStyle = legendTextStyle.copyWith(color: Colors.yellow, fontSize: uniformFontSize * 1.5); // Larger for rune
     TextStyle valueTextStyle = legendTextStyle.copyWith(fontSize: uniformFontSize * 0.8); // Smaller for value

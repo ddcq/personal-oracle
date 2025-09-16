@@ -37,16 +37,13 @@ class _WordSearchView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.help_outline, color: Colors.white),
             onPressed: () {
-              GameHelpDialog.show(
-                context,
-                [
-                  'Trouvez tous les mots cachés dans la grille.',
-                  'Les mots peuvent être horizontaux, verticaux ou diagonaux, et peuvent être lus dans les deux sens.',
-                  'Sélectionnez les lettres en faisant glisser votre doigt sur la grille.',
-                  'Une fois tous les mots trouvés, un mot secret vous sera demandé.',
-                  'Utilisez les lettres restantes pour former le mot secret et valider votre victoire.',
-                ],
-              );
+              GameHelpDialog.show(context, [
+                'Trouvez tous les mots cachés dans la grille.',
+                'Les mots peuvent être horizontaux, verticaux ou diagonaux, et peuvent être lus dans les deux sens.',
+                'Sélectionnez les lettres en faisant glisser votre doigt sur la grille.',
+                'Une fois tous les mots trouvés, un mot secret vous sera demandé.',
+                'Utilisez les lettres restantes pour former le mot secret et valider votre victoire.',
+              ]);
             },
           ),
         ],
@@ -144,10 +141,7 @@ class _Grid extends StatelessWidget {
               : null,
           child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: columnCount,
-              childAspectRatio: childAspectRatio,
-            ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: columnCount, childAspectRatio: childAspectRatio),
             itemCount: rowCount * columnCount,
             itemBuilder: (context, index) {
               final row = index ~/ columnCount;
@@ -197,12 +191,7 @@ class _Grid extends StatelessWidget {
             : Colors.black.withAlpha(102),
         border: Border.all(color: Colors.white.withAlpha(150)),
       ),
-      child: Center(
-        child: Text(
-          text,
-          style: ChibiTextStyles.buttonText.copyWith(fontSize: 18.sp),
-        ),
-      ),
+      child: Center(child: Text(text, style: ChibiTextStyles.dialogText)),
     );
   }
 }
@@ -240,7 +229,7 @@ class _WordList extends StatelessWidget {
   Widget _buildWordText(String word, bool isFound) {
     return Text(
       word,
-      style: ChibiTextStyles.buttonText.copyWith(
+      style: ChibiTextStyles.dialogText.copyWith(
         decoration: isFound ? TextDecoration.lineThrough : TextDecoration.none,
         color: isFound ? Colors.white.withAlpha(128) : Colors.white,
         decorationColor: ChibiColors.buttonRed,
@@ -264,13 +253,7 @@ class _SecretWordInput extends StatelessWidget {
             controller.instructionClue,
             style: ChibiTextStyles.storyTitle.copyWith(
               fontSize: 28.sp,
-              shadows: [
-                const Shadow(
-                  blurRadius: 20.0,
-                  color: Colors.black,
-                  offset: Offset(5.0, 5.0),
-                ),
-              ],
+              shadows: [const Shadow(blurRadius: 20.0, color: Colors.black, offset: Offset(5.0, 5.0))],
             ),
             textAlign: TextAlign.center,
           ),

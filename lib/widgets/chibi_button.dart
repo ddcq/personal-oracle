@@ -48,7 +48,24 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
     final Color lightColor = lighten(widget.color, 0.2);
     final Color darkColor = darken(widget.color, 0.2);
     final Color borderColor = darken(widget.color, 0.3);
+    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
+    final baseStyle = widget.textStyle ?? ChibiTextStyles.buttonText;
+    // The font size on the design draft.
+    const double designFontSize = 20.0;
+
+    final TextStyle finalTextStyle;
+    if (isLandscape) {
+      // In landscape, scale the font size based on the screen height.
+      final textScaleFactor = ScreenUtil().textScaleFactor;
+      final scaleHeight = ScreenUtil().scaleHeight;
+      finalTextStyle = baseStyle.copyWith(fontSize: designFontSize * scaleHeight * textScaleFactor, letterSpacing: 1.5 * scaleHeight);
+    } else {
+      // In portrait, scale the font size based on the screen width (default .sp behavior).
+      finalTextStyle = baseStyle.copyWith(fontSize: designFontSize.sp);
+    }
+
+    final borderWidth = isLandscape ? 3.h : 3.w;
     return GestureDetector(
       onTap: widget.onPressed, // Keep original onPressed
       onTapDown: _onTapDown,
@@ -59,7 +76,7 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
         duration: const Duration(milliseconds: 80),
         curve: Curves.easeOut,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
+          padding: EdgeInsets.all(borderWidth),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -68,18 +85,18 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
             ),
             borderRadius: BorderRadius.circular(16.r),
             boxShadow: [BoxShadow(color: Colors.black.withAlpha(64), offset: Offset(0, 4.h), blurRadius: 6.r)],
-            border: Border.all(color: borderColor, width: 3.w),
+            border: Border.all(color: borderColor, width: borderWidth),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.r),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
+              padding: EdgeInsets.all(borderWidth * 2),
               color: widget.color,
               child:
                   widget.child ??
                   FittedBox(
                     fit: BoxFit.scaleDown, // Scale down if needed
-                    child: Text(widget.text!, textAlign: TextAlign.center, style: widget.textStyle ?? ChibiTextStyles.buttonText),
+                    child: Text(widget.text!, textAlign: TextAlign.center, style: finalTextStyle),
                   ),
             ),
           ),
