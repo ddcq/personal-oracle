@@ -31,6 +31,8 @@ class _DeityCardState extends State<DeityCard> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -38,13 +40,11 @@ class _DeityCardState extends State<DeityCard> {
           scale: _scale,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeOutBack,
-          child: Image.asset(addAssetPrefix(widget.deity.icon), width: 1.sw, height: 1.sw),
+          child: Image.asset(addAssetPrefix(widget.deity.icon), height: 0.3.sh),
         ),
         SizedBox(height: 8.h),
         // New blurred container for name and title
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 20.w),
-          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.r),
             boxShadow: [
@@ -60,6 +60,7 @@ class _DeityCardState extends State<DeityCard> {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0), // Blur intensity
               child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
                 decoration: BoxDecoration(
                   color: Colors.black.withAlpha(51), // Transparent background for the content area
                   // Optional: a subtle gradient for the background color itself
@@ -69,35 +70,34 @@ class _DeityCardState extends State<DeityCard> {
                     colors: [Colors.white.withAlpha(25), Colors.white.withAlpha(12)],
                   ),
                 ),
-                child: Padding(
-                  padding: EdgeInsets.all(10.w),
-                  child: Column(
-                    children: [
-                      Text(
-                        widget.deity.name,
-                        style: TextStyle(
-                          fontFamily: AppTextStyles.amaticSC,
-                          fontSize: 48.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(offset: Offset(3.0, 3.0), blurRadius: 6.0, color: Colors.black.withAlpha(150)),
-                            Shadow(offset: Offset(1.5, 1.5), blurRadius: 3.0, color: Colors.grey.withAlpha(100)),
-                          ],
-                        ),
+                child: Column(
+                  children: [
+                    Text(
+                      widget.deity.name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: AppTextStyles.amaticSC,
+                        fontSize: isLandscape ? 24.sp : 48.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(offset: Offset(3.0, 3.0), blurRadius: 6.0, color: Colors.black.withAlpha(150)),
+                          Shadow(offset: Offset(1.5, 1.5), blurRadius: 3.0, color: Colors.grey.withAlpha(100)),
+                        ],
                       ),
-                      SizedBox(height: 8.h),
-                      Text(
-                        widget.deity.title,
-                        style: TextStyle(
-                          fontFamily: AppTextStyles.amaticSC,
-                          fontSize: 28.sp,
-                          color: Colors.white,
-                          shadows: [Shadow(offset: Offset(2.0, 2.0), blurRadius: 4.0, color: Colors.black.withAlpha(120))],
-                        ),
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      widget.deity.title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: AppTextStyles.amaticSC,
+                        fontSize: isLandscape ? 14.sp : 28.sp,
+                        color: Colors.white,
+                        shadows: [Shadow(offset: Offset(2.0, 2.0), blurRadius: 4.0, color: Colors.black.withAlpha(120))],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

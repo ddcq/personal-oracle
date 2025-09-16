@@ -134,7 +134,7 @@ class _QuizScreenState extends State<QuizScreen> {
                         ProgressBar(progress: progress),
                         Container(
                           padding: EdgeInsets.all(20.w),
-                          margin: EdgeInsets.all(20.w),
+                          margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.w),
                           decoration: BoxDecoration(
                             color: const Color.fromRGBO(0, 0, 0, 0.5), // Semi-transparent background
                             borderRadius: BorderRadius.circular(15.r),
@@ -148,7 +148,7 @@ class _QuizScreenState extends State<QuizScreen> {
                             style: Theme.of(context).textTheme.displayMedium?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20.sp, // Max font size
+                              fontSize: 16.sp, // Max font size
                               shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
                             ),
                           ),
@@ -168,9 +168,12 @@ class _QuizScreenState extends State<QuizScreen> {
                         final traits = answer.scores.keys.toList();
                         final gradientColors = traits.isNotEmpty ? TraitColors.gradients[traits.first] : null;
 
-                        return Padding(
-                          padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 10.h),
-                          child: AnswerButton(text: answer.text, onPressed: () => handleAnswer(index), letter: letter, gradientColors: gradientColors),
+                        return AnswerButton(
+                          text: answer.text,
+                          onPressed: () => handleAnswer(index),
+                          letter: letter,
+                          gradientColors: gradientColors,
+                          isLandscape: isLandscape,
                         );
                       },
                     ),
@@ -216,7 +219,13 @@ class _QuizScreenState extends State<QuizScreen> {
 
                         return Padding(
                           padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 10.h),
-                          child: AnswerButton(text: answer.text, onPressed: () => handleAnswer(index), letter: letter, gradientColors: gradientColors),
+                          child: AnswerButton(
+                            text: answer.text,
+                            onPressed: () => handleAnswer(index),
+                            letter: letter,
+                            gradientColors: gradientColors,
+                            isLandscape: isLandscape,
+                          ),
                         );
                       },
                     ),

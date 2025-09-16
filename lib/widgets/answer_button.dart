@@ -8,14 +8,9 @@ class AnswerButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String letter;
   final List<Color>? gradientColors;
+  final bool isLandscape;
 
-  const AnswerButton({
-    super.key,
-    required this.text,
-    required this.onPressed,
-    required this.letter,
-    this.gradientColors,
-  });
+  const AnswerButton({super.key, required this.text, required this.onPressed, required this.letter, this.gradientColors, this.isLandscape = false});
 
   @override
   Widget build(BuildContext context) {
@@ -36,17 +31,17 @@ class AnswerButton extends StatelessWidget {
         child: Row(
           children: [
             Padding(
-              padding: EdgeInsets.only(left: min(10.w, 10.h)),
+              padding: EdgeInsets.only(left: 10.r),
               child: Container(
-                width: 50.w,
-                height: 50.h,
+                width: 50.r,
+                height: 50.r,
                 decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                 child: Center(
                   child: Text(
                     letter,
                     style: TextStyle(
                       color: Colors.black, // Use black color for the letter on white background
-                      fontSize: min(32.w, 32.h),
+                      fontSize: 32.r,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
