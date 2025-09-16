@@ -3,9 +3,6 @@ import 'dart:io';
 import 'screens/main_screen.dart'; // 👈 Nouveau fichier avec MainScreen
 import 'package:oracle_d_asgard/utils/themes.dart';
 
-import 'package:firebase_core/firebase_core.dart';
-import 'package:oracle_d_asgard/firebase_options.dart';
-
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:oracle_d_asgard/services/database_service.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
@@ -17,7 +14,6 @@ import 'package:oracle_d_asgard/providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   if (Platform.isIOS || Platform.isAndroid) {
     await MobileAds.instance.initialize();
   }
