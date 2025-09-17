@@ -19,10 +19,12 @@ class GameController extends ChangeNotifier {
   MythCard? _nextChapterToUnlock; // The specific chapter to unlock if a story part is the reward
   bool _allChaptersEarned = false; // Flag to indicate if all story chapters have been earned
   MythCard? _unlockedStoryChapter; // The specific story chapter that was unlocked
+  List<bool?> _placementResults = []; // To store correctness of each card
 
   GameController() {
     _selectedStory = getMythStories().first; // Initialize with the dummy story
     _shuffledCards = List<MythCard>.from(_selectedStory.correctOrder); // Initialize with dummy story's cards
+    _placementResults = List<bool?>.filled(_shuffledCards.length, null);
   }
 
   final GamificationService _gamificationService = GamificationService();
@@ -36,6 +38,7 @@ class GameController extends ChangeNotifier {
   MythCard? get selectedMythCard => _selectedMythCard;
   CollectibleCard? get rewardCard => _rewardCard; // Getter for new property
   MythCard? get unlockedStoryChapter => _unlockedStoryChapter; // Getter for unlocked story chapter
+  List<bool?> get placementResults => _placementResults;
 
   Future<void> loadNewStory() async {
     final allStories = getMythStories();
@@ -58,6 +61,7 @@ class GameController extends ChangeNotifier {
     _validated = false;
     _selectedMythCard = _shuffledCards.isNotEmpty ? _shuffledCards.first : null;
     _showVictoryPopup = false; // Reset on new game
+    _placementResults = List<bool?>.filled(_shuffledCards.length, null);
     notifyListeners();
   }
 
@@ -94,6 +98,7 @@ class GameController extends ChangeNotifier {
       final item = _shuffledCards.removeAt(fromIndex);
       _shuffledCards.insert(toIndex, item);
       _draggedIndex = null;
+      clearPlacementResults();
       notifyListeners();
     }
   }
@@ -105,6 +110,7 @@ class GameController extends ChangeNotifier {
 
   void selectMythCard(MythCard card) {
     _selectedMythCard = card;
+    clearPlacementResults();
     notifyListeners();
   }
 
@@ -115,6 +121,9 @@ class GameController extends ChangeNotifier {
       _showVictoryPopup = true;
     } else {
       _showIncorrectOrderPopup = true;
+      for (int i = 0; i < _shuffledCards.length; i++) {
+        _placementResults[i] = isCardCorrect(i);
+      }
     }
     notifyListeners();
   }
@@ -145,6 +154,7 @@ class GameController extends ChangeNotifier {
 
   void incorrectOrderPopupShown() {
     _showIncorrectOrderPopup = false;
+    notifyListeners();
   }
 
   void victoryPopupShown() {
@@ -152,6 +162,13 @@ class GameController extends ChangeNotifier {
     _showVictoryPopup = false;
     _rewardCard = null; // Clear reward card after shown
     _unlockedStoryChapter = null; // Clear unlocked story chapter after shown
+  }
+
+  void clearPlacementResults() {
+    if (_placementResults.any((result) => result != null)) {
+      _placementResults = List<bool?>.filled(_shuffledCards.length, null);
+      notifyListeners();
+    }
   }
 
   Future<void> resetGame() async {
@@ -168,9 +185,4 @@ class GameController extends ChangeNotifier {
     return _shuffledCards.asMap().entries.every((e) => e.value.id == _selectedStory.correctOrder[e.key].id);
   }
 
-  BoxBorder? getCardBorder(int index) {
-    if (!_validated) return null;
-    final correct = isCardCorrect(index);
-    return Border.all(color: correct ? Colors.green : Colors.red, width: 4);
   }
-}

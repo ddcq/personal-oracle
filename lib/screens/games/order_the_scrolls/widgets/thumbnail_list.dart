@@ -20,10 +20,20 @@ class ThumbnailList extends StatelessWidget {
         final card = controller.shuffledCards[index];
         final isSelected = controller.selectedMythCard?.id == card.id;
 
+        Color borderColor;
+        if (controller.placementResults.isNotEmpty && controller.placementResults[index] != null) {
+          borderColor = controller.placementResults[index]! ? Colors.green : Colors.red;
+        } else {
+          borderColor = isSelected ? Colors.amber : Colors.transparent;
+        }
+
         return Column(
           children: [
             LongPressDraggable<int>(
               data: index, // The index of the card being dragged
+              onDragStarted: () {
+                controller.clearPlacementResults();
+              },
               feedback: Material(
                 // Visual representation during drag
                 color: Colors.transparent, // Make background transparent
@@ -78,7 +88,7 @@ class ThumbnailList extends StatelessWidget {
                       shadowColor: Colors.black.withAlpha(128),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: isSelected ? Colors.amber : Colors.transparent, width: 2),
+                        side: BorderSide(color: borderColor, width: 2),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
