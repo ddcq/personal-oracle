@@ -18,6 +18,7 @@ class DetailPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedCard = controller.selectedMythCard; // Use controller directly
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     if (selectedCard == null) {
       return const Center(
@@ -39,7 +40,7 @@ class DetailPanel extends StatelessWidget {
       normalFontSize = 16;
     }
     final enlargedFontSize = normalFontSize + 4;
-    final double titleFontSize = screenWidth > 800 ? 40 : 36;
+    final double titleFontSize = isLandscape ? (screenWidth > 800 ? 22 : 18) : (screenWidth > 800 ? 40 : 36);
 
     // Define normal and enlarged states
     final double normalPadding = 16.0;
@@ -64,42 +65,27 @@ class DetailPanel extends StatelessWidget {
         ),
         child: Padding(
           // Add padding here
-          padding: EdgeInsets.fromLTRB(
-            0, // No left padding for the image
-            0, // No top padding for the image
-            0, // No right padding for the image
-            isEnlarged ? enlargedPadding : normalPadding, // Only bottom padding
-          ),
+          padding: EdgeInsets.only(bottom: isEnlarged ? enlargedPadding : normalPadding),
           child: Column(
             // Main column for image and description
             children: [
               // Image, Gradient, and Title Stack
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(10)), // Match container's top radius
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
                 child: SizedBox(
-                  // Replaced AspectRatio with SizedBox
-                  height: 200.0, // Fixed height for the image container
+                  height: 200.0,
                   child: Stack(
                     children: [
                       Positioned.fill(
                         child: ShaderMask(
-                          shaderCallback: (Rect bounds) {
-                            return LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.white, // Fully opaque at the top
-                                Colors.transparent, // Fully transparent at the bottom
-                              ],
-                              stops: const [0.5, 1.0], // Gradient starts at 50%
-                            ).createShader(bounds);
-                          },
-                          blendMode: BlendMode.dstIn, // Apply the gradient as a transparency mask
-                          child: Image.asset(
-                            'assets/images/stories/${selectedCard.imagePath}',
-                            fit: BoxFit.cover,
-                            alignment: Alignment.topCenter, // Align image to top
-                          ),
+                          shaderCallback: (bounds) => const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.white, Colors.transparent],
+                            stops: [0.5, 1.0],
+                          ).createShader(bounds),
+                          blendMode: BlendMode.dstIn,
+                          child: Image.asset('assets/images/stories/${selectedCard.imagePath}', fit: BoxFit.cover, alignment: Alignment.topCenter),
                         ),
                       ),
                       Positioned(
@@ -107,44 +93,33 @@ class DetailPanel extends StatelessWidget {
                         right: 16,
                         bottom: 16,
                         child: AnimatedDefaultTextStyle(
-                          // Animated font size for title
                           duration: const Duration(milliseconds: 300),
                           style: TextStyle(
-                            fontFamily: AppTextStyles.amaticSC,
-                            fontSize: titleFontSize, // Adjust title font size
-                            fontWeight: FontWeight.bold,
+                            fontFamily: isLandscape ? null : AppTextStyles.amaticSC,
+                            fontSize: titleFontSize,
+                            fontWeight: isLandscape ? FontWeight.normal : FontWeight.bold,
                             color: Colors.white,
-                            shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(2.0, 2.0))],
+                            shadows: const [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(2.0, 2.0))],
                           ),
                           textAlign: TextAlign.center,
-                          child: Text(selectedCard.title),
+                          child: Text(isLandscape ? selectedCard.description : selectedCard.title),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              // Description
-              Expanded(
-                // Make description scrollable and take remaining space
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.fromLTRB(
-                    isEnlarged ? enlargedPadding : normalPadding, // Apply horizontal padding here
-                    isEnlarged ? enlargedPadding : normalPadding, // Apply top padding here
-                    isEnlarged ? enlargedPadding : normalPadding, // Apply horizontal padding here
-                    isEnlarged ? enlargedPadding : normalPadding, // Apply bottom padding here
-                  ),
-                  child: AnimatedDefaultTextStyle(
-                    // Animated font size for description
-                    duration: const Duration(milliseconds: 300),
-                    style: TextStyle(
-                      fontSize: isEnlarged ? enlargedFontSize : normalFontSize, // Animated font size
-                      color: Colors.white70,
+              if (!isLandscape)
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.all(isEnlarged ? enlargedPadding : normalPadding),
+                    child: AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 300),
+                      style: TextStyle(fontSize: isEnlarged ? enlargedFontSize : normalFontSize, color: Colors.white70),
+                      child: Text(selectedCard.description),
                     ),
-                    child: Text(selectedCard.description),
                   ),
                 ),
-              ),
             ],
           ),
         ),

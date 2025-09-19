@@ -1,3 +1,4 @@
+import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 
 import 'package:oracle_d_asgard/utils/text_styles.dart';
@@ -11,137 +12,82 @@ class ThumbnailList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    double fontSize;
-    fontSize = screenWidth * 0.05; // 8% of screen width
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final double fontSize = screenWidth * (isLandscape ? 0.03 : 0.06); // 5% of screen width in landscape, 4% in portrait
 
-    return ListView.builder(
-      itemCount: controller.shuffledCards.length,
-      itemBuilder: (context, index) {
-        final card = controller.shuffledCards[index];
-        final isSelected = controller.selectedMythCard?.id == card.id;
+    return DragAndDropLists(
+      children: [
+        DragAndDropList(
+          children: List.generate(controller.shuffledCards.length, (index) {
+            final card = controller.shuffledCards[index];
+            final isSelected = controller.selectedMythCard?.id == card.id;
 
-        Color borderColor;
-        if (controller.placementResults.isNotEmpty && controller.placementResults[index] != null) {
-          borderColor = controller.placementResults[index]! ? Colors.green : Colors.red;
-        } else {
-          borderColor = isSelected ? Colors.amber : Colors.transparent;
-        }
+            Color borderColor;
+            if (controller.placementResults.isNotEmpty && controller.placementResults[index] != null) {
+              borderColor = controller.placementResults[index]! ? Colors.green : Colors.red;
+            } else {
+              borderColor = isSelected ? Colors.amber : Colors.transparent;
+            }
 
-        return Column(
-          children: [
-            LongPressDraggable<int>(
-              data: index, // The index of the card being dragged
-              onDragStarted: () {
-                controller.clearPlacementResults();
-              },
-              feedback: Material(
-                // Visual representation during drag
-                color: Colors.transparent, // Make background transparent
-                elevation: 8,
-                child: SizedBox(
-                  width: 165, // Adjust size as needed for feedback
-                  height: 77,
-                  child: Card(
-                    color: Colors.blueGrey[700],
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Image.asset('assets/images/stories/${card.imagePath}', width: 55, height: 55, fit: BoxFit.cover),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              card.title,
-                              style: TextStyle(color: Colors.white, fontSize: fontSize + 2, fontFamily: AppTextStyles.amaticSC),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+            return DragAndDropItem(
+              child: GestureDetector(
+                onTap: () => controller.selectMythCard(card),
+                child: Card(
+                  margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                  color: isSelected ? Colors.blueGrey[700] : Colors.blueGrey[900],
+                  elevation: isSelected ? 12 : 8,
+                  shadowColor: Colors.black.withAlpha(128),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(color: borderColor, width: 2),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Row(
+                      children: [
+                        ShaderMask(
+                          shaderCallback: (rect) {
+                            return const LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Colors.black, Colors.transparent],
+                            ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+                          },
+                          blendMode: BlendMode.dstIn,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0), bottomLeft: Radius.circular(12.0)),
+                            child: Image.asset('assets/images/stories/${card.imagePath}', width: 60, height: 60, fit: BoxFit.cover),
                           ),
-                        ],
-                      ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            card.title,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: fontSize,
+                              fontFamily: AppTextStyles.amaticSC,
+                              shadows: [Shadow(blurRadius: 2.0, color: Colors.black.withAlpha(128), offset: const Offset(1.0, 1.0))],
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-              childWhenDragging: Container(
-                // What to show in place of the original when dragging
-                height: 70, // Match the height of the card
-                margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.blueGrey[900]?.withAlpha(128),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey, width: 2),
-                ),
-                child: const Center(child: Icon(Icons.drag_handle, color: Colors.white)),
-              ),
-              child: DragTarget<int>(
-                onAcceptWithDetails: (details) {
-                  controller.reorderCards(details.data, index);
-                },
-                builder: (context, candidateData, rejectedData) {
-                  return GestureDetector(
-                    onTap: () => controller.selectMythCard(card),
-                    child: Card(
-                      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                      color: isSelected ? Colors.blueGrey[700] : Colors.blueGrey[900],
-                      elevation: isSelected ? 12 : 8,
-                      shadowColor: Colors.black.withAlpha(128),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: borderColor, width: 2),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Row(
-                          children: [
-                            ShaderMask(
-                              shaderCallback: (rect) {
-                                return const LinearGradient(
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                  colors: [Colors.black, Colors.transparent],
-                                ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-                              },
-                              blendMode: BlendMode.dstIn,
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12.0), bottomLeft: Radius.circular(12.0)),
-                                child: Image.asset('assets/images/stories/${card.imagePath}', width: 60, height: 60, fit: BoxFit.cover),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                card.title,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: fontSize,
-                                  fontFamily: AppTextStyles.amaticSC,
-                                  shadows: [Shadow(blurRadius: 2.0, color: Colors.black.withAlpha(128), offset: const Offset(1.0, 1.0))],
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            if (index < controller.shuffledCards.length - 1)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 0.0),
-                child: Icon(
-                  Icons.arrow_downward,
-                  color: Colors.white,
-                  size: 24,
-                  shadows: [Shadow(blurRadius: 2.0, color: Colors.black.withAlpha(128), offset: const Offset(1.0, 1.0))],
-                ),
-              ),
-          ],
-        );
+            );
+          }),
+        ),
+      ],
+      onItemReorder: (int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+        controller.reorderCards(oldItemIndex, newItemIndex);
       },
+      onListReorder: (int oldListIndex, int newListIndex) {
+        // Not needed
+      },
+      listPadding: EdgeInsets.zero,
     );
   }
 }

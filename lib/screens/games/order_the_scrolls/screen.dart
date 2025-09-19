@@ -52,9 +52,9 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
     );
     _animationController.value = 0.0; // Set initial animation value to 0.0 (begin state)
 
-    _leftPanelFlexAnimation = Tween<double>(begin: 0.5, end: 0.0).animate(CurvedAnimation(parent: _animationController, curve: _currentCurve));
+    _leftPanelFlexAnimation = Tween<double>(begin: 0.6, end: 0.0).animate(CurvedAnimation(parent: _animationController, curve: _currentCurve));
 
-    _rightPanelFlexAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(CurvedAnimation(parent: _animationController, curve: _currentCurve));
+    _rightPanelFlexAnimation = Tween<double>(begin: 0.4, end: 1.0).animate(CurvedAnimation(parent: _animationController, curve: _currentCurve));
   }
 
   @override
@@ -64,8 +64,20 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
     super.dispose();
   }
 
+  Widget validationButton() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ChibiButton(
+        text: 'Valider l’ordre',
+        color: const Color(0xFFF9A825), // Orange color
+        onPressed: () => _gameController.validateOrder(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     return ChangeNotifierProvider.value(
       value: _gameController,
       child: Consumer<GameController>(
@@ -115,44 +127,75 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
                             builder: (context, constraints) {
                               final totalWidth = constraints.maxWidth;
                               // Calculate animated widths based on totalWidth and animation values
-                              final leftPanelWidth = totalWidth * _leftPanelFlexAnimation.value;
-                              final rightPanelWidth = totalWidth * _rightPanelFlexAnimation.value;
-
-                              return Row(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500), // Use the animation controller's duration
-                                    curve: _currentCurve, // Use the current curve
-                                    width: leftPanelWidth,
-                                    child: ThumbnailList(controller: controller),
-                                  ),
-                                  AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500), // Use the animation controller's duration
-                                    curve: _currentCurve, // Use the current curve
-                                    width: rightPanelWidth,
-                                    child: DetailPanel(
-                                      controller: controller,
-                                      isEnlarged: _animationController.isCompleted, // Use animation state for isEnlarged
-                                      onToggleEnlargement: _toggleDetailPanelEnlargement,
+                              if (isLandscape) {
+                                final leftPanelWidth = totalWidth * _leftPanelFlexAnimation.value;
+                                final rightPanelWidth = totalWidth * _rightPanelFlexAnimation.value;
+                                return Row(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    AnimatedContainer(
+                                      duration: const Duration(milliseconds: 500), // Use the animation controller's duration
+                                      curve: _currentCurve, // Use the current curve
+                                      width: leftPanelWidth,
+                                      child: ThumbnailList(controller: controller),
                                     ),
-                                  ),
-                                ],
-                              );
+                                    AnimatedContainer(
+                                      duration: const Duration(milliseconds: 500), // Use the animation controller's duration
+                                      curve: _currentCurve, // Use the current curve
+                                      width: rightPanelWidth,
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                            child: DetailPanel(
+                                              controller: controller,
+                                              isEnlarged: _animationController.isCompleted, // Use animation state for isEnlarged
+                                              onToggleEnlargement: _toggleDetailPanelEnlargement,
+                                            ),
+                                          ),
+                                          validationButton(),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                final topPanelHeight = constraints.maxHeight * (1 - _rightPanelFlexAnimation.value);
+                                final bottomPanelHeight = constraints.maxHeight * _rightPanelFlexAnimation.value;
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    AnimatedContainer(
+                                      duration: const Duration(milliseconds: 500), // Use the animation controller's duration
+                                      curve: _currentCurve, // Use the current curve
+                                      height: topPanelHeight,
+                                      child: ThumbnailList(controller: controller),
+                                    ),
+                                    AnimatedContainer(
+                                      duration: const Duration(milliseconds: 500), // Use the animation controller's duration
+                                      curve: _currentCurve, // Use the current curve
+                                      height: bottomPanelHeight,
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                            child: DetailPanel(
+                                              controller: controller,
+                                              isEnlarged: _animationController.isCompleted, // Use animation state for isEnlarged
+                                              onToggleEnlargement: _toggleDetailPanelEnlargement,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
                             },
                           );
                         },
                       ),
                     ),
                     // Validation Button
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: ChibiButton(
-                        text: 'Valider l’ordre',
-                        color: const Color(0xFFF9A825), // Orange color
-                        onPressed: () => controller.validateOrder(),
-                      ),
-                    ),
+                    if (!isLandscape) validationButton(),
                   ],
                 ),
               ), // Closing parenthesis for SafeArea

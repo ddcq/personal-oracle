@@ -22,7 +22,6 @@ class MythCardContent extends StatelessWidget {
         boxShadow: isDragging
             ? [BoxShadow(color: Colors.black.withAlpha(77), blurRadius: 12, offset: const Offset(0, 6))]
             : [BoxShadow(color: Colors.black.withAlpha(38), blurRadius: 8, offset: const Offset(0, 3))],
-        border: controller.getCardBorder(index),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
