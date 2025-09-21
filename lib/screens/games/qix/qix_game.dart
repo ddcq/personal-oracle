@@ -19,7 +19,7 @@ class QixGame extends FlameGame with KeyboardEvents {
   final VoidCallback onGameOver;
   final Function(CollectibleCard?) onWin;
   final String? rewardCardImagePath;
-  final CollectibleCard? rewardCard;
+  CollectibleCard? rewardCard;
   final int difficulty;
 
   QixGame({required this.onGameOver, required this.onWin, this.rewardCardImagePath, this.rewardCard, required this.difficulty});

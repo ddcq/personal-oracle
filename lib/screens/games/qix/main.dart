@@ -38,8 +38,6 @@ class _QixGameScreenState extends State<QixGameScreen> {
   Future<void> _initializeGame() async {
     final gamificationService = Provider.of<GamificationService>(context, listen: false);
     final int currentDifficulty = await gamificationService.getQixDifficulty();
-    CollectibleCard? selectedRewardCard = await gamificationService.selectRandomUnearnedCollectibleCard();
-    String? rewardCardImagePath = selectedRewardCard?.imagePath;
 
     _game = QixGame(
       onGameOver: () {
@@ -88,12 +86,16 @@ class _QixGameScreenState extends State<QixGameScreen> {
         );
       },
       onWin: (CollectibleCard? collectibleCard) async {
-        // Made async to await saveQixDifficulty
+        // Card is won here to prevent earning it on loss.
+        CollectibleCard? wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+        if (_game != null) {
+          _game!.rewardCard = wonCard;
+        }
         _showVictoryPopupNotifier.value = true;
         await gamificationService.saveQixDifficulty(currentDifficulty + 1); // Increment and save difficulty
       },
-      rewardCardImagePath: rewardCardImagePath,
-      rewardCard: selectedRewardCard,
+      rewardCardImagePath: null,
+      rewardCard: null,
       difficulty: currentDifficulty, // Pass difficulty to QixGame
     );
   }
