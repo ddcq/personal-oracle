@@ -32,7 +32,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const int _victoryScoreThreshold = 200;
   static const int _speedReductionScoreInterval = 20;
   static const double _speedReductionFactor = 20.0;
-  static const double _speedAccelerationPerLevel = 0.1;
+  static const double _speedAccelerationPerLevel = 0.07; // 7% faster per level
   static const int _minGameSpeed = 50;
 
   final GameLogic gameLogic = GameLogic();
