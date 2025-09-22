@@ -10,6 +10,9 @@ class DirectionalPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double iconSize = 32.0; // Increased icon size
+    const double spacerWidth = 70.0; // Increased spacer width
+
     return Align(
       alignment: Alignment.bottomRight,
       child: Padding(
@@ -19,19 +22,35 @@ class DirectionalPad extends StatelessWidget {
           children: [
             Row(
               mainAxisSize: MainAxisSize.min,
-              children: [_buildDirectionButton(Icon(Icons.arrow_upward, color: Colors.white), Direction.up)],
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
               children: [
-                _buildDirectionButton(Icon(Icons.arrow_back, color: Colors.white), Direction.left),
-                const SizedBox(width: 60), // Spacer for the center
-                _buildDirectionButton(Icon(Icons.arrow_forward, color: Colors.white), Direction.right),
+                _buildDirectionButton(
+                  Icon(Icons.arrow_upward, color: Colors.white, size: iconSize),
+                  Direction.up,
+                )
               ],
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
-              children: [_buildDirectionButton(Icon(Icons.arrow_downward, color: Colors.white), Direction.down)],
+              children: [
+                _buildDirectionButton(
+                  Icon(Icons.arrow_back, color: Colors.white, size: iconSize),
+                  Direction.left,
+                ),
+                const SizedBox(width: spacerWidth), // Spacer for the center
+                _buildDirectionButton(
+                  Icon(Icons.arrow_forward, color: Colors.white, size: iconSize),
+                  Direction.right,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildDirectionButton(
+                  Icon(Icons.arrow_downward, color: Colors.white, size: iconSize),
+                  Direction.down,
+                )
+              ],
             ),
           ],
         ),
