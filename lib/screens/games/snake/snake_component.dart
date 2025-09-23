@@ -36,16 +36,34 @@ class SnakeComponent extends PositionComponent {
   double _animationDuration; // Removed final
   final Curve _animationCurve = Curves.linear; // Easing curve for animation
 
+  dp.Direction _previousDirection;
+  dp.Direction _currentDirection;
+
   // Setter for animationDuration
   set animationDuration(double value) {
     _animationDuration = value;
+  }
+
+  double _directionToAngle(dp.Direction direction) {
+    switch (direction) {
+      case dp.Direction.right:
+        return radians(90);
+      case dp.Direction.down:
+        return radians(180);
+      case dp.Direction.left:
+        return radians(270);
+      case dp.Direction.up:
+        return radians(0);
+    }
   }
 
   SnakeComponent({required this.gameState, required this.cellSize, required this.snakeHeadSprite, required double animationDuration})
       : _animationDuration = animationDuration,
         _previousHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset(),
         _currentHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset(),
-        _animationProgress = 0.0 {
+        _animationProgress = 0.0,
+        _previousDirection = gameState.direction,
+        _currentDirection = gameState.direction {
     _top = Vector2(cellSize * 0.5, cellSize * 0.18);
     _bottom = Vector2(cellSize * 0.5, cellSize * 0.82);
     _left = Vector2(cellSize * 0.18, cellSize * 0.5);
@@ -227,9 +245,11 @@ class SnakeComponent extends PositionComponent {
     _previousSegmentCircles.addAll(_currentSegmentCircles); // Copy current to previous
     _previousHeadPosition = _currentHeadPosition; // Copy current head position to previous
 
+    _previousDirection = gameState.direction; // Store previous direction
     // Update gameState to newGameState *before* calculating _currentSegmentCircles
     // so that _getSegmentCircles uses the new state.
     gameState = newGameState;
+    _currentDirection = gameState.direction; // Update current direction
     _populateCurrentSegmentCircles(); // Populate current circles based on new game state
     _animationProgress = 0.0;
   }
@@ -243,32 +263,27 @@ class SnakeComponent extends PositionComponent {
     for (int i = 0; i < gameState.snake.length; i++) {
       if (i == 0) {
         // Head of the snake - Qix monster with rotation
-        double rotationAngle = 0; // Default: Up
-        switch (gameState.direction) {
-          case dp.Direction.right:
-            rotationAngle = radians(90);
-            break;
-          case dp.Direction.down:
-            rotationAngle = radians(180);
-            break;
-          case dp.Direction.left:
-            rotationAngle = radians(270); // or radians(-90)
-            break;
-          case dp.Direction.up:
-            rotationAngle = radians(0);
-            break;
+        double startAngle = _directionToAngle(_previousDirection);
+        double endAngle = _directionToAngle(_currentDirection);
+
+        // Handle shortest path for rotation (e.g., from 270 to 0 should go +90, not -270)
+        if ((endAngle - startAngle).abs() > radians(180)) {
+          if (endAngle > startAngle) {
+            startAngle += radians(360);
+          } else {
+            endAngle -= radians(360);
+          }
         }
 
-        // Animate head position
-        Offset animatedHeadPosition = _currentHeadPosition;
+        double animatedRotationAngle = endAngle;
         if (_animationProgress < _animationDuration) {
           final t = _animationCurve.transform(_animationProgress / _animationDuration);
-          animatedHeadPosition = Offset.lerp(_previousHeadPosition, _currentHeadPosition, t)!;
+          animatedRotationAngle = lerpDouble(startAngle, endAngle, t)!;
         }
 
         canvas.save();
         canvas.translate(animatedHeadPosition.dx + cellSize / 2, animatedHeadPosition.dy + cellSize / 2);
-        canvas.rotate(rotationAngle);
+        canvas.rotate(animatedRotationAngle);
         canvas.translate(-(animatedHeadPosition.dx + cellSize / 2), -(animatedHeadPosition.dy + cellSize / 2));
         snakeHeadSprite.render(
           canvas,
