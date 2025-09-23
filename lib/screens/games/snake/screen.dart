@@ -57,8 +57,6 @@ class _SnakeGameState extends State<SnakeGame> {
     super.dispose();
   }
 
-  
-
   void _handleGameEnd(int score, {required bool isVictory, CollectibleCard? wonCard}) {
     showDialog(
       context: context,
@@ -112,7 +110,7 @@ class _SnakeGameState extends State<SnakeGame> {
                 GameHelpDialog.show(
                   context,
                   [
-                    'Faites glisser votre doigt (swipe) sur l'écran pour changer la direction du serpent.',
+                    'Faites glisser votre doigt (swipe) sur l’écran pour changer la direction du serpent.',
                     'Mangez les pommes pour grandir et marquez des points.',
                     'Évitez de toucher les murs ou votre propre corps.',
                     'Les pommes dorées donnent plus de points et des bonus.',
@@ -140,13 +138,7 @@ class _SnakeGameState extends State<SnakeGame> {
                 _game ??= _createSnakeFlameGame(_currentLevel);
 
                 // Game is initialized, show the game content
-                return Column(
-                  children: [
-                    Expanded(
-                      child: _buildGameArea(context),
-                    ),
-                  ],
-                );
+                return Column(children: [Expanded(child: _buildGameArea(context))]);
               } else {
                 // Show a loading indicator while the game is initializing
                 return Center(child: CircularProgressIndicator());

@@ -2,9 +2,11 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart'; // Import effects
 import 'package:flutter/animation.dart'; // For Curves
 import 'dart:ui';
+import 'dart:math'; // For pi
 import 'game_logic.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
+import 'snake_flame_game.dart'; // Make sure this file defines SnakeFlameGame
 
 // Define CircleData class outside SnakeComponent
 class CircleData {
@@ -13,7 +15,7 @@ class CircleData {
   CircleData(this.center, this.radius);
 }
 
-class SnakeComponent extends PositionComponent with HasGameRef<SnakeFlameGame> {
+class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameGame> {
   GameState gameState;
   final double cellSize;
 
@@ -43,15 +45,11 @@ class SnakeComponent extends PositionComponent with HasGameRef<SnakeFlameGame> {
   }
 
   SnakeComponent({required this.gameState, required this.cellSize, required Sprite snakeHeadSprite, required double animationDuration})
-      : _animationDuration = animationDuration,
-        _previousHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset(),
-        _currentHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset(),
-        _animationProgress = 0.0 {
-    _headComponent = SpriteComponent(
-      sprite: snakeHeadSprite,
-      size: Vector2.all(cellSize * 1.5),
-      anchor: Anchor.center,
-    );
+    : _animationDuration = animationDuration,
+      _previousHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset(),
+      _currentHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset(),
+      _animationProgress = 0.0 {
+    _headComponent = SpriteComponent(sprite: snakeHeadSprite, size: Vector2.all(cellSize * 1.5), anchor: Anchor.center);
     add(_headComponent);
     _top = Vector2(cellSize * 0.5, cellSize * 0.18);
     _bottom = Vector2(cellSize * 0.5, cellSize * 0.82);
@@ -61,71 +59,23 @@ class SnakeComponent extends PositionComponent with HasGameRef<SnakeFlameGame> {
     _halfCellOffset = Vector2(cellSize * 0.5, cellSize * 0.5);
     _cornerCenters = {
       // Top-Left (snake turns from up to left, or from left to up)
-      [0, -1, -1, 0]: [
-        _top,
-        Vector2(cellSize * 0.4, cellSize * 0.4),
-        _left,
-      ],
-      [-1, 0, 0, -1]: [
-        _left,
-        Vector2(cellSize * 0.4, cellSize * 0.4),
-        _top,
-      ],
+      [0, -1, -1, 0]: [_top, Vector2(cellSize * 0.4, cellSize * 0.4), _left],
+      [-1, 0, 0, -1]: [_left, Vector2(cellSize * 0.4, cellSize * 0.4), _top],
       // Top-Right (snake turns from up to right, or from right to up)
-      [0, -1, 1, 0]: [
-        _top,
-        Vector2(cellSize * 0.6, cellSize * 0.4),
-        _right,
-      ],
-      [1, 0, 0, -1]: [
-        _right,
-        Vector2(cellSize * 0.6, cellSize * 0.4),
-        _top,
-      ],
+      [0, -1, 1, 0]: [_top, Vector2(cellSize * 0.6, cellSize * 0.4), _right],
+      [1, 0, 0, -1]: [_right, Vector2(cellSize * 0.6, cellSize * 0.4), _top],
       // Bottom-Left (snake turns from down to left, or from left to down)
-      [0, 1, -1, 0]: [
-        _bottom,
-        Vector2(cellSize * 0.4, cellSize * 0.6),
-        _left,
-      ],
-      [-1, 0, 0, 1]: [
-        _left,
-        Vector2(cellSize * 0.4, cellSize * 0.6),
-        _bottom,
-      ],
+      [0, 1, -1, 0]: [_bottom, Vector2(cellSize * 0.4, cellSize * 0.6), _left],
+      [-1, 0, 0, 1]: [_left, Vector2(cellSize * 0.4, cellSize * 0.6), _bottom],
       // Bottom-Right (snake turns from down to right, or from right to down)
-      [0, 1, 1, 0]: [
-        _bottom,
-        Vector2(cellSize * 0.6, cellSize * 0.6),
-        _right,
-      ],
-      [1, 0, 0, 1]: [
-        _right,
-        Vector2(cellSize * 0.6, cellSize * 0.6),
-        _bottom,
-      ],
+      [0, 1, 1, 0]: [_bottom, Vector2(cellSize * 0.6, cellSize * 0.6), _right],
+      [1, 0, 0, 1]: [_right, Vector2(cellSize * 0.6, cellSize * 0.6), _bottom],
       // Horizontal segment
-      [-1, 0, 1, 0]: [
-        _left,
-        _halfCellOffset,
-        _right,
-      ],
-      [1, 0, -1, 0]: [
-        _right,
-        _halfCellOffset,
-        _left,
-      ],
+      [-1, 0, 1, 0]: [_left, _halfCellOffset, _right],
+      [1, 0, -1, 0]: [_right, _halfCellOffset, _left],
       // Vertical segment
-      [0, -1, 0, 1]: [
-        _top,
-        _halfCellOffset,
-        _bottom,
-      ],
-      [0, 1, 0, -1]: [
-        _bottom,
-        _halfCellOffset,
-        _top,
-      ],
+      [0, -1, 0, 1]: [_top, _halfCellOffset, _bottom],
+      [0, 1, 0, -1]: [_bottom, _halfCellOffset, _top],
     };
   }
 
@@ -251,11 +201,32 @@ class SnakeComponent extends PositionComponent with HasGameRef<SnakeFlameGame> {
         break;
     }
 
-    // Apply RotateEffect
-    _headComponent.add(RotateEffect.to(
-      targetAngle,
-      EffectController(duration: _animationDuration, curve: _animationCurve),
-    ));
+    // Normalize targetAngle to be within 0 to 2*pi
+    targetAngle = targetAngle % (2 * pi);
+    if (targetAngle < 0) {
+      targetAngle += (2 * pi);
+    }
+
+    // Get current angle of the head component
+    double currentAngle = _headComponent.angle;
+
+    // Normalize currentAngle to be within 0 to 2*pi
+    currentAngle = currentAngle % (2 * pi);
+    if (currentAngle < 0) {
+      currentAngle += (2 * pi);
+    }
+
+    // Calculate the shortest angle difference
+    double angleDifference = targetAngle - currentAngle;
+
+    if (angleDifference > pi) {
+      angleDifference -= (2 * pi);
+    } else if (angleDifference < -pi) {
+      angleDifference += (2 * pi);
+    }
+
+    // Apply RotateEffect.by with the shortest angle difference
+    _headComponent.add(RotateEffect.by(angleDifference, EffectController(duration: _animationDuration, curve: _animationCurve)));
 
     // Update gameState to newGameState *before* calculating _currentSegmentCircles
     // so that _getSegmentCircles uses the new state.

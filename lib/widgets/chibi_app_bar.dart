@@ -21,9 +21,7 @@ class ChibiAppBar extends StatelessWidget implements PreferredSizeWidget {
           final titleStyle = ChibiTextStyles.appBarTitle.copyWith(
             fontSize: isHeightFinite ? constraints.maxHeight * 0.6 : 30.0, // Fallback to 30.0
           );
-          final subtitleStyle = ChibiTextStyles.appBarTitle.copyWith(
-            fontSize: isHeightFinite ? constraints.maxHeight * 0.25 : 12.0, // Fallback to 12.0
-          );
+
 
           return Column(
             mainAxisSize: MainAxisSize.min,

@@ -15,6 +15,8 @@ class IntVector2 {
   IntVector2 operator -(IntVector2 other) => IntVector2(x - other.x, y - other.y);
   IntVector2 operator *(IntVector2 other) => IntVector2(x * other.x, y * other.y);
 
+  IntVector2 operator -() => IntVector2(-x, -y);
+
   // Comparaison
   @override
   bool operator ==(Object other) => identical(this, other) || other is IntVector2 && runtimeType == other.runtimeType && x == other.x && y == other.y;

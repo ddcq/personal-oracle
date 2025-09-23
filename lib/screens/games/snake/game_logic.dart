@@ -13,7 +13,8 @@ enum FoodType { regular, golden, rotten }
 // ==========================================
 /// Holds all the data representing the current state of the game.
 class GameState {
-  static const int gridSize = 20;
+  final int gridWidth;
+  final int gridHeight;
   static const int _initialSnakeHeadPadding = 2;
 
   List<IntVector2> snake;
@@ -38,20 +39,22 @@ class GameState {
     this.nextDirection = dp.Direction.right,
     this.isGameRunning = false,
     this.isGameOver = false,
+    required this.gridWidth,
+    required this.gridHeight,
   });
 
   /// Creates a GameState with the default initial values.
-  factory GameState.initial() {
+  factory GameState.initial({required int gridWidth, required int gridHeight}) {
     final Random random = Random();
-    IntVector2 initialSnakeHead = _generateRandomPosition(random, _initialSnakeHeadPadding, gridSize - _initialSnakeHeadPadding - 1);
-    IntVector2 initialFood = _generateRandomPosition(random, 0, gridSize - 1, exclude: [initialSnakeHead]);
+    IntVector2 initialSnakeHead = _generateRandomPosition(random, _initialSnakeHeadPadding, gridWidth - _initialSnakeHeadPadding - 1, _initialSnakeHeadPadding, gridHeight - _initialSnakeHeadPadding - 1);
+    IntVector2 initialFood = _generateRandomPosition(random, 0, gridWidth - 1, 0, gridHeight - 1, exclude: [initialSnakeHead]);
 
     // Determine the best initial direction
     Map<dp.Direction, int> distances = {
-      dp.Direction.up: _calculateStraightDistance(initialSnakeHead, dp.Direction.up, gridSize),
-      dp.Direction.down: _calculateStraightDistance(initialSnakeHead, dp.Direction.down, gridSize),
-      dp.Direction.left: _calculateStraightDistance(initialSnakeHead, dp.Direction.left, gridSize),
-      dp.Direction.right: _calculateStraightDistance(initialSnakeHead, dp.Direction.right, gridSize),
+      dp.Direction.up: _calculateStraightDistance(initialSnakeHead, dp.Direction.up, gridWidth, gridHeight),
+      dp.Direction.down: _calculateStraightDistance(initialSnakeHead, dp.Direction.down, gridWidth, gridHeight),
+      dp.Direction.left: _calculateStraightDistance(initialSnakeHead, dp.Direction.left, gridWidth, gridHeight),
+      dp.Direction.right: _calculateStraightDistance(initialSnakeHead, dp.Direction.right, gridWidth, gridHeight),
     };
 
     dp.Direction bestDirection = dp.Direction.right; // Default if all are 0 or tied
@@ -76,18 +79,20 @@ class GameState {
       nextDirection: bestDirection,
       isGameRunning: false,
       isGameOver: false,
+      gridWidth: gridWidth,
+      gridHeight: gridHeight,
     );
   }
 
-  static IntVector2 _generateRandomPosition(Random random, int min, int max, {List<IntVector2>? exclude}) {
+  static IntVector2 _generateRandomPosition(Random random, int minX, int maxX, int minY, int maxY, {List<IntVector2>? exclude}) {
     IntVector2 position;
     do {
-      position = IntVector2(random.nextInt(max - min + 1) + min, random.nextInt(max - min + 1) + min);
+      position = IntVector2(random.nextInt(maxX - minX + 1) + minX, random.nextInt(maxY - minY + 1) + minY);
     } while (exclude != null && exclude.contains(position));
     return position;
   }
 
-  static int _calculateStraightDistance(IntVector2 start, dp.Direction direction, int gridSize) {
+  static int _calculateStraightDistance(IntVector2 start, dp.Direction direction, int gridWidth, int gridHeight) {
     int distance = 0;
     IntVector2 current = start;
     while (true) {
@@ -106,7 +111,7 @@ class GameState {
           break;
       }
 
-      if (current.x < 0 || current.x >= gridSize || current.y < 0 || current.y >= gridSize) {
+      if (current.x < 0 || current.x >= gridWidth || current.y < 0 || current.y >= gridHeight) {
         break; // Hit a wall
       }
       distance++;
@@ -174,7 +179,7 @@ class GameLogic {
 
   bool _isCollision(GameState state, IntVector2 newHead) {
     // Check for screen boundaries
-    if (newHead.x < 0 || newHead.x >= GameState.gridSize || newHead.y < 0 || newHead.y >= GameState.gridSize) {
+    if (newHead.x < 0 || newHead.x >= state.gridWidth || newHead.y < 0 || newHead.y >= state.gridHeight) {
       return true;
     }
     // Check for collision with self or obstacles
@@ -201,7 +206,7 @@ class GameLogic {
 
   void generateNewFood(GameState state) {
     Random random = Random();
-    IntVector2 newFood = _generateUniquePosition(random, state.snake, state.obstacles, state.food);
+    IntVector2 newFood = _generateUniquePosition(random, state.snake, state.obstacles, state.food, state.gridWidth, state.gridHeight);
 
     if (random.nextDouble() < _goldenFoodProbability) {
       state.foodType = FoodType.golden;
@@ -231,16 +236,16 @@ class GameLogic {
     Random random = Random();
     List<IntVector2> newObstacles = [];
     for (int i = 0; i < (_baseObstacles + level); i++) {
-      IntVector2 newObstacle = _generateUniquePosition(random, state.snake, state.obstacles, state.food, newObstacles);
+      IntVector2 newObstacle = _generateUniquePosition(random, state.snake, state.obstacles, state.food, state.gridWidth, state.gridHeight, newObstacles);
       newObstacles.add(newObstacle);
     }
     return newObstacles;
   }
 
-  static IntVector2 _generateUniquePosition(Random random, List<IntVector2> snake, List<IntVector2> obstacles, IntVector2 food, [List<IntVector2>? currentObstacles]) {
+  static IntVector2 _generateUniquePosition(Random random, List<IntVector2> snake, List<IntVector2> obstacles, IntVector2 food, int gridWidth, int gridHeight, [List<IntVector2>? currentObstacles]) {
     IntVector2 position;
     do {
-      position = IntVector2(random.nextInt(GameState.gridSize), random.nextInt(GameState.gridSize));
+      position = IntVector2(random.nextInt(gridWidth), random.nextInt(gridHeight));
     } while (snake.contains(position) || obstacles.contains(position) || food == position || (currentObstacles != null && currentObstacles.contains(position)));
     return position;
   }

@@ -54,7 +54,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     this.onGameLoaded, // Add this line to constructor
     this.onScoreChanged,
   }) {
-    gameState = GameState.initial();
+    // gridWidth and gridHeight will be calculated in onLoad()
     gameLogic.onRottenFoodEaten = onRottenFoodEaten; // Pass the callback
     gameLogic.level = level; // Pass level to gameLogic
   }
@@ -101,10 +101,27 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    // Calculate cell size based on the shortest screen dimension
     final screenWidth = size.x;
     final screenHeight = size.y;
-    cellSize = (screenWidth < screenHeight ? screenWidth : screenHeight) / GameState.gridSize;
+
+    // Define a base grid dimension for the shorter side
+    final int baseGridDimension = 20; // This was GameState.gridSize previously
+
+    int calculatedGridWidth;
+    int calculatedGridHeight;
+
+    if (screenWidth < screenHeight) {
+      calculatedGridWidth = baseGridDimension;
+      cellSize = screenWidth / calculatedGridWidth;
+      calculatedGridHeight = (screenHeight / cellSize).round();
+    } else {
+      calculatedGridHeight = baseGridDimension;
+      cellSize = screenHeight / calculatedGridHeight;
+      calculatedGridWidth = (screenWidth / cellSize).round();
+    }
+
+    // Initialize gameState with the calculated grid dimensions
+    gameState = GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight);
 
     // Load sprites
     regularFoodSprite = await loadSprite('apple_regular.png');
@@ -113,7 +130,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     obstacleSprite = await loadSprite('stone.png');
 
     snakeHeadSprite = await loadSprite('snake_head.png');
-
     _snakeComponent = SnakeComponent(
       gameState: gameState,
       cellSize: cellSize,
@@ -314,7 +330,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
   void resetGame() {
     // Reinitialize gameState to its initial state
-    gameState = GameState.initial();
+    gameState = GameState.initial(gridWidth: gameState.gridWidth, gridHeight: gameState.gridHeight);
 
     // Remove all existing components from the game
     removeAll([_snakeComponent, _foodComponent, ..._obstacles]);
