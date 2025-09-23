@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart'; // Import effects
 import 'package:flutter/animation.dart'; // For Curves
 import 'dart:ui';
 import 'game_logic.dart';
@@ -12,12 +13,12 @@ class CircleData {
   CircleData(this.center, this.radius);
 }
 
-class SnakeComponent extends PositionComponent {
+class SnakeComponent extends PositionComponent with HasGameRef<SnakeFlameGame> {
   GameState gameState;
   final double cellSize;
 
-  // Sprites
-  final Sprite snakeHeadSprite;
+  // Components
+  late SpriteComponent _headComponent;
 
   late final Vector2 _top;
   late final Vector2 _bottom;
@@ -36,34 +37,22 @@ class SnakeComponent extends PositionComponent {
   double _animationDuration; // Removed final
   final Curve _animationCurve = Curves.linear; // Easing curve for animation
 
-  dp.Direction _previousDirection;
-  dp.Direction _currentDirection;
-
   // Setter for animationDuration
   set animationDuration(double value) {
     _animationDuration = value;
   }
 
-  double _directionToAngle(dp.Direction direction) {
-    switch (direction) {
-      case dp.Direction.right:
-        return radians(90);
-      case dp.Direction.down:
-        return radians(180);
-      case dp.Direction.left:
-        return radians(270);
-      case dp.Direction.up:
-        return radians(0);
-    }
-  }
-
-  SnakeComponent({required this.gameState, required this.cellSize, required this.snakeHeadSprite, required double animationDuration})
+  SnakeComponent({required this.gameState, required this.cellSize, required Sprite snakeHeadSprite, required double animationDuration})
       : _animationDuration = animationDuration,
         _previousHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset(),
         _currentHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset(),
-        _animationProgress = 0.0,
-        _previousDirection = gameState.direction,
-        _currentDirection = gameState.direction {
+        _animationProgress = 0.0 {
+    _headComponent = SpriteComponent(
+      sprite: snakeHeadSprite,
+      size: Vector2.all(cellSize * 1.5),
+      anchor: Anchor.center,
+    );
+    add(_headComponent);
     _top = Vector2(cellSize * 0.5, cellSize * 0.18);
     _bottom = Vector2(cellSize * 0.5, cellSize * 0.82);
     _left = Vector2(cellSize * 0.18, cellSize * 0.5);
@@ -245,11 +234,32 @@ class SnakeComponent extends PositionComponent {
     _previousSegmentCircles.addAll(_currentSegmentCircles); // Copy current to previous
     _previousHeadPosition = _currentHeadPosition; // Copy current head position to previous
 
-    _previousDirection = gameState.direction; // Store previous direction
+    // Calculate target angle for rotation
+    double targetAngle = 0;
+    switch (newGameState.direction) {
+      case dp.Direction.right:
+        targetAngle = radians(90);
+        break;
+      case dp.Direction.down:
+        targetAngle = radians(180);
+        break;
+      case dp.Direction.left:
+        targetAngle = radians(270);
+        break;
+      case dp.Direction.up:
+        targetAngle = radians(0);
+        break;
+    }
+
+    // Apply RotateEffect
+    _headComponent.add(RotateEffect.to(
+      targetAngle,
+      EffectController(duration: _animationDuration, curve: _animationCurve),
+    ));
+
     // Update gameState to newGameState *before* calculating _currentSegmentCircles
     // so that _getSegmentCircles uses the new state.
     gameState = newGameState;
-    _currentDirection = gameState.direction; // Update current direction
     _populateCurrentSegmentCircles(); // Populate current circles based on new game state
     _animationProgress = 0.0;
   }
@@ -262,35 +272,14 @@ class SnakeComponent extends PositionComponent {
 
     for (int i = 0; i < gameState.snake.length; i++) {
       if (i == 0) {
-        // Head of the snake - Qix monster with rotation
-        double startAngle = _directionToAngle(_previousDirection);
-        double endAngle = _directionToAngle(_currentDirection);
-
-        // Handle shortest path for rotation (e.g., from 270 to 0 should go +90, not -270)
-        if ((endAngle - startAngle).abs() > radians(180)) {
-          if (endAngle > startAngle) {
-            startAngle += radians(360);
-          } else {
-            endAngle -= radians(360);
-          }
-        }
-
-        double animatedRotationAngle = endAngle;
+        // Head of the snake - handled by _headComponent
+        // Update _headComponent's position
+        Offset animatedHeadPosition = _currentHeadPosition;
         if (_animationProgress < _animationDuration) {
           final t = _animationCurve.transform(_animationProgress / _animationDuration);
-          animatedRotationAngle = lerpDouble(startAngle, endAngle, t)!;
+          animatedHeadPosition = Offset.lerp(_previousHeadPosition, _currentHeadPosition, t)!;
         }
-
-        canvas.save();
-        canvas.translate(animatedHeadPosition.dx + cellSize / 2, animatedHeadPosition.dy + cellSize / 2);
-        canvas.rotate(animatedRotationAngle);
-        canvas.translate(-(animatedHeadPosition.dx + cellSize / 2), -(animatedHeadPosition.dy + cellSize / 2));
-        snakeHeadSprite.render(
-          canvas,
-          position: Vector2(animatedHeadPosition.dx, animatedHeadPosition.dy) - Vector2(cellSize * 0.25, cellSize * 0.25),
-          size: Vector2.all(cellSize * 1.5),
-        );
-        canvas.restore();
+        _headComponent.position = Vector2(animatedHeadPosition.dx + cellSize / 2, animatedHeadPosition.dy + cellSize / 2);
       } else {
         // Body and Tail segments - draw animated circles
 
