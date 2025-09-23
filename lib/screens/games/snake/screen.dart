@@ -1,7 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'dart:async'; // For Completer
-import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
+
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_game_over_popup.dart';
 import 'package:oracle_d_asgard/screens/profile_screen.dart';
@@ -112,6 +112,7 @@ class _SnakeGameState extends State<SnakeGame> {
                 GameHelpDialog.show(
                   context,
                   [
+                    'Faites glisser votre doigt (swipe) sur l'écran pour changer la direction du serpent.',
                     'Mangez les pommes pour grandir et marquez des points.',
                     'Évitez de toucher les murs ou votre propre corps.',
                     'Les pommes dorées donnent plus de points et des bonus.',
@@ -144,7 +145,6 @@ class _SnakeGameState extends State<SnakeGame> {
                     Expanded(
                       child: _buildGameArea(context),
                     ),
-                    _buildGameInfoAndControls(),
                   ],
                 );
               } else {
@@ -192,26 +192,48 @@ class _SnakeGameState extends State<SnakeGame> {
   Widget _buildGameArea(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final gameSize = constraints.biggest.shortestSide;
-        final wallThickness = gameSize / (GameState.gridSize + 2); // 1 cell for wall
-        final gameAreaSize = gameSize - (wallThickness * 2); // Inner game area
+        final displayGameWidth = constraints.biggest.width;
+        final displayGameHeight = constraints.biggest.height;
+
+        final wallThickness = constraints.biggest.shortestSide / 22; // 1 cell for wall
+        final gameAreaWidth = displayGameWidth - (wallThickness * 2);
+        final gameAreaHeight = displayGameHeight - (wallThickness * 2);
 
         return Center(
           child: SizedBox(
-            width: gameSize,
-            height: gameSize,
+            width: displayGameWidth,
+            height: displayGameHeight,
             child: Stack(
               children: [
-                // Background wall image for the entire gameSize area
+                // Background wall image for the entire display area
                 Positioned.fill(child: Image.asset('assets/images/backgrounds/wall.webp', fit: BoxFit.fill)),
-                // Centered black square for the game area
+                // Centered black rectangle for the game area
                 Center(
-                  child: Container(
-                    width: gameAreaSize,
-                    height: gameAreaSize,
-                    color: Colors.black, // Black square
-                    child: GameWidget(
-                      game: _game!, // Use _game!
+                  child: GestureDetector(
+                    onVerticalDragEnd: (details) {
+                      if (details.primaryVelocity! > 0) {
+                        _game!.gameLogic.changeDirection(_game!.gameState, Direction.down);
+                      } else if (details.primaryVelocity! < 0) {
+                        _game!.gameLogic.changeDirection(_game!.gameState, Direction.up);
+                      }
+                    },
+                    onHorizontalDragEnd: (details) {
+                      if (details.primaryVelocity! > 0) {
+                        _game!.gameLogic.changeDirection(_game!.gameState, Direction.right);
+                      } else if (details.primaryVelocity! < 0) {
+                        _game!.gameLogic.changeDirection(_game!.gameState, Direction.left);
+                      }
+                    },
+                    onDoubleTap: () {
+                      _game?.pauseEngine();
+                    },
+                    child: Container(
+                      width: gameAreaWidth,
+                      height: gameAreaHeight,
+                      color: Colors.black, // Black rectangle
+                      child: GameWidget(
+                        game: _game!, // Use _game!
+                      ),
                     ),
                   ),
                 ),
@@ -220,22 +242,6 @@ class _SnakeGameState extends State<SnakeGame> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildGameInfoAndControls() {
-    return Column(
-      children: [
-        // Contrôles directionnels pour mobile
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: DirectionalPad(
-            onDirectionChanged: (Direction direction) {
-              _game!.gameLogic.changeDirection(_game!.gameState, direction); // Use _game!
-            },
-          ),
-        ),
-      ],
     );
   }
 }
