@@ -96,6 +96,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   late SnakeComponent _snakeComponent;
 
   late final Sprite snakeHeadSprite;
+  late final Sprite snakeBodySprite;
 
   @override
   Future<void> onLoad() async {
@@ -130,10 +131,12 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     obstacleSprite = await loadSprite('stone.png');
 
     snakeHeadSprite = await loadSprite('snake_head.png');
+    snakeBodySprite = await loadSprite('snake_body.png');
     _snakeComponent = SnakeComponent(
       gameState: gameState,
       cellSize: cellSize,
       snakeHeadSprite: snakeHeadSprite,
+      snakeBodySprite: snakeBodySprite,
       animationDuration: _gameSpeedInitial / 1000.0, // Initial animation duration
     );
     add(_snakeComponent);
@@ -341,6 +344,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       gameState: gameState,
       cellSize: cellSize,
       snakeHeadSprite: snakeHeadSprite,
+      snakeBodySprite: snakeBodySprite,
       animationDuration: _gameSpeedInitial / 1000.0, // Initial animation duration
     );
     add(_snakeComponent);

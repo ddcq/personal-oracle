@@ -118,6 +118,23 @@ class GameState {
     }
     return distance;
   }
+
+  GameState clone() {
+    return GameState(
+      snake: List.from(snake),
+      food: food,
+      foodType: foodType,
+      foodAge: foodAge,
+      obstacles: List.from(obstacles),
+      score: score,
+      direction: direction,
+      nextDirection: nextDirection,
+      isGameRunning: isGameRunning,
+      isGameOver: isGameOver,
+      gridWidth: gridWidth,
+      gridHeight: gridHeight,
+    );
+  }
 }
 
 // ==========================================
