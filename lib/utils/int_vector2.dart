@@ -10,6 +10,10 @@ class IntVector2 {
 
   const IntVector2(this.x, this.y);
 
+  IntVector2 clone() {
+    return IntVector2(x, y);
+  }
+
   // Opérations arithmétiques
   IntVector2 operator +(IntVector2 other) => IntVector2(x + other.x, y + other.y);
   IntVector2 operator -(IntVector2 other) => IntVector2(x - other.x, y - other.y);

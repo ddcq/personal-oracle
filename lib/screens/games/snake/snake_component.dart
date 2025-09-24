@@ -51,8 +51,8 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
     required this.snakeBodySprite,
     required double animationDuration,
   }) : _animationDuration = animationDuration,
-       _previousHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset(),
-       _currentHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset(),
+       _previousHeadPosition = (gameState.snake[0].position.toVector2() * cellSize).toOffset(),
+       _currentHeadPosition = (gameState.snake[0].position.toVector2() * cellSize).toOffset(),
        _animationProgress = 0.0 {
     _headComponent = SpriteComponent(sprite: snakeHeadSprite, size: Vector2.all(cellSize * 1.5), anchor: Anchor.center);
     add(_headComponent);
@@ -158,15 +158,15 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
     _headComponent.add(RotateEffect.by(angleDifference, EffectController(duration: _animationDuration, curve: _animationCurve)));
 
     gameState = newGameState;
-    _currentHeadPosition = (gameState.snake[0].toVector2() * cellSize).toOffset();
+    _currentHeadPosition = (gameState.snake[0].position.toVector2() * cellSize).toOffset();
     _animationProgress = 0.0;
   }
 
-  void _renderBodyPart(Canvas canvas, Vector2 center, double rotation, Vector2 size) {
+  void _renderBodyPart(Canvas canvas, Vector2 center, double rotation, Vector2 size, {Paint? overridePaint}) {
     canvas.save();
     canvas.translate(center.x, center.y);
     canvas.rotate(rotation);
-    snakeBodySprite.render(canvas, position: Vector2.zero(), size: size, anchor: Anchor.center);
+    snakeBodySprite.render(canvas, position: Vector2.zero(), size: size, anchor: Anchor.center, overridePaint: overridePaint);
     canvas.restore();
   }
 
@@ -174,25 +174,16 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
   void render(Canvas canvas) {
     super.render(canvas);
 
-    // Render the body
+    // Render the body and tail
     for (int i = 1; i < gameState.snake.length; i++) {
       final segment = gameState.snake[i];
-      final segmentPosition = segment.toVector2() * cellSize;
-      final prevSegment = gameState.snake[i - 1];
-      IntVector2? nextSegment;
-      if (i < gameState.snake.length - 1) {
-        nextSegment = gameState.snake[i + 1];
-      }
+      final segmentPosition = segment.position.toVector2() * cellSize;
+      final type = segment.type;
+      final subPattern = segment.subPattern;
 
-      if (nextSegment != null) {
-        final prevRelativeX = prevSegment.x - segment.x;
-        final prevRelativeY = prevSegment.y - segment.y;
-        final nextRelativeX = nextSegment.x - segment.x;
-        final nextRelativeY = nextSegment.y - segment.y;
-
-        final pattern = '$prevRelativeX,$prevRelativeY,$nextRelativeX,$nextRelativeY';
-        final centers = _cornerCenters[pattern];
-        final rotations = _cornerRotations[pattern];
+      if (type == 'body' && subPattern != null) {
+        final centers = _cornerCenters[subPattern];
+        final rotations = _cornerRotations[subPattern];
 
         if (centers != null && rotations != null) {
           final bodySize = Vector2.all(_smallRadius * 4);
@@ -200,42 +191,20 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
             _renderBodyPart(canvas, segmentPosition + centers[j], radians(rotations[j]), bodySize);
           }
         }
-      } else {
-        // Tail
-        final tailDirectionX = segment.x - prevSegment.x;
-        final tailDirectionY = segment.y - prevSegment.y;
+      } else if (type == 'tail' && subPattern != null) {
+        // New tail animation logic
+        final centers = _cornerCenters[subPattern];
+        final rotations = _cornerRotations[subPattern];
 
-        final double centerX = cellSize * 0.5;
-        final double centerY = cellSize * 0.5;
+        if (centers != null && rotations != null) {
+          final progress = _animationCurve.transform(_animationProgress / _animationDuration);
+          final paint = Paint()..color = Color.fromRGBO(255, 255, 255, 1.0 - progress);
+          final fullSize = Vector2.all(cellSize * _tailSize1Factor);
 
-        Vector2 center1, center2;
-
-        if (tailDirectionX == 1) {
-          // prev: left, current: right (tail moving right)
-          center1 = segmentPosition + Vector2(cellSize * _tailCenter1Offset, centerY);
-          center2 = segmentPosition + Vector2(cellSize * _tailCenter2Offset, centerY);
-        } else if (tailDirectionX == -1) {
-          // prev: right, current: left (tail moving left)
-          center1 = segmentPosition + Vector2(cellSize * _tailCenter4Offset, centerY);
-          center2 = segmentPosition + Vector2(cellSize * _tailCenter3Offset, centerY);
-        } else if (tailDirectionY == 1) {
-          // prev: up, current: down (tail moving down)
-          center1 = segmentPosition + Vector2(centerX, cellSize * _tailCenter1Offset);
-          center2 = segmentPosition + Vector2(centerX, cellSize * _tailCenter2Offset);
-        } else {
-          // tailDirectionY == -1
-          // prev: down, current: up (tail moving up)
-          center1 = segmentPosition + Vector2(centerX, cellSize * _tailCenter4Offset);
-          center2 = segmentPosition + Vector2(centerX, cellSize * _tailCenter3Offset);
+          _renderBodyPart(canvas, segmentPosition + centers[0], radians(rotations[0]), fullSize, overridePaint: paint);
+          _renderBodyPart(canvas, segmentPosition + centers[1], radians(rotations[1]), fullSize, overridePaint: paint);
+          _renderBodyPart(canvas, segmentPosition + centers[2], radians(rotations[2]), fullSize, overridePaint: paint);
         }
-        final t = _animationCurve.transform(_animationProgress / _animationDuration);
-        final paint = Paint()..color = Color.fromRGBO(255, 255, 255, 1.0 - t);
-
-        final tailSize1 = Vector2.all(cellSize * _tailSize1Factor * (1.0 - t));
-        final tailSize2 = Vector2.all(cellSize * _tailSize2Factor * (1.0 - t));
-
-        snakeBodySprite.render(canvas, position: center1, size: tailSize1, anchor: Anchor.center, overridePaint: paint);
-        snakeBodySprite.render(canvas, position: center2, size: tailSize2, anchor: Anchor.center, overridePaint: paint);
       }
     }
 

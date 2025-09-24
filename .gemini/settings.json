@@ -1,44 +1,16 @@
 {
+  "general": {
     "checkpointing": {
-        "enabled": true
-    },
-    "mcpServers": {
-        "flutter-docs": {
-            "command": "npx",
-            "args": [
-                "flutter-mcp"
-            ]
-        },
-        "imagesorcery-mcp": {
-            "command": "~/.local/bin/imagesorcery-mcp",
-            "transportType": "stdio",
-            "autoApprove": [
-                "blur",
-                "change_color",
-                "config",
-                "crop",
-                "detect",
-                "draw_arrows",
-                "draw_circles",
-                "draw_lines",
-                "draw_rectangles",
-                "draw_texts",
-                "fill",
-                "find",
-                "get_metainfo",
-                "ocr",
-                "overlay",
-                "resize",
-                "rotate"
-            ],
-            "timeout": 100
-        },
-        "sequential-thinking": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@modelcontextprotocol/server-sequential-thinking"
-            ]
-        }
+      "enabled": true
     }
+  },
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    }
+  }
 }

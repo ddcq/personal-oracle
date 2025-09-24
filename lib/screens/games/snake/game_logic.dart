@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 import 'package:flutter/foundation.dart'; // For VoidCallback
+import 'snake_segment.dart';
 
 // ==========================================
 // ENUMS
@@ -17,7 +18,7 @@ class GameState {
   final int gridHeight;
   static const int _initialSnakeHeadPadding = 2;
 
-  List<IntVector2> snake;
+  List<SnakeSegment> snake;
   IntVector2 food;
   FoodType foodType;
   double foodAge; // Add this line
@@ -46,7 +47,13 @@ class GameState {
   /// Creates a GameState with the default initial values.
   factory GameState.initial({required int gridWidth, required int gridHeight}) {
     final Random random = Random();
-    IntVector2 initialSnakeHead = _generateRandomPosition(random, _initialSnakeHeadPadding, gridWidth - _initialSnakeHeadPadding - 1, _initialSnakeHeadPadding, gridHeight - _initialSnakeHeadPadding - 1);
+    IntVector2 initialSnakeHead = _generateRandomPosition(
+      random,
+      _initialSnakeHeadPadding,
+      gridWidth - _initialSnakeHeadPadding - 1,
+      _initialSnakeHeadPadding,
+      gridHeight - _initialSnakeHeadPadding - 1,
+    );
     IntVector2 initialFood = _generateRandomPosition(random, 0, gridWidth - 1, 0, gridHeight - 1, exclude: [initialSnakeHead]);
 
     // Determine the best initial direction
@@ -69,7 +76,7 @@ class GameState {
     });
 
     return GameState(
-      snake: [initialSnakeHead],
+      snake: [SnakeSegment(position: initialSnakeHead, type: 'head')],
       food: initialFood,
       foodType: FoodType.regular,
       foodAge: 0.0, // Initialize foodAge
@@ -121,11 +128,11 @@ class GameState {
 
   GameState clone() {
     return GameState(
-      snake: List.from(snake),
-      food: food,
+      snake: snake.map((segment) => segment.clone()).toList(),
+      food: food.clone(),
       foodType: foodType,
       foodAge: foodAge,
-      obstacles: List.from(obstacles),
+      obstacles: obstacles.map((obstacle) => obstacle.clone()).toList(),
       score: score,
       direction: direction,
       nextDirection: nextDirection,
@@ -148,33 +155,60 @@ class GameLogic {
   static const double _goldenFoodProbability = 0.15;
   static const int _baseObstacles = 5;
 
-  VoidCallback? onRottenFoodEaten; // Add this line
-  late int level; // Add this line
+  VoidCallback? onRottenFoodEaten;
+  late int level;
 
   GameState updateGame(GameState state) {
     if (!state.isGameRunning || state.isGameOver) return state;
 
-    // Calculate new head position
     state.direction = state.nextDirection;
-    IntVector2 head = state.snake.first;
-    IntVector2 newHead = _getNewHeadPosition(head, state.direction);
+    IntVector2 headPos = state.snake.first.position;
+    IntVector2 newHeadPos = _getNewHeadPosition(headPos, state.direction);
 
-    // Handle collisions
-    if (_isCollision(state, newHead)) {
+    final currentSnakePositions = state.snake.map((s) => s.position).toList();
+    if (_isCollision(state, newHeadPos, currentSnakePositions)) {
       state.isGameRunning = false;
       state.isGameOver = true;
       return state;
     }
 
-    // Update snake
-    List<IntVector2> newSnake = List.from(state.snake);
-    newSnake.insert(0, newHead);
+    bool foodEaten = _handleFoodConsumption(state, newHeadPos);
 
-    // Handle food
-    if (_handleFoodConsumption(state, newHead, newSnake)) {
-      generateNewFood(state);
+    List<SnakeSegment> newSnake = [];
+
+    // 1. Add the new head
+    newSnake.add(SnakeSegment(position: newHeadPos, type: 'head'));
+
+    // 2. Add the old head (now the first body segment)
+    String? oldHeadSubPattern;
+    if (state.snake.length > 1) {
+      oldHeadSubPattern = _getPattern(newHeadPos, state.snake.first.position, state.snake[1].position);
     } else {
+      // If the snake was just a head, it becomes a straight body segment.
+      final dx = newHeadPos.x - state.snake.first.position.x;
+      final dy = newHeadPos.y - state.snake.first.position.y;
+      oldHeadSubPattern = '${-dx},${-dy},$dx,$dy';
+    }
+    newSnake.add(SnakeSegment(position: state.snake.first.position, type: 'body', subPattern: oldHeadSubPattern));
+
+    // 3. Add the rest of the body segments (from state.snake[1] onwards)
+    // These segments keep their position and pattern.
+    for (int i = 1; i < state.snake.length; i++) {
+      newSnake.add(state.snake[i].clone());
+    }
+
+    // 4. Handle food consumption and tail removal
+    if (foodEaten) {
+      generateNewFood(state, newSnake.map((s) => s.position).toList());
+    } else {
+      // If not eating, remove the last segment
       newSnake.removeLast();
+      if (newSnake.length > 1) {
+        // Ensure there's a tail to modify
+        final lastSegment = newSnake.last;
+        // The subPattern should already be set from when it was a body segment.
+        lastSegment.type = 'tail'; // Change type to 'tail'
+      }
     }
 
     state.snake = newSnake;
@@ -194,19 +228,17 @@ class GameLogic {
     }
   }
 
-  bool _isCollision(GameState state, IntVector2 newHead) {
-    // Check for screen boundaries
+  bool _isCollision(GameState state, IntVector2 newHead, List<IntVector2> snakePositions) {
     if (newHead.x < 0 || newHead.x >= state.gridWidth || newHead.y < 0 || newHead.y >= state.gridHeight) {
       return true;
     }
-    // Check for collision with self or obstacles
-    if (state.snake.contains(newHead) || state.obstacles.contains(newHead)) {
+    if (snakePositions.contains(newHead) || state.obstacles.contains(newHead)) {
       return true;
     }
     return false;
   }
 
-  bool _handleFoodConsumption(GameState state, IntVector2 newHead, List<IntVector2> newSnake) {
+  bool _handleFoodConsumption(GameState state, IntVector2 newHead) {
     if (newHead == state.food) {
       if (state.foodType == FoodType.golden) {
         state.score += _scoreGoldenFood;
@@ -221,9 +253,9 @@ class GameLogic {
     return false;
   }
 
-  void generateNewFood(GameState state) {
+  void generateNewFood(GameState state, List<IntVector2> snakePositions) {
     Random random = Random();
-    IntVector2 newFood = _generateUniquePosition(random, state.snake, state.obstacles, state.food, state.gridWidth, state.gridHeight);
+    IntVector2 newFood = _generateUniquePosition(random, snakePositions, state.obstacles, state.food, state.gridWidth, state.gridHeight);
 
     if (random.nextDouble() < _goldenFoodProbability) {
       state.foodType = FoodType.golden;
@@ -237,12 +269,12 @@ class GameLogic {
   void changeDirection(GameState state, dp.Direction newDirection) {
     if (!state.isGameRunning || state.isGameOver) return;
 
-    final bool isOppositeDirection = (
-            (state.direction == dp.Direction.up && newDirection == dp.Direction.down) ||
-            (state.direction == dp.Direction.down && newDirection == dp.Direction.up) ||
-            (state.direction == dp.Direction.left && newDirection == dp.Direction.right) ||
-            (state.direction == dp.Direction.right && newDirection == dp.Direction.left)
-        );
+    final bool isOppositeDirection =
+        (( // This line was changed
+        state.direction == dp.Direction.up && newDirection == dp.Direction.down) ||
+        (state.direction == dp.Direction.down && newDirection == dp.Direction.up) ||
+        (state.direction == dp.Direction.left && newDirection == dp.Direction.right) ||
+        (state.direction == dp.Direction.right && newDirection == dp.Direction.left));
 
     if (!isOppositeDirection) {
       state.nextDirection = newDirection;
@@ -252,18 +284,33 @@ class GameLogic {
   List<IntVector2> generateObstacles(GameState state) {
     Random random = Random();
     List<IntVector2> newObstacles = [];
+    final snakePositions = state.snake.map((s) => s.position).toList();
     for (int i = 0; i < (_baseObstacles + level); i++) {
-      IntVector2 newObstacle = _generateUniquePosition(random, state.snake, state.obstacles, state.food, state.gridWidth, state.gridHeight, newObstacles);
+      IntVector2 newObstacle = _generateUniquePosition(random, snakePositions, state.obstacles, state.food, state.gridWidth, state.gridHeight, newObstacles);
       newObstacles.add(newObstacle);
     }
     return newObstacles;
   }
 
-  static IntVector2 _generateUniquePosition(Random random, List<IntVector2> snake, List<IntVector2> obstacles, IntVector2 food, int gridWidth, int gridHeight, [List<IntVector2>? currentObstacles]) {
+  static IntVector2 _generateUniquePosition(
+    Random random,
+    List<IntVector2> snake,
+    List<IntVector2> obstacles,
+    IntVector2 food,
+    int gridWidth,
+    int gridHeight, [
+    List<IntVector2>? currentObstacles,
+  ]) {
     IntVector2 position;
     do {
       position = IntVector2(random.nextInt(gridWidth), random.nextInt(gridHeight));
     } while (snake.contains(position) || obstacles.contains(position) || food == position || (currentObstacles != null && currentObstacles.contains(position)));
     return position;
+  }
+
+  String _getPattern(IntVector2 prevPos, IntVector2 currentPos, IntVector2 nextPos) {
+    final prevRelative = prevPos - currentPos;
+    final nextRelative = nextPos - currentPos;
+    return '${prevRelative.x},${prevRelative.y},${nextRelative.x},${nextRelative.y}';
   }
 }

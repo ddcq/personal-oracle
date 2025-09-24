@@ -208,7 +208,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       } else if (gameState.foodType == FoodType.regular) {
         gameState.foodType = FoodType.rotten;
       } else if (gameState.foodType == FoodType.rotten) {
-        gameLogic.generateNewFood(gameState); // Disappear and generate new food
+        final currentSnakePositions = gameState.snake.map((s) => s.position).toList();
+        gameLogic.generateNewFood(gameState, currentSnakePositions); // Disappear and generate new food
       }
       // Update food component sprite after food type change
       _foodComponent.sprite = _getFoodSprite(gameState.foodType);
