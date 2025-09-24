@@ -131,7 +131,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     regularFoodSprite = await loadSprite('apple_regular.png');
     goldenFoodSprite = await loadSprite('apple_golden.png');
     rottenFoodSprite = await loadSprite('apple_rotten.png');
-    obstacleSprite = await loadSprite('stone.png');
+    obstacleSprite = await loadSprite('stone.webp');
 
     snakeHeadSprite = await loadSprite('snake_head.png');
     snakeBodySprite = await loadSprite('snake_body.png');
@@ -177,8 +177,12 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       obstacle.removeFromParent();
     }
     _obstacles.clear();
-    for (final obstacle in gameState.obstacles) {
-      final newObstacle = SpriteComponent(sprite: obstacleSprite, position: (obstacle.toOffset() * cellSize).toVector2(), size: Vector2.all(cellSize));
+    for (int i = 0; i < gameState.obstacles.length; i += 4) {
+      final obstacleTopLeft = gameState.obstacles[i];
+      final newObstacle = SpriteComponent(
+          sprite: obstacleSprite,
+          position: (obstacleTopLeft.toOffset() * cellSize).toVector2(),
+          size: Vector2.all(cellSize * 2));
       _obstacles.add(newObstacle);
       add(newObstacle);
     }

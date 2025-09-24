@@ -285,9 +285,32 @@ class GameLogic {
     Random random = Random();
     List<IntVector2> newObstacles = [];
     final snakePositions = state.snake.map((s) => s.position).toList();
-    for (int i = 0; i < (_baseObstacles + level); i++) {
-      IntVector2 newObstacle = _generateUniquePosition(random, snakePositions, state.obstacles, state.food, state.gridWidth, state.gridHeight, newObstacles);
-      newObstacles.add(newObstacle);
+
+    int obstacleCount = 0;
+    int attempts = 0; // To prevent infinite loops
+    while (obstacleCount < (_baseObstacles + level) && attempts < 1000) {
+      attempts++;
+      // Generate top-left corner, ensuring it's not on the very edge
+      IntVector2 topLeft = IntVector2(
+        random.nextInt(state.gridWidth - 1),
+        random.nextInt(state.gridHeight - 1),
+      );
+
+      List<IntVector2> obstacleCells = [
+        topLeft,
+        IntVector2(topLeft.x + 1, topLeft.y),
+        IntVector2(topLeft.x, topLeft.y + 1),
+        IntVector2(topLeft.x + 1, topLeft.y + 1),
+      ];
+
+      // Check for overlap with snake, existing obstacles, or food
+      bool isOccupied = obstacleCells.any((cell) =>
+          snakePositions.contains(cell) || state.obstacles.contains(cell) || newObstacles.contains(cell) || state.food == cell);
+
+      if (!isOccupied) {
+        newObstacles.addAll(obstacleCells);
+        obstacleCount++;
+      }
     }
     return newObstacles;
   }
