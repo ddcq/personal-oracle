@@ -128,13 +128,13 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     gameState = GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight);
 
     // Load sprites
-    regularFoodSprite = await loadSprite('apple_regular.png');
-    goldenFoodSprite = await loadSprite('apple_golden.png');
-    rottenFoodSprite = await loadSprite('apple_rotten.png');
-    obstacleSprite = await loadSprite('stone.webp');
+    regularFoodSprite = await loadSprite('snake/apple_regular.png');
+    goldenFoodSprite = await loadSprite('snake/apple_golden.png');
+    rottenFoodSprite = await loadSprite('snake/apple_rotten.png');
+    obstacleSprite = await loadSprite('snake/stone.webp');
 
-    snakeHeadSprite = await loadSprite('snake_head.png');
-    snakeBodySprite = await loadSprite('snake_body.png');
+    snakeHeadSprite = await loadSprite('snake/snake_head.png');
+    snakeBodySprite = await loadSprite('snake/snake_body.png');
     _snakeComponent = SnakeComponent(
       gameState: gameState,
       cellSize: cellSize,

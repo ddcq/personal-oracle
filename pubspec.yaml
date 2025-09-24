@@ -101,6 +101,7 @@ flutter:
   assets:
      - assets/
      - assets/images/
+     - assets/images/snake/
      - assets/images/cards/chibi/
      - assets/images/cards/premium/
      - assets/images/cards/epic/
