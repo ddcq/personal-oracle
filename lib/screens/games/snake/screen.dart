@@ -222,7 +222,9 @@ class _SnakeGameState extends State<SnakeGame> {
                     child: Container(
                       width: gameAreaWidth,
                       height: gameAreaHeight,
-                      color: Colors.black, // Black rectangle
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(image: AssetImage('assets/images/sea.webp'), repeat: ImageRepeat.repeat),
+                      ),
                       child: GameWidget(
                         game: _game!, // Use _game!
                       ),

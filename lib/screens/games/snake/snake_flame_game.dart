@@ -59,6 +59,9 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     gameLogic.level = level; // Pass level to gameLogic
   }
 
+  @override
+  Color backgroundColor() => Colors.transparent;
+
   // ...
 
   void shakeScreen() {
