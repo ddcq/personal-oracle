@@ -24,8 +24,10 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   static const double _pathStrokeWidth = 2.0;
   static const int _qixInitialPositionPadding = 20;
   static const String _defaultRewardCardImagePath = 'cards/chibi/fenrir.webp';
+  static const double _undiscoveredImageScaleFactor = 50.0; // Add this line
 
   late ui.Image _rewardCardImage;
+  late ui.Image _undiscoveredAreaImage; // Add this line
   final int gridSize;
   final double cellSize;
   final String? rewardCardImagePath;
@@ -88,6 +90,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       // Load a default image if no reward card image is provided
       _rewardCardImage = await game.images.load(_defaultRewardCardImagePath);
     }
+    _undiscoveredAreaImage = await game.images.load('qix/grass.webp'); // Load the image for undiscovered areas
 
     // Pre-calculate sprites for filled areas
     for (int y = 0; y < gridSize; y++) {
@@ -384,6 +387,21 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
           }
         } else if (_grid[y][x] == game_constants.kGridEdge) {
           canvas.drawRect(_cellRects[IntVector2(x, y)]!, _boundaryPaint);
+        } else if (_grid[y][x] == game_constants.kGridFree) {
+          final Rect destRect = _cellRects[IntVector2(x, y)]!;
+
+          final double srcWidth = _undiscoveredAreaImage.width / _undiscoveredImageScaleFactor;
+          final double srcHeight = _undiscoveredAreaImage.height / _undiscoveredImageScaleFactor;
+
+          final double srcX = (x * srcWidth) % _undiscoveredAreaImage.width;
+          final double srcY = (y * srcHeight) % _undiscoveredAreaImage.height;
+
+          canvas.drawImageRect(
+            _undiscoveredAreaImage,
+            Rect.fromLTWH(srcX, srcY, srcWidth, srcHeight),
+            destRect,
+            Paint()..colorFilter = ColorFilter.mode(Colors.black54, BlendMode.darken),
+          );
         }
       }
     }
