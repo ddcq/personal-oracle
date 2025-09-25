@@ -79,6 +79,7 @@ class _SnakeGameState extends State<SnakeGame> {
         Navigator.of(context).pop();
         _game?.resetGame();
         _game?.startGame();
+        setState(() {}); // Trigger rebuild to update AppBar score
       },
       onSeeRewards: () {
         Navigator.of(context).pop();
@@ -109,13 +110,44 @@ class _SnakeGameState extends State<SnakeGame> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Left: Score
-              Text('Score: ${_game?.gameState.score ?? 0}', style: ChibiTextStyles.dialogText),
+              // Left: Score with Confetti
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  if (_game != null)
+                    ValueListenableBuilder<GameState>(
+                      valueListenable: _game!.gameState,
+                      builder: (context, gameState, child) {
+                        return Text('Score: ${gameState.score}', style: ChibiTextStyles.dialogText);
+                      },
+                    )
+                  else
+                    Text('Score: 0', style: ChibiTextStyles.dialogText),
+                  if (_game != null && _game!.gameState.value.score >= SnakeFlameGame.victoryScoreThreshold)
+                    ConfettiWidget(
+                      confettiController: _confettiController,
+                      blastDirectionality: BlastDirectionality.explosive, // All directions
+                      // shouldLoop: true, // Continuously emit confetti
+                      colors: const [
+                        Colors.green,
+                        Colors.blue,
+                        Colors.pink,
+                        Colors.orange,
+                        Colors.purple
+                      ], // Customize colors
+                      createParticlePath: (size) {
+                        // Custom particle path for a more controlled spread
+                        return Path()
+                          ..addOval(Rect.fromCircle(center: Offset.zero, radius: 5));
+                      },
+                    ),
+                ],
+              ),
 
               // Center: Apple info
               if (_game != null)
                 ValueListenableBuilder<FoodType>(
-                  valueListenable: _game!.gameState.foodType,
+                  valueListenable: _game!.gameState.value.foodType,
                   builder: (context, foodType, child) {
                     String foodImage;
                     switch (foodType) {
@@ -207,7 +239,9 @@ class _SnakeGameState extends State<SnakeGame> {
         _handleGameEnd(score, isVictory: isVictory, wonCard: wonCard);
       },
       onResetGame: () {
-        _game!.resetGame(); // Use _game! because it's nullable
+        _game?.resetGame(); // Use _game! because it's nullable
+        _confettiController.stop(); // Stop confetti on reset
+        setState(() {}); // Trigger rebuild to update AppBar score
       },
       onRottenFoodEaten: () {
         _game!.shakeScreen(); // Use _game!
@@ -220,6 +254,13 @@ class _SnakeGameState extends State<SnakeGame> {
       },
       onScoreChanged: () {
         setState(() {});
+      },
+      onConfettiTrigger: () {
+        if (_game != null && _game!.gameState.value.score >= SnakeFlameGame.victoryScoreThreshold) {
+          _confettiController.play();
+        } else {
+          _confettiController.stop();
+        }
       },
     );
     completer.future.then((_) {
@@ -251,16 +292,16 @@ class _SnakeGameState extends State<SnakeGame> {
                   child: GestureDetector(
                     onVerticalDragEnd: (details) {
                       if (details.primaryVelocity! > 0) {
-                        _game!.gameLogic.changeDirection(_game!.gameState, Direction.down);
+                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
                       } else if (details.primaryVelocity! < 0) {
-                        _game!.gameLogic.changeDirection(_game!.gameState, Direction.up);
+                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
                       }
                     },
                     onHorizontalDragEnd: (details) {
                       if (details.primaryVelocity! > 0) {
-                        _game!.gameLogic.changeDirection(_game!.gameState, Direction.right);
+                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
                       } else if (details.primaryVelocity! < 0) {
-                        _game!.gameLogic.changeDirection(_game!.gameState, Direction.left);
+                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
                       }
                     },
                     onDoubleTap: () {

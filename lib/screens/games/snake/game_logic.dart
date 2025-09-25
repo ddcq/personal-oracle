@@ -3,6 +3,7 @@ import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 import 'package:flutter/foundation.dart'; // For VoidCallback
 import 'snake_segment.dart';
+import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart'; // Import for victoryScoreThreshold
 
 // ==========================================
 // ENUMS
@@ -156,6 +157,7 @@ class GameLogic {
   static const int _baseObstacles = 5;
 
   VoidCallback? onRottenFoodEaten;
+  VoidCallback? onConfettiTrigger; // Add this line
   late int level;
 
   GameState updateGame(GameState state) {
@@ -239,18 +241,22 @@ class GameLogic {
   }
 
   bool _handleFoodConsumption(GameState state, IntVector2 newHead) {
-    if (newHead == state.food) {
-      if (state.foodType.value == FoodType.golden) {
-        state.score += _scoreGoldenFood;
-      } else if (state.foodType.value == FoodType.regular) {
-        state.score += _scoreRegularFood;
-      } else if (state.foodType.value == FoodType.rotten) {
-        state.score -= (_scoreRottenFoodPenaltyBase + (level * _scoreRottenFoodPenaltyPerLevel));
-        onRottenFoodEaten?.call();
-      }
-      return true;
-    }
-    return false;
+          if (newHead == state.food) {
+            if (state.foodType.value == FoodType.golden) {
+              state.score += _scoreGoldenFood;
+            } else if (state.foodType.value == FoodType.regular) {
+              state.score += _scoreRegularFood;
+            } else if (state.foodType.value == FoodType.rotten) {
+              state.score -= (_scoreRottenFoodPenaltyBase + (level * _scoreRottenFoodPenaltyPerLevel));
+              onRottenFoodEaten?.call();
+            }
+    
+            // Trigger confetti if score is above threshold and food is not rotten
+            if (state.score >= SnakeFlameGame.victoryScoreThreshold && state.foodType.value != FoodType.rotten) {
+              onConfettiTrigger?.call();
+            }
+            return true;
+          }    return false;
   }
 
   void generateNewFood(GameState state, List<IntVector2> snakePositions) {

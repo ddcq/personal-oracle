@@ -29,7 +29,7 @@ class QixGame extends FlameGame with KeyboardEvents {
     await super.onLoad();
 
     characterSpriteSheet = await images.load('characters.png');
-    snakeHeadImage = await images.load('snake_head.png');
+    snakeHeadImage = await images.load('snake/snake_head.png');
 
     final int gridSize = kGridSize;
     final double cellSize = (size.x < size.y ? size.x : size.y) / gridSize;

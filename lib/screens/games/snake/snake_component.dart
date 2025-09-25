@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart'; // Import effects
 import 'package:flutter/animation.dart'; // For Curves
+import 'package:flutter/foundation.dart'; // For ValueNotifier
 import 'dart:ui';
 import 'dart:math'; // For pi
 import 'game_logic.dart';
@@ -9,7 +10,7 @@ import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 import 'snake_flame_game.dart'; // Make sure this file defines SnakeFlameGame
 
 class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameGame> {
-  GameState gameState;
+  ValueNotifier<GameState> gameState;
   final double cellSize;
   final Sprite snakeBodySprite;
 
@@ -46,8 +47,8 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
     required this.snakeBodySprite,
     required double animationDuration,
   }) : _animationDuration = animationDuration,
-       _previousHeadPosition = (gameState.snake[0].position.toVector2() * cellSize).toOffset(),
-       _currentHeadPosition = (gameState.snake[0].position.toVector2() * cellSize).toOffset(),
+       _previousHeadPosition = (gameState.value.snake[0].position.toVector2() * cellSize).toOffset(),
+       _currentHeadPosition = (gameState.value.snake[0].position.toVector2() * cellSize).toOffset(),
        _animationProgress = 0.0 {
     _headComponent = SpriteComponent(sprite: snakeHeadSprite, size: Vector2.all(cellSize * 1.5), anchor: Anchor.center);
     add(_headComponent);
@@ -152,8 +153,8 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
     // Apply RotateEffect.by with the shortest angle difference
     _headComponent.add(RotateEffect.by(angleDifference, EffectController(duration: _animationDuration, curve: _animationCurve)));
 
-    gameState = newGameState;
-    _currentHeadPosition = (gameState.snake[0].position.toVector2() * cellSize).toOffset();
+    gameState.value = newGameState;
+    _currentHeadPosition = (gameState.value.snake[0].position.toVector2() * cellSize).toOffset();
     _animationProgress = 0.0;
   }
 
@@ -170,8 +171,8 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
     super.render(canvas);
 
     // Render the body and tail
-    for (int i = 1; i < gameState.snake.length; i++) {
-      final segment = gameState.snake[i];
+    for (int i = 1; i < gameState.value.snake.length; i++) {
+      final segment = gameState.value.snake[i];
       final segmentPosition = segment.position.toVector2() * cellSize;
       final type = segment.type;
       final subPattern = segment.subPattern;

@@ -10,7 +10,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 import 'package:oracle_d_asgard/screens/games/snake/snake_component.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import CollectibleCard
@@ -25,20 +24,19 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const int _shakeIntervalMs = 50;
   static const int _gameSpeedInitial = 300; // milliseconds
   static const double _growthAnimationPeriod = 0.15;
-  static const double _foodRottingTimeBase = 10.0;
+  static const double _foodRottingTimeBase = 12.0;
   static const double _foodRottingTimeLevelFactor = 0.5;
   static const int _vibrationDurationShort = 100;
   static const int _vibrationDurationMedium = 200;
   static const int _vibrationDurationLong = 500;
   static const int _vibrationAmplitudeHigh = 255;
-  static const int _victoryScoreThreshold = 200;
+  static const int victoryScoreThreshold = 200;
   static const int _speedReductionScoreInterval = 20;
   static const double _speedReductionFactor = 20.0;
-  static const double _speedAccelerationPerLevel = 0.07; // 7% faster per level
   static const int _minGameSpeed = 50;
 
   final GameLogic gameLogic = GameLogic();
-  late GameState gameState;
+  late ValueNotifier<GameState> gameState;
   final GamificationService gamificationService;
   final Function(int score, {required bool isVictory, CollectibleCard? wonCard}) onGameEnd; // Modified callback
   final VoidCallback onResetGame;
@@ -46,6 +44,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final int level;
   final VoidCallback? onGameLoaded; // Add this line
   final VoidCallback? onScoreChanged;
+  final VoidCallback? onConfettiTrigger; // Add this line
 
   final ValueNotifier<double> remainingFoodTime = ValueNotifier(0);
 
@@ -57,9 +56,11 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     required this.level,
     this.onGameLoaded, // Add this line to constructor
     this.onScoreChanged,
+    this.onConfettiTrigger, // Add this line to constructor
   }) {
     // gridWidth and gridHeight will be calculated in onLoad()
     gameLogic.onRottenFoodEaten = onRottenFoodEaten; // Pass the callback
+    gameLogic.onConfettiTrigger = onConfettiTrigger; // Pass the callback
     gameLogic.level = level; // Pass level to gameLogic
   }
 
@@ -129,7 +130,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     }
 
     // Initialize gameState with the calculated grid dimensions
-    gameState = GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight);
+    gameState = ValueNotifier(GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight));
 
     // Load sprites
     regularFoodSprite = await loadSprite('snake/apple_regular.png');
@@ -169,25 +170,26 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
 
   void initializeGame() {
-    gameState.isGameRunning = false; // Game starts paused
-    gameState.obstacles = gameLogic.generateObstacles(gameState);
+    gameState.value.isGameRunning = false; // Game starts paused
+    gameState.value.obstacles = gameLogic.generateObstacles(gameState.value);
     remainingFoodTime.value = _foodRottingTimeBase - (gameLogic.level * _foodRottingTimeLevelFactor);
 
     // Update food component position and sprite
-    _foodComponent.position = gameState.food.toVector2() * cellSize;
-    _foodComponent.sprite = _getFoodSprite(gameState.foodType.value);
+    _foodComponent.position = gameState.value.food.toVector2() * cellSize;
+    _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
 
     // Clear and re-add obstacles
     for (var obstacle in _obstacles) {
       obstacle.removeFromParent();
     }
     _obstacles.clear();
-    for (int i = 0; i < gameState.obstacles.length; i += 4) {
-      final obstacleTopLeft = gameState.obstacles[i];
+    for (int i = 0; i < gameState.value.obstacles.length; i += 4) {
+      final obstacleTopLeft = gameState.value.obstacles[i];
       final newObstacle = SpriteComponent(
-          sprite: obstacleSprite,
-          position: (obstacleTopLeft.toOffset() * cellSize).toVector2(),
-          size: Vector2.all(cellSize * 2));
+        sprite: obstacleSprite,
+        position: (obstacleTopLeft.toOffset() * cellSize).toVector2(),
+        size: Vector2.all(cellSize * 2),
+      );
       _obstacles.add(newObstacle);
       add(newObstacle);
     }
@@ -197,7 +199,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
 
   void startGame() {
-    gameState.isGameRunning = true;
+    gameState.value.isGameRunning = true;
     resumeEngine();
   }
 
@@ -205,36 +207,36 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   void update(double dt) {
     super.update(dt);
 
-    if (!gameState.isGameRunning || gameState.isGameOver) {
+    if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
       return;
     }
 
     // Food aging logic
-    gameState.foodAge += dt;
+    gameState.value.foodAge += dt;
     final double foodRottingTime = _foodRottingTimeBase - (gameLogic.level * _foodRottingTimeLevelFactor); // Adjusted rotting time
     // Defer the update to avoid calling setState during build
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      remainingFoodTime.value = foodRottingTime - gameState.foodAge;
+      remainingFoodTime.value = foodRottingTime - gameState.value.foodAge;
     });
-    if (gameState.foodAge >= foodRottingTime) {
+    if (gameState.value.foodAge >= foodRottingTime) {
       // 8 seconds for each stage
-      gameState.foodAge = 0.0; // Reset timer after state change
-      if (gameState.foodType.value == FoodType.golden) {
-        gameState.foodType.value = FoodType.regular;
-        _foodComponent.sprite = _getFoodSprite(gameState.foodType.value);
-      } else if (gameState.foodType.value == FoodType.regular) {
-        gameState.foodType.value = FoodType.rotten;
-        _foodComponent.sprite = _getFoodSprite(gameState.foodType.value);
-      } else if (gameState.foodType.value == FoodType.rotten) {
-        final currentSnakePositions = gameState.snake.map((s) => s.position).toList();
-        gameLogic.generateNewFood(gameState, currentSnakePositions); // Disappear and generate new food
-        _foodComponent.position = gameState.food.toVector2() * cellSize;
-        _foodComponent.sprite = _getFoodSprite(gameState.foodType.value);
+      gameState.value.foodAge = 0.0; // Reset timer after state change
+      if (gameState.value.foodType.value == FoodType.golden) {
+        gameState.value.foodType.value = FoodType.regular;
+        _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
+      } else if (gameState.value.foodType.value == FoodType.regular) {
+        gameState.value.foodType.value = FoodType.rotten;
+        _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
+      } else if (gameState.value.foodType.value == FoodType.rotten) {
+        final currentSnakePositions = gameState.value.snake.map((s) => s.position).toList();
+        gameLogic.generateNewFood(gameState.value, currentSnakePositions); // Disappear and generate new food
+        _foodComponent.position = gameState.value.food.toVector2() * cellSize;
+        _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
       }
     }
 
     timeSinceLastTick += dt;
-    final double tickTime = _calculateGameSpeed(gameState.score) / 1000.0;
+    final double tickTime = _calculateGameSpeed(gameState.value.score) / 1000.0;
 
     if (timeSinceLastTick >= tickTime) {
       timeSinceLastTick = 0;
@@ -246,23 +248,23 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
   double _calculateGameSpeed(int currentScore) {
     final double baseSpeedReduction = (currentScore ~/ _speedReductionScoreInterval) * _speedReductionFactor;
-    final double acceleratedSpeedReduction = baseSpeedReduction * (1 + gameLogic.level * _speedAccelerationPerLevel); // 10% faster per level
+    final double acceleratedSpeedReduction = baseSpeedReduction; // Removed level-based acceleration
     return (_gameSpeedInitial - acceleratedSpeedReduction).clamp(_minGameSpeed, _gameSpeedInitial).toDouble();
   }
 
   void tick() async {
     // Made tick() async
-    final wasGameOver = gameState.isGameOver;
-    final oldFoodType = gameState.foodType.value;
-    final oldScore = gameState.score;
+    final wasGameOver = gameState.value.isGameOver;
+    final oldFoodType = gameState.value.foodType.value;
+    final oldScore = gameState.value.score;
 
-    gameState = gameLogic.updateGame(gameState);
+    gameState.value = gameLogic.updateGame(gameState.value);
 
     // Update snake component with new game state and animation duration
-    _snakeComponent.updateGameState(gameState);
-    _snakeComponent.animationDuration = _calculateGameSpeed(gameState.score) / 1000.0;
+    _snakeComponent.updateGameState(gameState.value);
+    _snakeComponent.animationDuration = _calculateGameSpeed(gameState.value.score) / 1000.0;
 
-    if (oldScore < gameState.score) {
+    if (oldScore < gameState.value.score) {
       onScoreChanged?.call();
       // Vibrate based on food type
       switch (oldFoodType) {
@@ -280,7 +282,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
           // No vibration for rotten food
           break;
       }
-    } else if (oldScore > gameState.score) {
+    } else if (oldScore > gameState.value.score) {
       // Rotten apple eaten
       onScoreChanged?.call();
       if (Platform.isAndroid || Platform.isIOS) {
@@ -293,25 +295,25 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     }
 
     // Update food
-    _foodComponent.position = gameState.food.toVector2() * cellSize;
+    _foodComponent.position = gameState.value.food.toVector2() * cellSize;
     // Remove and re-add _foodComponent to force re-render
     remove(_foodComponent);
-    _foodComponent = SpriteComponent(sprite: _getFoodSprite(gameState.foodType.value), position: _foodComponent.position, size: Vector2.all(cellSize));
+    _foodComponent = SpriteComponent(sprite: _getFoodSprite(gameState.value.foodType.value), position: _foodComponent.position, size: Vector2.all(cellSize));
     add(_foodComponent);
 
-    if (!wasGameOver && gameState.isGameOver) {
+    if (!wasGameOver && gameState.value.isGameOver) {
       pauseEngine();
       if (Platform.isAndroid || Platform.isIOS) {
         Vibration.vibrate(duration: _vibrationDurationLong); // Game over vibration
       }
-      final bool isVictory = gameState.score >= _victoryScoreThreshold;
+      final bool isVictory = gameState.value.score >= victoryScoreThreshold;
       CollectibleCard? wonCard;
 
       if (isVictory) {
-        gamificationService.saveGameScore('Snake', gameState.score);
+        gamificationService.saveGameScore('Snake', gameState.value.score);
         wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
       }
-      onGameEnd(gameState.score, isVictory: isVictory, wonCard: wonCard);
+      onGameEnd(gameState.value.score, isVictory: isVictory, wonCard: wonCard);
     }
   }
 
@@ -320,16 +322,16 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     if (event is KeyDownEvent) {
       switch (event.logicalKey) {
         case LogicalKeyboardKey.arrowUp:
-          gameLogic.changeDirection(gameState, dp.Direction.up);
+          gameLogic.changeDirection(gameState.value, dp.Direction.up);
           break;
         case LogicalKeyboardKey.arrowDown:
-          gameLogic.changeDirection(gameState, dp.Direction.down);
+          gameLogic.changeDirection(gameState.value, dp.Direction.down);
           break;
         case LogicalKeyboardKey.arrowLeft:
-          gameLogic.changeDirection(gameState, dp.Direction.left);
+          gameLogic.changeDirection(gameState.value, dp.Direction.left);
           break;
         case LogicalKeyboardKey.arrowRight:
-          gameLogic.changeDirection(gameState, dp.Direction.right);
+          gameLogic.changeDirection(gameState.value, dp.Direction.right);
           break;
         case LogicalKeyboardKey.keyR:
           resetGame();
@@ -353,7 +355,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
   void resetGame() {
     // Reinitialize gameState to its initial state
-    gameState = GameState.initial(gridWidth: gameState.gridWidth, gridHeight: gameState.gridHeight);
+    gameState.value = GameState.initial(gridWidth: gameState.value.gridWidth, gridHeight: gameState.value.gridHeight);
 
     // Remove all existing components from the game
     removeAll([_snakeComponent, _foodComponent, ..._obstacles]);

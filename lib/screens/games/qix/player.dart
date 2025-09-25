@@ -12,7 +12,7 @@ enum PlayerState { onEdge, drawing, dead, rescued }
 
 class Player extends PositionComponent {
   static const int _characterIndex = 0;
-  static const double _characterSpriteScale = 4.0;
+  static const double _characterSpriteScale = 6.0;
   static const double _positionSnapThreshold = 0.1;
 
   final ArenaComponent arena;
