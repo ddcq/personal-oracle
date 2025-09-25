@@ -8,7 +8,8 @@ import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
-import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 
@@ -101,28 +102,73 @@ class _SnakeGameState extends State<SnakeGame> {
     return AppBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: ChibiAppBar(
-          titleText: '🐍 Le Serpent de Midgard',
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.help_outline, color: Colors.white),
-              onPressed: () {
-                GameHelpDialog.show(
-                  context,
-                  [
-                    'Faites glisser votre doigt (swipe) sur l’écran pour changer la direction du serpent.',
-                    'Mangez les pommes pour grandir et marquez des points.',
-                    'Évitez de toucher les murs ou votre propre corps.',
-                    'Les pommes dorées donnent plus de points et des bonus.',
-                    'Les pommes pourries vous font rétrécir ou perdre des points.',
-                    'Le jeu devient plus rapide à chaque niveau.',
-                  ],
-                  onGamePaused: () => _game?.pauseEngine(),
-                  onGameResumed: () => _game?.resumeEngine(),
-                );
-              },
-            ),
-          ],
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Left: Score
+              Text('Score: ${_game?.gameState.score ?? 0}', style: ChibiTextStyles.dialogText),
+
+              // Center: Apple info
+              if (_game != null)
+                ValueListenableBuilder<FoodType>(
+                  valueListenable: _game!.gameState.foodType,
+                  builder: (context, foodType, child) {
+                    String foodImage;
+                    switch (foodType) {
+                      case FoodType.golden:
+                        foodImage = 'assets/images/snake/apple_golden.png';
+                        break;
+                      case FoodType.rotten:
+                        foodImage = 'assets/images/snake/apple_rotten.png';
+                        break;
+                      default:
+                        foodImage = 'assets/images/snake/apple_regular.png';
+                    }
+                    return ValueListenableBuilder<double>(
+                      valueListenable: _game!.remainingFoodTime,
+                      builder: (context, remainingTime, child) {
+                        return Row(
+                          children: [
+                            Image.asset(foodImage, height: 30),
+                            const SizedBox(width: 8),
+                            Text('${remainingTime.ceil()}s', style: ChibiTextStyles.dialogText),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                )
+              else
+                Text('Chargement...', style: ChibiTextStyles.dialogText),
+
+              // Right: Pause button
+              IconButton(
+                icon: const Icon(Icons.pause, color: Colors.white),
+                onPressed: () {
+                  GameHelpDialog.show(
+                    context,
+                    [
+                      'Faites glisser votre doigt (swipe) sur l’écran pour changer la direction du serpent.',
+                      'Mangez les pommes pour grandir et marquez des points.',
+                      'Évitez de toucher les murs, les rochers ou votre propre corps.',
+                      'Les pommes dorées donnent plus de points.',
+                      'Les pommes pourries vous font perdre des points et ralentir.',
+                      'Plus votre score est élevé, plus le serpent accélère.',
+                    ],
+                    onGamePaused: () => _game?.pauseEngine(),
+                    onGameResumed: () => _game?.resumeEngine(),
+                    onGoToHome: () {
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
         body: SafeArea(
           child: FutureBuilder<int>(
@@ -141,7 +187,7 @@ class _SnakeGameState extends State<SnakeGame> {
                 return Column(children: [Expanded(child: _buildGameArea(context))]);
               } else {
                 // Show a loading indicator while the game is initializing
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
             },
           ),
@@ -170,6 +216,7 @@ class _SnakeGameState extends State<SnakeGame> {
       onGameLoaded: () {
         completer.complete();
         _game?.startGame(); // Start the game automatically
+        setState(() {}); // Trigger rebuild to update AppBar
       },
       onScoreChanged: () {
         setState(() {});

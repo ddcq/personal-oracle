@@ -8,6 +8,6 @@ class WelcomeScreenDialog {
       'Contrôles: ←→ ou A/D pour bouger, ↑/W/Space/Q/E pour pivoter, ↓/S pour descendre (Les contrôles tactiles sont disponibles en jeu)',
     ];
 
-    GameHelpDialog.show(context, rules, onGamePaused: onGamePaused, onGameResumed: onGameResumed);
+    GameHelpDialog.show(context, rules, onGamePaused: onGamePaused ?? () {}, onGameResumed: onGameResumed ?? () {});
   }
 }

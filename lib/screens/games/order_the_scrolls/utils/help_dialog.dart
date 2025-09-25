@@ -12,6 +12,6 @@ class HelpDialog {
       'Les cartes correctes apparaîtront avec un contour vert ✅.',
     ];
 
-    GameHelpDialog.show(context, rules, onGamePaused: onGamePaused, onGameResumed: onGameResumed);
+    GameHelpDialog.show(context, rules, onGamePaused: onGamePaused ?? () {}, onGameResumed: onGameResumed ?? () {});
   }
 }

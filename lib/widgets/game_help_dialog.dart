@@ -3,11 +3,45 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/app_dialog.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
-class GameHelpDialog {
-  static void show(BuildContext context, List<String> rules, {VoidCallback? onGamePaused, VoidCallback? onGameResumed}) {
-    onGamePaused?.call(); // Pause the game when dialog is shown
+class GameHelpDialog extends StatelessWidget {
+  final List<String> helpTexts;
+  final VoidCallback onGameResumed;
+  final VoidCallback? onGoToHome;
 
+  const GameHelpDialog({
+    super.key,
+    required this.helpTexts,
+    required this.onGameResumed,
+    this.onGoToHome,
+  });
+
+  static void show(
+    BuildContext context,
+    List<String> helpTexts, {
+    required VoidCallback onGamePaused,
+    required VoidCallback onGameResumed,
+    VoidCallback? onGoToHome,
+  }) {
+    onGamePaused();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return GameHelpDialog(
+          helpTexts: helpTexts,
+          onGameResumed: () {
+            Navigator.of(context).pop();
+            onGameResumed();
+          },
+          onGoToHome: onGoToHome,
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textStyle = theme.textTheme.bodyLarge?.copyWith(
       color: const Color(0xFFC5CAE9),
@@ -15,40 +49,36 @@ class GameHelpDialog {
       fontFamily: AppTextStyles.amarante,
     );
 
-    showDialog(
-      context: context,
-      builder: (ctx) => AppDialog(
-        title: 'Règles du jeu',
-        icon: Icons.menu_book,
-        titleStyle: theme.textTheme.headlineSmall?.copyWith(
-          fontFamily: AppTextStyles.amaticSC,
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 24.sp,
-          letterSpacing: 1.5.sp,
-          shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
-        ),
-        content: SingleChildScrollView(child: ListBody(children: rules.map((rule) => _buildRule(rule, textStyle)).toList())),
-        actions: [
-          SizedBox(
-            width: double.infinity,
-            height: 50.h,
-            child: ChibiButton(
-              text: "J'ai compris !",
-              color: const Color(0xFFE53935),
-              onPressed: () {
-                onGameResumed?.call(); // Resume the game when dialog is dismissed
-                Navigator.pop(ctx);
-              },
-            ),
-          ),
-        ],
+    return AppDialog(
+      title: 'Aide',
+      icon: Icons.menu_book,
+      titleStyle: theme.textTheme.headlineSmall?.copyWith(
+        fontFamily: AppTextStyles.amaticSC,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 24.sp,
+        letterSpacing: 1.5.sp,
+        shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
       ),
-    ).then((_) {
-      // This callback is called when the dialog is dismissed by any means (e.g., tapping outside)
-      // Ensure game is resumed even if not dismissed by the button
-      onGameResumed?.call();
-    });
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: helpTexts.map((text) => _buildRule(text, textStyle)).toList(),
+        ),
+      ),
+      actions: [
+        if (onGoToHome != null)
+          ChibiButton(
+            color: ChibiColors.buttonRed,
+            onPressed: onGoToHome,
+            child: const Icon(Icons.home, color: Colors.white, size: 32),
+          ),
+        ChibiButton(
+          color: ChibiColors.buttonBlue,
+          onPressed: onGameResumed,
+          child: const Icon(Icons.play_arrow, color: Colors.white, size: 32),
+        ),
+      ],
+    );
   }
 
   static Widget _buildRule(String text, TextStyle? style) {

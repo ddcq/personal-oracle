@@ -43,7 +43,7 @@ class _WordSearchView extends StatelessWidget {
                 'Sélectionnez les lettres en faisant glisser votre doigt sur la grille.',
                 'Une fois tous les mots trouvés, un mot secret vous sera demandé.',
                 'Utilisez les lettres restantes pour former le mot secret et valider votre victoire.',
-              ]);
+              ], onGamePaused: () {}, onGameResumed: () {});
             },
           ),
         ],

@@ -20,7 +20,7 @@ class GameState {
 
   List<SnakeSegment> snake;
   IntVector2 food;
-  FoodType foodType;
+  ValueNotifier<FoodType> foodType;
   double foodAge; // Add this line
   List<IntVector2> obstacles;
   int score;
@@ -32,7 +32,7 @@ class GameState {
   GameState({
     required this.snake,
     required this.food,
-    this.foodType = FoodType.regular,
+    FoodType foodType = FoodType.regular,
     this.foodAge = 0.0, // Initialize foodAge
     required this.obstacles,
     this.score = 0,
@@ -42,7 +42,7 @@ class GameState {
     this.isGameOver = false,
     required this.gridWidth,
     required this.gridHeight,
-  });
+  }) : foodType = ValueNotifier(foodType);
 
   /// Creates a GameState with the default initial values.
   factory GameState.initial({required int gridWidth, required int gridHeight}) {
@@ -130,7 +130,7 @@ class GameState {
     return GameState(
       snake: snake.map((segment) => segment.clone()).toList(),
       food: food.clone(),
-      foodType: foodType,
+      foodType: foodType.value, // Clone the value
       foodAge: foodAge,
       obstacles: obstacles.map((obstacle) => obstacle.clone()).toList(),
       score: score,
@@ -240,11 +240,11 @@ class GameLogic {
 
   bool _handleFoodConsumption(GameState state, IntVector2 newHead) {
     if (newHead == state.food) {
-      if (state.foodType == FoodType.golden) {
+      if (state.foodType.value == FoodType.golden) {
         state.score += _scoreGoldenFood;
-      } else if (state.foodType == FoodType.regular) {
+      } else if (state.foodType.value == FoodType.regular) {
         state.score += _scoreRegularFood;
-      } else if (state.foodType == FoodType.rotten) {
+      } else if (state.foodType.value == FoodType.rotten) {
         state.score -= (_scoreRottenFoodPenaltyBase + (level * _scoreRottenFoodPenaltyPerLevel));
         onRottenFoodEaten?.call();
       }
@@ -258,9 +258,9 @@ class GameLogic {
     IntVector2 newFood = _generateUniquePosition(random, snakePositions, state.obstacles, state.food, state.gridWidth, state.gridHeight);
 
     if (random.nextDouble() < _goldenFoodProbability) {
-      state.foodType = FoodType.golden;
+      state.foodType.value = FoodType.golden;
     } else {
-      state.foodType = FoodType.regular;
+      state.foodType.value = FoodType.regular;
     }
     state.food = newFood;
     state.foodAge = 0.0;
@@ -291,10 +291,7 @@ class GameLogic {
     while (obstacleCount < (_baseObstacles + level) && attempts < 1000) {
       attempts++;
       // Generate top-left corner, ensuring it's not on the very edge
-      IntVector2 topLeft = IntVector2(
-        random.nextInt(state.gridWidth - 1),
-        random.nextInt(state.gridHeight - 1),
-      );
+      IntVector2 topLeft = IntVector2(random.nextInt(state.gridWidth - 1), random.nextInt(state.gridHeight - 1));
 
       List<IntVector2> obstacleCells = [
         topLeft,
@@ -304,8 +301,9 @@ class GameLogic {
       ];
 
       // Check for overlap with snake, existing obstacles, or food
-      bool isOccupied = obstacleCells.any((cell) =>
-          snakePositions.contains(cell) || state.obstacles.contains(cell) || newObstacles.contains(cell) || state.food == cell);
+      bool isOccupied = obstacleCells.any(
+        (cell) => snakePositions.contains(cell) || state.obstacles.contains(cell) || newObstacles.contains(cell) || state.food == cell,
+      );
 
       if (!isOccupied) {
         newObstacles.addAll(obstacleCells);

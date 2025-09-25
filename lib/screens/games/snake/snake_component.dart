@@ -13,12 +13,7 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
   final double cellSize;
   final Sprite snakeBodySprite;
 
-  static const double _tailCenter1Offset = 0.2;
-  static const double _tailCenter2Offset = 0.3;
-  static const double _tailCenter3Offset = 0.7;
-  static const double _tailCenter4Offset = 0.8;
   static const double _tailSize1Factor = 1.0;
-  static const double _tailSize2Factor = 0.5;
 
   // Components
   late SpriteComponent _headComponent;

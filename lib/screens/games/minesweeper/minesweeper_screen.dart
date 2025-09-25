@@ -110,7 +110,7 @@ class _MinesweeperView extends StatelessWidget {
                 'Les runes rouges indiquent les mines adjacentes, les runes jaunes indiquent les trésors adjacents.',
                 'Appuyez longuement sur une case pour y placer ou retirer un drapeau, marquant ainsi une mine suspectée.',
                 'Trouvez tous les trésors pour gagner la partie !',
-              ]);
+              ], onGamePaused: () {}, onGameResumed: () {});
             },
           ),
         ],
