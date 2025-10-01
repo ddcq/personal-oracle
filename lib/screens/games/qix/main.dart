@@ -164,9 +164,25 @@ class _QixGameScreenState extends State<QixGameScreen> {
                         SizedBox(
                           width: arenaSize,
                           height: arenaSize,
-                          child: Container(
-                            color: Colors.blue[900],
-                            child: GameWidget(game: _game!),
+                          child: GestureDetector(
+                            onVerticalDragEnd: (details) {
+                              if (details.primaryVelocity! > 0) {
+                                _game!.handleDirectionChange(Direction.down);
+                              } else if (details.primaryVelocity! < 0) {
+                                _game!.handleDirectionChange(Direction.up);
+                              }
+                            },
+                            onHorizontalDragEnd: (details) {
+                              if (details.primaryVelocity! > 0) {
+                                _game!.handleDirectionChange(Direction.right);
+                              } else if (details.primaryVelocity! < 0) {
+                                _game!.handleDirectionChange(Direction.left);
+                              }
+                            },
+                            child: Container(
+                              color: Colors.blue[900],
+                              child: GameWidget(game: _game!),
+                            ),
                           ),
                         ),
                         const SizedBox(height: 16), // Spacing
@@ -193,9 +209,25 @@ class _QixGameScreenState extends State<QixGameScreen> {
                         SizedBox(
                           width: arenaSize,
                           height: arenaSize,
-                          child: Container(
-                            color: Colors.blue[900],
-                            child: GameWidget(game: _game!),
+                          child: GestureDetector(
+                            onVerticalDragEnd: (details) {
+                              if (details.primaryVelocity! > 0) {
+                                _game!.handleDirectionChange(Direction.down);
+                              } else if (details.primaryVelocity! < 0) {
+                                _game!.handleDirectionChange(Direction.up);
+                              }
+                            },
+                            onHorizontalDragEnd: (details) {
+                              if (details.primaryVelocity! > 0) {
+                                _game!.handleDirectionChange(Direction.right);
+                              } else if (details.primaryVelocity! < 0) {
+                                _game!.handleDirectionChange(Direction.left);
+                              }
+                            },
+                            child: Container(
+                              color: Colors.blue[900],
+                              child: GameWidget(game: _game!),
+                            ),
                           ),
                         ),
                         Expanded(
