@@ -23,7 +23,6 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   late PuzzleFlameGame _flameGame;
   final int _rows = 5; // Default rows
   final int _cols = 5; // Default cols
-  final String versionNumber = "Version 1.7";
 
   @override
   void initState() {
@@ -82,54 +81,71 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: ChibiAppBar(
-        titleText: 'Les runes dispersées',
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.help_outline, color: Colors.white),
-            onPressed: () {
-              GameHelpDialog.show(
-                context,
-                [
-                  'Réorganisez les tuiles pour former l\'image complète.',
-                  'Glissez les tuiles dans les espaces vides.',
-                  'Le but est de reconstituer l\'image le plus rapidement possible.',
-                ],
-                onGamePaused: () => _flameGame.pauseEngine(),
-                onGameResumed: () => _flameGame.resumeEngine(),
-              );
-            },
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: GameWidget<PuzzleFlameGame>(
+              game: _flameGame,
+              overlayBuilderMap: {
+                'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
+                  return VictoryPopup(
+                    rewardCard: game.associatedCard,
+                    onDismiss: () {
+                      game.overlays.remove('victoryOverlay');
+                      _resetGame();
+                    },
+                    onSeeRewards: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                    },
+                  );
+                },
+              },
+            ),
+          ),
+          SafeArea(
+            child: IgnorePointer(
+              child: ChibiAppBar(
+                titleText: 'Les runes dispersées',
+              ),
+            ),
+          ),
+
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Navigator.of(context).canPop()
+                  ? IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () => Navigator.of(context).pop(),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                icon: const Icon(Icons.help_outline, color: Colors.white),
+                onPressed: () {
+                  GameHelpDialog.show(
+                    context,
+                    [
+                      'Réorganisez les tuiles pour former l\'image complète.',
+                      'Glissez les tuiles dans les espaces vides.',
+                      'Le but est de reconstituer l\'image le plus rapidement possible.',
+                    ],
+                    onGamePaused: () => _flameGame.pauseEngine(),
+                    onGameResumed: () => _flameGame.resumeEngine(),
+                  );
+                },
+              ),
+            ),
           ),
         ],
-      ),
-      body: AppBackground(
-        child: SafeArea(
-          child: GameWidget(
-            game: _flameGame,
-            overlayBuilderMap: {
-              'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
-                return VictoryPopup(
-                  rewardCard: game.associatedCard,
-                  onDismiss: () {
-                    game.overlays.remove('victoryOverlay');
-                    _resetGame();
-                  },
-                  onSeeRewards: () {
-                    Navigator.of(context).pop(); // Close the dialog
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
-                  },
-                );
-              },
-            },
-          ),
-        ),
       ),
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

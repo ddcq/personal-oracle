@@ -119,6 +119,59 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      title: 'L’Hydromel de la Poésie',
+      correctOrder: [
+        MythCard(
+          id: '1',
+          title: 'Le Sang de Kvasir',
+          description: 'Deux nains transforment le sang de Kvasir, être né de la sagesse, en un breuvage d’inspiration divine.',
+          imagePath: 'mead_1.webp',
+          detailedStory:
+              'Lorsque la paix fragile entre les Æsir et les Vanes fut scellée, les divins mêlèrent leurs bouches et de ce pacte naquit Kvasir, être de connaissance pure. Kvasir parcourait les mondes, répondant aux questions des dieux et des hommes; sa parole était clairvoyance, sa respiration un chant. Mais l’avarice vibra dans le cœur de deux nains, Fjalar et Galar, assoiffés de pouvoir. Par la ruse, ils attirèrent Kvasir dans une caverne, le tuèrent et recueillirent son sang. Dans des chaudrons massifs, ils mêlèrent ce sang au miel le plus pur et versèrent leurs runes comme on jette des semences. Le liquide prit une teinte dorée, miroitant d’un éclat qui semblait contenir des vers et des prophéties. Les nains comprirent vite que ce n’était plus qu’un breuvage: c’était la source de la poésie, la sève des mots et des savoirs. Ils nommèrent les cuves Óðrerir, Boðn et Són, et gardèrent jalousement leur trésor, ignorant que ce vol allait déclencher convoitise et tragédie parmi géants et dieux. Ainsi naquit, dans la violence et la perfidie, l’essence même de l’inspiration.',
+        ),
+        MythCard(
+          id: '2',
+          title: 'Le Trésor de Suttungr',
+          description: 'Le géant Suttungr s’empare de l’hydromel et le cache au cœur d’une montagne, sous la garde de sa fille Gunnlöð.',
+          imagePath: 'mead_2.webp',
+          detailedStory:
+              'Découvrant la trahison des nains et le vol de la sève de Kvasir, la colère éclata. Le père de la victime, outragé, chercha des comptes. Fjalar et Galar, acculés, offrirent en rançon leur trésor: la boisson des vers et des visions. Le géant Suttungr, homme de haute stature et d’appétit pour les merveilles, accepta sans hésiter. Il transporta les trois cuves jusque dans la montagne de Hnitbjörg, creusant une chambre si profonde que même la lumière hésitait à y descendre. Là, au milieu de stalactites comme des dents de pierre, il grava des runes de scellement et posa autour d’elles défenses et enchantements. Pour garder le don qui rendait sage, il confia la veille à sa fille Gunnlöð, jeune géante au regard de miel, douce et farouche à la fois. Gunnlöð passa des jours et des nuits à chanter des gardiens et à goûter parfois l’arôme qui flottait: l’hydromel diffusait une aura presque vivante. Les vagues de désir et de solitude la firent étroite de cœur; elle devint la clef vivante d’un trésor qui sonnait comme promesse et malédiction. Ainsi le nectar des mots dormait, surveillé par l’amour filial et l’orgueil d’un géant.',
+        ),
+        MythCard(
+          id: '3',
+          title: 'La Ruse d’Odin',
+          description: 'Odin se déguise et use de ruse et d’un foret enchanté pour percer la montagne et atteindre l’hydromel.',
+          imagePath: 'mead_3.webp',
+          detailedStory:
+              'Le grand Odin, assoiffé de savoir et de pouvoir, apprit la cachette de l’hydromel et n’eut d’autre envie que d’en boire. Sous le voile de Bölverk, nom d’emprunt et masque de labeur, il se présenta chez Baugi, le frère de Suttungr, et offrit ses services. Par des paroles savantes et des gestes de patience, il obtint l’aide du robuste Baugi, qui, flatté, accepta d’user d’un foret magique, Rati, pour percer la roche. La tarière grinça et la pierre craquela; le chant du fer contre la pierre résonna comme un présage. Quand l’air enfin passa, Odin se glissa dans la faille — non en force, mais en ruse: il se transforma en serpent et ramper par l’ouverture, frôlant la pierre chaude. À l’intérieur, la lueur des cuves se dessinait comme l’aube d’un monde nouveau. Il savait que la sagesse ne se rendrait pas sans prix, et qu’il lui faudrait tromper l’amour et le devoir pour s’emparer du nectar des dieux. Pourtant, aucun acte n’était pour lui trop vil si l’enjeu était la parole immortelle.',
+        ),
+        MythCard(
+          id: '4',
+          title: 'La Séduction de Gunnlöð',
+          description: 'Odin charme Gunnlöð et obtient de goûter trois fois à l’hydromel, renversant le destin du trésor.',
+          imagePath: 'mead_4.webp',
+          detailedStory:
+              'Dans la pénombre dorée de la caverne, Odin retrouva Gunnlöð. La fille du géant, gardienne à la fois farouche et vulnérable, vivait dans le rythme des cuves: elle écoutait le murmure de l’hydromel comme d’autres écoutent des prières. Odin parla, non pas du ton du puissant, mais du ton du voyageur qui sait écouter: il conta la solitude des grands cieux, le poids de la connaissance et la beauté des vers. Gunnlöð, touchée par ces paroles et par une tendresse inattendue, offrit trois nuits d’hospitalité. À chaque aube, elle laissa le visiteur goûter la coupe; à la troisième nuit, le dieu, en maître de ruse, but toute la cuve d’un trait, puis la suivante, puis la troisième. Le nectar embrasa son esprit: il vit les chants futurs, les paroles qui feraient frissonner les mondes. Gunnlöð, trahie, vit son trésor quitter le rocher, transporté par la silhouette d’un oiseau sacré. La douleur de l’abandon se mêla à la honte, mais le destin avait déjà basculé: la poésie changeait définitivement de maître.',
+        ),
+        MythCard(
+          id: '5',
+          title: 'La Fuite de l’Aigle',
+          description: 'Transformé en oiseau immense, Odin s’évade avec l’hydromel tandis que Suttungr le poursuit à travers la tempête.',
+          imagePath: 'mead_5.webp',
+          detailedStory:
+              'Au moment où les cuves furent vidées, Odin se métamorphosa: ailes et plumes jaillirent de son dos, et il prit la forme d’un grand oiseau de proie, silhouette noire découpée sur la lueur de la caverne. Il bondit hors de la montagne, l’hydromel coulant en gouttes d’or de son bec, traçant des filets de lumière dans la pluie. Alerté par les cris de sa fille, Suttungr prit à son tour la forme d’un monstre ailé et fondit à la poursuite. Les deux entités déchirèrent les nuages; les éclairs zébrèrent leur course, et le ciel résonna comme une forge. Les ailes frappaient l’air comme des voiles de navires en furie, et la distance entre la sagesse et la colère se mesurait en battements d’ailes. Les terres en dessous virent deux ombres colossales : l’une portait le don des dieux, l’autre la colère d’un père privé. La fuite d’Odin fut une épopée qui suspendit le monde entre admiration et effroi.',
+        ),
+        MythCard(
+          id: '6',
+          title: 'Le Don et la Perte',
+          description: 'Odin rapporte l’hydromel à Asgard, mais quelques gouttes tombent aux mortels, donnant naissance à la poésie humaine.',
+          imagePath: 'mead_6.webp',
+          detailedStory:
+              'Parvenu enfin au seuil d’Asgard, l’oiseau se posa dans la grande salle des dieux et reprit forme divine: Odin, porteur d’un savoir brûlant et d’un secret volé. Il cracha l’hydromel dans des coupes d’or; les dieux burent et la poésie fit vibrer leurs âmes. Les halls résonnèrent de chants nouveaux, d’inspirations imprévues, de constellations verbales qui se tissèrent comme des toiles. Mais la hâte de la fuite avait laissé échapper quelques gouttes dorées qui tombèrent en pluie sur la terre des hommes. Ces perles du destin rencontrèrent des lèvres mortelles: certains en firent des poèmes qui défiaient les dieux, d’autres n’obtinrent que des illusions ou la folie. Ainsi la poésie naquit pour les dieux et pour les hommes: merveille et malédiction à la fois, fruit d’un larcin divin et d’un désir irrépressible de savoir. Depuis, le monde porte en lui ce mélange de lumière et de chute.',
+        ),
+      ],
+    ),
+    MythStory(
       title: 'La Muraille d’Asgard',
       correctOrder: [
         MythCard(

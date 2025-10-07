@@ -49,7 +49,6 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
     return Scaffold(
       backgroundColor: Colors.transparent, // Make the scaffold transparent
       extendBodyBehindAppBar: false,
-      appBar: ChibiAppBar(titleText: 'Les runes dispersées'),
       body: AppBackground(
         child: SafeArea(
           child: isLandscape
@@ -61,7 +60,7 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
                     startButton,
                   ],
                 )
-              : Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[puzzleLayout, const Spacer(), startButton]),
+              : Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[puzzleLayout, const SizedBox(height: 32), startButton]),
         ),
       ),
     );

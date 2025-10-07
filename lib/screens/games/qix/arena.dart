@@ -24,7 +24,6 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   static const double _pathStrokeWidth = 2.0;
   static const int _qixInitialPositionPadding = 20;
   static const String _defaultRewardCardImagePath = 'cards/chibi/fenrir.webp';
-  static const double _undiscoveredImageScaleFactor = 50.0; // Add this line
 
   late ui.Image _rewardCardImage;
   late ui.Image _undiscoveredAreaImage; // Add this line
@@ -372,7 +371,16 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
 
   @override
   void render(Canvas canvas) {
-    // Render filled areas (including boundaries)
+    // Render the undiscovered area image as a background
+    final Paint backgroundPaint = Paint()..colorFilter = const ColorFilter.mode(Colors.black54, BlendMode.darken);
+    canvas.drawImageRect(
+      _undiscoveredAreaImage,
+      Rect.fromLTWH(0, 0, _undiscoveredAreaImage.width.toDouble(), _undiscoveredAreaImage.height.toDouble()),
+      Rect.fromLTWH(0, 0, size.x, size.y),
+      backgroundPaint,
+    );
+
+    // Render filled areas and boundaries
     for (int y = 0; y < gridSize; y++) {
       for (int x = 0; x < gridSize; x++) {
         if (_grid[y][x] == game_constants.kGridFilled) {
@@ -382,26 +390,10 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
               canvas,
               position: Vector2(x * cellSize, y * cellSize),
               size: Vector2.all(cellSize),
-              overridePaint: _boundaryPaint, // Using boundaryPaint for filled areas for now
             );
           }
         } else if (_grid[y][x] == game_constants.kGridEdge) {
           canvas.drawRect(_cellRects[IntVector2(x, y)]!, _boundaryPaint);
-        } else if (_grid[y][x] == game_constants.kGridFree) {
-          final Rect destRect = _cellRects[IntVector2(x, y)]!;
-
-          final double srcWidth = _undiscoveredAreaImage.width / _undiscoveredImageScaleFactor;
-          final double srcHeight = _undiscoveredAreaImage.height / _undiscoveredImageScaleFactor;
-
-          final double srcX = (x * srcWidth) % _undiscoveredAreaImage.width;
-          final double srcY = (y * srcHeight) % _undiscoveredAreaImage.height;
-
-          canvas.drawImageRect(
-            _undiscoveredAreaImage,
-            Rect.fromLTWH(srcX, srcY, srcWidth, srcHeight),
-            destRect,
-            Paint()..colorFilter = ColorFilter.mode(Colors.black54, BlendMode.darken),
-          );
         }
       }
     }

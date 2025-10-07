@@ -1,6 +1,4 @@
-import 'package:oracle_d_asgard/utils/image_picker_utils.dart';
 import 'dart:ui' as ui;
-import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +6,11 @@ import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import './puzzle_game.dart';
 import './puzzle_model.dart';
-
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
-
 import 'dart:math';
+import 'package:flame/game.dart';
+import 'package:oracle_d_asgard/utils/image_picker_utils.dart';
 
 class DashedRectangleComponent extends RectangleComponent {
   static const double _dashLength = 5.0;
@@ -48,7 +46,7 @@ class DashedRectangleComponent extends RectangleComponent {
   }
 }
 
-class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
+class PuzzleFlameGame extends FlameGame {
   final PuzzleGame puzzleGame;
   late ui.Image puzzleImage;
   final GamificationService _gamificationService = GamificationService();
@@ -73,7 +71,7 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
+    super.onLoad();
     await _loadImageForPuzzle();
 
     // Dessiner le plateau de jeu en pointillés
@@ -81,8 +79,8 @@ class PuzzleFlameGame extends FlameGame with HasCollisionDetection {
     final double boardWidth = pieceSize * puzzleGame.cols;
     final double boardHeight = pieceSize * puzzleGame.rows;
 
-    final double offsetX = (size.x - boardWidth) / 2;
-    final double offsetY = (size.y - boardHeight) / 2;
+    final double offsetX = (this.size.x - boardWidth) / 2;
+    final double offsetY = (this.size.y - boardHeight) / 2;
 
     for (int i = 0; i < puzzleGame.rows; i++) {
       for (int j = 0; j < puzzleGame.cols; j++) {
