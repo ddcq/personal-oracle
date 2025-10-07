@@ -31,9 +31,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const int _vibrationDurationLong = 500;
   static const int _vibrationAmplitudeHigh = 255;
   static const int victoryScoreThreshold = 200;
-  static const int _speedReductionScoreInterval = 20;
-  static const double _speedReductionFactor = 20.0;
-  static const int _minGameSpeed = 50;
+  static const int _minGameSpeed = 200;
 
   final GameLogic gameLogic = GameLogic();
   late ValueNotifier<GameState> gameState;
@@ -247,9 +245,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
 
   double _calculateGameSpeed(int currentScore) {
-    final double baseSpeedReduction = (currentScore ~/ _speedReductionScoreInterval) * _speedReductionFactor;
-    final double acceleratedSpeedReduction = baseSpeedReduction; // Removed level-based acceleration
-    return (_gameSpeedInitial - acceleratedSpeedReduction).clamp(_minGameSpeed, _gameSpeedInitial).toDouble();
+    return (_gameSpeedInitial - currentScore).clamp(_minGameSpeed, _gameSpeedInitial).toDouble();
   }
 
   void tick() async {

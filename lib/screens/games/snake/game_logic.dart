@@ -287,6 +287,46 @@ class GameLogic {
     }
   }
 
+  void rotateLeft(GameState state) {
+    final currentDirection = state.direction;
+    dp.Direction newDirection;
+    switch (currentDirection) {
+      case dp.Direction.up:
+        newDirection = dp.Direction.left;
+        break;
+      case dp.Direction.right:
+        newDirection = dp.Direction.up;
+        break;
+      case dp.Direction.down:
+        newDirection = dp.Direction.right;
+        break;
+      case dp.Direction.left:
+        newDirection = dp.Direction.down;
+        break;
+    }
+    changeDirection(state, newDirection);
+  }
+
+  void rotateRight(GameState state) {
+    final currentDirection = state.direction;
+    dp.Direction newDirection;
+    switch (currentDirection) {
+      case dp.Direction.up:
+        newDirection = dp.Direction.right;
+        break;
+      case dp.Direction.right:
+        newDirection = dp.Direction.down;
+        break;
+      case dp.Direction.down:
+        newDirection = dp.Direction.left;
+        break;
+      case dp.Direction.left:
+        newDirection = dp.Direction.up;
+        break;
+    }
+    changeDirection(state, newDirection);
+  }
+
   List<IntVector2> generateObstacles(GameState state) {
     Random random = Random();
     List<IntVector2> newObstacles = [];

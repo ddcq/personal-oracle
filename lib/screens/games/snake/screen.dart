@@ -13,6 +13,7 @@ import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart'; // Import the victory popup
 
 import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import CollectibleCard
@@ -216,7 +217,33 @@ class _SnakeGameState extends State<SnakeGame> {
                 _game ??= _createSnakeFlameGame(_currentLevel);
 
                 // Game is initialized, show the game content
-                return Column(children: [Expanded(child: _buildGameArea(context))]);
+                return Column(
+                  children: [
+                    Expanded(child: _buildGameArea(context)),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ChibiButton(
+                            onPressed: () {
+                              _game?.gameLogic.rotateLeft(_game!.gameState.value);
+                            },
+                            icon: const Icon(Icons.rotate_left, color: Colors.white),
+                            color: ChibiColors.buttonBlue,
+                          ),
+                          ChibiButton(
+                            onPressed: () {
+                              _game?.gameLogic.rotateRight(_game!.gameState.value);
+                            },
+                            icon: const Icon(Icons.rotate_right, color: Colors.white),
+                            color: ChibiColors.buttonBlue,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
               } else {
                 // Show a loading indicator while the game is initializing
                 return const Center(child: CircularProgressIndicator());
