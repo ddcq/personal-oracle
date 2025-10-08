@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
-import '../game_controller.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
 
 class DetailPanel extends StatelessWidget {
   // Changed to StatelessWidget
@@ -18,7 +18,6 @@ class DetailPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedCard = controller.selectedMythCard; // Use controller directly
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     if (selectedCard == null) {
       return const Center(
@@ -29,18 +28,6 @@ class DetailPanel extends StatelessWidget {
         ),
       );
     }
-
-    final screenWidth = MediaQuery.of(context).size.width;
-    double normalFontSize;
-    if (screenWidth > 1200) {
-      normalFontSize = 20;
-    } else if (screenWidth > 800) {
-      normalFontSize = 18;
-    } else {
-      normalFontSize = 16;
-    }
-    final enlargedFontSize = normalFontSize + 4;
-    final double titleFontSize = isLandscape ? (screenWidth > 800 ? 22 : 18) : (screenWidth > 800 ? 40 : 36);
 
     // Define normal and enlarged states
     final double normalPadding = 16.0;
@@ -70,56 +57,53 @@ class DetailPanel extends StatelessWidget {
             // Main column for image and description
             children: [
               // Image, Gradient, and Title Stack
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-                child: SizedBox(
-                  height: 200.0,
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: ShaderMask(
-                          shaderCallback: (bounds) => const LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [Colors.white, Colors.transparent],
-                            stops: [0.5, 1.0],
-                          ).createShader(bounds),
-                          blendMode: BlendMode.dstIn,
-                          child: Image.asset('assets/images/stories/${selectedCard.imagePath}', fit: BoxFit.cover, alignment: Alignment.topCenter),
-                        ),
-                      ),
-                      Positioned(
-                        left: 16,
-                        right: 16,
-                        bottom: 16,
-                        child: AnimatedDefaultTextStyle(
-                          duration: const Duration(milliseconds: 300),
-                          style: TextStyle(
-                            fontFamily: isLandscape ? null : AppTextStyles.amaticSC,
-                            fontSize: titleFontSize,
-                            fontWeight: isLandscape ? FontWeight.normal : FontWeight.bold,
-                            color: Colors.white,
-                            shadows: const [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(2.0, 2.0))],
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final boxWidth = constraints.maxWidth;
+                    final boxHeight = constraints.maxHeight;
+
+                    // Heuristic to determine font size based on container area.
+                    // The divisor (e.g., 8000) can be adjusted to fine-tune the text size.
+                    final area = boxWidth * boxHeight;
+                    final baseFontSize = (area / 2000).clamp(14.0, 24.0);
+
+                    final normalFontSize = baseFontSize;
+                    final enlargedFontSize = normalFontSize + 4;
+
+                    return Stack(
+                      children: [
+                        Positioned.fill(
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                            child: ShaderMask(
+                              shaderCallback: (bounds) => const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [Colors.white, Colors.transparent],
+                                stops: [0.5, 1.0],
+                              ).createShader(bounds),
+                              blendMode: BlendMode.dstIn,
+                              child: ColorFiltered(
+                                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken),
+                                child: Image.asset('assets/images/stories/${selectedCard.imagePath}', fit: BoxFit.cover, alignment: Alignment.topCenter),
+                              ),
+                            ),
                           ),
-                          textAlign: TextAlign.center,
-                          child: Text(isLandscape ? selectedCard.description : selectedCard.title),
                         ),
-                      ),
-                    ],
-                  ),
+                        SingleChildScrollView(
+                          padding: EdgeInsets.all(isEnlarged ? enlargedPadding : normalPadding),
+                          child: AnimatedDefaultTextStyle(
+                            duration: const Duration(milliseconds: 300),
+                            style: TextStyle(fontSize: isEnlarged ? enlargedFontSize : normalFontSize, color: Colors.white),
+                            child: Text(selectedCard.description),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
-              if (!isLandscape)
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.all(isEnlarged ? enlargedPadding : normalPadding),
-                    child: AnimatedDefaultTextStyle(
-                      duration: const Duration(milliseconds: 300),
-                      style: TextStyle(fontSize: isEnlarged ? enlargedFontSize : normalFontSize, color: Colors.white70),
-                      child: Text(selectedCard.description),
-                    ),
-                  ),
-                ),
             ],
           ),
         ),

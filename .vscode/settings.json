@@ -1,5 +1,9 @@
 {
     "idf.espIdfPath": "/Users/denis.declercq/esp/v5.5.1/esp-idf",
     "idf.toolsPath": "/Users/denis.declercq/.espressif",
-    "idf.pythonInstallPath": "/opt/homebrew/bin/python3"
+    "idf.pythonInstallPath": "/opt/homebrew/bin/python3",
+    "[dart]": {
+        "editor.defaultFormatter": "Dart-Code.dart-code",
+        "editor.formatOnSave": true
+    }
 }

@@ -229,14 +229,14 @@ class _SnakeGameState extends State<SnakeGame> {
                             onPressed: () {
                               _game?.gameLogic.rotateLeft(_game!.gameState.value);
                             },
-                            icon: const Icon(Icons.rotate_left, color: Colors.white),
+                            child: const Icon(Icons.rotate_left, color: Colors.white),
                             color: ChibiColors.buttonBlue,
                           ),
                           ChibiButton(
                             onPressed: () {
                               _game?.gameLogic.rotateRight(_game!.gameState.value);
                             },
-                            icon: const Icon(Icons.rotate_right, color: Colors.white),
+                            child: const Icon(Icons.rotate_right, color: Colors.white),
                             color: ChibiColors.buttonBlue,
                           ),
                         ],

@@ -31,7 +31,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const int _vibrationDurationLong = 500;
   static const int _vibrationAmplitudeHigh = 255;
   static const int victoryScoreThreshold = 200;
-  static const int _minGameSpeed = 200;
+  static const int _minGameSpeed = 50;
 
   final GameLogic gameLogic = GameLogic();
   late ValueNotifier<GameState> gameState;
