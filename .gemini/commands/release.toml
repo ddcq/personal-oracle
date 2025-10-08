@@ -1,5 +1,3 @@
-# Gemini command for releasing a new version
-
 [[command]]
 name = "release"
 description = "Create and publish a new release."
