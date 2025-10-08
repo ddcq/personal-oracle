@@ -184,11 +184,11 @@ class _MainScreenState extends State<MainScreen> {
           ),
 
           if (_isBannerAdLoaded && _bannerAd != null)
-            SafeArea(
-              child: Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: SafeArea(
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: SizedBox(
