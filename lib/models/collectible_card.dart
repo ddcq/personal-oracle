@@ -5,6 +5,7 @@ class CollectibleCard {
   final String title;
   final String description;
   final String imagePath;
+  final String? videoUrl;
   final List<String> tags;
   final CardVersion version;
 
@@ -13,6 +14,7 @@ class CollectibleCard {
     required this.title,
     required this.description,
     required this.imagePath,
+    this.videoUrl,
     this.tags = const [],
     this.version = CardVersion.epic,
   });
@@ -25,14 +27,15 @@ class CollectibleCard {
       imagePath: json['imagePath'] as String,
       tags: List<String>.from(json['tags'] as List? ?? []),
       version: json['version'] != null ? CardVersion.fromJson(json['version']) : CardVersion.epic,
+      videoUrl: json['videoUrl'] as String?,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'title': title, 'description': description, 'imagePath': imagePath, 'tags': tags, 'version': version.toJson()};
+    return {'id': id, 'title': title, 'description': description, 'imagePath': imagePath, 'tags': tags, 'version': version.toJson(), 'videoUrl': videoUrl};
   }
 
-  CollectibleCard copyWith({String? id, String? title, String? description, String? imagePath, List<String>? tags, CardVersion? version}) {
+  CollectibleCard copyWith({String? id, String? title, String? description, String? imagePath, List<String>? tags, CardVersion? version, String? videoUrl}) {
     return CollectibleCard(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -40,6 +43,7 @@ class CollectibleCard {
       imagePath: imagePath ?? this.imagePath,
       tags: tags ?? this.tags,
       version: version ?? this.version,
+      videoUrl: videoUrl ?? this.videoUrl,
     );
   }
 }

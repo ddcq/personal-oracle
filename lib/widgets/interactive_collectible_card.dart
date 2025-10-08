@@ -7,6 +7,7 @@ import 'package:oracle_d_asgard/screens/collectible_card_detail_page.dart';
 import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:flutter/foundation.dart'; // For defaultTargetPlatform
+import 'package:oracle_d_asgard/widgets/video_player_with_cache_and_ping_pong.dart';
 
 class InteractiveCollectibleCard extends StatefulWidget {
   final CollectibleCard card;
@@ -60,7 +61,13 @@ class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard>
                           borderRadius: BorderRadius.circular(15),
                           child: Stack(
                             children: [
-                              Image.asset(addAssetPrefix(widget.card.imagePath), fit: BoxFit.contain),
+                              if (widget.card.videoUrl != null)
+                                VideoPlayerWithCacheAndPingPong(
+                                  videoUrl: widget.card.videoUrl!,
+                                  placeholderAsset: addAssetPrefix(widget.card.imagePath),
+                                )
+                              else
+                                Image.asset(addAssetPrefix(widget.card.imagePath), fit: BoxFit.contain),
                               // Shine overlay
                               Positioned(
                                 left: _shineAnimation.value * cardWidth, // Scale animation based on card width

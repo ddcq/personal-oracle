@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/providers/theme_provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart'; // Import AdMob
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:oracle_d_asgard/widgets/video_player_with_cache_and_ping_pong.dart';
 
 class MythStoryPage extends StatefulWidget {
   final MythStory mythStory;
@@ -290,11 +291,17 @@ class _StoryContentState extends State<_StoryContent> {
                   children: [
                     Text(card.title, style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Theme.of(context).colorScheme.onSurface)),
                     const SizedBox(height: 8.0),
-                    if (isUnlocked) Image.asset('assets/images/stories/${card.imagePath}') else Icon(Icons.lock, size: 50, color: Theme.of(context).colorScheme.onSurface),
-                    const SizedBox(height: 8.0),
-                    if (isUnlocked)
-                      Text(card.detailedStory, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface, fontSize: widget.fontSize))
-                    else if (isFirstLockedChapter)
+                    if (isUnlocked) ...[
+                      if (card.videoUrl != null)
+                        VideoPlayerWithCacheAndPingPong(
+                          videoUrl: card.videoUrl!,
+                          placeholderAsset: 'assets/images/stories/${card.imagePath}',
+                        )
+                      else
+                        Image.asset('assets/images/stories/${card.imagePath}'),
+                      const SizedBox(height: 8.0),
+                      Text(card.detailedStory, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface, fontSize: widget.fontSize)),
+                    ] else if (isFirstLockedChapter) ...[
                       Column(
                         children: [
                           Text(
