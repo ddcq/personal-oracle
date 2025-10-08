@@ -35,8 +35,22 @@ echo "☁️ INFO: Pushing commits and tags to origin..."
 git push origin && git push origin --tags
 echo "✅ SUCCESS: Pushed to origin."
 
-# Step 5: Open Google Play Console
+# Step 5: Build App Bundle
+
+echo "📦 INFO: Building Android App Bundle..."
+
+flutter build appbundle --release
+
+echo "✅ SUCCESS: App Bundle built."
+
+
+
+# Step 6: Open Google Play Console
+
 echo "🌐 INFO: Opening Google Play Console in Google Chrome..."
+
 open -a 'Google Chrome' 'https://play.google.com/console/u/0/developers/7678706771924505759/app/4972955630697428940/tracks/internal-testing'
+
+
 
 echo "🎉 SUCCESS: Release process completed."
