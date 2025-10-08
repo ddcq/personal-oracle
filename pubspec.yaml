@@ -113,6 +113,7 @@ flutter:
      - assets/images/icons/
      - assets/images/heads/
      - assets/images/qix/ # Add this line
+     - assets/audio/
      - assets/fonts/
   #   - images/a_dot_ham.jpeg
 

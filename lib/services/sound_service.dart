@@ -22,7 +22,7 @@ class SoundService with ChangeNotifier {
     if (!_isMuted) {
       await _audioPlayer.stop(); // Still stop before playing new music
       await _audioPlayer.setVolume(1.0);
-      await _audioPlayer.play(AssetSource('ambiance.mp3'));
+      await _audioPlayer.play(AssetSource('audio/ambiance.mp3'));
       _currentMusic = MusicType.mainMenu;
     }
   }
@@ -31,7 +31,7 @@ class SoundService with ChangeNotifier {
     if (!_isMuted) {
       await _audioPlayer.stop(); // Still stop before playing new music
       await _audioPlayer.setVolume(0.5);
-      await _audioPlayer.play(AssetSource('reading.mp3'));
+      await _audioPlayer.play(AssetSource('audio/reading.mp3'));
       _currentMusic = MusicType.story;
     }
   }
