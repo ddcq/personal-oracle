@@ -7,7 +7,6 @@ class Deity {
   final String icon;
   final Map<String, int> traits;
   final String description;
-  final String dailyChallenge;
   final List<Color> colors;
 
   const Deity({
@@ -17,20 +16,12 @@ class Deity {
     required this.icon,
     required this.traits,
     required this.description,
-    required this.dailyChallenge,
     required this.colors,
   });
 
   // Conversion vers JSON pour persistence future
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'title': title,
-      'traits': traits,
-      'description': description,
-      'dailyChallenge': dailyChallenge,
-    };
+    return {'id': id, 'name': name, 'title': title, 'traits': traits, 'description': description};
   }
 
   // Création depuis JSON
@@ -42,7 +33,6 @@ class Deity {
       icon: icon,
       traits: Map<String, int>.from(json['traits']),
       description: json['description'],
-      dailyChallenge: json['dailyChallenge'],
       colors: colors,
     );
   }
