@@ -114,12 +114,12 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
           SafeArea(
             child: Align(
               alignment: Alignment.topLeft,
-              child: Navigator.of(context).canPop()
-                  ? IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.white),
-                      onPressed: () => Navigator.of(context).pop(),
-                    )
-                  : const SizedBox.shrink(),
+              child: IconButton(
+                icon: const Icon(Icons.home, color: Colors.white),
+                onPressed: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                },
+              ),
             ),
           ),
           SafeArea(
