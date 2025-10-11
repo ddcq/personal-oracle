@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
 
 class DetailPanel extends StatelessWidget {

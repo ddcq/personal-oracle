@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'screens/main_screen.dart'; // 👈 Nouveau fichier avec MainScreen
+import 'package:oracle_d_asgard/screens/main_screen.dart'; // 👈 Nouveau fichier avec MainScreen
 import 'package:oracle_d_asgard/utils/themes.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';

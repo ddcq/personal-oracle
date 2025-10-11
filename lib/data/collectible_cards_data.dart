@@ -4,9 +4,33 @@ import 'package:oracle_d_asgard/models/card_version.dart';
 // Helper function to create all versions of a card
 List<CollectibleCard> _createCardVersions({required String id, required String title, required String description, required List<String> tags}) {
   return [
-    CollectibleCard(id: id, title: title, description: description, imagePath: 'cards/chibi/$id.webp', tags: tags, version: CardVersion.chibi),
-    CollectibleCard(id: id, title: title, description: description, imagePath: 'cards/premium/$id.webp', tags: tags, version: CardVersion.premium),
-    CollectibleCard(id: id, title: title, description: description, imagePath: 'cards/epic/$id.webp', tags: tags, version: CardVersion.epic),
+    CollectibleCard(
+      id: id,
+      title: title,
+      description: description,
+      imagePath: 'cards/chibi/$id.webp',
+      tags: tags,
+      version: CardVersion.chibi,
+      videoUrl: 'https://ddcq.github.io/video/${id}_chibi.mp4',
+    ),
+    CollectibleCard(
+      id: id,
+      title: title,
+      description: description,
+      imagePath: 'cards/premium/$id.webp',
+      tags: tags,
+      version: CardVersion.premium,
+      videoUrl: 'https://ddcq.github.io/video/${id}_premium.mp4',
+    ),
+    CollectibleCard(
+      id: id,
+      title: title,
+      description: description,
+      imagePath: 'cards/epic/$id.webp',
+      tags: tags,
+      version: CardVersion.epic,
+      videoUrl: 'https://ddcq.github.io/video/${id}_epic.mp4',
+    ),
   ];
 }
 

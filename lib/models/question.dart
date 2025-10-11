@@ -1,4 +1,4 @@
-import 'answer.dart';
+import 'package:oracle_d_asgard/models/answer.dart';
 
 class Question {
   final String question;

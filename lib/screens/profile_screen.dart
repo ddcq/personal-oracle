@@ -794,7 +794,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       itemBuilder: (context, index) {
         if (index < filteredCards.length) {
           final collectibleCard = filteredCards[index];
-          return InteractiveCollectibleCard(card: collectibleCard);
+          return InteractiveCollectibleCard(card: collectibleCard, playVideo: false);
         } else {
           return adRewardButton!;
         }

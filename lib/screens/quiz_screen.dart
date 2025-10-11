@@ -115,11 +115,7 @@ class _QuizScreenState extends State<QuizScreen> {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          'Question ${currentQuestion + 1} sur ${AppData.questions.length}',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: isLandscape ? null : ProgressBar(progress: progress),
       ),
       body: AppBackground(
         child: isLandscape
@@ -183,8 +179,6 @@ class _QuizScreenState extends State<QuizScreen> {
             : Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(height: 20.h),
-                  ProgressBar(progress: progress),
                   Container(
                     padding: EdgeInsets.all(20.w),
                     margin: EdgeInsets.all(20.w),

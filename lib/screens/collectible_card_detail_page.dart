@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
 
 import 'package:oracle_d_asgard/models/collectible_card.dart';
+import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
 import 'package:oracle_d_asgard/widgets/interactive_collectible_card.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 
-class CollectibleCardDetailPage extends StatefulWidget {
+class CollectibleCardDetailPage extends StatelessWidget {
   final CollectibleCard card;
 
   const CollectibleCardDetailPage({super.key, required this.card});
 
   @override
-  State<CollectibleCardDetailPage> createState() => _CollectibleCardDetailPageState();
-}
-
-class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.card.title,
+          card.title,
           style: TextStyle(color: Colors.white, fontFamily: AppTextStyles.amaticSC),
         ),
         backgroundColor: Colors.transparent,
@@ -41,11 +37,13 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
           child: OrientationBuilder(
             builder: (context, orientation) {
               if (orientation == Orientation.portrait) {
-                return _buildPortraitLayout();
+                return _buildPortraitLayout(context);
               } else {
-                return LayoutBuilder(builder: (context, constraints) {
-                  return _buildLandscapeLayout(constraints);
-                });
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    return _buildLandscapeLayout(context, constraints);
+                  },
+                );
               }
             },
           ),
@@ -54,36 +52,34 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
     );
   }
 
-  Widget _buildPortraitLayout() {
+  Widget _buildPortraitLayout(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            InteractiveCollectibleCard(card: widget.card),
+            InteractiveCollectibleCard(card: card, enableNavigation: false),
             const SizedBox(height: 20),
             Text(
-              widget.card.title,
+              card.title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold),
+              style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
-              widget.card.description,
+              card.description,
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white70, fontSize: 18),
             ),
+            _buildVideoPlayer(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildLandscapeLayout(BoxConstraints constraints) {
+  Widget _buildLandscapeLayout(BuildContext context, BoxConstraints constraints) {
     final cardSize = constraints.maxHeight * 0.8;
     return Center(
       child: SingleChildScrollView(
@@ -95,7 +91,7 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
             SizedBox(
               width: cardSize,
               height: cardSize,
-              child: InteractiveCollectibleCard(card: widget.card),
+              child: InteractiveCollectibleCard(card: card, enableNavigation: false),
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -104,19 +100,17 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.card.title,
+                    card.title,
                     textAlign: TextAlign.left,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    widget.card.description,
+                    card.description,
                     textAlign: TextAlign.left,
                     style: const TextStyle(color: Colors.white70, fontSize: 18),
                   ),
+                  _buildVideoPlayer(),
                 ],
               ),
             ),
@@ -124,5 +118,19 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildVideoPlayer() {
+    if (card.videoUrl != null && card.videoUrl!.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 20.0),
+        child: AspectRatio(
+          aspectRatio: 16 / 9,
+          child: CustomVideoPlayer(videoUrl: card.videoUrl!, placeholderAsset: 'assets/images/${card.imagePath}'),
+        ),
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 }

@@ -3,7 +3,6 @@ import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:oracle_d_asgard/screens/profile_screen.dart';
-import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 

@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/providers/theme_provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart'; // Import AdMob
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:oracle_d_asgard/widgets/video_player_with_cache_and_ping_pong.dart';
+import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
 
 class MythStoryPage extends StatefulWidget {
   final MythStory mythStory;
@@ -144,10 +144,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
                       _saveFontSize(value);
                     },
                   ),
-                  Text(
-                    'Exemple de texte',
-                    style: TextStyle(fontSize: _fontSize),
-                  ),
+                  Text('Exemple de texte', style: TextStyle(fontSize: _fontSize)),
                 ],
               );
             },
@@ -183,10 +180,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
             onPressed: _showFontSizeDialog,
           ),
           IconButton(
-            icon: Icon(
-              themeProvider.themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
+            icon: Icon(themeProvider.themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode, color: Theme.of(context).colorScheme.onPrimary),
             onPressed: () {
               themeProvider.toggleTheme();
             },
@@ -293,21 +287,18 @@ class _StoryContentState extends State<_StoryContent> {
                     const SizedBox(height: 8.0),
                     if (isUnlocked) ...[
                       if (card.videoUrl != null)
-                        VideoPlayerWithCacheAndPingPong(
-                          videoUrl: card.videoUrl!,
-                          placeholderAsset: 'assets/images/stories/${card.imagePath}',
-                        )
+                        CustomVideoPlayer(videoUrl: card.videoUrl!, placeholderAsset: 'assets/images/stories/${card.imagePath}')
                       else
                         Image.asset('assets/images/stories/${card.imagePath}'),
                       const SizedBox(height: 8.0),
-                      Text(card.detailedStory, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface, fontSize: widget.fontSize)),
-                    ] else if (isFirstLockedChapter) ...[
+                      Text(
+                        card.detailedStory,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface, fontSize: widget.fontSize),
+                      ),
+                    ] else if (isFirstLockedChapter)
                       Column(
                         children: [
-                          Text(
-                            'Chapitre verrouillé',
-                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                          ),
+                          Text('Chapitre verrouillé', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                           const SizedBox(height: 8.0),
                           widget.isAdLoading
                               ? const CircularProgressIndicator()

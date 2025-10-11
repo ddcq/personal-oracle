@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/deity.dart';
-import '../models/question.dart';
-import '../models/answer.dart';
+import 'package:oracle_d_asgard/models/deity.dart';
+import 'package:oracle_d_asgard/models/question.dart';
+import 'package:oracle_d_asgard/models/answer.dart';
 
 class AppData {
   static const Map<String, Deity> deities = {
