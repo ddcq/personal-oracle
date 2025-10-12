@@ -9,6 +9,7 @@ import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 import 'package:oracle_d_asgard/screens/profile_screen.dart' as screens;
+import 'package:oracle_d_asgard/screens/main_screen.dart';
 
 class WordSearchScreen extends StatelessWidget {
   const WordSearchScreen({super.key});
@@ -34,6 +35,15 @@ class _WordSearchView extends StatelessWidget {
       appBar: ChibiAppBar(
         titleText: 'L’Œil d’Odin',
         actions: [
+          IconButton(
+            icon: const Icon(Icons.home, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const MainScreen()),
+                (route) => false,
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.help_outline, color: Colors.white),
             onPressed: () {

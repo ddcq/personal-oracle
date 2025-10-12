@@ -11,14 +11,14 @@ import 'package:oracle_d_asgard/widgets/app_background.dart';
 // =========================================
 // PUZZLE GAME - Les Runes Dispersées
 // =========================================
-class PuzzleGameScreen extends StatefulWidget {
-  const PuzzleGameScreen({super.key});
+class PuzzlePreliminaryScreen extends StatefulWidget {
+  const PuzzlePreliminaryScreen({super.key});
 
   @override
-  State<PuzzleGameScreen> createState() => _PuzzleGameScreenState();
+  State<PuzzlePreliminaryScreen> createState() => _PuzzlePreliminaryScreenState();
 }
 
-class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
+class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
   @override
   Widget build(BuildContext context) {
     final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
@@ -47,19 +47,34 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
     );
     return Scaffold(
       backgroundColor: Colors.transparent, // Make the scaffold transparent
-      extendBodyBehindAppBar: false,
+      extendBodyBehindAppBar: true,
       body: AppBackground(
-        child: SafeArea(
-          child: isLandscape
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Flexible(child: puzzleLayout),
-                    const SizedBox(width: 20),
-                    startButton,
-                  ],
-                )
-              : Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[puzzleLayout, const SizedBox(height: 32), startButton]),
+        child: Stack(
+          children: [
+            SafeArea(
+              child: Center(
+                child: isLandscape
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Flexible(child: puzzleLayout),
+                          const SizedBox(width: 20),
+                          startButton,
+                        ],
+                      )
+                    : Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[puzzleLayout, const SizedBox(height: 32), startButton]),
+              ),
+            ),
+            SafeArea(
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

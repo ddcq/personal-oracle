@@ -1,0 +1,75 @@
+import 'package:flutter/material.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'word_search_screen.dart';
+
+class WordSearchPreliminaryScreen extends StatelessWidget {
+  const WordSearchPreliminaryScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
+    final Widget gameInfoLayout = Container(
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
+      decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+                    Image.asset('assets/images/preliminary/word_search.webp', width: 120, height: 120),
+          const SizedBox(height: 16),
+          Text(
+            'Odin a sacrifié son œil pour la connaissance. Trouvez les mots cachés liés à la mythologie nordique dans la grille de runes.',
+            style: TextStyle(color: Colors.white, fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+
+    final Widget startButton = ChibiButton(
+      text: 'Commencer',
+      color: const Color(0xFF8B5CF6), // Color from menu
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const WordSearchScreen()));
+      },
+    );
+
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
+      body: AppBackground(
+        child: Stack(
+          children: [
+            SafeArea(
+              child: Center(
+                child: isLandscape
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Flexible(child: gameInfoLayout),
+                          const SizedBox(width: 20),
+                          startButton,
+                        ],
+                      )
+                    : Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[gameInfoLayout, const SizedBox(height: 32), startButton]),
+              ),
+            ),
+            SafeArea(
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+

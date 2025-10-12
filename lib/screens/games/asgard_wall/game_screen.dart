@@ -754,6 +754,17 @@ class _GameScreenState extends State<GameScreen> {
             ),
           ),
         ),
+        SafeArea(
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: IconButton(
+              icon: const Icon(Icons.home, color: Colors.white),
+              onPressed: () {
+                Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+              },
+            ),
+          ),
+        ),
       ],
     );
   }

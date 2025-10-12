@@ -114,6 +114,7 @@ flutter:
      - assets/images/backgrounds/
      - assets/images/icons/
      - assets/images/heads/
+     - assets/images/preliminary/
      - assets/images/qix/ # Add this line
      - assets/audio/
      - assets/fonts/
