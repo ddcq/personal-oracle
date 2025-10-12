@@ -41,7 +41,7 @@ class GameController extends ChangeNotifier {
   List<bool?> get placementResults => _placementResults;
 
   Future<void> loadNewStory() async {
-    final allStories = getMythStories();
+    final allStories = getMythStories().skip(1).toList();
     final selected = await _findNextEarnableStoryAndChapter(allStories);
 
     if (selected != null) {

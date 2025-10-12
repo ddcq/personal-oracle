@@ -9,6 +9,7 @@ import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'package:oracle_d_asgard/widgets/confetti_overlay.dart';
 import 'package:confetti/confetti.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
 
 class VictoryPopup extends StatefulWidget {
   final CollectibleCard? rewardCard; // Made nullable
@@ -18,7 +19,15 @@ class VictoryPopup extends StatefulWidget {
   final bool isGenericVictory; // New: to force generic victory message
   final bool hideReplayButton;
 
-  const VictoryPopup({super.key, this.rewardCard, this.unlockedStoryChapter, required this.onDismiss, required this.onSeeRewards, this.isGenericVictory = false, this.hideReplayButton = false});
+  const VictoryPopup({
+    super.key,
+    this.rewardCard,
+    this.unlockedStoryChapter,
+    required this.onDismiss,
+    required this.onSeeRewards,
+    this.isGenericVictory = false,
+    this.hideReplayButton = false,
+  });
 
   @override
   State<VictoryPopup> createState() => _VictoryPopupState();
@@ -26,19 +35,23 @@ class VictoryPopup extends StatefulWidget {
 
 class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<Offset> _slideAnimation;
+  late Animation<double> _scaleAnimation; // Changed from slide to scale
   late Animation<double> _fadeAnimation;
   late final ConfettiController _confettiController;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration: const Duration(milliseconds: 700), vsync: this);
+    // Changed duration to 2 seconds
+    _controller = AnimationController(duration: const Duration(seconds: 2), vsync: this);
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 1), // Start from bottom
-      end: Offset.zero, // End at original position
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+    // Using TweenSequence for custom bounce effect (0.1 -> 1.5 -> 0.5 -> 1.2 -> 1.0)
+    _scaleAnimation = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween<double>(begin: 0.1, end: 1.5).chain(CurveTween(curve: Curves.easeOut)), weight: 70.0),
+      TweenSequenceItem(tween: Tween<double>(begin: 1.5, end: 0.5).chain(CurveTween(curve: Curves.easeIn)), weight: 30.0),
+      TweenSequenceItem(tween: Tween<double>(begin: 0.5, end: 1.2).chain(CurveTween(curve: Curves.easeOut)), weight: 20.0),
+      TweenSequenceItem(tween: Tween<double>(begin: 1.2, end: 1.0).chain(CurveTween(curve: Curves.easeIn)), weight: 10.0),
+    ]).animate(_controller);
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
@@ -58,15 +71,15 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     return ConfettiOverlay(
       controller: _confettiController,
-      child: FadeTransition(
-        opacity: _fadeAnimation,
-        child: SlideTransition(
-          position: _slideAnimation,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            color: Colors.black54, // Semi-transparent background for the overlay
-            child: Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: Colors.black54, // Semi-transparent background for the overlay
+        child: Center(
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -113,7 +126,15 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                         textAlign: TextAlign.center,
                       ),
                     ] else if (widget.rewardCard != null) ...[
-                      Image.asset(addAssetPrefix(widget.rewardCard!.imagePath), height: 150, fit: BoxFit.contain),
+                      SizedBox(
+                        height: 150,
+                        child: widget.rewardCard!.videoUrl != null && widget.rewardCard!.videoUrl!.isNotEmpty
+                            ? CustomVideoPlayer(
+                                videoUrl: widget.rewardCard!.videoUrl!,
+                                placeholderAsset: addAssetPrefix(widget.rewardCard!.imagePath),
+                              )
+                            : Image.asset(addAssetPrefix(widget.rewardCard!.imagePath), fit: BoxFit.contain),
+                      ),
                       const SizedBox(height: 10),
                       Text(
                         widget.rewardCard!.title,

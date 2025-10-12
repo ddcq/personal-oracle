@@ -94,8 +94,7 @@ class GamificationService with ChangeNotifier {
       if (!parts.contains(partId)) {
         parts.add(partId);
         await db.update('story_progress', {'parts_unlocked': jsonEncode(parts)}, where: 'story_id = ?', whereArgs: [storyId]);
-      } else {
-      }
+      } else {}
     } else {
       await db.insert('story_progress', {
         'story_id': storyId,
@@ -118,7 +117,7 @@ class GamificationService with ChangeNotifier {
   Future<List<Map<String, dynamic>>> getUnlockedStoryProgress() async {
     final db = await _databaseService.database;
     final result = await db.query('story_progress');
-    
+
     return result;
   }
 
@@ -228,7 +227,7 @@ class GamificationService with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> getUnearnedContent() async {
-    final allMythStories = getMythStories().where((story) => story.title != 'Loading Story').toList();
+    final allMythStories = getMythStories().skip(1).toList();
     final unlockedCollectibleCards = await getUnlockedCollectibleCards(); // Now returns CollectibleCard objects
     final unlockedStoryProgress = await getUnlockedStoryProgress();
 
@@ -264,13 +263,12 @@ class GamificationService with ChangeNotifier {
     final List<MythStory> unearnedMythStories = [];
     for (var story in allMythStories) {
       final List<String> partsUnlockedForStory = unlockedStoryParts[story.title] ?? [];
-      if (partsUnlockedForStory.isEmpty) { // Only add stories with no unlocked chapters
+      if (partsUnlockedForStory.isEmpty) {
+        // Only add stories with no unlocked chapters
         unearnedMythStories.add(story);
-        
       }
     }
 
-    
     return {'unearned_collectible_cards': unearnedCollectibleCards, 'unearned_myth_stories': unearnedMythStories};
   }
 

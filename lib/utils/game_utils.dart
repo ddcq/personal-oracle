@@ -23,14 +23,12 @@ class NextChapter {
 /// Returns a [NextChapter] object containing the story and the specific chapter
 /// to be won, or `null` if all chapters across all stories have been earned.
 Future<NextChapter?> selectNextChapterToWin(GamificationService gamificationService) async {
-  final allStories = getMythStories();
-  // Filter out the dummy 'Loading Story'
-  final realStories = allStories.where((story) => story.title != 'Loading Story').toList();
+  final allStories = getMythStories().skip(1).toList();
 
   final List<NextChapter> earnableChapters = [];
 
-  for (var story in realStories) {
-    // Iterate over realStories
+  for (var story in allStories) {
+    // Iterate over allStories
     final progress = await gamificationService.getStoryProgress(story.title);
     // Decode the list of unlocked part IDs, or start with an empty list.
     final unlockedParts = progress != null ? jsonDecode(progress['parts_unlocked']) as List<dynamic> : [];
@@ -58,7 +56,7 @@ Future<NextChapter?> selectNextChapterToWin(GamificationService gamificationServ
 /// Selects a random chapter from all available stories, regardless of unlock status.
 /// This is used when all stories have been completed, to allow continuous play.
 Future<NextChapter> selectRandomChapterFromAllStories() async {
-  final allStories = getMythStories();
+  final allStories = getMythStories().skip(1).toList();
   final random = Random();
 
   // Select a random story

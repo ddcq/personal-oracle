@@ -40,7 +40,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _tapCount = 0;
   bool _showHiddenButtons = false;
 
-  late Map<String, MythCard> _allMythCards;
   String? _profileName;
   final TextEditingController _nameController = TextEditingController();
   String? _selectedDeityId;
@@ -54,7 +53,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _loadAllMythCards();
     _loadNextAdRewardCard(); // New: load the next card
     _loadNextAdRewardStory(); // New: load the next story
   }
@@ -162,14 +160,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _loadAllMythCards() {
-    _allMythCards = {};
-    for (var story in getMythStories()) {
-      for (var card in story.correctOrder) {
-        _allMythCards[card.id] = card;
-      }
-    }
-  }
 
   void _showRewardedAd() async {
     setState(() {
@@ -466,7 +456,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 20),
 
                       _buildSectionTitle('Cartes à collectionner'),
-                      _buildCollectibleCards(unlockedCards, gamificationService),
+                      _buildCollectibleCards(unlockedCards),
                       const SizedBox(height: 20),
                       GestureDetector(
                         onTap: () {
@@ -727,7 +717,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildCollectibleCards(List<CollectibleCard> cards, GamificationService gamificationService) {
+  Widget _buildCollectibleCards(List<CollectibleCard> cards) {
     if (cards.isEmpty) {
       final adRewardButton = _nextAdRewardCard != null
           ? _AdRewardButtonWidget(

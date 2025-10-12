@@ -72,7 +72,6 @@ class CollectibleCardDetailPage extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white70, fontSize: 18),
             ),
-            _buildVideoPlayer(),
           ],
         ),
       ),
@@ -110,7 +109,6 @@ class CollectibleCardDetailPage extends StatelessWidget {
                     textAlign: TextAlign.left,
                     style: const TextStyle(color: Colors.white70, fontSize: 18),
                   ),
-                  _buildVideoPlayer(),
                 ],
               ),
             ),
@@ -118,19 +116,5 @@ class CollectibleCardDetailPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _buildVideoPlayer() {
-    if (card.videoUrl != null && card.videoUrl!.isNotEmpty) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 20.0),
-        child: AspectRatio(
-          aspectRatio: 16 / 9,
-          child: CustomVideoPlayer(videoUrl: card.videoUrl!, placeholderAsset: 'assets/images/${card.imagePath}'),
-        ),
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
   }
 }
