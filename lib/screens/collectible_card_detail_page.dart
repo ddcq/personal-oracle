@@ -1,51 +1,81 @@
 import 'package:flutter/material.dart';
 
 import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
 import 'package:oracle_d_asgard/widgets/interactive_collectible_card.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 
-class CollectibleCardDetailPage extends StatelessWidget {
+import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/services/sound_service.dart';
+
+class CollectibleCardDetailPage extends StatefulWidget {
   final CollectibleCard card;
 
   const CollectibleCardDetailPage({super.key, required this.card});
 
   @override
+  State<CollectibleCardDetailPage> createState() => _CollectibleCardDetailPageState();
+}
+
+class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
+  late SoundService _soundService;
+
+  @override
+  void initState() {
+    super.initState();
+    _soundService = getIt<SoundService>();
+    _soundService.playCardMusic(widget.card.id);
+  }
+
+  @override
+  void dispose() {
+    // Logic moved to WillPopScope to handle async operation correctly
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          card.title,
-          style: TextStyle(color: Colors.white, fontFamily: AppTextStyles.amaticSC),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white), // For back button
-      ),
-      body: SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF4A148C), // Dark Purple
-                Color(0xFF880E4F), // Dark Pink
-              ],
-            ),
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) {
+          await _soundService.resumePreviousMusic();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            widget.card.title,
+            style: TextStyle(color: Colors.white, fontFamily: AppTextStyles.amaticSC),
           ),
-          child: OrientationBuilder(
-            builder: (context, orientation) {
-              if (orientation == Orientation.portrait) {
-                return _buildPortraitLayout(context);
-              } else {
-                return LayoutBuilder(
-                  builder: (context, constraints) {
-                    return _buildLandscapeLayout(context, constraints);
-                  },
-                );
-              }
-            },
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: const IconThemeData(color: Colors.white), // For back button
+        ),
+        body: SafeArea(
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF4A148C), // Dark Purple
+                  Color(0xFF880E4F), // Dark Pink
+                ],
+              ),
+            ),
+            child: OrientationBuilder(
+              builder: (context, orientation) {
+                if (orientation == Orientation.portrait) {
+                  return _buildPortraitLayout(context);
+                } else {
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      return _buildLandscapeLayout(context, constraints);
+                    },
+                  );
+                }
+              },
+            ),
           ),
         ),
       ),
@@ -59,16 +89,16 @@ class CollectibleCardDetailPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            InteractiveCollectibleCard(card: card, enableNavigation: false),
+            InteractiveCollectibleCard(card: widget.card, enableNavigation: false),
             const SizedBox(height: 20),
             Text(
-              card.title,
+              widget.card.title,
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
-              card.description,
+              widget.card.description,
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white70, fontSize: 18),
             ),
@@ -90,7 +120,7 @@ class CollectibleCardDetailPage extends StatelessWidget {
             SizedBox(
               width: cardSize,
               height: cardSize,
-              child: InteractiveCollectibleCard(card: card, enableNavigation: false),
+              child: InteractiveCollectibleCard(card: widget.card, enableNavigation: false),
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -99,13 +129,13 @@ class CollectibleCardDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    card.title,
+                    widget.card.title,
                     textAlign: TextAlign.left,
                     style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    card.description,
+                    widget.card.description,
                     textAlign: TextAlign.left,
                     style: const TextStyle(color: Colors.white70, fontSize: 18),
                   ),

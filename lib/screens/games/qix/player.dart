@@ -1,9 +1,9 @@
 import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart'; // Import for VoidCallback
 import 'dart:ui' as ui; // For Image
-import 'arena.dart';
+import 'package:oracle_d_asgard/screens/games/qix/arena.dart';
 
-import 'constants.dart' as game_constants;
+import 'package:oracle_d_asgard/screens/games/qix/constants.dart' as game_constants;
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/components/animated_character_component.dart'; // Import AnimatedCharacterComponent

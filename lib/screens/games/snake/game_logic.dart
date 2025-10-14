@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 import 'package:flutter/foundation.dart'; // For VoidCallback
-import 'snake_segment.dart';
+import 'package:oracle_d_asgard/screens/games/snake/snake_segment.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart'; // Import for victoryScoreThreshold
 
 // ==========================================

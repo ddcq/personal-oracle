@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'minesweeper_screen.dart';
+import 'package:oracle_d_asgard/screens/games/minesweeper/minesweeper_screen.dart';
 
 class MinesweeperPreliminaryScreen extends StatelessWidget {
   const MinesweeperPreliminaryScreen({super.key});

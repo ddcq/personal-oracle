@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
-import './puzzle_model.dart'; // Le modèle pur créé à l’étape 1
+import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_model.dart'; // Le modèle pur créé à l’étape 1
 
 class PuzzleGame {
   static const double _snapThreshold = 20.0;

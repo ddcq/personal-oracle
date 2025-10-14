@@ -99,7 +99,7 @@ WordSearchGridResult generateWordSearchGrid({
         final List<String> longestFittingWords = fittingWords.where((sw) => sw.length == maxLength).toList();
         secretWord = longestFittingWords[random.nextInt(longestFittingWords.length)];
       } else {
-        secretWord = "DEFAULT";
+        secretWord = 'DEFAULT';
       }
 
       int secretLetterIndex = 0;
@@ -121,7 +121,7 @@ WordSearchGridResult generateWordSearchGrid({
   }
 
   final finalFallbackGrid = List.generate(height, (_) => List.generate(width, (_) => '?'));
-  return WordSearchGridResult(grid: finalFallbackGrid, placedWords: [], secretWordUsed: "");
+  return WordSearchGridResult(grid: finalFallbackGrid, placedWords: [], secretWordUsed: '');
 }
 
 bool _areWordsNotObscured(List<_PlacedWord> placedWords) {

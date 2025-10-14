@@ -1,21 +1,19 @@
-import 'dart:math' as math;
-import 'package:oracle_d_asgard/models/collectible_card.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flame/game.dart' hide Route;
-import 'package:oracle_d_asgard/screens/profile_screen.dart';
-import 'package:oracle_d_asgard/widgets/progress_bar.dart';
-import 'qix_game.dart';
-import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
-import 'package:oracle_d_asgard/widgets/directional_pad.dart';
-import 'package:oracle_d_asgard/widgets/app_background.dart';
-
+import 'package:flame/game.dart';
+import 'package:oracle_d_asgard/screens/games/qix/qix_game.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
+import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
-
-import 'package:oracle_d_asgard/utils/text_styles.dart';
-import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
+import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/models/collectible_card.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/widgets/directional_pad.dart';
+import 'package:oracle_d_asgard/widgets/progress_bar.dart';
+import 'dart:math' as math;
 
 class QixGameScreen extends StatefulWidget {
   const QixGameScreen({super.key});
@@ -32,11 +30,11 @@ class _QixGameScreenState extends State<QixGameScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeGameFuture = _initializeGame();
+    _initializeGameFuture = _initializeGame(context);
   }
 
-  Future<void> _initializeGame() async {
-    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+  Future<void> _initializeGame(BuildContext context) async {
+    final gamificationService = getIt<GamificationService>();
     final int currentDifficulty = await gamificationService.getQixDifficulty();
     final CollectibleCard? potentialRewardCard = await gamificationService.selectRandomUnearnedCollectibleCard();
 
@@ -76,11 +74,10 @@ class _QixGameScreenState extends State<QixGameScreen> {
                 ],
               ),
               onReplay: () {
-                Navigator.of(context).pop(); // Close the dialog
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => QixGameScreen()));
+context.go('/qix');
               },
               onMenu: () {
-                Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
+                context.go('/');
               },
             );
           },
@@ -263,12 +260,12 @@ class _QixGameScreenState extends State<QixGameScreen> {
                                 rewardCard: _game!.rewardCard,
                                 onDismiss: () {
                                   _showVictoryPopupNotifier.value = false;
-                                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => QixGameScreen())); // Restart the game
+                                  context.go('/qix');
                                 },
                                 onSeeRewards: () {
                                   _showVictoryPopupNotifier.value = false;
                                   Navigator.of(context).pop(); // Go back to the previous screen (game menu)
-                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                                  context.push('/profile');
                                 },
                               ),
                             );

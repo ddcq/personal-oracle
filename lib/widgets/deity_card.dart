@@ -5,7 +5,7 @@ import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'dart:ui'; // For ImageFilter
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 
-import '../models/deity.dart'; // Make sure this model matches the structure from AppData
+import 'package:oracle_d_asgard/models/deity.dart'; // Make sure this model matches the structure from AppData
 
 class DeityCard extends StatefulWidget {
   final Deity deity;

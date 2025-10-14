@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
-import 'myth_card_content.dart';
-import '../game_controller.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/widgets/myth_card_content.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
 
 class DraggableMythCard extends StatelessWidget {
   final MythCard card;

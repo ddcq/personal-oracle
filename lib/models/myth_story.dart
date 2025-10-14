@@ -1,8 +1,15 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 
-class MythStory {
-  final String title;
-  final List<MythCard> correctOrder;
+part 'myth_story.freezed.dart';
+part 'myth_story.g.dart';
 
-  MythStory({required this.title, required this.correctOrder});
+@freezed
+abstract class MythStory with _$MythStory {
+  const factory MythStory({
+    required String title,
+    required List<MythCard> correctOrder,
+  }) = _MythStory;
+
+  factory MythStory.fromJson(Map<String, dynamic> json) => _$MythStoryFromJson(json);
 }

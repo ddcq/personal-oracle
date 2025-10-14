@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:oracle_d_asgard/screens/main_screen.dart'; // 👈 Nouveau fichier avec MainScreen
 import 'package:oracle_d_asgard/utils/themes.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:oracle_d_asgard/services/database_service.dart';
-import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/providers/theme_provider.dart';
+import 'package:provider/provider.dart';
+
+import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/router.dart'; // Import the router
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setupLocator();
   if (Platform.isIOS || Platform.isAndroid) {
     await MobileAds.instance.initialize();
   }
-  await DatabaseService().database;
+  await getIt<DatabaseService>().database;
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => GamificationService()),
-        ChangeNotifierProvider(create: (context) => SoundService()),
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
-      ],
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
       child: const MyApp(),
     ),
   );
@@ -42,7 +40,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    Provider.of<SoundService>(context, listen: false).playMainMenuMusic();
+    getIt<SoundService>().playMainMenuMusic();
   }
 
   @override
@@ -53,7 +51,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final soundService = Provider.of<SoundService>(context, listen: false);
+    final soundService = getIt<SoundService>();
     if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
       soundService.pauseMusic();
     } else if (state == AppLifecycleState.resumed) {
@@ -68,12 +66,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       minTextAdapt: false,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp(
+        return MaterialApp.router(
           title: 'Oracle Nordique',
           theme: AppThemes.lightTheme,
           darkTheme: AppThemes.darkTheme,
           themeMode: Provider.of<ThemeProvider>(context).themeMode,
-          home: const MainScreen(), // 👈 Utilise MainScreen au lieu de WelcomeScreen
+          routerConfig: router, // Use routerConfig instead of home and routes
           debugShowCheckedModeBanner: false,
         );
       },

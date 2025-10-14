@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:confetti/confetti.dart';
 import 'dart:math';
-import '../data/app_data.dart';
-import 'main_screen.dart';
-import '../widgets/deity_card.dart'; // 👈 Import it
+import 'package:oracle_d_asgard/data/app_data.dart';
+import 'package:oracle_d_asgard/widgets/deity_card.dart'; // 👈 Import it
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/confetti_overlay.dart';
@@ -115,11 +115,13 @@ class _ResultScreenState extends State<ResultScreen> {
                                         Expanded(
                                           child: ChibiButton(
                                             color: Colors.amber,
-                                            onPressed: () => Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(builder: (context) => const MainScreen()),
-                                              (route) => false,
-                                            ),
+                                            onPressed: () {
+                                              // Force navigation to home
+                                              while (GoRouter.of(context).canPop()) {
+                                                GoRouter.of(context).pop();
+                                              }
+                                              GoRouter.of(context).go('/');
+                                            },
                                             child: const Icon(Icons.home, color: Colors.white),
                                           ),
                                         ),
@@ -241,8 +243,13 @@ class _ResultScreenState extends State<ResultScreen> {
                                   ),
                                   ChibiButton(
                                     color: Colors.amber,
-                                    onPressed: () =>
-                                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MainScreen()), (route) => false),
+                                    onPressed: () {
+                                      // Force navigation to home
+                                      while (GoRouter.of(context).canPop()) {
+                                        GoRouter.of(context).pop();
+                                      }
+                                      GoRouter.of(context).go('/');
+                                    },
                                     child: const Icon(Icons.home, color: Colors.white),
                                   ),
                                 ],

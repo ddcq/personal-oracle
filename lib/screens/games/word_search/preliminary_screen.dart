@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'word_search_screen.dart';
+import 'package:oracle_d_asgard/screens/games/word_search/word_search_screen.dart';
 
 class WordSearchPreliminaryScreen extends StatelessWidget {
   const WordSearchPreliminaryScreen({super.key});

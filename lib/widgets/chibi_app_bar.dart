@@ -4,13 +4,15 @@ import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 class ChibiAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleText;
   final List<Widget>? actions;
+  final Widget? leading;
 
-  const ChibiAppBar({super.key, required this.titleText, this.actions});
+  const ChibiAppBar({super.key, required this.titleText, this.actions, this.leading});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: leading == null,
+      leading: leading,
       backgroundColor: Colors.transparent,
       elevation: 0.0,
       centerTitle: true,

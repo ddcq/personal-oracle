@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'screen.dart';
 
 class OrderTheScrollsPreliminaryScreen extends StatelessWidget {
   const OrderTheScrollsPreliminaryScreen({super.key});
@@ -32,7 +32,7 @@ class OrderTheScrollsPreliminaryScreen extends StatelessWidget {
       text: 'Commencer',
       color: const Color(0xFF6366F1), // Color from menu
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderTheScrollsGame()));
+        context.go('/order_the_scrolls');
       },
     );
 
@@ -61,7 +61,7 @@ class OrderTheScrollsPreliminaryScreen extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => context.go('/'),
                 ),
               ),
             ),

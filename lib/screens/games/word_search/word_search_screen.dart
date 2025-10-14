@@ -1,23 +1,20 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:oracle_d_asgard/components/victory_popup.dart';
-import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/screens/games/word_search/word_search_controller.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
-import 'package:oracle_d_asgard/screens/profile_screen.dart' as screens;
-import 'package:oracle_d_asgard/screens/main_screen.dart';
+import 'package:oracle_d_asgard/components/victory_popup.dart';
 
 class WordSearchScreen extends StatelessWidget {
   const WordSearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final gamificationService = Provider.of<GamificationService>(context, listen: false);
-    return ChangeNotifierProvider(create: (_) => WordSearchController(gamificationService), child: const _WordSearchView());
+    return ChangeNotifierProvider(create: (_) => WordSearchController(), child: const _WordSearchView());
   }
 }
 
@@ -33,17 +30,14 @@ class _WordSearchView extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
-        titleText: 'L’Œil d’Odin',
+        titleText: 'L\'Œil d\'Odin',
+        leading: IconButton(
+          icon: const Icon(Icons.home, color: Colors.white),
+          onPressed: () {
+            context.go('/');
+          },
+        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.home, color: Colors.white),
-            onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const MainScreen()),
-                (route) => false,
-              );
-            },
-          ),
           IconButton(
             icon: const Icon(Icons.help_outline, color: Colors.white),
             onPressed: () {
@@ -103,7 +97,7 @@ class _WordSearchView extends StatelessWidget {
               },
               onSeeRewards: () {
                 Navigator.of(context).pop(); // Close the dialog
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const screens.ProfileScreen()));
+                context.push('/profile');
               },
             );
           },

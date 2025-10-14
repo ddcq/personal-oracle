@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
-import 'puzzle_screen.dart';
+import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_screen.dart';
 import 'dart:math';
 import 'package:flutter/services.dart';
 import 'dart:ui' as ui;

@@ -1,12 +1,13 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'utils/help_dialog.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/utils/help_dialog.dart';
 
 import 'package:provider/provider.dart';
-import 'game_controller.dart';
-import './widgets/thumbnail_list.dart';
-import './widgets/detail_panel.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/widgets/thumbnail_list.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/widgets/detail_panel.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
-import 'package:oracle_d_asgard/screens/profile_screen.dart';
 
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -21,46 +22,21 @@ class OrderTheScrollsGame extends StatefulWidget {
   State<OrderTheScrollsGame> createState() => _OrderTheScrollsGameState();
 }
 
-class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTickerProviderStateMixin {
+class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
   late GameController _gameController;
-
-  final Curve _currentCurve = Curves.easeOutCubic; // User's chosen curve
-
-  late AnimationController _animationController; // Animation controller
-  late Animation<double> _leftPanelFlexAnimation; // Animation for left panel flex
-  late Animation<double> _rightPanelFlexAnimation; // Animation for right panel flex
-
-  void _toggleDetailPanelEnlargement() {
-    // New method
-    if (_animationController.isDismissed) {
-      _animationController.forward();
-    } else if (_animationController.isCompleted) {
-      _animationController.reverse();
-    }
-    // No need for setState here, as the animation controller will trigger rebuilds
-  }
+  final ValueNotifier<bool> _isDetailPanelEnlarged = ValueNotifier<bool>(false);
 
   @override
   void initState() {
     super.initState();
     _gameController = GameController();
     _gameController.loadNewStory();
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500), // Animation duration
-    );
-    _animationController.value = 0.0; // Set initial animation value to 0.0 (begin state)
-
-    _leftPanelFlexAnimation = Tween<double>(begin: 0.6, end: 0.0).animate(CurvedAnimation(parent: _animationController, curve: _currentCurve));
-
-    _rightPanelFlexAnimation = Tween<double>(begin: 0.4, end: 1.0).animate(CurvedAnimation(parent: _animationController, curve: _currentCurve));
   }
 
   @override
   void dispose() {
     _gameController.dispose();
-    _animationController.dispose(); // Dispose animation controller
+    _isDetailPanelEnlarged.dispose();
     super.dispose();
   }
 
@@ -101,13 +77,13 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.go('/');
                 },
               ),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.help_outline, color: Colors.white),
-                  onPressed: () => HelpDialog.show(context, onGamePaused: () => _animationController.stop()),
+                  onPressed: () => HelpDialog.show(context),
                 ),
               ],
             ),
@@ -119,73 +95,48 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
                   children: [
                     Expanded(
                       // Make the Row take available space
-                      child: AnimatedBuilder(
-                        // Re-introduce AnimatedBuilder
-                        animation: _animationController, // Listen to the animation controller
-                        builder: (context, child) {
+                      child: ValueListenableBuilder<bool>(
+                        valueListenable: _isDetailPanelEnlarged,
+                        builder: (context, isEnlarged, child) {
                           return LayoutBuilder(
                             builder: (context, constraints) {
-                              final totalWidth = constraints.maxWidth;
-                              // Calculate animated widths based on totalWidth and animation values
+                              final totalHeight = constraints.maxHeight;
+
                               if (isLandscape) {
-                                final leftPanelWidth = totalWidth * _leftPanelFlexAnimation.value;
-                                final rightPanelWidth = totalWidth * _rightPanelFlexAnimation.value;
                                 return Row(
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
-                                    AnimatedContainer(
-                                      duration: const Duration(milliseconds: 500), // Use the animation controller's duration
-                                      curve: _currentCurve, // Use the current curve
-                                      width: leftPanelWidth,
-                                      child: ThumbnailList(controller: controller),
-                                    ),
-                                    AnimatedContainer(
-                                      duration: const Duration(milliseconds: 500), // Use the animation controller's duration
-                                      curve: _currentCurve, // Use the current curve
-                                      width: rightPanelWidth,
-                                      child: Column(
-                                        children: [
-                                          Expanded(
-                                            child: DetailPanel(
-                                              controller: controller,
-                                              isEnlarged: _animationController.isCompleted, // Use animation state for isEnlarged
-                                              onToggleEnlargement: _toggleDetailPanelEnlargement,
-                                            ),
-                                          ),
-                                          validationButton(),
-                                        ],
+                                    if (!isEnlarged)
+                                      Expanded(
+                                        flex: 3,
+                                        child: ThumbnailList(controller: controller),
+                                      ).animate().fadeIn(duration: 300.ms),
+                                    Expanded(
+                                      flex: isEnlarged ? 6 : 2,
+                                      child: DetailPanel(
+                                        controller: controller,
+                                        isEnlarged: isEnlarged,
+                                        onToggleEnlargement: () => _isDetailPanelEnlarged.value = !isEnlarged,
                                       ),
-                                    ),
+                                    ).animate().fadeIn(duration: 300.ms),
                                   ],
                                 );
                               } else {
-                                final topPanelHeight = constraints.maxHeight * (1 - _rightPanelFlexAnimation.value);
-                                final bottomPanelHeight = constraints.maxHeight * _rightPanelFlexAnimation.value;
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
-                                    AnimatedContainer(
-                                      duration: const Duration(milliseconds: 500), // Use the animation controller's duration
-                                      curve: _currentCurve, // Use the current curve
-                                      height: topPanelHeight,
-                                      child: ThumbnailList(controller: controller),
-                                    ),
-                                    AnimatedContainer(
-                                      duration: const Duration(milliseconds: 500), // Use the animation controller's duration
-                                      curve: _currentCurve, // Use the current curve
-                                      height: bottomPanelHeight,
-                                      child: Column(
-                                        children: [
-                                          Expanded(
-                                            child: DetailPanel(
-                                              controller: controller,
-                                              isEnlarged: _animationController.isCompleted, // Use animation state for isEnlarged
-                                              onToggleEnlargement: _toggleDetailPanelEnlargement,
-                                            ),
-                                          ),
-                                        ],
+                                    if (!isEnlarged)
+                                      SizedBox(
+                                        height: totalHeight * 0.6,
+                                        child: ThumbnailList(controller: controller),
+                                      ).animate().fadeIn(duration: 300.ms),
+                                    Expanded(
+                                      child: DetailPanel(
+                                        controller: controller,
+                                        isEnlarged: isEnlarged,
+                                        onToggleEnlargement: () => _isDetailPanelEnlarged.value = !isEnlarged,
                                       ),
-                                    ),
+                                    ).animate().fadeIn(duration: 300.ms),
                                   ],
                                 );
                               }
@@ -194,8 +145,8 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
                         },
                       ),
                     ),
-                    // Validation Button
-                    if (!isLandscape) validationButton(),
+                    // Validation Button (always show at bottom)
+                    validationButton(),
                   ],
                 ),
               ), // Closing parenthesis for SafeArea
@@ -226,7 +177,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
             Navigator.of(context).pop();
           },
           onMenu: () {
-            Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
+            context.go('/');
           },
         );
       },
@@ -249,7 +200,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> with SingleTi
           onSeeRewards: () {
             Navigator.of(context).pop();
             controller.victoryPopupShown(); // Reset popup state
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+            context.go('/profile');
           },
         );
       },

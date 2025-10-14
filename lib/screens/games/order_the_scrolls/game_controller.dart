@@ -7,6 +7,8 @@ import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 
+import 'package:oracle_d_asgard/locator.dart';
+
 class GameController extends ChangeNotifier {
   late MythStory _selectedStory;
   late List<MythCard> _shuffledCards;
@@ -27,7 +29,7 @@ class GameController extends ChangeNotifier {
     _placementResults = List<bool?>.filled(_shuffledCards.length, null);
   }
 
-  final GamificationService _gamificationService = GamificationService();
+  final GamificationService _gamificationService = getIt<GamificationService>();
 
   MythStory get selectedStory => _selectedStory;
   List<MythCard> get shuffledCards => _shuffledCards;

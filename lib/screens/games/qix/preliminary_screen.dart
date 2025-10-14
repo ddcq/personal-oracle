@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'main.dart';
+import 'package:oracle_d_asgard/screens/games/qix/main.dart';
 
 class QixPreliminaryScreen extends StatelessWidget {
   const QixPreliminaryScreen({super.key});

@@ -36,7 +36,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
         videoFile = fileInfo.file;
       }
 
-      _videoPlayerController = video_player.VideoPlayerController.file(videoFile);
+      _videoPlayerController = video_player.VideoPlayerController.file(videoFile, videoPlayerOptions: video_player.VideoPlayerOptions(mixWithOthers: true));
       await _videoPlayerController.initialize();
 
       _videoPlayerController.setLooping(true);

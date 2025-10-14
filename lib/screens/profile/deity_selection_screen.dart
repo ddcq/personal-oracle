@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
@@ -117,19 +118,13 @@ class _DeityCard extends StatefulWidget {
   State<_DeityCard> createState() => _DeityCardState();
 }
 
-class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMixin {
-  late final AnimationController _animationController;
-  late final Animation<double> _scaleAnimation;
+class _DeityCardState extends State<_DeityCard> {
   late final ScrollController _scrollController;
   bool _showScrollIndicator = false;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack));
-    _animationController.forward();
-
     _scrollController = ScrollController();
     _scrollController.addListener(_updateScrollIndicatorVisibility);
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -139,7 +134,6 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
 
   @override
   void dispose() {
-    _animationController.dispose();
     _scrollController.removeListener(_updateScrollIndicatorVisibility);
     _scrollController.dispose();
     super.dispose();
@@ -173,78 +167,75 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
 
         return Transform.scale(scale: value, child: child);
       },
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: GestureDetector(
-          onTap: _selectDeity,
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
-            decoration: BoxDecoration(
-              color: Colors.black.withAlpha(100),
-              borderRadius: BorderRadius.circular(30),
-              border: Border.all(color: Colors.amber.withAlpha(150), width: 2),
-              boxShadow: [
-                BoxShadow(color: Colors.black.withAlpha(150), blurRadius: 20, spreadRadius: 5),
-                BoxShadow(color: Colors.amber.withAlpha(70), blurRadius: 30, spreadRadius: -10),
-              ],
-            ),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Stack(
-                  children: [
-                    OrientationBuilder(
-                      builder: (context, orientation) {
-                        if (orientation == Orientation.portrait) {
-                          return _buildPortraitLayout(context);
-                        } else {
-                          return _buildLandscapeLayout(context);
-                        }
-                      },
-                    ),
-                    if (_showScrollIndicator) ...[
-                      Positioned.fill(
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: IgnorePointer(
-                            child: Container(
-                              height: constraints.maxHeight * 0.1,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(30)),
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [Colors.black.withAlpha(0), Colors.black.withAlpha(100)],
-                                ),
+      child: GestureDetector(
+        onTap: _selectDeity,
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
+          decoration: BoxDecoration(
+            color: Colors.black.withAlpha(100),
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: Colors.amber.withAlpha(150), width: 2),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withAlpha(150), blurRadius: 20, spreadRadius: 5),
+              BoxShadow(color: Colors.amber.withAlpha(70), blurRadius: 30, spreadRadius: -10),
+            ],
+          ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Stack(
+                children: [
+                  OrientationBuilder(
+                    builder: (context, orientation) {
+                      if (orientation == Orientation.portrait) {
+                        return _buildPortraitLayout(context);
+                      } else {
+                        return _buildLandscapeLayout(context);
+                      }
+                    },
+                  ),
+                  if (_showScrollIndicator) ...[
+                    Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: IgnorePointer(
+                          child: Container(
+                            height: constraints.maxHeight * 0.1,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(30)),
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [Colors.black.withAlpha(0), Colors.black.withAlpha(100)],
                               ),
                             ),
                           ),
                         ),
                       ),
-                      Positioned(
-                        bottom: 10,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: IconButton(
-                            icon: const Icon(Icons.arrow_downward, color: Colors.white),
-                            onPressed: () {
-                              _scrollController.animateTo(
-                                _scrollController.position.maxScrollExtent,
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.easeOut,
-                              );
-                            },
-                          ),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_downward, color: Colors.white),
+                          onPressed: () {
+                            _scrollController.animateTo(
+                              _scrollController.position.maxScrollExtent,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeOut,
+                            );
+                          },
                         ),
                       ),
-                    ],
+                    ),
                   ],
-                );
-              },
-            ),
+                ],
+              );
+            },
           ),
         ),
-      ),
+      ).animate().scale(begin: const Offset(0.8, 0.8), end: const Offset(1.0, 1.0), duration: 500.ms, curve: Curves.easeOutBack),
     );
   }
 
@@ -317,7 +308,7 @@ class _DeityCardState extends State<_DeityCard> with SingleTickerProviderStateMi
         fontSize: 50,
         color: Colors.white,
         fontWeight: FontWeight.bold,
-        shadows: [const Shadow(color: Colors.black, blurRadius: 10, offset: Offset(2, 2))],
+        shadows: [Shadow(color: Colors.black, blurRadius: 10, offset: Offset(2, 2))],
       ),
     );
   }

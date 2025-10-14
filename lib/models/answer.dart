@@ -1,25 +1,14 @@
-class Answer {
-  final String text;
-  final Map<String, int> scores;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  const Answer({
-    required this.text,
-    required this.scores,
-  });
+part 'answer.freezed.dart';
+part 'answer.g.dart';
 
-  // Conversion vers JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'text': text,
-      'scores': scores,
-    };
-  }
+@freezed
+abstract class Answer with _$Answer {
+  const factory Answer({
+    required String text,
+    required Map<String, int> scores,
+  }) = _Answer;
 
-  // Création depuis JSON
-  factory Answer.fromJson(Map<String, dynamic> json) {
-    return Answer(
-      text: json['text'],
-      scores: Map<String, int>.from(json['scores']),
-    );
-  }
+  factory Answer.fromJson(Map<String, dynamic> json) => _$AnswerFromJson(json);
 }

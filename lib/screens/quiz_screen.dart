@@ -1,17 +1,17 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/data/app_data.dart';
-import '../models/question.dart';
-import '../services/quiz_service.dart';
-import '../utils/colors.dart';
-import '../utils/constants.dart';
-import '../widgets/answer_button.dart';
-import '../widgets/progress_bar.dart';
-import 'result_screen.dart';
+import 'package:oracle_d_asgard/models/question.dart';
+import 'package:oracle_d_asgard/services/quiz_service.dart';
+import 'package:oracle_d_asgard/utils/colors.dart';
+import 'package:oracle_d_asgard/utils/constants.dart';
+import 'package:oracle_d_asgard/widgets/answer_button.dart';
+import 'package:oracle_d_asgard/widgets/progress_bar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -94,8 +94,8 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _navigateToResult() {
     final deity = QuizService.calculateBestDeity(scores);
-    Provider.of<GamificationService>(context, listen: false).saveQuizResult(deity);
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ResultScreen(deity: deity)));
+    getIt<GamificationService>().saveQuizResult(deity);
+    context.go('/result', extra: deity);
   }
 
   @override

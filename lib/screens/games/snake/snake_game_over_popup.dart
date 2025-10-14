@@ -1,7 +1,7 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-
-import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 
 class SnakeGameOverPopup extends StatelessWidget {
   final int score;
@@ -44,7 +44,8 @@ class SnakeGameOverPopup extends StatelessWidget {
         onResetGame();
       },
       onMenu: () {
-        Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
+        Navigator.of(context).pop();
+        context.go('/');
       },
     );
   }

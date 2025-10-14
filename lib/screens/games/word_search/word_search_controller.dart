@@ -8,11 +8,12 @@ import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/services/word_search_generator.dart';
 import 'package:oracle_d_asgard/utils/game_utils.dart';
 import 'package:oracle_d_asgard/utils/text_utils.dart';
+import 'package:oracle_d_asgard/locator.dart';
 
 enum GamePhase { searchingWords, unscramblingSecret, victory }
 
 class WordSearchController with ChangeNotifier {
-  final GamificationService _gamificationService;
+  final GamificationService _gamificationService = getIt<GamificationService>();
   final Random _random = Random();
 
   // Game Level
@@ -46,7 +47,7 @@ class WordSearchController with ChangeNotifier {
   String get instructionClue => _instructionClue;
   NextChapter? get unlockedChapter => _nextChapter;
 
-  WordSearchController(this._gamificationService) {
+  WordSearchController() {
     _initialize();
   }
 
@@ -62,7 +63,7 @@ class WordSearchController with ChangeNotifier {
     do {
       generationAttempts++;
       if (generationAttempts > maxGenerationAttempts) {
-        _handleGenerationFailure("Impossible de générer une grille. Réessayez plus tard.");
+        _handleGenerationFailure('Impossible de générer une grille. Réessayez plus tard.');
         return;
       }
 

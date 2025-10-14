@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:math' as math;
 import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/screens/collectible_card_detail_page.dart';
 import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class InteractiveCollectibleCard extends StatefulWidget {
   final CollectibleCard card;
@@ -16,27 +17,17 @@ class InteractiveCollectibleCard extends StatefulWidget {
   State<InteractiveCollectibleCard> createState() => _InteractiveCollectibleCardState();
 }
 
-class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard> with SingleTickerProviderStateMixin {
-  late AnimationController _shineController;
-  late Animation<double> _shineAnimation;
+class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard> {
   bool _showVideo = true;
 
   @override
   void initState() {
     super.initState();
-    _shineController = AnimationController(vsync: this, duration: const Duration(seconds: 3))..repeat(reverse: true);
-
-    _shineAnimation = Tween<double>(
-      begin: -2.0, // Start off-screen left (relative to card width)
-      end: 1.0, // End off-screen right (relative to card width)
-    ).animate(_shineController);
-
     _showVideo = widget.card.videoUrl != null && widget.playVideo;
   }
 
   @override
   void dispose() {
-    _shineController.dispose();
     super.dispose();
   }
 
@@ -57,32 +48,29 @@ class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard>
     return GestureDetector(
       onTap: () {
         if (widget.enableNavigation) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CollectibleCardDetailPage(card: widget.card)));
+          context.go('/card_detail', extra: widget.card);
         } else if (hasVideo) {
           setState(() {
             _showVideo = !_showVideo;
           });
         }
       },
-      child: AnimatedBuilder(
-        animation: _shineAnimation,
-        builder: (context, child) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final cardWidth = constraints.maxWidth;
-              return AspectRatio(
-                aspectRatio: 1.0, // Force the card to be square
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Stack(
-                    children: [
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final cardWidth = constraints.maxWidth;
+          return AspectRatio(
+            aspectRatio: 1.0, // Force the card to be square
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Stack(
+                children: [
                       if (hasVideo && _showVideo)
                         CustomVideoPlayer(videoUrl: widget.card.videoUrl!, placeholderAsset: addAssetPrefix(widget.card.imagePath))
                       else
                         Image.asset(addAssetPrefix(widget.card.imagePath), fit: BoxFit.contain),
                       // Shine overlay
                       Positioned(
-                        left: _shineAnimation.value * cardWidth, // Scale animation based on card width
+                        left: -cardWidth * 2, // Initial position off-screen left
                         top: 0,
                         bottom: 0,
                         child: Container(
@@ -96,15 +84,12 @@ class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard>
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      ),
-    );
+                      ).animate(onPlay: (controller) => controller.repeat(reverse: true)).slideX(begin: 0, end: cardWidth * 3, duration: 3.seconds),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),    );
   }
 }

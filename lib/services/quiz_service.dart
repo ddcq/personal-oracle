@@ -1,8 +1,8 @@
-import '../models/deity.dart';
-import '../models/question.dart';
-import '../models/answer.dart';
-import '../data/app_data.dart';
-import '../utils/constants.dart';
+import 'package:oracle_d_asgard/models/deity.dart';
+import 'package:oracle_d_asgard/models/question.dart';
+import 'package:oracle_d_asgard/models/answer.dart';
+import 'package:oracle_d_asgard/data/app_data.dart';
+import 'package:oracle_d_asgard/utils/constants.dart';
 
 class QuizService {
   static List<Question> getQuestions() {

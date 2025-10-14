@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../game_controller.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

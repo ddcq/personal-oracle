@@ -1,6 +1,10 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import './minesweeper_controller.dart';
+import 'package:oracle_d_asgard/screens/games/minesweeper/minesweeper_controller.dart';
+import 'package:oracle_d_asgard/locator.dart';
+
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
@@ -10,7 +14,6 @@ import 'package:oracle_d_asgard/components/victory_popup.dart';
 
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/screens/profile_screen.dart' as screens;
 
 class MinesweeperScreen extends StatelessWidget {
   const MinesweeperScreen({super.key});
@@ -58,14 +61,14 @@ class _MinesweeperView extends StatelessWidget {
                 Navigator.of(context).pop();
               },
               onMenu: () {
-                Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> a) => false);
+                context.go('/');
               },
             );
           },
         );
       } else if (controller.isGameWon) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          final gamificationService = Provider.of<GamificationService>(context, listen: false);
+          final gamificationService = getIt<GamificationService>();
           CollectibleCard? wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
 
           if (wonCard != null) {
@@ -86,7 +89,7 @@ class _MinesweeperView extends StatelessWidget {
                 },
                 onSeeRewards: () {
                   Navigator.of(context).pop(); // Close the dialog
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => screens.ProfileScreen()));
+                  context.push('/profile');
                 },
               );
             },
@@ -98,7 +101,13 @@ class _MinesweeperView extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
-        titleText: 'Le Butin d’Andvari',
+        titleText: 'Le Butin d\'Andvari',
+        leading: IconButton(
+          icon: const Icon(Icons.home, color: Colors.white),
+          onPressed: () {
+            context.go('/');
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.help_outline, color: Colors.white),
@@ -139,20 +148,14 @@ class _MinesweeperView extends StatelessWidget {
                       return GestureDetector(
                         onTap: () => controller.revealCell(row, col),
                         onLongPress: () => controller.toggleFlag(row, col),
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          transitionBuilder: (Widget child, Animation<double> animation) {
-                            return ScaleTransition(scale: animation, child: child);
-                          },
-                          child: Container(
-                            key: ValueKey('${row}_${col}_${cell.isRevealed}_${cell.isFlagged}'), // Unique key for animation
-                            decoration: BoxDecoration(
-                              color: cell.isRevealed ? Colors.grey[800] : Colors.grey[600],
-                              border: Border.all(color: Colors.grey[900]!),
-                            ),
-                            child: Center(child: _buildCellContent(cell, context)),
+                        child: Container(
+                          key: ValueKey('${row}_${col}_${cell.isRevealed}_${cell.isFlagged}'), // Unique key for animation
+                          decoration: BoxDecoration(
+                            color: cell.isRevealed ? Colors.grey[800] : Colors.grey[600],
+                            border: Border.all(color: Colors.grey[900]!),
                           ),
-                        ),
+                          child: Center(child: _buildCellContent(cell, context)),
+                        ).animate(key: ValueKey('${row}_${col}_${cell.isRevealed}_${cell.isFlagged}')).scale(duration: const Duration(milliseconds: 300)),
                       );
                     },
                   ),

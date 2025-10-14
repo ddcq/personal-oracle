@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/screens/profile_screen.dart';
-import 'package:oracle_d_asgard/screens/quiz_screen.dart';
-import 'package:oracle_d_asgard/screens/games/menu.dart';
+import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
@@ -92,7 +90,7 @@ class _MainScreenState extends State<MainScreen> {
                                   text: 'Amusons-nous',
                                   color: ChibiColors.buttonOrange,
                                   onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
+                                    context.go('/games');
                                   },
                                 ),
                               ),
@@ -103,7 +101,7 @@ class _MainScreenState extends State<MainScreen> {
                                   text: 'Ma divinité gardienne',
                                   color: ChibiColors.buttonBlue,
                                   onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
+                                    context.go('/quiz');
                                   },
                                 ),
                               ),
@@ -114,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
                                   text: 'Mes récompenses',
                                   color: ChibiColors.buttonRed,
                                   onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                                    context.go('/profile');
                                   },
                                 ),
                               ),
@@ -152,7 +150,7 @@ class _MainScreenState extends State<MainScreen> {
                                   text: 'Amusons-nous',
                                   color: ChibiColors.buttonOrange,
                                   onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPrincipal()));
+                                    context.go('/games');
                                   },
                                 ),
                                 SizedBox(height: 10.h),
@@ -160,7 +158,7 @@ class _MainScreenState extends State<MainScreen> {
                                   text: 'Ma divinité gardienne',
                                   color: ChibiColors.buttonBlue,
                                   onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const QuizScreen()));
+                                    context.go('/quiz');
                                   },
                                 ),
                                 SizedBox(height: 10.h),
@@ -168,7 +166,7 @@ class _MainScreenState extends State<MainScreen> {
                                   text: 'Mes récompenses',
                                   color: ChibiColors.buttonRed,
                                   onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                                    context.go('/profile');
                                   },
                                 ),
                               ],

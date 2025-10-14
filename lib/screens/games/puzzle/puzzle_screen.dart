@@ -1,14 +1,12 @@
-import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/components/victory_popup.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
-import 'package:oracle_d_asgard/screens/profile_screen.dart';
+import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_flame_game.dart';
+import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_game.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
-
-import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_flame_game.dart';
-
-import './puzzle_game.dart';
+import 'package:oracle_d_asgard/components/victory_popup.dart';
+import 'package:oracle_d_asgard/models/collectible_card.dart';
 
 class PuzzleScreen extends StatefulWidget {
   const PuzzleScreen({super.key});
@@ -96,7 +94,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
                     },
                     onSeeRewards: () {
                       Navigator.of(context).pop(); // Close the dialog
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
+                      context.push('/profile');
                     },
                   );
                 },
@@ -117,7 +115,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
               child: IconButton(
                 icon: const Icon(Icons.home, color: Colors.white),
                 onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                  context.go('/');
                 },
               ),
             ),

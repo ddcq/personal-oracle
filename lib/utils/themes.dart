@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'constants.dart';
+import 'package:oracle_d_asgard/utils/constants.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class AppThemes {

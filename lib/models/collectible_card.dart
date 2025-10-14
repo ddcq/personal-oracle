@@ -1,49 +1,21 @@
 import 'package:oracle_d_asgard/models/card_version.dart';
 
-class CollectibleCard {
-  final String id;
-  final String title;
-  final String description;
-  final String imagePath;
-  final String? videoUrl;
-  final List<String> tags;
-  final CardVersion version;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  CollectibleCard({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.imagePath,
-    this.videoUrl,
-    this.tags = const [],
-    this.version = CardVersion.epic,
-  });
+part 'collectible_card.freezed.dart';
+part 'collectible_card.g.dart';
 
-  factory CollectibleCard.fromJson(Map<String, dynamic> json) {
-    return CollectibleCard(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      imagePath: json['imagePath'] as String,
-      tags: List<String>.from(json['tags'] as List? ?? []),
-      version: json['version'] != null ? CardVersion.fromJson(json['version']) : CardVersion.epic,
-      videoUrl: json['videoUrl'] as String?,
-    );
-  }
+@freezed
+abstract class CollectibleCard with _$CollectibleCard {
+  const factory CollectibleCard({
+    required String id,
+    required String title,
+    required String description,
+    required String imagePath,
+    String? videoUrl,
+    @Default([]) List<String> tags,
+    @Default(CardVersion.epic) CardVersion version,
+  }) = _CollectibleCard;
 
-  Map<String, dynamic> toJson() {
-    return {'id': id, 'title': title, 'description': description, 'imagePath': imagePath, 'tags': tags, 'version': version.toJson(), 'videoUrl': videoUrl};
-  }
-
-  CollectibleCard copyWith({String? id, String? title, String? description, String? imagePath, List<String>? tags, CardVersion? version, String? videoUrl}) {
-    return CollectibleCard(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      imagePath: imagePath ?? this.imagePath,
-      tags: tags ?? this.tags,
-      version: version ?? this.version,
-      videoUrl: videoUrl ?? this.videoUrl,
-    );
-  }
+  factory CollectibleCard.fromJson(Map<String, dynamic> json) => _$CollectibleCardFromJson(json);
 }

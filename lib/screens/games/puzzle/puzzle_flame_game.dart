@@ -4,8 +4,8 @@ import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
-import './puzzle_game.dart';
-import './puzzle_model.dart';
+import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_game.dart';
+import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_model.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'dart:math';
@@ -79,8 +79,8 @@ class PuzzleFlameGame extends FlameGame {
     final double boardWidth = pieceSize * puzzleGame.cols;
     final double boardHeight = pieceSize * puzzleGame.rows;
 
-    final double offsetX = (this.size.x - boardWidth) / 2;
-    final double offsetY = (this.size.y - boardHeight) / 2;
+    final double offsetX = (size.x - boardWidth) / 2;
+    final double offsetY = (size.y - boardHeight) / 2;
 
     for (int i = 0; i < puzzleGame.rows; i++) {
       for (int j = 0; j < puzzleGame.cols; j++) {

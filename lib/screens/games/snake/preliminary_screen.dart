@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'screen.dart';
+import 'package:oracle_d_asgard/screens/games/snake/screen.dart';
 
 class SnakePreliminaryScreen extends StatelessWidget {
   const SnakePreliminaryScreen({super.key});

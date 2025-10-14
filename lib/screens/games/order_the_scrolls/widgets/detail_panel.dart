@@ -44,7 +44,7 @@ class DetailPanel extends StatelessWidget {
         // Removed margin: const EdgeInsets.only(top: 8.0), // Add top margin
         // Removed padding: EdgeInsets.all(_isEnlarged ? enlargedPadding : normalPadding), // Animated padding
         decoration: BoxDecoration(
-          color: Colors.black.withAlpha(((isEnlarged ? enlargedOpacity : normalOpacity) * 255).round()), // Animated opacity
+          color: Color.fromARGB((255 * (isEnlarged ? enlargedOpacity : normalOpacity)).round(), 0, 0, 0), // Animated opacity
           borderRadius: BorderRadius.circular(12), // Rounded corners
           border: Border.all(color: Colors.amber, width: 2), // Amber border
           boxShadow: [BoxShadow(color: Colors.black.withAlpha(77), blurRadius: 10, offset: const Offset(0, 5))],
@@ -84,7 +84,7 @@ class DetailPanel extends StatelessWidget {
                               ).createShader(bounds),
                               blendMode: BlendMode.dstIn,
                               child: ColorFiltered(
-                                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken),
+                                colorFilter: ColorFilter.mode(const Color.fromARGB(128, 0, 0, 0), BlendMode.darken),
                                 child: Image.asset('assets/images/stories/${selectedCard.imagePath}', fit: BoxFit.cover, alignment: Alignment.topCenter),
                               ),
                             ),

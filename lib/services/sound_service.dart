@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 enum MusicType {
   mainMenu,
   story,
+  card,
   none,
 }
 
@@ -11,6 +12,7 @@ class SoundService with ChangeNotifier {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isMuted = false;
   MusicType _currentMusic = MusicType.none;
+  MusicType _previousMusic = MusicType.none;
 
   SoundService() {
     _audioPlayer.setReleaseMode(ReleaseMode.loop);
@@ -20,7 +22,7 @@ class SoundService with ChangeNotifier {
 
   Future<void> playMainMenuMusic() async {
     if (!_isMuted) {
-      await _audioPlayer.stop(); // Still stop before playing new music
+      await _audioPlayer.stop();
       await _audioPlayer.setVolume(1.0);
       await _audioPlayer.play(AssetSource('audio/ambiance.mp3'));
       _currentMusic = MusicType.mainMenu;
@@ -29,20 +31,46 @@ class SoundService with ChangeNotifier {
 
   Future<void> playStoryMusic() async {
     if (!_isMuted) {
-      await _audioPlayer.stop(); // Still stop before playing new music
+      await _audioPlayer.stop();
       await _audioPlayer.setVolume(0.5);
       await _audioPlayer.play(AssetSource('audio/reading.mp3'));
       _currentMusic = MusicType.story;
     }
   }
 
-  void pauseMusic() { // Renamed from stopMusic to pauseMusic
+  Future<void> playCardMusic(String cardId) async {
+    if (!_isMuted) {
+      if (_currentMusic != MusicType.card) {
+        _previousMusic = _currentMusic;
+      }
+      await _audioPlayer.stop();
+      final musicUrl = 'https://ddcq.github.io/music/$cardId.mp3';
+      await _audioPlayer.play(UrlSource(musicUrl));
+      _currentMusic = MusicType.card;
+    }
+  }
+
+  Future<void> resumePreviousMusic() async {
+    if (!_isMuted) {
+      if (_previousMusic == MusicType.mainMenu) {
+        await playMainMenuMusic();
+      } else if (_previousMusic == MusicType.story) {
+        await playStoryMusic();
+      } else {
+        await _audioPlayer.stop(); // If no previous music, just stop
+      }
+      _currentMusic = _previousMusic;
+      _previousMusic = MusicType.none;
+    }
+  }
+
+  void pauseMusic() {
     _audioPlayer.pause();
   }
 
   Future<void> resumeMusic() async {
     if (!_isMuted) {
-      if (_currentMusic != MusicType.none) { // Only resume if music was playing
+      if (_currentMusic != MusicType.none) {
         await _audioPlayer.resume();
       }
     }
@@ -51,8 +79,8 @@ class SoundService with ChangeNotifier {
   void setMuted(bool muted) {
     _isMuted = muted;
     if (_isMuted) {
-      _audioPlayer.stop(); // When muted, truly stop
-      _currentMusic = MusicType.none; // Reset current music when muted
+      _audioPlayer.stop();
+      _currentMusic = MusicType.none;
     } else {
       playMainMenuMusic();
     }

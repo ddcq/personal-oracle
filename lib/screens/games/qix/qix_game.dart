@@ -4,9 +4,9 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:ui' as ui; // For Image
-import 'arena.dart';
-import 'player.dart';
-import 'constants.dart';
+import 'package:oracle_d_asgard/screens/games/qix/arena.dart';
+import 'package:oracle_d_asgard/screens/games/qix/player.dart';
+import 'package:oracle_d_asgard/screens/games/qix/constants.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 

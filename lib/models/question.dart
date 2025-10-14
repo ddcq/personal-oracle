@@ -1,29 +1,16 @@
 import 'package:oracle_d_asgard/models/answer.dart';
 
-class Question {
-  final String question;
-  final List<Answer> answers;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  const Question({
-    required this.question,
-    required this.answers,
-  });
+part 'question.freezed.dart';
+part 'question.g.dart';
 
-  // Conversion vers JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'question': question,
-      'answers': answers.map((answer) => answer.toJson()).toList(),
-    };
-  }
+@freezed
+abstract class Question with _$Question {
+  const factory Question({
+    required String question,
+    required List<Answer> answers,
+  }) = _Question;
 
-  // Création depuis JSON
-  factory Question.fromJson(Map<String, dynamic> json) {
-    return Question(
-      question: json['question'],
-      answers: (json['answers'] as List)
-          .map((answerJson) => Answer.fromJson(answerJson))
-          .toList(),
-    );
-  }
+  factory Question.fromJson(Map<String, dynamic> json) => _$QuestionFromJson(json);
 }

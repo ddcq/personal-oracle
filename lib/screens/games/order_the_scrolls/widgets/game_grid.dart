@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
-import '../game_controller.dart';
-import 'draggable_myth_card.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/widgets/draggable_myth_card.dart';
 
 class GameGrid extends StatelessWidget {
   final GameController controller;

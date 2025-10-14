@@ -1,12 +1,11 @@
 import 'package:flame/game.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'dart:async'; // For Completer
 
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_game_over_popup.dart';
-import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
@@ -18,7 +17,7 @@ import 'package:oracle_d_asgard/components/victory_popup.dart'; // Import the vi
 
 import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import CollectibleCard
 import 'package:confetti/confetti.dart'; // Import ConfettiController
-
+import 'package:oracle_d_asgard/locator.dart';
 class SnakeGame extends StatefulWidget {
   // Temporary comment
   const SnakeGame({super.key});
@@ -42,7 +41,7 @@ class _SnakeGameState extends State<SnakeGame> {
 
   Future<int> _initializeGame() async {
     // Return int
-    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    final gamificationService = getIt<GamificationService>();
     _currentLevel = await gamificationService.getSnakeDifficulty();
     return _currentLevel;
   }
@@ -84,7 +83,7 @@ class _SnakeGameState extends State<SnakeGame> {
       },
       onSeeRewards: () {
         Navigator.of(context).pop();
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
+        context.push('/profile');
       },
     );
   }
@@ -195,7 +194,8 @@ class _SnakeGameState extends State<SnakeGame> {
                     onGamePaused: () => _game?.pauseEngine(),
                     onGameResumed: () => _game?.resumeEngine(),
                     onGoToHome: () {
-                      Navigator.of(context).popUntil((route) => route.isFirst);
+                      Navigator.of(context).pop();
+                      context.go('/');
                     },
                   );
                 },
@@ -229,15 +229,15 @@ class _SnakeGameState extends State<SnakeGame> {
                             onPressed: () {
                               _game?.gameLogic.rotateLeft(_game!.gameState.value);
                             },
-                            child: const Icon(Icons.rotate_left, color: Colors.white),
                             color: ChibiColors.buttonBlue,
+                            child: const Icon(Icons.rotate_left, color: Colors.white),
                           ),
                           ChibiButton(
                             onPressed: () {
                               _game?.gameLogic.rotateRight(_game!.gameState.value);
                             },
-                            child: const Icon(Icons.rotate_right, color: Colors.white),
                             color: ChibiColors.buttonBlue,
+                            child: const Icon(Icons.rotate_right, color: Colors.white),
                           ),
                         ],
                       ),
@@ -258,10 +258,10 @@ class _SnakeGameState extends State<SnakeGame> {
   SnakeFlameGame _createSnakeFlameGame(int level) {
     final Completer<void> completer = Completer<void>();
     final game = SnakeFlameGame(
-      gamificationService: Provider.of<GamificationService>(context, listen: false),
+      gamificationService: getIt<GamificationService>(),
       onGameEnd: (score, {required isVictory, CollectibleCard? wonCard}) async {
         if (isVictory) {
-          await Provider.of<GamificationService>(context, listen: false).saveSnakeDifficulty(_currentLevel + 1);
+          await getIt<GamificationService>().saveSnakeDifficulty(_currentLevel + 1);
         }
         _handleGameEnd(score, isVictory: isVictory, wonCard: wonCard);
       },
@@ -274,11 +274,6 @@ class _SnakeGameState extends State<SnakeGame> {
         _game!.shakeScreen(); // Use _game!
       },
       level: level,
-      onGameLoaded: () {
-        completer.complete();
-        _game?.startGame(); // Start the game automatically
-        setState(() {}); // Trigger rebuild to update AppBar
-      },
       onScoreChanged: () {
         setState(() {});
       },
@@ -288,6 +283,11 @@ class _SnakeGameState extends State<SnakeGame> {
         } else {
           _confettiController.stop();
         }
+      },
+      onGameLoaded: () {
+        completer.complete();
+        _game?.startGame(); // Start the game automatically
+        setState(() {}); // Trigger rebuild to update AppBar
       },
     );
     completer.future.then((_) {

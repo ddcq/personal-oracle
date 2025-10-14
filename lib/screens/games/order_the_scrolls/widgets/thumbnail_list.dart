@@ -2,7 +2,7 @@ import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 
 import 'package:oracle_d_asgard/utils/text_styles.dart';
-import '../game_controller.dart';
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
 
 class ThumbnailList extends StatelessWidget {
   final GameController controller;

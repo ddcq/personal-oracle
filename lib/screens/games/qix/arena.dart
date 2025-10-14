@@ -6,10 +6,10 @@ import 'dart:ui' as ui;
 import 'dart:collection';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
-import 'player.dart';
-import 'constants.dart' as game_constants;
-import 'qix_game.dart';
-import 'qix.dart';
+import 'package:oracle_d_asgard/screens/games/qix/player.dart';
+import 'package:oracle_d_asgard/screens/games/qix/constants.dart' as game_constants;
+import 'package:oracle_d_asgard/screens/games/qix/qix_game.dart';
+import 'package:oracle_d_asgard/screens/games/qix/qix.dart';
 
 class FloodFillResult {
   final List<IntVector2> points;

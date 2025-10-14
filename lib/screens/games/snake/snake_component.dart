@@ -4,10 +4,11 @@ import 'package:flutter/animation.dart'; // For Curves
 import 'package:flutter/foundation.dart'; // For ValueNotifier
 import 'dart:ui';
 import 'dart:math'; // For pi
-import 'game_logic.dart';
+import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
+import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
-import 'snake_flame_game.dart'; // Make sure this file defines SnakeFlameGame
+
 
 class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameGame> {
   ValueNotifier<GameState> gameState;
