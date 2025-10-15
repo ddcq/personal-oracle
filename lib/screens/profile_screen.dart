@@ -27,6 +27,7 @@ import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/locator.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -771,9 +772,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       itemBuilder: (context, index) {
         if (index < filteredCards.length) {
           final collectibleCard = filteredCards[index];
-          return InteractiveCollectibleCard(card: collectibleCard, playVideo: false);
+          return InteractiveCollectibleCard(card: collectibleCard, playVideo: false)
+            .animate(delay: (index * 50).ms)
+            .slideY(begin: 0.2, duration: 400.ms, curve: Curves.easeOutCubic)
+            .fadeIn(duration: 300.ms);
         } else {
-          return adRewardButton!;
+          return adRewardButton!
+            .animate(delay: (index * 50).ms)
+            .slideY(begin: 0.2, duration: 400.ms, curve: Curves.easeOutCubic)
+            .fadeIn(duration: 300.ms);
         }
       },
     );
@@ -907,9 +914,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-          );
+          )
+            .animate(delay: (index * 80).ms)
+            .slideY(begin: 0.2, duration: 500.ms, curve: Curves.easeOutCubic)
+            .fadeIn(duration: 300.ms);
         } else {
-          return adRewardStoryButton!;
+          return adRewardStoryButton!
+            .animate(delay: (index * 80).ms)
+            .slideY(begin: 0.2, duration: 500.ms, curve: Curves.easeOutCubic)
+            .fadeIn(duration: 300.ms);
         }
       },
     );

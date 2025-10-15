@@ -8,7 +8,7 @@ import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'package:provider/provider.dart';
+import 'package:oracle_d_asgard/locator.dart';
 
 class DeitySelectionScreen extends StatefulWidget {
   final String currentDeityId;
@@ -325,7 +325,7 @@ class _DeityCardState extends State<_DeityCard> {
   }
 
   void _selectDeity() async {
-    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    final gamificationService = getIt<GamificationService>();
     final navigator = Navigator.of(context);
     await gamificationService.saveProfileDeityIcon(widget.deity.id);
     if (!mounted) return;

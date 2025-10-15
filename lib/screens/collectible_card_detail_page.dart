@@ -89,7 +89,7 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            InteractiveCollectibleCard(card: widget.card, enableNavigation: false),
+            InteractiveCollectibleCard(card: widget.card, enableNavigation: false, playVideo: true),
             const SizedBox(height: 20),
             Text(
               widget.card.title,
@@ -120,7 +120,7 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
             SizedBox(
               width: cardSize,
               height: cardSize,
-              child: InteractiveCollectibleCard(card: widget.card, enableNavigation: false),
+              child: InteractiveCollectibleCard(card: widget.card, enableNavigation: false, playVideo: true),
             ),
             const SizedBox(width: 20),
             Expanded(

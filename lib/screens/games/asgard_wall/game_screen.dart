@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
@@ -14,6 +13,7 @@ import 'package:oracle_d_asgard/screens/games/asgard_wall/game_data.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/locator.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -439,7 +439,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _showWinDialog() {
-    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    final gamificationService = getIt<GamificationService>();
     gamificationService.selectRandomUnearnedCollectibleCard().then((card) {
       if (card != null) {
         if (!mounted) return;
@@ -481,6 +481,26 @@ class _GameScreenState extends State<GameScreen> {
           },
         );
       }
+    }).catchError((error) {
+      // Show generic victory popup in case of error
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return VictoryPopup(
+            isGenericVictory: true,
+            onDismiss: () {
+              Navigator.of(context).pop();
+              startGame();
+            },
+            onSeeRewards: () {
+              Navigator.of(context).pop();
+              context.go('/profile');
+            },
+          );
+        },
+      );
     });
   }
 

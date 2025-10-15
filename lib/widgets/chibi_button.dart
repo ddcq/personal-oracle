@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart'; // Added for HapticFeedback
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 class ChibiButton extends StatefulWidget {
@@ -17,29 +18,25 @@ class ChibiButton extends StatefulWidget {
   State<ChibiButton> createState() => _ChibiButtonState();
 }
 
-class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStateMixin {
-  double _scale = 1.0;
-  bool _isPressed = false; // New state variable
+class _ChibiButtonState extends State<ChibiButton> {
+  bool _isPressed = false;
 
   void _onTapDown(_) {
     setState(() {
-      _scale = 0.95;
-      _isPressed = true; // Set to true when pressed
+      _isPressed = true;
     });
   }
 
   void _onTapUp(_) {
     setState(() {
-      _scale = 1.0;
-      _isPressed = false; // Set to false when released
+      _isPressed = false;
     });
     HapticFeedback.mediumImpact();
   }
 
   void _onTapCancel() {
     setState(() {
-      _scale = 1.0;
-      _isPressed = false; // Set to false if tap is cancelled
+      _isPressed = false;
     });
   }
 
@@ -67,41 +64,47 @@ class _ChibiButtonState extends State<ChibiButton> with SingleTickerProviderStat
 
     final borderWidth = isLandscape ? 3.h : 3.w;
     return GestureDetector(
-      onTap: widget.onPressed, // Keep original onPressed
+      onTap: widget.onPressed,
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
       onTapCancel: _onTapCancel,
-      child: AnimatedScale(
-        scale: _scale,
-        duration: const Duration(milliseconds: 80),
-        curve: Curves.easeOut,
-        child: Container(
-          padding: EdgeInsets.all(borderWidth),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: _isPressed ? [darkColor, widget.color, lightColor] : [lightColor, widget.color, darkColor], // Conditional gradient
-            ),
-            borderRadius: BorderRadius.circular(16.r),
-            boxShadow: [BoxShadow(color: Colors.black.withAlpha(64), offset: Offset(0, 4.h), blurRadius: 6.r)],
-            border: Border.all(color: borderColor, width: borderWidth),
+      child: Container(
+        padding: EdgeInsets.all(borderWidth),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: _isPressed ? [darkColor, widget.color, lightColor] : [lightColor, widget.color, darkColor],
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8.r),
-            child: Container(
-              padding: EdgeInsets.all(borderWidth * 2),
-              color: widget.color,
-              child:
-                  widget.child ??
-                  FittedBox(
-                    fit: BoxFit.scaleDown, // Scale down if needed
-                    child: Text(widget.text!, textAlign: TextAlign.center, style: finalTextStyle),
-                  ),
-            ),
+          borderRadius: BorderRadius.circular(16.r),
+          boxShadow: [BoxShadow(color: Colors.black.withAlpha(64), offset: Offset(0, 4.h), blurRadius: 6.r)],
+          border: Border.all(color: borderColor, width: borderWidth),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8.r),
+          child: Container(
+            padding: EdgeInsets.all(borderWidth * 2),
+            color: widget.color,
+            child: widget.child ??
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(widget.text!, textAlign: TextAlign.center, style: finalTextStyle),
+                ),
           ),
         ),
-      ),
+      )
+          .animate(target: _isPressed ? 1 : 0)
+          .scale(
+            begin: const Offset(1.0, 1.0),
+            end: const Offset(0.95, 0.95),
+            duration: 80.ms,
+            curve: Curves.easeOut,
+          )
+          .shimmer(
+            delay: (_isPressed ? 0 : 200).ms,
+            duration: 300.ms,
+            color: Colors.white.withAlpha(30),
+          ),
     );
   }
 

@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -68,14 +69,20 @@ class _MainScreenState extends State<MainScreen> {
                           alignment: Alignment.topCenter,
                           child: Padding(
                             padding: EdgeInsets.only(top: 20.h),
-                            child: Text('Oracle d’Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle),
+                            child: Text('Oracle d\'Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle)
+                              .animate()
+                              .slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutCubic)
+                              .fadeIn(duration: 600.ms),
                           ),
                         ),
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
                             child: ClipRect(
-                              child: Image.asset('assets/images/odin_chibi.png', fit: BoxFit.cover, width: double.infinity, alignment: Alignment.topCenter),
+                              child: Image.asset('assets/images/odin_chibi.png', fit: BoxFit.cover, width: double.infinity, alignment: Alignment.topCenter)
+                                .animate(delay: 400.ms)
+                                .slideY(begin: -0.1, duration: 800.ms, curve: Curves.easeOutCubic)
+                                .fadeIn(duration: 600.ms),
                             ),
                           ),
                         ),
@@ -93,7 +100,10 @@ class _MainScreenState extends State<MainScreen> {
                                     context.go('/games');
                                   },
                                 ),
-                              ),
+                              )
+                                .animate(delay: 800.ms)
+                                .slideX(begin: -0.3, duration: 400.ms, curve: Curves.easeOutCubic)
+                                .fadeIn(duration: 300.ms),
                               SizedBox(height: 10.h),
                               SizedBox(
                                 width: double.infinity,
@@ -104,7 +114,10 @@ class _MainScreenState extends State<MainScreen> {
                                     context.go('/quiz');
                                   },
                                 ),
-                              ),
+                              )
+                                .animate(delay: 1000.ms)
+                                .slideX(begin: -0.3, duration: 400.ms, curve: Curves.easeOutCubic)
+                                .fadeIn(duration: 300.ms),
                               SizedBox(height: 10.h),
                               SizedBox(
                                 width: double.infinity,
@@ -115,7 +128,10 @@ class _MainScreenState extends State<MainScreen> {
                                     context.go('/profile');
                                   },
                                 ),
-                              ),
+                              )
+                                .animate(delay: 1200.ms)
+                                .slideX(begin: -0.3, duration: 400.ms, curve: Curves.easeOutCubic)
+                                .fadeIn(duration: 300.ms),
                             ],
                           ),
                         ),
@@ -128,7 +144,10 @@ class _MainScreenState extends State<MainScreen> {
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(16.w, 8.h, 8.w, 16.h),
                             child: ClipRect(
-                              child: Image.asset('assets/images/odin_chibi.png', fit: BoxFit.cover, alignment: Alignment.topCenter),
+                              child: Image.asset('assets/images/odin_chibi.png', fit: BoxFit.cover, alignment: Alignment.topCenter)
+                                .animate(delay: 400.ms)
+                                .slideX(begin: -0.2, duration: 800.ms, curve: Curves.easeOutCubic)
+                                .fadeIn(duration: 600.ms),
                             ),
                           ),
                         ),
@@ -142,7 +161,10 @@ class _MainScreenState extends State<MainScreen> {
                                   constraints: BoxConstraints(maxHeight: 0.2.sh),
                                   child: FittedBox(
                                     fit: BoxFit.contain,
-                                    child: Text('Oracle d’Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle),
+                                    child: Text('Oracle d\'Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle)
+                                    .animate()
+                                    .slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutCubic)
+                                    .fadeIn(duration: 600.ms),
                                   ),
                                 ),
                                 SizedBox(height: 16.h),
@@ -152,7 +174,10 @@ class _MainScreenState extends State<MainScreen> {
                                   onPressed: () {
                                     context.go('/games');
                                   },
-                                ),
+                                )
+                                  .animate(delay: 800.ms)
+                                  .slideX(begin: 0.3, duration: 400.ms, curve: Curves.easeOutCubic)
+                                  .fadeIn(duration: 300.ms),
                                 SizedBox(height: 10.h),
                                 ChibiButton(
                                   text: 'Ma divinité gardienne',
@@ -160,7 +185,10 @@ class _MainScreenState extends State<MainScreen> {
                                   onPressed: () {
                                     context.go('/quiz');
                                   },
-                                ),
+                                )
+                                  .animate(delay: 1000.ms)
+                                  .slideX(begin: 0.3, duration: 400.ms, curve: Curves.easeOutCubic)
+                                  .fadeIn(duration: 300.ms),
                                 SizedBox(height: 10.h),
                                 ChibiButton(
                                   text: 'Mes récompenses',
@@ -168,7 +196,10 @@ class _MainScreenState extends State<MainScreen> {
                                   onPressed: () {
                                     context.go('/profile');
                                   },
-                                ),
+                                )
+                                  .animate(delay: 1200.ms)
+                                  .slideX(begin: 0.3, duration: 400.ms, curve: Curves.easeOutCubic)
+                                  .fadeIn(duration: 300.ms),
                               ],
                             ),
                           ),

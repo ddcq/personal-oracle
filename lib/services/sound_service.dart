@@ -22,31 +22,58 @@ class SoundService with ChangeNotifier {
 
   Future<void> playMainMenuMusic() async {
     if (!_isMuted) {
-      await _audioPlayer.stop();
-      await _audioPlayer.setVolume(1.0);
-      await _audioPlayer.play(AssetSource('audio/ambiance.mp3'));
-      _currentMusic = MusicType.mainMenu;
+      try {
+        await _audioPlayer.stop();
+        await _audioPlayer.setVolume(1.0);
+        await _audioPlayer.play(AssetSource('audio/ambiance.mp3'));
+        _currentMusic = MusicType.mainMenu;
+      } catch (e) {
+        debugPrint('Erreur lors du chargement de la musique du menu principal: $e');
+      }
     }
   }
 
   Future<void> playStoryMusic() async {
     if (!_isMuted) {
-      await _audioPlayer.stop();
-      await _audioPlayer.setVolume(0.5);
-      await _audioPlayer.play(AssetSource('audio/reading.mp3'));
-      _currentMusic = MusicType.story;
+      try {
+        await _audioPlayer.stop();
+        await _audioPlayer.setVolume(0.5);
+        await _audioPlayer.play(AssetSource('audio/reading.mp3'));
+        _currentMusic = MusicType.story;
+      } catch (e) {
+        debugPrint('Erreur lors du chargement de la musique d\'histoire: $e');
+      }
     }
   }
 
   Future<void> playCardMusic(String cardId) async {
     if (!_isMuted) {
-      if (_currentMusic != MusicType.card) {
-        _previousMusic = _currentMusic;
+      try {
+        if (_currentMusic != MusicType.card) {
+          _previousMusic = _currentMusic;
+        }
+        await _audioPlayer.stop();
+        final musicUrl = 'https://ddcq.github.io/music/$cardId.mp3';
+
+        // Ajout d'un timeout de 10 secondes pour éviter les blocages
+        await _audioPlayer.play(UrlSource(musicUrl)).timeout(
+          const Duration(seconds: 10),
+          onTimeout: () {
+            debugPrint('Timeout lors du chargement de la musique pour la carte $cardId');
+            // En cas de timeout, on reprend la musique précédente
+            if (_previousMusic != MusicType.none) {
+              resumePreviousMusic();
+            }
+          },
+        );
+        _currentMusic = MusicType.card;
+      } catch (e) {
+        debugPrint('Erreur lors du chargement de la musique pour la carte $cardId: $e');
+        // En cas d'erreur, on reprend la musique précédente
+        if (_previousMusic != MusicType.none) {
+          await resumePreviousMusic();
+        }
       }
-      await _audioPlayer.stop();
-      final musicUrl = 'https://ddcq.github.io/music/$cardId.mp3';
-      await _audioPlayer.play(UrlSource(musicUrl));
-      _currentMusic = MusicType.card;
     }
   }
 
@@ -70,8 +97,12 @@ class SoundService with ChangeNotifier {
 
   Future<void> resumeMusic() async {
     if (!_isMuted) {
-      if (_currentMusic != MusicType.none) {
-        await _audioPlayer.resume();
+      try {
+        if (_currentMusic != MusicType.none) {
+          await _audioPlayer.resume();
+        }
+      } catch (e) {
+        debugPrint('Erreur lors de la reprise de la musique: $e');
       }
     }
   }

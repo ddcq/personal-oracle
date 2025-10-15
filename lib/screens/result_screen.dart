@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/confetti_overlay.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class ResultScreen extends StatefulWidget {
   final String deity;
@@ -73,7 +74,10 @@ class _ResultScreenState extends State<ResultScreen> {
                                           letterSpacing: 2.0.sp,
                                           shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
                                         ),
-                                      ),
+                                      )
+                                        .animate(delay: 200.ms)
+                                        .slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutBack)
+                                        .fadeIn(duration: 600.ms),
                                     ),
                                     SizedBox(height: 8.h),
                                     Container(
@@ -92,7 +96,10 @@ class _ResultScreenState extends State<ResultScreen> {
                                         deityData.description,
                                         style: TextStyle(fontSize: 0.05 * 1.sh, color: Colors.white70, height: 1.5),
                                       ),
-                                    ),
+                                    )
+                                      .animate(delay: 1000.ms)
+                                      .slideX(begin: -0.2, duration: 600.ms, curve: Curves.easeOutCubic)
+                                      .fadeIn(duration: 400.ms),
                                     SizedBox(height: 16.h),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -109,7 +116,10 @@ class _ResultScreenState extends State<ResultScreen> {
                                               );
                                             },
                                             child: const Icon(Icons.share, color: Colors.white),
-                                          ),
+                                          )
+                                            .animate(delay: 1400.ms)
+                                            .slideY(begin: 0.3, duration: 500.ms, curve: Curves.easeOutBack)
+                                            .fadeIn(duration: 300.ms),
                                         ),
                                         SizedBox(width: 16.w),
                                         Expanded(
@@ -123,7 +133,10 @@ class _ResultScreenState extends State<ResultScreen> {
                                               GoRouter.of(context).go('/');
                                             },
                                             child: const Icon(Icons.home, color: Colors.white),
-                                          ),
+                                          )
+                                            .animate(delay: 1600.ms)
+                                            .slideY(begin: 0.3, duration: 500.ms, curve: Curves.easeOutBack)
+                                            .fadeIn(duration: 300.ms),
                                         ),
                                       ],
                                     ),
@@ -145,9 +158,15 @@ class _ResultScreenState extends State<ResultScreen> {
                                         fontWeight: FontWeight.bold,
                                         shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0))],
                                       ),
-                                    ),
+                                    )
+                                      .animate(delay: 400.ms)
+                                      .slideX(begin: 0.3, duration: 600.ms, curve: Curves.easeOutCubic)
+                                      .fadeIn(duration: 400.ms),
                                     SizedBox(height: 16.h),
-                                    DeityCard(deity: deityData),
+                                    DeityCard(deity: deityData)
+                                      .animate(delay: 800.ms)
+                                      .scale(begin: const Offset(0.8, 0.8), duration: 800.ms, curve: Curves.easeOutBack)
+                                      .fadeIn(duration: 600.ms),
                                   ],
                                 ),
                               ),
@@ -174,7 +193,10 @@ class _ResultScreenState extends State<ResultScreen> {
                                     letterSpacing: 2.0.sp,
                                     shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
                                   ),
-                                ),
+                                )
+                                  .animate(delay: 200.ms)
+                                  .slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutBack)
+                                  .fadeIn(duration: 600.ms),
                               ),
                               SizedBox(height: 16.h),
                               Text(
@@ -185,9 +207,15 @@ class _ResultScreenState extends State<ResultScreen> {
                                   fontWeight: FontWeight.bold,
                                   shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0))],
                                 ),
-                              ),
+                              )
+                                .animate(delay: 600.ms)
+                                .slideY(begin: -0.2, duration: 600.ms, curve: Curves.easeOutCubic)
+                                .fadeIn(duration: 400.ms),
                               SizedBox(height: 32.h),
-                              DeityCard(deity: deityData),
+                              DeityCard(deity: deityData)
+                                .animate(delay: 1000.ms)
+                                .scale(begin: const Offset(0.8, 0.8), duration: 800.ms, curve: Curves.easeOutBack)
+                                .fadeIn(duration: 600.ms),
                               SizedBox(height: 32.h),
                               Container(
                                 width: 1.sw,

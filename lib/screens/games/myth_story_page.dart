@@ -12,6 +12,7 @@ import 'package:oracle_d_asgard/providers/theme_provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart'; // Import AdMob
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
+import 'package:oracle_d_asgard/locator.dart';
 
 class MythStoryPage extends StatefulWidget {
   final MythStory mythStory;
@@ -33,7 +34,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
   @override
   void initState() {
     super.initState();
-    _soundService = Provider.of<SoundService>(context, listen: false);
+    _soundService = getIt<SoundService>();
     _soundService.playStoryMusic();
     _unlockedCardIdsFuture = _getUnlockedCardIds();
     _loadFontSize();
@@ -61,7 +62,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
   }
 
   Future<List<String>> _getUnlockedCardIds() async {
-    final gamificationService = Provider.of<GamificationService>(context, listen: false);
+    final gamificationService = getIt<GamificationService>();
     final progress = await gamificationService.getStoryProgress(widget.mythStory.title);
     if (progress != null) {
       final unlockedParts = jsonDecode(progress['parts_unlocked']);
@@ -100,7 +101,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
           );
           ad.show(
             onUserEarnedReward: (ad, reward) async {
-              final gamificationService = Provider.of<GamificationService>(context, listen: false);
+              final gamificationService = getIt<GamificationService>();
               await gamificationService.unlockStoryPart(widget.mythStory.title, chapterId);
               setState(() {
                 _unlockedCardIdsFuture = _getUnlockedCardIds(); // Refresh unlocked chapters

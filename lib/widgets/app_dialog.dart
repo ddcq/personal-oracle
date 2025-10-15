@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class AppDialog extends StatelessWidget {
   final String title;
@@ -40,6 +41,9 @@ class AppDialog extends StatelessWidget {
         child: content,
       ),
       actions: actions,
-    );
+    )
+      .animate()
+      .scale(begin: const Offset(0.8, 0.8), duration: 300.ms, curve: Curves.easeOutBack)
+      .fadeIn(duration: 200.ms);
   }
 }

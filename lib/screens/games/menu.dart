@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -39,15 +40,22 @@ class MenuPrincipal extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   // Generate ChibiButtons from the jeux list
-                  ...jeux.map(
-                    (jeu) => Padding(
-                      padding: EdgeInsets.only(bottom: 15.h),
-                      child: ChibiButton(
-                        text: jeu.label,
-                        color: jeu.color,
-                        onPressed: jeu.onPressed,
-                      ),
-                    ),
+                  ...jeux.asMap().entries.map(
+                    (entry) {
+                      int index = entry.key;
+                      _MiniJeuItem jeu = entry.value;
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 15.h),
+                        child: ChibiButton(
+                          text: jeu.label,
+                          color: jeu.color,
+                          onPressed: jeu.onPressed,
+                        ),
+                      )
+                        .animate(delay: (index * 120).ms)
+                        .slideY(begin: 0.2, duration: 500.ms, curve: Curves.easeOutCubic)
+                        .fadeIn(duration: 300.ms);
+                    },
                   ),
                 ],
               ),

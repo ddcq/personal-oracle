@@ -15,6 +15,7 @@ import 'package:oracle_d_asgard/locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -115,10 +116,13 @@ class _QuizScreenState extends State<QuizScreen> {
             Navigator.pop(context);
           },
         ),
-        title: isLandscape ? null : ProgressBar(progress: progress),
+        title: isLandscape ? null : ProgressBar(progress: progress)
+          .animate(key: ValueKey(currentQuestion))
+          .scaleX(duration: 400.ms, curve: Curves.easeInOut),
       ),
       body: AppBackground(
-        child: isLandscape
+        child: SafeArea(
+          child: isLandscape
             ? Row(
                 children: <Widget>[
                   Expanded(
@@ -127,7 +131,9 @@ class _QuizScreenState extends State<QuizScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(height: 20.h),
-                        ProgressBar(progress: progress),
+                        ProgressBar(progress: progress)
+                          .animate(key: ValueKey(currentQuestion))
+                          .scaleX(duration: 400.ms, curve: Curves.easeInOut),
                         Container(
                           padding: EdgeInsets.all(20.w),
                           margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.w),
@@ -148,7 +154,10 @@ class _QuizScreenState extends State<QuizScreen> {
                               shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
                             ),
                           ),
-                        ),
+                        )
+                          .animate(key: ValueKey(currentQuestion))
+                          .fadeIn(duration: 300.ms)
+                          .slideX(begin: 0.1, duration: 400.ms),
                       ],
                     ),
                   ),
@@ -170,7 +179,10 @@ class _QuizScreenState extends State<QuizScreen> {
                           letter: letter,
                           gradientColors: gradientColors,
                           isLandscape: isLandscape,
-                        );
+                        )
+                          .animate(key: ValueKey('${currentQuestion}_$index'), delay: (index * 100).ms)
+                          .slideX(begin: 0.2, duration: 300.ms)
+                          .fadeIn(duration: 200.ms);
                       },
                     ),
                   ),
@@ -199,7 +211,10 @@ class _QuizScreenState extends State<QuizScreen> {
                         shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
                       ),
                     ),
-                  ),
+                  )
+                    .animate(key: ValueKey(currentQuestion))
+                    .fadeIn(duration: 300.ms)
+                    .slideY(begin: -0.1, duration: 400.ms),
                   Expanded(
                     child: ListView.separated(
                       shrinkWrap: true,
@@ -220,12 +235,16 @@ class _QuizScreenState extends State<QuizScreen> {
                             gradientColors: gradientColors,
                             isLandscape: isLandscape,
                           ),
-                        );
+                        )
+                          .animate(key: ValueKey('${currentQuestion}_$index'), delay: (index * 100).ms)
+                          .slideY(begin: 0.2, duration: 300.ms)
+                          .fadeIn(duration: 200.ms);
                       },
                     ),
                   ),
                 ],
               ),
+        ),
       ),
     );
   }
