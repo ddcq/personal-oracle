@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/widgets/interactive_collectible_card.dart';
@@ -35,10 +36,12 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: true,
+      canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) {
-          await _soundService.resumePreviousMusic();
+        if (didPop) return;
+        await _soundService.resumePreviousMusic();
+        if (mounted) {
+          context.go('/profile');
         }
       },
       child: Scaffold(
