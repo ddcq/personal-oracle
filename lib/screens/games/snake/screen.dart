@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flame/game.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
@@ -118,11 +119,11 @@ class _SnakeGameState extends State<SnakeGame> {
                     ValueListenableBuilder<GameState>(
                       valueListenable: _game!.gameState,
                       builder: (context, gameState, child) {
-                        return Text('Score: ${gameState.score}', style: ChibiTextStyles.dialogText);
+                        return Text('snake_screen_score'.tr(args: ['${gameState.score}']), style: ChibiTextStyles.dialogText);
                       },
                     )
                   else
-                    Text('Score: 0', style: ChibiTextStyles.dialogText),
+                    Text('snake_screen_score_default'.tr(), style: ChibiTextStyles.dialogText),
                   if (_game != null && _game!.gameState.value.score >= SnakeFlameGame.victoryScoreThreshold)
                     ConfettiWidget(
                       confettiController: _confettiController,
@@ -167,7 +168,7 @@ class _SnakeGameState extends State<SnakeGame> {
                           children: [
                             Image.asset(foodImage, height: 30),
                             const SizedBox(width: 8),
-                            Text('${remainingTime.ceil()}s', style: ChibiTextStyles.dialogText),
+                            Text('${remainingTime.ceil()}${'snake_screen_time_seconds_suffix'.tr()}', style: ChibiTextStyles.dialogText),
                           ],
                         );
                       },
@@ -175,7 +176,7 @@ class _SnakeGameState extends State<SnakeGame> {
                   },
                 )
               else
-                Text('Chargement...', style: ChibiTextStyles.dialogText),
+                Text('snake_screen_loading'.tr(), style: ChibiTextStyles.dialogText),
 
               // Right: Pause button
               IconButton(
@@ -184,12 +185,12 @@ class _SnakeGameState extends State<SnakeGame> {
                   GameHelpDialog.show(
                     context,
                     [
-                      'Faites glisser votre doigt (swipe) sur l’écran pour changer la direction du serpent.',
-                      'Mangez les pommes pour grandir et marquez des points.',
-                      'Évitez de toucher les murs, les rochers ou votre propre corps.',
-                      'Les pommes dorées donnent plus de points.',
-                      'Les pommes pourries vous font perdre des points et ralentir.',
-                      'Plus votre score est élevé, plus le serpent accélère.',
+                      'snake_screen_rule_1'.tr(),
+                      'snake_screen_rule_2'.tr(),
+                      'snake_screen_rule_3'.tr(),
+                      'snake_screen_rule_4'.tr(),
+                      'snake_screen_rule_5'.tr(),
+                      'snake_screen_rule_6'.tr(),
                     ],
                     onGamePaused: () => _game?.pauseEngine(),
                     onGameResumed: () => _game?.resumeEngine(),
@@ -210,7 +211,7 @@ class _SnakeGameState extends State<SnakeGame> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
+                  return Center(child: Text('${'snake_screen_error_prefix'.tr()}: ${snapshot.error}'));
                 }
                 _currentLevel = snapshot.data!; // Get the level from snapshot
 

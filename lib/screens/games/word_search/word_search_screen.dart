@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,7 +31,7 @@ class _WordSearchView extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
-        titleText: 'L\'Œil d\'Odin',
+        titleText: 'word_search_screen_title'.tr(),
         leading: IconButton(
           icon: const Icon(Icons.home, color: Colors.white),
           onPressed: () {
@@ -42,11 +43,11 @@ class _WordSearchView extends StatelessWidget {
             icon: const Icon(Icons.help_outline, color: Colors.white),
             onPressed: () {
               GameHelpDialog.show(context, [
-                'Trouvez tous les mots cachés dans la grille.',
-                'Les mots peuvent être horizontaux, verticaux ou diagonaux, et peuvent être lus dans les deux sens.',
-                'Sélectionnez les lettres en faisant glisser votre doigt sur la grille.',
-                'Une fois tous les mots trouvés, un mot secret vous sera demandé.',
-                'Utilisez les lettres restantes pour former le mot secret et valider votre victoire.',
+                'word_search_screen_rule_1'.tr(),
+                'word_search_screen_rule_2'.tr(),
+                'word_search_screen_rule_3'.tr(),
+                'word_search_screen_rule_4'.tr(),
+                'word_search_screen_rule_5'.tr(),
               ], onGamePaused: () {}, onGameResumed: () {});
             },
           ),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
@@ -20,7 +21,7 @@ class WordSearchPreliminaryScreen extends StatelessWidget {
                     Image.asset('assets/images/preliminary/word_search.webp', width: 120, height: 120),
           const SizedBox(height: 16),
           Text(
-            'Odin a sacrifié son œil pour la connaissance. Trouvez les mots cachés liés à la mythologie nordique dans la grille de runes.',
+            'word_search_preliminary_screen_help_text'.tr(),
             style: TextStyle(color: Colors.white, fontSize: 18),
             textAlign: TextAlign.center,
           ),
@@ -29,7 +30,7 @@ class WordSearchPreliminaryScreen extends StatelessWidget {
     );
 
     final Widget startButton = ChibiButton(
-      text: 'Commencer',
+      text: 'word_search_preliminary_screen_start_button'.tr(),
       color: const Color(0xFF8B5CF6), // Color from menu
       onPressed: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const WordSearchScreen()));

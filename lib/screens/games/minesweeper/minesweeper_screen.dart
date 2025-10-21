@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -55,7 +56,7 @@ class _MinesweeperView extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return GameOverPopup(
-              content: const Text('BOUM ! Vous avez touché une mine.'),
+              content: Text('minesweeper_game_over'.tr()),
               onReplay: () {
                 controller.initializeGame();
                 Navigator.of(context).pop();
@@ -101,7 +102,7 @@ class _MinesweeperView extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
-        titleText: 'Le Butin d\'Andvari',
+        titleText: 'minesweeper_title'.tr(),
         leading: IconButton(
           icon: const Icon(Icons.home, color: Colors.white),
           onPressed: () {
@@ -113,12 +114,12 @@ class _MinesweeperView extends StatelessWidget {
             icon: const Icon(Icons.help_outline, color: Colors.white),
             onPressed: () {
               GameHelpDialog.show(context, [
-                'Le but est de trouver tous les trésors sans déclencher de mines.',
-                'Appuyez sur une case pour la révéler. Si c\'est une mine, la partie est perdue.',
-                'Si la case révélée contient une rune, cela indique le nombre de mines ou de trésors adjacents.',
-                'Les runes rouges indiquent les mines adjacentes, les runes jaunes indiquent les trésors adjacents.',
-                'Appuyez longuement sur une case pour y placer ou retirer un drapeau, marquant ainsi une mine suspectée.',
-                'Trouvez tous les trésors pour gagner la partie !',
+                'minesweeper_rule_1'.tr(),
+                'minesweeper_rule_2'.tr(),
+                'minesweeper_rule_3'.tr(),
+                'minesweeper_rule_4'.tr(),
+                'minesweeper_rule_5'.tr(),
+                'minesweeper_rule_6'.tr(),
               ], onGamePaused: () {}, onGameResumed: () {});
             },
           ),
@@ -130,7 +131,7 @@ class _MinesweeperView extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('Trésors trouvés: ${controller.treasuresFound} / ${controller.treasureCount}', style: ChibiTextStyles.storyTitle),
+                child: Text('minesweeper_treasures_found'.tr(args: ['${controller.treasuresFound}', '${controller.treasureCount}']), style: ChibiTextStyles.storyTitle),
               ),
               _RuneLegend(),
               Expanded(
@@ -262,7 +263,7 @@ class _RuneLegend extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Légende des Runes:', style: legendTextStyle),
+          Text('minesweeper_rune_legend'.tr(), style: legendTextStyle),
           const SizedBox(height: 4),
           Wrap(
             spacing: 2.0,

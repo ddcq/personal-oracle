@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -514,7 +515,7 @@ class _GameScreenState extends State<GameScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Défaite !',
+                'asgard_wall_game_screen_defeat'.tr(),
                 style: TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
@@ -526,7 +527,7 @@ class _GameScreenState extends State<GameScreen> {
               ),
               SizedBox(height: 16),
               Text(
-                '💥 Un trou dans la muraille!\nLes Ases ne paieront pas le géant.',
+                'asgard_wall_game_screen_defeat_message'.tr(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
@@ -677,7 +678,7 @@ class _GameScreenState extends State<GameScreen> {
           backgroundColor: Colors.transparent, // Make the scaffold transparent
           extendBodyBehindAppBar: false, // The body does not extend behind the app bar
           appBar: ChibiAppBar(
-            titleText: 'Muraille d’Asgard',
+            titleText: 'asgard_wall_game_screen_title'.tr(),
             actions: [
               IconButton(
                 icon: const Icon(Icons.help_outline, color: Colors.white),
@@ -762,7 +763,7 @@ class _GameScreenState extends State<GameScreen> {
                   // Bouton Nouvelle Partie (peut être utile pour redémarrer depuis le jeu)
                   ChibiButton(
                     onPressed: startGame,
-                    text: 'Redémarrer le Mur',
+                    text: 'asgard_wall_game_screen_restart'.tr(),
                     color: const Color(0xFFFFD700), // Fond doré
                   ),
                 ],

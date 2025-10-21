@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
@@ -104,7 +105,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
           SafeArea(
             child: IgnorePointer(
               child: ChibiAppBar(
-                titleText: 'Les runes dispersées',
+                titleText: 'puzzle_screen_title'.tr(),
               ),
             ),
           ),
@@ -129,9 +130,9 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
                   GameHelpDialog.show(
                     context,
                     [
-                      'Réorganisez les tuiles pour former l\'image complète.',
-                      'Glissez les tuiles dans les espaces vides.',
-                      'Le but est de reconstituer l\'image le plus rapidement possible.',
+                      'puzzle_screen_rule_1'.tr(),
+                      'puzzle_screen_rule_2'.tr(),
+                      'puzzle_screen_rule_3'.tr(),
                     ],
                     onGamePaused: () => _flameGame.pauseEngine(),
                     onGameResumed: () => _flameGame.resumeEngine(),

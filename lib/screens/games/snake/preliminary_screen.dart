@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
@@ -20,7 +21,7 @@ class SnakePreliminaryScreen extends StatelessWidget {
           Image.asset('assets/images/preliminary/snake.webp', width: 120),
           const SizedBox(height: 16),
           Text(
-            'Guidez Jörmungandr, le serpent de Midgard, pour qu’il grandisse sans mordre sa propre queue, s’écraser contre les rochers ni heurter les bords du monde.',
+            'snake_preliminary_screen_help_text'.tr(),
             style: TextStyle(color: Colors.white, fontSize: 18),
             textAlign: TextAlign.center,
           ),
@@ -29,7 +30,7 @@ class SnakePreliminaryScreen extends StatelessWidget {
     );
 
     final Widget startButton = ChibiButton(
-      text: 'Commencer',
+      text: 'snake_preliminary_screen_start_button'.tr(),
       color: const Color(0xFF22C55E), // Color from menu
       onPressed: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const SnakeGame()));

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
@@ -13,18 +14,18 @@ class MenuPrincipal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final jeux = <_MiniJeuItem>[
-      _MiniJeuItem('Réordonne l\'Histoire', const Color(0xFF6366F1), () => context.go('/order_the_scrolls_preliminary')),
-      _MiniJeuItem('La Muraille d\'Asgard', const Color(0xFFEF4444), () => context.go('/asgard_wall_preliminary')),
-      _MiniJeuItem('Les Runes Dispersées', const Color(0xFF06B6D4), () => context.go('/puzzle_preliminary')),
-      _MiniJeuItem('Le Serpent de Midgard', const Color(0xFF22C55E), () => context.go('/snake_preliminary')),
-      _MiniJeuItem('Conquête de Territoire', const Color(0xFFFF6B35), () => context.go('/qix_preliminary')),
-      _MiniJeuItem('L\'Œil d\'Odin', const Color(0xFF8B5CF6), () => context.go('/word_search_preliminary')),
-      _MiniJeuItem('Le Butin d\'Andvari', Colors.brown, () => context.go('/minesweeper_preliminary')),
+      _MiniJeuItem('games_menu_reorder_history'.tr(), const Color(0xFF6366F1), () => context.go('/order_the_scrolls_preliminary')),
+      _MiniJeuItem('games_menu_asgard_wall'.tr(), const Color(0xFFEF4444), () => context.go('/asgard_wall_preliminary')),
+      _MiniJeuItem('games_menu_scattered_runes'.tr(), const Color(0xFF06B6D4), () => context.go('/puzzle_preliminary')),
+      _MiniJeuItem('games_menu_midgard_serpent'.tr(), const Color(0xFF22C55E), () => context.go('/snake_preliminary')),
+      _MiniJeuItem('games_menu_territory_conquest'.tr(), const Color(0xFFFF6B35), () => context.go('/qix_preliminary')),
+      _MiniJeuItem('games_menu_odin_eye'.tr(), const Color(0xFF8B5CF6), () => context.go('/word_search_preliminary')),
+      _MiniJeuItem('games_menu_andvari_loot'.tr(), Colors.brown, () => context.go('/minesweeper_preliminary')),
     ];
     return Scaffold(
       extendBodyBehindAppBar: true, // Permet au body de s’étendre derrière l’AppBar
       appBar: ChibiAppBar(
-        titleText: 'Mini-Jeux',
+        titleText: 'games_menu_mini_games'.tr(),
         leading: IconButton(
           icon: const Icon(Icons.home),
           onPressed: () {

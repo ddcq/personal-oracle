@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 
@@ -96,7 +97,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
               ad.dispose();
-              _showSnackBar('''Échec de l'affichage de la publicité. Veuillez réessayer.''');
+              _showSnackBar('myth_story_page_ad_display_failed'.tr());
             },
           );
           ad.show(
@@ -106,8 +107,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
               setState(() {
                 _unlockedCardIdsFuture = _getUnlockedCardIds(); // Refresh unlocked chapters
               });
-              _showSnackBar('''Chapitre débloqué avec succès !
-''');
+              _showSnackBar('myth_story_page_chapter_unlocked_success'.tr());
             },
           );
         },
@@ -115,7 +115,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
           setState(() {
             _isAdLoading = false;
           });
-          _showSnackBar('''Échec du chargement de la publicité. Veuillez réessayer.''');
+          _showSnackBar('myth_story_page_ad_loading_failed'.tr());
         },
       ),
     );
@@ -126,7 +126,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Taille de la police'),
+          title: Text('myth_story_page_font_size_title'.tr()),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
@@ -145,14 +145,14 @@ class _MythStoryPageState extends State<MythStoryPage> {
                       _saveFontSize(value);
                     },
                   ),
-                  Text('Exemple de texte', style: TextStyle(fontSize: _fontSize)),
+                  Text('myth_story_page_sample_text'.tr(), style: TextStyle(fontSize: _fontSize)),
                 ],
               );
             },
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Fermer'),
+              child: Text('myth_story_page_close_button'.tr()),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -211,7 +211,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
+                    return Center(child: Text('${'myth_story_page_error_prefix'.tr()}: ${snapshot.error}'));
                   } else {
                     final unlockedCardIds = snapshot.data ?? [];
                     String? firstLockedChapterId;
@@ -299,19 +299,19 @@ class _StoryContentState extends State<_StoryContent> {
                     ] else if (isFirstLockedChapter)
                       Column(
                         children: [
-                          Text('Chapitre verrouillé', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                          Text('myth_story_page_chapter_locked'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                           const SizedBox(height: 8.0),
                           widget.isAdLoading
                               ? const CircularProgressIndicator()
                               : ElevatedButton.icon(
                                   onPressed: () => widget.showRewardedAd(card.id),
                                   icon: const Icon(Icons.play_arrow),
-                                  label: const Text('Débloquer avec une pub'),
+                                  label: Text('myth_story_page_unlock_with_ad'.tr()),
                                 ),
                         ],
                       )
                     else
-                      Text('Chapitre verrouillé', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                      Text('myth_story_page_chapter_locked'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   ],
                 ),
               ),

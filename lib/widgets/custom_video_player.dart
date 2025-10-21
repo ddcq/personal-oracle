@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart' as video_player;
@@ -33,7 +34,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       // Add timeout for the entire operation
       await _performVideoLoad().timeout(const Duration(seconds: 15));
     } catch (e) {
-      debugPrint('Error loading video: $e');
+      debugPrint('widgets_custom_video_player_error_loading_video'.tr(args: ['$e']));
       if (mounted) {
         // Classify the error type
         String errorType = 'unknown';
@@ -156,13 +157,13 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   String _getErrorMessage() {
     switch (_errorType) {
       case 'codec_incompatible':
-        return 'Format vidéo non supporté par cet appareil';
+        return 'widgets_custom_video_player_codec_incompatible'.tr();
       case 'network':
-        return 'Erreur de connexion réseau';
+        return 'widgets_custom_video_player_network_error'.tr();
       case 'timeout':
-        return 'Délai d\'attente dépassé';
+        return 'widgets_custom_video_player_timeout'.tr();
       default:
-        return 'Erreur de lecture vidéo';
+        return 'widgets_custom_video_player_playback_error'.tr();
     }
   }
 

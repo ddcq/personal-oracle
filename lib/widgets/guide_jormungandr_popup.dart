@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
@@ -22,24 +23,22 @@ class GuideJormungandrPopup extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Guide Jörmungandr', style: ChibiTextStyles.overlayTitle, textAlign: TextAlign.center),
+            Text('widgets_guide_jormungandr_popup_title'.tr(), style: ChibiTextStyles.overlayTitle, textAlign: TextAlign.center),
             SizedBox(height: 8.h),
             Text(
-              '''Aide le serpent-monde à grandir
-en dévorant les offrandes des mortels''',
+              'widgets_guide_jormungandr_popup_description'.tr(),
               style: TextStyle(color: Colors.white70, fontSize: 14.sp),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 8.h),
             Text(
-              '''⌨️ Contrôles:
-↑↓←→ Flèches | R: Recommencer''',
+              'widgets_guide_jormungandr_popup_controls'.tr(),
               style: TextStyle(color: Colors.white54, fontSize: 12.sp),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 16.h),
             ChibiButton(
-              text: 'Réveiller le Serpent',
+              text: 'widgets_guide_jormungandr_popup_start_button'.tr(),
               color: const Color(0xFF22C55E),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog

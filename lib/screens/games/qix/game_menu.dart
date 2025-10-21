@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
@@ -20,7 +21,7 @@ class GameMenu extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: const Color(0xFFFF6B35).withAlpha(76)),
             ),
-            child: const Column(
+            child: Column(
               children: [
                 Text(
                   '🌲 YGGDRASIL 🌲',
@@ -28,19 +29,19 @@ class GameMenu extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'Les Neuf Royaumes',
+                  'qix_game_menu_title'.tr(),
                   style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 12),
                 Text(
-                  'Jörmungand, le Serpent-Monde, a envahi les royaumes sacrés. Trace des frontières magiques pour reconquérir 75% du territoire et emprisonner la bête !',
+                  'qix_game_menu_description'.tr(),
                   style: TextStyle(color: Colors.white70, fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 16),
                 Text(
-                  '⌨️ Commandes Clavier ⌨️\nFlèches pour bouger, Espace pour tracer lentement.',
+                  'qix_game_menu_controls'.tr(),
                   style: TextStyle(color: Colors.cyan, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
@@ -48,7 +49,7 @@ class GameMenu extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-          ChibiButton(onPressed: onStartGame, text: '⚔️ Commencer la Conquête', color: const Color(0xFFFF6B35)),
+          ChibiButton(onPressed: onStartGame, text: 'qix_game_menu_start_button'.tr(), color: const Color(0xFFFF6B35)),
         ],
       ),
     );

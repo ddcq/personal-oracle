@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
@@ -31,7 +32,7 @@ class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
           const PuzzleImageTile(size: 80),
           const SizedBox(height: 16),
           Text(
-            'Assemble les fragments des anciennes runes pour déverrouiller leur pouvoir mystique',
+            'puzzle_preliminary_screen_help_text'.tr(),
             style: TextStyle(color: Colors.white, fontSize: 18),
             textAlign: TextAlign.center,
           ),
@@ -39,7 +40,7 @@ class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
       ),
     );
     final Widget startButton = ChibiButton(
-      text: 'Commencer le Puzzle',
+      text: 'puzzle_preliminary_screen_start_button'.tr(),
       color: const Color(0xFF06B6D4),
       onPressed: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const PuzzleScreen()));

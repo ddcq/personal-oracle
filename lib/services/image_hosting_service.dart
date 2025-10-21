@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:http/http.dart' as http;
@@ -24,7 +25,7 @@ class ImageHostingService {
           await localFile.writeAsBytes(response.bodyBytes);
           return localFile;
         } else {
-          throw Exception('Failed to download image from \$imageUrl: \${response.statusCode}');
+          throw Exception('widgets_custom_video_player_failed_download'.tr(args: [imageUrl, '${response.statusCode}']));
         }
       } catch (e) {
         rethrow;

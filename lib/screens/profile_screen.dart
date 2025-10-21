@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:intl/intl.dart';
+
 import 'package:oracle_d_asgard/screens/games/myth_story_page.dart';
 import 'package:oracle_d_asgard/screens/profile/deity_selection_screen.dart';
 import 'package:oracle_d_asgard/services/database_service.dart';
@@ -111,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             side: const BorderSide(color: Colors.amber, width: 3),
           ),
           title: Text(
-            'Changer le nom',
+            'profile_screen_change_name'.tr(),
             textAlign: TextAlign.center,
             style: Theme.of(
               context,
@@ -122,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             autofocus: true,
             style: const TextStyle(color: Colors.black87),
             decoration: InputDecoration(
-              hintText: 'Nouveau nom',
+              hintText: 'profile_screen_new_name'.tr(),
               hintStyle: TextStyle(color: Colors.black.withAlpha(128)),
               enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.black54)),
               focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
@@ -163,48 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _isAdLoading = true;
     });
 
-    RewardedAd.load(
-      adUnitId: 'ca-app-pub-9329709593733606/7159103317',
-      request: const AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) {
-          setState(() {
-            _isAdLoading = false;
-          });
-          ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-              ad.dispose();
-            },
-            onAdFailedToShowFullScreenContent: (ad, error) {
-              ad.dispose();
-              _showSnackBar('Échec de l\'affichage de la publicité. Veuillez réessayer.');
-            },
-          );
-          ad.show(
-            onUserEarnedReward: (ad, reward) async {
-              // Reward the user
-              final gamificationService = getIt<GamificationService>();
-              CollectibleCard? wonCard = _nextAdRewardCard;
-
-              if (wonCard != null) {
-                await gamificationService.unlockCollectibleCard(wonCard);
-                _showRewardDialog(rewardCard: wonCard);
-              } else {
-                _showRewardDialog(title: 'Collection Complète !', content: 'Vous avez déjà toutes les cartes !');
-              }
-              // Refresh the UI to show the new card
-              _refreshProfileData();
-            },
-          );
-        },
-        onAdFailedToLoad: (LoadAdError error) {
-          setState(() {
-            _isAdLoading = false;
-          });
-          _showSnackBar('Échec du chargement de la publicité. Veuillez réessayer.');
-        },
-      ),
-    );
+          _showSnackBar('profile_screen_ad_failed'.tr());
   }
 
   void _showRewardedStoryAd() async {
@@ -227,7 +187,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
               ad.dispose();
-              _showSnackBar('Échec de l\'affichage de la publicité. Veuillez réessayer.');
+              _showSnackBar('profile_screen_ad_failed'.tr());
             },
           );
           ad.show(
@@ -272,10 +232,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await dbService.deleteDb();
       await dbService.reinitializeDb();
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Database cleared and rebuilt successfully!')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('profile_screen_database_cleared_success'.tr())));
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to clear and rebuild database: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${'profile_screen_database_clear_failed'.tr()}: $e')));
     }
   }
 
@@ -286,7 +246,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await gamificationService.unlockStory(story.title, story.correctOrder.map((card) => card.id).toList());
     }
     setState(() {}); // Refresh the UI
-    _showSnackBar('Toutes les histoires ont été débloquées !');
+    _showSnackBar('profile_screen_all_stories_unlocked'.tr());
   }
 
   @override
@@ -329,9 +289,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return Center(child: Text('${'profile_screen_error_prefix'.tr()}: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('No data available.'));
+              return Center(child: Text('profile_screen_no_data_available'.tr()));
             } else {
               final List<Map<String, dynamic>> snakeScores = snapshot.data![0];
               final List<CollectibleCard> unlockedCards = snapshot.data![1];
@@ -355,7 +315,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       if (quizSnapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (quizSnapshot.hasError) {
-                        return Center(child: Text('Error loading quiz result: ${quizSnapshot.error}'));
+                        return Center(child: Text('${'profile_screen_quiz_loading_error'.tr()}: ${quizSnapshot.error}'));
                       } else if (!quizSnapshot.hasData || quizSnapshot.data!.isEmpty) {
                         return const SizedBox.shrink();
                       } else {
@@ -441,14 +401,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       }
                     },
                   ),
-                  _buildSectionTitle('Paramètres'),
+                  _buildSectionTitle('profile_screen_settings'.tr()),
                   _buildSoundSettings(),
+                  const SizedBox(height: 10),
+                  _buildLanguageSettings(),
                   const SizedBox(height: 20),
-                  _buildSectionTitle('Scores de jeu'),
+                  _buildSectionTitle('profile_screen_game_scores'.tr()),
                   _buildGameScores(snakeScores),
                   const SizedBox(height: 20),
 
-                  _buildSectionTitle('Cartes à collectionner'),
+                  _buildSectionTitle('profile_screen_collectible_cards'.tr()),
                   _buildCollectibleCards(unlockedCards),
                   const SizedBox(height: 20),
                   GestureDetector(
@@ -460,7 +422,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         }
                       });
                     },
-                    child: _buildSectionTitle('Histoires débloquées'),
+                    child: _buildSectionTitle('profile_screen_unlocked_stories'.tr()),
                   ),
                   _buildUnlockedStories(storyProgress),
                   const SizedBox(height: 50),
@@ -499,7 +461,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Musique d\'ambiance',
+              'profile_screen_ambient_music'.tr(),
               style: Theme.of(
                 context,
               ).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC, fontSize: 22),
@@ -567,7 +529,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildGameScores(List<Map<String, dynamic>> scores) {
     if (scores.isEmpty) {
       return Text(
-        'Aucun score de Snake pour l’instant.',
+        'profile_screen_no_snake_scores'.tr(),
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
         textAlign: TextAlign.center,
       );
@@ -594,7 +556,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       children: [
         Text(
-          'Podium du Serpent',
+          'profile_screen_snake_podium'.tr(),
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -728,7 +690,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       } else {
         return Text(
-          'Aucune carte à collectionner débloquée pour l’instant.',
+          'profile_screen_no_collectible_cards'.tr(),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
         );
       }
@@ -809,7 +771,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       } else {
         return Text(
-          'Aucune histoire débloquée pour l’instant.',
+          'profile_screen_no_unlocked_stories'.tr(),
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
         );
       }
@@ -951,7 +913,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               content: Text(content ?? ''),
               actions: <Widget>[
                 TextButton(
-                  child: const Text('OK'),
+                  child: Text('profile_screen_ok_button'.tr()),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -962,6 +924,76 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       );
     }
+  }
+
+  Widget _buildLanguageSettings() {
+    return Card(
+      color: Colors.black.withAlpha(100),
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'profile_screen_language'.tr(),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: AppTextStyles.amaticSC,
+                fontSize: 22,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: DropdownButton<Locale>(
+                value: context.locale,
+                underline: const SizedBox(),
+                dropdownColor: Colors.black87,
+                items: [
+                  DropdownMenuItem(
+                    value: const Locale('en', 'US'),
+                    child: Row(
+                      children: [
+                        Text('🇺🇸', style: TextStyle(fontSize: 18)),
+                        const SizedBox(width: 8),
+                        Text(
+                          'profile_screen_language_english'.tr(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: const Locale('fr', 'FR'),
+                    child: Row(
+                      children: [
+                        Text('🇫🇷', style: TextStyle(fontSize: 18)),
+                        const SizedBox(width: 8),
+                        Text(
+                          'profile_screen_language_french'.tr(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                onChanged: (Locale? newLocale) {
+                  if (newLocale != null) {
+                    context.setLocale(newLocale);
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -1005,7 +1037,7 @@ class _AdRewardButtonWidget extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                           ),
-                          Text('(pub)', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white70)),
+                          Text('profile_screen_ad_label'.tr(), style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white70)),
                         ],
                       ),
               ),

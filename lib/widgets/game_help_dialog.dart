@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/app_dialog.dart';
@@ -50,7 +51,7 @@ class GameHelpDialog extends StatelessWidget {
     );
 
     return AppDialog(
-      title: 'Aide',
+      title: 'widgets_game_help_dialog_title'.tr(),
       icon: Icons.menu_book,
       titleStyle: theme.textTheme.headlineSmall?.copyWith(
         fontFamily: AppTextStyles.amaticSC,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -44,7 +45,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ChibiButton(
-        text: 'Valider l’ordre',
+        text: 'order_the_scrolls_screen_validate_order'.tr(),
         color: const Color(0xFFF9A825), // Orange color
         onPressed: () => _gameController.validateOrder(),
       ),
@@ -163,7 +164,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
       builder: (BuildContext context) {
         return GameOverPopup(
           content: Text(
-            '❌ Désolé, l’ordre est incorrect.',
+            'order_the_scrolls_screen_incorrect_order'.tr(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

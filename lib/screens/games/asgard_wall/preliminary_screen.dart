@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
@@ -20,7 +21,7 @@ class AsgardWallGameScreen extends StatelessWidget {
           Image.asset('assets/images/preliminary/asgard_wall.webp', width: 120),
           const SizedBox(height: 16),
           Text(
-            'Aidez Hrumthur à construire la muraille d’Asgard en plaçant les blocs qui tombent. Atteignez la hauteur de la victoire sans laisser de trous inaccessibles !',
+            'asgard_wall_preliminary_screen_help_text'.tr(),
             style: TextStyle(color: Colors.white, fontSize: 18),
             textAlign: TextAlign.center,
           ),
@@ -29,7 +30,7 @@ class AsgardWallGameScreen extends StatelessWidget {
     );
 
     final Widget startButton = ChibiButton(
-      text: 'Commencer la construction',
+      text: 'asgard_wall_preliminary_screen_start_button'.tr(),
       color: const Color(0xFFEF4444), // Color from menu
       onPressed: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const GameScreen()));

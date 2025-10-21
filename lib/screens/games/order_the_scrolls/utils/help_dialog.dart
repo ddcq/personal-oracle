@@ -1,15 +1,16 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 
 class HelpDialog {
   static void show(BuildContext context, {VoidCallback? onGamePaused, VoidCallback? onGameResumed}) {
     final List<String> rules = [
-      'Remettez les cartes dans l\'ordre chronologique du mythe nordique.',
-      'Glissez une carte sur une autre pour les échanger.',
-      'L\'icône ⭲ indique qu\'une carte est déplaçable.',
-      'Organisez-les de la première à la dernière étape.',
-      'Cliquez sur "Valider l\'ordre" pour vérifier.',
-      'Les cartes correctes apparaîtront avec un contour vert ✅.',
+      'order_the_scrolls_help_dialog_rule_1'.tr(),
+      'order_the_scrolls_help_dialog_rule_2'.tr(),
+      'order_the_scrolls_help_dialog_rule_3'.tr(),
+      'order_the_scrolls_help_dialog_rule_4'.tr(),
+      'order_the_scrolls_help_dialog_rule_5'.tr(),
+      'order_the_scrolls_help_dialog_rule_6'.tr(),
     ];
 
     GameHelpDialog.show(context, rules, onGamePaused: onGamePaused ?? () {}, onGameResumed: onGameResumed ?? () {});

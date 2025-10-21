@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:oracle_d_asgard/utils/themes.dart';
@@ -15,15 +16,22 @@ import 'package:oracle_d_asgard/router.dart'; // Import the router
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   setupLocator();
   if (Platform.isIOS || Platform.isAndroid) {
     await MobileAds.instance.initialize();
   }
   await getIt<DatabaseService>().database;
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-      child: const MyApp(),
+    EasyLocalization(
+      supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
+      path: 'assets/resources/langs',
+      fallbackLocale: const Locale('en', 'US'),
+      startLocale: const Locale('en', 'US'),
+      child: ChangeNotifierProvider(
+        create: (context) => ThemeProvider(),
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -72,6 +80,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           darkTheme: AppThemes.darkTheme,
           themeMode: Provider.of<ThemeProvider>(context).themeMode,
           routerConfig: router, // Use routerConfig instead of home and routes
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
           debugShowCheckedModeBanner: false,
         );
       },

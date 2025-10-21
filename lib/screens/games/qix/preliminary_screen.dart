@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
@@ -20,7 +21,7 @@ class QixPreliminaryScreen extends StatelessWidget {
           Image.asset('assets/images/preliminary/qix.webp', width: 120),
           const SizedBox(height: 16),
           Text(
-            'Guidez Odin et dessinez des formes pour conquérir les territoires des 9 mondes, mais attention à Fenrir qui rôde, prêt à frapper !',
+            'qix_preliminary_screen_help_text'.tr(),
             style: TextStyle(color: Colors.white, fontSize: 18),
             textAlign: TextAlign.center,
           ),
@@ -29,7 +30,7 @@ class QixPreliminaryScreen extends StatelessWidget {
     );
 
     final Widget startButton = ChibiButton(
-      text: 'Commencer',
+      text: 'qix_preliminary_screen_start_button'.tr(),
       color: const Color(0xFFFF6B35), // Color from menu
       onPressed: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const QixGameScreen()));

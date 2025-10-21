@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
@@ -69,7 +70,7 @@ class _MainScreenState extends State<MainScreen> {
                           alignment: Alignment.topCenter,
                           child: Padding(
                             padding: EdgeInsets.only(top: 20.h),
-                            child: Text('Oracle d\'Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle)
+                            child: Text('main_screen_title'.tr(), textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle)
                               .animate()
                               .slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutCubic)
                               .fadeIn(duration: 600.ms),
@@ -94,7 +95,7 @@ class _MainScreenState extends State<MainScreen> {
                               SizedBox(
                                 width: double.infinity,
                                 child: ChibiButton(
-                                  text: 'Amusons-nous',
+                                  text: 'main_screen_play'.tr(),
                                   color: ChibiColors.buttonOrange,
                                   onPressed: () {
                                     context.go('/games');
@@ -108,7 +109,7 @@ class _MainScreenState extends State<MainScreen> {
                               SizedBox(
                                 width: double.infinity,
                                 child: ChibiButton(
-                                  text: 'Ma divinité gardienne',
+                                  text: 'main_screen_guardian_deity'.tr(),
                                   color: ChibiColors.buttonBlue,
                                   onPressed: () {
                                     context.go('/quiz');
@@ -122,7 +123,7 @@ class _MainScreenState extends State<MainScreen> {
                               SizedBox(
                                 width: double.infinity,
                                 child: ChibiButton(
-                                  text: 'Mes récompenses',
+                                  text: 'main_screen_rewards'.tr(),
                                   color: ChibiColors.buttonRed,
                                   onPressed: () {
                                     context.go('/profile');
@@ -161,7 +162,7 @@ class _MainScreenState extends State<MainScreen> {
                                   constraints: BoxConstraints(maxHeight: 0.2.sh),
                                   child: FittedBox(
                                     fit: BoxFit.contain,
-                                    child: Text('Oracle d\'Asgard', textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle)
+                                    child: Text('main_screen_title'.tr(), textAlign: TextAlign.center, style: ChibiTextStyles.appBarTitle)
                                     .animate()
                                     .slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutCubic)
                                     .fadeIn(duration: 600.ms),
@@ -169,7 +170,7 @@ class _MainScreenState extends State<MainScreen> {
                                 ),
                                 SizedBox(height: 16.h),
                                 ChibiButton(
-                                  text: 'Amusons-nous',
+                                  text: 'main_screen_play'.tr(),
                                   color: ChibiColors.buttonOrange,
                                   onPressed: () {
                                     context.go('/games');
@@ -180,7 +181,7 @@ class _MainScreenState extends State<MainScreen> {
                                   .fadeIn(duration: 300.ms),
                                 SizedBox(height: 10.h),
                                 ChibiButton(
-                                  text: 'Ma divinité gardienne',
+                                  text: 'main_screen_guardian_deity'.tr(),
                                   color: ChibiColors.buttonBlue,
                                   onPressed: () {
                                     context.go('/quiz');
@@ -191,7 +192,7 @@ class _MainScreenState extends State<MainScreen> {
                                   .fadeIn(duration: 300.ms),
                                 SizedBox(height: 10.h),
                                 ChibiButton(
-                                  text: 'Mes récompenses',
+                                  text: 'main_screen_rewards'.tr(),
                                   color: ChibiColors.buttonRed,
                                   onPressed: () {
                                     context.go('/profile');

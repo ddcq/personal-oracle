@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
@@ -49,7 +50,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'DÉFAITE !',
+                    'qix_main_screen_defeat_title'.tr(),
                     style: TextStyle(
                       fontSize: 48,
                       fontWeight: FontWeight.bold,
@@ -61,7 +62,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
                   ),
                   SizedBox(height: 32),
                   Text(
-                    'Vous avez été vaincu. Réessayez !',
+                    'qix_main_screen_defeat_message'.tr(),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -98,7 +99,7 @@ context.go('/qix');
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
-        titleText: 'Conquête de Territoire',
+        titleText: 'qix_main_screen_title'.tr(),
         actions: [
           IconButton(
             icon: const Icon(Icons.help_outline, color: Colors.white),
@@ -106,11 +107,11 @@ context.go('/qix');
               GameHelpDialog.show(
                 context,
                 [
-                  'Tracez des lignes pour capturer des territoires. Évitez les ennemis et leurs lignes !',
-                  'Capturez plus de 75% du territoire pour gagner.',
-                  'Si un ennemi touche votre ligne en construction, vous perdez une vie.',
-                  'Si un ennemi touche votre corps, vous perdez une vie.',
-                  'Collectez les bonus pour des avantages temporaires.',
+                  'qix_main_screen_rule_1'.tr(),
+                  'qix_main_screen_rule_2'.tr(),
+                  'qix_main_screen_rule_3'.tr(),
+                  'qix_main_screen_rule_4'.tr(),
+                  'qix_main_screen_rule_5'.tr(),
                 ],
                 onGamePaused: () => _game?.pauseEngine(),
                 onGameResumed: () => _game?.resumeEngine(),
@@ -126,9 +127,9 @@ context.go('/qix');
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
+                  return Center(child: Text('${'qix_main_error_prefix'.tr()}: ${snapshot.error}'));
                 } else if (_game == null) {
-                  return const Center(child: Text('Error: Game not initialized.'));
+                  return Center(child: Text('qix_main_game_not_initialized_error'.tr()));
                 } else {
                   final Orientation orientation = MediaQuery.of(context).orientation;
                   final Size screenSize = MediaQuery.of(context).size;

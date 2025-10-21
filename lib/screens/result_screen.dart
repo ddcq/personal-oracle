@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
@@ -64,7 +65,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                     FittedBox(
                                       fit: BoxFit.contain,
                                       child: Text(
-                                        'Félicitations !',
+                                        'result_screen_congratulations'.tr(),
                                         textAlign: TextAlign.center,
                                         style: Theme.of(context).textTheme.displayMedium?.copyWith(
                                           fontFamily: AppTextStyles.amaticSC,
@@ -151,7 +152,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Ta divinité gardienne est :',
+                                      'result_screen_guardian_deity_is'.tr(),
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                         color: Colors.white,
@@ -183,7 +184,7 @@ class _ResultScreenState extends State<ResultScreen> {
                               FittedBox(
                                 fit: BoxFit.contain,
                                 child: Text(
-                                  'Félicitations !',
+                                  'result_screen_congratulations'.tr(),
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                                     fontFamily: AppTextStyles.amaticSC,
@@ -200,7 +201,7 @@ class _ResultScreenState extends State<ResultScreen> {
                               ),
                               SizedBox(height: 16.h),
                               Text(
-                                'Ta divinité gardienne est :',
+                                'result_screen_guardian_deity_is'.tr(),
                                 textAlign: TextAlign.center,
                                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                   color: Colors.white,
@@ -241,7 +242,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Votre Profil',
+                                      'result_screen_your_profile'.tr(),
                                       style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold, color: Colors.amber),
                                     ),
                                     SizedBox(height: 16.h),

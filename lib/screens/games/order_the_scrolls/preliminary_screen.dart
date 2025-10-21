@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -20,7 +21,7 @@ class OrderTheScrollsPreliminaryScreen extends StatelessWidget {
           Image.asset('assets/images/preliminary/order_the_scrolls.webp', width: 120),
           const SizedBox(height: 16),
           Text(
-            'Remettez dans l\'ordre les parchemins d\'une histoire de la mythologie nordique pour en découvrir le dénouement.',
+            'order_the_scrolls_preliminary_screen_help_text'.tr(),
             style: TextStyle(color: Colors.white, fontSize: 18),
             textAlign: TextAlign.center,
           ),
@@ -29,7 +30,7 @@ class OrderTheScrollsPreliminaryScreen extends StatelessWidget {
     );
 
     final Widget startButton = ChibiButton(
-      text: 'Commencer',
+      text: 'order_the_scrolls_preliminary_screen_start_button'.tr(),
       color: const Color(0xFF6366F1), // Color from menu
       onPressed: () {
         context.go('/order_the_scrolls');

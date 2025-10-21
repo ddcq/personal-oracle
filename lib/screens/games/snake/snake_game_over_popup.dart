@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
@@ -16,7 +17,7 @@ class SnakeGameOverPopup extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '⚰️ Ragnarök !',
+            'snake_game_over_popup_title'.tr(),
             style: TextStyle(
               color: Colors.white, // Changed to white
               fontSize: 36,
@@ -27,7 +28,7 @@ class SnakeGameOverPopup extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Jörmungandr a péri...\nScore final: $score',
+            'snake_game_over_popup_message'.tr(args: ['$score']),
             style: TextStyle(
               color: Colors.white, // Changed to white
               fontSize: 24,
