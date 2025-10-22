@@ -15,8 +15,11 @@ import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/data/stories_data.dart';
+import 'package:oracle_d_asgard/models/card_version.dart';
 import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
+import 'package:oracle_d_asgard/models/card_version.dart';
+import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // For .sw and .h extensions
@@ -239,11 +242,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _unlockAllCollectibleCards(CardVersion version) async {
+    final gamificationService = getIt<GamificationService>();
+    final allCardsOfVersion = allCollectibleCards.where((card) => card.version == version).toList();
+    for (var card in allCardsOfVersion) {
+      await gamificationService.unlockCollectibleCard(card);
+    }
+    setState(() {}); // Refresh the UI
+    _showSnackBar('profile_screen_all_cards_unlocked'.tr(args: [version.name]));
+  }
+
   Future<void> _unlockAllStories() async {
     final gamificationService = getIt<GamificationService>();
     final allStories = getMythStories();
     for (var story in allStories) {
-      await gamificationService.unlockStory(story.title, story.correctOrder.map((card) => card.id).toList());
+      await gamificationService.unlockStory(story.id, story.correctOrder.map((card) => card.id).toList());
     }
     setState(() {}); // Refresh the UI
     _showSnackBar('profile_screen_all_stories_unlocked'.tr());
@@ -427,16 +440,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildUnlockedStories(storyProgress),
                   const SizedBox(height: 50),
                   if (_showHiddenButtons)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Column(
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.delete_forever, size: 20),
-                          onPressed: _clearAndRebuildDatabase,
-                          tooltip: 'Clear and Rebuild Database',
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.delete_forever, size: 20),
+                              onPressed: _clearAndRebuildDatabase,
+                              tooltip: 'Clear and Rebuild Database',
+                            ),
+                            SizedBox(width: 20.w),
+                            IconButton(icon: const Icon(Icons.book, size: 20), onPressed: _unlockAllStories, tooltip: 'Unlock All Stories'),
+                          ],
                         ),
-                        SizedBox(width: 20.w),
-                        IconButton(icon: const Icon(Icons.book, size: 20), onPressed: _unlockAllStories, tooltip: 'Unlock All Stories'),
+                        SizedBox(height: 10.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.card_giftcard, size: 20),
+                              onPressed: () => _unlockAllCollectibleCards(CardVersion.chibi),
+                              tooltip: 'Unlock All Chibi Cards',
+                            ),
+                            SizedBox(width: 20.w),
+                            IconButton(
+                              icon: const Icon(Icons.card_membership, size: 20),
+                              onPressed: () => _unlockAllCollectibleCards(CardVersion.premium),
+                              tooltip: 'Unlock All Premium Cards',
+                            ),
+                            SizedBox(width: 20.w),
+                            IconButton(
+                              icon: const Icon(Icons.diamond, size: 20),
+                              onPressed: () => _unlockAllCollectibleCards(CardVersion.epic),
+                              tooltip: 'Unlock All Epic Cards',
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   const SizedBox(height: 50),
@@ -797,10 +837,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (index < storyProgress.length) {
           final progress = storyProgress[index];
           final storyId = progress['story_id'];
-          final mythStory = allMythStories.firstWhere(
-            (story) => story.title == storyId,
-            orElse: () => MythStory(title: 'Histoire inconnue', correctOrder: []), // Fallback
-          );
+          final mythStories = allMythStories.where((story) => story.id == storyId);
+          if (mythStories.isEmpty) {
+            return const SizedBox.shrink();
+          }
+          final mythStory = mythStories.first;
           final unlockedParts = jsonDecode(progress['parts_unlocked']) as List;
           String? lastChapterImagePath;
           if (unlockedParts.isNotEmpty) {

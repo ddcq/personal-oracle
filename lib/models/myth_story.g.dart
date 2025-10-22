@@ -7,6 +7,7 @@ part of 'myth_story.dart';
 // **************************************************************************
 
 _MythStory _$MythStoryFromJson(Map<String, dynamic> json) => _MythStory(
+  id: json['id'] as String,
   title: json['title'] as String,
   correctOrder: (json['correctOrder'] as List<dynamic>)
       .map((e) => MythCard.fromJson(e as Map<String, dynamic>))
@@ -15,6 +16,7 @@ _MythStory _$MythStoryFromJson(Map<String, dynamic> json) => _MythStory(
 
 Map<String, dynamic> _$MythStoryToJson(_MythStory instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'title': instance.title,
       'correctOrder': instance.correctOrder,
     };

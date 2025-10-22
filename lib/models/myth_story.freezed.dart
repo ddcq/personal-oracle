@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MythStory {
 
- String get title; List<MythCard> get correctOrder;
+ String get id; String get title; List<MythCard> get correctOrder;
 /// Create a copy of MythStory
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $MythStoryCopyWith<MythStory> get copyWith => _$MythStoryCopyWithImpl<MythStory>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MythStory&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other.correctOrder, correctOrder));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MythStory&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other.correctOrder, correctOrder));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,title,const DeepCollectionEquality().hash(correctOrder));
+int get hashCode => Object.hash(runtimeType,id,title,const DeepCollectionEquality().hash(correctOrder));
 
 @override
 String toString() {
-  return 'MythStory(title: $title, correctOrder: $correctOrder)';
+  return 'MythStory(id: $id, title: $title, correctOrder: $correctOrder)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $MythStoryCopyWith<$Res>  {
   factory $MythStoryCopyWith(MythStory value, $Res Function(MythStory) _then) = _$MythStoryCopyWithImpl;
 @useResult
 $Res call({
- String title, List<MythCard> correctOrder
+ String id, String title, List<MythCard> correctOrder
 });
 
 
@@ -65,9 +65,10 @@ class _$MythStoryCopyWithImpl<$Res>
 
 /// Create a copy of MythStory
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? correctOrder = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? correctOrder = null,}) {
   return _then(_self.copyWith(
-title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,correctOrder: null == correctOrder ? _self.correctOrder : correctOrder // ignore: cast_nullable_to_non_nullable
 as List<MythCard>,
   ));
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  List<MythCard> correctOrder)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  List<MythCard> correctOrder)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MythStory() when $default != null:
-return $default(_that.title,_that.correctOrder);case _:
+return $default(_that.id,_that.title,_that.correctOrder);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.title,_that.correctOrder);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  List<MythCard> correctOrder)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  List<MythCard> correctOrder)  $default,) {final _that = this;
 switch (_that) {
 case _MythStory():
-return $default(_that.title,_that.correctOrder);case _:
+return $default(_that.id,_that.title,_that.correctOrder);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +196,10 @@ return $default(_that.title,_that.correctOrder);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  List<MythCard> correctOrder)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  List<MythCard> correctOrder)?  $default,) {final _that = this;
 switch (_that) {
 case _MythStory() when $default != null:
-return $default(_that.title,_that.correctOrder);case _:
+return $default(_that.id,_that.title,_that.correctOrder);case _:
   return null;
 
 }
@@ -210,9 +211,10 @@ return $default(_that.title,_that.correctOrder);case _:
 @JsonSerializable()
 
 class _MythStory implements MythStory {
-  const _MythStory({required this.title, required final  List<MythCard> correctOrder}): _correctOrder = correctOrder;
+  const _MythStory({required this.id, required this.title, required final  List<MythCard> correctOrder}): _correctOrder = correctOrder;
   factory _MythStory.fromJson(Map<String, dynamic> json) => _$MythStoryFromJson(json);
 
+@override final  String id;
 @override final  String title;
  final  List<MythCard> _correctOrder;
 @override List<MythCard> get correctOrder {
@@ -235,16 +237,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MythStory&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other._correctOrder, _correctOrder));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MythStory&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&const DeepCollectionEquality().equals(other._correctOrder, _correctOrder));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,title,const DeepCollectionEquality().hash(_correctOrder));
+int get hashCode => Object.hash(runtimeType,id,title,const DeepCollectionEquality().hash(_correctOrder));
 
 @override
 String toString() {
-  return 'MythStory(title: $title, correctOrder: $correctOrder)';
+  return 'MythStory(id: $id, title: $title, correctOrder: $correctOrder)';
 }
 
 
@@ -255,7 +257,7 @@ abstract mixin class _$MythStoryCopyWith<$Res> implements $MythStoryCopyWith<$Re
   factory _$MythStoryCopyWith(_MythStory value, $Res Function(_MythStory) _then) = __$MythStoryCopyWithImpl;
 @override @useResult
 $Res call({
- String title, List<MythCard> correctOrder
+ String id, String title, List<MythCard> correctOrder
 });
 
 
@@ -272,9 +274,10 @@ class __$MythStoryCopyWithImpl<$Res>
 
 /// Create a copy of MythStory
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? correctOrder = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? correctOrder = null,}) {
   return _then(_MythStory(
-title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,correctOrder: null == correctOrder ? _self._correctOrder : correctOrder // ignore: cast_nullable_to_non_nullable
 as List<MythCard>,
   ));

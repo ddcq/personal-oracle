@@ -5,6 +5,7 @@ import 'package:oracle_d_asgard/models/myth_story.dart';
 List<MythStory> getMythStories() {
   return [
     MythStory(
+      id: 'loading',
       title: 'story_loading_title'.tr(),
       correctOrder: [
         MythCard(
@@ -17,6 +18,7 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      id: 'creation_of_the_world',
       title: 'story_creation_of_the_world_title'.tr(),
       correctOrder: [
         MythCard(
@@ -57,6 +59,7 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      id: 'war_of_aesir_and_vanir',
       title: 'story_war_of_aesir_and_vanir_title'.tr(),
       correctOrder: [
         MythCard(
@@ -104,6 +107,7 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      id: 'mead_of_poetry',
       title: 'story_mead_of_poetry_title'.tr(),
       correctOrder: [
         MythCard(
@@ -151,6 +155,7 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      id: 'the_wall_of_asgard',
       title: 'story_the_wall_of_asgard_title'.tr(),
       correctOrder: [
         MythCard(
@@ -205,6 +210,7 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      id: 'the_forging_of_mjolnir',
       title: 'story_the_forging_of_mjolnir_title'.tr(),
       correctOrder: [
         MythCard(
@@ -245,6 +251,7 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      id: 'fenrir_chained',
       title: 'story_fenrir_chained_title'.tr(),
       correctOrder: [
         MythCard(
@@ -285,6 +292,7 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      id: 'thors_hammer',
       title: 'story_thors_hammer_title'.tr(),
       correctOrder: [
         MythCard(
@@ -325,6 +333,7 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      id: 'the_serpent_fishing',
       title: 'story_the_serpent_fishing_title'.tr(),
       correctOrder: [
         MythCard(
@@ -365,6 +374,7 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      id: 'the_death_of_baldr',
       title: 'story_the_death_of_baldr_title'.tr(),
       correctOrder: [
         MythCard(
@@ -405,6 +415,7 @@ List<MythStory> getMythStories() {
       ],
     ),
     MythStory(
+      id: 'the_punishment_of_loki',
       title: 'story_the_punishment_of_loki_title'.tr(),
       correctOrder: [
         MythCard(

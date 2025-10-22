@@ -262,7 +262,7 @@ class GamificationService with ChangeNotifier {
 
     final List<MythStory> unearnedMythStories = [];
     for (var story in allMythStories) {
-      final List<String> partsUnlockedForStory = unlockedStoryParts[story.title] ?? [];
+      final List<String> partsUnlockedForStory = unlockedStoryParts[story.id] ?? [];
       if (partsUnlockedForStory.isEmpty) {
         // Only add stories with no unlocked chapters
         unearnedMythStories.add(story);
@@ -290,7 +290,7 @@ class GamificationService with ChangeNotifier {
       unlockedStoryParts[progress['story_id'] as String] = List<String>.from(jsonDecode(progress['parts_unlocked']));
     }
 
-    final List<String> partsUnlockedForStory = unlockedStoryParts[story.title] ?? [];
+    final List<String> partsUnlockedForStory = unlockedStoryParts[story.id] ?? [];
     MythCard? firstUnearnedChapter;
 
     for (var mythCard in story.correctOrder) {
@@ -301,7 +301,7 @@ class GamificationService with ChangeNotifier {
     }
 
     if (firstUnearnedChapter != null) {
-      await unlockStoryPart(story.title, firstUnearnedChapter.id);
+      await unlockStoryPart(story.id, firstUnearnedChapter.id);
       return story;
     }
     return null;
