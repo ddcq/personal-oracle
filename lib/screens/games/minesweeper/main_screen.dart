@@ -131,7 +131,7 @@ class _MinesweeperView extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('minesweeper_treasures_found'.tr(args: ['${controller.treasuresFound}', '${controller.treasureCount}']), style: ChibiTextStyles.storyTitle),
+                child: Text('minesweeper_treasures_found'.tr(namedArgs: {'found': '${controller.treasuresFound}', 'total': '${controller.treasureCount}'}), style: ChibiTextStyles.storyTitle),
               ),
               _RuneLegend(),
               Expanded(

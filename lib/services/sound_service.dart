@@ -24,7 +24,7 @@ class SoundService with ChangeNotifier {
         await _audioPlayer.play(AssetSource('audio/ambiance.mp3'));
         _currentMusic = MusicType.mainMenu;
       } catch (e) {
-        debugPrint('widgets_custom_video_player_error_loading_video'.tr(args: ['$e']));
+        debugPrint('widgets_custom_video_player_error_loading_video'.tr(namedArgs: {'error': '$e'}));
       }
     }
   }
@@ -37,7 +37,7 @@ class SoundService with ChangeNotifier {
         await _audioPlayer.play(AssetSource('audio/reading.mp3'));
         _currentMusic = MusicType.story;
       } catch (e) {
-        debugPrint('widgets_custom_video_player_error_loading_video'.tr(args: ['$e']));
+        debugPrint('widgets_custom_video_player_error_loading_video'.tr(namedArgs: {'error': '$e'}));
       }
     }
   }
@@ -57,7 +57,7 @@ class SoundService with ChangeNotifier {
             .timeout(
               const Duration(seconds: 10),
               onTimeout: () {
-                debugPrint('widgets_custom_video_player_timeout_loading_music'.tr(args: [cardId]));
+                debugPrint('widgets_custom_video_player_timeout_loading_music'.tr(namedArgs: {'cardId': cardId}));
                 // En cas de timeout, on reprend la musique précédente
                 if (_previousMusic != MusicType.none) {
                   resumePreviousMusic();
@@ -66,7 +66,7 @@ class SoundService with ChangeNotifier {
             );
         _currentMusic = MusicType.card;
       } catch (e) {
-        debugPrint('widgets_custom_video_player_error_loading_music'.tr(args: [cardId, '$e']));
+        debugPrint('widgets_custom_video_player_error_loading_music'.tr(namedArgs: {'cardId': cardId, 'error': '$e'}));
         // En cas d'erreur, on reprend la musique précédente
         if (_previousMusic != MusicType.none) {
           await resumePreviousMusic();
@@ -100,7 +100,7 @@ class SoundService with ChangeNotifier {
           await _audioPlayer.resume();
         }
       } catch (e) {
-        debugPrint('widgets_custom_video_player_error_resuming_music'.tr(args: ['$e']));
+        debugPrint('widgets_custom_video_player_error_resuming_music'.tr(namedArgs: {'error': '$e'}));
       }
     }
   }

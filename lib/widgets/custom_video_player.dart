@@ -34,7 +34,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       // Add timeout for the entire operation
       await _performVideoLoad().timeout(const Duration(seconds: 15));
     } catch (e) {
-      debugPrint('widgets_custom_video_player_error_loading_video'.tr(args: ['$e']));
+      debugPrint('widgets_custom_video_player_error_loading_video'.tr(namedArgs: {'error': '$e'}));
       if (mounted) {
         // Classify the error type
         String errorType = 'unknown';

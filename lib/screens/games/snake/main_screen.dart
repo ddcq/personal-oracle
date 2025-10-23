@@ -121,16 +121,18 @@ class _SnakeGameState extends State<SnakeGame> {
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  if (_game != null)
-                    ValueListenableBuilder<GameState>(
-                      valueListenable: _game!.gameState,
-                      builder: (context, gameState, child) {
-                        return Text('snake_screen_score'.tr(args: ['${gameState.score}']), style: ChibiTextStyles.dialogText);
-                      },
-                    )
-                  else
-                    Text('snake_screen_score_default'.tr(), style: ChibiTextStyles.dialogText),
-                  if (_game != null && _game!.gameState.value.score >= SnakeFlameGame.victoryScoreThreshold)
+                  _game != null
+                      ? ValueListenableBuilder<GameState>(
+                          valueListenable: _game!.gameState,
+                          builder: (context, gameState, child) {
+                            return Text(
+                              'snake_screen_score'.tr(namedArgs: {'score': '${gameState.score ?? 0}'}),
+                              style: ChibiTextStyles.dialogText,
+                            );
+                          },
+                        )
+                      : Text('snake_screen_score_default'.tr(), style: ChibiTextStyles.dialogText),
+                  if (_game != null && (_game!.gameState.value.score ?? 0) >= SnakeFlameGame.victoryScoreThreshold)
                     ConfettiWidget(
                       confettiController: _confettiController,
                       blastDirectionality: BlastDirectionality.explosive, // All directions
@@ -285,7 +287,7 @@ class _SnakeGameState extends State<SnakeGame> {
         setState(() {});
       },
       onConfettiTrigger: () {
-        if (_game != null && _game!.gameState.value.score >= SnakeFlameGame.victoryScoreThreshold) {
+        if (_game != null && (_game!.gameState.value.score ?? 0) >= SnakeFlameGame.victoryScoreThreshold) {
           _confettiController.play();
         } else {
           _confettiController.stop();

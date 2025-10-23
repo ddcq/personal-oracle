@@ -249,7 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await gamificationService.unlockCollectibleCard(card);
     }
     setState(() {}); // Refresh the UI
-    _showSnackBar('profile_screen_all_cards_unlocked'.tr(args: [version.name]));
+    _showSnackBar('profile_screen_all_cards_unlocked'.tr(namedArgs: {'version': version.name}));
   }
 
   Future<void> _unlockAllStories() async {

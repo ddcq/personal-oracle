@@ -28,7 +28,7 @@ class SnakeGameOverPopup extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'snake_game_over_popup_message'.tr(args: ['$score']),
+            'snake_game_over_popup_message'.tr(namedArgs: {'score': '$score'}),
             style: TextStyle(
               color: Colors.white, // Changed to white
               fontSize: 24,
