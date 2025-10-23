@@ -33,9 +33,9 @@ class _WordSearchView extends StatelessWidget {
       appBar: ChibiAppBar(
         titleText: 'word_search_screen_title'.tr(),
         leading: IconButton(
-          icon: const Icon(Icons.home, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            context.go('/');
+            context.go('/games');
           },
         ),
         actions: [

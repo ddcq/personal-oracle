@@ -62,7 +62,7 @@ class OrderTheScrollsPreliminaryScreen extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => context.go('/'),
+                  onPressed: () => context.go('/games'),
                 ),
               ),
             ),

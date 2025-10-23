@@ -18,7 +18,6 @@ import 'package:oracle_d_asgard/data/stories_data.dart';
 import 'package:oracle_d_asgard/models/card_version.dart';
 import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
-import 'package:oracle_d_asgard/models/card_version.dart';
 import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -32,6 +31,7 @@ import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -1024,9 +1024,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ],
-                onChanged: (Locale? newLocale) {
+                onChanged: (Locale? newLocale) async {
                   if (newLocale != null) {
                     context.setLocale(newLocale);
+                    // Sauvegarder la langue dans les préférences utilisateur
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setString('language_code', newLocale.languageCode);
+                    await prefs.setString('country_code', newLocale.countryCode ?? '');
                   }
                 },
               ),

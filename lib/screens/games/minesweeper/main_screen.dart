@@ -62,7 +62,7 @@ class _MinesweeperView extends StatelessWidget {
                 Navigator.of(context).pop();
               },
               onMenu: () {
-                context.go('/');
+                context.go('/games');
               },
             );
           },
@@ -104,9 +104,9 @@ class _MinesweeperView extends StatelessWidget {
       appBar: ChibiAppBar(
         titleText: 'minesweeper_title'.tr(),
         leading: IconButton(
-          icon: const Icon(Icons.home, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            context.go('/');
+            context.go('/games');
           },
         ),
         actions: [

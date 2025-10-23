@@ -108,6 +108,12 @@ class _SnakeGameState extends State<SnakeGame> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              context.go('/games');
+            },
+          ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -196,7 +202,7 @@ class _SnakeGameState extends State<SnakeGame> {
                     onGameResumed: () => _game?.resumeEngine(),
                     onGoToHome: () {
                       Navigator.of(context).pop();
-                      context.go('/');
+                      context.go('/games');
                     },
                   );
                 },

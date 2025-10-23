@@ -78,7 +78,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
 context.go('/qix');
               },
               onMenu: () {
-                context.go('/');
+                context.go('/games');
               },
             );
           },
@@ -100,6 +100,12 @@ context.go('/qix');
       extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
         titleText: 'qix_main_screen_title'.tr(),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            context.go('/games');
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.help_outline, color: Colors.white),

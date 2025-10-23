@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 /// Widget d'aperçu des prochaines pièces
 class NextPiecesPreview extends StatelessWidget {
   final List<int> nextPieces;
@@ -25,7 +26,7 @@ class NextPiecesPreview extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Prochaines pièces',
+            'asgard_wall_game_screen_next_pieces'.tr(),
             style: TextStyle(
               color: Color(0xFFFFD700), // Couleur du texte dorée
               fontWeight: FontWeight.bold,

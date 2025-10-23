@@ -679,6 +679,12 @@ class _GameScreenState extends State<GameScreen> {
           extendBodyBehindAppBar: false, // The body does not extend behind the app bar
           appBar: ChibiAppBar(
             titleText: 'asgard_wall_game_screen_title'.tr(),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                context.go('/games');
+              },
+            ),
             actions: [
               IconButton(
                 icon: const Icon(Icons.help_outline, color: Colors.white),
@@ -768,17 +774,6 @@ class _GameScreenState extends State<GameScreen> {
                   ),
                 ],
               ),
-            ),
-          ),
-        ),
-        SafeArea(
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: IconButton(
-              icon: const Icon(Icons.home, color: Colors.white),
-              onPressed: () {
-                context.go('/');
-              },
             ),
           ),
         ),

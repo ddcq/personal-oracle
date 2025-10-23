@@ -13,6 +13,20 @@ import 'package:provider/provider.dart';
 
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/router.dart'; // Import the router
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future<Locale> _loadSavedLocale() async {
+  final prefs = await SharedPreferences.getInstance();
+  final languageCode = prefs.getString('language_code');
+  final countryCode = prefs.getString('country_code');
+
+  if (languageCode != null) {
+    return Locale(languageCode, countryCode?.isNotEmpty == true ? countryCode : null);
+  }
+
+  // Valeur par défaut si aucune langue n'est sauvegardée
+  return const Locale('en', 'US');
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,12 +36,16 @@ void main() async {
     await MobileAds.instance.initialize();
   }
   await getIt<DatabaseService>().database;
+
+  // Charger la langue sauvegardée
+  final savedLocale = await _loadSavedLocale();
+
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
       path: 'assets/resources/langs',
       fallbackLocale: const Locale('en', 'US'),
-      startLocale: const Locale('en', 'US'),
+      startLocale: savedLocale,
       child: ChangeNotifierProvider(
         create: (context) => ThemeProvider(),
         child: const MyApp(),
@@ -58,6 +76,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Force rebuild when locale changes from EasyLocalization
+    setState(() {});
+  }
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final soundService = getIt<SoundService>();
     if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
@@ -75,7 +100,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp.router(
-          title: 'Oracle Nordique',
+          key: ValueKey(context.locale.toString()), // Force rebuild when locale changes
+          title: 'app_title'.tr(),
           theme: AppThemes.lightTheme,
           darkTheme: AppThemes.darkTheme,
           themeMode: Provider.of<ThemeProvider>(context).themeMode,

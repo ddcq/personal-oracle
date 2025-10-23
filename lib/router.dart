@@ -6,12 +6,12 @@ import 'package:oracle_d_asgard/screens/quiz_screen.dart';
 import 'package:oracle_d_asgard/screens/result_screen.dart';
 import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/screens/collectible_card_detail_page.dart';
-import 'package:oracle_d_asgard/screens/games/qix/main.dart'; // Import QixGameScreen
-import 'package:oracle_d_asgard/screens/games/order_the_scrolls/screen.dart'; // Import OrderTheScrollsGame
+import 'package:oracle_d_asgard/screens/games/qix/main_screen.dart'; // Import QixGameScreen
+import 'package:oracle_d_asgard/screens/games/order_the_scrolls/main_screen.dart'; // Import OrderTheScrollsGame
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/preliminary_screen.dart'; // Import OrderTheScrollsPreliminaryScreen
 import 'package:oracle_d_asgard/screens/games/menu.dart'; // Import MenuPrincipal
 import 'package:oracle_d_asgard/screens/games/asgard_wall/preliminary_screen.dart'; // Import AsgardWallGameScreen
-import 'package:oracle_d_asgard/screens/games/puzzle/screen.dart'; // Import PuzzlePreliminaryScreen
+import 'package:oracle_d_asgard/screens/games/puzzle/preliminary_screen.dart'; // Import PuzzlePreliminaryScreen
 import 'package:oracle_d_asgard/screens/games/snake/preliminary_screen.dart'; // Import SnakePreliminaryScreen
 import 'package:oracle_d_asgard/screens/games/qix/preliminary_screen.dart'; // Import QixPreliminaryScreen
 import 'package:oracle_d_asgard/screens/games/word_search/preliminary_screen.dart'; // Import WordSearchPreliminaryScreen

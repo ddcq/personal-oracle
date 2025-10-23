@@ -103,20 +103,12 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
             ),
           ),
           SafeArea(
-            child: IgnorePointer(
-              child: ChibiAppBar(
-                titleText: 'puzzle_screen_title'.tr(),
-              ),
-            ),
-          ),
-
-          SafeArea(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: IconButton(
-                icon: const Icon(Icons.home, color: Colors.white),
+            child: ChibiAppBar(
+              titleText: 'puzzle_screen_title'.tr(),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () {
-                  context.go('/');
+                  context.go('/games');
                 },
               ),
             ),

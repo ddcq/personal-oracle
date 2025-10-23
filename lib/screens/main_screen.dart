@@ -29,6 +29,16 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // This ensures the widget rebuilds when the locale changes
+    // EasyLocalization automatically triggers this method when locale changes
+    setState(() {
+      // Force rebuild when locale changes
+    });
+  }
+
+  @override
   void dispose() {
     if (Platform.isIOS || Platform.isAndroid) {
       _bannerAd?.dispose();

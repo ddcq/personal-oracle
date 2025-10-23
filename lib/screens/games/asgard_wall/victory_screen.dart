@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:oracle_d_asgard/screens/games/asgard_wall/game_screen.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/main_screen.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 

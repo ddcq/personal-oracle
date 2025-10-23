@@ -76,9 +76,9 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
               backgroundColor: Colors.transparent,
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () {
-                  context.go('/');
+                  context.go('/games');
                 },
               ),
               actions: [
@@ -178,7 +178,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
             Navigator.of(context).pop();
           },
           onMenu: () {
-            context.go('/');
+            context.go('/games');
           },
         );
       },

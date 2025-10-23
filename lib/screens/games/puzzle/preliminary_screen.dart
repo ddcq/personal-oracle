@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
-import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_screen.dart';
+import 'package:oracle_d_asgard/screens/games/puzzle/main_screen.dart';
 import 'dart:math';
 import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
@@ -71,7 +72,7 @@ class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
                 alignment: Alignment.topLeft,
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => context.go('/games'),
                 ),
               ),
             ),

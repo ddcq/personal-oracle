@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'package:oracle_d_asgard/screens/games/word_search/word_search_screen.dart';
+import 'package:oracle_d_asgard/screens/games/word_search/main_screen.dart';
 
 class WordSearchPreliminaryScreen extends StatelessWidget {
   const WordSearchPreliminaryScreen({super.key});
@@ -62,7 +63,7 @@ class WordSearchPreliminaryScreen extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => context.go('/games'),
                 ),
               ),
             ),
