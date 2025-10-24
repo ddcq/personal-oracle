@@ -4,29 +4,24 @@
 import 'package:flutter/material.dart';
 
 const List<String> pieceShapes = [
-  '1111/1|1|1|1', // I
-  '11|11', // O
-  '010|111/10|11|10/111|010/01|11|01', // T
-  '100|111/11|10|10/111|001/01|01|11', // L (corrigé pour la rotation 4)
-  '001|111/10|10|11/111|100/11|01|01', // J (corrigé pour la rotation 4)
-  '011|110/10|11|01', // S
-  '110|011/01|11|10', // Z
+  '11/1|1', // I-bimino (2)
+  '111/1|1|1', // I-tromino (3)
+  '10|11/11|10/11|01/01|11', // L-tromino (3)
+  // Removed pieces: toot hard to fit
+  //  '01|10|11/110|101/11|01|10/101|011', // ?-tetromino (4)
+  //  '011|110|010/010|111|001/010|011|110/100|111|010', // F-pentomino (5)
+  //  '110|011|010/010|111|100/010|110|011/001|111|010', // 7-pentomino (5)
+  '11|11|10/111|011/01|11|11/110|111', // P-pentomino (5)
+  '11|11|01/011|111/10|11|11/111|110', // Q-pentomino (5)
+  '111|010|010/001|111|001/010|010|111/100|111|100', // T-pentomino (5)
+  '101|111/11|10|11/111|101/11|01|11', // U-pentomino (5)
+  '010|111|010', // X-pentomino (5)
 ];
 
 // Convertit les chaînes de formes en listes de booléens.
 // Cette partie serait dans game_data.dart si "pieces" était une fonction.
 final List<List<List<List<bool>>>> pieces = pieceShapes
-    .map(
-      (s) => s
-          .split('/')
-          .map(
-            (r) => r
-                .split('|')
-                .map((l) => l.split('').map((c) => c == '1').toList())
-                .toList(),
-          )
-          .toList(),
-    )
+    .map((s) => s.split('/').map((r) => r.split('|').map((l) => l.split('').map((c) => c == '1').toList()).toList()).toList())
     .toList();
 
 List<Color> pieceColors = [
@@ -37,4 +32,9 @@ List<Color> pieceColors = [
   Colors.blue,
   Colors.green,
   Colors.red,
+  Colors.teal,
+  Colors.pink,
+  Colors.lime,
+  Colors.indigo,
+  Colors.amber,
 ];

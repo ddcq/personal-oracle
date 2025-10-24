@@ -26,8 +26,8 @@ class GameScreen extends StatefulWidget {
 // game_logic.dart (Simulé : La logique et l’état du jeu)
 // Les méthodes et l’état de jeu sont gérés par _GameScreenState.
 class _GameScreenState extends State<GameScreen> {
-  static const int boardWidth = 10;
-  static const int boardHeight = 20;
+  static const int boardWidth = 11;
+  static const int boardHeight = 22;
   static const int victoryHeight = 12;
 
   // Le plateau de jeu stocke la couleur de chaque cellule, qui sera maintenant la couleur du mur pour les blocs posés.
@@ -107,8 +107,19 @@ class _GameScreenState extends State<GameScreen> {
     nextPieces.clear();
     nextPieceColors.clear();
 
+    // Coefficients de chance pour chaque pièce : [5,5,5,2,2,1,1,1]
+    final totalWeight = 22;
+    final cumulativeWeights = [5, 10, 15, 17, 19, 20, 21, 22];
+
     for (int i = 0; i < 5; i++) {
-      int pieceIndex = random.nextInt(pieces.length);
+      final randomValue = random.nextInt(totalWeight);
+      int pieceIndex = 0;
+      for (int j = 0; j < cumulativeWeights.length; j++) {
+        if (randomValue < cumulativeWeights[j]) {
+          pieceIndex = j;
+          break;
+        }
+      }
       nextPieces.add(pieceIndex);
       nextPieceColors.add(pieceColors[pieceIndex]);
     }
@@ -224,41 +235,9 @@ class _GameScreenState extends State<GameScreen> {
 
   // Vérifie si le joueur a gagné ou perdu.
   void checkVictoryCondition() {
-    if (_checkInaccessibleHoles()) {
-      endGame(false); // Trou inaccessible détecté, le joueur perd
-      return;
-    }
-
     if (_checkWallComplete()) {
       endGame(true); // Victoire !
     }
-  }
-
-  bool _checkInaccessibleHoles() {
-    for (int row = boardHeight - 1; row >= boardHeight - victoryHeight; row--) {
-      for (int col = 0; col < boardWidth; col++) {
-        if (board[row][col] == null) {
-          // Il y a un trou, vérifier s'il y a des blocs au-dessus
-          bool hasBlockAbove = false;
-          for (int checkRow = row - 1; checkRow >= 0; checkRow--) {
-            if (board[checkRow][col] != null) {
-              hasBlockAbove = true;
-              break;
-            }
-          }
-
-          if (hasBlockAbove) {
-            // Il y a un bloc au-dessus, vérifier si le trou est accessible
-            if (!isTrueHole(col, row)) {
-              continue; // Ce n’est pas un vrai trou, continuer
-            } else {
-              return true; // Trou inaccessible détecté
-            }
-          }
-        }
-      }
-    }
-    return false;
   }
 
   bool _checkWallComplete() {
@@ -441,68 +420,71 @@ class _GameScreenState extends State<GameScreen> {
 
   void _showWinDialog() {
     final gamificationService = getIt<GamificationService>();
-    gamificationService.selectRandomUnearnedCollectibleCard().then((card) {
-      if (card != null) {
-        if (!mounted) return;
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return VictoryPopup(
-              rewardCard: card,
-              onDismiss: () {
-                Navigator.of(context).pop();
-                startGame();
-              },
-              onSeeRewards: () {
-                Navigator.of(context).pop();
-                context.go('/profile');
-              },
-            );
-          },
-        );
-      } else {
-        // No card won, just show a simple victory message and restart
-        if (!mounted) return;
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return VictoryPopup(
-              isGenericVictory: true,
-              onDismiss: () {
-                Navigator.of(context).pop();
-                startGame();
-              },
-              onSeeRewards: () {
-                Navigator.of(context).pop();
-                context.go('/profile');
+    gamificationService
+        .selectRandomUnearnedCollectibleCard()
+        .then((card) {
+          if (card != null) {
+            if (!mounted) return;
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return VictoryPopup(
+                  rewardCard: card,
+                  onDismiss: () {
+                    Navigator.of(context).pop();
+                    startGame();
+                  },
+                  onSeeRewards: () {
+                    Navigator.of(context).pop();
+                    context.go('/profile');
+                  },
+                );
               },
             );
-          },
-        );
-      }
-    }).catchError((error) {
-      // Show generic victory popup in case of error
-      if (!mounted) return;
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return VictoryPopup(
-            isGenericVictory: true,
-            onDismiss: () {
-              Navigator.of(context).pop();
-              startGame();
-            },
-            onSeeRewards: () {
-              Navigator.of(context).pop();
-              context.go('/profile');
+          } else {
+            // No card won, just show a simple victory message and restart
+            if (!mounted) return;
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return VictoryPopup(
+                  isGenericVictory: true,
+                  onDismiss: () {
+                    Navigator.of(context).pop();
+                    startGame();
+                  },
+                  onSeeRewards: () {
+                    Navigator.of(context).pop();
+                    context.go('/profile');
+                  },
+                );
+              },
+            );
+          }
+        })
+        .catchError((error) {
+          // Show generic victory popup in case of error
+          if (!mounted) return;
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return VictoryPopup(
+                isGenericVictory: true,
+                onDismiss: () {
+                  Navigator.of(context).pop();
+                  startGame();
+                },
+                onSeeRewards: () {
+                  Navigator.of(context).pop();
+                  context.go('/profile');
+                },
+              );
             },
           );
-        },
-      );
-    });
+        });
   }
 
   void _showLossDialog() {
