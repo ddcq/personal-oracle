@@ -54,4 +54,6 @@ class ChibiColors {
   static const Color buttonBlue = Color(0xFF1E88E5);
   static const Color buttonRed = Color(0xFFE53935);
   static const Color buttonGreen = Color(0xFF4CAF50);
+  static const Color buttonPurple = Color(0xFF9C27B0);
+  static const Color buttonYellow = Color(0xFFFFEB3B);
 }

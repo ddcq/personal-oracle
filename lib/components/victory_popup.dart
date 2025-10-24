@@ -11,6 +11,8 @@ import 'package:confetti/confetti.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:oracle_d_asgard/services/sound_service.dart';
+import 'package:oracle_d_asgard/locator.dart';
 
 class VictoryPopup extends StatefulWidget {
   final CollectibleCard? rewardCard; // Made nullable
@@ -36,14 +38,32 @@ class VictoryPopup extends StatefulWidget {
 
 class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderStateMixin {
   late final ConfettiController _confettiController;
+  late final SoundService _soundService;
+  bool _hasPlayedCardMusic = false;
 
   @override
   void initState() {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 2));
+    _soundService = getIt<SoundService>();
 
     _confettiController.play();
+
+    // Play card music if a collectible card was won
+    if (widget.rewardCard != null && !_hasPlayedCardMusic) {
+      _playCardMusic();
+    }
   }
+
+  void _playCardMusic() async {
+    if (widget.rewardCard?.id != null) {
+      await _soundService.playCardMusic(widget.rewardCard!.id);
+      _hasPlayedCardMusic = true;
+    }
+  }
+
+  // Note: Music will automatically resume previous track when card music ends
+  // Thanks to the onPlayerComplete listener in SoundService
 
   @override
   void dispose() {
@@ -152,7 +172,8 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                           const SizedBox(height: 5),
                           Text(
                             widget.unlockedStoryChapter!.description,
-                            style: const TextStyle(fontSize: 16, color: Colors.white70, decoration: TextDecoration.none),
+                            style: Theme.of(context).textTheme.displayMedium,
+                            //?.copyWith(fontSize: 14, color: Colors.white70, decoration: TextDecoration.none),
                             textAlign: TextAlign.center,
                           ),
                         ],
@@ -170,7 +191,7 @@ class _VictoryPopupState extends State<VictoryPopup> with SingleTickerProviderSt
                             if (!widget.hideReplayButton)
                               ChibiButton(
                                 color: ChibiColors.buttonGreen,
-                                onPressed: widget.onDismiss, // Assuming onDismiss is for replaying
+                                onPressed: widget.onDismiss,
                                 child: const Icon(Icons.replay, color: Colors.white, size: 32),
                               ),
                             ChibiButton(

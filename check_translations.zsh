@@ -1,151 +1,117 @@
 #!/bin/zsh
 
-# Script pour vérifier les clés de traduction manquantes
-# Auteur: Assistant Claude
-# Usage: ./check_translations.zsh
+# Couleurs pour la sortie
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+BLUE=$(tput setaf 4)
+NC=$(tput sgr0) # Pas de couleur
 
-set -e
+# --- Configuration ---
+# Dossier contenant les fichiers de langue
+LANGS_DIR="assets/resources/langs"
+# Fichiers de langue
+EN_FILE="$LANGS_DIR/en-US.json"
+FR_FILE="$LANGS_DIR/fr-FR.json"
+# Dossier contenant le code source Dart
+DART_DIR="lib"
 
-# Couleurs pour l'affichage
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# --- Vérifications initiales ---
+if ! command -v jq &> /dev/null; then
+    echo "${RED}ERREUR: 'jq' n'est pas installé. Veuillez l'installer (ex: brew install jq).${NC}"
+    exit 1
+fi
 
-# Chemins des fichiers de traduction
-FR_FILE="assets/resources/langs/fr-FR.json"
-EN_FILE="assets/resources/langs/en-US.json"
+if [[ ! -f "$EN_FILE" || ! -f "$FR_FILE" ]]; then
+    echo "${RED}ERREUR: Un ou plusieurs fichiers de traduction n'ont pas été trouvés.${NC}"
+    echo "Vérifié: $EN_FILE"
+    echo "Vérifié: $FR_FILE"
+    exit 1
+fi
 
-# Fichiers temporaires
-TEMP_DIR=$(mktemp -d)
-FR_KEYS="$TEMP_DIR/fr_keys.txt"
-EN_KEYS="$TEMP_DIR/en_keys.txt"
-MISSING_FR="$TEMP_DIR/missing_fr.txt"
-MISSING_EN="$TEMP_DIR/missing_en.txt"
+# --- Création des fichiers temporaires ---
+# Crée des fichiers temporaires pour stocker les listes de clés
+DART_KEYS_FILE=$(mktemp)
+EN_KEYS_FILE=$(mktemp)
+FR_KEYS_FILE=$(mktemp)
 
-# Fonction de nettoyage
-cleanup() {
-    rm -rf "$TEMP_DIR"
-}
-trap cleanup EXIT
+# Assure que les fichiers temporaires sont supprimés à la fin du script
+trap 'rm -f "$DART_KEYS_FILE" "$EN_KEYS_FILE" "$FR_KEYS_FILE"' EXIT
 
-# Vérification que les fichiers existent
-check_files() {
-    if [[ ! -f "$FR_FILE" ]]; then
-        echo "${RED}Erreur: Fichier $FR_FILE introuvable${NC}"
-        exit 1
-    fi
+# --- Extraction des clés ---
+echo "${BLUE}🔍 Extraction des clés...${NC}"
 
-    if [[ ! -f "$EN_FILE" ]]; then
-        echo "${RED}Erreur: Fichier $EN_FILE introuvable${NC}"
-        exit 1
-    fi
+# 1. Extrait les clés du code Dart
+# Cherche les chaînes de caractères suivies de ".tr" et nettoie le résultat
+echo "   - Depuis les fichiers Dart (.tr)"
+grep -rhEo "['\"][a-zA-Z0-9_.-]+['\"]\s*\.tr" "$DART_DIR" | sed -E "s/['\"]//g" | sed -E 's/\.tr$//' | sort -u > "$DART_KEYS_FILE"
 
-    # Vérifier que jq est installé
-    if ! command -v jq &> /dev/null; then
-        echo "${RED}Erreur: jq n'est pas installé. Installez-le avec: brew install jq${NC}"
-        exit 1
-    fi
-}
+# 2. Extrait les clés des fichiers JSON
+# Utilise jq pour extraire récursivement tous les chemins vers des valeurs scalaires
+echo "   - Depuis $EN_FILE"
+jq -r 'paths(scalars) | join(".")' "$EN_FILE" | sort -u > "$EN_KEYS_FILE"
+echo "   - Depuis $FR_FILE"
+jq -r 'paths(scalars) | join(".")' "$FR_FILE" | sort -u > "$FR_KEYS_FILE"
 
-# Extraction et tri des clés
-extract_keys() {
-    echo "${BLUE}📝 Extraction des clés de traduction...${NC}"
+DART_KEY_COUNT=$(wc -l < "$DART_KEYS_FILE")
+EN_KEY_COUNT=$(wc -l < "$EN_KEYS_FILE")
+FR_KEY_COUNT=$(wc -l < "$FR_KEYS_FILE")
 
-    # Extraire les clés du fichier français et les trier
-    jq -r 'keys[]' "$FR_FILE" | sort > "$FR_KEYS"
-    FR_COUNT=$(wc -l < "$FR_KEYS" | tr -d ' ')
+echo "${GREEN}✅ Terminé!${NC} ($DART_KEY_COUNT clés dans le code, $EN_KEY_COUNT en anglais, $FR_KEY_COUNT en français)"
 
-    # Extraire les clés du fichier anglais et les trier
-    jq -r 'keys[]' "$EN_FILE" | sort > "$EN_KEYS"
-    EN_COUNT=$(wc -l < "$EN_KEYS" | tr -d ' ')
+# --- Analyse et rapport ---
+ANY_MISSING=false
 
-    echo "${GREEN}✓ Clés françaises: $FR_COUNT${NC}"
-    echo "${GREEN}✓ Clés anglaises: $EN_COUNT${NC}"
-}
+# 1. Clés utilisées dans le code mais manquantes dans fr-FR.json
+echo "\n${YELLOW}--- Clés manquantes dans fr-FR.json ---${NC}"
+MISSING_FR=$(comm -23 "$DART_KEYS_FILE" "$FR_KEYS_FILE")
+if [[ -n "$MISSING_FR" ]]; then
+    ANY_MISSING=true
+    echo "$MISSING_FR" | while read -r key; do echo "${RED}- $key${NC}"; done
+else
+    echo "${GREEN}Aucune clé manquante.${NC}"
+fi
 
-# Comparaison des clés
-compare_keys() {
-    echo "\n${BLUE}🔍 Comparaison des clés...${NC}"
+# 2. Clés utilisées dans le code mais manquantes dans en-US.json
+echo "\n${YELLOW}--- Clés manquantes dans en-US.json ---${NC}"
+MISSING_EN=$(comm -23 "$DART_KEYS_FILE" "$EN_KEYS_FILE")
+if [[ -n "$MISSING_EN" ]]; then
+    ANY_MISSING=true
+    echo "$MISSING_EN" | while read -r key; do echo "${RED}- $key${NC}"; done
+else
+    echo "${GREEN}Aucune clé manquante.${NC}"
+fi
 
-    # Trouver les clés manquantes dans le fichier français
-    comm -23 "$EN_KEYS" "$FR_KEYS" > "$MISSING_FR"
-    MISSING_FR_COUNT=$(wc -l < "$MISSING_FR" | tr -d ' ')
+# 3. Incohérences entre les fichiers de langue
+echo "\n${YELLOW}--- Incohérences entre en-US.json et fr-FR.json ---${NC}"
+INCONSISTENCY=false
+# Clés dans EN mais pas dans FR
+EN_NOT_FR=$(comm -23 "$EN_KEYS_FILE" "$FR_KEYS_FILE")
+if [[ -n "$EN_NOT_FR" ]]; then
+    INCONSISTENCY=true
+    ANY_MISSING=true
+    echo "${YELLOW}Clés présentes dans en-US.json mais absentes dans fr-FR.json:${NC}"
+    echo "$EN_NOT_FR" | while read -r key; do echo "${RED}- $key${NC}"; done
+fi
 
-    # Trouver les clés manquantes dans le fichier anglais
-    comm -23 "$FR_KEYS" "$EN_KEYS" > "$MISSING_EN"
-    MISSING_EN_COUNT=$(wc -l < "$MISSING_EN" | tr -d ' ')
+# Clés dans FR mais pas dans EN
+FR_NOT_EN=$(comm -13 "$EN_KEYS_FILE" "$FR_KEYS_FILE")
+if [[ -n "$FR_NOT_EN" ]]; then
+    INCONSISTENCY=true
+    ANY_MISSING=true
+    echo "${YELLOW}Clés présentes dans fr-FR.json mais absentes dans en-US.json:${NC}"
+    echo "$FR_NOT_EN" | while read -r key; do echo "${RED}- $key${NC}"; done
+fi
 
-    # Afficher les résultats
-    display_results
-}
+if ! $INCONSISTENCY; then
+    echo "${GREEN}Les deux fichiers de langue sont synchronisés.${NC}"
+fi
 
-# Affichage des résultats
-display_results() {
-    echo "\n${BLUE}📊 RAPPORT DE COMPARAISON${NC}"
-    echo "=================================="
-
-    if [[ $MISSING_FR_COUNT -eq 0 && $MISSING_EN_COUNT -eq 0 ]]; then
-        echo "${GREEN}✅ Parfait! Toutes les clés sont présentes dans les deux fichiers.${NC}"
-        return
-    fi
-
-    # Clés manquantes dans le fichier français
-    if [[ $MISSING_FR_COUNT -gt 0 ]]; then
-        echo "\n${RED}❌ Clés manquantes dans $FR_FILE ($MISSING_FR_COUNT):${NC}"
-        echo "${RED}────────────────────────────────────────────────${NC}"
-        while IFS= read -r key; do
-            echo "  • $key"
-        done < "$MISSING_FR"
-    fi
-
-    # Clés manquantes dans le fichier anglais
-    if [[ $MISSING_EN_COUNT -gt 0 ]]; then
-        echo "\n${RED}❌ Clés manquantes dans $EN_FILE ($MISSING_EN_COUNT):${NC}"
-        echo "${RED}────────────────────────────────────────────────${NC}"
-        while IFS= read -r key; do
-            echo "  • $key"
-        done < "$MISSING_EN"
-    fi
-
-    # Résumé
-    echo "\n${YELLOW}📋 RÉSUMÉ:${NC}"
-    echo "  • Total clés FR: $FR_COUNT"
-    echo "  • Total clés EN: $EN_COUNT"
-    echo "  • Manquantes FR: $MISSING_FR_COUNT"
-    echo "  • Manquantes EN: $MISSING_EN_COUNT"
-
-    if [[ $MISSING_FR_COUNT -gt 0 || $MISSING_EN_COUNT -gt 0 ]]; then
-        echo "\n${YELLOW}💡 Actions recommandées:${NC}"
-        if [[ $MISSING_FR_COUNT -gt 0 ]]; then
-            echo "  1. Ajoutez les clés manquantes au fichier français"
-        fi
-        if [[ $MISSING_EN_COUNT -gt 0 ]]; then
-            echo "  2. Ajoutez les clés manquantes au fichier anglais"
-        fi
-        echo "  3. Relancez ce script pour vérifier"
-    fi
-}
-
-# Fonction principale
-main() {
-    echo "${BLUE}🌍 VÉRIFICATEUR DE TRADUCTIONS Oracle d'Asgard${NC}"
-    echo "================================================="
-
-    check_files
-    extract_keys
-    compare_keys
-
-    echo "\n${GREEN}✓ Analyse terminée!${NC}"
-
-    # Code de sortie selon les résultats
-    if [[ $MISSING_FR_COUNT -gt 0 || $MISSING_EN_COUNT -gt 0 ]]; then
-        exit 1
-    else
-        exit 0
-    fi
-}
-
-# Exécution du script principal
-main "$@"
+# --- Résumé ---
+echo "\n${BLUE}--- Résumé ---${NC}"
+if $ANY_MISSING; then
+    echo "${RED}Des problèmes de traduction ont été trouvés. Veuillez vérifier les listes ci-dessus.${NC}"
+    exit 1
+else
+    echo "${GREEN}🎉 Parfait! Toutes les clés de traduction sont présentes et synchronisées.${NC}"
+fi

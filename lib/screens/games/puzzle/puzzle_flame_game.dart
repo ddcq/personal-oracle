@@ -299,7 +299,6 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   }
 
   @override
-  @override
   void update(double dt) {
     super.update(dt);
     // Mettre à jour la position du composant Flame en fonction des données du modèle

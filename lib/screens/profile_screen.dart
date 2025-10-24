@@ -29,6 +29,8 @@ import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+import 'package:oracle_d_asgard/widgets/dev_tools_widget.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -229,37 +231,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> _clearAndRebuildDatabase() async {
-    final dbService = getIt<DatabaseService>();
-    try {
-      await dbService.deleteDb();
-      await dbService.reinitializeDb();
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('profile_screen_database_cleared_success'.tr())));
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${'profile_screen_database_clear_failed'.tr()}: $e')));
-    }
-  }
+  void _showRandomVictoryPopup() {
+    // Sélectionne une carte aléatoire parmi toutes les cartes disponibles
+    final allCards = allCollectibleCards;
+    if (allCards.isNotEmpty) {
+      final randomIndex = DateTime.now().millisecondsSinceEpoch % allCards.length;
+      final randomCard = allCards[randomIndex];
 
-  Future<void> _unlockAllCollectibleCards(CardVersion version) async {
-    final gamificationService = getIt<GamificationService>();
-    final allCardsOfVersion = allCollectibleCards.where((card) => card.version == version).toList();
-    for (var card in allCardsOfVersion) {
-      await gamificationService.unlockCollectibleCard(card);
+      _showRewardDialog(rewardCard: randomCard);
     }
-    setState(() {}); // Refresh the UI
-    _showSnackBar('profile_screen_all_cards_unlocked'.tr(namedArgs: {'version': version.name}));
-  }
-
-  Future<void> _unlockAllStories() async {
-    final gamificationService = getIt<GamificationService>();
-    final allStories = getMythStories();
-    for (var story in allStories) {
-      await gamificationService.unlockStory(story.id, story.correctOrder.map((card) => card.id).toList());
-    }
-    setState(() {}); // Refresh the UI
-    _showSnackBar('profile_screen_all_stories_unlocked'.tr());
   }
 
   @override
@@ -440,44 +420,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildUnlockedStories(storyProgress),
                   const SizedBox(height: 50),
                   if (_showHiddenButtons)
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.delete_forever, size: 20),
-                              onPressed: _clearAndRebuildDatabase,
-                              tooltip: 'Clear and Rebuild Database',
-                            ),
-                            SizedBox(width: 20.w),
-                            IconButton(icon: const Icon(Icons.book, size: 20), onPressed: _unlockAllStories, tooltip: 'Unlock All Stories'),
-                          ],
-                        ),
-                        SizedBox(height: 10.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.card_giftcard, size: 20),
-                              onPressed: () => _unlockAllCollectibleCards(CardVersion.chibi),
-                              tooltip: 'Unlock All Chibi Cards',
-                            ),
-                            SizedBox(width: 20.w),
-                            IconButton(
-                              icon: const Icon(Icons.card_membership, size: 20),
-                              onPressed: () => _unlockAllCollectibleCards(CardVersion.premium),
-                              tooltip: 'Unlock All Premium Cards',
-                            ),
-                            SizedBox(width: 20.w),
-                            IconButton(
-                              icon: const Icon(Icons.diamond, size: 20),
-                              onPressed: () => _unlockAllCollectibleCards(CardVersion.epic),
-                              tooltip: 'Unlock All Epic Cards',
-                            ),
-                          ],
-                        ),
-                      ],
+                    DevToolsWidget(
+                      onVictoryPopupTest: _showRandomVictoryPopup,
+                      onShowSnackBar: (message) {
+                        _showSnackBar(message);
+                        setState(() {}); // Refresh the UI after dev actions
+                      },
                     ),
                   const SizedBox(height: 50),
                 ],
@@ -506,13 +454,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 context,
               ).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC, fontSize: 22),
             ),
-            Switch(
-              value: !soundService.isMuted,
-              onChanged: (value) {
-                soundService.setMuted(!value);
+            ListenableBuilder(
+              listenable: soundService,
+              builder: (context, child) {
+                return Switch(
+                  value: !soundService.isMuted,
+                  onChanged: (value) {
+                    soundService.setMuted(!value);
+                  },
+                  activeTrackColor: Colors.green,
+                  inactiveTrackColor: Colors.grey,
+                );
               },
-              activeTrackColor: Colors.green,
-              inactiveTrackColor: Colors.grey,
             ),
           ],
         ),

@@ -12,6 +12,13 @@ class SoundService with ChangeNotifier {
 
   SoundService() {
     _audioPlayer.setReleaseMode(ReleaseMode.loop);
+
+    // Listen for player completion to auto-resume previous music for cards
+    _audioPlayer.onPlayerComplete.listen((_) {
+      if (_currentMusic == MusicType.card && _previousMusic != MusicType.none) {
+        resumePreviousMusic();
+      }
+    });
   }
 
   bool get isMuted => _isMuted;
@@ -20,6 +27,7 @@ class SoundService with ChangeNotifier {
     if (!_isMuted) {
       try {
         await _audioPlayer.stop();
+        await _audioPlayer.setReleaseMode(ReleaseMode.loop); // Ensure looping for menu music
         await _audioPlayer.setVolume(1.0);
         await _audioPlayer.play(AssetSource('audio/ambiance.mp3'));
         _currentMusic = MusicType.mainMenu;
@@ -33,6 +41,7 @@ class SoundService with ChangeNotifier {
     if (!_isMuted) {
       try {
         await _audioPlayer.stop();
+        await _audioPlayer.setReleaseMode(ReleaseMode.loop); // Ensure looping for story music
         await _audioPlayer.setVolume(0.5);
         await _audioPlayer.play(AssetSource('audio/reading.mp3'));
         _currentMusic = MusicType.story;
@@ -50,6 +59,9 @@ class SoundService with ChangeNotifier {
         }
         await _audioPlayer.stop();
         final musicUrl = 'https://ddcq.github.io/music/$cardId.mp3';
+
+        // Set release mode to stop (not loop) for card music
+        await _audioPlayer.setReleaseMode(ReleaseMode.stop);
 
         // Ajout d'un timeout de 10 secondes pour éviter les blocages
         await _audioPlayer

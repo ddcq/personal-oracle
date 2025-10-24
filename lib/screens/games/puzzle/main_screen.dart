@@ -80,60 +80,54 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          SafeArea(
-            child: GameWidget<PuzzleFlameGame>(
-              game: _flameGame,
-              overlayBuilderMap: {
-                'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
-                  return VictoryPopup(
-                    rewardCard: game.associatedCard,
-                    onDismiss: () {
-                      game.overlays.remove('victoryOverlay');
-                      _resetGame();
-                    },
-                    onSeeRewards: () {
-                      Navigator.of(context).pop(); // Close the dialog
-                      context.push('/profile');
-                    },
-                  );
-                },
-              },
-            ),
-          ),
-          SafeArea(
-            child: ChibiAppBar(
-              titleText: 'puzzle_screen_title'.tr(),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () {
-                  context.go('/games');
-                },
-              ),
-            ),
-          ),
-          SafeArea(
-            child: Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: const Icon(Icons.help_outline, color: Colors.white),
-                onPressed: () {
-                  GameHelpDialog.show(
-                    context,
-                    [
-                      'puzzle_screen_rule_1'.tr(),
-                      'puzzle_screen_rule_2'.tr(),
-                      'puzzle_screen_rule_3'.tr(),
-                    ],
-                    onGamePaused: () => _flameGame.pauseEngine(),
-                    onGameResumed: () => _flameGame.resumeEngine(),
-                  );
-                },
-              ),
-            ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            context.go('/games');
+          },
+        ),
+        title: Text(
+          'puzzle_screen_title'.tr(),
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: Colors.white),
+            onPressed: () {
+              GameHelpDialog.show(
+                context,
+                [
+                  'puzzle_screen_rule_1'.tr(),
+                  'puzzle_screen_rule_2'.tr(),
+                  'puzzle_screen_rule_3'.tr(),
+                ],
+                onGamePaused: () => _flameGame.pauseEngine(),
+                onGameResumed: () => _flameGame.resumeEngine(),
+              );
+            },
           ),
         ],
+      ),
+      body: GameWidget<PuzzleFlameGame>(
+        game: _flameGame,
+        overlayBuilderMap: {
+          'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
+            return VictoryPopup(
+              rewardCard: game.associatedCard,
+              onDismiss: () {
+                game.overlays.remove('victoryOverlay');
+                _resetGame();
+              },
+              onSeeRewards: () {
+                Navigator.of(context).pop(); // Close the dialog
+                context.push('/profile');
+              },
+            );
+          },
+        },
       ),
     );
   }

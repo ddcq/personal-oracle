@@ -101,7 +101,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       builder: (context, child) {
         return MaterialApp.router(
           key: ValueKey(context.locale.toString()), // Force rebuild when locale changes
-          title: 'app_title'.tr(),
+          title: context.locale.languageCode == 'fr' ? 'Oracle d\'Asgard' : 'Oracle of Asgard',
           theme: AppThemes.lightTheme,
           darkTheme: AppThemes.darkTheme,
           themeMode: Provider.of<ThemeProvider>(context).themeMode,
