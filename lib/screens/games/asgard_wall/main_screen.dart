@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
@@ -32,12 +33,7 @@ class PlacedPiece {
   final int y;
   bool isNewlyPlaced = true;
 
-  PlacedPiece({
-    required this.pieceIndex,
-    required this.rotationIndex,
-    required this.x,
-    required this.y,
-  });
+  PlacedPiece({required this.pieceIndex, required this.rotationIndex, required this.x, required this.y});
 }
 
 class _GameScreenState extends State<GameScreen> {
@@ -215,12 +211,17 @@ class _GameScreenState extends State<GameScreen> {
       }
     }
 
-    // Simule un effet de placement (peut être remplacé par vibration/son)
     _simulateBlockPlacement();
 
-    checkVictoryCondition(); // Vérifie si la condition de victoire est atteinte
+    // Check for inaccessible holes created by this piece
+    if (_checkInaccessibleHoles()) {
+      endGame(false);
+      return;
+    }
+
+    checkVictoryCondition();
     if (gameActive) {
-      spawnNewPiece(); // Fait apparaître une nouvelle pièce si le jeu est toujours actif
+      spawnNewPiece();
     }
   }
 
@@ -257,6 +258,40 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
+  bool _checkInaccessibleHoles() {
+    final piece = currentPiece;
+    final x = pieceX;
+    final y = pieceY;
+
+    final pieceWidth = piece[0].length;
+    final pieceHeight = piece.length;
+
+    // Check all cells in the bounding box of the piece, with a 1-cell margin.
+    final startX = x - 1;
+    final endX = x + pieceWidth;
+    final startY = y - 1;
+    final endY = y + pieceHeight;
+
+    for (int cy = startY; cy <= endY; cy++) {
+      for (int cx = startX; cx <= endX; cx++) {
+        // We are looking for an empty cell (a potential hole).
+        // It must be within the board and not on the top row (since it must have a block above).
+        if (cx >= 0 && cx < boardWidth && cy > 0 && cy < boardHeight && !collisionBoard[cy][cx]) {
+          // Check if it's blocked on top, left, and right.
+          final bool blockedTop = collisionBoard[cy - 1][cx];
+          final bool blockedLeft = (cx == 0) || collisionBoard[cy][cx - 1];
+          final bool blockedRight = (cx == boardWidth - 1) || collisionBoard[cy][cx + 1];
+
+          if (blockedTop && blockedLeft && blockedRight) {
+            return true; // Found a hole.
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
   bool _checkWallComplete() {
     for (int row = boardHeight - 1; row >= boardHeight - victoryHeight; row--) {
       for (int col = 0; col < boardWidth; col++) {
@@ -266,36 +301,6 @@ class _GameScreenState extends State<GameScreen> {
       }
     }
     return true;
-  }
-
-  // Vérifie si un trou est vraiment inaccessible (selon la logique du jeu).
-  bool isTrueHole(int col, int row) {
-    // Un trou est considéré comme inaccessible s’il n’y a pas d'accès horizontal
-    // sur au moins 2 cases consécutives de chaque côté
-
-    bool canAccessFromDirection(int startCol, int endCol) {
-      for (int checkCol = startCol; checkCol <= endCol; checkCol++) {
-        if (checkCol < 0 || checkCol >= boardWidth || collisionBoard[row][checkCol]) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    // Vérifier l’accès par la gauche (besoin de 2 cases libres consécutives)
-    bool leftAccess = false;
-    if (col >= 2) {
-      leftAccess = canAccessFromDirection(col - 2, col - 1);
-    }
-
-    // Vérifier l’accès par la droite (besoin de 2 cases libres consécutives)
-    bool rightAccess = false;
-    if (col < boardWidth - 2) {
-      rightAccess = canAccessFromDirection(col + 1, col + 2);
-    }
-
-    // Si aucun accès n’est possible, c’est un vrai trou
-    return !leftAccess && !rightAccess;
   }
 
   // Déplace la pièce vers le bas.
@@ -564,82 +569,64 @@ class _GameScreenState extends State<GameScreen> {
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white, width: 2),
         borderRadius: BorderRadius.circular(8),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/backgrounds/asgard.jpg'),
-          fit: BoxFit.cover,
-        ),
+        image: const DecorationImage(image: AssetImage('assets/images/backgrounds/asgard.jpg'), fit: BoxFit.cover),
       ),
-      child: LayoutBuilder(builder: (context, constraints) {
-        final boardPixelWidth = constraints.maxWidth;
-        final boardPixelHeight = constraints.maxHeight;
-        final cellWidth = boardPixelWidth / boardWidth;
-        final cellHeight = boardPixelHeight / boardHeight;
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final boardPixelWidth = constraints.maxWidth;
+          final boardPixelHeight = constraints.maxHeight;
+          final cellWidth = boardPixelWidth / boardWidth;
+          final cellHeight = boardPixelHeight / boardHeight;
 
-        final placedPiecesWidgets = placedPieces.map((piece) {
-          final pieceData = pieces[piece.pieceIndex][piece.rotationIndex];
-          final pieceWidth = pieceData[0].length;
-          final pieceHeight = pieceData.length;
+          final placedPiecesWidgets = placedPieces.map((piece) {
+            final pieceData = pieces[piece.pieceIndex][piece.rotationIndex];
+            final pieceWidth = pieceData[0].length;
+            final pieceHeight = pieceData.length;
 
-          return Positioned(
-            left: piece.x * cellWidth,
-            top: piece.y * cellHeight,
-            width: pieceWidth * cellWidth,
-            height: pieceHeight * cellHeight,
-            child: RotatedBox(
-              quarterTurns: piece.rotationIndex,
-              child: ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  piece.isNewlyPlaced ? Colors.white.withAlpha(179) : Colors.transparent,
-                  BlendMode.srcATop,
-                ),
-                child: Image.asset(
-                  'assets/images/blocks/${pieceImageNames[piece.pieceIndex]}.webp',
-                  fit: BoxFit.fill,
+            return Positioned(
+              left: piece.x * cellWidth,
+              top: piece.y * cellHeight,
+              width: pieceWidth * cellWidth,
+              height: pieceHeight * cellHeight,
+              child: RotatedBox(
+                quarterTurns: piece.rotationIndex,
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(piece.isNewlyPlaced ? Colors.white.withAlpha(179) : Colors.transparent, BlendMode.srcATop),
+                  child: Image.asset('assets/images/blocks/${pieceImageNames[piece.pieceIndex]}.webp', fit: BoxFit.fill),
                 ),
               ),
-            ),
-          );
-        }).toList();
+            );
+          }).toList();
 
-        final fallingPieceWidget = gameActive && currentPiece.isNotEmpty
-            ? Positioned(
-                left: pieceX * cellWidth,
-                top: pieceY * cellHeight,
-                width: currentPiece[0].length * cellWidth,
-                height: currentPiece.length * cellHeight,
-                child: RotatedBox(
-                  quarterTurns: currentRotationIndex,
-                  child: Image.asset(
-                    'assets/images/blocks/${pieceImageNames[currentPieceIndex]}.webp',
-                    fit: BoxFit.fill,
+          final fallingPieceWidget = gameActive && currentPiece.isNotEmpty
+              ? Positioned(
+                  left: pieceX * cellWidth,
+                  top: pieceY * cellHeight,
+                  width: currentPiece[0].length * cellWidth,
+                  height: currentPiece.length * cellHeight,
+                  child: RotatedBox(
+                    quarterTurns: currentRotationIndex,
+                    child: Image.asset('assets/images/blocks/${pieceImageNames[currentPieceIndex]}.webp', fit: BoxFit.fill),
                   ),
-                ),
-              )
-            : const SizedBox.shrink();
+                )
+              : const SizedBox.shrink();
 
-        final boardGrid = GridView.builder(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: boardWidth,
-          ),
-          itemCount: boardWidth * boardHeight,
-          itemBuilder: (context, index) {
-            int row = index ~/ boardWidth;
-            int col = index % boardWidth;
-            return _buildCell(row, col);
-          },
-        );
+          final boardGrid = GridView.builder(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: boardWidth),
+            itemCount: boardWidth * boardHeight,
+            itemBuilder: (context, index) {
+              int row = index ~/ boardWidth;
+              int col = index % boardWidth;
+              return _buildCell(row, col);
+            },
+          );
 
-        return Stack(
-          children: [
-            boardGrid,
-            ...placedPiecesWidgets,
-            fallingPieceWidget,
-          ],
-        );
-      }),
+          return Stack(children: [boardGrid, ...placedPiecesWidgets, fallingPieceWidget]);
+        },
+      ),
     );
   }
 
@@ -648,14 +635,9 @@ class _GameScreenState extends State<GameScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(
-          color: isVictoryLine ? const Color(0xFFFFD700) : Colors.grey[700]!,
-          width: isVictoryLine ? 2 : 0.5,
-        ),
+        border: Border.all(color: isVictoryLine ? const Color(0xFFFFD700) : Colors.grey[700]!, width: isVictoryLine ? 2 : 0.5),
       ),
-      child: Container(
-        color: Colors.transparent,
-      ),
+      child: Container(color: Colors.transparent),
     );
   }
 
@@ -724,7 +706,12 @@ class _GameScreenState extends State<GameScreen> {
                         // Aperçu des prochaines pièces
                         Expanded(
                           flex: 1,
-                          child: NextPiecesPreview(nextPieces: nextPieces, nextPieceColors: nextPieceColors, piecesData: pieces, pieceImageNames: pieceImageNames),
+                          child: NextPiecesPreview(
+                            nextPieces: nextPieces,
+                            nextPieceColors: nextPieceColors,
+                            piecesData: pieces,
+                            pieceImageNames: pieceImageNames,
+                          ),
                         ),
                       ],
                     ),
