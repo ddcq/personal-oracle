@@ -25,40 +25,53 @@ class GameScreen extends StatefulWidget {
 
 // game_logic.dart (Simulé : La logique et l’état du jeu)
 // Les méthodes et l’état de jeu sont gérés par _GameScreenState.
+class PlacedPiece {
+  final int pieceIndex;
+  final int rotationIndex;
+  final int x;
+  final int y;
+  bool isNewlyPlaced = true;
+
+  PlacedPiece({
+    required this.pieceIndex,
+    required this.rotationIndex,
+    required this.x,
+    required this.y,
+  });
+}
+
 class _GameScreenState extends State<GameScreen> {
   static const int boardWidth = 11;
   static const int boardHeight = 22;
   static const int victoryHeight = 12;
 
-  // Le plateau de jeu stocke la couleur de chaque cellule, qui sera maintenant la couleur du mur pour les blocs posés.
-  List<List<Color?>> board = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => null));
+  // The board is now for collision detection only.
+  List<List<bool>> collisionBoard = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => false));
+  List<PlacedPiece> placedPieces = [];
 
-  // La couleur fixe pour les blocs du mur une fois qu'ils sont posés
-  Color wallBlockColor = Color(0xFF6B5B95); // Une couleur de pierre (violet/gris)
-
-  // Animation pour l’effet de construction du mur, indiquant les blocs nouvellement posés.
-  List<List<bool>> justPlaced = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => false));
-
-  // Timer pour les effets visuels
+  // Timer for visual effects
   Timer? effectTimer;
 
   Timer? gameTimer;
   bool gameActive = false;
   bool _isPaused = false; // New flag for pausing game logic
-  // gameWon et gameLost sont maintenant gérés par la navigation vers les écrans dédiés.
+  // gameWon and gameLost are now handled by navigation to dedicated screens.
   FocusNode focusNode = FocusNode();
 
-  // Pièce actuelle
+  // Current piece
   List<List<bool>> currentPiece = [];
-  Color currentPieceColor = Colors.blue; // Couleur de la pièce en mouvement
+  Color currentPieceColor = Colors.blue; // Fallback color, not used if images work
   int pieceX = 0;
   int pieceY = 0;
   int currentPieceIndex = 0;
   int currentRotationIndex = 0;
 
-  // Queue des prochaines pièces
+  // Queue of next pieces
   List<int> nextPieces = [];
   List<Color> nextPieceColors = [];
+
+  // Assuming image files are named like 'p.webp', 'q.webp' etc. in assets/images/blocks/
+  final List<String> pieceImageNames = ['i2', 'i3', 'l', 'p', 'q', 't', 'u', 'x'];
 
   @override
   void initState() {
@@ -67,18 +80,18 @@ class _GameScreenState extends State<GameScreen> {
     startGame();
   }
 
-  // Initialise ou réinitialise le jeu.
+  // Initializes or resets the game.
   void startGame() {
-    gameTimer?.cancel(); // Annule le timer précédent s’il existe
-    effectTimer?.cancel(); // Annule le timer d'effets visuels précédent
+    gameTimer?.cancel(); // Cancel previous timer if it exists
+    effectTimer?.cancel(); // Cancel previous visual effects timer
 
     setState(() {
-      // Réinitialise le plateau et les effets
-      board = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => null));
-      justPlaced = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => false));
+      // Reset board and effects
+      collisionBoard = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => false));
+      placedPieces = [];
       gameActive = true;
       _isPaused = false; // Ensure game is not paused on start
-      currentPiece = []; // Vide la pièce actuelle
+      currentPiece = []; // Empty the current piece
     });
 
     generateNextPieces(); // Génère les prochaines pièces
@@ -168,7 +181,7 @@ class _GameScreenState extends State<GameScreen> {
           if (boardX < 0 || // Hors limite à gauche
               boardX >= boardWidth || // Hors limite à droite
               boardY >= boardHeight || // Hors limite en bas
-              (boardY >= 0 && board[boardY][boardX] != null)) {
+              (boardY >= 0 && collisionBoard[boardY][boardX])) {
             // Collision avec un bloc existant
             return false;
           }
@@ -180,6 +193,15 @@ class _GameScreenState extends State<GameScreen> {
 
   // Place la pièce actuelle sur le plateau (elle devient fixe).
   void placePiece() {
+    // Add to placed pieces list for rendering
+    placedPieces.add(PlacedPiece(
+      pieceIndex: currentPieceIndex,
+      rotationIndex: currentRotationIndex,
+      x: pieceX,
+      y: pieceY,
+    ));
+
+    // Update collision board
     for (int row = 0; row < currentPiece.length; row++) {
       for (int col = 0; col < currentPiece[row].length; col++) {
         if (currentPiece[row][col]) {
@@ -187,9 +209,7 @@ class _GameScreenState extends State<GameScreen> {
           int boardY = pieceY + row;
 
           if (boardY >= 0 && boardY < boardHeight && boardX >= 0 && boardX < boardWidth) {
-            // IMPORTANT: Les blocs posés prennent la couleur du mur
-            board[boardY][boardX] = wallBlockColor;
-            justPlaced[boardY][boardX] = true; // Marque comme nouvellement placé pour l’effet visuel
+            collisionBoard[boardY][boardX] = true;
           }
         }
       }
@@ -213,23 +233,20 @@ class _GameScreenState extends State<GameScreen> {
   // Met à jour les effets visuels (ex: fait disparaître la brillance des blocs après un certain temps).
   void _updateVisualEffects() {
     bool needsUpdate = false;
-
-    // Réduit progressivement l’effet "nouvellement placé"
-    for (int row = 0; row < boardHeight; row++) {
-      for (int col = 0; col < boardWidth; col++) {
-        if (justPlaced[row][col]) {
-          // Après quelques frames, enlève l’effet aléatoirement
-          if (Random().nextDouble() < 0.1) {
-            // 10% de chance de désactiver l’effet par frame
-            justPlaced[row][col] = false;
-            needsUpdate = true;
-          }
+    for (final piece in placedPieces) {
+      if (piece.isNewlyPlaced) {
+        // After a short delay, remove the "newly placed" effect.
+        // A simple random chance per frame to turn it off.
+        if (Random().nextDouble() < 0.2) {
+          // 20% chance to turn off the effect per frame
+          piece.isNewlyPlaced = false;
+          needsUpdate = true;
         }
       }
     }
 
     if (needsUpdate) {
-      setState(() {}); // Force la mise à jour pour que les effets disparaissent
+      setState(() {}); // Force update to make effects disappear
     }
   }
 
@@ -243,7 +260,7 @@ class _GameScreenState extends State<GameScreen> {
   bool _checkWallComplete() {
     for (int row = boardHeight - 1; row >= boardHeight - victoryHeight; row--) {
       for (int col = 0; col < boardWidth; col++) {
-        if (board[row][col] == null) {
+        if (!collisionBoard[row][col]) {
           return false;
         }
       }
@@ -258,7 +275,7 @@ class _GameScreenState extends State<GameScreen> {
 
     bool canAccessFromDirection(int startCol, int endCol) {
       for (int checkCol = startCol; checkCol <= endCol; checkCol++) {
-        if (checkCol < 0 || checkCol >= boardWidth || board[row][checkCol] != null) {
+        if (checkCol < 0 || checkCol >= boardWidth || collisionBoard[row][checkCol]) {
           return false;
         }
       }
@@ -545,105 +562,100 @@ class _GameScreenState extends State<GameScreen> {
   Widget buildBoard() {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white, width: 2), // Bordure blanche autour du plateau
+        border: Border.all(color: Colors.white, width: 2),
         borderRadius: BorderRadius.circular(8),
-        // AJOUT : Image de fond pour le plateau
-        image: DecorationImage(
+        image: const DecorationImage(
           image: AssetImage('assets/images/backgrounds/asgard.jpg'),
-          fit: BoxFit.cover, // L’image couvrira le conteneur
-          // Optionnel : un filtre pour assombrir l’image et améliorer la lisibilité des blocs
-          // colorFilter: ColorFilter.mode(Colors.black.withAlpha(128), BlendMode.dstATop),
+          fit: BoxFit.cover,
         ),
       ),
-      child: GridView.builder(
-        padding: EdgeInsets.zero,
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(), // Empêche le défilement du GridView
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: boardWidth, // Nombre de colonnes
-        ),
-        itemCount: boardWidth * boardHeight, // Nombre total de cellules
-        itemBuilder: (context, index) {
-          int row = index ~/ boardWidth;
-          int col = index % boardWidth;
+      child: LayoutBuilder(builder: (context, constraints) {
+        final boardPixelWidth = constraints.maxWidth;
+        final boardPixelHeight = constraints.maxHeight;
+        final cellWidth = boardPixelWidth / boardWidth;
+        final cellHeight = boardPixelHeight / boardHeight;
 
-          Color? cellColor = board[row][col]; // Couleur du bloc fixe sur le plateau
+        final placedPiecesWidgets = placedPieces.map((piece) {
+          final pieceData = pieces[piece.pieceIndex][piece.rotationIndex];
+          final pieceWidth = pieceData[0].length;
+          final pieceHeight = pieceData.length;
 
-          // Affiche la pièce actuelle qui tombe
-          if (gameActive && currentPiece.isNotEmpty) {
-            int relativeRow = row - pieceY;
-            int relativeCol = col - pieceX;
+          return Positioned(
+            left: piece.x * cellWidth,
+            top: piece.y * cellHeight,
+            width: pieceWidth * cellWidth,
+            height: pieceHeight * cellHeight,
+            child: RotatedBox(
+              quarterTurns: piece.rotationIndex,
+              child: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  piece.isNewlyPlaced ? Colors.white.withAlpha(179) : Colors.transparent,
+                  BlendMode.srcATop,
+                ),
+                child: Image.asset(
+                  'assets/images/blocks/${pieceImageNames[piece.pieceIndex]}.webp',
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          );
+        }).toList();
 
-            if (relativeRow >= 0 &&
-                relativeRow < currentPiece.length &&
-                relativeCol >= 0 &&
-                relativeCol < currentPiece[relativeRow].length &&
-                currentPiece[relativeRow][relativeCol] &&
-                cellColor == null) {
-              // Si c’est une partie de la pièce qui tombe et la cellule est vide
-              cellColor = currentPieceColor;
-            }
-          }
+        final fallingPieceWidget = gameActive && currentPiece.isNotEmpty
+            ? Positioned(
+                left: pieceX * cellWidth,
+                top: pieceY * cellHeight,
+                width: currentPiece[0].length * cellWidth,
+                height: currentPiece.length * cellHeight,
+                child: RotatedBox(
+                  quarterTurns: currentRotationIndex,
+                  child: Image.asset(
+                    'assets/images/blocks/${pieceImageNames[currentPieceIndex]}.webp',
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              )
+            : const SizedBox.shrink();
 
-          return _buildCell(row, col, cellColor);
-        },
-      ),
+        final boardGrid = GridView.builder(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: boardWidth,
+          ),
+          itemCount: boardWidth * boardHeight,
+          itemBuilder: (context, index) {
+            int row = index ~/ boardWidth;
+            int col = index % boardWidth;
+            return _buildCell(row, col);
+          },
+        );
+
+        return Stack(
+          children: [
+            boardGrid,
+            ...placedPiecesWidgets,
+            fallingPieceWidget,
+          ],
+        );
+      }),
     );
   }
 
-  Widget _buildCell(int row, int col, Color? cellColor) {
-    // Marque la ligne de victoire avec une bordure dorée
+  Widget _buildCell(int row, int col) {
     bool isVictoryLine = row == boardHeight - victoryHeight;
 
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-          color: isVictoryLine ? Color(0xFFFFD700) : Colors.grey[700]!, // Bordure dorée pour la ligne de victoire
+          color: isVictoryLine ? const Color(0xFFFFD700) : Colors.grey[700]!,
           width: isVictoryLine ? 2 : 0.5,
         ),
       ),
-      child:
-          cellColor !=
-              null // Si la cellule contient un bloc (fixe ou tombant)
-          ? AnimatedContainer(
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              decoration: BoxDecoration(
-                // Couleur de base pour les blocs (couleur de la pièce en mouvement ou couleur du mur)
-                color: cellColor,
-                // Effet de brillance pour les blocs nouvellement placés
-                boxShadow: justPlaced[row][col] ? [BoxShadow(color: Colors.white.withAlpha(128), blurRadius: 4, spreadRadius: 1)] : null,
-              ),
-              // Ajoute des bordures et des dégradés pour simuler des joints et la profondeur des pierres
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: justPlaced[row][col] ? Colors.white38 : Colors.black45, // Bordure plus claire pour les blocs nouvellement placés
-                    width: justPlaced[row][col] ? 1.0 : 0.5,
-                  ),
-                  // Effet de profondeur pour les pierres
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Colors.white.withAlpha(25), Colors.transparent, Colors.black.withAlpha(25)],
-                  ),
-                ),
-                // Icône de pierre ou autre effet pour les blocs nouvellement placés
-                child: justPlaced[row][col]
-                    ? Center(
-                        child: Icon(
-                          Icons.hexagon, // Symbole de pierre
-                          color: Colors.white.withAlpha(76),
-                          size: 12,
-                        ),
-                      )
-                    : null,
-              ),
-            )
-          : Container(
-              // Rendre les cases vides transparentes pour laisser l’image de fond apparaître
-              color: Colors.transparent, // Transparent pour les cases vides
-            ),
+      child: Container(
+        color: Colors.transparent,
+      ),
     );
   }
 
@@ -712,7 +724,7 @@ class _GameScreenState extends State<GameScreen> {
                         // Aperçu des prochaines pièces
                         Expanded(
                           flex: 1,
-                          child: NextPiecesPreview(nextPieces: nextPieces, nextPieceColors: nextPieceColors, piecesData: pieces),
+                          child: NextPiecesPreview(nextPieces: nextPieces, nextPieceColors: nextPieceColors, piecesData: pieces, pieceImageNames: pieceImageNames),
                         ),
                       ],
                     ),

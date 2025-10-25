@@ -37,12 +37,14 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, result) async {
+      onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        await _soundService.resumePreviousMusic();
-        if (mounted) {
-          context.go('/profile');
-        }
+        _soundService.resumePreviousMusic().then((_) {
+          if (mounted) {
+            // ignore: use_build_context_synchronously
+            context.go('/profile');
+          }
+        });
       },
       child: Scaffold(
         appBar: AppBar(

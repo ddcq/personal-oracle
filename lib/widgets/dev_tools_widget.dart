@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/models/card_version.dart';
-import 'package:oracle_d_asgard/models/collectible_card.dart';
+
 import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:oracle_d_asgard/data/stories_data.dart';
 import 'package:oracle_d_asgard/services/database_service.dart';

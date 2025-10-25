@@ -8,20 +8,20 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:oracle_d_asgard/screens/games/myth_story_page.dart';
 import 'package:oracle_d_asgard/screens/profile/deity_selection_screen.dart';
-import 'package:oracle_d_asgard/services/database_service.dart';
+
 import 'package:oracle_d_asgard/widgets/interactive_collectible_card.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/data/stories_data.dart';
-import 'package:oracle_d_asgard/models/card_version.dart';
+
 import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:share_plus/share_plus.dart';
 
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // For .sw and .h extensions
+
 
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
@@ -29,7 +29,7 @@ import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+
 import 'package:oracle_d_asgard/widgets/dev_tools_widget.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:flutter_animate/flutter_animate.dart';
