@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:oracle_d_asgard/services/notification_service.dart';
 import 'package:oracle_d_asgard/utils/themes.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -32,6 +33,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   setupLocator();
+  await NotificationService().init(); // Initialize NotificationService
   if (Platform.isIOS || Platform.isAndroid) {
     await MobileAds.instance.initialize();
   }
@@ -67,6 +69,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     getIt<SoundService>().playMainMenuMusic();
+    NotificationService().cancelAllNotifications(); // Cancel notifications on app start
   }
 
   @override
@@ -87,8 +90,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     final soundService = getIt<SoundService>();
     if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
       soundService.pauseMusic();
+      NotificationService().scheduleNotification(); // Schedule notification on app pause
     } else if (state == AppLifecycleState.resumed) {
       soundService.resumeMusic();
+      NotificationService().cancelAllNotifications(); // Cancel notifications on app resume
     }
   }
 
