@@ -19,7 +19,7 @@ import 'package:oracle_d_asgard/data/stories_data.dart';
 import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
-import 'package:share_plus/share_plus.dart';
+
 
 
 
@@ -257,20 +257,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.share, color: Colors.white),
-            onPressed: () async {
-              final gamificationService = getIt<GamificationService>();
-              final quizResults = await gamificationService.getQuizResults();
-              if (quizResults.isNotEmpty) {
-                final lastQuizResult = quizResults.first;
-                final deityName = lastQuizResult['deity_name'];
-                final Deity? deity = AppData.deities[deityName.toLowerCase()];
-                if (deity != null) {
-                  SharePlus.instance.share(
-                    ShareParams(text: 'Mon résultat au quiz Oracle d\'Asgard : Je suis ${deity.name} ! Découvrez votre divinité sur l\'application !'),
-                  );
-                }
-              }
+            icon: const Icon(Icons.info_outline, color: Colors.white),
+            onPressed: () {
+              context.go('/about');
             },
           ),
         ],

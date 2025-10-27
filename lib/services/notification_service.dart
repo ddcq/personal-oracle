@@ -31,6 +31,7 @@ class NotificationService {
     final InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
+      macOS: initializationSettingsIOS,
     );
 
     tz.initializeTimeZones();

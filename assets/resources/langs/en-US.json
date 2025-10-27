@@ -576,5 +576,15 @@
   "norse_riddle_gjallarhorn_clue_3": "I will announce the beginning of the final battle.",
   "norse_riddle_jormungandr_clue_1": "I am so large that I encircle the world of men.",
   "norse_riddle_jormungandr_clue_2": "I am the Midgard Serpent, child of Loki.",
-  "norse_riddle_jormungandr_clue_3": "My sworn enemy is the god of thunder."
+  "norse_riddle_jormungandr_clue_3": "My sworn enemy is the god of thunder.",
+  "about_screen_appbar_title": "About",
+  "about_screen_about_title": "About the App",
+  "about_screen_about_content": "This application is a tribute to the fascinating world of Norse mythology. It was designed to provide an immersive and educational experience through quizzes, stories, and mini-games.",
+  "about_screen_contribution_title": "Contribution",
+  "about_screen_contribution_content": "This project is open source. Feel free to contribute on GitHub.",
+  "about_screen_github_link": "View on GitHub",
+  "about_screen_legal_title": "Legal",
+  "about_screen_terms_link": "Terms of Service",
+  "about_screen_privacy_link": "Privacy Policy",
+  "about_screen_contact_us": "Contact Us"
 }
