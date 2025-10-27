@@ -44,7 +44,7 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
 
     // 2. Get all chibi collectible cards (to access their videoUrl and imagePath)
     final allChibiCards = allCollectibleCards.where((card) => card.version == CardVersion.chibi).toList();
-    final allChibiCardsMap = { for (var card in allChibiCards) card.id : card };
+    final allChibiCardsMap = {for (var card in allChibiCards) card.id: card};
 
     // 3. Get unlocked collectible cards
     final unlockedCards = await gamificationService.getUnlockedCollectibleCards();
@@ -66,16 +66,20 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
         final card = allChibiCardsMap[deityId];
         if (card != null) {
           final existingDeity = AppData.deities[card.id];
-          finalDeities.add(Deity(
-            id: card.id,
-            name: card.title,
-            title: card.title,
-            icon: 'assets/images/${card.imagePath}',
-            videoUrl: card.videoUrl,
-            description: card.description,
-            traits: existingDeity?.traits ?? {},
-            colors: existingDeity?.colors ?? [Colors.grey, Colors.black],
-          ));
+          finalDeities.add(
+            Deity(
+              id: card.id,
+              name: card.title,
+              title: card.title,
+              icon: 'assets/images/${card.imagePath}',
+              videoUrl: card.videoUrl,
+              description: card.description,
+              traits: existingDeity?.traits ?? {},
+              colors: existingDeity?.colors ?? [Colors.grey, Colors.black],
+              isCollectibleCard: true,
+              cardVersion: card.version,
+            ),
+          );
           addedDeityIds.add(deityId);
         }
       } else if (allPossibleQuizDeityIds.contains(deityId)) {
@@ -375,22 +379,22 @@ class _DeityCardState extends State<_DeityCard> {
   }
 
   Widget _buildDeityImage() {
-    return SizedBox(
-      width: 180,
-      height: 180,
-      child: ClipOval(
-        child: (widget.deity.videoUrl != null && widget.deity.videoUrl!.isNotEmpty)
-            ? CustomVideoPlayer(
-                videoUrl: widget.deity.videoUrl!,
-                placeholderAsset: widget.deity.icon,
-              )
-            : Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage(widget.deity.icon), fit: BoxFit.cover),
-                ),
-              ),
-      ),
-    );
+    Widget imageWidget = (widget.deity.videoUrl != null && widget.deity.videoUrl!.isNotEmpty)
+        ? CustomVideoPlayer(videoUrl: widget.deity.videoUrl!, placeholderAsset: widget.deity.icon)
+        : Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(image: AssetImage(widget.deity.icon), fit: BoxFit.cover),
+            ),
+          );
+
+    if (widget.deity.isCollectibleCard) {
+      imageWidget = Transform.translate(
+        offset: const Offset(0, 18), // 10% of 180px height
+        child: Transform.scale(scale: 1.4, child: imageWidget),
+      );
+    }
+
+    return SizedBox(width: 180, height: 180, child: ClipOval(child: imageWidget));
   }
 
   Widget _buildDeityName() {

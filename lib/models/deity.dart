@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oracle_d_asgard/models/card_version.dart';
 
 class Deity {
   final String id;
@@ -9,6 +10,8 @@ class Deity {
   final Map<String, int> traits;
   final String description;
   final List<Color> colors;
+  final bool isCollectibleCard;
+  final CardVersion? cardVersion;
 
   const Deity({
     required this.id,
@@ -19,6 +22,8 @@ class Deity {
     required this.traits,
     required this.description,
     required this.colors,
+    this.isCollectibleCard = false,
+    this.cardVersion,
   });
 
   // Conversion vers JSON pour persistence future

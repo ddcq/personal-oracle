@@ -14,6 +14,8 @@ class AppData {
       traits: {'wisdom': 5, 'cunning': 4, 'honor': 3},
       description: 'deity_odin_description'.tr(),
       colors: [Color(0xFF334155), Color(0xFF0F172A)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'thor': Deity(
       id: 'thor',
@@ -23,6 +25,8 @@ class AppData {
       traits: {'courage': 5, 'strength': 5, 'honor': 4},
       description: 'deity_thor_description'.tr(),
       colors: [Color(0xFF2563EB), Color(0xFF1E40AF)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'freyja': Deity(
       id: 'freyja',
@@ -32,6 +36,8 @@ class AppData {
       traits: {'passion': 5, 'wisdom': 3, 'nature': 4},
       description: 'deity_freyja_description'.tr(),
       colors: [Color(0xFFDB2777), Color(0xFFBE185D)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'tyr': Deity(
       id: 'tyr',
@@ -41,6 +47,8 @@ class AppData {
       traits: {'justice': 5, 'honor': 5, 'courage': 3},
       description: 'deity_tyr_description'.tr(),
       colors: [Color(0xFFD97706), Color(0xFFB45309)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'loki': Deity(
       id: 'loki',
@@ -50,6 +58,8 @@ class AppData {
       traits: {'cunning': 5, 'passion': 3, 'wisdom': 2},
       description: 'deity_loki_description'.tr(),
       colors: [Color(0xFFDC2626), Color(0xFFB91C1C)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'frigg': Deity(
       id: 'frigg',
@@ -59,6 +69,8 @@ class AppData {
       traits: {'wisdom': 4, 'honor': 4, 'nature': 3},
       description: 'deity_frigg_description'.tr(),
       colors: [Color(0xFF7C3AED), Color(0xFF6D28D9)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'bjorn': Deity(
       id: 'bjorn',
@@ -68,6 +80,8 @@ class AppData {
       traits: {'strength': 5, 'courage': 4, 'honor': 3},
       description: 'deity_bjorn_description'.tr(),
       colors: [Color(0xFFD97706), Color(0xFFB45309)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'astrid': Deity(
       id: 'astrid',
@@ -77,6 +91,8 @@ class AppData {
       traits: {'wisdom': 5, 'cunning': 3, 'nature': 2},
       description: 'deity_astrid_description'.tr(),
       colors: [Color(0xFF334155), Color(0xFF0F172A)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'ragnar': Deity(
       id: 'ragnar',
@@ -86,6 +102,8 @@ class AppData {
       traits: {'cunning': 5, 'wisdom': 4, 'courage': 2},
       description: 'deity_ragnar_description'.tr(),
       colors: [Color(0xFFDAA520), Color(0xFFB8860B)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'ingrid': Deity(
       id: 'ingrid',
@@ -95,6 +113,8 @@ class AppData {
       traits: {'honor': 5, 'justice': 4, 'wisdom': 3},
       description: 'deity_ingrid_description'.tr(),
       colors: [Color(0xFF2563EB), Color(0xFF1E40AF)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'sven': Deity(
       id: 'sven',
@@ -104,6 +124,8 @@ class AppData {
       traits: {'courage': 5, 'nature': 4, 'strength': 3},
       description: 'deity_sven_description'.tr(),
       colors: [Color(0xFFDB2777), Color(0xFFBE185D)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'freydis': Deity(
       id: 'freydis',
@@ -113,6 +135,8 @@ class AppData {
       traits: {'courage': 5, 'strength': 4, 'passion': 3},
       description: 'deity_freydis_description'.tr(),
       colors: [Color(0xFFDC2626), Color(0xFFB91C1C)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'audhumla': Deity(
       id: 'audhumla',
@@ -122,6 +146,8 @@ class AppData {
       traits: {'nature': 5, 'wisdom': 3, 'strength': 2},
       description: 'deity_audhumla_description'.tr(),
       colors: [Color(0xFF4CAF50), Color(0xFF2E7D32)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'baldr': Deity(
       id: 'baldr',
@@ -131,6 +157,8 @@ class AppData {
       traits: {'honor': 5, 'passion': 4, 'wisdom': 3},
       description: 'deity_baldr_description'.tr(),
       colors: [Color(0xFFFFD700), Color(0xFFDAA520)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'bragi': Deity(
       id: 'bragi',
@@ -140,6 +168,8 @@ class AppData {
       traits: {'cunning': 4, 'passion': 5, 'wisdom': 3},
       description: 'deity_bragi_description'.tr(),
       colors: [Color(0xFFA0522D)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'fenrir': Deity(
       id: 'fenrir',
@@ -149,6 +179,8 @@ class AppData {
       traits: {'strength': 5, 'cunning': 4, 'courage': 3},
       description: 'deity_fenrir_description'.tr(),
       colors: [Color(0xFF212121)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'heimdall': Deity(
       id: 'heimdall',
@@ -158,6 +190,8 @@ class AppData {
       traits: {'wisdom': 5, 'honor': 4, 'courage': 3},
       description: 'deity_heimdall_description'.tr(),
       colors: [Color(0xFF1565C0)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'hel': Deity(
       id: 'hel',
@@ -167,6 +201,8 @@ class AppData {
       traits: {'cunning': 5, 'justice': 4, 'wisdom': 3},
       description: 'deity_hel_description'.tr(),
       colors: [Color(0xFF455A64)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'hrimthurs': Deity(
       id: 'hrimthurs',
@@ -176,6 +212,8 @@ class AppData {
       traits: {'strength': 5, 'nature': 4, 'courage': 3},
       description: 'deity_hrimthurs_description'.tr(),
       colors: [Color(0xFF64B5F6)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'idunn': Deity(
       id: 'idunn',
@@ -185,6 +223,8 @@ class AppData {
       traits: {'nature': 5, 'passion': 4, 'wisdom': 3},
       description: 'deity_idunn_description'.tr(),
       colors: [Color(0xFF689F38)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'jormungandr': Deity(
       id: 'jormungandr',
@@ -194,6 +234,8 @@ class AppData {
       traits: {'strength': 5, 'cunning': 4, 'nature': 3},
       description: 'deity_jormungandr_description'.tr(),
       colors: [Color(0xFF303F9F)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'njord': Deity(
       id: 'njord',
@@ -203,6 +245,8 @@ class AppData {
       traits: {'nature': 5, 'wisdom': 4, 'passion': 3},
       description: 'deity_njord_description'.tr(),
       colors: [Color(0xFF0097A7)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'sif': Deity(
       id: 'sif',
@@ -212,6 +256,8 @@ class AppData {
       traits: {'nature': 4, 'honor': 3, 'passion': 2},
       description: 'deity_sif_description'.tr(),
       colors: [Color(0xFFFFA000)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'skadi': Deity(
       id: 'skadi',
@@ -221,6 +267,8 @@ class AppData {
       traits: {'nature': 5, 'courage': 4, 'strength': 3},
       description: 'deity_skadi_description'.tr(),
       colors: [Color(0xFF455A64)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'sleipnir': Deity(
       id: 'sleipnir',
@@ -230,6 +278,8 @@ class AppData {
       traits: {'cunning': 4, 'strength': 5, 'nature': 3},
       description: 'deity_sleipnir_description'.tr(),
       colors: [Color(0xFF616161)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'svadilfari': Deity(
       id: 'svadilfari',
@@ -239,6 +289,8 @@ class AppData {
       traits: {'strength': 5, 'cunning': 4, 'nature': 3},
       description: 'deity_svadilfari_description'.tr(),
       colors: [Color(0xFF5D4037)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'thrym': Deity(
       id: 'thrym',
@@ -248,6 +300,8 @@ class AppData {
       traits: {'strength': 5, 'cunning': 4, 'passion': 3},
       description: 'deity_thrym_description'.tr(),
       colors: [Color(0xFF424242)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
     'ymir': Deity(
       id: 'ymir',
@@ -257,6 +311,8 @@ class AppData {
       traits: {'strength': 5, 'nature': 5, 'wisdom': 3},
       description: 'deity_ymir_description'.tr(),
       colors: [Color(0xFF263238), Color(0xFF212121)],
+      isCollectibleCard: false,
+      cardVersion: null,
     ),
   };
 

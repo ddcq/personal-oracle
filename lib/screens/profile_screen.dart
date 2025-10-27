@@ -22,9 +22,6 @@ import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:oracle_d_asgard/models/card_version.dart';
 
-
-
-
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 
@@ -90,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     // 2. Get all chibi collectible cards (to access their videoUrl and imagePath)
     final allChibiCards = allCollectibleCards.where((card) => card.version == CardVersion.chibi).toList();
-    final allChibiCardsMap = { for (var card in allChibiCards) card.id : card };
+    final allChibiCardsMap = {for (var card in allChibiCards) card.id: card};
 
     // 3. Get unlocked collectible cards
     final unlockedCards = await gamificationService.getUnlockedCollectibleCards();
@@ -112,16 +109,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final card = allChibiCardsMap[deityId];
         if (card != null) {
           final existingDeity = AppData.deities[card.id];
-          tempDeities.add(Deity(
-            id: card.id,
-            name: card.title,
-            title: card.title,
-            icon: 'assets/images/${card.imagePath}',
-            videoUrl: card.videoUrl,
-            description: card.description,
-            traits: existingDeity?.traits ?? {},
-            colors: existingDeity?.colors ?? [Colors.grey, Colors.black],
-          ));
+          tempDeities.add(
+            Deity(
+              id: card.id,
+              name: card.title,
+              title: card.title,
+              icon: 'assets/images/${card.imagePath}',
+              videoUrl: card.videoUrl,
+              description: card.description,
+              traits: existingDeity?.traits ?? {},
+              colors: existingDeity?.colors ?? [Colors.grey, Colors.black],
+              isCollectibleCard: true,
+              cardVersion: card.version,
+            ),
+          );
           addedDeityIds.add(deityId);
         }
       } else if (allPossibleQuizDeityIds.contains(deityId)) {
@@ -241,7 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _isAdLoading = true;
     });
 
-          _showSnackBar('profile_screen_ad_failed'.tr());
+    _showSnackBar('profile_screen_ad_failed'.tr());
   }
 
   void _showRewardedStoryAd() async {
@@ -451,17 +452,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         borderRadius: BorderRadius.circular(10),
                                         child: Builder(
                                           builder: (context) {
-                                            final selectedDeity = _allSelectableDeities.firstWhereOrNull(
-                                              (d) => d.id == (_selectedDeityId ?? deity.id),
-                                            );
+                                            final selectedDeity = _allSelectableDeities.firstWhereOrNull((d) => d.id == (_selectedDeityId ?? deity.id));
                                             final displayDeity = selectedDeity ?? deity; // Fallback to quiz deity if not found
 
-                                            return (displayDeity.videoUrl != null && displayDeity.videoUrl!.isNotEmpty)
-                                                ? CustomVideoPlayer(
-                                                    videoUrl: displayDeity.videoUrl!,
-                                                    placeholderAsset: displayDeity.icon,
-                                                  )
-                                                : Image.asset(displayDeity.icon, fit: BoxFit.cover);
+                                            Widget deityImageWidget;
+                                            if (displayDeity.videoUrl != null && displayDeity.videoUrl!.isNotEmpty) {
+                                              deityImageWidget = CustomVideoPlayer(videoUrl: displayDeity.videoUrl!, placeholderAsset: displayDeity.icon);
+                                            } else {
+                                              deityImageWidget = Image.asset(displayDeity.icon, fit: BoxFit.cover);
+                                            }
+
+                                            if (displayDeity.isCollectibleCard) {
+                                              return Transform.translate(
+                                                offset: const Offset(0, 15), // 10% of 150px height
+                                                child: Transform.scale(scale: 1.4, child: deityImageWidget),
+                                              );
+                                            } else {
+                                              return deityImageWidget;
+                                            }
                                           },
                                         ),
                                       ),
@@ -809,15 +817,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       itemBuilder: (context, index) {
         if (index < filteredCards.length) {
           final collectibleCard = filteredCards[index];
-          return InteractiveCollectibleCard(card: collectibleCard, playVideo: false)
-            .animate(delay: (index * 50).ms)
-            .slideY(begin: 0.2, duration: 400.ms, curve: Curves.easeOutCubic)
-            .fadeIn(duration: 300.ms);
+          return InteractiveCollectibleCard(
+            card: collectibleCard,
+            playVideo: false,
+          ).animate(delay: (index * 50).ms).slideY(begin: 0.2, duration: 400.ms, curve: Curves.easeOutCubic).fadeIn(duration: 300.ms);
         } else {
-          return adRewardButton!
-            .animate(delay: (index * 50).ms)
-            .slideY(begin: 0.2, duration: 400.ms, curve: Curves.easeOutCubic)
-            .fadeIn(duration: 300.ms);
+          return adRewardButton!.animate(delay: (index * 50).ms).slideY(begin: 0.2, duration: 400.ms, curve: Curves.easeOutCubic).fadeIn(duration: 300.ms);
         }
       },
     );
@@ -952,15 +957,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-          )
-            .animate(delay: (index * 80).ms)
-            .slideY(begin: 0.2, duration: 500.ms, curve: Curves.easeOutCubic)
-            .fadeIn(duration: 300.ms);
+          ).animate(delay: (index * 80).ms).slideY(begin: 0.2, duration: 500.ms, curve: Curves.easeOutCubic).fadeIn(duration: 300.ms);
         } else {
-          return adRewardStoryButton!
-            .animate(delay: (index * 80).ms)
-            .slideY(begin: 0.2, duration: 500.ms, curve: Curves.easeOutCubic)
-            .fadeIn(duration: 300.ms);
+          return adRewardStoryButton!.animate(delay: (index * 80).ms).slideY(begin: 0.2, duration: 500.ms, curve: Curves.easeOutCubic).fadeIn(duration: 300.ms);
         }
       },
     );
@@ -1014,12 +1013,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Text(
               'profile_screen_language'.tr(),
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: AppTextStyles.amaticSC,
-                fontSize: 22,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC, fontSize: 22),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -1038,10 +1034,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Text('🇺🇸', style: TextStyle(fontSize: 18)),
                         const SizedBox(width: 8),
-                        Text(
-                          'profile_screen_language_english'.tr(),
-                          style: const TextStyle(color: Colors.white),
-                        ),
+                        Text('profile_screen_language_english'.tr(), style: const TextStyle(color: Colors.white)),
                       ],
                     ),
                   ),
@@ -1051,10 +1044,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Text('🇫🇷', style: TextStyle(fontSize: 18)),
                         const SizedBox(width: 8),
-                        Text(
-                          'profile_screen_language_french'.tr(),
-                          style: const TextStyle(color: Colors.white),
-                        ),
+                        Text('profile_screen_language_french'.tr(), style: const TextStyle(color: Colors.white)),
                       ],
                     ),
                   ),
@@ -1075,6 +1065,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
   Widget _buildDeityDisplayPlaceholder({bool error = false}) {
     return Container(
       width: 150,
@@ -1089,13 +1080,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: Center(
-          child: error ? const Icon(Icons.error, color: Colors.red, size: 50) : const CircularProgressIndicator(),
-        ),
+        child: Center(child: error ? const Icon(Icons.error, color: Colors.red, size: 50) : const CircularProgressIndicator()),
       ),
     );
   }
-
 }
 
 class _AdRewardButtonWidget extends StatelessWidget {
