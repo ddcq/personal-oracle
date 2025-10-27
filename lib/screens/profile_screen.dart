@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:collection/collection.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -19,6 +20,7 @@ import 'package:oracle_d_asgard/data/stories_data.dart';
 import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
+import 'package:oracle_d_asgard/models/card_version.dart';
 
 
 
@@ -29,11 +31,13 @@ import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
 
 import 'package:oracle_d_asgard/widgets/dev_tools_widget.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:oracle_d_asgard/services/quiz_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -53,6 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<List<dynamic>>? _mainDataFuture;
   Future<List<Map<String, dynamic>>>? _quizResultsFuture;
+  List<Deity> _allSelectableDeities = [];
 
   CollectibleCard? _nextAdRewardCard; // New: to store the next card from ad
   MythStory? _nextAdRewardStory; // New: to store the next story to unlock from ad
@@ -62,6 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     _loadNextAdRewardCard(); // New: load the next card
     _loadNextAdRewardStory(); // New: load the next story
+    _loadSelectableDeities();
   }
 
   Future<void> _loadNextAdRewardCard() async {
@@ -76,6 +82,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {}); // Update UI after loading
   }
 
+  Future<void> _loadSelectableDeities() async {
+    final gamificationService = getIt<GamificationService>();
+
+    // 1. Get all possible quiz deity IDs
+    final allPossibleQuizDeityIds = QuizService.getAllowedQuizDeityIds().toSet();
+
+    // 2. Get all chibi collectible cards (to access their videoUrl and imagePath)
+    final allChibiCards = allCollectibleCards.where((card) => card.version == CardVersion.chibi).toList();
+    final allChibiCardsMap = { for (var card in allChibiCards) card.id : card };
+
+    // 3. Get unlocked collectible cards
+    final unlockedCards = await gamificationService.getUnlockedCollectibleCards();
+    final unlockedCardIds = unlockedCards.map((card) => card.id).toSet();
+
+    final List<Deity> tempDeities = [];
+    final Set<String> addedDeityIds = {}; // To ensure uniqueness
+
+    // Combine all possible quiz deities and unlocked card IDs
+    final allDeityOptions = <String>{};
+    allDeityOptions.addAll(allPossibleQuizDeityIds);
+    allDeityOptions.addAll(unlockedCardIds);
+
+    for (final deityId in allDeityOptions) {
+      if (addedDeityIds.contains(deityId)) continue;
+
+      if (unlockedCardIds.contains(deityId)) {
+        // Prioritize unlocked collectible card data if available
+        final card = allChibiCardsMap[deityId];
+        if (card != null) {
+          final existingDeity = AppData.deities[card.id];
+          tempDeities.add(Deity(
+            id: card.id,
+            name: card.title,
+            title: card.title,
+            icon: 'assets/images/${card.imagePath}',
+            videoUrl: card.videoUrl,
+            description: card.description,
+            traits: existingDeity?.traits ?? {},
+            colors: existingDeity?.colors ?? [Colors.grey, Colors.black],
+          ));
+          addedDeityIds.add(deityId);
+        }
+      } else if (allPossibleQuizDeityIds.contains(deityId)) {
+        // If it's a quiz deity but no unlocked card, use AppData
+        final deity = AppData.deities[deityId];
+        if (deity != null) {
+          tempDeities.add(deity);
+          addedDeityIds.add(deityId);
+        }
+      }
+    }
+
+    if (tempDeities.isEmpty) {
+      final odin = AppData.deities['odin'];
+      if (odin != null) {
+        _allSelectableDeities = [odin];
+      }
+    } else {
+      _allSelectableDeities = tempDeities;
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   Future<void> _refreshProfileData() async {
     final gamificationService = getIt<GamificationService>();
     _mainDataFuture = Future.wait([
@@ -86,6 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       gamificationService.getProfileDeityIcon(),
     ]);
     _quizResultsFuture = gamificationService.getQuizResults();
+    await _loadSelectableDeities(); // Await this to ensure _allSelectableDeities is populated before setState
     await _loadNextAdRewardCard();
     await _loadNextAdRewardStory();
     setState(() {});
@@ -351,28 +423,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   setState(() {
                                     _selectedDeityId = newDeityId;
                                   });
+                                  await getIt<GamificationService>().saveProfileDeityIcon(newDeityId);
+                                  _refreshProfileData(); // Trigger a full refresh
                                 }
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    width: 150,
-                                    height: 150,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      border: Border.all(color: const Color(0xFFDAA520), width: 5),
-                                      boxShadow: const [
-                                        BoxShadow(color: Color(0xFFDAA520), offset: Offset(5, 5)),
-                                        BoxShadow(color: Color(0xFFFFD700), offset: Offset(-5, -5)),
-                                      ],
+                                  // Find the selected deity from the pre-loaded list
+                                  // Fallback to the quiz deity if _allSelectableDeities is empty or selected deity not found
+                                  if (_allSelectableDeities.isEmpty) // Show placeholder if deities are not yet loaded
+                                    _buildDeityDisplayPlaceholder()
+                                  else
+                                    Container(
+                                      width: 150,
+                                      height: 150,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(color: const Color(0xFFDAA520), width: 5),
+                                        boxShadow: const [
+                                          BoxShadow(color: Color(0xFFDAA520), offset: Offset(5, 5)),
+                                          BoxShadow(color: Color(0xFFFFD700), offset: Offset(-5, -5)),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Builder(
+                                          builder: (context) {
+                                            final selectedDeity = _allSelectableDeities.firstWhereOrNull(
+                                              (d) => d.id == (_selectedDeityId ?? deity.id),
+                                            );
+                                            final displayDeity = selectedDeity ?? deity; // Fallback to quiz deity if not found
+
+                                            return (displayDeity.videoUrl != null && displayDeity.videoUrl!.isNotEmpty)
+                                                ? CustomVideoPlayer(
+                                                    videoUrl: displayDeity.videoUrl!,
+                                                    placeholderAsset: displayDeity.icon,
+                                                  )
+                                                : Image.asset(displayDeity.icon, fit: BoxFit.cover);
+                                          },
+                                        ),
+                                      ),
                                     ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.asset(AppData.deities[_selectedDeityId]?.icon ?? deity.icon, fit: BoxFit.cover),
-                                    ),
-                                  ),
                                   const SizedBox(width: 8),
                                   const Icon(Icons.edit, color: Colors.white, size: 20),
                                 ],
@@ -982,6 +1075,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+  Widget _buildDeityDisplayPlaceholder({bool error = false}) {
+    return Container(
+      width: 150,
+      height: 150,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: const Color(0xFFDAA520), width: 5),
+        boxShadow: const [
+          BoxShadow(color: Color(0xFFDAA520), offset: Offset(5, 5)),
+          BoxShadow(color: Color(0xFFFFD700), offset: Offset(-5, -5)),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Center(
+          child: error ? const Icon(Icons.error, color: Colors.red, size: 50) : const CircularProgressIndicator(),
+        ),
+      ),
+    );
+  }
+
 }
 
 class _AdRewardButtonWidget extends StatelessWidget {

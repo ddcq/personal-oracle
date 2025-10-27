@@ -5,6 +5,7 @@ class Deity {
   final String name;
   final String title;
   final String icon;
+  final String? videoUrl;
   final Map<String, int> traits;
   final String description;
   final List<Color> colors;
@@ -14,6 +15,7 @@ class Deity {
     required this.name,
     required this.title,
     required this.icon,
+    this.videoUrl,
     required this.traits,
     required this.description,
     required this.colors,

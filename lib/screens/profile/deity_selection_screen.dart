@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:oracle_d_asgard/data/app_data.dart';
+import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
+import 'package:oracle_d_asgard/models/card_version.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
+import 'package:oracle_d_asgard/services/quiz_service.dart';
 
 class DeitySelectionScreen extends StatefulWidget {
   final String currentDeityId;
@@ -20,17 +25,78 @@ class DeitySelectionScreen extends StatefulWidget {
 }
 
 class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
-  late final PageController _pageController;
-  late int _currentPage;
+  late PageController _pageController;
+  int _currentPage = 0;
+  Future<List<Deity>>? _deitiesFuture;
+  bool _pageControllerInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    final deities = AppData.deities.values.toList();
-    _currentPage = deities.indexWhere((d) => d.id == widget.currentDeityId);
-    if (_currentPage == -1) _currentPage = 0;
+    _deitiesFuture = _loadDeities();
+  }
 
-    _pageController = PageController(initialPage: _currentPage, viewportFraction: 0.8);
+  Future<List<Deity>> _loadDeities() async {
+    final gamificationService = getIt<GamificationService>();
+
+    // 1. Get all possible quiz deity IDs
+    final allPossibleQuizDeityIds = QuizService.getAllowedQuizDeityIds().toSet();
+
+    // 2. Get all chibi collectible cards (to access their videoUrl and imagePath)
+    final allChibiCards = allCollectibleCards.where((card) => card.version == CardVersion.chibi).toList();
+    final allChibiCardsMap = { for (var card in allChibiCards) card.id : card };
+
+    // 3. Get unlocked collectible cards
+    final unlockedCards = await gamificationService.getUnlockedCollectibleCards();
+    final unlockedCardIds = unlockedCards.map((card) => card.id).toSet();
+
+    final List<Deity> finalDeities = [];
+    final Set<String> addedDeityIds = {}; // To ensure uniqueness
+
+    // Combine all possible quiz deities and unlocked card IDs
+    final allDeityOptions = <String>{};
+    allDeityOptions.addAll(allPossibleQuizDeityIds);
+    allDeityOptions.addAll(unlockedCardIds);
+
+    for (final deityId in allDeityOptions) {
+      if (addedDeityIds.contains(deityId)) continue;
+
+      if (unlockedCardIds.contains(deityId)) {
+        // Prioritize unlocked collectible card data if available
+        final card = allChibiCardsMap[deityId];
+        if (card != null) {
+          final existingDeity = AppData.deities[card.id];
+          finalDeities.add(Deity(
+            id: card.id,
+            name: card.title,
+            title: card.title,
+            icon: 'assets/images/${card.imagePath}',
+            videoUrl: card.videoUrl,
+            description: card.description,
+            traits: existingDeity?.traits ?? {},
+            colors: existingDeity?.colors ?? [Colors.grey, Colors.black],
+          ));
+          addedDeityIds.add(deityId);
+        }
+      } else if (allPossibleQuizDeityIds.contains(deityId)) {
+        // If it's a quiz deity but no unlocked card, use AppData
+        final deity = AppData.deities[deityId];
+        if (deity != null) {
+          finalDeities.add(deity);
+          addedDeityIds.add(deityId);
+        }
+      }
+    }
+
+    if (finalDeities.isEmpty) {
+      final odin = AppData.deities['odin'];
+      if (odin != null) {
+        return [odin];
+      }
+      return [];
+    }
+
+    return finalDeities;
   }
 
   @override
@@ -41,48 +107,70 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final deities = AppData.deities.values.toList();
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(titleText: 'Choisir une Divinité'),
       body: AppBackground(
         child: Padding(
           padding: EdgeInsets.only(top: kToolbarHeight + MediaQuery.of(context).padding.top),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              PageView.builder(
-                controller: _pageController,
-                itemCount: deities.length,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  // This container with a transparent color makes the entire area hittable.
-                  return Container(
-                    color: Colors.transparent,
-                    child: _DeityCard(deity: deities[index], pageController: _pageController, pageIndex: index),
-                  );
-                },
-              ),
-              _buildNavigationArrow(
-                isLeft: true,
-                isVisible: _currentPage > 0,
-                onPressed: () {
-                  _pageController.previousPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
-                },
-              ),
-              _buildNavigationArrow(
-                isLeft: false,
-                isVisible: _currentPage < deities.length - 1,
-                onPressed: () {
-                  _pageController.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
-                },
-              ),
-            ],
+          child: FutureBuilder<List<Deity>>(
+            future: _deitiesFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text('Aucune divinité débloquée.'));
+              }
+
+              final deities = snapshot.data!;
+              if (!mounted) return const SizedBox.shrink(); // Ensure widget is still mounted
+
+              // Initialize _pageController only once
+              if (!_pageControllerInitialized) {
+                _currentPage = deities.indexWhere((d) => d.id == widget.currentDeityId);
+                if (_currentPage == -1) _currentPage = 0;
+                _pageController = PageController(initialPage: _currentPage, viewportFraction: 0.8);
+                _pageControllerInitialized = true;
+              }
+
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  PageView.builder(
+                    controller: _pageController,
+                    itemCount: deities.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index;
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      // This container with a transparent color makes the entire area hittable.
+                      return Container(
+                        color: Colors.transparent,
+                        child: _DeityCard(deity: deities[index], pageController: _pageController, pageIndex: index),
+                      );
+                    },
+                  ),
+                  _buildNavigationArrow(
+                    isLeft: true,
+                    isVisible: _currentPage > 0,
+                    onPressed: () {
+                      _pageController.previousPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+                    },
+                  ),
+                  _buildNavigationArrow(
+                    isLeft: false,
+                    isVisible: _currentPage < deities.length - 1,
+                    onPressed: () {
+                      _pageController.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+                    },
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -287,14 +375,20 @@ class _DeityCardState extends State<_DeityCard> {
   }
 
   Widget _buildDeityImage() {
-    return Container(
+    return SizedBox(
       width: 180,
       height: 180,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        image: DecorationImage(image: AssetImage(widget.deity.icon), fit: BoxFit.cover),
-        border: Border.all(color: Colors.amber, width: 6),
-        boxShadow: [BoxShadow(color: Colors.black.withAlpha(200), blurRadius: 15, offset: const Offset(0, 8))],
+      child: ClipOval(
+        child: (widget.deity.videoUrl != null && widget.deity.videoUrl!.isNotEmpty)
+            ? CustomVideoPlayer(
+                videoUrl: widget.deity.videoUrl!,
+                placeholderAsset: widget.deity.icon,
+              )
+            : Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: AssetImage(widget.deity.icon), fit: BoxFit.cover),
+                ),
+              ),
       ),
     );
   }
@@ -326,7 +420,9 @@ class _DeityCardState extends State<_DeityCard> {
 
   void _selectDeity() async {
     final gamificationService = getIt<GamificationService>();
+    final soundService = getIt<SoundService>();
     final navigator = Navigator.of(context);
+    await soundService.playCardMusic(widget.deity.id);
     await gamificationService.saveProfileDeityIcon(widget.deity.id);
     if (!mounted) return;
     navigator.pop(widget.deity.id);

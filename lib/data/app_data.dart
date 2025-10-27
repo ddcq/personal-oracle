@@ -24,8 +24,8 @@ class AppData {
       description: 'deity_thor_description'.tr(),
       colors: [Color(0xFF2563EB), Color(0xFF1E40AF)],
     ),
-    'freya': Deity(
-      id: 'freya',
+    'freyja': Deity(
+      id: 'freyja',
       name: 'Freyja',
       title: 'deity_freyja_title'.tr(),
       icon: 'assets/images/heads/freya.webp',

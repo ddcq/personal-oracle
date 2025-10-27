@@ -27,11 +27,15 @@ class QuizService {
     });
   }
 
+  static List<String> getAllowedQuizDeityIds() {
+    return ['odin', 'loki', 'freyja', 'frigg', 'thor', 'tyr'];
+  }
+
   static String calculateBestDeity(Map<String, int> scores) {
     String bestMatch = 'odin';
     int bestScore = -1;
 
-    final List<String> allowedDeityIds = ['odin', 'loki', 'freya', 'frigg', 'thor', 'tyr'];
+    final List<String> allowedDeityIds = getAllowedQuizDeityIds();
 
     AppData.deities.forEach((key, deity) {
       if (!allowedDeityIds.contains(key)) {
