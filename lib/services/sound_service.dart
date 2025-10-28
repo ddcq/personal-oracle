@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 
@@ -29,10 +28,15 @@ class SoundService with ChangeNotifier {
         await _audioPlayer.stop();
         await _audioPlayer.setReleaseMode(ReleaseMode.loop); // Ensure looping for menu music
         await _audioPlayer.setVolume(1.0);
-        await _audioPlayer.play(AssetSource('audio/ambiance.mp3'));
+        await _audioPlayer.play(AssetSource('audio/ambiance.mp3')).timeout(
+          const Duration(seconds: 5),
+          onTimeout: () {
+            debugPrint('Main menu music loading timeout');
+          },
+        );
         _currentMusic = MusicType.mainMenu;
       } catch (e) {
-        debugPrint('widgets_custom_video_player_error_loading_video'.tr(namedArgs: {'error': '$e'}));
+        debugPrint('Error loading main menu music: $e');
       }
     }
   }
@@ -43,10 +47,15 @@ class SoundService with ChangeNotifier {
         await _audioPlayer.stop();
         await _audioPlayer.setReleaseMode(ReleaseMode.loop); // Ensure looping for story music
         await _audioPlayer.setVolume(0.5);
-        await _audioPlayer.play(AssetSource('audio/reading.mp3'));
+        await _audioPlayer.play(AssetSource('audio/reading.mp3')).timeout(
+          const Duration(seconds: 5),
+          onTimeout: () {
+            debugPrint('Story music loading timeout');
+          },
+        );
         _currentMusic = MusicType.story;
       } catch (e) {
-        debugPrint('widgets_custom_video_player_error_loading_video'.tr(namedArgs: {'error': '$e'}));
+        debugPrint('Error loading story music: $e');
       }
     }
   }
@@ -69,7 +78,7 @@ class SoundService with ChangeNotifier {
             .timeout(
               const Duration(seconds: 10),
               onTimeout: () {
-                debugPrint('widgets_custom_video_player_timeout_loading_music'.tr(namedArgs: {'cardId': cardId}));
+                debugPrint('Card music loading timeout for $cardId');
                 // En cas de timeout, on reprend la musique précédente
                 if (_previousMusic != MusicType.none) {
                   resumePreviousMusic();
@@ -78,7 +87,7 @@ class SoundService with ChangeNotifier {
             );
         _currentMusic = MusicType.card;
       } catch (e) {
-        debugPrint('widgets_custom_video_player_error_loading_music'.tr(namedArgs: {'cardId': cardId, 'error': '$e'}));
+        debugPrint('Error loading card music for $cardId: $e');
         // En cas d'erreur, on reprend la musique précédente
         if (_previousMusic != MusicType.none) {
           await resumePreviousMusic();
@@ -112,7 +121,7 @@ class SoundService with ChangeNotifier {
           await _audioPlayer.resume();
         }
       } catch (e) {
-        debugPrint('widgets_custom_video_player_error_resuming_music'.tr(namedArgs: {'error': '$e'}));
+        debugPrint('Error resuming music: $e');
       }
     }
   }

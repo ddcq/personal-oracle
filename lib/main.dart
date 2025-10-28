@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:async';
 import 'package:oracle_d_asgard/services/notification_service.dart';
 import 'package:oracle_d_asgard/utils/themes.dart';
 
@@ -11,43 +12,30 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/router.dart'; // Import the router
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<Locale> _loadSavedLocale() async {
-  final prefs = await SharedPreferences.getInstance();
-  final languageCode = prefs.getString('language_code');
-  final countryCode = prefs.getString('country_code');
-
-  if (languageCode != null) {
-    return Locale(languageCode, countryCode?.isNotEmpty == true ? countryCode : null);
-  }
-
-  // Valeur par défaut si aucune langue n'est sauvegardée
-  return const Locale('en', 'US');
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyLocalization.ensureInitialized();
-  setupLocator();
-  await NotificationService().init(); // Initialize NotificationService
-  if (Platform.isIOS || Platform.isAndroid) {
-    await MobileAds.instance.initialize();
+  
+  // Initialize EasyLocalization with error handling
+  try {
+    await EasyLocalization.ensureInitialized();
+  } catch (e) {
+    debugPrint('Failed to initialize EasyLocalization: $e');
+    // Continue without localization - app will use fallback locale
   }
-  await getIt<DatabaseService>().database;
-
-  // Charger la langue sauvegardée
-  final savedLocale = await _loadSavedLocale();
+  
+  setupLocator();
 
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR')],
       path: 'assets/resources/langs',
       fallbackLocale: const Locale('en', 'US'),
-      startLocale: savedLocale,
       child: ChangeNotifierProvider(
         create: (context) => ThemeProvider(),
         child: const MyApp(),
@@ -68,8 +56,74 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    getIt<SoundService>().playMainMenuMusic();
-    NotificationService().cancelAllNotifications(); // Cancel notifications on app start
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeServicesAfterStartup();
+      _loadSavedLocale();
+    });
+  }
+
+  Future<void> _loadSavedLocale() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final languageCode = prefs.getString('language_code');
+      final countryCode = prefs.getString('country_code');
+
+      if (languageCode != null && mounted) {
+        final savedLocale = Locale(languageCode, countryCode?.isNotEmpty == true ? countryCode : null);
+        await context.setLocale(savedLocale);
+      }
+    } catch (e) {
+      debugPrint('Failed to load saved locale: $e');
+      // Continue with default locale
+    }
+  }
+
+  Future<void> _initializeServicesAfterStartup() async {
+    // Initialize NotificationService with timeout to prevent blocking
+    try {
+      await NotificationService().init().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {
+          // Skip notifications if initialization takes too long
+        },
+      );
+      NotificationService().cancelAllNotifications();
+    } catch (e) {
+      debugPrint('Failed to initialize notifications: $e');
+      // Continue without notifications if initialization fails
+    }
+    
+    // Initialize ads with error handling
+    try {
+      if (Platform.isIOS || Platform.isAndroid) {
+        await MobileAds.instance.initialize();
+      }
+    } catch (e) {
+      debugPrint('Failed to initialize ads: $e');
+      // Continue without ads
+    }
+    
+    // Initialize database with error handling and timeout
+    try {
+      await getIt<DatabaseService>().database.timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          debugPrint('Database initialization timeout');
+          throw TimeoutException('Database initialization took too long');
+        },
+      );
+    } catch (e) {
+      debugPrint('Failed to initialize database: $e');
+      // Continue - database errors will be handled per-operation
+    }
+    
+    // Start music with error handling
+    try {
+      getIt<SoundService>().playMainMenuMusic();
+    } catch (e) {
+      debugPrint('Failed to start music: $e');
+      // Continue without music
+    }
   }
 
   @override

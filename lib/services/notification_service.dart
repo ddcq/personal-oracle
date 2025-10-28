@@ -17,53 +17,85 @@ class NotificationService {
   static const channelDescription = 'Notifications pour l\'Oracle d\'Asgard';
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  bool _isInitialized = false;
 
   Future<void> init() async {
-    final AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    if (_isInitialized) return;
 
-    final DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings(
-      requestSoundPermission: false,
-      requestBadgePermission: false,
-      requestAlertPermission: false,
-    );
+    try {
+      final AndroidInitializationSettings initializationSettingsAndroid =
+          AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-      macOS: initializationSettingsIOS,
-    );
+      final DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings(
+        requestSoundPermission: false,
+        requestBadgePermission: false,
+        requestAlertPermission: false,
+      );
 
-    tz.initializeTimeZones();
-    tz.setLocalLocation(tz.getLocation('Europe/Paris'));
+      final InitializationSettings initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid,
+        iOS: initializationSettingsIOS,
+        macOS: initializationSettingsIOS,
+      );
 
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-    );
+      // Initialize timezones only once and in a safe way
+      tz.initializeTimeZones();
+      
+      // Use UTC as fallback if local timezone fails
+      try {
+        tz.setLocalLocation(tz.getLocation('Europe/Paris'));
+      } catch (e) {
+        tz.setLocalLocation(tz.UTC);
+      }
+
+      await flutterLocalNotificationsPlugin.initialize(
+        initializationSettings,
+      );
+      
+      _isInitialized = true;
+    } catch (e) {
+      // Silently fail - notifications are not critical for app startup
+      _isInitialized = false;
+    }
   }
 
   Future<void> scheduleNotification() async {
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      0,
-      'Odin s\'ennuie de vous !',
-      'Cela fait un moment que nous ne vous avons pas vu. Relevez de nouveaux défis !',
-      tz.TZDateTime.now(tz.local).add(const Duration(hours: 48)),
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          channelId,
-          channelName,
-          channelDescription: channelDescription,
-          importance: Importance.max,
-          priority: Priority.high,
-          largeIcon: DrawableResourceAndroidBitmap('odin_notification'),
+    if (!_isInitialized) {
+      await init();
+      if (!_isInitialized) return; // Still not initialized, skip
+    }
+
+    try {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        0,
+        'Odin s\'ennuie de vous !',
+        'Cela fait un moment que nous ne vous avons pas vu. Relevez de nouveaux défis !',
+        tz.TZDateTime.now(tz.local).add(const Duration(hours: 48)),
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            channelId,
+            channelName,
+            channelDescription: channelDescription,
+            importance: Importance.max,
+            priority: Priority.high,
+            largeIcon: DrawableResourceAndroidBitmap('odin_notification'),
+          ),
+          iOS: DarwinNotificationDetails(),
         ),
-        iOS: DarwinNotificationDetails(),
-      ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-    );
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      );
+    } catch (e) {
+      // Silently fail - non-critical feature
+    }
   }
 
   Future<void> cancelAllNotifications() async {
-    await flutterLocalNotificationsPlugin.cancelAll();
+    if (!_isInitialized) return; // Skip if not initialized
+    
+    try {
+      await flutterLocalNotificationsPlugin.cancelAll();
+    } catch (e) {
+      // Silently fail - non-critical feature
+    }
   }
 }

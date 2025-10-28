@@ -17,14 +17,19 @@ class DatabaseService {
   }
 
   Future<Database> _initDatabase() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'oracle_d_asgard.db');
-    return await openDatabase(
-      path,
-      version: 5, // Increment version
-      onCreate: _onCreate,
-      onUpgrade: _onUpgrade,
-    );
+    try {
+      Directory documentsDirectory = await getApplicationDocumentsDirectory();
+      String path = join(documentsDirectory.path, 'oracle_d_asgard.db');
+      return await openDatabase(
+        path,
+        version: 5, // Increment version
+        onCreate: _onCreate,
+        onUpgrade: _onUpgrade,
+      );
+    } catch (e) {
+      // If database initialization fails, throw to be caught by caller
+      throw Exception('Failed to initialize database: $e');
+    }
   }
 
   Future _onCreate(Database db, int version) async {
@@ -110,21 +115,31 @@ class DatabaseService {
   }
 
   Future<void> deleteDb() async {
-    if (_database != null && _database!.isOpen) {
-      await _database!.close();
+    try {
+      if (_database != null && _database!.isOpen) {
+        await _database!.close();
+        _database = null;
+      }
+      Directory documentsDirectory = await getApplicationDocumentsDirectory();
+      String path = join(documentsDirectory.path, 'oracle_d_asgard.db');
+      await deleteDatabase(path);
+      _database = null; // Ensure it's null so it gets reinitialized on next access
+    } catch (e) {
+      // Silently fail - this is a debug/reset function
       _database = null;
     }
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'oracle_d_asgard.db');
-    await deleteDatabase(path);
-    _database = null; // Ensure it's null so it gets reinitialized on next access
   }
 
   Future<void> reinitializeDb() async {
-    if (_database != null && _database!.isOpen) {
-      await _database!.close();
+    try {
+      if (_database != null && _database!.isOpen) {
+        await _database!.close();
+        _database = null;
+      }
+      _database = await _initDatabase();
+    } catch (e) {
+      // Silently fail - this is a debug/reset function
       _database = null;
     }
-    _database = await _initDatabase();
   }
 }
