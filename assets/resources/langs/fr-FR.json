@@ -323,6 +323,8 @@
   "profile_screen_ok_button": "OK",
   "profile_screen_ad_label": "(pub)",
   "profile_screen_all_cards_unlocked": "Toutes les cartes à collectionner {version} débloquées !",
+  "profile_screen_cache_cleared_success": "Cache vidé avec succès !",
+  "profile_screen_cache_clear_failed": "Échec de la suppression du cache",
   "snake_screen_score_default": "Score: 0",
   "snake_screen_time_seconds_suffix": "s",
   "snake_screen_error_prefix": "Erreur",
@@ -586,5 +588,8 @@
   "about_screen_legal_title": "Légal",
   "about_screen_terms_link": "Conditions d'utilisation",
   "about_screen_privacy_link": "Politique de confidentialité",
-  "about_screen_contact_us": "Nous contacter"
+  "about_screen_contact_us": "Nous contacter",
+  "victory_popup_title": "Victoire !",
+  "victory_popup_congratulations": "Félicitations !",
+  "victory_popup_generic_message": "Vous avez accompli un exploit digne des dieux !"
 }

@@ -323,6 +323,8 @@
   "profile_screen_ok_button": "OK",
   "profile_screen_ad_label": "(ad)",
   "profile_screen_all_cards_unlocked": "All {version} collectible cards unlocked!",
+  "profile_screen_cache_cleared_success": "Cache cleared successfully!",
+  "profile_screen_cache_clear_failed": "Failed to clear cache",
   "snake_screen_score_default": "Score: 0",
   "snake_screen_time_seconds_suffix": "s",
   "snake_screen_error_prefix": "Error",
@@ -586,5 +588,8 @@
   "about_screen_legal_title": "Legal",
   "about_screen_terms_link": "Terms of Service",
   "about_screen_privacy_link": "Privacy Policy",
-  "about_screen_contact_us": "Contact Us"
+  "about_screen_contact_us": "Contact Us",
+  "victory_popup_title": "Victory!",
+  "victory_popup_congratulations": "Congratulations!",
+  "victory_popup_generic_message": "You have accomplished a feat worthy of the gods!"
 }

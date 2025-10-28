@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
@@ -57,29 +58,41 @@ class DevToolsWidget extends StatelessWidget {
     }
   }
 
+  Future<void> _clearCache() async {
+    try {
+      await DefaultCacheManager().emptyCache();
+      onShowSnackBar('profile_screen_cache_cleared_success'.tr());
+    } catch (e) {
+      onShowSnackBar('${'profile_screen_cache_clear_failed'.tr()}: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ChibiButton(
               color: ChibiColors.buttonRed,
               onPressed: _clearAndRebuildDatabase,
               child: const Icon(Icons.delete_forever, color: Colors.white, size: 20),
             ),
-            SizedBox(width: 20.w),
             ChibiButton(
               color: ChibiColors.buttonBlue,
               onPressed: _unlockAllStories,
               child: const Icon(Icons.book, color: Colors.white, size: 20),
             ),
-            SizedBox(width: 20.w),
             ChibiButton(
               color: ChibiColors.buttonPurple,
               onPressed: _showRandomVictoryPopup,
               child: const Icon(Icons.celebration, color: Colors.white, size: 20),
+            ),
+            ChibiButton(
+              color: ChibiColors.buttonYellow,
+              onPressed: _clearCache,
+              child: const Icon(Icons.cleaning_services, color: Colors.white, size: 20),
             ),
           ],
         ),

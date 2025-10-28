@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -305,13 +306,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showRandomVictoryPopup() {
-    // Sélectionne une carte aléatoire parmi toutes les cartes disponibles
-    final allCards = allCollectibleCards;
-    if (allCards.isNotEmpty) {
-      final randomIndex = DateTime.now().millisecondsSinceEpoch % allCards.length;
-      final randomCard = allCards[randomIndex];
-
-      _showRewardDialog(rewardCard: randomCard);
+    final random = Random();
+    // 50/50 chance to show a card or a story
+    if (random.nextBool()) {
+      // Show a random collectible card
+      final allCards = allCollectibleCards;
+      if (allCards.isNotEmpty) {
+        final randomCard = allCards[random.nextInt(allCards.length)];
+        _showRewardDialog(rewardCard: randomCard);
+      }
+    } else {
+      // Show a random story chapter
+      final allStories = getMythStories();
+      if (allStories.isNotEmpty) {
+        final randomStory = allStories[random.nextInt(allStories.length)];
+        if (randomStory.correctOrder.isNotEmpty) {
+          final randomChapter = randomStory.correctOrder[random.nextInt(randomStory.correctOrder.length)];
+          _showRewardDialog(unlockedStoryChapter: randomChapter);
+        }
+      }
     }
   }
 
