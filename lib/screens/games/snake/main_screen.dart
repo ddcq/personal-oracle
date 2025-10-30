@@ -326,17 +326,17 @@ class _SnakeGameState extends State<SnakeGame> {
                 // Centered black rectangle for the game area
                 Center(
                   child: GestureDetector(
-                    onVerticalDragEnd: (details) {
-                      if (details.primaryVelocity! > 0) {
+                    onVerticalDragUpdate: (details) {
+                      if (details.delta.dy > 0) {
                         _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
-                      } else if (details.primaryVelocity! < 0) {
+                      } else if (details.delta.dy < 0) {
                         _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
                       }
                     },
-                    onHorizontalDragEnd: (details) {
-                      if (details.primaryVelocity! > 0) {
+                    onHorizontalDragUpdate: (details) {
+                      if (details.delta.dx > 0) {
                         _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
-                      } else if (details.primaryVelocity! < 0) {
+                      } else if (details.delta.dx < 0) {
                         _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
                       }
                     },
