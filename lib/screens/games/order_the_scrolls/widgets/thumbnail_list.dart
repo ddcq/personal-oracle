@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class ThumbnailList extends StatelessWidget {
   final GameController controller;
@@ -30,7 +31,7 @@ class ThumbnailList extends StatelessWidget {
             }
 
             return DragAndDropItem(
-              child: GestureDetector(
+              child: SimpleGestureDetector(
                 onTap: () => controller.selectMythCard(card),
                 child: Card(
                   margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),

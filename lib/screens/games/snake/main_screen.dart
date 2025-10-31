@@ -19,6 +19,7 @@ import 'package:oracle_d_asgard/components/victory_popup.dart'; // Import the vi
 import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import CollectibleCard
 import 'package:confetti/confetti.dart'; // Import ConfettiController
 import 'package:oracle_d_asgard/locator.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 class SnakeGame extends StatefulWidget {
   // Temporary comment
   const SnakeGame({super.key});
@@ -325,18 +326,23 @@ class _SnakeGameState extends State<SnakeGame> {
                 Positioned.fill(child: Image.asset('assets/images/backgrounds/wall.webp', fit: BoxFit.fill)),
                 // Centered black rectangle for the game area
                 Center(
-                  child: GestureDetector(
-                    onVerticalDragUpdate: (details) {
-                      if (details.delta.dy > 0) {
+                  child: SimpleGestureDetector(
+                    swipeConfig: const SimpleSwipeConfig(
+                      verticalThreshold: 20.0,
+                      horizontalThreshold: 20.0,
+                      swipeDetectionBehavior: SwipeDetectionBehavior.singularOnEnd,
+                    ),
+                    onVerticalSwipe: (direction) {
+                      if (direction == SwipeDirection.down) {
                         _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
-                      } else if (details.delta.dy < 0) {
+                      } else if (direction == SwipeDirection.up) {
                         _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
                       }
                     },
-                    onHorizontalDragUpdate: (details) {
-                      if (details.delta.dx > 0) {
+                    onHorizontalSwipe: (direction) {
+                      if (direction == SwipeDirection.right) {
                         _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
-                      } else if (details.delta.dx < 0) {
+                      } else if (direction == SwipeDirection.left) {
                         _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
                       }
                     },

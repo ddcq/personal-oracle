@@ -5,6 +5,7 @@ import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class InteractiveCollectibleCard extends StatefulWidget {
   final CollectibleCard card;
@@ -45,7 +46,7 @@ class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard>
   Widget build(BuildContext context) {
     final bool hasVideo = widget.card.videoUrl != null;
 
-    return GestureDetector(
+    return SimpleGestureDetector(
       onTap: () {
         if (widget.enableNavigation) {
           context.go('/card_detail', extra: widget.card);

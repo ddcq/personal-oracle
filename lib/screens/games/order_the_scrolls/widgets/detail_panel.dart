@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class DetailPanel extends StatelessWidget {
   // Changed to StatelessWidget
@@ -34,7 +35,7 @@ class DetailPanel extends StatelessWidget {
     final double normalOpacity = 0.6;
     final double enlargedOpacity = 0.8;
 
-    return GestureDetector(
+    return SimpleGestureDetector(
       onTap: onToggleEnlargement, // Use the callback
       child: AnimatedContainer(
         // Animated container for the frame

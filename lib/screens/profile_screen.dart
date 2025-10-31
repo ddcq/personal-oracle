@@ -36,6 +36,7 @@ import 'package:oracle_d_asgard/locator.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:oracle_d_asgard/services/quiz_service.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -399,7 +400,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                         return Column(
                           children: [
-                            GestureDetector(
+                            SimpleGestureDetector(
                               onTap: () => _showEditNameDialog(context),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -426,7 +427,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            GestureDetector(
+                            SimpleGestureDetector(
                               onTap: () async {
                                 final newDeityId = await Navigator.push<String>(
                                   context,
@@ -509,7 +510,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildSectionTitle('profile_screen_collectible_cards'.tr()),
                   _buildCollectibleCards(unlockedCards),
                   const SizedBox(height: 20),
-                  GestureDetector(
+                  SimpleGestureDetector(
                     onTap: () {
                       setState(() {
                         _tapCount++;
@@ -906,7 +907,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             lastChapterImagePath = lastChapterMythCard.imagePath;
           }
 
-          return GestureDetector(
+          return SimpleGestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => MythStoryPage(mythStory: mythStory)));
             },
@@ -1110,7 +1111,7 @@ class _AdRewardButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return SimpleGestureDetector(
       onTap: isAdLoading ? null : onTap,
       child: Container(
         decoration: BoxDecoration(

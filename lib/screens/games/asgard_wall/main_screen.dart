@@ -16,6 +16,7 @@ import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/locator.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -684,7 +685,7 @@ class _GameScreenState extends State<GameScreen> {
               // Gère les événements clavier
               return handleKeyPress(event) ? KeyEventResult.handled : KeyEventResult.ignored;
             },
-            child: GestureDetector(
+            child: SimpleGestureDetector(
               // Permet de refocaliser le jeu en tapant n’importe où
               onTap: () => focusNode.requestFocus(),
               child: Column(

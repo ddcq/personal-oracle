@@ -15,6 +15,7 @@ import 'package:oracle_d_asgard/components/victory_popup.dart';
 
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class MinesweeperScreen extends StatelessWidget {
   const MinesweeperScreen({super.key});
@@ -146,7 +147,7 @@ class _MinesweeperView extends StatelessWidget {
                       final col = index % controller.cols;
                       final cell = controller.board[row][col];
 
-                      return GestureDetector(
+                      return SimpleGestureDetector(
                         onTap: () => controller.revealCell(row, col),
                         onLongPress: () => controller.toggleFlag(row, col),
                         child: Container(

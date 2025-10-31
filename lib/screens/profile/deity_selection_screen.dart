@@ -14,6 +14,7 @@ import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
 import 'package:oracle_d_asgard/services/quiz_service.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class DeitySelectionScreen extends StatefulWidget {
   final String currentDeityId;
@@ -259,7 +260,7 @@ class _DeityCardState extends State<_DeityCard> {
 
         return Transform.scale(scale: value, child: child);
       },
-      child: GestureDetector(
+      child: SimpleGestureDetector(
         onTap: _selectDeity,
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),

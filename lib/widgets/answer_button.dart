@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 
 class AnswerButton extends StatelessWidget {
@@ -16,7 +17,7 @@ class AnswerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool useGradient = gradientColors != null && gradientColors!.length >= 2;
 
-    return GestureDetector(
+    return SimpleGestureDetector(
       onTap: onPressed,
       child: Container(
         width: 90.sw,
