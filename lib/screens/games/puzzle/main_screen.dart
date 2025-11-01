@@ -19,8 +19,8 @@ class PuzzleScreen extends StatefulWidget {
 class _PuzzleScreenState extends State<PuzzleScreen> {
   late PuzzleGame _game;
   late PuzzleFlameGame _flameGame;
-  final int _rows = 5; // Default rows
-  final int _cols = 5; // Default cols
+  final int _rows = 7; // Default rows
+  final int _cols = 7; // Default cols
 
   @override
   void initState() {
@@ -66,10 +66,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
 
     final Rect puzzleBoardBounds = Rect.fromLTWH(boardX, boardY, calculatedPuzzleWidth, calculatedPuzzleHeight);
 
-    return {
-      'pieceSize': calculatedPieceSize,
-      'puzzleBoardBounds': puzzleBoardBounds,
-    };
+    return {'pieceSize': calculatedPieceSize, 'puzzleBoardBounds': puzzleBoardBounds};
   }
 
   void _showVictoryDialog(CollectibleCard? rewardCard) {
@@ -99,11 +96,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
             onPressed: () {
               GameHelpDialog.show(
                 context,
-                [
-                  'puzzle_screen_rule_1'.tr(),
-                  'puzzle_screen_rule_2'.tr(),
-                  'puzzle_screen_rule_3'.tr(),
-                ],
+                ['puzzle_screen_rule_1'.tr(), 'puzzle_screen_rule_2'.tr(), 'puzzle_screen_rule_3'.tr()],
                 onGamePaused: () => _flameGame.pauseEngine(),
                 onGameResumed: () => _flameGame.resumeEngine(),
               );
@@ -131,5 +124,4 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
       ),
     );
   }
-
 }
