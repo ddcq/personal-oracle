@@ -69,6 +69,7 @@
   "puzzle_screen_rule_1": "Rearrange the tiles to form the complete image.",
   "puzzle_screen_rule_2": "Slide tiles into empty spaces.",
   "puzzle_screen_rule_3": "The goal is to complete the image as quickly as possible.",
+  "level": "Level",
   "qix_game_menu_title": "The Nine Realms",
   "qix_game_menu_description": "Jörmungandr, the World Serpent, has invaded the sacred realms. Draw magical borders to reclaim 75% of the territory and imprison the beast!",
   "qix_game_menu_controls": "⌨️ Keyboard Controls ⌨️\nArrows to move, Space to draw slowly.",

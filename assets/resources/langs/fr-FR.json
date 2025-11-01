@@ -69,6 +69,7 @@
   "puzzle_screen_rule_1": "Réorganisez les tuiles pour former l'image complète.",
   "puzzle_screen_rule_2": "Glissez les tuiles dans les espaces vides.",
   "puzzle_screen_rule_3": "Le but est de reconstituer l'image le plus rapidement possible.",
+  "level": "Niveau",
   "qix_game_menu_title": "Les Neuf Royaumes",
   "qix_game_menu_description": "Jörmungand, le Serpent-Monde, a envahi les royaumes sacrés. Trace des frontières magiques pour reconquérir 75% du territoire et emprisonner la bête !",
   "qix_game_menu_controls": "⌨️ Commandes Clavier ⌨️\nFlèches pour bouger, Espace pour tracer lentement.",
