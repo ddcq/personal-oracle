@@ -29,7 +29,7 @@ Future<NextChapter?> selectNextChapterToWin(GamificationService gamificationServ
 
   for (var story in allStories) {
     // Iterate over allStories
-    final progress = await gamificationService.getStoryProgress(story.title);
+    final progress = await gamificationService.getStoryProgress(story.id);
     // Decode the list of unlocked part IDs, or start with an empty list.
     final unlockedParts = progress != null ? jsonDecode(progress['parts_unlocked']) as List<dynamic> : [];
 

@@ -170,6 +170,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
           'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
             return VictoryPopup(
               rewardCard: game.associatedCard,
+              unlockedStoryChapter: game.associatedChapter,
               onDismiss: () {
                 game.overlays.remove('victoryOverlay');
                 _resetGame();

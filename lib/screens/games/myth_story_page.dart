@@ -64,7 +64,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
 
   Future<List<String>> _getUnlockedCardIds() async {
     final gamificationService = getIt<GamificationService>();
-    final progress = await gamificationService.getStoryProgress(widget.mythStory.title);
+    final progress = await gamificationService.getStoryProgress(widget.mythStory.id);
     if (progress != null) {
       final unlockedParts = jsonDecode(progress['parts_unlocked']);
       return List<String>.from(unlockedParts);
@@ -103,7 +103,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
           ad.show(
             onUserEarnedReward: (ad, reward) async {
               final gamificationService = getIt<GamificationService>();
-              await gamificationService.unlockStoryPart(widget.mythStory.title, chapterId);
+              await gamificationService.unlockStoryPart(widget.mythStory.id, chapterId);
               setState(() {
                 _unlockedCardIdsFuture = _getUnlockedCardIds(); // Refresh unlocked chapters
               });

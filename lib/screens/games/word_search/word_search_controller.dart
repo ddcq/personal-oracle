@@ -411,7 +411,7 @@ class WordSearchController with ChangeNotifier {
 
   void _onSecretWordSuccess() async {
     if (_nextChapter != null) {
-      await _gamificationService.unlockStoryPart(_nextChapter!.story.title, _nextChapter!.chapter.id);
+      await _gamificationService.unlockStoryPart(_nextChapter!.story.id, _nextChapter!.chapter.id);
       if (level < 10) {
         await _gamificationService.saveWordSearchDifficulty(level + 1);
       }

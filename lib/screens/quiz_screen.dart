@@ -132,7 +132,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       children: [
                         SizedBox(height: 20.h),
                         ProgressBar(progress: progress)
-                          .animate(key: ValueKey(currentQuestion))
+                          .animate(key: ValueKey('progress_$currentQuestion'))
                           .scaleX(duration: 400.ms, curve: Curves.easeInOut),
                         Container(
                           padding: EdgeInsets.all(20.w),
@@ -155,7 +155,7 @@ class _QuizScreenState extends State<QuizScreen> {
                             ),
                           ),
                         )
-                          .animate(key: ValueKey(currentQuestion))
+                          .animate(key: ValueKey('question_$currentQuestion'))
                           .fadeIn(duration: 300.ms)
                           .slideX(begin: 0.1, duration: 400.ms),
                       ],
@@ -212,7 +212,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       ),
                     ),
                   )
-                    .animate(key: ValueKey(currentQuestion))
+                    .animate(key: ValueKey('question_portrait_$currentQuestion'))
                     .fadeIn(duration: 300.ms)
                     .slideY(begin: -0.1, duration: 400.ms),
                   Expanded(

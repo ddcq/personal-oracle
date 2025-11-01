@@ -71,7 +71,7 @@ class GameController extends ChangeNotifier {
     final List<Map<String, dynamic>> earnableChapters = [];
 
     for (var story in allStories) {
-      final progress = await _gamificationService.getStoryProgress(story.title);
+      final progress = await _gamificationService.getStoryProgress(story.id);
       final unlockedParts = progress != null ? jsonDecode(progress['parts_unlocked']) : [];
 
       // Find the next unearned chapter in order
@@ -149,7 +149,7 @@ class GameController extends ChangeNotifier {
   }
 
   Future<void> _handleChapterUnlockReward() async {
-    await _gamificationService.unlockStoryPart(_selectedStory.title, _nextChapterToUnlock!.id);
+    await _gamificationService.unlockStoryPart(_selectedStory.id, _nextChapterToUnlock!.id);
     _unlockedStoryChapter = _nextChapterToUnlock;
     _rewardCard = null;
   }
