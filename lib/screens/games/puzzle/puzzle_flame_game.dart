@@ -8,6 +8,7 @@ import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_game.dart';
 import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_model.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
+import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'dart:math';
 import 'package:flame/game.dart';
 import 'package:oracle_d_asgard/utils/image_picker_utils.dart';
@@ -50,10 +51,12 @@ class PuzzleFlameGame extends FlameGame {
   final PuzzleGame puzzleGame;
   late ui.Image puzzleImage;
   final GamificationService _gamificationService = GamificationService();
-  final Function(CollectibleCard? rewardCard) onRewardEarned; // New callback
-  CollectibleCard? associatedCard; // Changed type to CollectibleCard?
+  final Function(CollectibleCard? rewardCard) onRewardEarned;
+  CollectibleCard? associatedCard;
+  MythStory? associatedStory;
+  int currentLevel;
 
-  PuzzleFlameGame({required this.puzzleGame, required this.onRewardEarned}) {
+  PuzzleFlameGame({required this.puzzleGame, required this.onRewardEarned, required this.currentLevel}) {
     puzzleGame.onGameCompleted = onGameCompletedFromPuzzleGame;
   }
 
@@ -108,7 +111,37 @@ class PuzzleFlameGame extends FlameGame {
   Future<void> _loadImageForPuzzle() async {
     final unearnedContent = await _gamificationService.getUnearnedContent();
     final List<CollectibleCard> unearnedCollectibleCards = unearnedContent['unearned_collectible_cards'].cast<CollectibleCard>();
+    final List<MythStory> unearnedMythStories = unearnedContent['unearned_myth_stories'].cast<MythStory>();
 
+    // Calculate story selection probability based on level
+    // 7% per level, capped at 70% for level 10+
+    final int storyPercentage = (currentLevel * 7).clamp(0, 70);
+    final random = Random();
+    final bool selectStory = random.nextInt(100) < storyPercentage;
+
+    String imageToLoad;
+    
+    if (selectStory && unearnedMythStories.isNotEmpty) {
+      // Select a random unearned story
+      final selected = unearnedMythStories[random.nextInt(unearnedMythStories.length)];
+      // Use the first card image from the story
+      if (selected.correctOrder.isNotEmpty) {
+        imageToLoad = selected.correctOrder[0].imagePath;
+        associatedStory = selected;
+        associatedCard = null;
+      } else {
+        // Fallback to card if story has no cards
+        imageToLoad = await _selectCardImage(unearnedCollectibleCards);
+      }
+    } else {
+      // Select a collectible card
+      imageToLoad = await _selectCardImage(unearnedCollectibleCards);
+    }
+    
+    puzzleImage = await Flame.images.load(imageToLoad);
+  }
+
+  Future<String> _selectCardImage(List<CollectibleCard> unearnedCollectibleCards) async {
     final List<CollectibleCard> availableCards = [];
     for (var card in unearnedCollectibleCards) {
       if (await _assetExists(card.imagePath)) {
@@ -116,23 +149,26 @@ class PuzzleFlameGame extends FlameGame {
       }
     }
 
-    String imageToLoad;
     if (availableCards.isNotEmpty) {
       final random = Random();
       final selected = availableCards[random.nextInt(availableCards.length)];
-      imageToLoad = selected.imagePath;
       associatedCard = selected;
+      associatedStory = null;
+      return selected.imagePath;
     } else {
       // Fallback image if no unearned cards
-      imageToLoad = getRandomCardImagePath();
-      associatedCard = null; // No specific card to unlock
+      associatedCard = null;
+      associatedStory = null;
+      return getRandomCardImagePath();
     }
-    puzzleImage = await Flame.images.load(imageToLoad);
   }
 
   void onGameCompletedFromPuzzleGame() async {
     if (associatedCard != null) {
-      await _gamificationService.unlockCollectibleCard(associatedCard!); // Pass the CollectibleCard object
+      await _gamificationService.unlockCollectibleCard(associatedCard!);
+    } else if (associatedStory != null) {
+      // Unlock the first chapter of the story
+      await _gamificationService.unlockStoryPart(associatedStory!.id, associatedStory!.correctOrder[0].id);
     }
     onRewardEarned(associatedCard);
   }
