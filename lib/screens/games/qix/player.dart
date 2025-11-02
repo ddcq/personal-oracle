@@ -64,11 +64,14 @@ class Player extends PositionComponent {
 
   void setDirection(dp.Direction? direction, {bool isManual = false}) {
     if (isManual) {
-      // Prevent U-turn (moving in the opposite direction)
-      if (direction != null && currentDirection != null && direction == _getOppositeDirection(currentDirection)) {
-        return; // Ignore the input if it's a U-turn
+      // Prevent U-turn only when drawing a path
+      if (state == PlayerState.drawing &&
+          direction != null &&
+          currentDirection != null &&
+          direction == _getOppositeDirection(currentDirection)) {
+        return; // Ignore U-turn input while drawing
       }
-      
+
       bool originalIsManualInput = _isManualInput;
       _isManualInput = true; // Temporarily set to true for _canMove check
       if (direction != null && _canMove(direction)) {

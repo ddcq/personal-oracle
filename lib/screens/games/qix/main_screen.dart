@@ -34,6 +34,18 @@ class _QixGameScreenState extends State<QixGameScreen> {
     _initializeGameFuture = _initializeGame(context);
   }
 
+  void _resetGame() {
+    // Reset the victory popup notifier
+    _showVictoryPopupNotifier.value = false;
+
+    // Re-initialize the game
+    setState(() {
+      // Setting the future will trigger the FutureBuilder to show a loading indicator
+      // and then rebuild with the new game instance.
+      _initializeGameFuture = _initializeGame(context);
+    });
+  }
+
   Future<void> _initializeGame(BuildContext context) async {
     final gamificationService = getIt<GamificationService>();
     final int currentDifficulty = await gamificationService.getQixDifficulty();
@@ -44,7 +56,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (BuildContext context) {
+          builder: (BuildContext dialogContext) {
             return GameOverPopup(
               content: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -75,9 +87,11 @@ class _QixGameScreenState extends State<QixGameScreen> {
                 ],
               ),
               onReplay: () {
-context.go('/qix');
+                Navigator.of(dialogContext).pop();
+                _resetGame();
               },
               onMenu: () {
+                Navigator.of(dialogContext).pop();
                 context.go('/games');
               },
             );
@@ -266,8 +280,7 @@ context.go('/qix');
                               child: VictoryPopup(
                                 rewardCard: _game!.rewardCard,
                                 onDismiss: () {
-                                  _showVictoryPopupNotifier.value = false;
-                                  context.go('/qix');
+                                  _resetGame();
                                 },
                                 onSeeRewards: () {
                                   _showVictoryPopupNotifier.value = false;
