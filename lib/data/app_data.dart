@@ -417,12 +417,12 @@ class AppData {
       ],
     ),
     Question(
-      question: 'Quel type de défi t’attire le plus ?',
+      question: 'question_12_text'.tr(),
       answers: [
-        Answer(text: 'Résoudre une énigme ancienne', scores: {'wisdom': 2, 'cunning': 1}),
-        Answer(text: 'Affronter un dragon', scores: {'strength': 2, 'courage': 1}),
-        Answer(text: 'Retourner une situation désespérée', scores: {'cunning': 2, 'honor': 1}),
-        Answer(text: 'Réunir des ennemis autour d’une table', scores: {'justice': 2, 'passion': 1}),
+        Answer(text: 'question_12_answer_1'.tr(), scores: {'wisdom': 2, 'cunning': 1}),
+        Answer(text: 'question_12_answer_2'.tr(), scores: {'strength': 2, 'courage': 1}),
+        Answer(text: 'question_12_answer_3'.tr(), scores: {'cunning': 2, 'honor': 1}),
+        Answer(text: 'question_12_answer_4'.tr(), scores: {'justice': 2, 'passion': 1}),
       ],
     ),
   ];
