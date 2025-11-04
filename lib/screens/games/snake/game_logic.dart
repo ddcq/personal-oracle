@@ -160,6 +160,8 @@ class GameLogic {
   VoidCallback? onConfettiTrigger; // Add this line
   late int level;
 
+  GameLogic({required this.level});
+
   GameState updateGame(GameState state) {
     if (!state.isGameRunning || state.isGameOver) return state;
 
