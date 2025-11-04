@@ -158,6 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       gamificationService.getUnlockedStoryProgress(),
       gamificationService.getProfileName(),
       gamificationService.getProfileDeityIcon(),
+      gamificationService.getGameScores('Asgard Wall'),
     ]);
     _quizResultsFuture = gamificationService.getQuizResults();
     await _loadSelectableDeities(); // Await this to ensure _allSelectableDeities is populated before setState
@@ -367,6 +368,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               final List<Map<String, dynamic>> storyProgress = snapshot.data![2];
               final String? savedName = snapshot.data![3];
               final String? savedDeityIconId = snapshot.data![4];
+              final List<Map<String, dynamic>> asgardWallScores = snapshot.data![5];
 
               if (_profileName == null && savedName != null) {
                 _profileName = savedName;
@@ -504,7 +506,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildLanguageSettings(),
                   const SizedBox(height: 20),
                   _buildSectionTitle('profile_screen_game_scores'.tr()),
-                  _buildGameScores(snakeScores),
+                  _buildGameScores(snakeScores, 'Snake'),
+                  const SizedBox(height: 20),
+                  _buildGameScores(asgardWallScores, 'Asgard Wall'),
                   const SizedBox(height: 20),
 
                   _buildSectionTitle('profile_screen_collectible_cards'.tr()),
@@ -623,10 +627,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Widget _buildGameScores(List<Map<String, dynamic>> scores) {
+  Widget _buildGameScores(List<Map<String, dynamic>> scores, String gameName) {
     if (scores.isEmpty) {
       return Text(
-        'profile_screen_no_snake_scores'.tr(),
+        gameName == 'Snake' ? 'profile_screen_no_snake_scores'.tr() : 'Aucun score pour $gameName',
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
         textAlign: TextAlign.center,
       );
@@ -653,7 +657,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       children: [
         Text(
-          'profile_screen_snake_podium'.tr(),
+          gameName == 'Snake' ? 'profile_screen_snake_podium'.tr() : '$gameName - Podium',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,

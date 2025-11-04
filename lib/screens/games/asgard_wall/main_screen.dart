@@ -62,6 +62,9 @@ class _GameScreenState extends State<GameScreen> {
   int pieceY = 0;
   int currentPieceIndex = 0;
   int currentRotationIndex = 0;
+  
+  // Score tracking
+  int currentScore = 0;
 
   // Queue of next pieces
   List<int> nextPieces = [];
@@ -89,6 +92,7 @@ class _GameScreenState extends State<GameScreen> {
       gameActive = true;
       _isPaused = false; // Ensure game is not paused on start
       currentPiece = []; // Empty the current piece
+      currentScore = 0; // Reset score
     });
 
     generateNextPieces(); // Génère les prochaines pièces
@@ -420,9 +424,12 @@ class _GameScreenState extends State<GameScreen> {
 
   // Fait tomber la pièce instantanément au fond.
   void dropPiece() {
+    int startY = pieceY;
     while (canPlacePiece(pieceX, pieceY + 1)) {
       pieceY++;
     }
+    int floorsDropped = pieceY - startY;
+    currentScore += floorsDropped;
     placePiece(); // Une fois au fond, la pièce est posée.
     setState(() {});
   }
@@ -434,6 +441,11 @@ class _GameScreenState extends State<GameScreen> {
     setState(() {
       gameActive = false;
     });
+    
+    // Save the score
+    final gamificationService = getIt<GamificationService>();
+    gamificationService.saveGameScore('Asgard Wall', currentScore);
+    
     if (won) {
       _showWinDialog();
     } else {
@@ -712,6 +724,7 @@ class _GameScreenState extends State<GameScreen> {
                             nextPieceColors: nextPieceColors,
                             piecesData: pieces,
                             pieceImageNames: pieceImageNames,
+                            currentScore: currentScore,
                           ),
                         ),
                       ],

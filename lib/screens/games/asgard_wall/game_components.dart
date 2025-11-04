@@ -6,6 +6,7 @@ class NextPiecesPreview extends StatelessWidget {
   final List<Color> nextPieceColors;
   final List<List<List<List<bool>>>> piecesData; // Passer les données des pièces
   final List<String> pieceImageNames;
+  final int currentScore;
 
   const NextPiecesPreview({
     super.key,
@@ -13,6 +14,7 @@ class NextPiecesPreview extends StatelessWidget {
     required this.nextPieceColors,
     required this.piecesData,
     required this.pieceImageNames,
+    required this.currentScore,
   });
 
   @override
@@ -27,6 +29,16 @@ class NextPiecesPreview extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'Score: $currentScore',
+            style: const TextStyle(
+              color: Color(0xFFFFD700),
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
           Text(
             'asgard_wall_game_screen_next_pieces'.tr(),
             style: const TextStyle(
