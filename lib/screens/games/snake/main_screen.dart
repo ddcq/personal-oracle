@@ -226,41 +226,79 @@ class _SnakeGameState extends State<SnakeGame> {
 
                 _game ??= _createSnakeFlameGame(_currentLevel);
 
-                // Game is initialized, show the game content
-                return Row(
-                  children: [
-                    Expanded(
-                      flex: 2, // Adjust flex as needed for desired width
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: DirectionalPad(
-                          onDirectionChanged: (direction) {
-                            if (_game != null) {
-                              switch (direction) {
-                                case Direction.up:
-                                  _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
-                                  break;
-                                case Direction.down:
-                                  _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
-                                  break;
-                                case Direction.left:
-                                  _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
-                                  break;
-                                case Direction.right:
-                                  _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
-                                  break;
+                final orientation = MediaQuery.of(context).orientation;
+
+                if (orientation == Orientation.landscape) {
+                  return Row(
+                    children: [
+                      Expanded(
+                        flex: 2, // Adjust flex as needed for desired width
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: DirectionalPad(
+                            onDirectionChanged: (direction) {
+                              if (_game != null) {
+                                switch (direction) {
+                                  case Direction.up:
+                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
+                                    break;
+                                  case Direction.down:
+                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
+                                    break;
+                                  case Direction.left:
+                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
+                                    break;
+                                  case Direction.right:
+                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
+                                    break;
+                                }
                               }
-                            }
-                          },
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 5, // Adjust flex as needed for desired width
-                      child: _buildGameArea(context),
-                    ),
-                  ],
-                );
+                      Expanded(
+                        flex: 5, // Adjust flex as needed for desired width
+                        child: _buildGameArea(context),
+                      ),
+                    ],
+                  );
+                } else {
+                  // Portrait mode
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: _buildGameArea(context),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: DirectionalPad(
+                            onDirectionChanged: (direction) {
+                              if (_game != null) {
+                                switch (direction) {
+                                  case Direction.up:
+                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
+                                    break;
+                                  case Direction.down:
+                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
+                                    break;
+                                  case Direction.left:
+                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
+                                    break;
+                                  case Direction.right:
+                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
+                                    break;
+                                }
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
               } else {
                 // Show a loading indicator while the game is initializing
                 return const Center(child: CircularProgressIndicator());
