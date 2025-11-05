@@ -30,7 +30,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _shareApp() async {
     const String appLink = 'https://play.google.com/store/apps/details?id=net.forhimandus.oracledasgard';
-    await Share.share('settings_screen_share_text'.tr(namedArgs: {'appLink': appLink}));
+    await SharePlus.instance.share(ShareParams(text: 'settings_screen_share_text'.tr(namedArgs: {'appLink': appLink})));
   }
 
   Future<void> _rateApp() async {
