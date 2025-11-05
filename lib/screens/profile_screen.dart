@@ -248,7 +248,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _isAdLoading = true;
     });
 
-    _showSnackBar('profile_screen_ad_failed'.tr());
+    RewardedAd.load(
+      adUnitId: 'ca-app-pub-9329709593733606/7159103317',
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          setState(() {
+            _isAdLoading = false;
+          });
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+              _loadNextAdRewardCard(); // Reload next card after ad
+            },
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              ad.dispose();
+              _showSnackBar('profile_screen_ad_failed'.tr());
+            },
+          );
+          ad.show(
+            onUserEarnedReward: (ad, reward) async {
+              final gamificationService = getIt<GamificationService>();
+              final rewardCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+
+              if (rewardCard != null) {
+                _showRewardDialog(rewardCard: rewardCard);
+              } else {
+                _showRewardDialog(title: 'Toutes les cartes sont débloquées !', content: 'Vous avez déjà débloqué toutes les cartes disponibles.');
+              }
+              _refreshProfileData(); // Refresh the UI to show the new card
+            },
+          );
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          setState(() {
+            _isAdLoading = false;
+          });
+          _showSnackBar('profile_screen_ad_failed'.tr());
+        },
+      ),
+    );
   }
 
   void _showRewardedStoryAd() async {
