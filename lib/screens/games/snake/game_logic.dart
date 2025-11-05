@@ -17,7 +17,6 @@ enum FoodType { regular, golden, rotten }
 class GameState {
   final int gridWidth;
   final int gridHeight;
-  static const int _initialSnakeHeadPadding = 2;
 
   List<SnakeSegment> snake;
   IntVector2 food;
@@ -46,42 +45,43 @@ class GameState {
   }) : foodType = ValueNotifier(foodType);
 
   /// Creates a GameState with the default initial values.
-  factory GameState.initial({required int gridWidth, required int gridHeight}) {
+  factory GameState.initial({required int gridWidth, required int gridHeight, List<IntVector2>? obstacles}) {
     final Random random = Random();
-    IntVector2 initialSnakeHead = _generateRandomPosition(
-      random,
-      _initialSnakeHeadPadding,
-      gridWidth - _initialSnakeHeadPadding - 1,
-      _initialSnakeHeadPadding,
-      gridHeight - _initialSnakeHeadPadding - 1,
-    );
-    IntVector2 initialFood = _generateRandomPosition(random, 0, gridWidth - 1, 0, gridHeight - 1, exclude: [initialSnakeHead]);
-
-    // Determine the best initial direction
-    Map<dp.Direction, int> distances = {
-      dp.Direction.up: _calculateStraightDistance(initialSnakeHead, dp.Direction.up, gridWidth, gridHeight),
-      dp.Direction.down: _calculateStraightDistance(initialSnakeHead, dp.Direction.down, gridWidth, gridHeight),
-      dp.Direction.left: _calculateStraightDistance(initialSnakeHead, dp.Direction.left, gridWidth, gridHeight),
-      dp.Direction.right: _calculateStraightDistance(initialSnakeHead, dp.Direction.right, gridWidth, gridHeight),
-    };
-
-    dp.Direction bestDirection = dp.Direction.right; // Default if all are 0 or tied
-    int maxDistance = -1;
-
-    // Find the direction with the maximum distance
-    distances.forEach((direction, distance) {
-      if (distance > maxDistance) {
-        maxDistance = distance;
-        bestDirection = direction;
+    final obstacleList = obstacles ?? [];
+    
+    // Find longest path in all rows and columns
+    int maxPathLength = 0;
+    IntVector2 bestStartPosition = IntVector2(0, 0);
+    dp.Direction bestDirection = dp.Direction.right;
+    
+    // Check all horizontal paths (left to right)
+    for (int y = 0; y < gridHeight; y++) {
+      int pathLength = _calculateStraightDistanceWithObstacles(IntVector2(0, y), dp.Direction.right, gridWidth, gridHeight, obstacleList);
+      if (pathLength > maxPathLength) {
+        maxPathLength = pathLength;
+        bestStartPosition = IntVector2(0, y);
+        bestDirection = dp.Direction.right;
       }
-    });
+    }
+    
+    // Check all vertical paths (bottom to top)
+    for (int x = 0; x < gridWidth; x++) {
+      int pathLength = _calculateStraightDistanceWithObstacles(IntVector2(x, gridHeight - 1), dp.Direction.up, gridWidth, gridHeight, obstacleList);
+      if (pathLength > maxPathLength) {
+        maxPathLength = pathLength;
+        bestStartPosition = IntVector2(x, gridHeight - 1);
+        bestDirection = dp.Direction.up;
+      }
+    }
+
+    IntVector2 initialFood = _generateRandomPosition(random, 0, gridWidth - 1, 0, gridHeight - 1, exclude: [bestStartPosition], obstacles: obstacleList);
 
     return GameState(
-      snake: [SnakeSegment(position: initialSnakeHead, type: 'head')],
+      snake: [SnakeSegment(position: bestStartPosition, type: 'head')],
       food: initialFood,
       foodType: FoodType.regular,
-      foodAge: 0.0, // Initialize foodAge
-      obstacles: [],
+      foodAge: 0.0,
+      obstacles: obstacleList,
       score: 0,
       direction: bestDirection,
       nextDirection: bestDirection,
@@ -92,15 +92,15 @@ class GameState {
     );
   }
 
-  static IntVector2 _generateRandomPosition(Random random, int minX, int maxX, int minY, int maxY, {List<IntVector2>? exclude}) {
+  static IntVector2 _generateRandomPosition(Random random, int minX, int maxX, int minY, int maxY, {List<IntVector2>? exclude, List<IntVector2>? obstacles}) {
     IntVector2 position;
     do {
       position = IntVector2(random.nextInt(maxX - minX + 1) + minX, random.nextInt(maxY - minY + 1) + minY);
-    } while (exclude != null && exclude.contains(position));
+    } while ((exclude != null && exclude.contains(position)) || (obstacles != null && obstacles.contains(position)));
     return position;
   }
 
-  static int _calculateStraightDistance(IntVector2 start, dp.Direction direction, int gridWidth, int gridHeight) {
+  static int _calculateStraightDistanceWithObstacles(IntVector2 start, dp.Direction direction, int gridWidth, int gridHeight, List<IntVector2> obstacles) {
     int distance = 0;
     IntVector2 current = start;
     while (true) {
@@ -119,8 +119,8 @@ class GameState {
           break;
       }
 
-      if (current.x < 0 || current.x >= gridWidth || current.y < 0 || current.y >= gridHeight) {
-        break; // Hit a wall
+      if (current.x < 0 || current.x >= gridWidth || current.y < 0 || current.y >= gridHeight || obstacles.contains(current)) {
+        break; // Hit a wall or obstacle
       }
       distance++;
     }

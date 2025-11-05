@@ -31,7 +31,7 @@ class AboutScreen extends StatelessWidget {
       extendBodyBehindAppBar: false,
       appBar: AppBar(
         title: Text(
-          'about_screen_appbar_title'.tr(),
+          'about_screen_title'.tr(),
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,

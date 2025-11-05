@@ -122,7 +122,10 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     gameLogic = GameLogic(level: level);
     // Initialize gameState with the calculated grid dimensions
-    gameState = ValueNotifier(GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight));
+    // First create a temporary state to generate obstacles
+    final tempState = GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight, obstacles: []);
+    final obstacles = gameLogic.generateObstacles(tempState);
+    gameState = ValueNotifier(GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight, obstacles: obstacles));
 
     // Load sprites
     regularFoodSprite = await loadSprite('snake/apple_regular.png');
@@ -163,7 +166,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
   void initializeGame() {
     gameState.value.isGameRunning = false; // Game starts paused
-    gameState.value.obstacles = gameLogic.generateObstacles(gameState.value);
+    // Obstacles are already set in the GameState.initial factory
     remainingFoodTime.value = _foodRottingTimeBase - (level * _foodRottingTimeLevelFactor);
 
     // Update food component position and sprite
@@ -334,7 +337,10 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
 
   void resetGame() {
-    gameState.value = GameState.initial(gridWidth: gameState.value.gridWidth, gridHeight: gameState.value.gridHeight);
+    // First create a temporary state to generate obstacles
+    final tempState = GameState.initial(gridWidth: gameState.value.gridWidth, gridHeight: gameState.value.gridHeight, obstacles: []);
+    final obstacles = gameLogic.generateObstacles(tempState);
+    gameState.value = GameState.initial(gridWidth: gameState.value.gridWidth, gridHeight: gameState.value.gridHeight, obstacles: obstacles);
 
     removeAll([_snakeComponent, _foodComponent, ..._obstacles]);
     _obstacles.clear();
