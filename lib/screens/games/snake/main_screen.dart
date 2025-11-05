@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flame/game.dart';
+import 'package:flame/sprite.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'dart:async'; // For Completer
@@ -232,33 +233,39 @@ class _SnakeGameState extends State<SnakeGame> {
                   return Row(
                     children: [
                       Expanded(
-                        flex: 2, // Adjust flex as needed for desired width
+                        flex: 2,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: DirectionalPad(
-                            onDirectionChanged: (direction) {
-                              if (_game != null) {
-                                switch (direction) {
-                                  case Direction.up:
-                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
-                                    break;
-                                  case Direction.down:
-                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
-                                    break;
-                                  case Direction.left:
-                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
-                                    break;
-                                  case Direction.right:
-                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
-                                    break;
-                                }
-                              }
-                            },
+                          child: Column(
+                            children: [
+                              DirectionalPad(
+                                onDirectionChanged: (direction) {
+                                  if (_game != null) {
+                                    switch (direction) {
+                                      case Direction.up:
+                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
+                                        break;
+                                      case Direction.down:
+                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
+                                        break;
+                                      case Direction.left:
+                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
+                                        break;
+                                      case Direction.right:
+                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
+                                        break;
+                                    }
+                                  }
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              _buildBonusList(),
+                            ],
                           ),
                         ),
                       ),
                       Expanded(
-                        flex: 5, // Adjust flex as needed for desired width
+                        flex: 5,
                         child: _buildGameArea(context),
                       ),
                     ],
@@ -274,25 +281,31 @@ class _SnakeGameState extends State<SnakeGame> {
                         alignment: Alignment.bottomLeft,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: DirectionalPad(
-                            onDirectionChanged: (direction) {
-                              if (_game != null) {
-                                switch (direction) {
-                                  case Direction.up:
-                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
-                                    break;
-                                  case Direction.down:
-                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
-                                    break;
-                                  case Direction.left:
-                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
-                                    break;
-                                  case Direction.right:
-                                    _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
-                                    break;
-                                }
-                              }
-                            },
+                          child: Row(
+                            children: [
+                              DirectionalPad(
+                                onDirectionChanged: (direction) {
+                                  if (_game != null) {
+                                    switch (direction) {
+                                      case Direction.up:
+                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
+                                        break;
+                                      case Direction.down:
+                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
+                                        break;
+                                      case Direction.left:
+                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
+                                        break;
+                                      case Direction.right:
+                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
+                                        break;
+                                    }
+                                  }
+                                },
+                              ),
+                              const SizedBox(width: 16),
+                              _buildBonusList(),
+                            ],
                           ),
                         ),
                       ),
@@ -339,6 +352,9 @@ class _SnakeGameState extends State<SnakeGame> {
           _confettiController.stop();
         }
       },
+      onBonusCollected: () {
+        setState(() {});
+      },
       onGameLoaded: () {
         completer.complete();
         _game?.startGame(); // Start the game automatically
@@ -349,6 +365,59 @@ class _SnakeGameState extends State<SnakeGame> {
       // Removed _showStartPopup() as per user request.
     });
     return game;
+  }
+
+  Widget _buildBonusList() {
+    if (_game == null) return const SizedBox.shrink();
+    
+    try {
+      return ValueListenableBuilder<GameState>(
+        valueListenable: _game!.gameState,
+        builder: (context, gameState, child) {
+          if (gameState.activeBonusEffects.isEmpty) {
+            return const SizedBox.shrink();
+          }
+          
+          return Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Bonus',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+                const SizedBox(height: 4),
+                Wrap(
+                  spacing: 4,
+                  runSpacing: 8,
+                  children: gameState.activeBonusEffects.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final effect = entry.value;
+                    final sprite = _game!.bonusSprites[effect.type];
+                    if (sprite == null) {
+                      return const SizedBox.shrink();
+                    }
+                    
+                    return _BonusProgressWidget(
+                      key: ValueKey('${effect.type}_$index'),
+                      sprite: sprite,
+                      effect: effect,
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      return const SizedBox.shrink();
+    }
   }
 
   Widget _buildGameArea(BuildContext context) {
@@ -414,3 +483,100 @@ class _SnakeGameState extends State<SnakeGame> {
     );
   }
 }
+
+class _BonusProgressWidget extends StatefulWidget {
+  final Sprite sprite;
+  final ActiveBonusEffect effect;
+
+  const _BonusProgressWidget({
+    super.key,
+    required this.sprite,
+    required this.effect,
+  });
+
+  @override
+  State<_BonusProgressWidget> createState() => _BonusProgressWidgetState();
+}
+
+class _BonusProgressWidgetState extends State<_BonusProgressWidget> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late double _startTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTime = widget.effect.activationTime;
+    final remainingDuration = GameLogic.bonusEffectDuration - _startTime;
+    
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: (remainingDuration * 1000).toInt()),
+      value: _startTime / GameLogic.bonusEffectDuration,
+    );
+    
+    _controller.animateTo(1.0, curve: Curves.linear).then((_) {
+      // Animation finished, the widget should be removed by the parent
+      if (mounted) {
+        setState(() {}); // Force rebuild to trigger removal
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        final progress = 1.0 - _controller.value;
+        
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 30,
+              height: 30,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: ClipOval(
+                child: RawImage(
+                  image: widget.sprite.image,
+                  fit: BoxFit.cover,
+                  width: 30,
+                  height: 30,
+                ),
+              ),
+            ),
+            const SizedBox(height: 2),
+            Container(
+              width: 30,
+              height: 3,
+              decoration: BoxDecoration(
+                color: Colors.grey.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(1.5),
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  width: 30 * progress,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(1.5),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+

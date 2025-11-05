@@ -24,6 +24,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final VoidCallback? onRottenFoodEaten;
   final VoidCallback? onScoreChanged;
   final VoidCallback? onConfettiTrigger;
+  final VoidCallback? onBonusCollected;
   final VoidCallback? onGameLoaded;
   final int level;
 
@@ -34,6 +35,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     this.onRottenFoodEaten,
     this.onScoreChanged,
     this.onConfettiTrigger,
+    this.onBonusCollected,
     this.onGameLoaded,
     required this.level,
   });
@@ -79,6 +81,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
   late final double cellSize;
   late SpriteComponent _foodComponent;
+  SpriteComponent? _bonusComponent;
   final List<SpriteComponent> _obstacles = [];
 
   // Sprites
@@ -86,6 +89,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   late final Sprite goldenFoodSprite;
   late final Sprite obstacleSprite;
   late final Sprite rottenFoodSprite;
+  late final Map<BonusType, Sprite> bonusSprites = {};
 
   // Animation
   late final TimerComponent _growthAnimationTimer;
@@ -121,6 +125,10 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     }
 
     gameLogic = GameLogic(level: level);
+    gameLogic.onRottenFoodEaten = onRottenFoodEaten;
+    gameLogic.onConfettiTrigger = onConfettiTrigger;
+    gameLogic.onBonusCollected = onBonusCollected;
+
     // Initialize gameState with the calculated grid dimensions
     // First create a temporary state to generate obstacles
     final tempState = GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight, obstacles: []);
@@ -132,6 +140,12 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     goldenFoodSprite = await loadSprite('snake/apple_golden.png');
     rottenFoodSprite = await loadSprite('snake/apple_rotten.png');
     obstacleSprite = await loadSprite('snake/stone.webp');
+
+    // Load bonus sprites (placeholder - use food sprites for now)
+    bonusSprites[BonusType.speed] = await loadSprite('snake/apple_golden.png');
+    bonusSprites[BonusType.shield] = await loadSprite('snake/apple_golden.png');
+    bonusSprites[BonusType.freeze] = await loadSprite('snake/apple_golden.png');
+    bonusSprites[BonusType.ghost] = await loadSprite('snake/apple_golden.png');
 
     snakeHeadSprite = await loadSprite('snake/snake_head.png');
     snakeBodySprite = await loadSprite('snake/snake_body.png');
@@ -206,6 +220,51 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       return;
     }
 
+    // Bonus aging logic
+    if (gameState.value.activeBonus != null) {
+      final bonus = gameState.value.activeBonus!;
+      final updatedBonus = Bonus(position: bonus.position, type: bonus.type, spawnTime: bonus.spawnTime + dt);
+      gameState.value.activeBonus = updatedBonus;
+
+      if (updatedBonus.spawnTime >= GameLogic.bonusLifetime) {
+        gameState.value.activeBonus = null;
+        _bonusComponent?.removeFromParent();
+        _bonusComponent = null;
+      }
+    }
+
+    // Bonus effect aging logic
+    if (gameState.value.activeBonusEffects.isNotEmpty) {
+      final originalLength = gameState.value.activeBonusEffects.length;
+      final updatedEffects = <ActiveBonusEffect>[];
+      
+      for (var effect in gameState.value.activeBonusEffects) {
+        final updatedEffect = ActiveBonusEffect(
+          type: effect.type,
+          activationTime: effect.activationTime + dt,
+        );
+        
+        if (updatedEffect.activationTime < GameLogic.bonusEffectDuration) {
+          updatedEffects.add(updatedEffect);
+        }
+      }
+      
+      // Update the list
+      gameState.value.activeBonusEffects.clear();
+      gameState.value.activeBonusEffects.addAll(updatedEffects);
+      
+      // If a bonus expired, force immediate notification
+      if (updatedEffects.length < originalLength) {
+        final newState = gameState.value.clone();
+        // Schedule for next frame to avoid setState during build
+        Future.microtask(() {
+          if (!gameState.value.isGameOver) {
+            gameState.value = newState;
+          }
+        });
+      }
+    }
+
     // Food aging logic
     gameState.value.foodAge += dt;
     final double foodRottingTime = _foodRottingTimeBase - (level * _foodRottingTimeLevelFactor); // Adjusted rotting time
@@ -231,7 +290,9 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     }
 
     timeSinceLastTick += dt;
-    final double tickTime = _calculateGameSpeed(gameState.value.score) / 1000.0;
+    final double baseTickTime = _calculateGameSpeed(gameState.value.score) / 1000.0;
+    final double speedMultiplier = gameLogic.getSpeedMultiplier(gameState.value);
+    final double tickTime = baseTickTime * speedMultiplier;
 
     if (timeSinceLastTick >= tickTime) {
       timeSinceLastTick = 0;
@@ -247,11 +308,25 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     final wasGameOver = gameState.value.isGameOver;
     final oldFoodType = gameState.value.foodType.value;
     final oldScore = gameState.value.score;
+    final oldObstacleCount = gameState.value.obstacles.length;
+    final oldBonusCount = gameState.value.activeBonusEffects.length;
 
     gameState.value = gameLogic.updateGame(gameState.value);
 
     _snakeComponent.updateGameState(gameState.value);
     _snakeComponent.animationDuration = _calculateGameSpeed(gameState.value.score) / 1000.0;
+
+    // Check if bonus effects expired
+    if (oldBonusCount != gameState.value.activeBonusEffects.length) {
+      // Force rebuild by reassigning
+      final temp = gameState.value.clone();
+      gameState.value = temp;
+    }
+
+    // Check if obstacles were destroyed
+    if (oldObstacleCount != gameState.value.obstacles.length) {
+      _updateObstacles();
+    }
 
     if (oldScore < gameState.value.score) {
       onScoreChanged?.call();
@@ -285,6 +360,20 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     _foodComponent = SpriteComponent(sprite: _getFoodSprite(gameState.value.foodType.value), position: _foodComponent.position, size: Vector2.all(cellSize));
     add(_foodComponent);
 
+    // Update bonus component
+    if (gameState.value.activeBonus != null && _bonusComponent == null) {
+      _bonusComponent = SpriteComponent(
+        sprite: bonusSprites[gameState.value.activeBonus!.type]!,
+        position: gameState.value.activeBonus!.position.toVector2() * cellSize,
+        size: Vector2.all(cellSize),
+      );
+      add(_bonusComponent!);
+    } else if (gameState.value.activeBonus == null && _bonusComponent != null) {
+      _bonusComponent!.removeFromParent();
+      _bonusComponent = null;
+      onBonusCollected?.call();
+    }
+
     if (!wasGameOver && gameState.value.isGameOver) {
       pauseEngine();
       if (Platform.isAndroid || Platform.isIOS) {
@@ -298,6 +387,26 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
         wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
       }
       onGameEnd(gameState.value.score, isVictory: isVictory, wonCard: wonCard);
+    }
+  }
+
+  void _updateObstacles() {
+    // Remove all obstacle components
+    for (var obstacle in _obstacles) {
+      obstacle.removeFromParent();
+    }
+    _obstacles.clear();
+
+    // Re-add obstacles based on current gameState
+    for (int i = 0; i < gameState.value.obstacles.length; i += 4) {
+      final obstacleTopLeft = gameState.value.obstacles[i];
+      final newObstacle = SpriteComponent(
+        sprite: obstacleSprite,
+        position: (obstacleTopLeft.toOffset() * cellSize).toVector2(),
+        size: Vector2.all(cellSize * 2),
+      );
+      _obstacles.add(newObstacle);
+      add(newObstacle);
     }
   }
 

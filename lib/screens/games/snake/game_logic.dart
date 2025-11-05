@@ -10,6 +10,34 @@ import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart'; // I
 // ==========================================
 enum FoodType { regular, golden, rotten }
 
+enum BonusType { speed, shield, freeze, ghost }
+
+// ==========================================
+// BONUS
+// ==========================================
+class Bonus {
+  final IntVector2 position;
+  final BonusType type;
+  final double spawnTime;
+
+  Bonus({required this.position, required this.type, required this.spawnTime});
+
+  Bonus clone() {
+    return Bonus(position: position.clone(), type: type, spawnTime: spawnTime);
+  }
+}
+
+class ActiveBonusEffect {
+  final BonusType type;
+  final double activationTime;
+
+  ActiveBonusEffect({required this.type, required this.activationTime});
+
+  ActiveBonusEffect clone() {
+    return ActiveBonusEffect(type: type, activationTime: activationTime);
+  }
+}
+
 // ==========================================
 // GAME STATE
 // ==========================================
@@ -21,8 +49,11 @@ class GameState {
   List<SnakeSegment> snake;
   IntVector2 food;
   ValueNotifier<FoodType> foodType;
-  double foodAge; // Add this line
+  double foodAge;
   List<IntVector2> obstacles;
+  Bonus? activeBonus;
+  List<BonusType> collectedBonuses;
+  List<ActiveBonusEffect> activeBonusEffects;
   int score;
   dp.Direction direction;
   dp.Direction nextDirection;
@@ -33,8 +64,11 @@ class GameState {
     required this.snake,
     required this.food,
     FoodType foodType = FoodType.regular,
-    this.foodAge = 0.0, // Initialize foodAge
+    this.foodAge = 0.0,
     required this.obstacles,
+    this.activeBonus,
+    List<BonusType>? collectedBonuses,
+    List<ActiveBonusEffect>? activeBonusEffects,
     this.score = 0,
     this.direction = dp.Direction.right,
     this.nextDirection = dp.Direction.right,
@@ -42,18 +76,20 @@ class GameState {
     this.isGameOver = false,
     required this.gridWidth,
     required this.gridHeight,
-  }) : foodType = ValueNotifier(foodType);
+  }) : foodType = ValueNotifier(foodType),
+       collectedBonuses = collectedBonuses ?? [],
+       activeBonusEffects = activeBonusEffects ?? [];
 
   /// Creates a GameState with the default initial values.
   factory GameState.initial({required int gridWidth, required int gridHeight, List<IntVector2>? obstacles}) {
     final Random random = Random();
     final obstacleList = obstacles ?? [];
-    
+
     // Find longest path in all rows and columns
     int maxPathLength = 0;
     IntVector2 bestStartPosition = IntVector2(0, 0);
     dp.Direction bestDirection = dp.Direction.right;
-    
+
     // Check all horizontal paths (left to right)
     for (int y = 0; y < gridHeight; y++) {
       int pathLength = _calculateStraightDistanceWithObstacles(IntVector2(0, y), dp.Direction.right, gridWidth, gridHeight, obstacleList);
@@ -63,7 +99,7 @@ class GameState {
         bestDirection = dp.Direction.right;
       }
     }
-    
+
     // Check all vertical paths (bottom to top)
     for (int x = 0; x < gridWidth; x++) {
       int pathLength = _calculateStraightDistanceWithObstacles(IntVector2(x, gridHeight - 1), dp.Direction.up, gridWidth, gridHeight, obstacleList);
@@ -82,6 +118,9 @@ class GameState {
       foodType: FoodType.regular,
       foodAge: 0.0,
       obstacles: obstacleList,
+      activeBonus: null,
+      collectedBonuses: [],
+      activeBonusEffects: [],
       score: 0,
       direction: bestDirection,
       nextDirection: bestDirection,
@@ -131,9 +170,12 @@ class GameState {
     return GameState(
       snake: snake.map((segment) => segment.clone()).toList(),
       food: food.clone(),
-      foodType: foodType.value, // Clone the value
+      foodType: foodType.value,
       foodAge: foodAge,
       obstacles: obstacles.map((obstacle) => obstacle.clone()).toList(),
+      activeBonus: activeBonus?.clone(),
+      collectedBonuses: List<BonusType>.from(collectedBonuses),
+      activeBonusEffects: activeBonusEffects.map((effect) => effect.clone()).toList(),
       score: score,
       direction: direction,
       nextDirection: nextDirection,
@@ -155,9 +197,15 @@ class GameLogic {
   static const int _scoreRottenFoodPenaltyPerLevel = 10;
   static const double _goldenFoodProbability = 0.15;
   static const int _baseObstacles = 5;
+  static const double bonusSpawnProbability = 1;
+  static const double bonusLifetime = 8.0;
+  static const double bonusEffectDuration = 8.0;
+  static const double speedBonusMultiplier = 0.7; // 30% faster (multiply time by 0.7)
+  static const double freezeBonusMultiplier = 1.3; // 30% slower (multiply time by 1.3)
 
   VoidCallback? onRottenFoodEaten;
-  VoidCallback? onConfettiTrigger; // Add this line
+  VoidCallback? onConfettiTrigger;
+  VoidCallback? onBonusCollected;
   late int level;
 
   GameLogic({required this.level});
@@ -170,13 +218,25 @@ class GameLogic {
     IntVector2 newHeadPos = _getNewHeadPosition(headPos, state.direction);
 
     final currentSnakePositions = state.snake.map((s) => s.position).toList();
-    if (_isCollision(state, newHeadPos, currentSnakePositions)) {
+
+    // Check for bonus effects
+    bool hasGhostEffect = state.activeBonusEffects.any((effect) => effect.type == BonusType.ghost);
+    bool hasShieldEffect = state.activeBonusEffects.any((effect) => effect.type == BonusType.shield);
+
+    // Check collision (ignore obstacles if ghost or shield is active)
+    if (_isCollision(state, newHeadPos, currentSnakePositions, ignoreObstacles: hasGhostEffect || hasShieldEffect)) {
       state.isGameRunning = false;
       state.isGameOver = true;
       return state;
     }
 
+    // Handle shield effect - destroy obstacles on collision
+    if (hasShieldEffect && state.obstacles.contains(newHeadPos)) {
+      _removeObstacleBlock(state, newHeadPos);
+    }
+
     bool foodEaten = _handleFoodConsumption(state, newHeadPos);
+    _handleBonusCollection(state, newHeadPos);
 
     List<SnakeSegment> newSnake = [];
 
@@ -232,38 +292,74 @@ class GameLogic {
     }
   }
 
-  bool _isCollision(GameState state, IntVector2 newHead, List<IntVector2> snakePositions) {
+  bool _isCollision(GameState state, IntVector2 newHead, List<IntVector2> snakePositions, {bool ignoreObstacles = false}) {
     if (newHead.x < 0 || newHead.x >= state.gridWidth || newHead.y < 0 || newHead.y >= state.gridHeight) {
       return true;
     }
-    if (snakePositions.contains(newHead) || state.obstacles.contains(newHead)) {
+    if (snakePositions.contains(newHead)) {
+      return true;
+    }
+    if (!ignoreObstacles && state.obstacles.contains(newHead)) {
       return true;
     }
     return false;
   }
 
   bool _handleFoodConsumption(GameState state, IntVector2 newHead) {
-          if (newHead == state.food) {
-            if (state.foodType.value == FoodType.golden) {
-              state.score += _scoreGoldenFood;
-            } else if (state.foodType.value == FoodType.regular) {
-              state.score += _scoreRegularFood;
-            } else if (state.foodType.value == FoodType.rotten) {
-              state.score -= (_scoreRottenFoodPenaltyBase + (level * _scoreRottenFoodPenaltyPerLevel));
-              onRottenFoodEaten?.call();
-            }
-    
-            // Trigger confetti if score is above threshold and food is not rotten
-            if (state.score >= SnakeFlameGame.victoryScoreThreshold && state.foodType.value != FoodType.rotten) {
-              onConfettiTrigger?.call();
-            }
-            return true;
-          }    return false;
+    if (newHead == state.food) {
+      if (state.foodType.value == FoodType.golden) {
+        state.score += _scoreGoldenFood;
+      } else if (state.foodType.value == FoodType.regular) {
+        state.score += _scoreRegularFood;
+      } else if (state.foodType.value == FoodType.rotten) {
+        state.score -= (_scoreRottenFoodPenaltyBase + (level * _scoreRottenFoodPenaltyPerLevel));
+        onRottenFoodEaten?.call();
+      }
+
+      // Trigger confetti if score is above threshold and food is not rotten
+      if (state.score >= SnakeFlameGame.victoryScoreThreshold && state.foodType.value != FoodType.rotten) {
+        onConfettiTrigger?.call();
+      }
+      return true;
+    }
+    return false;
+  }
+
+  bool _handleBonusCollection(GameState state, IntVector2 newHead) {
+    if (state.activeBonus != null && newHead == state.activeBonus!.position) {
+      final bonusType = state.activeBonus!.type;
+      state.collectedBonuses.add(bonusType);
+      state.activeBonusEffects.add(ActiveBonusEffect(type: bonusType, activationTime: 0.0));
+      state.activeBonus = null;
+      onBonusCollected?.call();
+      return true;
+    }
+    return false;
+  }
+
+  double getSpeedMultiplier(GameState state) {
+    double multiplier = 1.0;
+    for (var effect in state.activeBonusEffects) {
+      if (effect.type == BonusType.speed) {
+        multiplier *= speedBonusMultiplier;
+      } else if (effect.type == BonusType.freeze) {
+        multiplier *= freezeBonusMultiplier;
+      }
+    }
+    return multiplier;
   }
 
   void generateNewFood(GameState state, List<IntVector2> snakePositions) {
     Random random = Random();
-    IntVector2 newFood = _generateUniquePosition(random, snakePositions, state.obstacles, state.food, state.gridWidth, state.gridHeight);
+    IntVector2 newFood = _generateUniquePosition(
+      random,
+      snakePositions,
+      state.obstacles,
+      state.food,
+      state.gridWidth,
+      state.gridHeight,
+      state.activeBonus?.position,
+    );
 
     if (random.nextDouble() < _goldenFoodProbability) {
       state.foodType.value = FoodType.golden;
@@ -272,6 +368,21 @@ class GameLogic {
     }
     state.food = newFood;
     state.foodAge = 0.0;
+
+    // Randomly spawn bonus
+    if (state.activeBonus == null && random.nextDouble() < bonusSpawnProbability) {
+      spawnBonus(state, snakePositions);
+    }
+  }
+
+  void spawnBonus(GameState state, List<IntVector2> snakePositions) {
+    Random random = Random();
+    final bonusTypes = BonusType.values;
+    final randomBonusType = bonusTypes[random.nextInt(bonusTypes.length)];
+
+    IntVector2 bonusPosition = _generateUniquePosition(random, snakePositions, state.obstacles, state.food, state.gridWidth, state.gridHeight, null);
+
+    state.activeBonus = Bonus(position: bonusPosition, type: randomBonusType, spawnTime: 0.0);
   }
 
   void changeDirection(GameState state, dp.Direction newDirection) {
@@ -367,14 +478,30 @@ class GameLogic {
     List<IntVector2> obstacles,
     IntVector2 food,
     int gridWidth,
-    int gridHeight, [
-    List<IntVector2>? currentObstacles,
-  ]) {
+    int gridHeight,
+    IntVector2? bonusPosition,
+  ) {
     IntVector2 position;
     do {
       position = IntVector2(random.nextInt(gridWidth), random.nextInt(gridHeight));
-    } while (snake.contains(position) || obstacles.contains(position) || food == position || (currentObstacles != null && currentObstacles.contains(position)));
+    } while (snake.contains(position) || obstacles.contains(position) || food == position || (bonusPosition != null && bonusPosition == position));
     return position;
+  }
+
+  void _removeObstacleBlock(GameState state, IntVector2 hitPosition) {
+    // Obstacles are stored in blocks of 4 consecutive cells (2x2)
+    // Find which block contains the hit position
+    for (int i = 0; i < state.obstacles.length; i += 4) {
+      if (i + 3 < state.obstacles.length) {
+        final block = state.obstacles.getRange(i, i + 4);
+
+        if (block.contains(hitPosition)) {
+          // Remove all 4 cells of this obstacle block
+          state.obstacles.removeRange(i, i + 4);
+          return;
+        }
+      }
+    }
   }
 
   String _getPattern(IntVector2 prevPos, IntVector2 currentPos, IntVector2 nextPos) {
