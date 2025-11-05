@@ -23,7 +23,7 @@ import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:oracle_d_asgard/models/card_version.dart';
 
-import 'package:oracle_d_asgard/services/sound_service.dart';
+
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -34,9 +34,10 @@ import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
 import 'package:oracle_d_asgard/widgets/dev_tools_widget.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:oracle_d_asgard/services/quiz_service.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -180,6 +181,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _nameController.dispose();
     super.dispose();
   }
+
+
 
   Future<void> _showEditNameDialog(BuildContext context) async {
     _nameController.text = _profileName ?? '';
@@ -343,14 +346,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             context.go('/');
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline, color: Colors.white),
-            onPressed: () {
-              context.go('/about');
-            },
-          ),
-        ],
+
       ),
       body: AppBackground(
         child: FutureBuilder<List<dynamic>>(
@@ -500,10 +496,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       }
                     },
                   ),
-                  _buildSectionTitle('profile_screen_settings'.tr()),
-                  _buildSoundSettings(),
-                  const SizedBox(height: 10),
-                  _buildLanguageSettings(),
+
                   const SizedBox(height: 20),
                   _buildSectionTitle('profile_screen_game_scores'.tr()),
                   _buildGameScores(snakeScores, 'Snake'),
@@ -545,41 +538,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildSoundSettings() {
-    final soundService = getIt<SoundService>();
-    return Card(
-      color: Colors.black.withAlpha(100),
-      elevation: 5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'profile_screen_ambient_music'.tr(),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC, fontSize: 22),
-            ),
-            ListenableBuilder(
-              listenable: soundService,
-              builder: (context, child) {
-                return Switch(
-                  value: !soundService.isMuted,
-                  onChanged: (value) {
-                    soundService.setMuted(!value);
-                  },
-                  activeTrackColor: Colors.green,
-                  inactiveTrackColor: Colors.grey,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildSectionTitle(String title) {
     return Padding(
@@ -1019,70 +978,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Widget _buildLanguageSettings() {
-    return Card(
-      color: Colors.black.withAlpha(100),
-      elevation: 5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'profile_screen_language'.tr(),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC, fontSize: 22),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: DropdownButton<Locale>(
-                value: context.locale,
-                underline: const SizedBox(),
-                dropdownColor: Colors.black87,
-                items: [
-                  DropdownMenuItem(
-                    value: const Locale('en', 'US'),
-                    child: Row(
-                      children: [
-                        Text('🇺🇸', style: TextStyle(fontSize: 18)),
-                        const SizedBox(width: 8),
-                        Text('profile_screen_language_english'.tr(), style: const TextStyle(color: Colors.white)),
-                      ],
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: const Locale('fr', 'FR'),
-                    child: Row(
-                      children: [
-                        Text('🇫🇷', style: TextStyle(fontSize: 18)),
-                        const SizedBox(width: 8),
-                        Text('profile_screen_language_french'.tr(), style: const TextStyle(color: Colors.white)),
-                      ],
-                    ),
-                  ),
-                ],
-                onChanged: (Locale? newLocale) async {
-                  if (newLocale != null) {
-                    context.setLocale(newLocale);
-                    // Sauvegarder la langue dans les préférences utilisateur
-                    final prefs = await SharedPreferences.getInstance();
-                    await prefs.setString('language_code', newLocale.languageCode);
-                    await prefs.setString('country_code', newLocale.countryCode ?? '');
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
+
+
 
   Widget _buildDeityDisplayPlaceholder({bool error = false}) {
     return Container(

@@ -6,6 +6,7 @@ import 'package:oracle_d_asgard/screens/quiz_screen.dart';
 import 'package:oracle_d_asgard/screens/result_screen.dart';
 import 'package:oracle_d_asgard/screens/profile_screen.dart';
 import 'package:oracle_d_asgard/screens/about_screen.dart';
+import 'package:oracle_d_asgard/screens/settings_screen.dart';
 import 'package:oracle_d_asgard/screens/collectible_card_detail_page.dart';
 import 'package:oracle_d_asgard/screens/games/qix/main_screen.dart'; // Import QixGameScreen
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/main_screen.dart'; // Import OrderTheScrollsGame
@@ -32,6 +33,12 @@ final GoRouter router = GoRouter(
           path: 'about',
           builder: (BuildContext context, GoRouterState state) {
             return const AboutScreen();
+          },
+        ),
+        GoRoute(
+          path: 'settings',
+          builder: (BuildContext context, GoRouterState state) {
+            return const SettingsScreen();
           },
         ),
         GoRoute(

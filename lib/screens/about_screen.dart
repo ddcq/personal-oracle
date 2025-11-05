@@ -4,6 +4,7 @@ import 'package:oracle_d_asgard/generated/version.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 
+
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
@@ -13,6 +14,8 @@ class AboutScreen extends StatelessWidget {
       throw Exception('Could not launch $url');
     }
   }
+
+
 
   Future<void> _launchEmail() async {
     final Uri emailLaunchUri = Uri(scheme: 'mailto', path: 'support.ddcq@erine.email', query: 'subject=About Oracle d\'Asgard');
@@ -36,7 +39,7 @@ class AboutScreen extends StatelessWidget {
       ),
       body: AppBackground(
         child: Container(
-          color: Colors.black.withOpacity(0.5),
+          color: Colors.black.withAlpha(128),
           child: ListView(
             padding: const EdgeInsets.all(16.0),
             children: [
@@ -57,9 +60,7 @@ class AboutScreen extends StatelessWidget {
               _buildSectionContent(context, 'about_screen_thanks_content'.tr()),
               _buildSectionTitle(context, 'about_screen_tech_title'.tr()),
               _buildSectionContent(context, 'about_screen_tech_content'.tr()),
-              _buildSectionTitle(context, 'about_screen_support_title'.tr()),
-              _buildLink(context, 'about_screen_support_kofi'.tr(), 'https://ko-fi.com/forhimandus'),
-              _buildLink(context, 'about_screen_support_buymeacoffee'.tr(), 'https://buymeacoffee.com/ddcq'),
+
               _buildSectionTitle(context, 'about_screen_roadmap_title'.tr()),
               _buildSectionContent(context, 'about_screen_roadmap_content'.tr()),
               _buildSectionTitle(context, 'about_screen_legal_title'.tr()),

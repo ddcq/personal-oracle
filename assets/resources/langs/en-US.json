@@ -580,7 +580,7 @@
   "norse_riddle_jormungandr_clue_1": "I am so large that I encircle the world of men.",
   "norse_riddle_jormungandr_clue_2": "I am the Midgard Serpent, child of Loki.",
   "norse_riddle_jormungandr_clue_3": "My sworn enemy is the god of thunder.",
-  "about_screen_appbar_title": "About",
+  "settings_screen_about_button": "About",
   "about_screen_about_title": "About the App",
   "about_screen_about_content": "This application is a tribute to the fascinating world of Norse mythology. It was designed to provide an immersive and educational experience through quizzes, stories, and mini-games.",
   "about_screen_contribution_title": "Contribution",
@@ -594,8 +594,12 @@
   "victory_popup_congratulations": "Congratulations!",
   "victory_popup_generic_message": "You have accomplished a feat worthy of the gods!",
   "about_screen_support_title": "Support the Project",
-  "about_screen_support_kofi": "Sponsor me on Ko-fi",
-  "about_screen_support_buymeacoffee": "Sponsor me on Buy Me A Coffee",
+  "settings_screen_support_kofi": "Sponsor me on Ko-fi",
+  "settings_screen_support_buymeacoffee": "Sponsor me on Buy Me A Coffee",
+  "settings_screen_support_us_title": "Support Us",
+  "settings_screen_share_app": "Share the app",
+  "settings_screen_rate_app": "Rate the app",
+  "settings_screen_share_text": "Check out this cool app: {appLink}",
   "about_screen_disclaimer_title": "Disclaimer",
   "about_screen_disclaimer_content": "This application is based on Norse mythology and is not affiliated with, sponsored, or endorsed by Marvel.",
   "about_screen_vision_title": "Story & Vision",
@@ -610,5 +614,6 @@
   "about_screen_roadmap_title": "Future Features / Roadmap",
   "about_screen_roadmap_content": "Coming soon: new realms, more stories, and mythic challenges. Stay tuned for the next saga!",
   "about_screen_tech_title": "Technologies & AI",
-  "about_screen_tech_content": "Built with Flutter and powered by open-source libraries. This project was also brought to life with the help of several AI tools: Nightcafé for images, Gemini CLI for coding, Vidnoz for animations, and Suno for music."
+  "about_screen_tech_content": "Built with Flutter and powered by open-source libraries. This project was also brought to life with the help of several AI tools: Nightcafé for images, Gemini CLI for coding, Vidnoz for animations, and Suno for music.",
+  "settings_screen_title": "Settings"
 }

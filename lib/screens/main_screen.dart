@@ -130,15 +130,28 @@ class _MainScreenState extends State<MainScreen> {
                                 .slideX(begin: -0.3, duration: 400.ms, curve: Curves.easeOutCubic)
                                 .fadeIn(duration: 300.ms),
                               SizedBox(height: 10.h),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ChibiButton(
-                                  text: 'main_screen_rewards'.tr(),
-                                  color: ChibiColors.buttonRed,
-                                  onPressed: () {
-                                    context.go('/profile');
-                                  },
-                                ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ChibiButton(
+                                      color: ChibiColors.buttonRed,
+                                      onPressed: () {
+                                        context.go('/profile');
+                                      },
+                                      child: const Icon(Icons.emoji_events, color: Colors.white),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  Expanded(
+                                    child: ChibiButton(
+                                      color: ChibiColors.buttonGreen,
+                                      onPressed: () {
+                                        context.go('/settings');
+                                      },
+                                      child: const Icon(Icons.settings, color: Colors.white),
+                                    ),
+                                  ),
+                                ],
                               )
                                 .animate(delay: 1200.ms)
                                 .slideX(begin: -0.3, duration: 400.ms, curve: Curves.easeOutCubic)
@@ -201,12 +214,28 @@ class _MainScreenState extends State<MainScreen> {
                                   .slideX(begin: 0.3, duration: 400.ms, curve: Curves.easeOutCubic)
                                   .fadeIn(duration: 300.ms),
                                 SizedBox(height: 10.h),
-                                ChibiButton(
-                                  text: 'main_screen_rewards'.tr(),
-                                  color: ChibiColors.buttonRed,
-                                  onPressed: () {
-                                    context.go('/profile');
-                                  },
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ChibiButton(
+                                        color: ChibiColors.buttonRed,
+                                        onPressed: () {
+                                          context.go('/profile');
+                                        },
+                                        child: const Icon(Icons.emoji_events, color: Colors.white),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10.w),
+                                    Expanded(
+                                      child: ChibiButton(
+                                        color: ChibiColors.buttonGreen,
+                                        onPressed: () {
+                                          context.go('/settings');
+                                        },
+                                        child: const Icon(Icons.settings, color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
                                 )
                                   .animate(delay: 1200.ms)
                                   .slideX(begin: 0.3, duration: 400.ms, curve: Curves.easeOutCubic)
