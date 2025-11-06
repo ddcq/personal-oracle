@@ -42,14 +42,9 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
 
         if (errorString.contains('timeout')) {
           errorType = 'timeout';
-        } else if (errorString.contains('network') ||
-                   errorString.contains('connection') ||
-                   errorString.contains('http')) {
+        } else if (errorString.contains('network') || errorString.contains('connection') || errorString.contains('http')) {
           errorType = 'network';
-        } else if (errorString.contains('codec') ||
-                   errorString.contains('format') ||
-                   errorString.contains('decoder') ||
-                   errorString.contains('capabilities')) {
+        } else if (errorString.contains('codec') || errorString.contains('format') || errorString.contains('decoder') || errorString.contains('capabilities')) {
           errorType = 'codec_incompatible';
         }
 
@@ -78,10 +73,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
 
     if (!mounted) return;
 
-    _videoPlayerController = video_player.VideoPlayerController.file(
-      videoFile,
-      videoPlayerOptions: video_player.VideoPlayerOptions(mixWithOthers: true)
-    );
+    _videoPlayerController = video_player.VideoPlayerController.file(videoFile, videoPlayerOptions: video_player.VideoPlayerOptions(mixWithOthers: true));
 
     await _videoPlayerController!.initialize();
 
@@ -111,12 +103,9 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       // Classify error type for better handling
       String errorType = 'unknown';
       if (error != null) {
-        if (error.toLowerCase().contains('codec') ||
-            error.toLowerCase().contains('decoder') ||
-            error.toLowerCase().contains('format')) {
+        if (error.toLowerCase().contains('codec') || error.toLowerCase().contains('decoder') || error.toLowerCase().contains('format')) {
           errorType = 'codec_incompatible';
-        } else if (error.toLowerCase().contains('network') ||
-                   error.toLowerCase().contains('connection')) {
+        } else if (error.toLowerCase().contains('network') || error.toLowerCase().contains('connection')) {
           errorType = 'network';
         } else if (error.toLowerCase().contains('timeout')) {
           errorType = 'timeout';
@@ -183,59 +172,54 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                       color: Colors.grey[300],
-                      child: const Center(
-                        child: Icon(Icons.error, color: Colors.grey),
-                      ),
+                      child: const Center(child: Icon(Icons.error, color: Colors.grey)),
                     );
                   },
                 ),
-                if (_hasError)
-                  Positioned(
-                    bottom: 8,
-                    left: 8,
-                    right: 8,
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withAlpha(180),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.orange.withAlpha(150), width: 1),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            _getErrorIcon(),
-                            color: Colors.orange,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Text(
-                              _getErrorMessage(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                // if (_hasError)
+                //   Positioned(
+                //     bottom: 8,
+                //     left: 8,
+                //     right: 8,
+                //     child: Container(
+                //       padding: const EdgeInsets.all(8),
+                //       decoration: BoxDecoration(
+                //         color: Colors.black.withAlpha(180),
+                //         borderRadius: BorderRadius.circular(8),
+                //         border: Border.all(color: Colors.orange.withAlpha(150), width: 1),
+                //       ),
+                //       child: Row(
+                //         mainAxisSize: MainAxisSize.min,
+                //         children: [
+                //           Icon(
+                //             _getErrorIcon(),
+                //             color: Colors.orange,
+                //             size: 16,
+                //           ),
+                //           const SizedBox(width: 6),
+                //           Expanded(
+                //             child: Text(
+                //               _getErrorMessage(),
+                //               style: const TextStyle(
+                //                 color: Colors.white,
+                //                 fontSize: 12,
+                //                 fontWeight: FontWeight.w500,
+                //               ),
+                //               maxLines: 2,
+                //               overflow: TextOverflow.ellipsis,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
               ],
             );
           } else {
             // Show video player
             return ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: AspectRatio(
-                aspectRatio: _videoPlayerController!.value.aspectRatio,
-                child: video_player.VideoPlayer(_videoPlayerController!),
-              ),
+              child: AspectRatio(aspectRatio: _videoPlayerController!.value.aspectRatio, child: video_player.VideoPlayer(_videoPlayerController!)),
             );
           }
         } else {
@@ -248,18 +232,11 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
                     color: Colors.grey[300],
-                    child: const Center(
-                      child: Icon(Icons.error, color: Colors.grey),
-                    ),
+                    child: const Center(child: Icon(Icons.error, color: Colors.grey)),
                   );
                 },
               ),
-              const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 2,
-                ),
-              ),
+              const Center(child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)),
             ],
           );
         }
