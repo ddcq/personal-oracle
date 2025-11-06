@@ -142,10 +142,10 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     obstacleSprite = await loadSprite('snake/stone.webp');
 
     // Load bonus sprites (placeholder - use food sprites for now)
-    bonusSprites[BonusType.speed] = await loadSprite('snake/apple_golden.png');
-    bonusSprites[BonusType.shield] = await loadSprite('snake/apple_golden.png');
-    bonusSprites[BonusType.freeze] = await loadSprite('snake/apple_golden.png');
-    bonusSprites[BonusType.ghost] = await loadSprite('snake/apple_golden.png');
+    bonusSprites[BonusType.speed] = await loadSprite('snake/speed.png');
+    bonusSprites[BonusType.shield] = await loadSprite('snake/shield.png');
+    bonusSprites[BonusType.freeze] = await loadSprite('snake/freeze.png');
+    bonusSprites[BonusType.ghost] = await loadSprite('snake/ghost.png');
 
     snakeHeadSprite = await loadSprite('snake/snake_head.png');
     snakeBodySprite = await loadSprite('snake/snake_body.png');
@@ -237,22 +237,19 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     if (gameState.value.activeBonusEffects.isNotEmpty) {
       final originalLength = gameState.value.activeBonusEffects.length;
       final updatedEffects = <ActiveBonusEffect>[];
-      
+
       for (var effect in gameState.value.activeBonusEffects) {
-        final updatedEffect = ActiveBonusEffect(
-          type: effect.type,
-          activationTime: effect.activationTime + dt,
-        );
-        
+        final updatedEffect = ActiveBonusEffect(type: effect.type, activationTime: effect.activationTime + dt);
+
         if (updatedEffect.activationTime < GameLogic.bonusEffectDuration) {
           updatedEffects.add(updatedEffect);
         }
       }
-      
+
       // Update the list
       gameState.value.activeBonusEffects.clear();
       gameState.value.activeBonusEffects.addAll(updatedEffects);
-      
+
       // If a bonus expired, force immediate notification
       if (updatedEffects.length < originalLength) {
         final newState = gameState.value.clone();
