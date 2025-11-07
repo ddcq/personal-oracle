@@ -8,7 +8,8 @@ import 'dart:async'; // For Completer
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_game_over_popup.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:oracle_d_asgard/widgets/directional_pad.dart';
+import 'package:oracle_d_asgard/widgets/joystick_controller.dart';
+import 'package:oracle_d_asgard/widgets/directional_pad.dart' show Direction;
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -238,23 +239,10 @@ class _SnakeGameState extends State<SnakeGame> {
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
-                              DirectionalPad(
+                              JoystickController(
                                 onDirectionChanged: (direction) {
                                   if (_game != null) {
-                                    switch (direction) {
-                                      case Direction.up:
-                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
-                                        break;
-                                      case Direction.down:
-                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
-                                        break;
-                                      case Direction.left:
-                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
-                                        break;
-                                      case Direction.right:
-                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
-                                        break;
-                                    }
+                                    _game!.gameLogic.changeDirection(_game!.gameState.value, direction);
                                   }
                                 },
                               ),
@@ -283,23 +271,10 @@ class _SnakeGameState extends State<SnakeGame> {
                           padding: const EdgeInsets.all(16.0),
                           child: Row(
                             children: [
-                              DirectionalPad(
+                              JoystickController(
                                 onDirectionChanged: (direction) {
                                   if (_game != null) {
-                                    switch (direction) {
-                                      case Direction.up:
-                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
-                                        break;
-                                      case Direction.down:
-                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
-                                        break;
-                                      case Direction.left:
-                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
-                                        break;
-                                      case Direction.right:
-                                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
-                                        break;
-                                    }
+                                    _game!.gameLogic.changeDirection(_game!.gameState.value, direction);
                                   }
                                 },
                               ),
