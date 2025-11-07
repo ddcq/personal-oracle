@@ -20,6 +20,7 @@ class MinesweeperController with ChangeNotifier {
   bool isGameOver = false;
   bool isGameWon = false;
   int treasuresFound = 0;
+  bool _isFirstMove = true;
 
   MinesweeperController({this.rows = 10, this.cols = 10, this.mineCount = 15, this.treasureCount = 5}) {
     initializeGame();
@@ -29,31 +30,34 @@ class MinesweeperController with ChangeNotifier {
     isGameOver = false;
     isGameWon = false;
     treasuresFound = 0;
+    _isFirstMove = true;
     board = List.generate(rows, (_) => List.generate(cols, (_) => Cell()));
-    _placeMinesAndTreasures();
-    _calculateAdjacentMines();
-    _calculateAdjacentTreasures();
     notifyListeners();
   }
 
-  void _placeMinesAndTreasures() {
+  void _placeMinesAndTreasures(int initialRow, int initialCol) {
     final random = Random();
-    int placedMines = 0;
-    int placedTreasures = 0;
+    final forbiddenMineCells = <Point<int>>{};
+    forbiddenMineCells.add(Point(initialRow, initialCol));
+    _forEachAdjacentCell(initialRow, initialCol, (r, c) {
+      forbiddenMineCells.add(Point(r, c));
+    });
 
+    int placedMines = 0;
     while (placedMines < mineCount) {
       int row = random.nextInt(rows);
       int col = random.nextInt(cols);
-      if (!board[row][col].hasMine) {
+      if (!board[row][col].hasMine && !forbiddenMineCells.contains(Point(row, col))) {
         board[row][col].hasMine = true;
         placedMines++;
       }
     }
 
+    int placedTreasures = 0;
     while (placedTreasures < treasureCount) {
       int row = random.nextInt(rows);
       int col = random.nextInt(cols);
-      if (!board[row][col].hasMine && !board[row][col].hasTreasure) {
+      if (!board[row][col].hasMine && !board[row][col].hasTreasure && (row != initialRow || col != initialCol)) {
         board[row][col].hasTreasure = true;
         placedTreasures++;
       }
@@ -106,6 +110,13 @@ class MinesweeperController with ChangeNotifier {
   }
 
   void revealCell(int row, int col) {
+    if (_isFirstMove) {
+      _isFirstMove = false;
+      _placeMinesAndTreasures(row, col);
+      _calculateAdjacentMines();
+      _calculateAdjacentTreasures();
+    }
+
     if (isGameOver || isGameWon || board[row][col].isFlagged) {
       return;
     }
