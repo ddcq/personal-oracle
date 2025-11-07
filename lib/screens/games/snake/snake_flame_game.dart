@@ -13,7 +13,10 @@ import 'package:flutter/services.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_component.dart';
+import 'package:oracle_d_asgard/screens/games/snake/rock_explosion_effect.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/services/sound_service.dart';
+import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
@@ -306,6 +309,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     final oldFoodType = gameState.value.foodType.value;
     final oldScore = gameState.value.score;
     final oldObstacleCount = gameState.value.obstacles.length;
+    final oldObstacles = List<IntVector2>.from(gameState.value.obstacles);
     final oldBonusCount = gameState.value.activeBonusEffects.length;
 
     gameState.value = gameLogic.updateGame(gameState.value);
@@ -322,6 +326,11 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     // Check if obstacles were destroyed
     if (oldObstacleCount != gameState.value.obstacles.length) {
+      // Find which obstacle was destroyed
+      final destroyedObstacle = _findDestroyedObstacle(oldObstacles, gameState.value.obstacles);
+      if (destroyedObstacle != null) {
+        _triggerRockExplosion(destroyedObstacle);
+      }
       _updateObstacles();
     }
 
@@ -405,6 +414,98 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       _obstacles.add(newObstacle);
       add(newObstacle);
     }
+  }
+
+  IntVector2? _findDestroyedObstacle(List<IntVector2> oldObstacles, List<IntVector2> newObstacles) {
+    // Obstacles are in blocks of 4, find which block is missing
+    for (int i = 0; i < oldObstacles.length; i += 4) {
+      if (i + 3 < oldObstacles.length) {
+        final oldBlock = oldObstacles.getRange(i, i + 4).toList();
+        final blockStillExists = oldBlock.every((pos) => newObstacles.contains(pos));
+        
+        if (!blockStillExists) {
+          // Return the top-left position of the destroyed obstacle
+          return oldBlock[0];
+        }
+      }
+    }
+    return null;
+  }
+
+  void _triggerRockExplosion(IntVector2 obstacleTopLeft) {
+    final position = (obstacleTopLeft.toOffset() * cellSize).toVector2();
+    final size = Vector2.all(cellSize * 2);
+    final center = position + size / 2;
+
+    // Play explosion sound
+    final soundService = getIt<SoundService>();
+    soundService.playSoundEffect('audio/explode.mp3');
+
+    // Step 1: Flash effect
+    final flashEffect = FlashEffect(
+      position: position,
+      size: size,
+    );
+    add(flashEffect);
+
+    // Step 2: Rock fragments - split rock into 4 pieces
+    final random = Random();
+    final fragmentSize = Vector2.all(cellSize); // Each fragment is 1 cell
+
+    // Create 4 fragments (top-left, top-right, bottom-left, bottom-right)
+    final fragmentOffsets = [
+      Vector2(0, 0),           // Top-left
+      Vector2(cellSize, 0),    // Top-right
+      Vector2(0, cellSize),    // Bottom-left
+      Vector2(cellSize, cellSize), // Bottom-right
+    ];
+
+    final fragmentVelocities = [
+      Vector2(-80, -80),  // Top-left flies up-left
+      Vector2(80, -80),   // Top-right flies up-right
+      Vector2(-80, 80),   // Bottom-left flies down-left
+      Vector2(80, 80),    // Bottom-right flies down-right
+    ];
+
+    for (int i = 0; i < 4; i++) {
+      final fragment = RockFragment(
+        sprite: obstacleSprite,
+        position: position + fragmentOffsets[i] + fragmentSize / 2, // Center of fragment
+        size: fragmentSize,
+        velocity: fragmentVelocities[i],
+        rotationSpeed: (random.nextDouble() - 0.5) * 8, // -4 to 4 rad/s
+      );
+      add(fragment);
+    }
+
+    // Step 3: Debris particles
+    const particleCount = 12;
+    final debrisColors = [
+      const Color(0xFF808080), // Gray
+      const Color(0xFF696969), // Dim gray
+      const Color(0xFFA9A9A9), // Dark gray
+      const Color(0xFF5C4033), // Brown
+    ];
+
+    for (int i = 0; i < particleCount; i++) {
+      final angle = (i / particleCount) * 2 * pi + random.nextDouble() * 0.5;
+      final speed = 100 + random.nextDouble() * 100; // 100-200 pixels/sec
+      final velocity = Vector2(
+        cos(angle) * speed,
+        sin(angle) * speed,
+      );
+
+      final debris = DebrisParticle(
+        position: center.clone(),
+        velocity: velocity,
+        particleColor: debrisColors[random.nextInt(debrisColors.length)],
+        rotationSpeed: (random.nextDouble() - 0.5) * 10, // -5 to 5
+      );
+      add(debris);
+    }
+
+    // Step 4: Camera shake
+    shakeScreen();
   }
 
   @override

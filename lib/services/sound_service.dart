@@ -153,6 +153,23 @@ class SoundService with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> playSoundEffect(String assetPath) async {
+    if (!_isMuted) {
+      try {
+        // Create a new AudioPlayer for each sound effect to allow overlapping
+        final player = AudioPlayer();
+        await player.play(AssetSource(assetPath));
+        
+        // Dispose the player when the sound finishes
+        player.onPlayerComplete.listen((_) {
+          player.dispose();
+        });
+      } catch (e) {
+        debugPrint('Error playing sound effect $assetPath: $e');
+      }
+    }
+  }
+
   @override
   void dispose() {
     _audioPlayer.dispose();
