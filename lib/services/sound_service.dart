@@ -1,5 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/services/cache_service.dart';
 
 enum MusicType { mainMenu, story, card, none }
 
@@ -67,14 +70,27 @@ class SoundService with ChangeNotifier {
           _previousMusic = _currentMusic;
         }
         await _audioPlayer.stop();
-        final musicUrl = 'https://ddcq.github.io/music/$cardId.mp3';
+        final musicPath = '/music/$cardId.mp3';
+        final musicUrl = 'https://ddcq.github.io$musicPath';
+        final cacheService = getIt<CacheService>();
+        final cacheManager = DefaultCacheManager();
+
+        var fileInfo = await cacheManager.getFileFromCache(musicUrl);
+        if (fileInfo == null) {
+          debugPrint('Downloading music: $musicUrl');
+          fileInfo = await cacheManager.downloadFile(musicUrl);
+          final version = cacheService.getVersionFor(musicPath);
+          if (version != null) {
+            await cacheService.setVersionFor(musicPath, version);
+          }
+        }
 
         // Set release mode to stop (not loop) for card music
         await _audioPlayer.setReleaseMode(ReleaseMode.stop);
 
         // Ajout d'un timeout de 10 secondes pour éviter les blocages
         await _audioPlayer
-            .play(UrlSource(musicUrl))
+            .play(DeviceFileSource(fileInfo.file.path))
             .timeout(
               const Duration(seconds: 10),
               onTimeout: () {

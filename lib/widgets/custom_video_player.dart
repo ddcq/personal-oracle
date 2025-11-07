@@ -1,3 +1,5 @@
+import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/services/cache_service.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -58,6 +60,8 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   }
 
   Future<void> _performVideoLoad() async {
+    final cacheService = getIt<CacheService>();
+    final videoPath = Uri.parse(widget.videoUrl).path;
     FileInfo? fileInfo = await DefaultCacheManager().getFileFromCache(widget.videoUrl);
     File videoFile;
 
@@ -69,6 +73,10 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       fileInfo = await DefaultCacheManager().downloadFile(widget.videoUrl);
       videoFile = fileInfo.file;
       debugPrint('Video downloaded: ${fileInfo.file.path}');
+      final version = cacheService.getVersionFor(videoPath);
+      if (version != null) {
+        await cacheService.setVersionFor(videoPath, version);
+      }
     }
 
     if (!mounted) return;

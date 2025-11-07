@@ -14,6 +14,7 @@ import 'package:oracle_d_asgard/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 
+import 'package:oracle_d_asgard/services/cache_service.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/router.dart'; // Import the router
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,6 +80,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   Future<void> _initializeServicesAfterStartup() async {
+    // Initialize CacheService and validate cache
+    try {
+      final cacheService = getIt<CacheService>();
+      await cacheService.initialize();
+      await cacheService.validateCache();
+    } catch (e) {
+      debugPrint('Failed to initialize or validate cache: $e');
+    }
+
     // Initialize NotificationService with timeout to prevent blocking
     try {
       await NotificationService().init().timeout(
