@@ -16,10 +16,10 @@ const double kBaseWinPercentage = 0.8;
 const double kWinPercentageIncrementPerLevel = 0.02;
 const double kMaxWinPercentage = 0.96;
 
-const double kBasePlayerSpeedCellsPerSecond = 10.0;
-const double kBaseMonsterSpeedCellsPerSecond = 5.0;
-const double kPlayerSpeedChangePerLevelCellsPerSecond = 0.5;
-const double kMonsterSpeedChangePerLevelCellsPerSecond = 3.0;
+const double kBasePlayerSpeedCellsPerSecond = 20.0;
+const double kBaseMonsterSpeedCellsPerSecond = 10.0;
+const double kPlayerSpeedChangePerLevelCellsPerSecond = 1.0;
+const double kMonsterSpeedChangePerLevelCellsPerSecond = 5.0;
 
 const double gameWidth = 150.0;
 const double gameHeight = 200.0;
