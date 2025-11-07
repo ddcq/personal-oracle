@@ -108,15 +108,11 @@ class _JoystickControllerState extends State<JoystickController> {
   }
 
   void _handlePanStart(DragStartDetails details) {
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
-    final localPosition = renderBox.globalToLocal(details.globalPosition);
-    _updateDirection(localPosition);
+    _updateDirection(details.localPosition);
   }
 
   void _handlePanUpdate(DragUpdateDetails details) {
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
-    final localPosition = renderBox.globalToLocal(details.globalPosition);
-    _updateDirection(localPosition);
+    _updateDirection(details.localPosition);
   }
 
   void _handlePanEnd(DragEndDetails details) {

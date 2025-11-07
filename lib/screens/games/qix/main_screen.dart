@@ -12,7 +12,8 @@ import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
-import 'package:oracle_d_asgard/widgets/directional_pad.dart';
+import 'package:oracle_d_asgard/widgets/joystick_controller.dart';
+import 'package:oracle_d_asgard/widgets/directional_pad.dart' show Direction;
 import 'package:oracle_d_asgard/widgets/progress_bar.dart';
 import 'dart:math' as math;
 
@@ -207,12 +208,10 @@ class _QixGameScreenState extends State<QixGameScreen> {
                         percentageDisplay,
                         const SizedBox(height: 16), // Spacing
                         Center(
-                          child: FittedBox(
-                            child: DirectionalPad(
-                              onDirectionChanged: (Direction direction) {
-                                _game!.handleDirectionChange(direction);
-                              },
-                            ),
+                          child: JoystickController(
+                            onDirectionChanged: (Direction direction) {
+                              _game!.handleDirectionChange(direction);
+                            },
                           ),
                         ),
                       ],
@@ -255,12 +254,10 @@ class _QixGameScreenState extends State<QixGameScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 percentageDisplay,
-                                FittedBox(
-                                  child: DirectionalPad(
-                                    onDirectionChanged: (Direction direction) {
-                                      _game!.handleDirectionChange(direction);
-                                    },
-                                  ),
+                                JoystickController(
+                                  onDirectionChanged: (Direction direction) {
+                                    _game!.handleDirectionChange(direction);
+                                  },
                                 ),
                               ],
                             ),
