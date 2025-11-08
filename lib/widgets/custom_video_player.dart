@@ -21,7 +21,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   Future<void>? _initializeVideoPlayerFuture;
   bool _isInitialized = false;
   bool _hasError = false;
-  String? _errorType;
+
 
   @override
   void initState() {
@@ -39,21 +39,11 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       debugPrint('widgets_custom_video_player_error_loading_video'.tr(namedArgs: {'error': '$e'}));
       if (mounted) {
         // Classify the error type
-        String errorType = 'unknown';
-        String errorString = e.toString().toLowerCase();
 
-        if (errorString.contains('timeout')) {
-          errorType = 'timeout';
-        } else if (errorString.contains('network') || errorString.contains('connection') || errorString.contains('http')) {
-          errorType = 'network';
-        } else if (errorString.contains('codec') || errorString.contains('format') || errorString.contains('decoder') || errorString.contains('capabilities')) {
-          errorType = 'codec_incompatible';
-        }
 
         setState(() {
           _isInitialized = false;
           _hasError = true;
-          _errorType = errorType;
         });
       }
     }
@@ -98,7 +88,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       setState(() {
         _isInitialized = true;
         _hasError = false;
-        _errorType = null;
+
       });
     }
   }
@@ -109,22 +99,13 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       debugPrint('Video playback error: $error');
 
       // Classify error type for better handling
-      String errorType = 'unknown';
-      if (error != null) {
-        if (error.toLowerCase().contains('codec') || error.toLowerCase().contains('decoder') || error.toLowerCase().contains('format')) {
-          errorType = 'codec_incompatible';
-        } else if (error.toLowerCase().contains('network') || error.toLowerCase().contains('connection')) {
-          errorType = 'network';
-        } else if (error.toLowerCase().contains('timeout')) {
-          errorType = 'timeout';
-        }
-      }
+
 
       if (mounted) {
         setState(() {
           _hasError = true;
           _isInitialized = false;
-          _errorType = errorType;
+
         });
       }
     }
@@ -138,31 +119,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     super.dispose();
   }
 
-  IconData _getErrorIcon() {
-    switch (_errorType) {
-      case 'codec_incompatible':
-        return Icons.video_settings;
-      case 'network':
-        return Icons.wifi_off;
-      case 'timeout':
-        return Icons.schedule;
-      default:
-        return Icons.error;
-    }
-  }
 
-  String _getErrorMessage() {
-    switch (_errorType) {
-      case 'codec_incompatible':
-        return 'widgets_custom_video_player_codec_incompatible'.tr();
-      case 'network':
-        return 'widgets_custom_video_player_network_error'.tr();
-      case 'timeout':
-        return 'widgets_custom_video_player_timeout'.tr();
-      default:
-        return 'widgets_custom_video_player_playback_error'.tr();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

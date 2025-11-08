@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/main_screen.dart';
 import 'package:oracle_d_asgard/screens/quiz_screen.dart';
 import 'package:oracle_d_asgard/screens/result_screen.dart';
-import 'package:oracle_d_asgard/screens/profile_screen.dart';
+import 'package:oracle_d_asgard/screens/profile/main_screen.dart';
 import 'package:oracle_d_asgard/screens/about_screen.dart';
 import 'package:oracle_d_asgard/screens/settings_screen.dart';
 import 'package:oracle_d_asgard/screens/collectible_card_detail_page.dart';
