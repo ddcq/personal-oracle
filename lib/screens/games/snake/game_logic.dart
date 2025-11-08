@@ -10,7 +10,7 @@ import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart'; // I
 // ==========================================
 enum FoodType { regular, golden, rotten }
 
-enum BonusType { speed, shield, freeze, ghost }
+enum BonusType { speed, shield, freeze, ghost, coin }
 
 // ==========================================
 // BONUS
@@ -196,7 +196,7 @@ class GameLogic {
   static const int _scoreRottenFoodPenaltyBase = 10;
   static const int _scoreRottenFoodPenaltyPerLevel = 10;
   static const double _goldenFoodProbability = 0.15;
-  static const int _baseObstacles = 5;
+  static const int _baseObstacles = 1;
   static const double bonusSpawnProbability = 1;
   static const double bonusLifetime = 8.0;
   static const double bonusEffectDuration = 8.0;
@@ -328,6 +328,14 @@ class GameLogic {
   bool _handleBonusCollection(GameState state, IntVector2 newHead) {
     if (state.activeBonus != null && newHead == state.activeBonus!.position) {
       final bonusType = state.activeBonus!.type;
+
+      if (bonusType == BonusType.coin) {
+        state.score += 20;
+        state.activeBonus = null;
+        onBonusCollected?.call();
+        return true;
+      }
+
       state.collectedBonuses.add(bonusType);
       state.activeBonusEffects.add(ActiveBonusEffect(type: bonusType, activationTime: 0.0));
       state.activeBonus = null;
@@ -377,7 +385,14 @@ class GameLogic {
 
   void spawnBonus(GameState state, List<IntVector2> snakePositions) {
     Random random = Random();
-    final bonusTypes = BonusType.values;
+    List<BonusType> bonusTypes;
+
+    if (state.obstacles.isEmpty) {
+      bonusTypes = [BonusType.speed, BonusType.freeze, BonusType.coin];
+    } else {
+      bonusTypes = [BonusType.speed, BonusType.shield, BonusType.freeze, BonusType.ghost];
+    }
+
     final randomBonusType = bonusTypes[random.nextInt(bonusTypes.length)];
 
     IntVector2 bonusPosition = _generateUniquePosition(random, snakePositions, state.obstacles, state.food, state.gridWidth, state.gridHeight, null);

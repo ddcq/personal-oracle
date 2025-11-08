@@ -35,6 +35,8 @@ class _SnakeGameState extends State<SnakeGame> {
   late final ConfettiController _confettiController;
   late int _currentLevel;
   Future<int>? _initializeGameFuture;
+  bool _isGameInitialized = false;
+  bool _levelCompleted = false;
 
   @override
   void initState() {
@@ -52,6 +54,9 @@ class _SnakeGameState extends State<SnakeGame> {
 
   @override
   void dispose() {
+    if (_levelCompleted) {
+      getIt<GamificationService>().saveSnakeDifficulty(_currentLevel + 1);
+    }
     final game = _game;
     if (game != null) {
       game.pauseEngine();
@@ -68,7 +73,7 @@ class _SnakeGameState extends State<SnakeGame> {
       barrierDismissible: false, // User must interact with the button
       builder: (BuildContext context) {
         if (isVictory) {
-          return _buildVictoryDialog(wonCard); // Pass wonCard directly
+          return _buildVictoryDialog(wonCard);
         } else {
           return _buildGameOverDialog(score);
         }
@@ -124,7 +129,7 @@ class _SnakeGameState extends State<SnakeGame> {
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  _game != null
+                  _isGameInitialized
                       ? ValueListenableBuilder<GameState>(
                           valueListenable: _game!.gameState,
                           builder: (context, gameState, child) {
@@ -135,7 +140,7 @@ class _SnakeGameState extends State<SnakeGame> {
                           },
                         )
                       : Text('snake_screen_score_default'.tr(), style: ChibiTextStyles.dialogText),
-                  if (_game != null && _game!.gameState.value.score >= SnakeFlameGame.victoryScoreThreshold)
+                  if (_isGameInitialized && _game!.gameState.value.score >= SnakeFlameGame.victoryScoreThreshold)
                     ConfettiWidget(
                       confettiController: _confettiController,
                       blastDirectionality: BlastDirectionality.explosive, // All directions
@@ -157,7 +162,7 @@ class _SnakeGameState extends State<SnakeGame> {
               ),
 
               // Center: Apple info
-              if (_game != null)
+              if (_isGameInitialized)
                 ValueListenableBuilder<FoodType>(
                   valueListenable: _game!.gameState.value.foodType,
                   builder: (context, foodType, child) {
@@ -299,12 +304,12 @@ class _SnakeGameState extends State<SnakeGame> {
   }
 
   SnakeFlameGame _createSnakeFlameGame(int level) {
-    final Completer<void> completer = Completer<void>();
+    _isGameInitialized = false;
     final game = SnakeFlameGame(
       gamificationService: getIt<GamificationService>(),
       onGameEnd: (score, {required isVictory, CollectibleCard? wonCard}) async {
         if (isVictory) {
-          await getIt<GamificationService>().saveSnakeDifficulty(_currentLevel + 1);
+          _levelCompleted = true;
         }
         _handleGameEnd(score, isVictory: isVictory, wonCard: wonCard);
       },
@@ -331,14 +336,12 @@ class _SnakeGameState extends State<SnakeGame> {
         setState(() {});
       },
       onGameLoaded: () {
-        completer.complete();
+        setState(() {
+          _isGameInitialized = true;
+        });
         _game?.startGame(); // Start the game automatically
-        setState(() {}); // Trigger rebuild to update AppBar
       },
     );
-    completer.future.then((_) {
-      // Removed _showStartPopup() as per user request.
-    });
     return game;
   }
 

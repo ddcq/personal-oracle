@@ -149,6 +149,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     bonusSprites[BonusType.shield] = await loadSprite('snake/shield.png');
     bonusSprites[BonusType.freeze] = await loadSprite('snake/freeze.png');
     bonusSprites[BonusType.ghost] = await loadSprite('snake/ghost.png');
+    bonusSprites[BonusType.coin] = await loadSprite('sparkle.png');
 
     snakeHeadSprite = await loadSprite('snake/snake_head.png');
     snakeBodySprite = await loadSprite('snake/snake_body.png');
@@ -368,8 +369,13 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     // Update bonus component
     if (gameState.value.activeBonus != null && _bonusComponent == null) {
+      final bonusSprite = bonusSprites[gameState.value.activeBonus!.type];
+      if (bonusSprite == null) {
+        debugPrint("Error: bonus sprite for ${gameState.value.activeBonus!.type} is null");
+        return;
+      }
       _bonusComponent = SpriteComponent(
-        sprite: bonusSprites[gameState.value.activeBonus!.type]!,
+        sprite: bonusSprite,
         position: gameState.value.activeBonus!.position.toVector2() * cellSize,
         size: Vector2.all(cellSize),
       );
@@ -422,7 +428,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       if (i + 3 < oldObstacles.length) {
         final oldBlock = oldObstacles.getRange(i, i + 4).toList();
         final blockStillExists = oldBlock.every((pos) => newObstacles.contains(pos));
-        
+
         if (!blockStillExists) {
           // Return the top-left position of the destroyed obstacle
           return oldBlock[0];
@@ -442,10 +448,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     soundService.playSoundEffect('audio/explode.mp3');
 
     // Step 1: Flash effect
-    final flashEffect = FlashEffect(
-      position: position,
-      size: size,
-    );
+    final flashEffect = FlashEffect(position: position, size: size);
     add(flashEffect);
 
     // Step 2: Rock fragments - split rock into 4 pieces
@@ -454,17 +457,17 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     // Create 4 fragments (top-left, top-right, bottom-left, bottom-right)
     final fragmentOffsets = [
-      Vector2(0, 0),           // Top-left
-      Vector2(cellSize, 0),    // Top-right
-      Vector2(0, cellSize),    // Bottom-left
+      Vector2(0, 0), // Top-left
+      Vector2(cellSize, 0), // Top-right
+      Vector2(0, cellSize), // Bottom-left
       Vector2(cellSize, cellSize), // Bottom-right
     ];
 
     final fragmentVelocities = [
-      Vector2(-80, -80),  // Top-left flies up-left
-      Vector2(80, -80),   // Top-right flies up-right
-      Vector2(-80, 80),   // Bottom-left flies down-left
-      Vector2(80, 80),    // Bottom-right flies down-right
+      Vector2(-80, -80), // Top-left flies up-left
+      Vector2(80, -80), // Top-right flies up-right
+      Vector2(-80, 80), // Bottom-left flies down-left
+      Vector2(80, 80), // Bottom-right flies down-right
     ];
 
     for (int i = 0; i < 4; i++) {
@@ -490,10 +493,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     for (int i = 0; i < particleCount; i++) {
       final angle = (i / particleCount) * 2 * pi + random.nextDouble() * 0.5;
       final speed = 100 + random.nextDouble() * 100; // 100-200 pixels/sec
-      final velocity = Vector2(
-        cos(angle) * speed,
-        sin(angle) * speed,
-      );
+      final velocity = Vector2(cos(angle) * speed, sin(angle) * speed);
 
       final debris = DebrisParticle(
         position: center.clone(),
