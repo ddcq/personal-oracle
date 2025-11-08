@@ -460,9 +460,11 @@ class GameLogic {
     List<IntVector2> newObstacles = [];
     final snakePositions = state.snake.map((s) => s.position).toList();
 
+    final targetObstacleCount = _baseObstacles + level;
+
     int obstacleCount = 0;
     int attempts = 0; // To prevent infinite loops
-    while (obstacleCount < (_baseObstacles + level) && attempts < 1000) {
+    while (obstacleCount < targetObstacleCount && attempts < 1000) {
       attempts++;
       // Generate top-left corner, ensuring it's not on the very edge
       IntVector2 topLeft = IntVector2(random.nextInt(state.gridWidth - 1), random.nextInt(state.gridHeight - 1));

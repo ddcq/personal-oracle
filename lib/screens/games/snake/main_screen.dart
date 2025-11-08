@@ -33,10 +33,10 @@ class SnakeGame extends StatefulWidget {
 class _SnakeGameState extends State<SnakeGame> {
   SnakeFlameGame? _game; // Make it nullable
   late final ConfettiController _confettiController;
-  late int _currentLevel;
+  int _currentLevel = 1; // Initialize with default value
   Future<int>? _initializeGameFuture;
   bool _isGameInitialized = false;
-  bool _levelCompleted = false;
+  bool _isLevelInitialized = false; // Track if level was loaded from DB
 
   @override
   void initState() {
@@ -46,7 +46,6 @@ class _SnakeGameState extends State<SnakeGame> {
   }
 
   Future<int> _initializeGame() async {
-    // Return int
     final gamificationService = getIt<GamificationService>();
     _currentLevel = await gamificationService.getSnakeDifficulty();
     return _currentLevel;
@@ -54,9 +53,6 @@ class _SnakeGameState extends State<SnakeGame> {
 
   @override
   void dispose() {
-    if (_levelCompleted) {
-      getIt<GamificationService>().saveSnakeDifficulty(_currentLevel + 1);
-    }
     final game = _game;
     if (game != null) {
       game.pauseEngine();
@@ -67,42 +63,127 @@ class _SnakeGameState extends State<SnakeGame> {
     super.dispose();
   }
 
-  void _handleGameEnd(int score, {required bool isVictory, CollectibleCard? wonCard}) {
-    showDialog(
-      context: context,
-      barrierDismissible: false, // User must interact with the button
-      builder: (BuildContext context) {
-        if (isVictory) {
-          return _buildVictoryDialog(wonCard);
+  // ==========================================
+  // CLEAN GAME MANAGEMENT METHODS
+  // ==========================================
+
+  /// Creates a new game instance at the current level
+  void _initializeNewGame() {
+    _game?.pauseEngine();
+    _game = SnakeFlameGame(
+      gamificationService: getIt<GamificationService>(),
+      onGameEnd: _onGameEnd,
+      onResetGame: _onResetGame,
+      onRottenFoodEaten: () => _game?.shakeScreen(),
+      level: _currentLevel,
+      onScoreChanged: () => setState(() {}),
+      onConfettiTrigger: () {
+        if (_safeGameStateValue != null && _safeGameStateValue!.score >= SnakeFlameGame.victoryScoreThreshold) {
+          _confettiController.play();
         } else {
-          return _buildGameOverDialog(score);
+          _confettiController.stop();
         }
       },
-    );
-  }
-
-  Widget _buildVictoryDialog(CollectibleCard? wonCard) {
-    return VictoryPopup(
-      rewardCard: wonCard,
-      onDismiss: () {
-        Navigator.of(context).pop();
-        _game?.resetGame();
-        _game?.startGame();
-        setState(() {}); // Trigger rebuild to update AppBar score
-      },
-      onSeeRewards: () {
-        Navigator.of(context).pop();
-        context.push('/profile');
+      onBonusCollected: () => setState(() {}),
+      onGameLoaded: () {
+        setState(() {
+          _isGameInitialized = true;
+        });
+        _game?.startGame(); // Start the game automatically
       },
     );
   }
 
-  Widget _buildGameOverDialog(int score) {
-    return SnakeGameOverPopup(
-      score: score,
-      onResetGame: () {
-        _game?.resetGame();
-        _game?.startGame(); // Start the game after reset
+  /// Resets the current game at the same level
+  void _resetCurrentGame() {
+    _game?.resetGame();
+    _confettiController.stop();
+    setState(() {});
+  }
+
+  /// Increases level and creates new game instance
+  Future<void> _levelUp() async {
+    await getIt<GamificationService>().saveSnakeDifficulty(_currentLevel + 1);
+    setState(() {
+      _currentLevel++;
+    });
+    _initializeNewGame();
+  }
+
+  /// Starts the current game
+  void _startGame() {
+    _game?.startGame();
+  }
+
+  /// Safe getter for gameState - returns null if not ready
+  ValueNotifier<GameState>? get _safeGameState {
+    return _isGameInitialized && _game != null ? _game!.gameState : null;
+  }
+
+  /// Safe getter for gameState value - returns null if not ready
+  GameState? get _safeGameStateValue {
+    return _safeGameState?.value;
+  }
+
+  // ==========================================
+  // GAME EVENT HANDLERS
+  // ==========================================
+
+  void _onGameEnd(int score, {required bool isVictory, CollectibleCard? wonCard}) async {
+    if (isVictory) {
+      getIt<GamificationService>().saveGameScore('Snake', score);
+      final rewardCard = wonCard ?? await getIt<GamificationService>().selectRandomUnearnedCollectibleCard();
+      _showVictoryDialog(rewardCard);
+    } else {
+      _showGameOverDialog(score);
+    }
+  }
+
+  void _onResetGame() {
+    _resetCurrentGame();
+    setState(() {});
+  }
+
+  // ==========================================
+  // DIALOG METHODS
+  // ==========================================
+
+  void _showVictoryDialog(CollectibleCard? wonCard) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return VictoryPopup(
+          rewardCard: wonCard,
+          onDismiss: () async {
+            Navigator.of(context).pop();
+            await _levelUp();
+            // Wait for setState to complete before starting game
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _startGame();
+            });
+          },
+          onSeeRewards: () {
+            Navigator.of(context).pop();
+            context.push('/profile');
+          },
+        );
+      },
+    );
+  }
+
+  void _showGameOverDialog(int score) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SnakeGameOverPopup(
+          score: score,
+          onResetGame: () {
+            _resetCurrentGame();
+            _startGame();
+          },
+        );
       },
     );
   }
@@ -129,9 +210,9 @@ class _SnakeGameState extends State<SnakeGame> {
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  _isGameInitialized
+                  _safeGameState != null
                       ? ValueListenableBuilder<GameState>(
-                          valueListenable: _game!.gameState,
+                          valueListenable: _safeGameState!,
                           builder: (context, gameState, child) {
                             return Text(
                               'snake_screen_score'.tr(namedArgs: {'score': '${gameState.score}'}),
@@ -140,7 +221,7 @@ class _SnakeGameState extends State<SnakeGame> {
                           },
                         )
                       : Text('snake_screen_score_default'.tr(), style: ChibiTextStyles.dialogText),
-                  if (_isGameInitialized && _game!.gameState.value.score >= SnakeFlameGame.victoryScoreThreshold)
+                  if (_safeGameStateValue != null && _safeGameStateValue!.score >= SnakeFlameGame.victoryScoreThreshold)
                     ConfettiWidget(
                       confettiController: _confettiController,
                       blastDirectionality: BlastDirectionality.explosive, // All directions
@@ -162,9 +243,9 @@ class _SnakeGameState extends State<SnakeGame> {
               ),
 
               // Center: Apple info
-              if (_isGameInitialized)
+              if (_safeGameStateValue != null)
                 ValueListenableBuilder<FoodType>(
-                  valueListenable: _game!.gameState.value.foodType,
+                  valueListenable: _safeGameStateValue!.foodType,
                   builder: (context, foodType, child) {
                     String foodImage;
                     switch (foodType) {
@@ -229,9 +310,15 @@ class _SnakeGameState extends State<SnakeGame> {
                 if (snapshot.hasError) {
                   return Center(child: Text('${'snake_screen_error_prefix'.tr()}: ${snapshot.error}'));
                 }
-                _currentLevel = snapshot.data!; // Get the level from snapshot
+                // Only set _currentLevel from snapshot on first initialization
+                if (!_isLevelInitialized) {
+                  _currentLevel = snapshot.data!;
+                  _isLevelInitialized = true;
+                }
 
-                _game ??= _createSnakeFlameGame(_currentLevel);
+                if (_game == null) {
+                  _initializeNewGame();
+                }
 
                 final orientation = MediaQuery.of(context).orientation;
 
@@ -246,8 +333,8 @@ class _SnakeGameState extends State<SnakeGame> {
                             children: [
                               JoystickController(
                                 onDirectionChanged: (direction) {
-                                  if (_game != null) {
-                                    _game!.gameLogic.changeDirection(_game!.gameState.value, direction);
+                                  if (_safeGameStateValue != null) {
+                                    _game!.gameLogic.changeDirection(_safeGameStateValue!, direction);
                                   }
                                 },
                               ),
@@ -278,8 +365,8 @@ class _SnakeGameState extends State<SnakeGame> {
                             children: [
                               JoystickController(
                                 onDirectionChanged: (direction) {
-                                  if (_game != null) {
-                                    _game!.gameLogic.changeDirection(_game!.gameState.value, direction);
+                                  if (_safeGameStateValue != null) {
+                                    _game!.gameLogic.changeDirection(_safeGameStateValue!, direction);
                                   }
                                 },
                               ),
@@ -303,54 +390,13 @@ class _SnakeGameState extends State<SnakeGame> {
     );
   }
 
-  SnakeFlameGame _createSnakeFlameGame(int level) {
-    _isGameInitialized = false;
-    final game = SnakeFlameGame(
-      gamificationService: getIt<GamificationService>(),
-      onGameEnd: (score, {required isVictory, CollectibleCard? wonCard}) async {
-        if (isVictory) {
-          _levelCompleted = true;
-        }
-        _handleGameEnd(score, isVictory: isVictory, wonCard: wonCard);
-      },
-      onResetGame: () {
-        _game?.resetGame(); // Use _game! because it's nullable
-        _confettiController.stop(); // Stop confetti on reset
-        setState(() {}); // Trigger rebuild to update AppBar score
-      },
-      onRottenFoodEaten: () {
-        _game!.shakeScreen(); // Use _game!
-      },
-      level: level,
-      onScoreChanged: () {
-        setState(() {});
-      },
-      onConfettiTrigger: () {
-        if (_game != null && _game!.gameState.value.score >= SnakeFlameGame.victoryScoreThreshold) {
-          _confettiController.play();
-        } else {
-          _confettiController.stop();
-        }
-      },
-      onBonusCollected: () {
-        setState(() {});
-      },
-      onGameLoaded: () {
-        setState(() {
-          _isGameInitialized = true;
-        });
-        _game?.startGame(); // Start the game automatically
-      },
-    );
-    return game;
-  }
 
   Widget _buildBonusList() {
-    if (_game == null) return const SizedBox.shrink();
-    
+    if (_game == null || _safeGameState == null) return const SizedBox.shrink();
+
     try {
       return ValueListenableBuilder<GameState>(
-        valueListenable: _game!.gameState,
+        valueListenable: _safeGameState!,
         builder: (context, gameState, child) {
           if (gameState.activeBonusEffects.isEmpty) {
             return const SizedBox.shrink();
@@ -425,17 +471,21 @@ class _SnakeGameState extends State<SnakeGame> {
                       swipeDetectionBehavior: SwipeDetectionBehavior.singularOnEnd,
                     ),
                     onVerticalSwipe: (direction) {
-                      if (direction == SwipeDirection.down) {
-                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.down);
-                      } else if (direction == SwipeDirection.up) {
-                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.up);
+                      if (_safeGameStateValue != null) {
+                        if (direction == SwipeDirection.down) {
+                          _game!.gameLogic.changeDirection(_safeGameStateValue!, Direction.down);
+                        } else if (direction == SwipeDirection.up) {
+                          _game!.gameLogic.changeDirection(_safeGameStateValue!, Direction.up);
+                        }
                       }
                     },
                     onHorizontalSwipe: (direction) {
-                      if (direction == SwipeDirection.right) {
-                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.right);
-                      } else if (direction == SwipeDirection.left) {
-                        _game!.gameLogic.changeDirection(_game!.gameState.value, Direction.left);
+                      if (_safeGameStateValue != null) {
+                        if (direction == SwipeDirection.right) {
+                          _game!.gameLogic.changeDirection(_safeGameStateValue!, Direction.right);
+                        } else if (direction == SwipeDirection.left) {
+                          _game!.gameLogic.changeDirection(_safeGameStateValue!, Direction.left);
+                        }
                       }
                     },
                     onDoubleTap: () {

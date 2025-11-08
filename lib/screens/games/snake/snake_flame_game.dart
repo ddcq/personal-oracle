@@ -58,8 +58,18 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const int _minGameSpeed = 50;
 
   late final GameLogic gameLogic;
-  late final ValueNotifier<GameState> gameState;
+  ValueNotifier<GameState>? _gameState;
+
+  /// Safe getter for gameState that doesn't throw
+  ValueNotifier<GameState> get gameState {
+    if (_gameState == null) {
+      // Return a dummy state to prevent crashes - this shouldn't be used in practice
+      return ValueNotifier(GameState.initial(gridWidth: 10, gridHeight: 10, obstacles: []));
+    }
+    return _gameState!;
+  }
   late final ValueNotifier<double> remainingFoodTime = ValueNotifier<double>(0);
+  bool _isLoaded = false;
 
   @override
   Color backgroundColor() => Colors.transparent;
@@ -136,7 +146,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     // First create a temporary state to generate obstacles
     final tempState = GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight, obstacles: []);
     final obstacles = gameLogic.generateObstacles(tempState);
-    gameState = ValueNotifier(GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight, obstacles: obstacles));
+    _gameState = ValueNotifier(GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight, obstacles: obstacles));
 
     // Load sprites
     regularFoodSprite = await loadSprite('snake/apple_regular.png');
@@ -178,8 +188,9 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     initializeGame();
     pauseEngine(); // Pause engine until start button is pressed
 
-    // Call the onGameLoaded callback when the game is fully loaded
-    onGameLoaded?.call(); // Add this line
+    // Mark game as loaded and call the callback
+    _isLoaded = true;
+    onGameLoaded?.call();
   }
 
   void initializeGame() {
@@ -212,8 +223,11 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
 
   void startGame() {
-    gameState.value.isGameRunning = true;
-    resumeEngine();
+    // Only start if game is fully loaded
+    if (_isLoaded) {
+      gameState.value.isGameRunning = true;
+      resumeEngine();
+    }
   }
 
   @override
@@ -369,13 +383,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     // Update bonus component
     if (gameState.value.activeBonus != null && _bonusComponent == null) {
-      final bonusSprite = bonusSprites[gameState.value.activeBonus!.type];
-      if (bonusSprite == null) {
-        debugPrint("Error: bonus sprite for ${gameState.value.activeBonus!.type} is null");
-        return;
-      }
       _bonusComponent = SpriteComponent(
-        sprite: bonusSprite,
+        sprite: bonusSprites[gameState.value.activeBonus!.type]!,
         position: gameState.value.activeBonus!.position.toVector2() * cellSize,
         size: Vector2.all(cellSize),
       );
@@ -428,7 +437,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       if (i + 3 < oldObstacles.length) {
         final oldBlock = oldObstacles.getRange(i, i + 4).toList();
         final blockStillExists = oldBlock.every((pos) => newObstacles.contains(pos));
-
+        
         if (!blockStillExists) {
           // Return the top-left position of the destroyed obstacle
           return oldBlock[0];
@@ -448,7 +457,10 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     soundService.playSoundEffect('audio/explode.mp3');
 
     // Step 1: Flash effect
-    final flashEffect = FlashEffect(position: position, size: size);
+    final flashEffect = FlashEffect(
+      position: position,
+      size: size,
+    );
     add(flashEffect);
 
     // Step 2: Rock fragments - split rock into 4 pieces
@@ -457,17 +469,17 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     // Create 4 fragments (top-left, top-right, bottom-left, bottom-right)
     final fragmentOffsets = [
-      Vector2(0, 0), // Top-left
-      Vector2(cellSize, 0), // Top-right
-      Vector2(0, cellSize), // Bottom-left
+      Vector2(0, 0),           // Top-left
+      Vector2(cellSize, 0),    // Top-right
+      Vector2(0, cellSize),    // Bottom-left
       Vector2(cellSize, cellSize), // Bottom-right
     ];
 
     final fragmentVelocities = [
-      Vector2(-80, -80), // Top-left flies up-left
-      Vector2(80, -80), // Top-right flies up-right
-      Vector2(-80, 80), // Bottom-left flies down-left
-      Vector2(80, 80), // Bottom-right flies down-right
+      Vector2(-80, -80),  // Top-left flies up-left
+      Vector2(80, -80),   // Top-right flies up-right
+      Vector2(-80, 80),   // Bottom-left flies down-left
+      Vector2(80, 80),    // Bottom-right flies down-right
     ];
 
     for (int i = 0; i < 4; i++) {
@@ -493,7 +505,10 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     for (int i = 0; i < particleCount; i++) {
       final angle = (i / particleCount) * 2 * pi + random.nextDouble() * 0.5;
       final speed = 100 + random.nextDouble() * 100; // 100-200 pixels/sec
-      final velocity = Vector2(cos(angle) * speed, sin(angle) * speed);
+      final velocity = Vector2(
+        cos(angle) * speed,
+        sin(angle) * speed,
+      );
 
       final debris = DebrisParticle(
         position: center.clone(),
@@ -544,6 +559,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
 
   void resetGame() {
+    _isLoaded = false; // Mark as not loaded during reset
+
     // First create a temporary state to generate obstacles
     final tempState = GameState.initial(gridWidth: gameState.value.gridWidth, gridHeight: gameState.value.gridHeight, obstacles: []);
     final obstacles = gameLogic.generateObstacles(tempState);
@@ -566,6 +583,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     initializeGame();
     remainingFoodTime.value = _foodRottingTimeBase - (level * _foodRottingTimeLevelFactor);
 
+    _isLoaded = true; // Mark as loaded after reset is complete
     pauseEngine();
   }
 }
