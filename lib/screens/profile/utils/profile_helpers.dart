@@ -17,7 +17,9 @@ String formatRelativeTime(DateTime timestamp) {
   final now = DateTime.now();
   final difference = now.difference(timestamp);
 
-  if (difference.inDays == 0) {
+  final isSameDay = now.year == timestamp.year && now.month == timestamp.month && now.day == timestamp.day;
+
+  if (isSameDay) {
     if (difference.inHours == 0) {
       if (difference.inMinutes == 0) {
         return 'À l’instant';
@@ -25,9 +27,16 @@ String formatRelativeTime(DateTime timestamp) {
       return 'Il y a ${difference.inMinutes} min';
     }
     return 'Aujourd’hui à ${DateFormat('HH:mm').format(timestamp)}';
-  } else if (difference.inDays == 1) {
+  }
+
+  final yesterday = DateTime(now.year, now.month, now.day - 1);
+  final isYesterday = yesterday.year == timestamp.year && yesterday.month == timestamp.month && yesterday.day == timestamp.day;
+
+  if (isYesterday) {
     return 'Hier à ${DateFormat('HH:mm').format(timestamp)}';
-  } else if (difference.inDays < 7) {
+  }
+
+  if (difference.inDays < 7) {
     return 'Il y a ${difference.inDays} jours';
   } else if (difference.inDays < 30) {
     final weeks = (difference.inDays / 7).floor();

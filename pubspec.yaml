@@ -119,22 +119,23 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-     - assets/
-     - assets/resources/langs/
-     - assets/images/
-     - assets/images/blocks/
-     - assets/images/snake/
-     - assets/images/cards/chibi/
-     - assets/images/cards/premium/
-     - assets/images/cards/epic/
-     - assets/images/stories/
-     - assets/images/backgrounds/
-     - assets/images/icons/
-     - assets/images/heads/
-     - assets/images/preliminary/
-     - assets/images/qix/ # Add this line
-     - assets/audio/
-     - assets/fonts/
+    - assets/
+    - assets/audio/
+    - assets/fonts/
+    - assets/images/
+    - assets/images/backgrounds/
+    - assets/images/blocks/
+    - assets/images/cards/chibi/
+    - assets/images/cards/epic/
+    - assets/images/cards/premium/
+    - assets/images/heads/
+    - assets/images/icons/
+    - assets/images/preliminary/
+    - assets/images/profile/
+    - assets/images/qix/
+    - assets/images/snake/
+    - assets/images/stories/
+    - assets/resources/langs/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
