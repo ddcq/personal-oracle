@@ -4,7 +4,6 @@ import 'package:oracle_d_asgard/generated/version.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 
-
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
@@ -14,8 +13,6 @@ class AboutScreen extends StatelessWidget {
       throw Exception('Could not launch $url');
     }
   }
-
-
 
   Future<void> _launchEmail() async {
     final Uri emailLaunchUri = Uri(scheme: 'mailto', path: 'support.ddcq@erine.email', query: 'subject=About Oracle d\'Asgard');
@@ -31,7 +28,7 @@ class AboutScreen extends StatelessWidget {
       extendBodyBehindAppBar: false,
       appBar: AppBar(
         title: Text(
-          'about_screen_title'.tr(),
+          'about_screen_about_title'.tr(),
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,

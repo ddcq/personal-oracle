@@ -49,12 +49,6 @@ final allCollectibleCards = [
     tags: ['Frigg', 'Odin', 'Baldr'],
   ),
   ..._createCardVersions(
-    id: 'gui',
-    title: 'collectible_card_gui_title'.tr(),
-    description: 'collectible_card_gui_description'.tr(),
-    tags: ['Gui', 'Baldr', 'Loki'],
-  ),
-  ..._createCardVersions(
     id: 'thor',
     title: 'collectible_card_thor_title'.tr(),
     description: 'collectible_card_thor_description'.tr(),
