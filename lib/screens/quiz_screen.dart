@@ -94,9 +94,10 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _navigateToResult() {
-    final deity = QuizService.calculateBestDeity(scores);
-    getIt<GamificationService>().saveQuizResult(deity);
-    context.go('/result', extra: deity);
+    final deityId = QuizService.calculateBestDeity(scores);
+    getIt<GamificationService>().saveQuizResult(deityId);
+    getIt<GamificationService>().saveProfileDeityIcon(deityId);
+    context.go('/result', extra: deityId);
   }
 
   @override

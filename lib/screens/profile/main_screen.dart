@@ -155,19 +155,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _refreshProfileData() async {
     final gamificationService = getIt<GamificationService>();
-    _mainDataFuture = Future.wait([
-      gamificationService.getGameScores('Snake'),
-      gamificationService.getUnlockedCollectibleCards(),
-      gamificationService.getUnlockedStoryProgress(),
-      gamificationService.getProfileName(),
-      gamificationService.getProfileDeityIcon(),
-      gamificationService.getGameScores('Asgard Wall'),
-    ]);
-    _quizResultsFuture = gamificationService.getQuizResults();
-    await _loadSelectableDeities(); // Await this to ensure _allSelectableDeities is populated before setState
+    await _loadSelectableDeities();
     await _loadNextAdRewardCard();
     await _loadNextAdRewardStory();
-    setState(() {});
+
+    setState(() {
+      _mainDataFuture = Future.wait([
+        gamificationService.getGameScores('Snake'),
+        gamificationService.getUnlockedCollectibleCards(),
+        gamificationService.getUnlockedStoryProgress(),
+        gamificationService.getProfileName(),
+        gamificationService.getProfileDeityIcon(),
+        gamificationService.getGameScores('Asgard Wall'),
+      ]);
+      _quizResultsFuture = gamificationService.getQuizResults();
+    });
   }
 
   @override
@@ -439,9 +441,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             });
                           },
                           onDeityChanged: (newDeityId) {
-                            setState(() {
-                              _selectedDeityId = newDeityId;
-                            });
+                            _selectedDeityId = newDeityId;
                             _refreshProfileData();
                           },
                           onEditName: () => _showEditNameDialog(context),

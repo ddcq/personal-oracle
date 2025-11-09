@@ -29,8 +29,8 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deityName = AppData.deities[selectedDeityId?.toLowerCase() ?? '']?.name ?? '';
-    final deity = AppData.deities[deityName.toLowerCase()];
+    final displayDeity = allSelectableDeities.firstWhereOrNull((d) => d.id == selectedDeityId);
+    final deityName = displayDeity?.name ?? '';
 
     return Column(
       children: [
@@ -65,7 +65,7 @@ class ProfileHeader extends StatelessWidget {
           onTap: () async {
             final newDeityId = await Navigator.push<String>(
               context,
-              MaterialPageRoute(builder: (context) => DeitySelectionScreen(currentDeityId: selectedDeityId ?? deity!.id)),
+              MaterialPageRoute(builder: (context) => DeitySelectionScreen(currentDeityId: selectedDeityId ?? '')),
             );
 
             if (newDeityId != null && newDeityId != selectedDeityId) {
@@ -95,9 +95,6 @@ class ProfileHeader extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     child: Builder(
                       builder: (context) {
-                        final selectedDeity = allSelectableDeities.firstWhereOrNull((d) => d.id == (selectedDeityId ?? deity!.id));
-                        final displayDeity = selectedDeity ?? deity;
-
                         if (displayDeity == null) {
                           return _buildDeityDisplayPlaceholder(error: true);
                         }
