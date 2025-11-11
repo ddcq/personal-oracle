@@ -203,6 +203,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ],
                     ),
                   ),
+                  DropdownMenuItem(
+                    value: const Locale('es', 'ES'),
+                    child: Row(
+                      children: [
+                        Text('🇪🇸', style: TextStyle(fontSize: 18)),
+                        const SizedBox(width: 8),
+                        Text('profile_screen_language_spanish'.tr(), style: const TextStyle(color: Colors.white)),
+                      ],
+                    ),
+                  ),
                 ],
                 onChanged: (Locale? newLocale) async {
                   if (newLocale != null) {
