@@ -59,6 +59,9 @@ class GameState {
   dp.Direction nextDirection;
   bool isGameRunning;
   bool isGameOver;
+  bool bonusJustCollected;
+  bool pendingGameOver;
+  bool foodJustEaten;
 
   GameState({
     required this.snake,
@@ -74,6 +77,9 @@ class GameState {
     this.nextDirection = dp.Direction.right,
     this.isGameRunning = false,
     this.isGameOver = false,
+    this.bonusJustCollected = false,
+    this.pendingGameOver = false,
+    this.foodJustEaten = false,
     required this.gridWidth,
     required this.gridHeight,
   }) : foodType = ValueNotifier(foodType),
@@ -181,6 +187,9 @@ class GameState {
       nextDirection: nextDirection,
       isGameRunning: isGameRunning,
       isGameOver: isGameOver,
+      bonusJustCollected: bonusJustCollected,
+      pendingGameOver: pendingGameOver,
+      foodJustEaten: foodJustEaten,
       gridWidth: gridWidth,
       gridHeight: gridHeight,
     );
@@ -213,6 +222,8 @@ class GameLogic {
   GameState updateGame(GameState state) {
     if (!state.isGameRunning || state.isGameOver) return state;
 
+    state.bonusJustCollected = false;
+    state.foodJustEaten = false;
     state.direction = state.nextDirection;
     IntVector2 headPos = state.snake.first.position;
     IntVector2 newHeadPos = _getNewHeadPosition(headPos, state.direction);
@@ -225,9 +236,7 @@ class GameLogic {
 
     // Check collision (ignore obstacles if ghost or shield is active)
     if (_isCollision(state, newHeadPos, currentSnakePositions, ignoreObstacles: hasGhostEffect || hasShieldEffect)) {
-      state.isGameRunning = false;
-      state.isGameOver = true;
-      return state;
+      state.pendingGameOver = true;
     }
 
     // Handle shield effect - destroy obstacles on collision
@@ -307,6 +316,7 @@ class GameLogic {
 
   bool _handleFoodConsumption(GameState state, IntVector2 newHead) {
     if (newHead == state.food) {
+      state.foodJustEaten = true;
       if (state.foodType.value == FoodType.golden) {
         state.score += _scoreGoldenFood;
       } else if (state.foodType.value == FoodType.regular) {
@@ -333,6 +343,7 @@ class GameLogic {
         state.score += 20;
         state.activeBonus = null;
         onBonusCollected?.call();
+        state.bonusJustCollected = true;
         return true;
       }
 
@@ -340,6 +351,7 @@ class GameLogic {
       state.activeBonusEffects.add(ActiveBonusEffect(type: bonusType, activationTime: 0.0));
       state.activeBonus = null;
       onBonusCollected?.call();
+      state.bonusJustCollected = true;
       return true;
     }
     return false;
@@ -400,19 +412,28 @@ class GameLogic {
     state.activeBonus = Bonus(position: bonusPosition, type: randomBonusType, spawnTime: 0.0);
   }
 
-  void changeDirection(GameState state, dp.Direction newDirection) {
+  void changeDirection(GameState state, dp.Direction newDirection, {bool isRetroactive = false}) {
     if (!state.isGameRunning || state.isGameOver) return;
 
-    final bool isOppositeDirection =
-        (( // This line was changed
-        state.direction == dp.Direction.up && newDirection == dp.Direction.down) ||
-        (state.direction == dp.Direction.down && newDirection == dp.Direction.up) ||
-        (state.direction == dp.Direction.left && newDirection == dp.Direction.right) ||
-        (state.direction == dp.Direction.right && newDirection == dp.Direction.left));
+    final currentDirection = isRetroactive && state.snake.length > 1
+        ? _getDirectionFromPositions(state.snake[1].position, state.snake[0].position)
+        : state.direction;
+
+    final bool isOppositeDirection = ((currentDirection == dp.Direction.up && newDirection == dp.Direction.down) ||
+        (currentDirection == dp.Direction.down && newDirection == dp.Direction.up) ||
+        (currentDirection == dp.Direction.left && newDirection == dp.Direction.right) ||
+        (currentDirection == dp.Direction.right && newDirection == dp.Direction.left));
 
     if (!isOppositeDirection) {
       state.nextDirection = newDirection;
     }
+  }
+
+  dp.Direction _getDirectionFromPositions(IntVector2 from, IntVector2 to) {
+    if (to.x > from.x) return dp.Direction.right;
+    if (to.x < from.x) return dp.Direction.left;
+    if (to.y > from.y) return dp.Direction.down;
+    return dp.Direction.up;
   }
 
   void rotateLeft(GameState state) {
@@ -453,6 +474,114 @@ class GameLogic {
         break;
     }
     changeDirection(state, newDirection);
+  }
+
+  bool performRetrospectiveUpdate(GameState state, dp.Direction newDirection) {
+    // 1. Pre-computation & Safety checks
+    if (state.bonusJustCollected || state.foodJustEaten) return false;
+    if (state.snake.length < 2) return false; // Cannot look back one step
+
+    final IntVector2 headBeforeLastMove = state.snake[1].position;
+
+    final bool isOpposite = ((state.direction == dp.Direction.up && newDirection == dp.Direction.down) ||
+        (state.direction == dp.Direction.down && newDirection == dp.Direction.up) ||
+        (state.direction == dp.Direction.left && newDirection == dp.Direction.right) ||
+        (state.direction == dp.Direction.right && newDirection == dp.Direction.left));
+    if (isOpposite) return false;
+
+    // 2. Calculate intended new head position
+    final IntVector2 intendedHeadPos = _getNewHeadPosition(headBeforeLastMove, newDirection);
+
+    // 3. Collision check for the intended move
+    final snakeBodyForCollision = state.snake.sublist(1).map((s) => s.position).toList();
+    bool hasGhostEffect = state.activeBonusEffects.any((effect) => effect.type == BonusType.ghost);
+    bool hasShieldEffect = state.activeBonusEffects.any((effect) => effect.type == BonusType.shield);
+
+    if (_isCollision(state, intendedHeadPos, snakeBodyForCollision, ignoreObstacles: hasGhostEffect || hasShieldEffect)) {
+      return false;
+    }
+
+    // --- At this point, we commit to the change ---
+
+    // 4. Preserve info about the original move
+    final IntVector2 originalHeadPos = state.snake[0].position;
+    final bool originalMoveAteFood = (originalHeadPos == state.food);
+
+    // 5. Check food/bonus situation for the NEW move
+    final bool newMoveAteFood = (intendedHeadPos == state.food);
+    final bool newMoveCollectedBonus = (state.activeBonus != null && intendedHeadPos == state.activeBonus!.position);
+
+    // 6. Adjust score
+    if (originalMoveAteFood && !newMoveAteFood) {
+      _adjustScore(state, state.foodType.value, subtract: true);
+    }
+    if (newMoveAteFood && !originalMoveAteFood) {
+      _adjustScore(state, state.foodType.value, subtract: false);
+    }
+
+    // 7. Build the new snake
+    List<SnakeSegment> newSnake = [];
+    newSnake.add(SnakeSegment(position: intendedHeadPos, type: 'head')); // New head
+
+    String? newBodySegmentPattern;
+    if (state.snake.length > 2) {
+      newBodySegmentPattern = _getPattern(intendedHeadPos, state.snake[1].position, state.snake[2].position);
+    } else {
+      final dx = intendedHeadPos.x - state.snake[1].position.x;
+      final dy = intendedHeadPos.y - state.snake[1].position.y;
+      newBodySegmentPattern = '${-dx},${-dy},$dx,$dy';
+    }
+    newSnake.add(SnakeSegment(position: headBeforeLastMove, type: 'body', subPattern: newBodySegmentPattern));
+
+    newSnake.addAll(state.snake.sublist(2));
+
+    // 8. Handle tail removal/growth
+    if (!newMoveAteFood) {
+      if (newSnake.isNotEmpty) {
+        newSnake.removeLast();
+      }
+    }
+    if (newSnake.length > 1) {
+      newSnake.last.type = 'tail';
+    } else if (newSnake.length == 1) {
+      newSnake.first.type = 'head'; // Ensure it's a head if it's the only segment
+    }
+
+    // 9. Update the state object
+    state.snake = newSnake;
+    state.direction = newDirection;
+    state.nextDirection = newDirection;
+
+    // 10. Handle food generation if needed
+    if (newMoveAteFood) {
+      generateNewFood(state, newSnake.map((s) => s.position).toList());
+    }
+
+    // 11. Handle bonus collection
+    if (newMoveCollectedBonus) {
+      _handleBonusCollection(state, intendedHeadPos);
+    }
+    
+    // 12. Handle shield effect
+    if (hasShieldEffect && state.obstacles.contains(intendedHeadPos)) {
+      _removeObstacleBlock(state, intendedHeadPos);
+    }
+
+    return true; // Success!
+  }
+
+  void _adjustScore(GameState state, FoodType foodType, {bool subtract = false}) {
+    int sign = subtract ? -1 : 1;
+    if (foodType == FoodType.golden) {
+      state.score += _scoreGoldenFood * sign;
+    } else if (foodType == FoodType.regular) {
+      state.score += _scoreRegularFood * sign;
+    } else if (foodType == FoodType.rotten) {
+      state.score -= (_scoreRottenFoodPenaltyBase + (level * _scoreRottenFoodPenaltyPerLevel)) * sign;
+      if (!subtract) {
+        onRottenFoodEaten?.call();
+      }
+    }
   }
 
   List<IntVector2> generateObstacles(GameState state) {

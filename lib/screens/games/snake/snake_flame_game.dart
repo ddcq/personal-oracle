@@ -20,6 +20,7 @@ import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
+
 class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final GamificationService gamificationService;
   final Function(int, {required bool isVictory, CollectibleCard? wonCard}) onGameEnd;
@@ -55,7 +56,9 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const int _vibrationDurationLong = 500;
   static const int _vibrationAmplitudeHigh = 255;
   static const int victoryScoreThreshold = 100;
-  static const int _minGameSpeed = 50;
+  static const int _minGameSpeed = 200;
+  static const double _gracePeriodDuration = 0.1; // 100 milliseconds
+  static const double _retroactiveThreshold = 0.1; // 100 milliseconds
 
   late final GameLogic gameLogic;
   ValueNotifier<GameState>? _gameState;
@@ -70,6 +73,10 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
   late final ValueNotifier<double> remainingFoodTime = ValueNotifier<double>(0);
   bool _isLoaded = false;
+
+  GameState? _preCollisionState;
+  bool _inGracePeriod = false;
+  double _gracePeriodTimer = 0.0;
 
   @override
   Color backgroundColor() => Colors.transparent;
@@ -234,6 +241,16 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   void update(double dt) {
     super.update(dt);
 
+    if (_inGracePeriod) {
+      _gracePeriodTimer += dt;
+      if (_gracePeriodTimer > _gracePeriodDuration) {
+        _inGracePeriod = false;
+        gameState.value.isGameOver = true;
+        _processGameOver();
+      }
+      return;
+    }
+
     if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
       return;
     }
@@ -319,29 +336,22 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     return (_gameSpeedInitial - currentScore).clamp(_minGameSpeed, _gameSpeedInitial).toDouble();
   }
 
-  void tick() async {
-    final wasGameOver = gameState.value.isGameOver;
-    final oldFoodType = gameState.value.foodType.value;
-    final oldScore = gameState.value.score;
-    final oldObstacleCount = gameState.value.obstacles.length;
-    final oldObstacles = List<IntVector2>.from(gameState.value.obstacles);
-    final oldBonusCount = gameState.value.activeBonusEffects.length;
-
-    gameState.value = gameLogic.updateGame(gameState.value);
+  void _processGameUpdate(GameState oldState) {
+    final oldFoodType = oldState.foodType.value;
+    final oldScore = oldState.score;
+    final oldObstacleCount = oldState.obstacles.length;
+    final oldObstacles = List<IntVector2>.from(oldState.obstacles);
+    final oldBonusCount = oldState.activeBonusEffects.length;
 
     _snakeComponent.updateGameState(gameState.value);
     _snakeComponent.animationDuration = _calculateGameSpeed(gameState.value.score) / 1000.0;
 
-    // Check if bonus effects expired
     if (oldBonusCount != gameState.value.activeBonusEffects.length) {
-      // Force rebuild by reassigning
       final temp = gameState.value.clone();
       gameState.value = temp;
     }
 
-    // Check if obstacles were destroyed
     if (oldObstacleCount != gameState.value.obstacles.length) {
-      // Find which obstacle was destroyed
       final destroyedObstacle = _findDestroyedObstacle(oldObstacles, gameState.value.obstacles);
       if (destroyedObstacle != null) {
         _triggerRockExplosion(destroyedObstacle);
@@ -349,30 +359,23 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       _updateObstacles();
     }
 
-    if (oldScore < gameState.value.score) {
+    if (oldScore != gameState.value.score) {
       onScoreChanged?.call();
-      switch (oldFoodType) {
-        case FoodType.regular:
-          if (Platform.isAndroid || Platform.isIOS) {
-            Vibration.vibrate(duration: _vibrationDurationShort);
-          }
-          break;
-        case FoodType.golden:
-          if (Platform.isAndroid || Platform.isIOS) {
-            Vibration.vibrate(duration: _vibrationDurationShort, amplitude: _vibrationAmplitudeHigh);
-          }
-          break;
-        case FoodType.rotten:
-          break;
-      }
-    } else if (oldScore > gameState.value.score) {
-      onScoreChanged?.call();
-      if (Platform.isAndroid || Platform.isIOS) {
-        Vibration.vibrate(duration: _vibrationDurationMedium, amplitude: _vibrationAmplitudeHigh);
-      }
-      await Future.delayed(const Duration(milliseconds: _vibrationDurationMedium));
-      if (Platform.isAndroid || Platform.isIOS) {
-        Vibration.vibrate(duration: _vibrationDurationMedium, amplitude: _vibrationAmplitudeHigh);
+      if (gameState.value.score > oldScore) {
+        switch (oldFoodType) {
+          case FoodType.regular:
+            if (Platform.isAndroid || Platform.isIOS) Vibration.vibrate(duration: _vibrationDurationShort);
+            break;
+          case FoodType.golden:
+            if (Platform.isAndroid || Platform.isIOS) Vibration.vibrate(duration: _vibrationDurationShort, amplitude: _vibrationAmplitudeHigh);
+            break;
+          default:
+            break;
+        }
+      } else {
+        if (Platform.isAndroid || Platform.isIOS) {
+          Vibration.vibrate(duration: _vibrationDurationMedium, amplitude: _vibrationAmplitudeHigh);
+        }
       }
     }
 
@@ -381,7 +384,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     _foodComponent = SpriteComponent(sprite: _getFoodSprite(gameState.value.foodType.value), position: _foodComponent.position, size: Vector2.all(cellSize));
     add(_foodComponent);
 
-    // Update bonus component
     if (gameState.value.activeBonus != null && _bonusComponent == null) {
       _bonusComponent = SpriteComponent(
         sprite: bonusSprites[gameState.value.activeBonus!.type]!,
@@ -394,21 +396,75 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       _bonusComponent = null;
       onBonusCollected?.call();
     }
+  }
 
-    if (!wasGameOver && gameState.value.isGameOver) {
-      pauseEngine();
-      if (Platform.isAndroid || Platform.isIOS) {
-        Vibration.vibrate(duration: _vibrationDurationLong);
-      }
-      final bool isVictory = gameState.value.score >= victoryScoreThreshold;
-      CollectibleCard? wonCard;
-
-      if (isVictory) {
-        gamificationService.saveGameScore('Snake', gameState.value.score);
-        wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
-      }
-      onGameEnd(gameState.value.score, isVictory: isVictory, wonCard: wonCard);
+  void _processGameOver() async {
+    gameState.value.isGameOver = true;
+    gameState.value.isGameRunning = false;
+    pauseEngine();
+    if (Platform.isAndroid || Platform.isIOS) {
+      Vibration.vibrate(duration: _vibrationDurationLong);
     }
+    final bool isVictory = gameState.value.score >= victoryScoreThreshold;
+    CollectibleCard? wonCard;
+
+    if (isVictory) {
+      gamificationService.saveGameScore('Snake', gameState.value.score);
+      wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+    }
+    onGameEnd(gameState.value.score, isVictory: isVictory, wonCard: wonCard);
+  }
+
+  void tick() async {
+    if (gameState.value.isGameOver) {
+      _processGameOver();
+      return;
+    }
+
+    final oldState = gameState.value.clone();
+    final newState = gameLogic.updateGame(oldState.clone());
+
+    if (newState.pendingGameOver) {
+      _preCollisionState = oldState;
+      _inGracePeriod = true;
+      _gracePeriodTimer = 0.0;
+      // Don't pause engine, let the update loop handle the grace period timer
+    }
+
+    gameState.value = newState;
+    _processGameUpdate(oldState);
+  }
+
+  void requestDirectionChange(dp.Direction newDirection) {
+    if (_inGracePeriod) {
+      final tempState = _preCollisionState!.clone();
+      if (gameLogic.performRetrospectiveUpdate(tempState, newDirection)) {
+        _inGracePeriod = false;
+        _gracePeriodTimer = 0.0;
+        gameState.value = tempState;
+        _processGameUpdate(_preCollisionState!);
+        // No need to resume engine as it was never paused
+        timeSinceLastTick = 0;
+      }
+      return;
+    }
+
+    if (!gameState.value.isGameRunning || gameState.value.isGameOver) return;
+
+    if (timeSinceLastTick <= _retroactiveThreshold) {
+      final oldState = gameState.value.clone();
+      if (gameLogic.performRetrospectiveUpdate(gameState.value, newDirection)) {
+        // The state has been surgically altered. We need to process the consequences
+        // of this new state, similar to what tick() does after updateGame().
+        _processGameUpdate(oldState);
+        // We also reset the tick timer because we effectively completed a move.
+        timeSinceLastTick = 0;
+        return; // Early exit
+      }
+    }
+
+    // If retrospective update wasn't possible or applicable, queue for next tick.
+    gameLogic.changeDirection(gameState.value, newDirection);
   }
 
   void _updateObstacles() {
@@ -523,21 +579,22 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     shakeScreen();
   }
 
+
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event is KeyDownEvent) {
       switch (event.logicalKey) {
         case LogicalKeyboardKey.arrowUp:
-          gameLogic.changeDirection(gameState.value, dp.Direction.up);
+          requestDirectionChange(dp.Direction.up);
           break;
         case LogicalKeyboardKey.arrowDown:
-          gameLogic.changeDirection(gameState.value, dp.Direction.down);
+          requestDirectionChange(dp.Direction.down);
           break;
         case LogicalKeyboardKey.arrowLeft:
-          gameLogic.changeDirection(gameState.value, dp.Direction.left);
+          requestDirectionChange(dp.Direction.left);
           break;
         case LogicalKeyboardKey.arrowRight:
-          gameLogic.changeDirection(gameState.value, dp.Direction.right);
+          requestDirectionChange(dp.Direction.right);
           break;
         case LogicalKeyboardKey.keyR:
           resetGame();

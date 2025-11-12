@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/data/app_data.dart';
+
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/models/deity.dart';
 import 'package:oracle_d_asgard/screens/profile/deity_selection_screen.dart';

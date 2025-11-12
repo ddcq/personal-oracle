@@ -16,8 +16,11 @@ class GameScoresPodium extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (scores.isEmpty) {
+      final translationKey = gameName == 'Snake' 
+          ? 'profile_screen_no_snake_scores' 
+          : 'profile_screen_no_asgard_wall_scores';
       return Text(
-        gameName == 'Snake' ? 'profile_screen_no_snake_scores'.tr() : 'Aucun score pour $gameName',
+        translationKey.tr(),
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
         textAlign: TextAlign.center,
       );

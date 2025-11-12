@@ -131,7 +131,6 @@ class _SnakeGameState extends State<SnakeGame> {
 
   void _onGameEnd(int score, {required bool isVictory, CollectibleCard? wonCard}) async {
     if (isVictory) {
-      getIt<GamificationService>().saveGameScore('Snake', score);
       final rewardCard = wonCard ?? await getIt<GamificationService>().selectRandomUnearnedCollectibleCard();
       _showVictoryDialog(rewardCard);
     } else {
@@ -333,9 +332,7 @@ class _SnakeGameState extends State<SnakeGame> {
                             children: [
                               JoystickController(
                                 onDirectionChanged: (direction) {
-                                  if (_safeGameStateValue != null) {
-                                    _game!.gameLogic.changeDirection(_safeGameStateValue!, direction);
-                                  }
+                                  _game?.requestDirectionChange(direction);
                                 },
                               ),
                               const SizedBox(height: 16),
@@ -365,9 +362,7 @@ class _SnakeGameState extends State<SnakeGame> {
                             children: [
                               JoystickController(
                                 onDirectionChanged: (direction) {
-                                  if (_safeGameStateValue != null) {
-                                    _game!.gameLogic.changeDirection(_safeGameStateValue!, direction);
-                                  }
+                                  _game?.requestDirectionChange(direction);
                                 },
                               ),
                               const SizedBox(width: 16),
@@ -405,7 +400,7 @@ class _SnakeGameState extends State<SnakeGame> {
           return Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.5),
+              color: Colors.black.withAlpha(128),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Column(
@@ -471,21 +466,17 @@ class _SnakeGameState extends State<SnakeGame> {
                       swipeDetectionBehavior: SwipeDetectionBehavior.singularOnEnd,
                     ),
                     onVerticalSwipe: (direction) {
-                      if (_safeGameStateValue != null) {
-                        if (direction == SwipeDirection.down) {
-                          _game!.gameLogic.changeDirection(_safeGameStateValue!, Direction.down);
-                        } else if (direction == SwipeDirection.up) {
-                          _game!.gameLogic.changeDirection(_safeGameStateValue!, Direction.up);
-                        }
+                      if (direction == SwipeDirection.down) {
+                        _game?.requestDirectionChange(Direction.down);
+                      } else if (direction == SwipeDirection.up) {
+                        _game?.requestDirectionChange(Direction.up);
                       }
                     },
                     onHorizontalSwipe: (direction) {
-                      if (_safeGameStateValue != null) {
-                        if (direction == SwipeDirection.right) {
-                          _game!.gameLogic.changeDirection(_safeGameStateValue!, Direction.right);
-                        } else if (direction == SwipeDirection.left) {
-                          _game!.gameLogic.changeDirection(_safeGameStateValue!, Direction.left);
-                        }
+                      if (direction == SwipeDirection.right) {
+                        _game?.requestDirectionChange(Direction.right);
+                      } else if (direction == SwipeDirection.left) {
+                        _game?.requestDirectionChange(Direction.left);
                       }
                     },
                     onDoubleTap: () {

@@ -390,34 +390,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       body: AppBackground(
-        child: FutureBuilder<List<dynamic>>(
-          future: _mainDataFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('${'profile_screen_error_prefix'.tr()}: ${snapshot.error}'));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('profile_screen_no_data_available'.tr()));
-            } else {
-              final List<Map<String, dynamic>> snakeScores = snapshot.data![0];
-              final List<CollectibleCard> unlockedCards = snapshot.data![1];
-              final List<Map<String, dynamic>> storyProgress = snapshot.data![2];
-              final String? savedName = snapshot.data![3];
-              final String? savedDeityIconId = snapshot.data![4];
-              final List<Map<String, dynamic>> asgardWallScores = snapshot.data![5];
+        child: Container(
+          color: Colors.black.withAlpha(128),
+          child: FutureBuilder<List<dynamic>>(
+            future: _mainDataFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('${'profile_screen_error_prefix'.tr()}: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text('profile_screen_no_data_available'.tr()));
+              } else {
+                final List<Map<String, dynamic>> snakeScores = snapshot.data![0];
+                final List<CollectibleCard> unlockedCards = snapshot.data![1];
+                final List<Map<String, dynamic>> storyProgress = snapshot.data![2];
+                final String? savedName = snapshot.data![3];
+                final String? savedDeityIconId = snapshot.data![4];
+                final List<Map<String, dynamic>> asgardWallScores = snapshot.data![5];
 
-              if (_profileName == null && savedName != null) {
-                _profileName = savedName;
-              }
-              if (_selectedDeityId == null && savedDeityIconId != null) {
-                _selectedDeityId = savedDeityIconId;
-              }
+                if (_profileName == null && savedName != null) {
+                  _profileName = savedName;
+                }
+                if (_selectedDeityId == null && savedDeityIconId != null) {
+                  _selectedDeityId = savedDeityIconId;
+                }
 
-              return ListView(
-                padding: EdgeInsets.only(top: kToolbarHeight, left: 16.0, right: 16.0, bottom: 16.0),
-                children: [
-                  FutureBuilder<List<Map<String, dynamic>>>(
+                return ListView(
+                  padding: EdgeInsets.only(top: kToolbarHeight, left: 16.0, right: 16.0, bottom: 16.0),
+                  children: [
+                    FutureBuilder<List<Map<String, dynamic>>>(
                     future: _quizResultsFuture,
                     builder: (context, quizSnapshot) {
                       if (quizSnapshot.connectionState == ConnectionState.waiting) {
@@ -496,6 +498,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             }
           },
+        ),
         ),
       ),
     );

@@ -614,5 +614,6 @@
   "word_search_screen_rule_3": "Sélectionnez les lettres en faisant glisser votre doigt sur la grille.",
   "word_search_screen_rule_4": "Une fois tous les mots trouvés, un mot secret vous sera demandé.",
   "word_search_screen_rule_5": "Utilisez les lettres restantes pour former le mot secret et valider votre victoire.",
-  "word_search_screen_title": "L'Œil d'Odin"
+  "word_search_screen_title": "L'Œil d'Odin",
+  "profile_screen_no_asgard_wall_scores": "Aucun score de la Muraille d'Asgard pour l'instant."
 }
