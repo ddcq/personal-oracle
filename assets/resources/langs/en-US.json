@@ -615,5 +615,15 @@
   "word_search_screen_rule_3": "Select letters by sliding your finger across the grid.",
   "word_search_screen_rule_4": "Once all words are found, a secret word will be requested.",
   "word_search_screen_rule_5": "Use the remaining letters to form the secret word and confirm your victory.",
-  "word_search_screen_title": "Odin's Eye"
+  "word_search_screen_title": "Odin's Eye",
+  "snake_bonus_speed_name": "Speed",
+  "snake_bonus_speed_effect": "+30% faster",
+  "snake_bonus_shield_name": "Shield",
+  "snake_bonus_shield_effect": "Destroy obstacles",
+  "snake_bonus_freeze_name": "Freeze",
+  "snake_bonus_freeze_effect": "-30% slower",
+  "snake_bonus_ghost_name": "Ghost",
+  "snake_bonus_ghost_effect": "Pass through obstacles",
+  "snake_bonus_duration": "Effects last 8 seconds",
+  "snake_bonus_title": "Bonus:"
 }

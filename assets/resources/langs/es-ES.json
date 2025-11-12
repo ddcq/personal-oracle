@@ -615,5 +615,15 @@
   "word_search_screen_rule_4": "Una vez encontradas todas las palabras, se pedirá una palabra secreta.",
   "word_search_screen_rule_5": "Usa las letras restantes para formar la palabra secreta y confirma tu victoria.",
   "word_search_screen_title": "El Ojo de Odín",
-  "profile_screen_no_asgard_wall_scores": "Aún no hay puntuaciones del Muro de Asgard."
+  "profile_screen_no_asgard_wall_scores": "Aún no hay puntuaciones del Muro de Asgard.",
+  "snake_bonus_speed_name": "Velocidad",
+  "snake_bonus_speed_effect": "+30% más rápido",
+  "snake_bonus_shield_name": "Escudo",
+  "snake_bonus_shield_effect": "Destruye obstáculos",
+  "snake_bonus_freeze_name": "Congelación",
+  "snake_bonus_freeze_effect": "-30% más lento",
+  "snake_bonus_ghost_name": "Fantasma",
+  "snake_bonus_ghost_effect": "Atraviesa obstáculos",
+  "snake_bonus_duration": "Los efectos duran 8 segundos",
+  "snake_bonus_title": "Bonus:"
 }

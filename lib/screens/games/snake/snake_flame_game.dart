@@ -20,7 +20,6 @@ import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
-
 class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final GamificationService gamificationService;
   final Function(int, {required bool isVictory, CollectibleCard? wonCard}) onGameEnd;
@@ -56,9 +55,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const int _vibrationDurationLong = 500;
   static const int _vibrationAmplitudeHigh = 255;
   static const int victoryScoreThreshold = 100;
-  static const int _minGameSpeed = 200;
+  static const int _minGameSpeed = 100;
   static const double _gracePeriodDuration = 0.1; // 100 milliseconds
-  static const double _retroactiveThreshold = 0.1; // 100 milliseconds
 
   late final GameLogic gameLogic;
   ValueNotifier<GameState>? _gameState;
@@ -71,6 +69,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     }
     return _gameState!;
   }
+
   late final ValueNotifier<double> remainingFoodTime = ValueNotifier<double>(0);
   bool _isLoaded = false;
 
@@ -451,19 +450,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     if (!gameState.value.isGameRunning || gameState.value.isGameOver) return;
 
-    if (timeSinceLastTick <= _retroactiveThreshold) {
-      final oldState = gameState.value.clone();
-      if (gameLogic.performRetrospectiveUpdate(gameState.value, newDirection)) {
-        // The state has been surgically altered. We need to process the consequences
-        // of this new state, similar to what tick() does after updateGame().
-        _processGameUpdate(oldState);
-        // We also reset the tick timer because we effectively completed a move.
-        timeSinceLastTick = 0;
-        return; // Early exit
-      }
-    }
-
-    // If retrospective update wasn't possible or applicable, queue for next tick.
+    // Queue direction change for next tick
     gameLogic.changeDirection(gameState.value, newDirection);
   }
 
@@ -493,7 +480,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       if (i + 3 < oldObstacles.length) {
         final oldBlock = oldObstacles.getRange(i, i + 4).toList();
         final blockStillExists = oldBlock.every((pos) => newObstacles.contains(pos));
-        
+
         if (!blockStillExists) {
           // Return the top-left position of the destroyed obstacle
           return oldBlock[0];
@@ -513,10 +500,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     soundService.playSoundEffect('audio/explode.mp3');
 
     // Step 1: Flash effect
-    final flashEffect = FlashEffect(
-      position: position,
-      size: size,
-    );
+    final flashEffect = FlashEffect(position: position, size: size);
     add(flashEffect);
 
     // Step 2: Rock fragments - split rock into 4 pieces
@@ -525,17 +509,17 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     // Create 4 fragments (top-left, top-right, bottom-left, bottom-right)
     final fragmentOffsets = [
-      Vector2(0, 0),           // Top-left
-      Vector2(cellSize, 0),    // Top-right
-      Vector2(0, cellSize),    // Bottom-left
+      Vector2(0, 0), // Top-left
+      Vector2(cellSize, 0), // Top-right
+      Vector2(0, cellSize), // Bottom-left
       Vector2(cellSize, cellSize), // Bottom-right
     ];
 
     final fragmentVelocities = [
-      Vector2(-80, -80),  // Top-left flies up-left
-      Vector2(80, -80),   // Top-right flies up-right
-      Vector2(-80, 80),   // Bottom-left flies down-left
-      Vector2(80, 80),    // Bottom-right flies down-right
+      Vector2(-80, -80), // Top-left flies up-left
+      Vector2(80, -80), // Top-right flies up-right
+      Vector2(-80, 80), // Bottom-left flies down-left
+      Vector2(80, 80), // Bottom-right flies down-right
     ];
 
     for (int i = 0; i < 4; i++) {
@@ -561,10 +545,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     for (int i = 0; i < particleCount; i++) {
       final angle = (i / particleCount) * 2 * pi + random.nextDouble() * 0.5;
       final speed = 100 + random.nextDouble() * 100; // 100-200 pixels/sec
-      final velocity = Vector2(
-        cos(angle) * speed,
-        sin(angle) * speed,
-      );
+      final velocity = Vector2(cos(angle) * speed, sin(angle) * speed);
 
       final debris = DebrisParticle(
         position: center.clone(),
@@ -578,7 +559,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     // Step 4: Camera shake
     shakeScreen();
   }
-
 
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {

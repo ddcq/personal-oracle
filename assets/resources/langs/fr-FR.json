@@ -615,5 +615,15 @@
   "word_search_screen_rule_4": "Une fois tous les mots trouvés, un mot secret vous sera demandé.",
   "word_search_screen_rule_5": "Utilisez les lettres restantes pour former le mot secret et valider votre victoire.",
   "word_search_screen_title": "L'Œil d'Odin",
-  "profile_screen_no_asgard_wall_scores": "Aucun score de la Muraille d'Asgard pour l'instant."
+  "profile_screen_no_asgard_wall_scores": "Aucun score de la Muraille d'Asgard pour l'instant.",
+  "snake_bonus_speed_name": "Vitesse",
+  "snake_bonus_speed_effect": "+30% plus rapide",
+  "snake_bonus_shield_name": "Bouclier",
+  "snake_bonus_shield_effect": "Détruit les obstacles",
+  "snake_bonus_freeze_name": "Gel",
+  "snake_bonus_freeze_effect": "-30% plus lent",
+  "snake_bonus_ghost_name": "Fantôme",
+  "snake_bonus_ghost_effect": "Traverse les obstacles",
+  "snake_bonus_duration": "Les effets durent 8 secondes",
+  "snake_bonus_title": "Bonus :"
 }

@@ -264,7 +264,7 @@ class GameLogic {
     }
     newSnake.add(SnakeSegment(position: state.snake.first.position, type: 'body', subPattern: oldHeadSubPattern));
 
-    // 3. Add the rest of the body segments (from state.snake[1] onwards)
+    // 3. Add the rest of the body segments (from state.snake[1] onwards, excluding the old head at index 0)
     // These segments keep their position and pattern.
     for (int i = 1; i < state.snake.length; i++) {
       newSnake.add(state.snake[i].clone());
@@ -273,15 +273,17 @@ class GameLogic {
     // 4. Handle food consumption and tail removal
     if (foodEaten) {
       generateNewFood(state, newSnake.map((s) => s.position).toList());
+      // Keep all segments when eating - the snake grows by 1
     } else {
-      // If not eating, remove the last segment
-      newSnake.removeLast();
+      // If not eating, remove the last segment to maintain length
       if (newSnake.length > 1) {
-        // Ensure there's a tail to modify
-        final lastSegment = newSnake.last;
-        // The subPattern should already be set from when it was a body segment.
-        lastSegment.type = 'tail'; // Change type to 'tail'
+        newSnake.removeLast();
       }
+    }
+    
+    // 5. Set the tail type on the last segment
+    if (newSnake.length > 1) {
+      newSnake.last.type = 'tail';
     }
 
     state.snake = newSnake;
@@ -535,16 +537,19 @@ class GameLogic {
 
     newSnake.addAll(state.snake.sublist(2));
 
-    // 8. Handle tail removal/growth
-    if (!newMoveAteFood) {
-      if (newSnake.isNotEmpty) {
-        newSnake.removeLast();
-      }
+    // 8. Handle food consumption and tail management
+    if (newMoveAteFood) {
+      generateNewFood(state, newSnake.map((s) => s.position).toList());
+      // Snake grows by 1 - keep all segments
     }
+    // Note: We do NOT remove the last segment when not eating in retrospective update
+    // because we're replacing the last move, not adding a new move
+    
+    // 9. Set the tail type
     if (newSnake.length > 1) {
       newSnake.last.type = 'tail';
     } else if (newSnake.length == 1) {
-      newSnake.first.type = 'head'; // Ensure it's a head if it's the only segment
+      newSnake.first.type = 'head';
     }
 
     // 9. Update the state object

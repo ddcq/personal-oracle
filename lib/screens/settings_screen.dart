@@ -12,6 +12,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
+import 'package:oracle_d_asgard/widgets/app_restart_wrapper.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -204,11 +205,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
               onChanged: (Locale? newLocale) async {
-                if (newLocale != null) {
-                  context.setLocale(newLocale);
+                if (newLocale != null && newLocale != context.locale) {
+                  await context.setLocale(newLocale);
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.setString('language_code', newLocale.languageCode);
                   await prefs.setString('country_code', newLocale.countryCode ?? '');
+                  
+                  // Restart the app to apply language changes everywhere
+                  if (mounted) {
+                    AppRestartWrapper.restartApp(context);
+                  }
                 }
               },
             ),

@@ -8,26 +8,22 @@ import 'package:oracle_d_asgard/screens/games/snake/main_screen.dart';
 class SnakePreliminaryScreen extends StatelessWidget {
   const SnakePreliminaryScreen({super.key});
 
-  static Widget _buildBonusInfo(IconData icon, Color color, String name, String effect) {
+  static Widget _buildBonusInfo(String imagePath, String nameKey, String effectKey) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
+        Image.asset(
+          imagePath,
           width: 24,
           height: 24,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, size: 14, color: Colors.white),
         ),
         const SizedBox(width: 8),
         Text(
-          '$name: ',
+          '${nameKey.tr()}: ',
           style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
         ),
         Text(
-          effect,
+          effectKey.tr(),
           style: const TextStyle(color: Colors.white70, fontSize: 14),
         ),
       ],
@@ -53,22 +49,22 @@ class SnakePreliminaryScreen extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
-          const Text(
-            'Bonus:',
-            style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          Text(
+            'snake_bonus_title'.tr(),
+            style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
-          _buildBonusInfo(Icons.flash_on, Colors.yellow, 'Speed', '+30% faster'),
+          _buildBonusInfo('assets/images/snake/speed.png', 'snake_bonus_speed_name', 'snake_bonus_speed_effect'),
           const SizedBox(height: 8),
-          _buildBonusInfo(Icons.shield, Colors.blue, 'Shield', 'Destroy obstacles'),
+          _buildBonusInfo('assets/images/snake/shield.png', 'snake_bonus_shield_name', 'snake_bonus_shield_effect'),
           const SizedBox(height: 8),
-          _buildBonusInfo(Icons.ac_unit, Colors.cyan, 'Freeze', '-30% slower'),
+          _buildBonusInfo('assets/images/snake/freeze.png', 'snake_bonus_freeze_name', 'snake_bonus_freeze_effect'),
           const SizedBox(height: 8),
-          _buildBonusInfo(Icons.visibility_off, Colors.grey, 'Ghost', 'Pass through obstacles'),
+          _buildBonusInfo('assets/images/snake/ghost.png', 'snake_bonus_ghost_name', 'snake_bonus_ghost_effect'),
           const SizedBox(height: 8),
-          const Text(
-            'Effects last 8 seconds',
-            style: TextStyle(color: Colors.white70, fontSize: 12, fontStyle: FontStyle.italic),
+          Text(
+            'snake_bonus_duration'.tr(),
+            style: const TextStyle(color: Colors.white70, fontSize: 12, fontStyle: FontStyle.italic),
           ),
         ],
       ),

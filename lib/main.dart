@@ -18,6 +18,7 @@ import 'package:oracle_d_asgard/services/cache_service.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/router.dart'; // Import the router
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:oracle_d_asgard/widgets/app_restart_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,13 +34,15 @@ void main() async {
   setupLocator();
 
   runApp(
-    EasyLocalization(
-      supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR'), Locale('es', 'ES')],
-      path: 'assets/resources/langs',
-      fallbackLocale: const Locale('en', 'US'),
-      child: ChangeNotifierProvider(
-        create: (context) => ThemeProvider(),
-        child: const MyApp(),
+    AppRestartWrapper(
+      child: EasyLocalization(
+        supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR'), Locale('es', 'ES')],
+        path: 'assets/resources/langs',
+        fallbackLocale: const Locale('en', 'US'),
+        child: ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+          child: const MyApp(),
+        ),
       ),
     ),
   );
