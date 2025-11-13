@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/services/sound_service.dart';
 
 class Cell {
   bool isRevealed = false;
@@ -147,12 +149,16 @@ class MinesweeperController with ChangeNotifier {
     // First click on an unrevealed cell
     board[row][col].isRevealed = true; // Mark as revealed
 
+    final soundService = getIt<SoundService>();
+
     if (board[row][col].hasMine) {
       isGameOver = true;
       _revealAll();
+      soundService.playSoundEffect('audio/dramatic.mp3');
     } else if (board[row][col].hasTreasure) {
       // First click on a treasure, just reveal it. Do nothing else.
       // The second click will be handled by the 'if (board[row][col].isRevealed)' block above.
+      soundService.playSoundEffect('audio/coin.mp3');
     } else if (board[row][col].adjacentMines == 0 &&
         board[row][col].adjacentTreasures == 0) {
       _forEachAdjacentCell(row, col, (newRow, newCol) {
