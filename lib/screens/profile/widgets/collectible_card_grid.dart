@@ -35,7 +35,12 @@ class CollectibleCardGrid extends StatelessWidget {
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 1.0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            childAspectRatio: 1.0,
+          ),
           itemCount: 1,
           itemBuilder: (context, index) {
             return adRewardButton;
@@ -44,7 +49,11 @@ class CollectibleCardGrid extends StatelessWidget {
       } else {
         return Text(
           'profile_screen_no_collectible_cards'.tr(),
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: 'AmaticSC', fontSize: 20),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: Colors.white70,
+            fontFamily: 'AmaticSC',
+            fontSize: 20,
+          ),
         );
       }
     }
@@ -59,7 +68,8 @@ class CollectibleCardGrid extends StatelessWidget {
       if (existingCard == null) {
         highestTierCards[card.title] = card;
       } else {
-        final existingCardPriority = tierPriority[existingCard.version.name] ?? 0;
+        final existingCardPriority =
+            tierPriority[existingCard.version.name] ?? 0;
         if (currentCardPriority > existingCardPriority) {
           highestTierCards[card.title] = card;
         }
@@ -82,17 +92,28 @@ class CollectibleCardGrid extends StatelessWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 1.0),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 1.0,
+      ),
       itemCount: filteredCards.length + (adRewardButton != null ? 1 : 0),
       itemBuilder: (context, index) {
         if (index < filteredCards.length) {
           final collectibleCard = filteredCards[index];
           return InteractiveCollectibleCard(
-            card: collectibleCard,
-            playVideo: false,
-          ).animate(delay: (index * 50).ms).slideY(begin: 0.2, duration: 400.ms, curve: Curves.easeOutCubic).fadeIn(duration: 300.ms);
+                card: collectibleCard,
+                playVideo: false,
+              )
+              .animate(delay: (index * 50).ms)
+              .slideY(begin: 0.2, duration: 400.ms, curve: Curves.easeOutCubic)
+              .fadeIn(duration: 300.ms);
         } else {
-          return adRewardButton!.animate(delay: (index * 50).ms).slideY(begin: 0.2, duration: 400.ms, curve: Curves.easeOutCubic).fadeIn(duration: 300.ms);
+          return adRewardButton!
+              .animate(delay: (index * 50).ms)
+              .slideY(begin: 0.2, duration: 400.ms, curve: Curves.easeOutCubic)
+              .fadeIn(duration: 300.ms);
         }
       },
     );

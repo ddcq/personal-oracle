@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart'; // For Offset
 import 'package:flame/components.dart'; // For Vector2
 
@@ -15,22 +13,32 @@ class IntVector2 {
   }
 
   // Opérations arithmétiques
-  IntVector2 operator +(IntVector2 other) => IntVector2(x + other.x, y + other.y);
-  IntVector2 operator -(IntVector2 other) => IntVector2(x - other.x, y - other.y);
-  IntVector2 operator *(IntVector2 other) => IntVector2(x * other.x, y * other.y);
+  IntVector2 operator +(IntVector2 other) =>
+      IntVector2(x + other.x, y + other.y);
+  IntVector2 operator -(IntVector2 other) =>
+      IntVector2(x - other.x, y - other.y);
+  IntVector2 operator *(IntVector2 other) =>
+      IntVector2(x * other.x, y * other.y);
 
   IntVector2 operator -() => IntVector2(-x, -y);
 
   // Comparaison
   @override
-  bool operator ==(Object other) => identical(this, other) || other is IntVector2 && runtimeType == other.runtimeType && x == other.x && y == other.y;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is IntVector2 &&
+          runtimeType == other.runtimeType &&
+          x == other.x &&
+          y == other.y;
 
   @override
   int get hashCode => Object.hash(x, y);
 
   // Utilitaires
   double get magnitude => (x * x + y * y).toDouble();
-  int get magnitudeSquared => (x * x + y * y); // Utile pour les comparaisons de distance sans racine carrée
+  int get magnitudeSquared =>
+      (x * x +
+      y * y); // Utile pour les comparaisons de distance sans racine carrée
 
   // Clamp the vector within given bounds
   IntVector2 clamp(int minX, int maxX, int minY, int maxY) {

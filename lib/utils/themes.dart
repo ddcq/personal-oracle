@@ -15,12 +15,22 @@ class AppThemes {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: TextStyle(fontFamily: AppTextStyles.amaticSC, color: AppConstants.accent, fontSize: 20, fontWeight: FontWeight.bold),
+        titleTextStyle: TextStyle(
+          fontFamily: AppTextStyles.amaticSC,
+          color: AppConstants.accent,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       ),
 
       // Elevated Button theme
       elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusMedium))),
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
+          ),
+        ),
       ),
 
       // Card theme
@@ -35,16 +45,39 @@ class AppThemes {
 
       // Text themes
       textTheme: const TextTheme(
-        headlineLarge: TextStyle(color: AppConstants.accent, fontSize: 36, fontWeight: FontWeight.bold),
-        headlineMedium: TextStyle(color: AppConstants.textDark, fontSize: 24, fontWeight: FontWeight.bold),
-        headlineSmall: TextStyle(color: AppConstants.accent, fontSize: 20, fontWeight: FontWeight.bold),
-        bodyLarge: TextStyle(color: AppConstants.textDark, fontSize: 16, height: 1.5),
-        bodyMedium: TextStyle(color: AppConstants.textDark, fontSize: 14, height: 1.5),
+        headlineLarge: TextStyle(
+          color: AppConstants.accent,
+          fontSize: 36,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineMedium: TextStyle(
+          color: AppConstants.textDark,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineSmall: TextStyle(
+          color: AppConstants.accent,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        bodyLarge: TextStyle(
+          color: AppConstants.textDark,
+          fontSize: 16,
+          height: 1.5,
+        ),
+        bodyMedium: TextStyle(
+          color: AppConstants.textDark,
+          fontSize: 14,
+          height: 1.5,
+        ),
         bodySmall: TextStyle(color: AppConstants.textDark, fontSize: 12),
       ),
 
       // Progress indicator theme
-      progressIndicatorTheme: const ProgressIndicatorThemeData(color: AppConstants.accent, linearTrackColor: AppConstants.cardDark),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: AppConstants.accent,
+        linearTrackColor: AppConstants.cardDark,
+      ),
     );
   }
 
@@ -60,12 +93,22 @@ class AppThemes {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: TextStyle(fontFamily: AppTextStyles.amaticSC, color: AppConstants.accent, fontSize: 20, fontWeight: FontWeight.bold),
+        titleTextStyle: TextStyle(
+          fontFamily: AppTextStyles.amaticSC,
+          color: AppConstants.accent,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       ),
 
       // Elevated Button theme
       elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppConstants.radiusMedium))),
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
+          ),
+        ),
       ),
 
       // Card theme
@@ -80,16 +123,39 @@ class AppThemes {
 
       // Text themes
       textTheme: const TextTheme(
-        headlineLarge: TextStyle(color: AppConstants.accent, fontSize: 36, fontWeight: FontWeight.bold),
-        headlineMedium: TextStyle(color: AppConstants.textLight, fontSize: 24, fontWeight: FontWeight.bold),
-        headlineSmall: TextStyle(color: AppConstants.accent, fontSize: 20, fontWeight: FontWeight.bold),
-        bodyLarge: TextStyle(color: AppConstants.textLight, fontSize: 16, height: 1.5),
-        bodyMedium: TextStyle(color: AppConstants.textLight, fontSize: 14, height: 1.5),
+        headlineLarge: TextStyle(
+          color: AppConstants.accent,
+          fontSize: 36,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineMedium: TextStyle(
+          color: AppConstants.textLight,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineSmall: TextStyle(
+          color: AppConstants.accent,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        bodyLarge: TextStyle(
+          color: AppConstants.textLight,
+          fontSize: 16,
+          height: 1.5,
+        ),
+        bodyMedium: TextStyle(
+          color: AppConstants.textLight,
+          fontSize: 14,
+          height: 1.5,
+        ),
         bodySmall: TextStyle(color: AppConstants.textLight, fontSize: 12),
       ),
 
       // Progress indicator theme
-      progressIndicatorTheme: const ProgressIndicatorThemeData(color: AppConstants.accent, linearTrackColor: AppConstants.cardLight),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: AppConstants.accent,
+        linearTrackColor: AppConstants.cardLight,
+      ),
     );
   }
 }

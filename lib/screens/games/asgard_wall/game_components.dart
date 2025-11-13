@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+
 /// Widget d'aperçu des prochaines pièces
 class NextPiecesPreview extends StatelessWidget {
   final List<int> nextPieces;
   final List<Color> nextPieceColors;
-  final List<List<List<List<bool>>>> piecesData; // Passer les données des pièces
+  final List<List<List<List<bool>>>>
+  piecesData; // Passer les données des pièces
   final List<String> pieceImageNames;
   final int currentScore;
 
@@ -24,7 +26,10 @@ class NextPiecesPreview extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF0F3460), // Couleur de fond du conteneur
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFFFD700), width: 1), // Bordure dorée
+        border: Border.all(
+          color: const Color(0xFFFFD700),
+          width: 1,
+        ), // Bordure dorée
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -12,5 +12,6 @@ abstract class Question with _$Question {
     required List<Answer> answers,
   }) = _Question;
 
-  factory Question.fromJson(Map<String, dynamic> json) => _$QuestionFromJson(json);
+  factory Question.fromJson(Map<String, dynamic> json) =>
+      _$QuestionFromJson(json);
 }

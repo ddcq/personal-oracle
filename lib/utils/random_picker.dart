@@ -6,9 +6,11 @@ class UniqueRandomPicker<T> {
   final Random _random;
 
   /// Creates a new picker with a copy of the provided list.
-  UniqueRandomPicker(List<T> items) 
-      : _items = List<T>.from(items), // Create a copy to avoid modifying the original list
-        _random = Random();
+  UniqueRandomPicker(List<T> items)
+    : _items = List<T>.from(
+        items,
+      ), // Create a copy to avoid modifying the original list
+      _random = Random();
 
   /// Returns `true` if there are still items to pick.
   bool get isNotEmpty => _items.isNotEmpty;

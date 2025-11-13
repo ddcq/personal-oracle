@@ -7,7 +7,8 @@ import 'dart:collection';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 import 'package:oracle_d_asgard/screens/games/qix/player.dart';
-import 'package:oracle_d_asgard/screens/games/qix/constants.dart' as game_constants;
+import 'package:oracle_d_asgard/screens/games/qix/constants.dart'
+    as game_constants;
 import 'package:oracle_d_asgard/screens/games/qix/qix_game.dart';
 import 'package:oracle_d_asgard/screens/games/qix/qix.dart';
 
@@ -44,13 +45,23 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late final Map<IntVector2, Rect> _cellRects;
   late QixComponent _qixComponent;
 
-  ArenaComponent({required this.gridSize, required this.cellSize, this.rewardCardImagePath, required this.snakeHeadImage, required this.difficulty})
-    : super(size: Vector2(gridSize * cellSize, gridSize * cellSize), position: Vector2.zero()) {
+  ArenaComponent({
+    required this.gridSize,
+    required this.cellSize,
+    this.rewardCardImagePath,
+    required this.snakeHeadImage,
+    required this.difficulty,
+  }) : super(
+         size: Vector2(gridSize * cellSize, gridSize * cellSize),
+         position: Vector2.zero(),
+       ) {
     _initializeGrid();
     final Random random = Random();
     final IntVector2 initialQixPosition = IntVector2(
-      _qixInitialPositionPadding + random.nextInt(gridSize - 2 * _qixInitialPositionPadding),
-      _qixInitialPositionPadding + random.nextInt(gridSize - 2 * _qixInitialPositionPadding),
+      _qixInitialPositionPadding +
+          random.nextInt(gridSize - 2 * _qixInitialPositionPadding),
+      _qixInitialPositionPadding +
+          random.nextInt(gridSize - 2 * _qixInitialPositionPadding),
     );
 
     _boundaryPaint = Paint()
@@ -89,7 +100,9 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       // Load a default image if no reward card image is provided
       _rewardCardImage = await game.images.load(_defaultRewardCardImagePath);
     }
-    _undiscoveredAreaImage = await game.images.load('qix/grass.webp'); // Load the image for undiscovered areas
+    _undiscoveredAreaImage = await game.images.load(
+      'qix/grass.webp',
+    ); // Load the image for undiscovered areas
 
     // Pre-calculate sprites for filled areas
     for (int y = 0; y < gridSize; y++) {
@@ -99,7 +112,11 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
         final double sourceWidth = _rewardCardImage.width / gridSize;
         final double sourceHeight = _rewardCardImage.height / gridSize;
 
-        _filledSprites[y * gridSize + x] = Sprite(_rewardCardImage, srcPosition: Vector2(sourceX, sourceY), srcSize: Vector2(sourceWidth, sourceHeight));
+        _filledSprites[y * gridSize + x] = Sprite(
+          _rewardCardImage,
+          srcPosition: Vector2(sourceX, sourceY),
+          srcSize: Vector2(sourceWidth, sourceHeight),
+        );
       }
     }
     calculateFilledPercentage();
@@ -113,7 +130,8 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     bool isInnerCell = x > 0 && x < gridSize - 1 && y > 0 && y < gridSize - 1;
 
     if (isInnerCell && oldValue == game_constants.kGridFree) {
-      if (value == game_constants.kGridEdge || value == game_constants.kGridFilled) {
+      if (value == game_constants.kGridEdge ||
+          value == game_constants.kGridFilled) {
         _nonFreeCells++;
       }
     }
@@ -152,7 +170,10 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   }
 
   void _initializeGrid() {
-    _grid = List.generate(gridSize, (_) => List.generate(gridSize, (_) => game_constants.kGridFree));
+    _grid = List.generate(
+      gridSize,
+      (_) => List.generate(gridSize, (_) => game_constants.kGridFree),
+    );
 
     _boundaryPoints.clear();
     _nonFreeCells = 0; // Initialize to 0 as border cells don’t count
@@ -174,7 +195,12 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     // Pre-calculate Rects for all grid cells
     for (int y = 0; y < gridSize; y++) {
       for (int x = 0; x < gridSize; x++) {
-        _cellRects[IntVector2(x, y)] = Rect.fromLTWH(x * cellSize, y * cellSize, cellSize, cellSize);
+        _cellRects[IntVector2(x, y)] = Rect.fromLTWH(
+          x * cellSize,
+          y * cellSize,
+          cellSize,
+          cellSize,
+        );
       }
     }
   }
@@ -197,17 +223,32 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     return _grid[y][x];
   }
 
-  List<IntVector2> fillArea(List<IntVector2> playerPath, IntVector2 pathStartGridPosition, IntVector2 pathEndGridPosition) {
+  List<IntVector2> fillArea(
+    List<IntVector2> playerPath,
+    IntVector2 pathStartGridPosition,
+    IntVector2 pathEndGridPosition,
+  ) {
     List<IntVector2> newlyFilledPoints = [];
 
     _markPlayerPathAsEdge(playerPath);
 
-    List<List<bool>> visitedCells = List.generate(gridSize, (_) => List.generate(gridSize, (_) => false));
-    List<FloodFillResult> identifiedRegions = _identifyEnclosedRegions(visitedCells);
+    List<List<bool>> visitedCells = List.generate(
+      gridSize,
+      (_) => List.generate(gridSize, (_) => false),
+    );
+    List<FloodFillResult> identifiedRegions = _identifyEnclosedRegions(
+      visitedCells,
+    );
 
-    int qixContainingRegionIndex = identifiedRegions.indexWhere((region) => region.containsQix);
+    int qixContainingRegionIndex = identifiedRegions.indexWhere(
+      (region) => region.containsQix,
+    );
 
-    _fillRegionsExcludingQix(identifiedRegions, qixContainingRegionIndex, newlyFilledPoints);
+    _fillRegionsExcludingQix(
+      identifiedRegions,
+      qixContainingRegionIndex,
+      newlyFilledPoints,
+    );
 
     // After filling, re-evaluate edges that might have become fully enclosed
     // and convert them to filled areas.
@@ -223,7 +264,9 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     }
   }
 
-  List<FloodFillResult> _identifyEnclosedRegions(List<List<bool>> visitedCells) {
+  List<FloodFillResult> _identifyEnclosedRegions(
+    List<List<bool>> visitedCells,
+  ) {
     List<FloodFillResult> identifiedRegions = [];
     for (int y = 0; y < gridSize; y++) {
       for (int x = 0; x < gridSize; x++) {
@@ -238,7 +281,11 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     return identifiedRegions;
   }
 
-  void _fillRegionsExcludingQix(List<FloodFillResult> identifiedRegions, int qixContainingRegionIndex, List<IntVector2> newlyFilledPoints) {
+  void _fillRegionsExcludingQix(
+    List<FloodFillResult> identifiedRegions,
+    int qixContainingRegionIndex,
+    List<IntVector2> newlyFilledPoints,
+  ) {
     for (int i = 0; i < identifiedRegions.length; i++) {
       if (i == qixContainingRegionIndex) continue;
       for (final point in identifiedRegions[i].points) {
@@ -248,14 +295,23 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     }
   }
 
-  void _demoteEnclosedEdges(List<IntVector2> newlyFilledPoints, List<IntVector2> playerPath) {
-    Set<IntVector2> pointsToCheck = _getPointsToCheck(newlyFilledPoints, playerPath);
+  void _demoteEnclosedEdges(
+    List<IntVector2> newlyFilledPoints,
+    List<IntVector2> playerPath,
+  ) {
+    Set<IntVector2> pointsToCheck = _getPointsToCheck(
+      newlyFilledPoints,
+      playerPath,
+    );
     final Set<IntVector2> demotedPoints = {};
     _processPointsForDemotion(pointsToCheck, demotedPoints);
     _boundaryPoints.removeWhere((p) => demotedPoints.contains(p));
   }
 
-  Set<IntVector2> _getPointsToCheck(List<IntVector2> newlyFilledPoints, List<IntVector2> playerPath) {
+  Set<IntVector2> _getPointsToCheck(
+    List<IntVector2> newlyFilledPoints,
+    List<IntVector2> playerPath,
+  ) {
     Set<IntVector2> pointsToCheck = {};
 
     for (IntVector2 filledPoint in newlyFilledPoints) {
@@ -263,8 +319,14 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       for (int dy = -1; dy <= 1; dy++) {
         for (int dx = -1; dx <= 1; dx++) {
           if (dx == 0 && dy == 0) continue;
-          IntVector2 neighbor = IntVector2(filledPoint.x + dx, filledPoint.y + dy);
-          if (neighbor.x >= 0 && neighbor.x < gridSize && neighbor.y >= 0 && neighbor.y < gridSize) {
+          IntVector2 neighbor = IntVector2(
+            filledPoint.x + dx,
+            filledPoint.y + dy,
+          );
+          if (neighbor.x >= 0 &&
+              neighbor.x < gridSize &&
+              neighbor.y >= 0 &&
+              neighbor.y < gridSize) {
             pointsToCheck.add(neighbor);
           }
         }
@@ -274,7 +336,10 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     for (IntVector2 pathPoint in playerPath) {
       pointsToCheck.add(pathPoint);
       for (final neighbor in pathPoint.allNeighbors) {
-        if (neighbor.x >= 0 && neighbor.x < gridSize && neighbor.y >= 0 && neighbor.y < gridSize) {
+        if (neighbor.x >= 0 &&
+            neighbor.x < gridSize &&
+            neighbor.y >= 0 &&
+            neighbor.y < gridSize) {
           pointsToCheck.add(neighbor);
         }
       }
@@ -282,7 +347,10 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     return pointsToCheck;
   }
 
-  void _processPointsForDemotion(Set<IntVector2> pointsToCheck, Set<IntVector2> demotedPoints) {
+  void _processPointsForDemotion(
+    Set<IntVector2> pointsToCheck,
+    Set<IntVector2> demotedPoints,
+  ) {
     for (IntVector2 p in pointsToCheck) {
       int x = p.x;
       int y = p.y;
@@ -290,7 +358,8 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       if (_grid[y][x] == game_constants.kGridEdge) {
         bool isEnclosed = true;
         for (IntVector2 neighbor in p.allNeighbors) {
-          if (neighbor.isInBounds(0, gridSize - 1, 0, gridSize - 1) && _isFree(neighbor)) {
+          if (neighbor.isInBounds(0, gridSize - 1, 0, gridSize - 1) &&
+              _isFree(neighbor)) {
             isEnclosed = false;
             break;
           }
@@ -310,7 +379,9 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     bool containsQix = false;
 
     IntVector2 startPoint = IntVector2(startX, startY);
-    if (!startPoint.isInBounds(0, gridSize - 1, 0, gridSize - 1) || _grid[startY][startX] != game_constants.kGridFree || visited[startY][startX]) {
+    if (!startPoint.isInBounds(0, gridSize - 1, 0, gridSize - 1) ||
+        _grid[startY][startX] != game_constants.kGridFree ||
+        visited[startY][startX]) {
       return FloodFillResult(filledPoints, containsQix);
     }
 
@@ -343,7 +414,9 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       game.updateFilledPercentage(0.0);
       return;
     }
-    game.updateFilledPercentage((_nonFreeCells / (innerGridSize * innerGridSize)));
+    game.updateFilledPercentage(
+      (_nonFreeCells / (innerGridSize * innerGridSize)),
+    );
   }
 
   // Finds the nearest boundary point to a given point
@@ -364,7 +437,8 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   @override
   void update(double dt) {
     super.update(dt);
-    if (game.player.state == PlayerState.onEdge && !_isEdge(game.player.gridPosition)) {
+    if (game.player.state == PlayerState.onEdge &&
+        !_isEdge(game.player.gridPosition)) {
       rescuePlayer(game.player.gridPosition);
     }
   }
@@ -372,10 +446,16 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   @override
   void render(Canvas canvas) {
     // Render the undiscovered area image as a background
-    final Paint backgroundPaint = Paint()..colorFilter = const ColorFilter.mode(Colors.black54, BlendMode.darken);
+    final Paint backgroundPaint = Paint()
+      ..colorFilter = const ColorFilter.mode(Colors.black54, BlendMode.darken);
     canvas.drawImageRect(
       _undiscoveredAreaImage,
-      Rect.fromLTWH(0, 0, _undiscoveredAreaImage.width.toDouble(), _undiscoveredAreaImage.height.toDouble()),
+      Rect.fromLTWH(
+        0,
+        0,
+        _undiscoveredAreaImage.width.toDouble(),
+        _undiscoveredAreaImage.height.toDouble(),
+      ),
       Rect.fromLTWH(0, 0, size.x, size.y),
       backgroundPaint,
     );
@@ -401,9 +481,15 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     // Render current drawing path
     if (_currentDrawingPath.isNotEmpty) {
       final path = Path();
-      path.moveTo(_currentDrawingPath.first.x * cellSize + cellSize / 2, _currentDrawingPath.first.y * cellSize + cellSize / 2);
+      path.moveTo(
+        _currentDrawingPath.first.x * cellSize + cellSize / 2,
+        _currentDrawingPath.first.y * cellSize + cellSize / 2,
+      );
       for (int i = 1; i < _currentDrawingPath.length; i++) {
-        path.lineTo(_currentDrawingPath[i].x * cellSize + cellSize / 2, _currentDrawingPath[i].y * cellSize + cellSize / 2);
+        path.lineTo(
+          _currentDrawingPath[i].x * cellSize + cellSize / 2,
+          _currentDrawingPath[i].y * cellSize + cellSize / 2,
+        );
       }
       canvas.drawPath(path, _pathPaint);
     }

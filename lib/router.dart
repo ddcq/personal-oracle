@@ -63,15 +63,16 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'card_detail',
           builder: (BuildContext context, GoRouterState state) {
-            final card = state.extra as CollectibleCard? ??
-              const CollectibleCard(
-                id: 'default',
-                title: 'Default Card',
-                description: 'A default card',
-                imagePath: 'default.png',
-                tags: [],
-                version: CardVersion.chibi,
-              );
+            final card =
+                state.extra as CollectibleCard? ??
+                const CollectibleCard(
+                  id: 'default',
+                  title: 'Default Card',
+                  description: 'A default card',
+                  imagePath: 'default.png',
+                  tags: [],
+                  version: CardVersion.chibi,
+                );
             return CollectibleCardDetailPage(card: card);
           },
         ),

@@ -11,6 +11,7 @@ class SoundService with ChangeNotifier {
   bool _isMuted = false;
   MusicType _currentMusic = MusicType.none;
   MusicType _previousMusic = MusicType.none;
+  String? currentCardId;
 
   SoundService() {
     _audioPlayer.setReleaseMode(ReleaseMode.loop);
@@ -29,34 +30,45 @@ class SoundService with ChangeNotifier {
     if (!_isMuted) {
       try {
         await _audioPlayer.stop();
-        await _audioPlayer.setReleaseMode(ReleaseMode.loop); // Ensure looping for menu music
+        await _audioPlayer.setReleaseMode(
+          ReleaseMode.loop,
+        ); // Ensure looping for menu music
         await _audioPlayer.setVolume(1.0);
-        await _audioPlayer.play(AssetSource('audio/ambiance.mp3')).timeout(
-          const Duration(seconds: 5),
-          onTimeout: () {
-            debugPrint('Main menu music loading timeout');
-          },
-        );
+        await _audioPlayer
+            .play(AssetSource('audio/ambiance.mp3'))
+            .timeout(
+              const Duration(seconds: 5),
+              onTimeout: () {
+                debugPrint('Main menu music loading timeout');
+              },
+            );
         _currentMusic = MusicType.mainMenu;
+        currentCardId = null;
       } catch (e) {
         debugPrint('Error loading main menu music: $e');
       }
     }
+    notifyListeners();
   }
 
   Future<void> playStoryMusic() async {
     if (!_isMuted) {
       try {
         await _audioPlayer.stop();
-        await _audioPlayer.setReleaseMode(ReleaseMode.loop); // Ensure looping for story music
+        await _audioPlayer.setReleaseMode(
+          ReleaseMode.loop,
+        ); // Ensure looping for story music
         await _audioPlayer.setVolume(0.5);
-        await _audioPlayer.play(AssetSource('audio/reading.mp3')).timeout(
-          const Duration(seconds: 5),
-          onTimeout: () {
-            debugPrint('Story music loading timeout');
-          },
-        );
+        await _audioPlayer
+            .play(AssetSource('audio/reading.mp3'))
+            .timeout(
+              const Duration(seconds: 5),
+              onTimeout: () {
+                debugPrint('Story music loading timeout');
+              },
+            );
         _currentMusic = MusicType.story;
+        currentCardId = null;
       } catch (e) {
         debugPrint('Error loading story music: $e');
       }
@@ -102,6 +114,7 @@ class SoundService with ChangeNotifier {
               },
             );
         _currentMusic = MusicType.card;
+        currentCardId = cardId;
       } catch (e) {
         debugPrint('Error loading card music for $cardId: $e');
         // En cas d'erreur, on reprend la musique précédente
@@ -110,6 +123,7 @@ class SoundService with ChangeNotifier {
         }
       }
     }
+    notifyListeners();
   }
 
   Future<void> resumePreviousMusic() async {
@@ -147,6 +161,7 @@ class SoundService with ChangeNotifier {
     if (_isMuted) {
       _audioPlayer.stop();
       _currentMusic = MusicType.none;
+      currentCardId = null;
     } else {
       playMainMenuMusic();
     }
@@ -159,7 +174,7 @@ class SoundService with ChangeNotifier {
         // Create a new AudioPlayer for each sound effect to allow overlapping
         final player = AudioPlayer();
         await player.play(AssetSource(assetPath));
-        
+
         // Dispose the player when the sound finishes
         player.onPlayerComplete.listen((_) {
           player.dispose();

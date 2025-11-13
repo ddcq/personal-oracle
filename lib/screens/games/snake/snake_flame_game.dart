@@ -22,7 +22,8 @@ import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
 class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final GamificationService gamificationService;
-  final Function(int, {required bool isVictory, CollectibleCard? wonCard}) onGameEnd;
+  final Function(int, {required bool isVictory, CollectibleCard? wonCard})
+  onGameEnd;
   final VoidCallback? onResetGame;
   final VoidCallback? onRottenFoodEaten;
   final VoidCallback? onScoreChanged;
@@ -46,7 +47,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const double _shakeIntensity = 10.0;
   static const int _shakeDurationMs = 200;
   static const int _shakeIntervalMs = 50;
-  static const int _gameSpeedInitial = 300; // milliseconds
+  static const int _gameSpeedInitial = 200; // milliseconds
   static const double _growthAnimationPeriod = 0.15;
   static const double _foodRottingTimeBase = 12.0;
   static const double _foodRottingTimeLevelFactor = 0.5;
@@ -56,7 +57,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const int _vibrationAmplitudeHigh = 255;
   static const int victoryScoreThreshold = 100;
 
-
   late final GameLogic gameLogic;
   ValueNotifier<GameState>? _gameState;
 
@@ -64,7 +64,9 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   ValueNotifier<GameState> get gameState {
     if (_gameState == null) {
       // Return a dummy state to prevent crashes - this shouldn't be used in practice
-      return ValueNotifier(GameState.initial(gridWidth: 10, gridHeight: 10, obstacles: []));
+      return ValueNotifier(
+        GameState.initial(gridWidth: 10, gridHeight: 10, obstacles: []),
+      );
     }
     return _gameState!;
   }
@@ -79,7 +81,9 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     final originalPosition = camera.viewfinder.position.clone();
 
     // Simple shake by rapidly changing camera position
-    async.Timer.periodic(const Duration(milliseconds: _shakeIntervalMs), (timer) {
+    async.Timer.periodic(const Duration(milliseconds: _shakeIntervalMs), (
+      timer,
+    ) {
       if (timer.tick * _shakeIntervalMs > _shakeDurationMs) {
         timer.cancel();
         camera.viewfinder.position = originalPosition; // Reset camera position
@@ -87,7 +91,11 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       }
       final random = Random();
       camera.viewfinder.position =
-          originalPosition + Vector2((random.nextDouble() - 0.5) * _shakeIntensity * 2, (random.nextDouble() - 0.5) * _shakeIntensity * 2);
+          originalPosition +
+          Vector2(
+            (random.nextDouble() - 0.5) * _shakeIntensity * 2,
+            (random.nextDouble() - 0.5) * _shakeIntensity * 2,
+          );
     });
   }
 
@@ -123,7 +131,9 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     const int maxBaseGridDimension = 20;
     const int minBaseGridDimension = 10;
-    final int baseGridDimension = (minBaseGridDimension + level - 1).clamp(minBaseGridDimension, maxBaseGridDimension).toInt();
+    final int baseGridDimension = (minBaseGridDimension + level - 1)
+        .clamp(minBaseGridDimension, maxBaseGridDimension)
+        .toInt();
 
     int baseGridWidth;
     int baseGridHeight;
@@ -151,9 +161,19 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     // Initialize gameState with the calculated grid dimensions
     // First create a temporary state to generate obstacles
-    final tempState = GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight, obstacles: []);
+    final tempState = GameState.initial(
+      gridWidth: calculatedGridWidth,
+      gridHeight: calculatedGridHeight,
+      obstacles: [],
+    );
     final obstacles = gameLogic.generateObstacles(tempState);
-    _gameState = ValueNotifier(GameState.initial(gridWidth: calculatedGridWidth, gridHeight: calculatedGridHeight, obstacles: obstacles));
+    _gameState = ValueNotifier(
+      GameState.initial(
+        gridWidth: calculatedGridWidth,
+        gridHeight: calculatedGridHeight,
+        obstacles: obstacles,
+      ),
+    );
 
     // Load sprites
     regularFoodSprite = await loadSprite('snake/apple_regular.png');
@@ -175,12 +195,17 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       cellSize: cellSize,
       snakeHeadSprite: snakeHeadSprite,
       snakeBodySprite: snakeBodySprite,
-      animationDuration: _gameSpeedInitial / 1000.0, // Initial animation duration
+      animationDuration:
+          _gameSpeedInitial / 1000.0, // Initial animation duration
     );
     add(_snakeComponent);
 
     // Initialize components once
-    _foodComponent = SpriteComponent(sprite: regularFoodSprite, position: Vector2.zero(), size: Vector2.all(cellSize * 2));
+    _foodComponent = SpriteComponent(
+      sprite: regularFoodSprite,
+      position: Vector2.zero(),
+      size: Vector2.all(cellSize * 2),
+    );
     add(_foodComponent);
 
     // Initialize growth animation timer
@@ -203,7 +228,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   void initializeGame() {
     gameState.value.isGameRunning = false; // Game starts paused
     // Obstacles are already set in the GameState.initial factory
-    remainingFoodTime.value = _foodRottingTimeBase - (level * _foodRottingTimeLevelFactor);
+    remainingFoodTime.value =
+        _foodRottingTimeBase - (level * _foodRottingTimeLevelFactor);
 
     // Update food component position and sprite
     _foodComponent.position = gameState.value.food.toVector2() * cellSize;
@@ -216,7 +242,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     _obstacles.clear();
     for (int i = 0; i < gameState.value.obstacles.length; i += 16) {
       final obstacleTopLeft = gameState.value.obstacles[i];
-      
+
       final newObstacle = SpriteComponent(
         sprite: obstacleSprite,
         position: (obstacleTopLeft.toOffset() * cellSize).toVector2(),
@@ -242,14 +268,18 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   void update(double dt) {
     super.update(dt);
 
-if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
+    if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
       return;
     }
 
     // Bonus aging logic
     if (gameState.value.activeBonus != null) {
       final bonus = gameState.value.activeBonus!;
-      final updatedBonus = Bonus(position: bonus.position, type: bonus.type, spawnTime: bonus.spawnTime + dt);
+      final updatedBonus = Bonus(
+        position: bonus.position,
+        type: bonus.type,
+        spawnTime: bonus.spawnTime + dt,
+      );
       gameState.value.activeBonus = updatedBonus;
 
       if (updatedBonus.spawnTime >= GameLogic.bonusLifetime) {
@@ -265,7 +295,10 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
       final updatedEffects = <ActiveBonusEffect>[];
 
       for (var effect in gameState.value.activeBonusEffects) {
-        final updatedEffect = ActiveBonusEffect(type: effect.type, activationTime: effect.activationTime + dt);
+        final updatedEffect = ActiveBonusEffect(
+          type: effect.type,
+          activationTime: effect.activationTime + dt,
+        );
 
         if (updatedEffect.activationTime < GameLogic.bonusEffectDuration) {
           updatedEffects.add(updatedEffect);
@@ -290,7 +323,9 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
 
     // Food aging logic
     gameState.value.foodAge += dt;
-    final double foodRottingTime = _foodRottingTimeBase - (level * _foodRottingTimeLevelFactor); // Adjusted rotting time
+    final double foodRottingTime =
+        _foodRottingTimeBase -
+        (level * _foodRottingTimeLevelFactor); // Adjusted rotting time
     // Defer the update to avoid calling setState during build
     WidgetsBinding.instance.addPostFrameCallback((_) {
       remainingFoodTime.value = foodRottingTime - gameState.value.foodAge;
@@ -305,15 +340,20 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
         gameState.value.foodType.value = FoodType.rotten;
         _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
       } else if (gameState.value.foodType.value == FoodType.rotten) {
-        gameLogic.generateNewFood(gameState.value); // Disappear and generate new food
+        gameLogic.generateNewFood(
+          gameState.value,
+        ); // Disappear and generate new food
         _foodComponent.position = gameState.value.food.toVector2() * cellSize;
         _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
       }
     }
 
     timeSinceLastTick += dt;
-    final double baseTickTime = _calculateGameSpeed(gameState.value.score) / 1000.0;
-    final double speedMultiplier = gameLogic.getSpeedMultiplier(gameState.value);
+    final double baseTickTime =
+        _calculateGameSpeed(gameState.value.score) / 1000.0;
+    final double speedMultiplier = gameLogic.getSpeedMultiplier(
+      gameState.value,
+    );
     final double tickTime = baseTickTime * speedMultiplier;
 
     if (timeSinceLastTick >= tickTime) {
@@ -328,18 +368,18 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
     // - Accelerates faster at beginning, slower later
     // - At score 100, speed matches old linear formula (150-100 = 50ms)
     // - No speed cap, continues to accelerate
-    
+
     if (currentScore == 0) {
       return _gameSpeedInitial.toDouble();
     }
-    
+
     // Using formula: speed = initial - k * log(score + 1)
     // At score 100: 50 = 150 - k * log(101)
     // k = (150 - 50) / log(101) = 100 / log(101) ≈ 21.7
-    const double k = 100 / 4.615120517; // log(101) ≈ 4.615
-    
+    const double k = 150 / 4.615120517; // log(101) ≈ 4.615
+
     final speed = _gameSpeedInitial - (k * log(currentScore + 1));
-    
+
     // Allow speed to go below old minimum, but keep a reasonable floor
     return speed.clamp(10.0, _gameSpeedInitial.toDouble());
   }
@@ -352,7 +392,8 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
     final oldBonusCount = oldState.activeBonusEffects.length;
 
     _snakeComponent.updateGameState(gameState.value);
-    _snakeComponent.animationDuration = _calculateGameSpeed(gameState.value.score) / 1000.0;
+    _snakeComponent.animationDuration =
+        _calculateGameSpeed(gameState.value.score) / 1000.0;
 
     if (oldBonusCount != gameState.value.activeBonusEffects.length) {
       final temp = gameState.value.clone();
@@ -360,7 +401,10 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
     }
 
     if (oldObstacleCount != gameState.value.obstacles.length) {
-      final destroyedObstacle = _findDestroyedObstacle(oldObstacles, gameState.value.obstacles);
+      final destroyedObstacle = _findDestroyedObstacle(
+        oldObstacles,
+        gameState.value.obstacles,
+      );
       if (destroyedObstacle != null) {
         _triggerRockExplosion(destroyedObstacle);
       }
@@ -372,24 +416,36 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
       if (gameState.value.score > oldScore) {
         switch (oldFoodType) {
           case FoodType.regular:
-            if (Platform.isAndroid || Platform.isIOS) Vibration.vibrate(duration: _vibrationDurationShort);
+            if (Platform.isAndroid || Platform.isIOS)
+              Vibration.vibrate(duration: _vibrationDurationShort);
             break;
           case FoodType.golden:
-            if (Platform.isAndroid || Platform.isIOS) Vibration.vibrate(duration: _vibrationDurationShort, amplitude: _vibrationAmplitudeHigh);
+            if (Platform.isAndroid || Platform.isIOS)
+              Vibration.vibrate(
+                duration: _vibrationDurationShort,
+                amplitude: _vibrationAmplitudeHigh,
+              );
             break;
           default:
             break;
         }
       } else {
         if (Platform.isAndroid || Platform.isIOS) {
-          Vibration.vibrate(duration: _vibrationDurationMedium, amplitude: _vibrationAmplitudeHigh);
+          Vibration.vibrate(
+            duration: _vibrationDurationMedium,
+            amplitude: _vibrationAmplitudeHigh,
+          );
         }
       }
     }
 
     _foodComponent.position = gameState.value.food.toVector2() * cellSize;
     remove(_foodComponent);
-    _foodComponent = SpriteComponent(sprite: _getFoodSprite(gameState.value.foodType.value), position: _foodComponent.position, size: Vector2.all(cellSize * 2));
+    _foodComponent = SpriteComponent(
+      sprite: _getFoodSprite(gameState.value.foodType.value),
+      position: _foodComponent.position,
+      size: Vector2.all(cellSize * 2),
+    );
     add(_foodComponent);
 
     if (gameState.value.activeBonus != null && _bonusComponent == null) {
@@ -470,12 +526,17 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
     }
   }
 
-  IntVector2? _findDestroyedObstacle(List<IntVector2> oldObstacles, List<IntVector2> newObstacles) {
+  IntVector2? _findDestroyedObstacle(
+    List<IntVector2> oldObstacles,
+    List<IntVector2> newObstacles,
+  ) {
     // Obstacles are in blocks of 16, find which block is missing
     for (int i = 0; i < oldObstacles.length; i += 16) {
       if (i + 15 < oldObstacles.length) {
         final oldBlock = oldObstacles.getRange(i, i + 16).toList();
-        final blockStillExists = oldBlock.every((pos) => newObstacles.contains(pos));
+        final blockStillExists = oldBlock.every(
+          (pos) => newObstacles.contains(pos),
+        );
 
         if (!blockStillExists) {
           // Return the top-left position of the destroyed obstacle
@@ -501,7 +562,9 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
 
     // Step 2: Rock fragments - split rock into 4 pieces
     final random = Random();
-    final fragmentSize = Vector2.all(cellSize * 2); // Each fragment is 2x2 cells
+    final fragmentSize = Vector2.all(
+      cellSize * 2,
+    ); // Each fragment is 2x2 cells
 
     // Create 4 fragments (top-left, top-right, bottom-left, bottom-right)
     final fragmentOffsets = [
@@ -521,7 +584,10 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
     for (int i = 0; i < 4; i++) {
       final fragment = RockFragment(
         sprite: obstacleSprite,
-        position: position + fragmentOffsets[i] + fragmentSize / 2, // Center of fragment
+        position:
+            position +
+            fragmentOffsets[i] +
+            fragmentSize / 2, // Center of fragment
         size: fragmentSize,
         velocity: fragmentVelocities[i],
         rotationSpeed: (random.nextDouble() - 0.5) * 8, // -4 to 4 rad/s
@@ -557,7 +623,10 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
   }
 
   @override
-  KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
     if (event is KeyDownEvent) {
       switch (event.logicalKey) {
         case LogicalKeyboardKey.arrowUp:
@@ -595,9 +664,17 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
     _isLoaded = false; // Mark as not loaded during reset
 
     // First create a temporary state to generate obstacles
-    final tempState = GameState.initial(gridWidth: gameState.value.gridWidth, gridHeight: gameState.value.gridHeight, obstacles: []);
+    final tempState = GameState.initial(
+      gridWidth: gameState.value.gridWidth,
+      gridHeight: gameState.value.gridHeight,
+      obstacles: [],
+    );
     final obstacles = gameLogic.generateObstacles(tempState);
-    gameState.value = GameState.initial(gridWidth: gameState.value.gridWidth, gridHeight: gameState.value.gridHeight, obstacles: obstacles);
+    gameState.value = GameState.initial(
+      gridWidth: gameState.value.gridWidth,
+      gridHeight: gameState.value.gridHeight,
+      obstacles: obstacles,
+    );
 
     removeAll([_snakeComponent, _foodComponent, ..._obstacles]);
     _obstacles.clear();
@@ -614,7 +691,8 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
     add(_foodComponent);
 
     initializeGame();
-    remainingFoodTime.value = _foodRottingTimeBase - (level * _foodRottingTimeLevelFactor);
+    remainingFoodTime.value =
+        _foodRottingTimeBase - (level * _foodRottingTimeLevelFactor);
 
     _isLoaded = true; // Mark as loaded after reset is complete
     pauseEngine();

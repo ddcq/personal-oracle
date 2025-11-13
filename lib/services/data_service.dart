@@ -29,10 +29,7 @@ class DataService {
   // Récupération des préférences utilisateur
   static Future<Map<String, dynamic>> getUserPreferences() async {
     // TODO: Implémenter la récupération des préférences
-    return {
-      'notificationsEnabled': true,
-      'preferredLanguage': 'fr',
-    };
+    return {'notificationsEnabled': true, 'preferredLanguage': 'fr'};
   }
 
   // Historique des quiz complétés
@@ -44,11 +41,7 @@ class DataService {
   // Statistiques utilisateur
   static Future<Map<String, dynamic>> getUserStats() async {
     // TODO: Implémenter les statistiques
-    return {
-      'totalQuizzes': 0,
-      'favoriteDeity': null,
-      'completedChallenges': 0,
-    };
+    return {'totalQuizzes': 0, 'favoriteDeity': null, 'completedChallenges': 0};
   }
 
   // Nettoyage des données

@@ -321,36 +321,72 @@ class AppData {
       question: 'question_1_text'.tr(),
       answers: [
         Answer(text: 'question_1_answer_1'.tr(), scores: {'wisdom': 2}),
-        Answer(text: 'question_1_answer_2'.tr(), scores: {'courage': 2, 'strength': 1}),
+        Answer(
+          text: 'question_1_answer_2'.tr(),
+          scores: {'courage': 2, 'strength': 1},
+        ),
         Answer(text: 'question_1_answer_3'.tr(), scores: {'cunning': 2}),
-        Answer(text: 'question_1_answer_4'.tr(), scores: {'honor': 1, 'justice': 1}),
+        Answer(
+          text: 'question_1_answer_4'.tr(),
+          scores: {'honor': 1, 'justice': 1},
+        ),
       ],
     ),
     Question(
       question: 'question_2_text'.tr(),
       answers: [
-        Answer(text: 'question_2_answer_1'.tr(), scores: {'wisdom': 2, 'cunning': 1}),
-        Answer(text: 'question_2_answer_2'.tr(), scores: {'strength': 2, 'courage': 1}),
-        Answer(text: 'question_2_answer_3'.tr(), scores: {'passion': 2, 'nature': 1}),
-        Answer(text: 'question_2_answer_4'.tr(), scores: {'justice': 2, 'honor': 1}),
+        Answer(
+          text: 'question_2_answer_1'.tr(),
+          scores: {'wisdom': 2, 'cunning': 1},
+        ),
+        Answer(
+          text: 'question_2_answer_2'.tr(),
+          scores: {'strength': 2, 'courage': 1},
+        ),
+        Answer(
+          text: 'question_2_answer_3'.tr(),
+          scores: {'passion': 2, 'nature': 1},
+        ),
+        Answer(
+          text: 'question_2_answer_4'.tr(),
+          scores: {'justice': 2, 'honor': 1},
+        ),
       ],
     ),
     Question(
       question: 'question_3_text'.tr(),
       answers: [
         Answer(text: 'question_3_answer_1'.tr(), scores: {'wisdom': 2}),
-        Answer(text: 'question_3_answer_2'.tr(), scores: {'courage': 1, 'honor': 1}),
-        Answer(text: 'question_3_answer_3'.tr(), scores: {'cunning': 1, 'passion': 1}),
+        Answer(
+          text: 'question_3_answer_2'.tr(),
+          scores: {'courage': 1, 'honor': 1},
+        ),
+        Answer(
+          text: 'question_3_answer_3'.tr(),
+          scores: {'cunning': 1, 'passion': 1},
+        ),
         Answer(text: 'question_3_answer_4'.tr(), scores: {'justice': 2}),
       ],
     ),
     Question(
       question: 'question_4_text'.tr(),
       answers: [
-        Answer(text: 'question_4_answer_1'.tr(), scores: {'wisdom': 1, 'nature': 2}),
-        Answer(text: 'question_4_answer_2'.tr(), scores: {'strength': 1, 'courage': 1}),
-        Answer(text: 'question_4_answer_3'.tr(), scores: {'passion': 2, 'nature': 1}),
-        Answer(text: 'question_4_answer_4'.tr(), scores: {'honor': 1, 'justice': 1}),
+        Answer(
+          text: 'question_4_answer_1'.tr(),
+          scores: {'wisdom': 1, 'nature': 2},
+        ),
+        Answer(
+          text: 'question_4_answer_2'.tr(),
+          scores: {'strength': 1, 'courage': 1},
+        ),
+        Answer(
+          text: 'question_4_answer_3'.tr(),
+          scores: {'passion': 2, 'nature': 1},
+        ),
+        Answer(
+          text: 'question_4_answer_4'.tr(),
+          scores: {'honor': 1, 'justice': 1},
+        ),
       ],
     ),
     Question(
@@ -358,71 +394,158 @@ class AppData {
       answers: [
         Answer(text: 'question_5_answer_1'.tr(), scores: {'wisdom': 2}),
         Answer(text: 'question_5_answer_2'.tr(), scores: {'courage': 2}),
-        Answer(text: 'question_5_answer_3'.tr(), scores: {'cunning': 1, 'passion': 1}),
-        Answer(text: 'question_5_answer_4'.tr(), scores: {'honor': 2, 'justice': 1}),
+        Answer(
+          text: 'question_5_answer_3'.tr(),
+          scores: {'cunning': 1, 'passion': 1},
+        ),
+        Answer(
+          text: 'question_5_answer_4'.tr(),
+          scores: {'honor': 2, 'justice': 1},
+        ),
       ],
     ),
     Question(
       question: 'question_6_text'.tr(),
       answers: [
-        Answer(text: 'question_6_answer_1'.tr(), scores: {'wisdom': 1, 'honor': 1}),
-        Answer(text: 'question_6_answer_2'.tr(), scores: {'strength': 1, 'honor': 1}),
-        Answer(text: 'question_6_answer_3'.tr(), scores: {'passion': 2, 'nature': 1}),
+        Answer(
+          text: 'question_6_answer_1'.tr(),
+          scores: {'wisdom': 1, 'honor': 1},
+        ),
+        Answer(
+          text: 'question_6_answer_2'.tr(),
+          scores: {'strength': 1, 'honor': 1},
+        ),
+        Answer(
+          text: 'question_6_answer_3'.tr(),
+          scores: {'passion': 2, 'nature': 1},
+        ),
         Answer(text: 'question_6_answer_4'.tr(), scores: {'justice': 2}),
       ],
     ),
     Question(
       question: 'question_7_text'.tr(),
       answers: [
-        Answer(text: 'question_7_answer_1'.tr(), scores: {'wisdom': 2, 'honor': 1}),
-        Answer(text: 'question_7_answer_2'.tr(), scores: {'courage': 2, 'passion': 1}),
-        Answer(text: 'question_7_answer_3'.tr(), scores: {'cunning': 2, 'passion': 1}),
-        Answer(text: 'question_7_answer_4'.tr(), scores: {'nature': 1, 'justice': 2}),
+        Answer(
+          text: 'question_7_answer_1'.tr(),
+          scores: {'wisdom': 2, 'honor': 1},
+        ),
+        Answer(
+          text: 'question_7_answer_2'.tr(),
+          scores: {'courage': 2, 'passion': 1},
+        ),
+        Answer(
+          text: 'question_7_answer_3'.tr(),
+          scores: {'cunning': 2, 'passion': 1},
+        ),
+        Answer(
+          text: 'question_7_answer_4'.tr(),
+          scores: {'nature': 1, 'justice': 2},
+        ),
       ],
     ),
     Question(
       question: 'question_8_text'.tr(),
       answers: [
-        Answer(text: 'question_8_answer_1'.tr(), scores: {'wisdom': 2, 'cunning': 1}),
-        Answer(text: 'question_8_answer_2'.tr(), scores: {'strength': 2, 'courage': 1}),
-        Answer(text: 'question_8_answer_3'.tr(), scores: {'nature': 2, 'passion': 1}),
-        Answer(text: 'question_8_answer_4'.tr(), scores: {'honor': 1, 'justice': 2}),
+        Answer(
+          text: 'question_8_answer_1'.tr(),
+          scores: {'wisdom': 2, 'cunning': 1},
+        ),
+        Answer(
+          text: 'question_8_answer_2'.tr(),
+          scores: {'strength': 2, 'courage': 1},
+        ),
+        Answer(
+          text: 'question_8_answer_3'.tr(),
+          scores: {'nature': 2, 'passion': 1},
+        ),
+        Answer(
+          text: 'question_8_answer_4'.tr(),
+          scores: {'honor': 1, 'justice': 2},
+        ),
       ],
     ),
     Question(
       question: 'question_9_text'.tr(),
       answers: [
-        Answer(text: 'question_9_answer_1'.tr(), scores: {'wisdom': 2, 'justice': 1}),
-        Answer(text: 'question_9_answer_2'.tr(), scores: {'strength': 2, 'honor': 1}),
-        Answer(text: 'question_9_answer_3'.tr(), scores: {'cunning': 2, 'justice': 1}),
-        Answer(text: 'question_9_answer_4'.tr(), scores: {'passion': 2, 'nature': 1}),
+        Answer(
+          text: 'question_9_answer_1'.tr(),
+          scores: {'wisdom': 2, 'justice': 1},
+        ),
+        Answer(
+          text: 'question_9_answer_2'.tr(),
+          scores: {'strength': 2, 'honor': 1},
+        ),
+        Answer(
+          text: 'question_9_answer_3'.tr(),
+          scores: {'cunning': 2, 'justice': 1},
+        ),
+        Answer(
+          text: 'question_9_answer_4'.tr(),
+          scores: {'passion': 2, 'nature': 1},
+        ),
       ],
     ),
     Question(
       question: 'question_10_text'.tr(),
       answers: [
-        Answer(text: 'question_10_answer_1'.tr(), scores: {'wisdom': 2, 'cunning': 1}),
-        Answer(text: 'question_10_answer_2'.tr(), scores: {'strength': 2, 'courage': 1}),
-        Answer(text: 'question_10_answer_3'.tr(), scores: {'cunning': 1, 'nature': 2}),
-        Answer(text: 'question_10_answer_4'.tr(), scores: {'passion': 2, 'justice': 1}),
+        Answer(
+          text: 'question_10_answer_1'.tr(),
+          scores: {'wisdom': 2, 'cunning': 1},
+        ),
+        Answer(
+          text: 'question_10_answer_2'.tr(),
+          scores: {'strength': 2, 'courage': 1},
+        ),
+        Answer(
+          text: 'question_10_answer_3'.tr(),
+          scores: {'cunning': 1, 'nature': 2},
+        ),
+        Answer(
+          text: 'question_10_answer_4'.tr(),
+          scores: {'passion': 2, 'justice': 1},
+        ),
       ],
     ),
     Question(
       question: 'question_11_text'.tr(),
       answers: [
-        Answer(text: 'question_11_answer_1'.tr(), scores: {'wisdom': 2, 'honor': 1}),
-        Answer(text: 'question_11_answer_2'.tr(), scores: {'strength': 2, 'courage': 1}),
-        Answer(text: 'question_11_answer_3'.tr(), scores: {'cunning': 2, 'passion': 1}),
-        Answer(text: 'question_11_answer_4'.tr(), scores: {'nature': 2, 'justice': 1}),
+        Answer(
+          text: 'question_11_answer_1'.tr(),
+          scores: {'wisdom': 2, 'honor': 1},
+        ),
+        Answer(
+          text: 'question_11_answer_2'.tr(),
+          scores: {'strength': 2, 'courage': 1},
+        ),
+        Answer(
+          text: 'question_11_answer_3'.tr(),
+          scores: {'cunning': 2, 'passion': 1},
+        ),
+        Answer(
+          text: 'question_11_answer_4'.tr(),
+          scores: {'nature': 2, 'justice': 1},
+        ),
       ],
     ),
     Question(
       question: 'question_12_text'.tr(),
       answers: [
-        Answer(text: 'question_12_answer_1'.tr(), scores: {'wisdom': 2, 'cunning': 1}),
-        Answer(text: 'question_12_answer_2'.tr(), scores: {'strength': 2, 'courage': 1}),
-        Answer(text: 'question_12_answer_3'.tr(), scores: {'cunning': 2, 'honor': 1}),
-        Answer(text: 'question_12_answer_4'.tr(), scores: {'justice': 2, 'passion': 1}),
+        Answer(
+          text: 'question_12_answer_1'.tr(),
+          scores: {'wisdom': 2, 'cunning': 1},
+        ),
+        Answer(
+          text: 'question_12_answer_2'.tr(),
+          scores: {'strength': 2, 'courage': 1},
+        ),
+        Answer(
+          text: 'question_12_answer_3'.tr(),
+          scores: {'cunning': 2, 'honor': 1},
+        ),
+        Answer(
+          text: 'question_12_answer_4'.tr(),
+          scores: {'justice': 2, 'passion': 1},
+        ),
       ],
     ),
   ];

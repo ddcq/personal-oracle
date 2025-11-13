@@ -15,7 +15,10 @@ class WordSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(create: (_) => WordSearchController(), child: const _WordSearchView());
+    return ChangeNotifierProvider(
+      create: (_) => WordSearchController(),
+      child: const _WordSearchView(),
+    );
   }
 }
 
@@ -42,13 +45,18 @@ class _WordSearchView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.help_outline, color: Colors.white),
             onPressed: () {
-              GameHelpDialog.show(context, [
-                'word_search_screen_rule_1'.tr(),
-                'word_search_screen_rule_2'.tr(),
-                'word_search_screen_rule_3'.tr(),
-                'word_search_screen_rule_4'.tr(),
-                'word_search_screen_rule_5'.tr(),
-              ], onGamePaused: () {}, onGameResumed: () {});
+              GameHelpDialog.show(
+                context,
+                [
+                  'word_search_screen_rule_1'.tr(),
+                  'word_search_screen_rule_2'.tr(),
+                  'word_search_screen_rule_3'.tr(),
+                  'word_search_screen_rule_4'.tr(),
+                  'word_search_screen_rule_5'.tr(),
+                ],
+                onGamePaused: () {},
+                onGameResumed: () {},
+              );
             },
           ),
         ],
@@ -64,14 +72,22 @@ class _WordSearchView extends StatelessWidget {
                         Expanded(
                           flex: 3,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                            ),
                             child: _Grid(controller: controller),
                           ),
                         ),
                         if (controller.gamePhase == GamePhase.searchingWords)
-                          Expanded(flex: 2, child: _WordList(controller: controller))
+                          Expanded(
+                            flex: 2,
+                            child: _WordList(controller: controller),
+                          )
                         else
-                          Expanded(flex: 2, child: _SecretWordInput(controller: controller)),
+                          Expanded(
+                            flex: 2,
+                            child: _SecretWordInput(controller: controller),
+                          ),
                       ],
                     ),
             ),
@@ -81,7 +97,10 @@ class _WordSearchView extends StatelessWidget {
     );
   }
 
-  void _showVictoryDialog(BuildContext context, WordSearchController controller) {
+  void _showVictoryDialog(
+    BuildContext context,
+    WordSearchController controller,
+  ) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (controller.gamePhase == GamePhase.victory) {
         final bool isGenericVictory = controller.unlockedChapter == null;
@@ -94,7 +113,8 @@ class _WordSearchView extends StatelessWidget {
               isGenericVictory: isGenericVictory,
               onDismiss: () {
                 Navigator.of(context).pop();
-                controller.resetGame(); // Assuming you have a resetGame method in your controller
+                controller
+                    .resetGame(); // Assuming you have a resetGame method in your controller
               },
               onSeeRewards: () {
                 Navigator.of(context).pop(); // Close the dialog
@@ -125,7 +145,9 @@ class _Grid extends StatelessWidget {
           return const SizedBox.shrink(); // Or a placeholder
         }
 
-        final childAspectRatio = (constraints.maxWidth / columnCount) / (constraints.maxHeight / rowCount);
+        final childAspectRatio =
+            (constraints.maxWidth / columnCount) /
+            (constraints.maxHeight / rowCount);
 
         return GestureDetector(
           onPanStart: controller.gamePhase == GamePhase.searchingWords
@@ -135,10 +157,16 @@ class _Grid extends StatelessWidget {
               : null,
           onPanUpdate: controller.gamePhase == GamePhase.searchingWords
               ? (details) {
-                  _handleInteraction(details.localPosition, size, isUpdate: true);
+                  _handleInteraction(
+                    details.localPosition,
+                    size,
+                    isUpdate: true,
+                  );
                 }
               : null,
-          onPanEnd: controller.gamePhase == GamePhase.searchingWords ? (_) => controller.endSelection() : null,
+          onPanEnd: controller.gamePhase == GamePhase.searchingWords
+              ? (_) => controller.endSelection()
+              : null,
           onTapUp: controller.gamePhase == GamePhase.unscramblingSecret
               ? (details) {
                   _handleInteraction(details.localPosition, size, isTap: true);
@@ -146,15 +174,24 @@ class _Grid extends StatelessWidget {
               : null,
           child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: columnCount, childAspectRatio: childAspectRatio),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columnCount,
+              childAspectRatio: childAspectRatio,
+            ),
             itemCount: rowCount * columnCount,
             itemBuilder: (context, index) {
               final row = index ~/ columnCount;
               final col = index % columnCount;
               final offset = Offset(col.toDouble(), row.toDouble());
               final isSelected = controller.currentSelection.contains(offset);
-              final isConfirmed = controller.confirmedSelection.contains(offset);
-              return _buildGridCell(isSelected, isConfirmed, controller.grid[row][col]);
+              final isConfirmed = controller.confirmedSelection.contains(
+                offset,
+              );
+              return _buildGridCell(
+                isSelected,
+                isConfirmed,
+                controller.grid[row][col],
+              );
             },
           ),
         );
@@ -162,7 +199,12 @@ class _Grid extends StatelessWidget {
     );
   }
 
-  void _handleInteraction(Offset localPosition, Size size, {bool isUpdate = false, bool isTap = false}) {
+  void _handleInteraction(
+    Offset localPosition,
+    Size size, {
+    bool isUpdate = false,
+    bool isTap = false,
+  }) {
     final offset = _getGridOffset(localPosition, size);
     if (offset != null) {
       if (isTap) {
@@ -180,7 +222,10 @@ class _Grid extends StatelessWidget {
     final double cellHeight = size.height / controller.grid.length;
     final col = (localPosition.dx / cellWidth).floor();
     final row = (localPosition.dy / cellHeight).floor();
-    if (col >= 0 && col < controller.grid[0].length && row >= 0 && row < controller.grid.length) {
+    if (col >= 0 &&
+        col < controller.grid[0].length &&
+        row >= 0 &&
+        row < controller.grid.length) {
       return Offset(col.toDouble(), row.toDouble());
     }
     return null;
@@ -258,7 +303,13 @@ class _SecretWordInput extends StatelessWidget {
             controller.instructionClue,
             style: ChibiTextStyles.storyTitle.copyWith(
               fontSize: 28.sp,
-              shadows: [const Shadow(blurRadius: 20.0, color: Colors.black, offset: Offset(5.0, 5.0))],
+              shadows: [
+                const Shadow(
+                  blurRadius: 20.0,
+                  color: Colors.black,
+                  offset: Offset(5.0, 5.0),
+                ),
+              ],
             ),
             textAlign: TextAlign.center,
           ),
@@ -268,8 +319,13 @@ class _SecretWordInput extends StatelessWidget {
             spacing: 4.0, // Horizontal spacing
             runSpacing: 4.0, // Vertical spacing for wrapping
             children: List.generate(controller.secretWord.length, (index) {
-              final letter = (index < controller.currentSecretWordGuess.length) ? controller.currentSecretWordGuess[index] : '';
-              return _buildLetterContainer(letter, controller.isSecretWordError);
+              final letter = (index < controller.currentSecretWordGuess.length)
+                  ? controller.currentSecretWordGuess[index]
+                  : '';
+              return _buildLetterContainer(
+                letter,
+                controller.isSecretWordError,
+              );
             }),
           ),
         ],
@@ -282,12 +338,17 @@ class _SecretWordInput extends StatelessWidget {
       width: 35,
       height: 50,
       decoration: BoxDecoration(
-        color: isError ? ChibiColors.buttonRed.withAlpha(180) : Colors.black.withAlpha(102),
+        color: isError
+            ? ChibiColors.buttonRed.withAlpha(180)
+            : Colors.black.withAlpha(102),
         border: Border.all(color: Colors.white.withAlpha(150), width: 2),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Center(
-        child: Text(letter, style: ChibiTextStyles.storyTitle.copyWith(fontSize: 30.sp)),
+        child: Text(
+          letter,
+          style: ChibiTextStyles.storyTitle.copyWith(fontSize: 30.sp),
+        ),
       ),
     );
   }

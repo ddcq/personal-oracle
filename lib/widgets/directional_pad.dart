@@ -26,7 +26,7 @@ class DirectionalPad extends StatelessWidget {
                 _buildDirectionButton(
                   Icon(Icons.arrow_upward, color: Colors.white, size: iconSize),
                   Direction.up,
-                )
+                ),
               ],
             ),
             Row(
@@ -38,7 +38,11 @@ class DirectionalPad extends StatelessWidget {
                 ),
                 const SizedBox(width: spacerWidth), // Spacer for the center
                 _buildDirectionButton(
-                  Icon(Icons.arrow_forward, color: Colors.white, size: iconSize),
+                  Icon(
+                    Icons.arrow_forward,
+                    color: Colors.white,
+                    size: iconSize,
+                  ),
                   Direction.right,
                 ),
               ],
@@ -47,9 +51,13 @@ class DirectionalPad extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildDirectionButton(
-                  Icon(Icons.arrow_downward, color: Colors.white, size: iconSize),
+                  Icon(
+                    Icons.arrow_downward,
+                    color: Colors.white,
+                    size: iconSize,
+                  ),
                   Direction.down,
-                )
+                ),
               ],
             ),
           ],

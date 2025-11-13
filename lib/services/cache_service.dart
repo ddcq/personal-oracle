@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +12,9 @@ class CacheService {
 
   Future<void> initialize() async {
     try {
-      final response = await http.get(Uri.parse(_versionsUrl)).timeout(const Duration(seconds: 5));
+      final response = await http
+          .get(Uri.parse(_versionsUrl))
+          .timeout(const Duration(seconds: 5));
       if (response.statusCode == 200) {
         _remoteVersions = json.decode(response.body) as Map<String, dynamic>;
       } else {
@@ -55,10 +56,11 @@ class CacheService {
           filesToRemove.add(path);
         }
       }
-      
+
       // Also check for files no longer in remote versions
       for (var localPath in localVersions.keys) {
-        if (!_remoteVersions.containsKey(localPath) && !filesToRemove.contains(localPath)) {
+        if (!_remoteVersions.containsKey(localPath) &&
+            !filesToRemove.contains(localPath)) {
           filesToRemove.add(localPath);
         }
       }
@@ -71,13 +73,14 @@ class CacheService {
       }
 
       await _saveLocalVersions(prefs, localVersions);
-
     } catch (e) {
       debugPrint('Failed to validate cache: $e');
     }
   }
 
-  Future<Map<String, dynamic>> _getLocalVersions(SharedPreferences prefs) async {
+  Future<Map<String, dynamic>> _getLocalVersions(
+    SharedPreferences prefs,
+  ) async {
     final versionsJson = prefs.getString(_cacheVersionsKey);
     if (versionsJson != null) {
       try {
@@ -90,7 +93,10 @@ class CacheService {
     return {};
   }
 
-  Future<void> _saveLocalVersions(SharedPreferences prefs, Map<String, dynamic> versions) async {
+  Future<void> _saveLocalVersions(
+    SharedPreferences prefs,
+    Map<String, dynamic> versions,
+  ) async {
     await prefs.setString(_cacheVersionsKey, json.encode(versions));
   }
 }

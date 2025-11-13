@@ -83,7 +83,8 @@ class DatabaseService {
         )
       ''');
     }
-    if (oldVersion < 4) { // Migration for version 4
+    if (oldVersion < 4) {
+      // Migration for version 4
       await db.execute('''
         ALTER TABLE collectible_cards ADD COLUMN version TEXT DEFAULT 'epic' NOT NULL;
       ''');
@@ -93,7 +94,8 @@ class DatabaseService {
         CREATE UNIQUE INDEX IF NOT EXISTS idx_card_id_version ON collectible_cards (card_id, version);
       ''');
     }
-    if (oldVersion < 5) { // Migration for version 5
+    if (oldVersion < 5) {
+      // Migration for version 5
       await db.execute('''
         CREATE TABLE game_settings (
           setting_key TEXT PRIMARY KEY,
@@ -123,7 +125,8 @@ class DatabaseService {
       Directory documentsDirectory = await getApplicationDocumentsDirectory();
       String path = join(documentsDirectory.path, 'oracle_d_asgard.db');
       await deleteDatabase(path);
-      _database = null; // Ensure it's null so it gets reinitialized on next access
+      _database =
+          null; // Ensure it's null so it gets reinitialized on next access
     } catch (e) {
       // Silently fail - this is a debug/reset function
       _database = null;

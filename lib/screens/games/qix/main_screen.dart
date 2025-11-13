@@ -27,7 +27,9 @@ class QixGameScreen extends StatefulWidget {
 class _QixGameScreenState extends State<QixGameScreen> {
   QixGame? _game;
   late Future<void> _initializeGameFuture;
-  final ValueNotifier<bool> _showVictoryPopupNotifier = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> _showVictoryPopupNotifier = ValueNotifier<bool>(
+    false,
+  );
 
   @override
   void initState() {
@@ -50,7 +52,8 @@ class _QixGameScreenState extends State<QixGameScreen> {
   Future<void> _initializeGame(BuildContext context) async {
     final gamificationService = getIt<GamificationService>();
     final int currentDifficulty = await gamificationService.getQixDifficulty();
-    final CollectibleCard? potentialRewardCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+    final CollectibleCard? potentialRewardCard = await gamificationService
+        .selectRandomUnearnedCollectibleCard();
 
     _game = QixGame(
       onGameOver: () {
@@ -69,7 +72,13 @@ class _QixGameScreenState extends State<QixGameScreen> {
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       fontFamily: AppTextStyles.amaticSC,
-                      shadows: [Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0))],
+                      shadows: [
+                        Shadow(
+                          blurRadius: 10.0,
+                          color: Colors.black,
+                          offset: Offset(2.0, 2.0),
+                        ),
+                      ],
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -81,7 +90,13 @@ class _QixGameScreenState extends State<QixGameScreen> {
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       fontFamily: AppTextStyles.amaticSC,
-                      shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(1.0, 1.0))],
+                      shadows: [
+                        Shadow(
+                          blurRadius: 5.0,
+                          color: Colors.black,
+                          offset: Offset(1.0, 1.0),
+                        ),
+                      ],
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -101,9 +116,12 @@ class _QixGameScreenState extends State<QixGameScreen> {
       },
       onWin: (CollectibleCard? collectibleCard) async {
         _showVictoryPopupNotifier.value = true;
-        await gamificationService.saveQixDifficulty(currentDifficulty + 1); // Increment and save difficulty
+        await gamificationService.saveQixDifficulty(
+          currentDifficulty + 1,
+        ); // Increment and save difficulty
       },
-      rewardCardImagePath: potentialRewardCard?.imagePath, // Pass the image path here
+      rewardCardImagePath:
+          potentialRewardCard?.imagePath, // Pass the image path here
       rewardCard: potentialRewardCard, // Pass the actual card object
       difficulty: currentDifficulty, // Pass difficulty to QixGame
     );
@@ -148,21 +166,33 @@ class _QixGameScreenState extends State<QixGameScreen> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('${'qix_main_error_prefix'.tr()}: ${snapshot.error}'));
+                  return Center(
+                    child: Text(
+                      '${'qix_main_error_prefix'.tr()}: ${snapshot.error}',
+                    ),
+                  );
                 } else if (_game == null) {
-                  return Center(child: Text('qix_main_game_not_initialized_error'.tr()));
+                  return Center(
+                    child: Text('qix_main_game_not_initialized_error'.tr()),
+                  );
                 } else {
-                  final Orientation orientation = MediaQuery.of(context).orientation;
+                  final Orientation orientation = MediaQuery.of(
+                    context,
+                  ).orientation;
                   final Size screenSize = MediaQuery.of(context).size;
-                  final double appBarHeight = AppBar().preferredSize.height; // Standard AppBar height
-                  final double statusBarHeight = MediaQuery.of(context).padding.top; // Status bar height
+                  final double appBarHeight =
+                      AppBar().preferredSize.height; // Standard AppBar height
+                  final double statusBarHeight = MediaQuery.of(
+                    context,
+                  ).padding.top; // Status bar height
 
                   // Estimate controls height (progress bar + directional pad + padding)
                   // This is an approximation, adjust as needed
                   const double controlsEstimatedHeight = 250.0;
 
                   double availableWidth = screenSize.width;
-                  double availableHeight = screenSize.height - appBarHeight - statusBarHeight;
+                  double availableHeight =
+                      screenSize.height - appBarHeight - statusBarHeight;
 
                   double arenaSize;
                   Widget percentageDisplay = ValueListenableBuilder<double>(
@@ -176,7 +206,10 @@ class _QixGameScreenState extends State<QixGameScreen> {
 
                   if (orientation == Orientation.portrait) {
                     // In portrait, game takes width, controls take remaining height
-                    arenaSize = math.min(availableWidth, availableHeight - controlsEstimatedHeight);
+                    arenaSize = math.min(
+                      availableWidth,
+                      availableHeight - controlsEstimatedHeight,
+                    );
                     gameAndControls = Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -219,7 +252,10 @@ class _QixGameScreenState extends State<QixGameScreen> {
                   } else {
                     // Orientation.landscape
                     // Game takes height, controls take remaining width
-                    arenaSize = math.min(availableHeight, availableWidth - controlsEstimatedHeight);
+                    arenaSize = math.min(
+                      availableHeight,
+                      availableWidth - controlsEstimatedHeight,
+                    );
                     gameAndControls = Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -281,7 +317,9 @@ class _QixGameScreenState extends State<QixGameScreen> {
                                 },
                                 onSeeRewards: () {
                                   _showVictoryPopupNotifier.value = false;
-                                  Navigator.of(context).pop(); // Go back to the previous screen (game menu)
+                                  Navigator.of(
+                                    context,
+                                  ).pop(); // Go back to the previous screen (game menu)
                                   context.push('/profile');
                                 },
                               ),

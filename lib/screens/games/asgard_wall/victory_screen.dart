@@ -30,7 +30,12 @@ class VictoryScreen extends StatelessWidget {
                 SizedBox(height: 24),
                 Text(
                   'Victoire !',
-                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFFFFD700), fontFamily: AppTextStyles.amaticSC),
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFFD700),
+                    fontFamily: AppTextStyles.amaticSC,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 16),
@@ -44,14 +49,21 @@ class VictoryScreen extends StatelessWidget {
                   child: Text(
                     '🏰 La muraille d’Asgard est parfaite !\nSleipnir peut naître !',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 SizedBox(height: 32),
                 SizedBox(height: 32),
                 ChibiButton(
                   onPressed: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GameScreen()));
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => GameScreen()),
+                    );
                   },
                   text: 'Rejouer',
                   color: const Color(0xFFFFD700),
@@ -62,7 +74,8 @@ class VictoryScreen extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   text: 'Retour à l’accueil',
-                  color: Colors.blueGrey, // Using a consistent color for secondary action
+                  color: Colors
+                      .blueGrey, // Using a consistent color for secondary action
                 ),
               ],
             ),

@@ -17,7 +17,10 @@ String formatRelativeTime(DateTime timestamp) {
   final now = DateTime.now();
   final difference = now.difference(timestamp);
 
-  final isSameDay = now.year == timestamp.year && now.month == timestamp.month && now.day == timestamp.day;
+  final isSameDay =
+      now.year == timestamp.year &&
+      now.month == timestamp.month &&
+      now.day == timestamp.day;
 
   if (isSameDay) {
     if (difference.inHours == 0) {
@@ -30,7 +33,10 @@ String formatRelativeTime(DateTime timestamp) {
   }
 
   final yesterday = DateTime(now.year, now.month, now.day - 1);
-  final isYesterday = yesterday.year == timestamp.year && yesterday.month == timestamp.month && yesterday.day == timestamp.day;
+  final isYesterday =
+      yesterday.year == timestamp.year &&
+      yesterday.month == timestamp.month &&
+      yesterday.day == timestamp.day;
 
   if (isYesterday) {
     return 'Hier à ${DateFormat('HH:mm').format(timestamp)}';

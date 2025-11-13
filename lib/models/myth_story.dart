@@ -12,5 +12,6 @@ abstract class MythStory with _$MythStory {
     required List<MythCard> correctOrder,
   }) = _MythStory;
 
-  factory MythStory.fromJson(Map<String, dynamic> json) => _$MythStoryFromJson(json);
+  factory MythStory.fromJson(Map<String, dynamic> json) =>
+      _$MythStoryFromJson(json);
 }

@@ -25,12 +25,20 @@ class GameMenu extends StatelessWidget {
               children: [
                 Text(
                   '🌲 YGGDRASIL 🌲',
-                  style: TextStyle(color: Color(0xFFFF6B35), fontSize: 28, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    color: Color(0xFFFF6B35),
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 SizedBox(height: 16),
                 Text(
                   'qix_game_menu_title'.tr(),
-                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 12),
@@ -49,7 +57,11 @@ class GameMenu extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-          ChibiButton(onPressed: onStartGame, text: 'qix_game_menu_start_button'.tr(), color: const Color(0xFFFF6B35)),
+          ChibiButton(
+            onPressed: onStartGame,
+            text: 'qix_game_menu_start_button'.tr(),
+            color: const Color(0xFFFF6B35),
+          ),
         ],
       ),
     );

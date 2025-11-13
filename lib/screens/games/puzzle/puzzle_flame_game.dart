@@ -19,7 +19,11 @@ class DashedRectangleComponent extends RectangleComponent {
   static const double _dashLength = 5.0;
   static const double _spaceLength = 5.0;
 
-  DashedRectangleComponent({required Rect rect}) : super(position: Vector2(rect.left, rect.top), size: Vector2(rect.width, rect.height)) {
+  DashedRectangleComponent({required Rect rect})
+    : super(
+        position: Vector2(rect.left, rect.top),
+        size: Vector2(rect.width, rect.height),
+      ) {
     paint = Paint()
       ..color = Colors.grey
       ..strokeWidth = 1.0
@@ -29,21 +33,57 @@ class DashedRectangleComponent extends RectangleComponent {
   @override
   void render(Canvas canvas) {
     final Path path = Path();
-    _drawDashedLine(path, Offset.zero, Offset(size.x, 0), _dashLength, _spaceLength);
-    _drawDashedLine(path, Offset(size.x, 0), Offset(size.x, size.y), _dashLength, _spaceLength);
-    _drawDashedLine(path, Offset(size.x, size.y), Offset(0, size.y), _dashLength, _spaceLength);
-    _drawDashedLine(path, Offset(0, size.y), Offset.zero, _dashLength, _spaceLength);
+    _drawDashedLine(
+      path,
+      Offset.zero,
+      Offset(size.x, 0),
+      _dashLength,
+      _spaceLength,
+    );
+    _drawDashedLine(
+      path,
+      Offset(size.x, 0),
+      Offset(size.x, size.y),
+      _dashLength,
+      _spaceLength,
+    );
+    _drawDashedLine(
+      path,
+      Offset(size.x, size.y),
+      Offset(0, size.y),
+      _dashLength,
+      _spaceLength,
+    );
+    _drawDashedLine(
+      path,
+      Offset(0, size.y),
+      Offset.zero,
+      _dashLength,
+      _spaceLength,
+    );
     canvas.drawPath(path, paint);
   }
 
-  void _drawDashedLine(Path path, Offset p1, Offset p2, double dash, double space) {
+  void _drawDashedLine(
+    Path path,
+    Offset p1,
+    Offset p2,
+    double dash,
+    double space,
+  ) {
     double distance = (p2 - p1).distance;
     double current = 0.0;
     while (current < distance) {
-      path.moveTo(p1.dx + (p2.dx - p1.dx) * (current / distance), p1.dy + (p2.dy - p1.dy) * (current / distance));
+      path.moveTo(
+        p1.dx + (p2.dx - p1.dx) * (current / distance),
+        p1.dy + (p2.dy - p1.dy) * (current / distance),
+      );
       current += dash;
       if (current > distance) current = distance;
-      path.lineTo(p1.dx + (p2.dx - p1.dx) * (current / distance), p1.dy + (p2.dy - p1.dy) * (current / distance));
+      path.lineTo(
+        p1.dx + (p2.dx - p1.dx) * (current / distance),
+        p1.dy + (p2.dy - p1.dy) * (current / distance),
+      );
       current += space;
     }
   }
@@ -59,7 +99,11 @@ class PuzzleFlameGame extends FlameGame {
   MythCard? associatedChapter; // The specific chapter to unlock
   int currentLevel;
 
-  PuzzleFlameGame({required this.puzzleGame, required this.onRewardEarned, required this.currentLevel}) {
+  PuzzleFlameGame({
+    required this.puzzleGame,
+    required this.onRewardEarned,
+    required this.currentLevel,
+  }) {
     puzzleGame.onGameCompleted = onGameCompletedFromPuzzleGame;
   }
 
@@ -90,7 +134,12 @@ class PuzzleFlameGame extends FlameGame {
 
     for (int i = 0; i < puzzleGame.rows; i++) {
       for (int j = 0; j < puzzleGame.cols; j++) {
-        final Rect rect = Rect.fromLTWH(offsetX + j * pieceSize, offsetY + i * pieceSize, pieceSize, pieceSize);
+        final Rect rect = Rect.fromLTWH(
+          offsetX + j * pieceSize,
+          offsetY + i * pieceSize,
+          pieceSize,
+          pieceSize,
+        );
         add(DashedRectangleComponent(rect: rect));
       }
     }
@@ -113,7 +162,8 @@ class PuzzleFlameGame extends FlameGame {
 
   Future<void> _loadImageForPuzzle() async {
     final unearnedContent = await _gamificationService.getUnearnedContent();
-    final List<CollectibleCard> unearnedCollectibleCards = unearnedContent['unearned_collectible_cards'].cast<CollectibleCard>();
+    final List<CollectibleCard> unearnedCollectibleCards =
+        unearnedContent['unearned_collectible_cards'].cast<CollectibleCard>();
 
     // Calculate story selection probability based on level
     // 7% per level, capped at 70% for level 10+
@@ -122,11 +172,11 @@ class PuzzleFlameGame extends FlameGame {
     final bool selectStory = random.nextInt(100) < storyPercentage;
 
     String imageToLoad;
-    
+
     if (selectStory) {
       // Try to select a story chapter
       final nextChapter = await selectNextChapterToWin(_gamificationService);
-      
+
       if (nextChapter != null) {
         // Story images are in the stories/ subdirectory
         imageToLoad = 'stories/${nextChapter.chapter.imagePath}';
@@ -141,12 +191,13 @@ class PuzzleFlameGame extends FlameGame {
       // Select a collectible card
       imageToLoad = await _selectCardImage(unearnedCollectibleCards);
     }
-    
+
     puzzleImage = await Flame.images.load(imageToLoad);
   }
 
-
-  Future<String> _selectCardImage(List<CollectibleCard> unearnedCollectibleCards) async {
+  Future<String> _selectCardImage(
+    List<CollectibleCard> unearnedCollectibleCards,
+  ) async {
     final List<CollectibleCard> availableCards = [];
     for (var card in unearnedCollectibleCards) {
       if (await _assetExists(card.imagePath)) {
@@ -173,7 +224,10 @@ class PuzzleFlameGame extends FlameGame {
       await _gamificationService.unlockCollectibleCard(associatedCard!);
     } else if (associatedStory != null && associatedChapter != null) {
       // Unlock the selected chapter of the story
-      await _gamificationService.unlockStoryPart(associatedStory!.id, associatedChapter!.id);
+      await _gamificationService.unlockStoryPart(
+        associatedStory!.id,
+        associatedChapter!.id,
+      );
     }
     onRewardEarned(associatedCard);
   }
@@ -196,7 +250,12 @@ class PuzzleFlameGame extends FlameGame {
 
     for (int i = 0; i < puzzleGame.rows; i++) {
       for (int j = 0; j < puzzleGame.cols; j++) {
-        final Rect rect = Rect.fromLTWH(offsetX + j * pieceSize, offsetY + i * pieceSize, pieceSize, pieceSize);
+        final Rect rect = Rect.fromLTWH(
+          offsetX + j * pieceSize,
+          offsetY + i * pieceSize,
+          pieceSize,
+          pieceSize,
+        );
         add(DashedRectangleComponent(rect: rect));
       }
     }
@@ -241,8 +300,14 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   late final Rect _sourceRect;
   final Paint _paint = Paint()..filterQuality = FilterQuality.high;
   final Paint _shadowPaint = Paint(); // Pre-allocate shadow paint
-  final Offset _defaultShadowOffset = const Offset(2.0, 2.0); // Pre-allocate default shadow offset
-  final Offset _draggingShadowOffset = const Offset(5.0, 5.0); // Pre-allocate dragging shadow offset
+  final Offset _defaultShadowOffset = const Offset(
+    2.0,
+    2.0,
+  ); // Pre-allocate default shadow offset
+  final Offset _draggingShadowOffset = const Offset(
+    5.0,
+    5.0,
+  ); // Pre-allocate dragging shadow offset
   bool _isDragging = false; // Indicateur de glissement
 
   // Priorités de rendu
@@ -259,9 +324,14 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     required this.puzzleSize,
     required this.pieceSize,
   }) : super(
-         position: Vector2(pieceData.currentPosition.dx + offsetX, pieceData.currentPosition.dy + offsetY),
+         position: Vector2(
+           pieceData.currentPosition.dx + offsetX,
+           pieceData.currentPosition.dy + offsetY,
+         ),
          size: Vector2(pieceData.size.width, pieceData.size.height),
-         priority: pieceData.isLocked ? _lockedPriority : _defaultPriority, // Initialiser la priorité
+         priority: pieceData.isLocked
+             ? _lockedPriority
+             : _defaultPriority, // Initialiser la priorité
        ) {
     _calculateSourceRect();
   }
@@ -273,23 +343,38 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
     final int col = pieceData.id % puzzleSize;
     final int row = pieceData.id ~/ puzzleSize;
 
-    _sourceRect = Rect.fromLTWH(col * imageSliceWidth, row * imageSliceHeight, imageSliceWidth, imageSliceHeight);
+    _sourceRect = Rect.fromLTWH(
+      col * imageSliceWidth,
+      row * imageSliceHeight,
+      imageSliceWidth,
+      imageSliceHeight,
+    );
     size = Vector2(pieceSize, pieceSize);
   }
 
   @override
   void render(Canvas canvas) {
     final Rect destRect = size.toRect();
-    final RRect pieceRRect = RRect.fromRectAndRadius(destRect, const Radius.circular(_cornerRadius));
+    final RRect pieceRRect = RRect.fromRectAndRadius(
+      destRect,
+      const Radius.circular(_cornerRadius),
+    );
 
     // 1. Dessiner l’ombre portée pour l’effet de flottement
     if (!pieceData.isLocked) {
       _shadowPaint
         ..color = Colors.black
-            .withAlpha((_isDragging ? _shadowAlphaDragging : _shadowAlphaDefault)) // Ombre plus prononcée
-        ..maskFilter = MaskFilter.blur(BlurStyle.normal, _isDragging ? _shadowBlurRadiusDragging : _shadowBlurRadiusDefault); // Flou plus important
+            .withAlpha(
+              (_isDragging ? _shadowAlphaDragging : _shadowAlphaDefault),
+            ) // Ombre plus prononcée
+        ..maskFilter = MaskFilter.blur(
+          BlurStyle.normal,
+          _isDragging ? _shadowBlurRadiusDragging : _shadowBlurRadiusDefault,
+        ); // Flou plus important
 
-      final Offset currentShadowOffset = _isDragging ? _draggingShadowOffset : _defaultShadowOffset;
+      final Offset currentShadowOffset = _isDragging
+          ? _draggingShadowOffset
+          : _defaultShadowOffset;
       canvas.drawRRect(pieceRRect.shift(currentShadowOffset), _shadowPaint);
     }
 
@@ -334,7 +419,8 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
     if (!pieceData.isLocked) {
-      priority = _draggingPriority; // Mettre la pièce au-dessus de toutes les autres
+      priority =
+          _draggingPriority; // Mettre la pièce au-dessus de toutes les autres
       _isDragging = true; // La pièce est en cours de glissement
     }
   }
@@ -359,7 +445,10 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   void onDragUpdate(DragUpdateEvent event) {
     if (!pieceData.isLocked) {
       position.add(event.localDelta);
-      pieceData.currentPosition = Offset(position.x - offsetX, position.y - offsetY);
+      pieceData.currentPosition = Offset(
+        position.x - offsetX,
+        position.y - offsetY,
+      );
     }
   }
 
@@ -367,7 +456,10 @@ class PuzzlePieceComponent extends PositionComponent with DragCallbacks {
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
     if (!pieceData.isLocked) {
-      gameRef.puzzleGame.handlePieceDrop(pieceData.id, Offset(position.x - offsetX, position.y - offsetY));
+      gameRef.puzzleGame.handlePieceDrop(
+        pieceData.id,
+        Offset(position.x - offsetX, position.y - offsetY),
+      );
     }
     // Si la pièce n’est pas verrouillée après le drop, elle reste à la priorité par défaut
     // Si elle est verrouillée, update() la mettra à _lockedPriority

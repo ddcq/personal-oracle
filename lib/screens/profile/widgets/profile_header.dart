@@ -29,7 +29,9 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayDeity = allSelectableDeities.firstWhereOrNull((d) => d.id == selectedDeityId);
+    final displayDeity = allSelectableDeities.firstWhereOrNull(
+      (d) => d.id == selectedDeityId,
+    );
     final deityName = displayDeity?.name ?? '';
 
     return Column(
@@ -45,13 +47,19 @@ class ProfileHeader extends StatelessWidget {
                   profileName ?? deityName,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                        fontFamily: AppTextStyles.amaticSC,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 70,
-                        letterSpacing: 2.0,
-                        shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+                    fontFamily: AppTextStyles.amaticSC,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 70,
+                    letterSpacing: 2.0,
+                    shadows: [
+                      const Shadow(
+                        blurRadius: 15.0,
+                        color: Colors.black87,
+                        offset: Offset(4.0, 4.0),
                       ),
+                    ],
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -65,12 +73,17 @@ class ProfileHeader extends StatelessWidget {
           onTap: () async {
             final newDeityId = await Navigator.push<String>(
               context,
-              MaterialPageRoute(builder: (context) => DeitySelectionScreen(currentDeityId: selectedDeityId ?? '')),
+              MaterialPageRoute(
+                builder: (context) =>
+                    DeitySelectionScreen(currentDeityId: selectedDeityId ?? ''),
+              ),
             );
 
             if (newDeityId != null && newDeityId != selectedDeityId) {
               onDeityChanged(newDeityId);
-              await getIt<GamificationService>().saveProfileDeityIcon(newDeityId);
+              await getIt<GamificationService>().saveProfileDeityIcon(
+                newDeityId,
+              );
             }
           },
           child: Row(
@@ -85,10 +98,16 @@ class ProfileHeader extends StatelessWidget {
                   height: 150,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: const Color(0xFFDAA520), width: 5),
+                    border: Border.all(
+                      color: const Color(0xFFDAA520),
+                      width: 5,
+                    ),
                     boxShadow: const [
                       BoxShadow(color: Color(0xFFDAA520), offset: Offset(5, 5)),
-                      BoxShadow(color: Color(0xFFFFD700), offset: Offset(-5, -5)),
+                      BoxShadow(
+                        color: Color(0xFFFFD700),
+                        offset: Offset(-5, -5),
+                      ),
                     ],
                   ),
                   child: ClipRRect(
@@ -100,16 +119,26 @@ class ProfileHeader extends StatelessWidget {
                         }
 
                         Widget deityImageWidget;
-                        if (displayDeity.videoUrl != null && displayDeity.videoUrl!.isNotEmpty) {
-                          deityImageWidget = CustomVideoPlayer(videoUrl: displayDeity.videoUrl!, placeholderAsset: displayDeity.icon);
+                        if (displayDeity.videoUrl != null &&
+                            displayDeity.videoUrl!.isNotEmpty) {
+                          deityImageWidget = CustomVideoPlayer(
+                            videoUrl: displayDeity.videoUrl!,
+                            placeholderAsset: displayDeity.icon,
+                          );
                         } else {
-                          deityImageWidget = Image.asset(displayDeity.icon, fit: BoxFit.cover);
+                          deityImageWidget = Image.asset(
+                            displayDeity.icon,
+                            fit: BoxFit.cover,
+                          );
                         }
 
                         if (displayDeity.isCollectibleCard) {
                           return Transform.translate(
                             offset: const Offset(0, 15), // 10% of 150px height
-                            child: Transform.scale(scale: 1.4, child: deityImageWidget),
+                            child: Transform.scale(
+                              scale: 1.4,
+                              child: deityImageWidget,
+                            ),
                           );
                         } else {
                           return deityImageWidget;
@@ -141,7 +170,11 @@ class ProfileHeader extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: Center(child: error ? const Icon(Icons.error, color: Colors.red, size: 50) : const CircularProgressIndicator()),
+        child: Center(
+          child: error
+              ? const Icon(Icons.error, color: Colors.red, size: 50)
+              : const CircularProgressIndicator(),
+        ),
       ),
     );
   }

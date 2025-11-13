@@ -16,18 +16,24 @@ class GameScoresPodium extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (scores.isEmpty) {
-      final translationKey = gameName == 'Snake' 
-          ? 'profile_screen_no_snake_scores' 
+      final translationKey = gameName == 'Snake'
+          ? 'profile_screen_no_snake_scores'
           : 'profile_screen_no_asgard_wall_scores';
       return Text(
         translationKey.tr(),
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, fontFamily: AppTextStyles.amaticSC, fontSize: 20),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Colors.white70,
+          fontFamily: AppTextStyles.amaticSC,
+          fontSize: 20,
+        ),
         textAlign: TextAlign.center,
       );
     }
 
     final mutableScores = List<Map<String, dynamic>>.from(scores);
-    mutableScores.sort((a, b) => (b['score'] as int).compareTo(a['score'] as int));
+    mutableScores.sort(
+      (a, b) => (b['score'] as int).compareTo(a['score'] as int),
+    );
     final topScores = mutableScores.take(3).toList();
 
     Widget? firstPlace;
@@ -47,14 +53,22 @@ class GameScoresPodium extends StatelessWidget {
     return Column(
       children: [
         Text(
-          gameName == 'Snake' ? 'profile_screen_snake_podium'.tr() : '$gameName - Podium',
+          gameName == 'Snake'
+              ? 'profile_screen_snake_podium'.tr()
+              : '$gameName - Podium',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: AppTextStyles.amaticSC,
-                fontSize: 28,
-                shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(3.0, 3.0))],
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: AppTextStyles.amaticSC,
+            fontSize: 28,
+            shadows: [
+              const Shadow(
+                blurRadius: 10.0,
+                color: Colors.black,
+                offset: Offset(3.0, 3.0),
               ),
+            ],
+          ),
         ),
         const SizedBox(height: 20),
         Row(
@@ -70,27 +84,45 @@ class GameScoresPodium extends StatelessWidget {
     );
   }
 
-  Widget _buildPodiumPlace(BuildContext context, Map<String, dynamic> score, int rank) {
-    final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(score['timestamp']);
+  Widget _buildPodiumPlace(
+    BuildContext context,
+    Map<String, dynamic> score,
+    int rank,
+  ) {
+    final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(
+      score['timestamp'],
+    );
 
     final podiumConfig = {
       1: {
         'color': Colors.amber,
         'height': 201.0,
         'iconSize': 50.0,
-        'gradient': const LinearGradient(colors: [Color(0xFFFFFDE7), Colors.amber], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+        'gradient': const LinearGradient(
+          colors: [Color(0xFFFFFDE7), Colors.amber],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
       },
       2: {
         'color': const Color(0xFFC0C0C0),
         'height': 181.0,
         'iconSize': 40.0,
-        'gradient': const LinearGradient(colors: [Color(0xFFF5F5F5), Color(0xFFBDBDBD)], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+        'gradient': const LinearGradient(
+          colors: [Color(0xFFF5F5F5), Color(0xFFBDBDBD)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
       },
       3: {
         'color': const Color(0xFFCD7F32),
         'height': 161.0,
         'iconSize': 40.0,
-        'gradient': const LinearGradient(colors: [Color(0xFFFFEADD), Color(0xFFD8A166)], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+        'gradient': const LinearGradient(
+          colors: [Color(0xFFFFEADD), Color(0xFFD8A166)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
       },
     };
 
@@ -103,9 +135,18 @@ class GameScoresPodium extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         gradient: gradient,
-        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
         border: Border.all(color: Colors.black.withAlpha(51)),
-        boxShadow: [BoxShadow(color: Colors.black.withAlpha(77), blurRadius: 10, offset: const Offset(0, 5))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(77),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -117,11 +158,11 @@ class GameScoresPodium extends StatelessWidget {
             Text(
               '${score['score']}',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Colors.black.withAlpha(204),
-                    fontWeight: FontWeight.bold,
-                    fontFamily: AppTextStyles.amaticSC,
-                    fontSize: 26,
-                  ),
+                color: Colors.black.withAlpha(204),
+                fontWeight: FontWeight.bold,
+                fontFamily: AppTextStyles.amaticSC,
+                fontSize: 26,
+              ),
             ),
             const SizedBox(height: 4),
             Text(

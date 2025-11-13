@@ -64,7 +64,9 @@ class _MythStoryPageState extends State<MythStoryPage> {
 
   Future<List<String>> _getUnlockedCardIds() async {
     final gamificationService = getIt<GamificationService>();
-    final progress = await gamificationService.getStoryProgress(widget.mythStory.id);
+    final progress = await gamificationService.getStoryProgress(
+      widget.mythStory.id,
+    );
     if (progress != null) {
       final unlockedParts = jsonDecode(progress['parts_unlocked']);
       return List<String>.from(unlockedParts);
@@ -74,7 +76,9 @@ class _MythStoryPageState extends State<MythStoryPage> {
 
   void _showSnackBar(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -84,7 +88,8 @@ class _MythStoryPageState extends State<MythStoryPage> {
     });
 
     RewardedAd.load(
-      adUnitId: 'ca-app-pub-9329709593733606/7159103317', // Use your AdMob rewarded ad unit ID
+      adUnitId:
+          'ca-app-pub-9329709593733606/7159103317', // Use your AdMob rewarded ad unit ID
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
@@ -103,9 +108,13 @@ class _MythStoryPageState extends State<MythStoryPage> {
           ad.show(
             onUserEarnedReward: (ad, reward) async {
               final gamificationService = getIt<GamificationService>();
-              await gamificationService.unlockStoryPart(widget.mythStory.id, chapterId);
+              await gamificationService.unlockStoryPart(
+                widget.mythStory.id,
+                chapterId,
+              );
               setState(() {
-                _unlockedCardIdsFuture = _getUnlockedCardIds(); // Refresh unlocked chapters
+                _unlockedCardIdsFuture =
+                    _getUnlockedCardIds(); // Refresh unlocked chapters
               });
               _showSnackBar('myth_story_page_chapter_unlocked_success'.tr());
             },
@@ -145,7 +154,10 @@ class _MythStoryPageState extends State<MythStoryPage> {
                       _saveFontSize(value);
                     },
                   ),
-                  Text('myth_story_page_sample_text'.tr(), style: TextStyle(fontSize: _fontSize)),
+                  Text(
+                    'myth_story_page_sample_text'.tr(),
+                    style: TextStyle(fontSize: _fontSize),
+                  ),
                 ],
               );
             },
@@ -172,16 +184,27 @@ class _MythStoryPageState extends State<MythStoryPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.onPrimary),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.format_size, color: Theme.of(context).colorScheme.onPrimary),
+            icon: Icon(
+              Icons.format_size,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
             onPressed: _showFontSizeDialog,
           ),
           IconButton(
-            icon: Icon(themeProvider.themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode, color: Theme.of(context).colorScheme.onPrimary),
+            icon: Icon(
+              themeProvider.themeMode == ThemeMode.dark
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
             onPressed: () {
               themeProvider.toggleTheme();
             },
@@ -196,7 +219,13 @@ class _MythStoryPageState extends State<MythStoryPage> {
             fontWeight: FontWeight.bold,
             fontSize: 30, // Adjusted font size for AppBar
             letterSpacing: 2.0,
-            shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+            shadows: [
+              const Shadow(
+                blurRadius: 15.0,
+                color: Colors.black87,
+                offset: Offset(4.0, 4.0),
+              ),
+            ],
           ),
         ),
         centerTitle: true,
@@ -211,7 +240,11 @@ class _MythStoryPageState extends State<MythStoryPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(child: Text('${'myth_story_page_error_prefix'.tr()}: ${snapshot.error}'));
+                    return Center(
+                      child: Text(
+                        '${'myth_story_page_error_prefix'.tr()}: ${snapshot.error}',
+                      ),
+                    );
                   } else {
                     final unlockedCardIds = snapshot.data ?? [];
                     String? firstLockedChapterId;
@@ -275,7 +308,8 @@ class _StoryContentState extends State<_StoryContent> {
           itemBuilder: (context, index) {
             final card = widget.mythStory.correctOrder[index];
             final isUnlocked = widget.unlockedCardIds.contains(card.id);
-            final isFirstLockedChapter = (card.id == widget.firstLockedChapterId);
+            final isFirstLockedChapter =
+                (card.id == widget.firstLockedChapterId);
             return Card(
               color: Theme.of(context).cardColor, // Use theme's card color
               margin: const EdgeInsets.all(8.0),
@@ -284,34 +318,60 @@ class _StoryContentState extends State<_StoryContent> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(card.title, style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Theme.of(context).colorScheme.onSurface)),
+                    Text(
+                      card.title,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                    ),
                     const SizedBox(height: 8.0),
                     if (isUnlocked) ...[
                       if (card.videoUrl != null)
-                        CustomVideoPlayer(videoUrl: card.videoUrl!, placeholderAsset: 'assets/images/stories/${card.imagePath}')
+                        CustomVideoPlayer(
+                          videoUrl: card.videoUrl!,
+                          placeholderAsset:
+                              'assets/images/stories/${card.imagePath}',
+                        )
                       else
                         Image.asset('assets/images/stories/${card.imagePath}'),
                       const SizedBox(height: 8.0),
                       Text(
                         card.detailedStory,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface, fontSize: widget.fontSize),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: widget.fontSize,
+                        ),
                       ),
                     ] else if (isFirstLockedChapter)
                       Column(
                         children: [
-                          Text('myth_story_page_chapter_locked'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                          Text(
+                            'myth_story_page_chapter_locked'.tr(),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
                           const SizedBox(height: 8.0),
                           widget.isAdLoading
                               ? const CircularProgressIndicator()
                               : ElevatedButton.icon(
-                                  onPressed: () => widget.showRewardedAd(card.id),
+                                  onPressed: () =>
+                                      widget.showRewardedAd(card.id),
                                   icon: const Icon(Icons.play_arrow),
-                                  label: Text('myth_story_page_unlock_with_ad'.tr()),
+                                  label: Text(
+                                    'myth_story_page_unlock_with_ad'.tr(),
+                                  ),
                                 ),
                         ],
                       )
                     else
-                      Text('myth_story_page_chapter_locked'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                      Text(
+                        'myth_story_page_chapter_locked'.tr(),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
                   ],
                 ),
               ),

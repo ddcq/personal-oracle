@@ -28,11 +28,21 @@ class Deity {
 
   // Conversion vers JSON pour persistence future
   Map<String, dynamic> toJson() {
-    return {'id': id, 'name': name, 'title': title, 'traits': traits, 'description': description};
+    return {
+      'id': id,
+      'name': name,
+      'title': title,
+      'traits': traits,
+      'description': description,
+    };
   }
 
   // Création depuis JSON
-  factory Deity.fromJson(Map<String, dynamic> json, String icon, List<Color> colors) {
+  factory Deity.fromJson(
+    Map<String, dynamic> json,
+    String icon,
+    List<Color> colors,
+  ) {
     return Deity(
       id: json['id'],
       name: json['name'],

@@ -7,7 +7,8 @@ import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
-class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameGame> {
+class SnakeComponent extends PositionComponent
+    with HasGameReference<SnakeFlameGame> {
   ValueNotifier<GameState> gameState;
   final double cellSize;
   final Sprite snakeHeadSprite;
@@ -45,12 +46,20 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
     required this.snakeBodySprite,
     required double animationDuration,
   }) : _animationDuration = animationDuration,
-       _previousHeadPosition = (gameState.value.snake[0].position.toVector2() * cellSize).toOffset(),
-       _currentHeadPosition = (gameState.value.snake[0].position.toVector2() * cellSize).toOffset(),
+       _previousHeadPosition =
+           (gameState.value.snake[0].position.toVector2() * cellSize)
+               .toOffset(),
+       _currentHeadPosition =
+           (gameState.value.snake[0].position.toVector2() * cellSize)
+               .toOffset(),
        _animationProgress = 0.0 {
-    _headComponent = SpriteComponent(sprite: snakeHeadSprite, size: Vector2.all(cellSize * 2), anchor: Anchor.center);
+    _headComponent = SpriteComponent(
+      sprite: snakeHeadSprite,
+      size: Vector2.all(cellSize * 2),
+      anchor: Anchor.center,
+    );
     add(_headComponent);
-    
+
     // Doubled positions for 2x2 blocks
     _top = Vector2(cellSize * 1.0, cellSize * 0.36);
     _bottom = Vector2(cellSize * 1.0, cellSize * 1.64);
@@ -58,7 +67,7 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
     _right = Vector2(cellSize * 1.64, cellSize * 1.0);
     _smallRadius = cellSize * 0.5;
     _halfCellOffset = Vector2(cellSize * 1.0, cellSize * 1.0);
-    
+
     _cornerCenters = {
       // Top-Left
       '0,-1,-1,0': [_top, Vector2(cellSize * 0.8, cellSize * 0.8), _left],
@@ -79,7 +88,7 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
       '0,-1,0,1': [_top, _halfCellOffset, _bottom],
       '0,1,0,-1': [_bottom, _halfCellOffset, _top],
     };
-    
+
     _cornerRotations = {
       // Straight
       '-1,0,1,0': [-90.0, -90.0, -90.0],
@@ -101,7 +110,10 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
   @override
   void update(double dt) {
     super.update(dt);
-    _animationProgress = (_animationProgress + dt).clamp(0.0, _animationDuration);
+    _animationProgress = (_animationProgress + dt).clamp(
+      0.0,
+      _animationDuration,
+    );
   }
 
   double _calculateShortestAngle(double currentAngle, double targetAngle) {
@@ -141,19 +153,40 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
         break;
     }
 
-    final angleDifference = _calculateShortestAngle(_headComponent.angle, targetAngle);
-    _headComponent.add(RotateEffect.by(angleDifference, EffectController(duration: _animationDuration, curve: _animationCurve)));
+    final angleDifference = _calculateShortestAngle(
+      _headComponent.angle,
+      targetAngle,
+    );
+    _headComponent.add(
+      RotateEffect.by(
+        angleDifference,
+        EffectController(duration: _animationDuration, curve: _animationCurve),
+      ),
+    );
 
     gameState.value = newGameState;
-    _currentHeadPosition = (gameState.value.snake[0].position.toVector2() * cellSize).toOffset();
+    _currentHeadPosition =
+        (gameState.value.snake[0].position.toVector2() * cellSize).toOffset();
     _animationProgress = 0.0;
   }
 
-  void _renderBodyPart(Canvas canvas, Vector2 center, double rotation, Vector2 size, {Paint? overridePaint}) {
+  void _renderBodyPart(
+    Canvas canvas,
+    Vector2 center,
+    double rotation,
+    Vector2 size, {
+    Paint? overridePaint,
+  }) {
     canvas.save();
     canvas.translate(center.x, center.y);
     canvas.rotate(rotation);
-    snakeBodySprite.render(canvas, position: Vector2.zero(), size: size, anchor: Anchor.center, overridePaint: overridePaint);
+    snakeBodySprite.render(
+      canvas,
+      position: Vector2.zero(),
+      size: size,
+      anchor: Anchor.center,
+      overridePaint: overridePaint,
+    );
     canvas.restore();
   }
 
@@ -177,7 +210,12 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
         if (centers != null && rotations != null) {
           final bodySize = Vector2.all(_smallRadius * 4);
           for (int j = 0; j < centers.length; j++) {
-            _renderBodyPart(canvas, segmentPosition + centers[j], radians(rotations[j]), bodySize);
+            _renderBodyPart(
+              canvas,
+              segmentPosition + centers[j],
+              radians(rotations[j]),
+              bodySize,
+            );
           }
         }
       } else if (type == 'tail' && subPattern != null) {
@@ -185,13 +223,34 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
         final rotations = _cornerRotations[subPattern];
 
         if (centers != null && rotations != null) {
-          final progress = _animationCurve.transform(_animationProgress / _animationDuration);
-          final paint = Paint()..color = Color.fromRGBO(255, 255, 255, 1.0 - progress);
+          final progress = _animationCurve.transform(
+            _animationProgress / _animationDuration,
+          );
+          final paint = Paint()
+            ..color = Color.fromRGBO(255, 255, 255, 1.0 - progress);
           final fullSize = Vector2.all(cellSize * _tailSize1Factor);
 
-          _renderBodyPart(canvas, segmentPosition + centers[0], radians(rotations[0]), fullSize, overridePaint: paint);
-          _renderBodyPart(canvas, segmentPosition + centers[1], radians(rotations[1]), fullSize, overridePaint: paint);
-          _renderBodyPart(canvas, segmentPosition + centers[2], radians(rotations[2]), fullSize, overridePaint: paint);
+          _renderBodyPart(
+            canvas,
+            segmentPosition + centers[0],
+            radians(rotations[0]),
+            fullSize,
+            overridePaint: paint,
+          );
+          _renderBodyPart(
+            canvas,
+            segmentPosition + centers[1],
+            radians(rotations[1]),
+            fullSize,
+            overridePaint: paint,
+          );
+          _renderBodyPart(
+            canvas,
+            segmentPosition + centers[2],
+            radians(rotations[2]),
+            fullSize,
+            overridePaint: paint,
+          );
         }
       }
     }
@@ -199,9 +258,18 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
     // Head animation
     Offset animatedHeadPosition = _currentHeadPosition;
     if (_animationProgress < _animationDuration) {
-      final t = _animationCurve.transform(_animationProgress / _animationDuration);
-      animatedHeadPosition = Offset.lerp(_previousHeadPosition, _currentHeadPosition, t)!;
+      final t = _animationCurve.transform(
+        _animationProgress / _animationDuration,
+      );
+      animatedHeadPosition = Offset.lerp(
+        _previousHeadPosition,
+        _currentHeadPosition,
+        t,
+      )!;
     }
-    _headComponent.position = Vector2(animatedHeadPosition.dx + cellSize, animatedHeadPosition.dy + cellSize);
+    _headComponent.position = Vector2(
+      animatedHeadPosition.dx + cellSize,
+      animatedHeadPosition.dy + cellSize,
+    );
   }
 }

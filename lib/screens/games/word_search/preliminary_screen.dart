@@ -10,16 +10,24 @@ class WordSearchPreliminaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
     final Widget gameInfoLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+        color: Colors.black.withAlpha(128),
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-                    Image.asset('assets/images/preliminary/word_search.webp', width: 120, height: 120),
+          Image.asset(
+            'assets/images/preliminary/word_search.webp',
+            width: 120,
+            height: 120,
+          ),
           const SizedBox(height: 16),
           Text(
             'word_search_preliminary_screen_help_text'.tr(),
@@ -34,7 +42,10 @@ class WordSearchPreliminaryScreen extends StatelessWidget {
       text: 'word_search_preliminary_screen_start_button'.tr(),
       color: const Color(0xFF8B5CF6), // Color from menu
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const WordSearchScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const WordSearchScreen()),
+        );
       },
     );
 
@@ -55,7 +66,14 @@ class WordSearchPreliminaryScreen extends StatelessWidget {
                           startButton,
                         ],
                       )
-                    : Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[gameInfoLayout, const SizedBox(height: 32), startButton]),
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          gameInfoLayout,
+                          const SizedBox(height: 32),
+                          startButton,
+                        ],
+                      ),
               ),
             ),
             SafeArea(
@@ -73,5 +91,3 @@ class WordSearchPreliminaryScreen extends StatelessWidget {
     );
   }
 }
-
-

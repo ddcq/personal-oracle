@@ -59,11 +59,19 @@ class GameHelpDialog extends StatelessWidget {
         fontWeight: FontWeight.bold,
         fontSize: 24.sp,
         letterSpacing: 1.5.sp,
-        shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(3.0, 3.0))],
+        shadows: [
+          const Shadow(
+            blurRadius: 10.0,
+            color: Colors.black87,
+            offset: Offset(3.0, 3.0),
+          ),
+        ],
       ),
       content: SingleChildScrollView(
         child: ListBody(
-          children: helpTexts.map((text) => _buildRule(text, textStyle)).toList(),
+          children: helpTexts
+              .map((text) => _buildRule(text, textStyle))
+              .toList(),
         ),
       ),
       actions: [

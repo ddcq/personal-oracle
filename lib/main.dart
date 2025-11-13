@@ -13,7 +13,6 @@ import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-
 import 'package:oracle_d_asgard/services/cache_service.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/router.dart'; // Import the router
@@ -22,7 +21,7 @@ import 'package:oracle_d_asgard/widgets/app_restart_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize EasyLocalization with error handling
   try {
     await EasyLocalization.ensureInitialized();
@@ -30,13 +29,17 @@ void main() async {
     debugPrint('Failed to initialize EasyLocalization: $e');
     // Continue without localization - app will use fallback locale
   }
-  
+
   setupLocator();
 
   runApp(
     AppRestartWrapper(
       child: EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('fr', 'FR'), Locale('es', 'ES')],
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('fr', 'FR'),
+          Locale('es', 'ES'),
+        ],
         path: 'assets/resources/langs',
         fallbackLocale: const Locale('en', 'US'),
         child: ChangeNotifierProvider(
@@ -73,7 +76,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       final countryCode = prefs.getString('country_code');
 
       if (languageCode != null && mounted) {
-        final savedLocale = Locale(languageCode, countryCode?.isNotEmpty == true ? countryCode : null);
+        final savedLocale = Locale(
+          languageCode,
+          countryCode?.isNotEmpty == true ? countryCode : null,
+        );
         await context.setLocale(savedLocale);
       }
     } catch (e) {
@@ -105,7 +111,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       debugPrint('Failed to initialize notifications: $e');
       // Continue without notifications if initialization fails
     }
-    
+
     // Initialize ads with error handling
     try {
       if (Platform.isIOS || Platform.isAndroid) {
@@ -115,7 +121,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       debugPrint('Failed to initialize ads: $e');
       // Continue without ads
     }
-    
+
     // Initialize database with error handling and timeout
     try {
       await getIt<DatabaseService>().database.timeout(
@@ -129,7 +135,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       debugPrint('Failed to initialize database: $e');
       // Continue - database errors will be handled per-operation
     }
-    
+
     // Start music with error handling
     try {
       getIt<SoundService>().playMainMenuMusic();
@@ -155,12 +161,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final soundService = getIt<SoundService>();
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       soundService.pauseMusic();
-      NotificationService().scheduleNotification(); // Schedule notification on app pause
+      NotificationService()
+          .scheduleNotification(); // Schedule notification on app pause
     } else if (state == AppLifecycleState.resumed) {
       soundService.resumeMusic();
-      NotificationService().cancelAllNotifications(); // Cancel notifications on app resume
+      NotificationService()
+          .cancelAllNotifications(); // Cancel notifications on app resume
     }
   }
 
@@ -172,8 +181,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp.router(
-          key: ValueKey(context.locale.toString()), // Force rebuild when locale changes
-          title: context.locale.languageCode == 'fr' ? 'Oracle d\'Asgard' : 'Oracle of Asgard',
+          key: ValueKey(
+            context.locale.toString(),
+          ), // Force rebuild when locale changes
+          title: context.locale.languageCode == 'fr'
+              ? 'Oracle d\'Asgard'
+              : 'Oracle of Asgard',
           theme: AppThemes.lightTheme,
           darkTheme: AppThemes.darkTheme,
           themeMode: Provider.of<ThemeProvider>(context).themeMode,

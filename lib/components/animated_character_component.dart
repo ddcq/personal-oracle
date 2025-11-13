@@ -3,7 +3,8 @@ import 'package:flame/components.dart';
 
 enum CharacterDirection { down, left, right, up }
 
-class AnimatedCharacterComponent extends PositionComponent with HasGameReference {
+class AnimatedCharacterComponent extends PositionComponent
+    with HasGameReference {
   final ui.Image characterSpriteSheet;
   final int characterIndex; // 0-7 (4 characters per row, 2 rows)
   CharacterDirection direction;
@@ -46,8 +47,10 @@ class AnimatedCharacterComponent extends PositionComponent with HasGameReference
     final int charRow = characterIndex ~/ 4; // 0 for top row, 1 for bottom row
     final int charCol = characterIndex % 4; // 0-3 for columns
 
-    final double charOffsetX = charCol * (frameWidth * 3); // Each character block is 3 frames wide
-    final double charOffsetY = charRow * (frameHeight * 4); // Each character block is 4 rows high
+    final double charOffsetX =
+        charCol * (frameWidth * 3); // Each character block is 3 frames wide
+    final double charOffsetY =
+        charRow * (frameHeight * 4); // Each character block is 4 rows high
 
     // Calculate animation row offset based on direction
     double directionOffsetY = 0;
@@ -67,11 +70,21 @@ class AnimatedCharacterComponent extends PositionComponent with HasGameReference
     }
 
     // Calculate the source rectangle for the current frame
-    final ui.Rect sourceRect = ui.Rect.fromLTWH(charOffsetX + (_currentFrame * frameWidth), charOffsetY + directionOffsetY, frameWidth, frameHeight);
+    final ui.Rect sourceRect = ui.Rect.fromLTWH(
+      charOffsetX + (_currentFrame * frameWidth),
+      charOffsetY + directionOffsetY,
+      frameWidth,
+      frameHeight,
+    );
 
     // Destination rectangle (where to draw on the canvas)
     final ui.Rect destRect = ui.Rect.fromLTWH(0, 0, size.x, size.y);
 
-    canvas.drawImageRect(characterSpriteSheet, sourceRect, destRect, ui.Paint());
+    canvas.drawImageRect(
+      characterSpriteSheet,
+      sourceRect,
+      destRect,
+      ui.Paint(),
+    );
   }
 }

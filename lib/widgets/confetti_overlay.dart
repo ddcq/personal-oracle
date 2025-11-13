@@ -16,7 +16,6 @@ class ConfettiOverlay extends StatefulWidget {
 }
 
 class _ConfettiOverlayState extends State<ConfettiOverlay> {
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -33,7 +32,7 @@ class _ConfettiOverlayState extends State<ConfettiOverlay> {
               Colors.blue,
               Colors.pink,
               Colors.orange,
-              Colors.purple
+              Colors.purple,
             ],
           ),
         ),

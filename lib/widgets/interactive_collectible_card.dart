@@ -12,13 +12,20 @@ class InteractiveCollectibleCard extends StatefulWidget {
   final bool enableNavigation;
   final bool playVideo;
 
-  const InteractiveCollectibleCard({super.key, required this.card, this.enableNavigation = true, this.playVideo = true});
+  const InteractiveCollectibleCard({
+    super.key,
+    required this.card,
+    this.enableNavigation = true,
+    this.playVideo = true,
+  });
 
   @override
-  State<InteractiveCollectibleCard> createState() => _InteractiveCollectibleCardState();
+  State<InteractiveCollectibleCard> createState() =>
+      _InteractiveCollectibleCardState();
 }
 
-class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard> {
+class _InteractiveCollectibleCardState
+    extends State<InteractiveCollectibleCard> {
   bool _showVideo = true;
 
   @override
@@ -35,7 +42,8 @@ class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard>
   @override
   void didUpdateWidget(covariant InteractiveCollectibleCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.card != oldWidget.card || widget.playVideo != oldWidget.playVideo) {
+    if (widget.card != oldWidget.card ||
+        widget.playVideo != oldWidget.playVideo) {
       setState(() {
         _showVideo = widget.card.videoUrl != null && widget.playVideo;
       });
@@ -65,13 +73,20 @@ class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard>
               borderRadius: BorderRadius.circular(15),
               child: Stack(
                 children: [
-                      if (hasVideo && _showVideo)
-                        CustomVideoPlayer(videoUrl: widget.card.videoUrl!, placeholderAsset: addAssetPrefix(widget.card.imagePath))
-                      else
-                        Image.asset(addAssetPrefix(widget.card.imagePath), fit: BoxFit.contain),
-                      // Shine overlay
-                      Positioned(
-                        left: -cardWidth * 2, // Initial position off-screen left
+                  if (hasVideo && _showVideo)
+                    CustomVideoPlayer(
+                      videoUrl: widget.card.videoUrl!,
+                      placeholderAsset: addAssetPrefix(widget.card.imagePath),
+                    )
+                  else
+                    Image.asset(
+                      addAssetPrefix(widget.card.imagePath),
+                      fit: BoxFit.contain,
+                    ),
+                  // Shine overlay
+                  Positioned(
+                        left:
+                            -cardWidth * 2, // Initial position off-screen left
                         top: 0,
                         bottom: 0,
                         child: Container(
@@ -79,18 +94,38 @@ class _InteractiveCollectibleCardState extends State<InteractiveCollectibleCard>
                           height: double.infinity,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [Colors.white.withAlpha(0), Colors.white.withAlpha(76), Colors.white.withAlpha(0)],
-                              begin: Alignment(-math.cos(math.pi / 6), -math.sin(math.pi / 6)), // 30 degrees angle
-                              end: Alignment(math.cos(math.pi / 6), math.sin(math.pi / 6)), // 30 degrees angle
+                              colors: [
+                                Colors.white.withAlpha(0),
+                                Colors.white.withAlpha(76),
+                                Colors.white.withAlpha(0),
+                              ],
+                              begin: Alignment(
+                                -math.cos(math.pi / 6),
+                                -math.sin(math.pi / 6),
+                              ), // 30 degrees angle
+                              end: Alignment(
+                                math.cos(math.pi / 6),
+                                math.sin(math.pi / 6),
+                              ), // 30 degrees angle
                             ),
                           ),
                         ),
-                      ).animate(onPlay: (controller) => controller.repeat(reverse: true)).slideX(begin: 0, end: cardWidth * 3, duration: 3.seconds),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),    );
+                      )
+                      .animate(
+                        onPlay: (controller) =>
+                            controller.repeat(reverse: true),
+                      )
+                      .slideX(
+                        begin: 0,
+                        end: cardWidth * 3,
+                        duration: 3.seconds,
+                      ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

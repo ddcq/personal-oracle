@@ -17,5 +17,6 @@ abstract class MythCard with _$MythCard {
     required String detailedStory,
   }) = _MythCard;
 
-  factory MythCard.fromJson(Map<String, dynamic> json) => _$MythCardFromJson(json);
+  factory MythCard.fromJson(Map<String, dynamic> json) =>
+      _$MythCardFromJson(json);
 }

@@ -15,14 +15,22 @@ class QixGame extends FlameGame with KeyboardEvents {
   late final Player player;
   late ui.Image characterSpriteSheet;
   late ui.Image snakeHeadImage;
-  final ValueNotifier<double> filledPercentageNotifier = ValueNotifier<double>(0.0);
+  final ValueNotifier<double> filledPercentageNotifier = ValueNotifier<double>(
+    0.0,
+  );
   final VoidCallback onGameOver;
   final Function(CollectibleCard?) onWin;
   final String? rewardCardImagePath;
   CollectibleCard? rewardCard;
   final int difficulty;
 
-  QixGame({required this.onGameOver, required this.onWin, this.rewardCardImagePath, this.rewardCard, required this.difficulty});
+  QixGame({
+    required this.onGameOver,
+    required this.onWin,
+    this.rewardCardImagePath,
+    this.rewardCard,
+    required this.difficulty,
+  });
 
   @override
   Future<void> onLoad() async {
@@ -51,8 +59,13 @@ class QixGame extends FlameGame with KeyboardEvents {
       difficulty: difficulty,
     );
     player.gridPosition = IntVector2(0, 0); // Start at the top-left edge
-    player.targetGridPosition = IntVector2(player.gridPosition.x, player.gridPosition.y);
-    player.setDirection(Direction.right); // Start moving right along the edge automatically
+    player.targetGridPosition = IntVector2(
+      player.gridPosition.x,
+      player.gridPosition.y,
+    );
+    player.setDirection(
+      Direction.right,
+    ); // Start moving right along the edge automatically
 
     add(arena);
     add(player);
@@ -60,7 +73,8 @@ class QixGame extends FlameGame with KeyboardEvents {
   }
 
   double get winPercentage {
-    double calculatedPercentage = kBaseWinPercentage + (difficulty * kWinPercentageIncrementPerLevel);
+    double calculatedPercentage =
+        kBaseWinPercentage + (difficulty * kWinPercentageIncrementPerLevel);
     return calculatedPercentage.clamp(kBaseWinPercentage, kMaxWinPercentage);
   }
 
@@ -73,7 +87,11 @@ class QixGame extends FlameGame with KeyboardEvents {
 
   void onPlayerStateChanged(PlayerState newState) {
     if (newState == PlayerState.onEdge) {
-      arena.fillArea(player.currentPath, player.pathStartGridPosition!, player.gridPosition);
+      arena.fillArea(
+        player.currentPath,
+        player.pathStartGridPosition!,
+        player.gridPosition,
+      );
       arena.endPath();
     }
   }
@@ -94,7 +112,10 @@ class QixGame extends FlameGame with KeyboardEvents {
   }
 
   @override
-  KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
     super.onKeyEvent(event, keysPressed);
 
     final Map<LogicalKeyboardKey, Direction> keyDirectionMap = {

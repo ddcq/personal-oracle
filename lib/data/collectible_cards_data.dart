@@ -3,7 +3,12 @@ import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/models/card_version.dart';
 
 // Helper function to create all versions of a card
-List<CollectibleCard> _createCardVersions({required String id, required String title, required String description, required List<String> tags}) {
+List<CollectibleCard> _createCardVersions({
+  required String id,
+  required String title,
+  required String description,
+  required List<String> tags,
+}) {
   return [
     CollectibleCard(
       id: id,
@@ -72,14 +77,24 @@ final allCollectibleCards = [
     description: 'collectible_card_fenrir_description'.tr(),
     tags: ['Fenrir', 'Loki', 'Odin', 'Ragnarök'],
   ),
-  ..._createCardVersions(id: 'tyr', title: 'collectible_card_tyr_title'.tr(), description: 'collectible_card_tyr_description'.tr(), tags: ['Tyr', 'Fenrir']),
+  ..._createCardVersions(
+    id: 'tyr',
+    title: 'collectible_card_tyr_title'.tr(),
+    description: 'collectible_card_tyr_description'.tr(),
+    tags: ['Tyr', 'Fenrir'],
+  ),
   ..._createCardVersions(
     id: 'gleipnir',
     title: 'collectible_card_gleipnir_title'.tr(),
     description: 'collectible_card_gleipnir_description'.tr(),
     tags: ['Gleipnir', 'Fenrir'],
   ),
-  ..._createCardVersions(id: 'ymir', title: 'collectible_card_ymir_title'.tr(), description: 'collectible_card_ymir_description'.tr(), tags: ['Ymir']),
+  ..._createCardVersions(
+    id: 'ymir',
+    title: 'collectible_card_ymir_title'.tr(),
+    description: 'collectible_card_ymir_description'.tr(),
+    tags: ['Ymir'],
+  ),
   ..._createCardVersions(
     id: 'audhumla',
     title: 'collectible_card_audhumla_title'.tr(),
@@ -92,7 +107,12 @@ final allCollectibleCards = [
     description: 'collectible_card_ginnungagap_description'.tr(),
     tags: ['Ginnungagap'],
   ),
-  ..._createCardVersions(id: 'sif', title: 'collectible_card_sif_title'.tr(), description: 'collectible_card_sif_description'.tr(), tags: ['Sif', 'Thor']),
+  ..._createCardVersions(
+    id: 'sif',
+    title: 'collectible_card_sif_title'.tr(),
+    description: 'collectible_card_sif_description'.tr(),
+    tags: ['Sif', 'Thor'],
+  ),
   ..._createCardVersions(
     id: 'brokkr_sindri',
     title: 'collectible_card_brokkr_sindri_title'.tr(),

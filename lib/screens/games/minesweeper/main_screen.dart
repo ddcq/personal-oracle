@@ -22,7 +22,10 @@ class MinesweeperScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(create: (_) => MinesweeperController(), child: const _MinesweeperView());
+    return ChangeNotifierProvider(
+      create: (_) => MinesweeperController(),
+      child: const _MinesweeperView(),
+    );
   }
 }
 
@@ -71,7 +74,8 @@ class _MinesweeperView extends StatelessWidget {
       } else if (controller.isGameWon) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           final gamificationService = getIt<GamificationService>();
-          CollectibleCard? wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+          CollectibleCard? wonCard = await gamificationService
+              .selectRandomUnearnedCollectibleCard();
 
           if (wonCard != null) {
             await gamificationService.unlockCollectibleCard(wonCard);
@@ -114,14 +118,19 @@ class _MinesweeperView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.help_outline, color: Colors.white),
             onPressed: () {
-              GameHelpDialog.show(context, [
-                'minesweeper_rule_1'.tr(),
-                'minesweeper_rule_2'.tr(),
-                'minesweeper_rule_3'.tr(),
-                'minesweeper_rule_4'.tr(),
-                'minesweeper_rule_5'.tr(),
-                'minesweeper_rule_6'.tr(),
-              ], onGamePaused: () {}, onGameResumed: () {});
+              GameHelpDialog.show(
+                context,
+                [
+                  'minesweeper_rule_1'.tr(),
+                  'minesweeper_rule_2'.tr(),
+                  'minesweeper_rule_3'.tr(),
+                  'minesweeper_rule_4'.tr(),
+                  'minesweeper_rule_5'.tr(),
+                  'minesweeper_rule_6'.tr(),
+                ],
+                onGamePaused: () {},
+                onGameResumed: () {},
+              );
             },
           ),
         ],
@@ -132,7 +141,15 @@ class _MinesweeperView extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('minesweeper_treasures_found'.tr(namedArgs: {'found': '${controller.treasuresFound}', 'total': '${controller.treasureCount}'}), style: ChibiTextStyles.storyTitle),
+                child: Text(
+                  'minesweeper_treasures_found'.tr(
+                    namedArgs: {
+                      'found': '${controller.treasuresFound}',
+                      'total': '${controller.treasureCount}',
+                    },
+                  ),
+                  style: ChibiTextStyles.storyTitle,
+                ),
               ),
               _RuneLegend(),
               Expanded(
@@ -140,7 +157,9 @@ class _MinesweeperView extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: controller.cols),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: controller.cols,
+                    ),
                     itemCount: controller.rows * controller.cols,
                     itemBuilder: (context, index) {
                       final row = index ~/ controller.cols;
@@ -150,14 +169,31 @@ class _MinesweeperView extends StatelessWidget {
                       return SimpleGestureDetector(
                         onTap: () => controller.revealCell(row, col),
                         onLongPress: () => controller.toggleFlag(row, col),
-                        child: Container(
-                          key: ValueKey('${row}_${col}_${cell.isRevealed}_${cell.isFlagged}'), // Unique key for animation
-                          decoration: BoxDecoration(
-                            color: cell.isRevealed ? Colors.grey[800] : Colors.grey[600],
-                            border: Border.all(color: Colors.grey[900]!),
-                          ),
-                          child: Center(child: _buildCellContent(cell, context)),
-                        ).animate(key: ValueKey('${row}_${col}_${cell.isRevealed}_${cell.isFlagged}')).scale(duration: const Duration(milliseconds: 300)),
+                        child:
+                            Container(
+                                  key: ValueKey(
+                                    '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
+                                  ), // Unique key for animation
+                                  decoration: BoxDecoration(
+                                    color: cell.isRevealed
+                                        ? Colors.grey[800]
+                                        : Colors.grey[600],
+                                    border: Border.all(
+                                      color: Colors.grey[900]!,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: _buildCellContent(cell, context),
+                                  ),
+                                )
+                                .animate(
+                                  key: ValueKey(
+                                    '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
+                                  ),
+                                )
+                                .scale(
+                                  duration: const Duration(milliseconds: 300),
+                                ),
                       );
                     },
                   ),
@@ -178,10 +214,20 @@ class _MinesweeperView extends StatelessWidget {
       return const SizedBox.shrink();
     }
     if (cell.hasMine) {
-      return Image.asset('assets/images/explosion.png', key: const ValueKey('explosion'), width: 40, height: 40); // Explosion animation
+      return Image.asset(
+        'assets/images/explosion.png',
+        key: const ValueKey('explosion'),
+        width: 40,
+        height: 40,
+      ); // Explosion animation
     }
     if (cell.hasTreasure) {
-      return Image.asset('assets/images/sparkle.png', key: const ValueKey('sparkle'), width: 40, height: 40); // Placeholder for treasure
+      return Image.asset(
+        'assets/images/sparkle.png',
+        key: const ValueKey('sparkle'),
+        width: 40,
+        height: 40,
+      ); // Placeholder for treasure
     }
     if (cell.adjacentMines > 0 || cell.adjacentTreasures > 0) {
       List<Widget> counts = [];
@@ -190,14 +236,19 @@ class _MinesweeperView extends StatelessWidget {
 
       // Check if both mine and treasure runes will be displayed
       if (cell.adjacentMines > 0 && cell.adjacentTreasures > 0) {
-        currentFontSize = baseFontSize * 0.75; // Reduce font size if both are present
+        currentFontSize =
+            baseFontSize * 0.75; // Reduce font size if both are present
       }
 
       if (cell.adjacentMines > 0) {
         counts.add(
           Text(
             _getRuneForMines(cell.adjacentMines), // Use rune
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: currentFontSize),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+              fontSize: currentFontSize,
+            ),
           ),
         );
       }
@@ -205,7 +256,11 @@ class _MinesweeperView extends StatelessWidget {
         counts.add(
           Text(
             _getRuneForTreasures(cell.adjacentTreasures), // Use rune
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.yellow, fontSize: currentFontSize),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.yellow,
+              fontSize: currentFontSize,
+            ),
           ),
         );
       }
@@ -231,7 +286,12 @@ String _getRuneForTreasures(int count) {
 class _RuneLegend extends StatelessWidget {
   const _RuneLegend();
 
-  List<Widget> _buildRuneTexts(List<String> runes, TextStyle runeStyle, TextStyle valueStyle, {String Function(int)? suffixBuilder}) {
+  List<Widget> _buildRuneTexts(
+    List<String> runes,
+    TextStyle runeStyle,
+    TextStyle valueStyle, {
+    String Function(int)? suffixBuilder,
+  }) {
     return [
       for (int i = 1; i < runes.length; i++)
         if (runes[i].isNotEmpty)
@@ -248,10 +308,20 @@ class _RuneLegend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double uniformFontSize = MediaQuery.of(context).size.width * 0.035;
-    TextStyle legendTextStyle = ChibiTextStyles.dialogText.copyWith(fontSize: uniformFontSize);
-    TextStyle mineRuneTextStyle = legendTextStyle.copyWith(color: Colors.red, fontSize: uniformFontSize * 1.5); // Larger for rune
-    TextStyle treasureRuneTextStyle = legendTextStyle.copyWith(color: Colors.yellow, fontSize: uniformFontSize * 1.5); // Larger for rune
-    TextStyle valueTextStyle = legendTextStyle.copyWith(fontSize: uniformFontSize * 0.8); // Smaller for value
+    TextStyle legendTextStyle = ChibiTextStyles.dialogText.copyWith(
+      fontSize: uniformFontSize,
+    );
+    TextStyle mineRuneTextStyle = legendTextStyle.copyWith(
+      color: Colors.red,
+      fontSize: uniformFontSize * 1.5,
+    ); // Larger for rune
+    TextStyle treasureRuneTextStyle = legendTextStyle.copyWith(
+      color: Colors.yellow,
+      fontSize: uniformFontSize * 1.5,
+    ); // Larger for rune
+    TextStyle valueTextStyle = legendTextStyle.copyWith(
+      fontSize: uniformFontSize * 0.8,
+    ); // Smaller for value
 
     return Container(
       padding: const EdgeInsets.all(6.0),
@@ -268,15 +338,29 @@ class _RuneLegend extends StatelessWidget {
           const SizedBox(height: 4),
           Wrap(
             spacing: 2.0,
-            runSpacing: 4.0, // Increased runSpacing to accommodate vertical layout
+            runSpacing:
+                4.0, // Increased runSpacing to accommodate vertical layout
             children: [
-              Image.asset('assets/images/explosion.png', width: 32, height: 32), // Mine image
+              Image.asset(
+                'assets/images/explosion.png',
+                width: 32,
+                height: 32,
+              ), // Mine image
               const SizedBox(width: 4), // Small space between image and runes
               ..._buildRuneTexts(mineRunes, mineRuneTextStyle, valueTextStyle),
               const SizedBox(width: 16),
-              Image.asset('assets/images/sparkle.png', width: 32, height: 32), // Treasure image
+              Image.asset(
+                'assets/images/sparkle.png',
+                width: 32,
+                height: 32,
+              ), // Treasure image
               const SizedBox(width: 4), // Small space between image and runes
-              ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, valueTextStyle, suffixBuilder: (count) => count > 1 ? '+' : ''),
+              ..._buildRuneTexts(
+                treasureRunes,
+                treasureRuneTextStyle,
+                valueTextStyle,
+                suffixBuilder: (count) => count > 1 ? '+' : '',
+              ),
             ],
           ),
         ],

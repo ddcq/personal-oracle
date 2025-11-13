@@ -10,12 +10,16 @@ class AsgardWallGameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
     final Widget gameInfoLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+        color: Colors.black.withAlpha(128),
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -34,7 +38,10 @@ class AsgardWallGameScreen extends StatelessWidget {
       text: 'asgard_wall_preliminary_screen_start_button'.tr(),
       color: const Color(0xFFEF4444), // Color from menu
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const GameScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const GameScreen()),
+        );
       },
     );
 
@@ -55,7 +62,14 @@ class AsgardWallGameScreen extends StatelessWidget {
                           startButton,
                         ],
                       )
-                    : Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[gameInfoLayout, const SizedBox(height: 32), startButton]),
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          gameInfoLayout,
+                          const SizedBox(height: 32),
+                          startButton,
+                        ],
+                      ),
               ),
             ),
             SafeArea(

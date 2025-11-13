@@ -61,9 +61,7 @@ class _JoystickControllerState extends State<JoystickController> {
                 // Direction triangles
                 CustomPaint(
                   size: Size(widget.size, widget.size),
-                  painter: _DirectionTrianglesPainter(
-                    size: widget.size,
-                  ),
+                  painter: _DirectionTrianglesPainter(size: widget.size),
                 ),
                 // Dead zone indicator
                 Container(
@@ -138,18 +136,18 @@ class _JoystickControllerState extends State<JoystickController> {
 
     // Calculate angle in radians
     final angle = math.atan2(delta.dy, delta.dx);
-    
+
     // Convert angle to direction (0° is right, 90° is down, etc.)
     Direction newDirection;
-    
+
     // Divide the circle into 4 quadrants
     // Right: -45° to 45°
     // Down: 45° to 135°
     // Left: 135° to -135° (or 135° to 225°)
     // Up: -135° to -45° (or 225° to 315°)
-    
+
     final degrees = angle * 180 / math.pi;
-    
+
     if (degrees >= -45 && degrees < 45) {
       newDirection = Direction.right;
     } else if (degrees >= 45 && degrees < 135) {
@@ -315,12 +313,16 @@ class _DirectionIndicatorPainter extends CustomPainter {
 
     // Shadow
     canvas.drawCircle(endPoint + const Offset(1, 1), 9, circleShadowPaint);
-    
+
     // Main circle
     canvas.drawCircle(endPoint, 8, circlePaint);
-    
+
     // Highlight
-    canvas.drawCircle(endPoint - const Offset(1.5, 1.5), 3, circleHighlightPaint);
+    canvas.drawCircle(
+      endPoint - const Offset(1.5, 1.5),
+      3,
+      circleHighlightPaint,
+    );
   }
 
   @override

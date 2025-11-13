@@ -6,7 +6,12 @@ class ChibiAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final Widget? leading;
 
-  const ChibiAppBar({super.key, required this.titleText, this.actions, this.leading});
+  const ChibiAppBar({
+    super.key,
+    required this.titleText,
+    this.actions,
+    this.leading,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +27,10 @@ class ChibiAppBar extends StatelessWidget implements PreferredSizeWidget {
           final isHeightFinite = constraints.maxHeight.isFinite;
 
           final titleStyle = ChibiTextStyles.appBarTitle.copyWith(
-            fontSize: isHeightFinite ? constraints.maxHeight * 0.6 : 30.0, // Fallback to 30.0
+            fontSize: isHeightFinite
+                ? constraints.maxHeight * 0.6
+                : 30.0, // Fallback to 30.0
           );
-
 
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -35,7 +41,8 @@ class ChibiAppBar extends StatelessWidget implements PreferredSizeWidget {
                 textAlign: TextAlign.center,
                 style: titleStyle,
                 softWrap: false, // Keep on one line
-                overflow: TextOverflow.ellipsis, // Add ellipsis if it still overflows horizontally
+                overflow: TextOverflow
+                    .ellipsis, // Add ellipsis if it still overflows horizontally
               ),
             ],
           );

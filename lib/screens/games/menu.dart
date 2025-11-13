@@ -14,16 +14,45 @@ class MenuPrincipal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final jeux = <_MiniJeuItem>[
-      _MiniJeuItem('games_menu_reorder_history'.tr(), const Color(0xFF6366F1), () => context.go('/order_the_scrolls_preliminary')),
-      _MiniJeuItem('games_menu_asgard_wall'.tr(), const Color(0xFFEF4444), () => context.go('/asgard_wall_preliminary')),
-      _MiniJeuItem('games_menu_scattered_runes'.tr(), const Color(0xFF06B6D4), () => context.go('/puzzle_preliminary')),
-      _MiniJeuItem('games_menu_midgard_serpent'.tr(), const Color(0xFF22C55E), () => context.go('/snake_preliminary')),
-      _MiniJeuItem('games_menu_territory_conquest'.tr(), const Color(0xFFFF6B35), () => context.go('/qix_preliminary')),
-      _MiniJeuItem('games_menu_odin_eye'.tr(), const Color(0xFF8B5CF6), () => context.go('/word_search_preliminary')),
-      _MiniJeuItem('games_menu_andvari_loot'.tr(), Colors.brown, () => context.go('/minesweeper_preliminary')),
+      _MiniJeuItem(
+        'games_menu_reorder_history'.tr(),
+        const Color(0xFF6366F1),
+        () => context.go('/order_the_scrolls_preliminary'),
+      ),
+      _MiniJeuItem(
+        'games_menu_asgard_wall'.tr(),
+        const Color(0xFFEF4444),
+        () => context.go('/asgard_wall_preliminary'),
+      ),
+      _MiniJeuItem(
+        'games_menu_scattered_runes'.tr(),
+        const Color(0xFF06B6D4),
+        () => context.go('/puzzle_preliminary'),
+      ),
+      _MiniJeuItem(
+        'games_menu_midgard_serpent'.tr(),
+        const Color(0xFF22C55E),
+        () => context.go('/snake_preliminary'),
+      ),
+      _MiniJeuItem(
+        'games_menu_territory_conquest'.tr(),
+        const Color(0xFFFF6B35),
+        () => context.go('/qix_preliminary'),
+      ),
+      _MiniJeuItem(
+        'games_menu_odin_eye'.tr(),
+        const Color(0xFF8B5CF6),
+        () => context.go('/word_search_preliminary'),
+      ),
+      _MiniJeuItem(
+        'games_menu_andvari_loot'.tr(),
+        Colors.brown,
+        () => context.go('/minesweeper_preliminary'),
+      ),
     ];
     return Scaffold(
-      extendBodyBehindAppBar: true, // Permet au body de s’étendre derrière l’AppBar
+      extendBodyBehindAppBar:
+          true, // Permet au body de s’étendre derrière l’AppBar
       appBar: ChibiAppBar(
         titleText: 'games_menu_mini_games'.tr(),
         leading: IconButton(
@@ -41,23 +70,25 @@ class MenuPrincipal extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   // Generate ChibiButtons from the jeux list
-                  ...jeux.asMap().entries.map(
-                    (entry) {
-                      int index = entry.key;
-                      _MiniJeuItem jeu = entry.value;
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: 15.h),
-                        child: ChibiButton(
-                          text: jeu.label,
-                          color: jeu.color,
-                          onPressed: jeu.onPressed,
-                        ),
-                      )
+                  ...jeux.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    _MiniJeuItem jeu = entry.value;
+                    return Padding(
+                          padding: EdgeInsets.only(bottom: 15.h),
+                          child: ChibiButton(
+                            text: jeu.label,
+                            color: jeu.color,
+                            onPressed: jeu.onPressed,
+                          ),
+                        )
                         .animate(delay: (index * 120).ms)
-                        .slideY(begin: 0.2, duration: 500.ms, curve: Curves.easeOutCubic)
+                        .slideY(
+                          begin: 0.2,
+                          duration: 500.ms,
+                          curve: Curves.easeOutCubic,
+                        )
                         .fadeIn(duration: 300.ms);
-                    },
-                  ),
+                  }),
                 ],
               ),
             ),

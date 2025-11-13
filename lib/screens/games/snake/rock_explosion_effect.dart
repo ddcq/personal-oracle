@@ -6,7 +6,11 @@ class FlashEffect extends PositionComponent {
   final double flashDuration;
   double _elapsed = 0;
 
-  FlashEffect({required Vector2 position, required Vector2 size, this.flashDuration = 0.15}) : super(position: position, size: size);
+  FlashEffect({
+    required Vector2 position,
+    required Vector2 size,
+    this.flashDuration = 0.15,
+  }) : super(position: position, size: size);
 
   @override
   void update(double dt) {
@@ -83,11 +87,16 @@ class DebrisParticle extends PositionComponent {
   double _elapsed = 0;
   double _rotation = 0;
 
-  DebrisParticle({required Vector2 position, required this.velocity, required this.particleColor, this.particleDuration = 0.6, this.rotationSpeed = 5.0})
-    : super(
-        position: position,
-        size: Vector2.all(16.0), // Increased from 4.0 to 16.0
-      );
+  DebrisParticle({
+    required Vector2 position,
+    required this.velocity,
+    required this.particleColor,
+    this.particleDuration = 0.6,
+    this.rotationSpeed = 5.0,
+  }) : super(
+         position: position,
+         size: Vector2.all(16.0), // Increased from 4.0 to 16.0
+       );
 
   @override
   void update(double dt) {

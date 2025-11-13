@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 
-
 // =========================================
 // PUZZLE GAME - Les Runes Dispersées
 // =========================================
@@ -17,17 +16,22 @@ class PuzzlePreliminaryScreen extends StatefulWidget {
   const PuzzlePreliminaryScreen({super.key});
 
   @override
-  State<PuzzlePreliminaryScreen> createState() => _PuzzlePreliminaryScreenState();
+  State<PuzzlePreliminaryScreen> createState() =>
+      _PuzzlePreliminaryScreenState();
 }
 
 class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final Widget puzzleLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+        color: Colors.black.withAlpha(128),
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Column(
         children: [
           const PuzzleImageTile(size: 80),
@@ -44,7 +48,10 @@ class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
       text: 'puzzle_preliminary_screen_start_button'.tr(),
       color: const Color(0xFF06B6D4),
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const PuzzleScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const PuzzleScreen()),
+        );
       },
     );
     return Scaffold(
@@ -64,7 +71,14 @@ class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
                           startButton,
                         ],
                       )
-                    : Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[puzzleLayout, const SizedBox(height: 32), startButton]),
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          puzzleLayout,
+                          const SizedBox(height: 32),
+                          startButton,
+                        ],
+                      ),
               ),
             ),
             SafeArea(
@@ -102,8 +116,12 @@ class _PuzzleImageTileState extends State<PuzzleImageTile> {
   }
 
   Future<void> _loadImage() async {
-    final ByteData data = await rootBundle.load('assets/images/puzzle_chibi.png');
-    final ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
+    final ByteData data = await rootBundle.load(
+      'assets/images/puzzle_chibi.png',
+    );
+    final ui.Codec codec = await ui.instantiateImageCodec(
+      data.buffer.asUint8List(),
+    );
     final ui.FrameInfo fi = await codec.getNextFrame();
     if (mounted) {
       setState(() {
@@ -116,7 +134,11 @@ class _PuzzleImageTileState extends State<PuzzleImageTile> {
   @override
   Widget build(BuildContext context) {
     if (_image == null || _tileIndex == null) {
-      return SizedBox(width: widget.size, height: widget.size, child: const CircularProgressIndicator());
+      return SizedBox(
+        width: widget.size,
+        height: widget.size,
+        child: const CircularProgressIndicator(),
+      );
     }
     return CustomPaint(
       size: Size(widget.size, widget.size),
@@ -142,7 +164,12 @@ class PuzzleTilePainter extends CustomPainter {
     final int tileCol = tileIndex % tilesPerRow;
     final int tileRow = tileIndex ~/ tilesPerRow;
 
-    final Rect sourceRect = Rect.fromLTWH(tileCol * tileWidth, tileRow * tileHeight, tileWidth, tileHeight);
+    final Rect sourceRect = Rect.fromLTWH(
+      tileCol * tileWidth,
+      tileRow * tileHeight,
+      tileWidth,
+      tileHeight,
+    );
 
     final Rect destRect = Rect.fromLTWH(0, 0, size.width, size.height);
 

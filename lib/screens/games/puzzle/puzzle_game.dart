@@ -24,7 +24,14 @@ class PuzzleGame {
       final int row = i ~/ cols;
       final int col = i % cols;
       final Offset targetPos = Offset(col * pieceSize, row * pieceSize);
-      pieces.add(PuzzlePieceData(id: i, currentPosition: targetPos, targetPosition: targetPos, size: Size(pieceSize, pieceSize)));
+      pieces.add(
+        PuzzlePieceData(
+          id: i,
+          currentPosition: targetPos,
+          targetPosition: targetPos,
+          size: Size(pieceSize, pieceSize),
+        ),
+      );
     }
   }
 
@@ -40,13 +47,15 @@ class PuzzleGame {
     // Zone de dispersion pour le coin supérieur gauche des pièces.
     // On s'assure que toute la pièce reste visible.
     final double scatterWidth = availableArea.width - pieceSize;
-    final double scatterHeight = availableArea.height - pieceSize - topMargin - bottomMargin;
+    final double scatterHeight =
+        availableArea.height - pieceSize - topMargin - bottomMargin;
 
     for (var piece in pieces) {
       // Génère une position aléatoire dans la zone de dispersion.
       // Utilise max(0, ...) pour éviter des valeurs négatives si la zone est plus petite que la pièce.
       final randomGlobalX = random.nextDouble() * max(0, scatterWidth);
-      final randomGlobalY = topMargin + (random.nextDouble() * max(0, scatterHeight));
+      final randomGlobalY =
+          topMargin + (random.nextDouble() * max(0, scatterHeight));
 
       // Convertit la position globale en position locale par rapport au plateau de jeu.
       // La position du composant sera la position globale, car l’offset du plateau est ajouté plus tard.

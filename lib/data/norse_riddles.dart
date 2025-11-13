@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+
 /// Represents a single enigma from Norse mythology.
 class NorseRiddle {
   /// The name of the god, creature, or object. The answer to the riddle.

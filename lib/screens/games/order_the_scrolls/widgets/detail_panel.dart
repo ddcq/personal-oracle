@@ -45,14 +45,27 @@ class DetailPanel extends StatelessWidget {
         // Removed margin: const EdgeInsets.only(top: 8.0), // Add top margin
         // Removed padding: EdgeInsets.all(_isEnlarged ? enlargedPadding : normalPadding), // Animated padding
         decoration: BoxDecoration(
-          color: Color.fromARGB((255 * (isEnlarged ? enlargedOpacity : normalOpacity)).round(), 0, 0, 0), // Animated opacity
+          color: Color.fromARGB(
+            (255 * (isEnlarged ? enlargedOpacity : normalOpacity)).round(),
+            0,
+            0,
+            0,
+          ), // Animated opacity
           borderRadius: BorderRadius.circular(12), // Rounded corners
           border: Border.all(color: Colors.amber, width: 2), // Amber border
-          boxShadow: [BoxShadow(color: Colors.black.withAlpha(77), blurRadius: 10, offset: const Offset(0, 5))],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(77),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
         ),
         child: Padding(
           // Add padding here
-          padding: EdgeInsets.only(bottom: isEnlarged ? enlargedPadding : normalPadding),
+          padding: EdgeInsets.only(
+            bottom: isEnlarged ? enlargedPadding : normalPadding,
+          ),
           child: Column(
             // Main column for image and description
             children: [
@@ -75,7 +88,9 @@ class DetailPanel extends StatelessWidget {
                       children: [
                         Positioned.fill(
                           child: ClipRRect(
-                            borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(10),
+                            ),
                             child: ShaderMask(
                               shaderCallback: (bounds) => const LinearGradient(
                                 begin: Alignment.topCenter,
@@ -85,17 +100,31 @@ class DetailPanel extends StatelessWidget {
                               ).createShader(bounds),
                               blendMode: BlendMode.dstIn,
                               child: ColorFiltered(
-                                colorFilter: ColorFilter.mode(const Color.fromARGB(128, 0, 0, 0), BlendMode.darken),
-                                child: Image.asset('assets/images/stories/${selectedCard.imagePath}', fit: BoxFit.cover, alignment: Alignment.topCenter),
+                                colorFilter: ColorFilter.mode(
+                                  const Color.fromARGB(128, 0, 0, 0),
+                                  BlendMode.darken,
+                                ),
+                                child: Image.asset(
+                                  'assets/images/stories/${selectedCard.imagePath}',
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment.topCenter,
+                                ),
                               ),
                             ),
                           ),
                         ),
                         SingleChildScrollView(
-                          padding: EdgeInsets.all(isEnlarged ? enlargedPadding : normalPadding),
+                          padding: EdgeInsets.all(
+                            isEnlarged ? enlargedPadding : normalPadding,
+                          ),
                           child: AnimatedDefaultTextStyle(
                             duration: const Duration(milliseconds: 300),
-                            style: TextStyle(fontSize: isEnlarged ? enlargedFontSize : normalFontSize, color: Colors.white),
+                            style: TextStyle(
+                              fontSize: isEnlarged
+                                  ? enlargedFontSize
+                                  : normalFontSize,
+                              color: Colors.white,
+                            ),
                             child: Text(selectedCard.description),
                           ),
                         ),

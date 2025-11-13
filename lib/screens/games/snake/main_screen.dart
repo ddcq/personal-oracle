@@ -15,13 +15,13 @@ import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 
-
 import 'package:oracle_d_asgard/components/victory_popup.dart'; // Import the victory popup
 
 import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import CollectibleCard
 import 'package:confetti/confetti.dart'; // Import ConfettiController
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+
 class SnakeGame extends StatefulWidget {
   // Temporary comment
   const SnakeGame({super.key});
@@ -41,7 +41,9 @@ class _SnakeGameState extends State<SnakeGame> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 3),
+    );
     _initializeGameFuture = _initializeGame();
   }
 
@@ -78,7 +80,9 @@ class _SnakeGameState extends State<SnakeGame> {
       level: _currentLevel,
       onScoreChanged: () => setState(() {}),
       onConfettiTrigger: () {
-        if (_safeGameStateValue != null && _safeGameStateValue!.score >= SnakeFlameGame.victoryScoreThreshold) {
+        if (_safeGameStateValue != null &&
+            _safeGameStateValue!.score >=
+                SnakeFlameGame.victoryScoreThreshold) {
           _confettiController.play();
         } else {
           _confettiController.stop();
@@ -129,9 +133,16 @@ class _SnakeGameState extends State<SnakeGame> {
   // GAME EVENT HANDLERS
   // ==========================================
 
-  void _onGameEnd(int score, {required bool isVictory, CollectibleCard? wonCard}) async {
+  void _onGameEnd(
+    int score, {
+    required bool isVictory,
+    CollectibleCard? wonCard,
+  }) async {
     if (isVictory) {
-      final rewardCard = wonCard ?? await getIt<GamificationService>().selectRandomUnearnedCollectibleCard();
+      final rewardCard =
+          wonCard ??
+          await getIt<GamificationService>()
+              .selectRandomUnearnedCollectibleCard();
       _showVictoryDialog(rewardCard);
     } else {
       _showGameOverDialog(score);
@@ -214,28 +225,37 @@ class _SnakeGameState extends State<SnakeGame> {
                           valueListenable: _safeGameState!,
                           builder: (context, gameState, child) {
                             return Text(
-                              'snake_screen_score'.tr(namedArgs: {'score': '${gameState.score}'}),
+                              'snake_screen_score'.tr(
+                                namedArgs: {'score': '${gameState.score}'},
+                              ),
                               style: ChibiTextStyles.dialogText,
                             );
                           },
                         )
-                      : Text('snake_screen_score_default'.tr(), style: ChibiTextStyles.dialogText),
-                  if (_safeGameStateValue != null && _safeGameStateValue!.score >= SnakeFlameGame.victoryScoreThreshold)
+                      : Text(
+                          'snake_screen_score_default'.tr(),
+                          style: ChibiTextStyles.dialogText,
+                        ),
+                  if (_safeGameStateValue != null &&
+                      _safeGameStateValue!.score >=
+                          SnakeFlameGame.victoryScoreThreshold)
                     ConfettiWidget(
                       confettiController: _confettiController,
-                      blastDirectionality: BlastDirectionality.explosive, // All directions
+                      blastDirectionality:
+                          BlastDirectionality.explosive, // All directions
                       // shouldLoop: true, // Continuously emit confetti
                       colors: const [
                         Colors.green,
                         Colors.blue,
                         Colors.pink,
                         Colors.orange,
-                        Colors.purple
+                        Colors.purple,
                       ], // Customize colors
                       createParticlePath: (size) {
                         // Custom particle path for a more controlled spread
-                        return Path()
-                          ..addOval(Rect.fromCircle(center: Offset.zero, radius: 5));
+                        return Path()..addOval(
+                          Rect.fromCircle(center: Offset.zero, radius: 5),
+                        );
                       },
                     ),
                 ],
@@ -264,7 +284,10 @@ class _SnakeGameState extends State<SnakeGame> {
                           children: [
                             Image.asset(foodImage, height: 30),
                             const SizedBox(width: 8),
-                            Text('${remainingTime.ceil()}${'snake_screen_time_seconds_suffix'.tr()}', style: ChibiTextStyles.dialogText),
+                            Text(
+                              '${remainingTime.ceil()}${'snake_screen_time_seconds_suffix'.tr()}',
+                              style: ChibiTextStyles.dialogText,
+                            ),
                           ],
                         );
                       },
@@ -272,7 +295,10 @@ class _SnakeGameState extends State<SnakeGame> {
                   },
                 )
               else
-                Text('snake_screen_loading'.tr(), style: ChibiTextStyles.dialogText),
+                Text(
+                  'snake_screen_loading'.tr(),
+                  style: ChibiTextStyles.dialogText,
+                ),
 
               // Right: Pause button
               IconButton(
@@ -307,7 +333,11 @@ class _SnakeGameState extends State<SnakeGame> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('${'snake_screen_error_prefix'.tr()}: ${snapshot.error}'));
+                  return Center(
+                    child: Text(
+                      '${'snake_screen_error_prefix'.tr()}: ${snapshot.error}',
+                    ),
+                  );
                 }
                 // Only set _currentLevel from snapshot on first initialization
                 if (!_isLevelInitialized) {
@@ -341,19 +371,14 @@ class _SnakeGameState extends State<SnakeGame> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        flex: 5,
-                        child: _buildGameArea(context),
-                      ),
+                      Expanded(flex: 5, child: _buildGameArea(context)),
                     ],
                   );
                 } else {
                   // Portrait mode
                   return Column(
                     children: [
-                      Expanded(
-                        child: _buildGameArea(context),
-                      ),
+                      Expanded(child: _buildGameArea(context)),
                       Align(
                         alignment: Alignment.bottomLeft,
                         child: Padding(
@@ -385,7 +410,6 @@ class _SnakeGameState extends State<SnakeGame> {
     );
   }
 
-
   Widget _buildBonusList() {
     if (_game == null || _safeGameState == null) return const SizedBox.shrink();
 
@@ -396,7 +420,7 @@ class _SnakeGameState extends State<SnakeGame> {
           if (gameState.activeBonusEffects.isEmpty) {
             return const SizedBox.shrink();
           }
-          
+
           return Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
@@ -414,16 +438,20 @@ class _SnakeGameState extends State<SnakeGame> {
                 Wrap(
                   spacing: 4,
                   runSpacing: 8,
-                  children: gameState.activeBonusEffects.asMap().entries.map((entry) {
+                  children: gameState.activeBonusEffects.asMap().entries.map((
+                    entry,
+                  ) {
                     final index = entry.key;
                     final effect = entry.value;
                     final sprite = _game!.bonusSprites[effect.type];
                     if (sprite == null) {
                       return const SizedBox.shrink();
                     }
-                    
+
                     return _BonusProgressWidget(
-                      key: ValueKey('${effect.type}_${effect.activationTime}_$index'),
+                      key: ValueKey(
+                        '${effect.type}_${effect.activationTime}_$index',
+                      ),
                       sprite: sprite,
                       effect: effect,
                     );
@@ -445,7 +473,8 @@ class _SnakeGameState extends State<SnakeGame> {
         final displayGameWidth = constraints.biggest.width;
         final displayGameHeight = constraints.biggest.height;
 
-        final wallThickness = constraints.biggest.shortestSide / 22; // 1 cell for wall
+        final wallThickness =
+            constraints.biggest.shortestSide / 22; // 1 cell for wall
         final gameAreaWidth = displayGameWidth - (wallThickness * 2);
         final gameAreaHeight = displayGameHeight - (wallThickness * 2);
 
@@ -456,14 +485,20 @@ class _SnakeGameState extends State<SnakeGame> {
             child: Stack(
               children: [
                 // Background wall image for the entire display area
-                Positioned.fill(child: Image.asset('assets/images/backgrounds/wall.webp', fit: BoxFit.fill)),
+                Positioned.fill(
+                  child: Image.asset(
+                    'assets/images/backgrounds/wall.webp',
+                    fit: BoxFit.fill,
+                  ),
+                ),
                 // Centered black rectangle for the game area
                 Center(
                   child: SimpleGestureDetector(
                     swipeConfig: const SimpleSwipeConfig(
                       verticalThreshold: 20.0,
                       horizontalThreshold: 20.0,
-                      swipeDetectionBehavior: SwipeDetectionBehavior.singularOnEnd,
+                      swipeDetectionBehavior:
+                          SwipeDetectionBehavior.singularOnEnd,
                     ),
                     onVerticalSwipe: (direction) {
                       if (direction == SwipeDirection.down) {
@@ -486,7 +521,10 @@ class _SnakeGameState extends State<SnakeGame> {
                       width: gameAreaWidth,
                       height: gameAreaHeight,
                       decoration: const BoxDecoration(
-                        image: DecorationImage(image: AssetImage('assets/images/sea.webp'), repeat: ImageRepeat.repeat),
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/sea.webp'),
+                          repeat: ImageRepeat.repeat,
+                        ),
                       ),
                       child: GameWidget(
                         game: _game!, // Use _game!
@@ -517,7 +555,8 @@ class _BonusProgressWidget extends StatefulWidget {
   State<_BonusProgressWidget> createState() => _BonusProgressWidgetState();
 }
 
-class _BonusProgressWidgetState extends State<_BonusProgressWidget> with SingleTickerProviderStateMixin {
+class _BonusProgressWidgetState extends State<_BonusProgressWidget>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late double _startTime;
 
@@ -526,13 +565,13 @@ class _BonusProgressWidgetState extends State<_BonusProgressWidget> with SingleT
     super.initState();
     _startTime = widget.effect.activationTime;
     final remainingDuration = GameLogic.bonusEffectDuration - _startTime;
-    
+
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: (remainingDuration * 1000).toInt()),
       value: _startTime / GameLogic.bonusEffectDuration,
     );
-    
+
     _controller.animateTo(1.0, curve: Curves.linear).then((_) {
       // Animation finished, the widget should be removed by the parent
       if (mounted) {
@@ -553,16 +592,14 @@ class _BonusProgressWidgetState extends State<_BonusProgressWidget> with SingleT
       animation: _controller,
       builder: (context, child) {
         final progress = 1.0 - _controller.value;
-        
+
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               width: 30,
               height: 30,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-              ),
+              decoration: const BoxDecoration(shape: BoxShape.circle),
               child: ClipOval(
                 child: RawImage(
                   image: widget.sprite.image,
@@ -598,4 +635,3 @@ class _BonusProgressWidgetState extends State<_BonusProgressWidget> with SingleT
     );
   }
 }
-

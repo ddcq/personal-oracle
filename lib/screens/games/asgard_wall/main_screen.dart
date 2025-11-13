@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +33,12 @@ class PlacedPiece {
   final int y;
   bool isNewlyPlaced = true;
 
-  PlacedPiece({required this.pieceIndex, required this.rotationIndex, required this.x, required this.y});
+  PlacedPiece({
+    required this.pieceIndex,
+    required this.rotationIndex,
+    required this.x,
+    required this.y,
+  });
 }
 
 class _GameScreenState extends State<GameScreen> {
@@ -43,7 +47,10 @@ class _GameScreenState extends State<GameScreen> {
   static const int victoryHeight = 12;
 
   // The board is now for collision detection only.
-  List<List<bool>> collisionBoard = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => false));
+  List<List<bool>> collisionBoard = List.generate(
+    boardHeight,
+    (index) => List.generate(boardWidth, (index) => false),
+  );
   List<PlacedPiece> placedPieces = [];
 
   // Timer for visual effects
@@ -57,12 +64,13 @@ class _GameScreenState extends State<GameScreen> {
 
   // Current piece
   List<List<bool>> currentPiece = [];
-  Color currentPieceColor = Colors.blue; // Fallback color, not used if images work
+  Color currentPieceColor =
+      Colors.blue; // Fallback color, not used if images work
   int pieceX = 0;
   int pieceY = 0;
   int currentPieceIndex = 0;
   int currentRotationIndex = 0;
-  
+
   // Score tracking
   int currentScore = 0;
 
@@ -71,7 +79,16 @@ class _GameScreenState extends State<GameScreen> {
   List<Color> nextPieceColors = [];
 
   // Assuming image files are named like 'p.webp', 'q.webp' etc. in assets/images/blocks/
-  final List<String> pieceImageNames = ['i2', 'i3', 'l', 'p', 'q', 't', 'u', 'x'];
+  final List<String> pieceImageNames = [
+    'i2',
+    'i3',
+    'l',
+    'p',
+    'q',
+    't',
+    'u',
+    'x',
+  ];
 
   @override
   void initState() {
@@ -87,7 +104,10 @@ class _GameScreenState extends State<GameScreen> {
 
     setState(() {
       // Reset board and effects
-      collisionBoard = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => false));
+      collisionBoard = List.generate(
+        boardHeight,
+        (index) => List.generate(boardWidth, (index) => false),
+      );
       placedPieces = [];
       gameActive = true;
       _isPaused = false; // Ensure game is not paused on start
@@ -158,8 +178,13 @@ class _GameScreenState extends State<GameScreen> {
     currentRotationIndex = 0; // Commence toujours par la première rotation
 
     // Définit la forme de la pièce actuelle basée sur l’index et la rotation
-    currentPiece = List.generate(pieces[currentPieceIndex][currentRotationIndex].length, (i) => List.from(pieces[currentPieceIndex][currentRotationIndex][i]));
-    pieceX = (boardWidth - currentPiece[0].length) ~/ 2; // Centre la pièce horizontalement
+    currentPiece = List.generate(
+      pieces[currentPieceIndex][currentRotationIndex].length,
+      (i) => List.from(pieces[currentPieceIndex][currentRotationIndex][i]),
+    );
+    pieceX =
+        (boardWidth - currentPiece[0].length) ~/
+        2; // Centre la pièce horizontalement
     pieceY = 0; // Place la pièce en haut du plateau
 
     // Vérifie si le jeu est perdu (nouvelle pièce ne peut pas être placée au départ)
@@ -195,12 +220,14 @@ class _GameScreenState extends State<GameScreen> {
   // Place la pièce actuelle sur le plateau (elle devient fixe).
   void placePiece() {
     // Add to placed pieces list for rendering
-    placedPieces.add(PlacedPiece(
-      pieceIndex: currentPieceIndex,
-      rotationIndex: currentRotationIndex,
-      x: pieceX,
-      y: pieceY,
-    ));
+    placedPieces.add(
+      PlacedPiece(
+        pieceIndex: currentPieceIndex,
+        rotationIndex: currentRotationIndex,
+        x: pieceX,
+        y: pieceY,
+      ),
+    );
 
     // Update collision board
     for (int row = 0; row < currentPiece.length; row++) {
@@ -209,7 +236,10 @@ class _GameScreenState extends State<GameScreen> {
           int boardX = pieceX + col;
           int boardY = pieceY + row;
 
-          if (boardY >= 0 && boardY < boardHeight && boardX >= 0 && boardX < boardWidth) {
+          if (boardY >= 0 &&
+              boardY < boardHeight &&
+              boardX >= 0 &&
+              boardX < boardWidth) {
             collisionBoard[boardY][boardX] = true;
           }
         }
@@ -281,11 +311,16 @@ class _GameScreenState extends State<GameScreen> {
       for (int cx = startX; cx <= endX; cx++) {
         // We are looking for an empty cell (a potential hole).
         // It must be within the board and not on the top row (since it must have a block above).
-        if (cx >= 0 && cx < boardWidth && cy > 0 && cy < boardHeight && !collisionBoard[cy][cx]) {
+        if (cx >= 0 &&
+            cx < boardWidth &&
+            cy > 0 &&
+            cy < boardHeight &&
+            !collisionBoard[cy][cx]) {
           // Check if it's blocked on top, left, and right.
           final bool blockedTop = collisionBoard[cy - 1][cx];
           final bool blockedLeft = (cx == 0) || collisionBoard[cy][cx - 1];
-          final bool blockedRight = (cx == boardWidth - 1) || collisionBoard[cy][cx + 1];
+          final bool blockedRight =
+              (cx == boardWidth - 1) || collisionBoard[cy][cx + 1];
 
           if (blockedTop && blockedLeft && blockedRight) {
             return true; // Found a hole.
@@ -343,7 +378,8 @@ class _GameScreenState extends State<GameScreen> {
     if (!gameActive) return;
 
     // Calculer la prochaine rotation
-    int nextRotationIndex = (currentRotationIndex + 1) % pieces[currentPieceIndex].length;
+    int nextRotationIndex =
+        (currentRotationIndex + 1) % pieces[currentPieceIndex].length;
     List<List<bool>> nextPiece = List.generate(
       pieces[currentPieceIndex][nextRotationIndex].length,
       (i) => List.from(pieces[currentPieceIndex][nextRotationIndex][i]),
@@ -441,11 +477,11 @@ class _GameScreenState extends State<GameScreen> {
     setState(() {
       gameActive = false;
     });
-    
+
     // Save the score
     final gamificationService = getIt<GamificationService>();
     gamificationService.saveGameScore('Asgard Wall', currentScore);
-    
+
     if (won) {
       _showWinDialog();
     } else {
@@ -538,7 +574,13 @@ class _GameScreenState extends State<GameScreen> {
                   fontWeight: FontWeight.bold,
                   color: Colors.white, // Changed to white
                   fontFamily: AppTextStyles.amaticSC,
-                  shadows: [Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0))],
+                  shadows: [
+                    Shadow(
+                      blurRadius: 10.0,
+                      color: Colors.black,
+                      offset: Offset(2.0, 2.0),
+                    ),
+                  ],
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -551,7 +593,13 @@ class _GameScreenState extends State<GameScreen> {
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                   fontFamily: AppTextStyles.amaticSC, // Added font family
-                  shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(1.0, 1.0))],
+                  shadows: [
+                    Shadow(
+                      blurRadius: 5.0,
+                      color: Colors.black,
+                      offset: Offset(1.0, 1.0),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -582,7 +630,10 @@ class _GameScreenState extends State<GameScreen> {
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white, width: 2),
         borderRadius: BorderRadius.circular(8),
-        image: const DecorationImage(image: AssetImage('assets/images/backgrounds/asgard.jpg'), fit: BoxFit.cover),
+        image: const DecorationImage(
+          image: AssetImage('assets/images/backgrounds/asgard.jpg'),
+          fit: BoxFit.cover,
+        ),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -604,8 +655,16 @@ class _GameScreenState extends State<GameScreen> {
               child: RotatedBox(
                 quarterTurns: piece.rotationIndex,
                 child: ColorFiltered(
-                  colorFilter: ColorFilter.mode(piece.isNewlyPlaced ? Colors.white.withAlpha(179) : Colors.transparent, BlendMode.srcATop),
-                  child: Image.asset('assets/images/blocks/${pieceImageNames[piece.pieceIndex]}.webp', fit: BoxFit.fill),
+                  colorFilter: ColorFilter.mode(
+                    piece.isNewlyPlaced
+                        ? Colors.white.withAlpha(179)
+                        : Colors.transparent,
+                    BlendMode.srcATop,
+                  ),
+                  child: Image.asset(
+                    'assets/images/blocks/${pieceImageNames[piece.pieceIndex]}.webp',
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
             );
@@ -619,7 +678,10 @@ class _GameScreenState extends State<GameScreen> {
                   height: currentPiece.length * cellHeight,
                   child: RotatedBox(
                     quarterTurns: currentRotationIndex,
-                    child: Image.asset('assets/images/blocks/${pieceImageNames[currentPieceIndex]}.webp', fit: BoxFit.fill),
+                    child: Image.asset(
+                      'assets/images/blocks/${pieceImageNames[currentPieceIndex]}.webp',
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 )
               : const SizedBox.shrink();
@@ -628,7 +690,9 @@ class _GameScreenState extends State<GameScreen> {
             padding: EdgeInsets.zero,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: boardWidth),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: boardWidth,
+            ),
             itemCount: boardWidth * boardHeight,
             itemBuilder: (context, index) {
               int row = index ~/ boardWidth;
@@ -637,7 +701,9 @@ class _GameScreenState extends State<GameScreen> {
             },
           );
 
-          return Stack(children: [boardGrid, ...placedPiecesWidgets, fallingPieceWidget]);
+          return Stack(
+            children: [boardGrid, ...placedPiecesWidgets, fallingPieceWidget],
+          );
         },
       ),
     );
@@ -648,7 +714,10 @@ class _GameScreenState extends State<GameScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: isVictoryLine ? const Color(0xFFFFD700) : Colors.grey[700]!, width: isVictoryLine ? 2 : 0.5),
+        border: Border.all(
+          color: isVictoryLine ? const Color(0xFFFFD700) : Colors.grey[700]!,
+          width: isVictoryLine ? 2 : 0.5,
+        ),
       ),
       child: Container(color: Colors.transparent),
     );
@@ -660,12 +729,16 @@ class _GameScreenState extends State<GameScreen> {
       children: [
         Container(
           decoration: const BoxDecoration(
-            image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
+            image: DecorationImage(
+              image: AssetImage('assets/images/backgrounds/landscape.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
         ), // The background is now at the bottom of the stack
         Scaffold(
           backgroundColor: Colors.transparent, // Make the scaffold transparent
-          extendBodyBehindAppBar: false, // The body does not extend behind the app bar
+          extendBodyBehindAppBar:
+              false, // The body does not extend behind the app bar
           appBar: ChibiAppBar(
             titleText: 'asgard_wall_game_screen_title'.tr(),
             leading: IconButton(
@@ -695,7 +768,9 @@ class _GameScreenState extends State<GameScreen> {
             focusNode: focusNode,
             onKeyEvent: (node, event) {
               // Gère les événements clavier
-              return handleKeyPress(event) ? KeyEventResult.handled : KeyEventResult.ignored;
+              return handleKeyPress(event)
+                  ? KeyEventResult.handled
+                  : KeyEventResult.ignored;
             },
             child: SimpleGestureDetector(
               // Permet de refocaliser le jeu en tapant n’importe où
@@ -710,7 +785,10 @@ class _GameScreenState extends State<GameScreen> {
                         Expanded(
                           flex: 3,
                           child: Center(
-                            child: AspectRatio(aspectRatio: boardWidth / boardHeight, child: buildBoard()),
+                            child: AspectRatio(
+                              aspectRatio: boardWidth / boardHeight,
+                              child: buildBoard(),
+                            ),
                           ),
                         ),
 
@@ -738,7 +816,8 @@ class _GameScreenState extends State<GameScreen> {
                     children: [
                       ChibiButton(
                         onPressed: gameActive ? movePieceLeft : () {},
-                        color: Colors.blueGrey, // Consistent color for game controls
+                        color: Colors
+                            .blueGrey, // Consistent color for game controls
                         child: Icon(Icons.arrow_left, color: Colors.white),
                       ),
                       ChibiButton(

@@ -9,7 +9,8 @@ class ScreenTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
     final baseStyle = AppTextStyles.screenTitle;
     const double designFontSize = 60.0;
@@ -18,15 +19,13 @@ class ScreenTitle extends StatelessWidget {
     if (isLandscape) {
       final textScaleFactor = ScreenUtil().textScaleFactor;
       final scaleHeight = ScreenUtil().scaleHeight;
-      finalTextStyle = baseStyle.copyWith(fontSize: designFontSize * scaleHeight * textScaleFactor);
+      finalTextStyle = baseStyle.copyWith(
+        fontSize: designFontSize * scaleHeight * textScaleFactor,
+      );
     } else {
       finalTextStyle = baseStyle.copyWith(fontSize: designFontSize.sp);
     }
 
-    return Text(
-      title,
-      textAlign: TextAlign.center,
-      style: finalTextStyle,
-    );
+    return Text(title, textAlign: TextAlign.center, style: finalTextStyle);
   }
 }

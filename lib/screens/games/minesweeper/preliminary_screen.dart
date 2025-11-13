@@ -10,12 +10,16 @@ class MinesweeperPreliminaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
     final Widget gameInfoLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+        color: Colors.black.withAlpha(128),
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -45,21 +49,40 @@ class MinesweeperPreliminaryScreen extends StatelessWidget {
                           Flexible(child: gameInfoLayout),
                           const SizedBox(width: 20),
                           ChibiButton(
-                            text: 'minesweeper_preliminary_screen_start_button'.tr(),
+                            text: 'minesweeper_preliminary_screen_start_button'
+                                .tr(),
                             color: Colors.brown, // Color from menu
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => MinesweeperScreen()));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MinesweeperScreen(),
+                                ),
+                              );
                             },
                           ),
                         ],
                       )
-                    : Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[gameInfoLayout, const SizedBox(height: 32), ChibiButton(
-                            text: 'minesweeper_preliminary_screen_start_button'.tr(),
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          gameInfoLayout,
+                          const SizedBox(height: 32),
+                          ChibiButton(
+                            text: 'minesweeper_preliminary_screen_start_button'
+                                .tr(),
                             color: Colors.brown, // Color from menu
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => MinesweeperScreen()));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MinesweeperScreen(),
+                                ),
+                              );
                             },
-                          )]),
+                          ),
+                        ],
+                      ),
               ),
             ),
             SafeArea(

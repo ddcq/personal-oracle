@@ -10,7 +10,11 @@ class CustomVideoPlayer extends StatefulWidget {
   final String videoUrl;
   final String placeholderAsset;
 
-  const CustomVideoPlayer({super.key, required this.videoUrl, required this.placeholderAsset});
+  const CustomVideoPlayer({
+    super.key,
+    required this.videoUrl,
+    required this.placeholderAsset,
+  });
 
   @override
   State<CustomVideoPlayer> createState() => _CustomVideoPlayerState();
@@ -21,7 +25,6 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   Future<void>? _initializeVideoPlayerFuture;
   bool _isInitialized = false;
   bool _hasError = false;
-
 
   @override
   void initState() {
@@ -36,10 +39,13 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       // Add timeout for the entire operation
       await _performVideoLoad().timeout(const Duration(seconds: 15));
     } catch (e) {
-      debugPrint('widgets_custom_video_player_error_loading_video'.tr(namedArgs: {'error': '$e'}));
+      debugPrint(
+        'widgets_custom_video_player_error_loading_video'.tr(
+          namedArgs: {'error': '$e'},
+        ),
+      );
       if (mounted) {
         // Classify the error type
-
 
         setState(() {
           _isInitialized = false;
@@ -52,7 +58,9 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   Future<void> _performVideoLoad() async {
     final cacheService = getIt<CacheService>();
     final videoPath = Uri.parse(widget.videoUrl).path;
-    FileInfo? fileInfo = await DefaultCacheManager().getFileFromCache(widget.videoUrl);
+    FileInfo? fileInfo = await DefaultCacheManager().getFileFromCache(
+      widget.videoUrl,
+    );
     File videoFile;
 
     if (fileInfo != null && fileInfo.file.existsSync()) {
@@ -71,7 +79,10 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
 
     if (!mounted) return;
 
-    _videoPlayerController = video_player.VideoPlayerController.file(videoFile, videoPlayerOptions: video_player.VideoPlayerOptions(mixWithOthers: true));
+    _videoPlayerController = video_player.VideoPlayerController.file(
+      videoFile,
+      videoPlayerOptions: video_player.VideoPlayerOptions(mixWithOthers: true),
+    );
 
     await _videoPlayerController!.initialize();
 
@@ -88,24 +99,22 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
       setState(() {
         _isInitialized = true;
         _hasError = false;
-
       });
     }
   }
 
   void _videoErrorListener() {
-    if (_videoPlayerController != null && _videoPlayerController!.value.hasError) {
+    if (_videoPlayerController != null &&
+        _videoPlayerController!.value.hasError) {
       final error = _videoPlayerController!.value.errorDescription;
       debugPrint('Video playback error: $error');
 
       // Classify error type for better handling
 
-
       if (mounted) {
         setState(() {
           _hasError = true;
           _isInitialized = false;
-
         });
       }
     }
@@ -118,8 +127,6 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
     // Don't empty cache on dispose as it might be used by other instances
     super.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +144,9 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                       color: Colors.grey[300],
-                      child: const Center(child: Icon(Icons.error, color: Colors.grey)),
+                      child: const Center(
+                        child: Icon(Icons.error, color: Colors.grey),
+                      ),
                     );
                   },
                 ),
@@ -184,7 +193,10 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
             // Show video player
             return ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: AspectRatio(aspectRatio: _videoPlayerController!.value.aspectRatio, child: video_player.VideoPlayer(_videoPlayerController!)),
+              child: AspectRatio(
+                aspectRatio: _videoPlayerController!.value.aspectRatio,
+                child: video_player.VideoPlayer(_videoPlayerController!),
+              ),
             );
           }
         } else {
@@ -197,11 +209,18 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
                     color: Colors.grey[300],
-                    child: const Center(child: Icon(Icons.error, color: Colors.grey)),
+                    child: const Center(
+                      child: Icon(Icons.error, color: Colors.grey),
+                    ),
                   );
                 },
               ),
-              const Center(child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)),
+              const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              ),
             ],
           );
         }

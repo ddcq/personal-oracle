@@ -54,7 +54,8 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return ChangeNotifierProvider.value(
       value: _gameController,
       child: Consumer<GameController>(
@@ -70,9 +71,13 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
             });
           }
           return Scaffold(
-            extendBodyBehindAppBar: true, // Make background visible behind AppBar
+            extendBodyBehindAppBar:
+                true, // Make background visible behind AppBar
             appBar: AppBar(
-              title: Text(controller.selectedStory.title, style: ChibiTextStyles.storyTitle),
+              title: Text(
+                controller.selectedStory.title,
+                style: ChibiTextStyles.storyTitle,
+              ),
               backgroundColor: Colors.transparent,
               elevation: 0,
               leading: IconButton(
@@ -105,37 +110,47 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
 
                               if (isLandscape) {
                                 return Row(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     if (!isEnlarged)
                                       Expanded(
                                         flex: 3,
-                                        child: ThumbnailList(controller: controller),
+                                        child: ThumbnailList(
+                                          controller: controller,
+                                        ),
                                       ).animate().fadeIn(duration: 300.ms),
                                     Expanded(
                                       flex: isEnlarged ? 6 : 2,
                                       child: DetailPanel(
                                         controller: controller,
                                         isEnlarged: isEnlarged,
-                                        onToggleEnlargement: () => _isDetailPanelEnlarged.value = !isEnlarged,
+                                        onToggleEnlargement: () =>
+                                            _isDetailPanelEnlarged.value =
+                                                !isEnlarged,
                                       ),
                                     ).animate().fadeIn(duration: 300.ms),
                                   ],
                                 );
                               } else {
                                 return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     if (!isEnlarged)
                                       SizedBox(
                                         height: totalHeight * 0.6,
-                                        child: ThumbnailList(controller: controller),
+                                        child: ThumbnailList(
+                                          controller: controller,
+                                        ),
                                       ).animate().fadeIn(duration: 300.ms),
                                     Expanded(
                                       child: DetailPanel(
                                         controller: controller,
                                         isEnlarged: isEnlarged,
-                                        onToggleEnlargement: () => _isDetailPanelEnlarged.value = !isEnlarged,
+                                        onToggleEnlargement: () =>
+                                            _isDetailPanelEnlarged.value =
+                                                !isEnlarged,
                                       ),
                                     ).animate().fadeIn(duration: 300.ms),
                                   ],
@@ -170,7 +185,13 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
               fontWeight: FontWeight.bold,
               color: Colors.white,
               fontFamily: AppTextStyles.amaticSC, // Added font family
-              shadows: [Shadow(blurRadius: 5.0, color: Colors.black, offset: Offset(1.0, 1.0))],
+              shadows: [
+                Shadow(
+                  blurRadius: 5.0,
+                  color: Colors.black,
+                  offset: Offset(1.0, 1.0),
+                ),
+              ],
             ),
             textAlign: TextAlign.center,
           ),
@@ -192,7 +213,8 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
       builder: (BuildContext context) {
         return VictoryPopup(
           rewardCard: controller.rewardCard, // Pass the reward card
-          unlockedStoryChapter: controller.unlockedStoryChapter, // Pass the unlocked story chapter
+          unlockedStoryChapter: controller
+              .unlockedStoryChapter, // Pass the unlocked story chapter
           onDismiss: () {
             Navigator.of(context).pop();
             controller.victoryPopupShown(); // Reset popup state

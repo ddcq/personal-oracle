@@ -31,7 +31,8 @@ class _DeityCardState extends State<DeityCard> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,7 +50,9 @@ class _DeityCardState extends State<DeityCard> {
             borderRadius: BorderRadius.circular(20.r),
             boxShadow: [
               BoxShadow(
-                color: Colors.white.withAlpha(50), // Soft white glow for the edge
+                color: Colors.white.withAlpha(
+                  50,
+                ), // Soft white glow for the edge
                 blurRadius: 30.r, // Large blur for soft transition
                 spreadRadius: 5.r,
               ),
@@ -58,16 +61,24 @@ class _DeityCardState extends State<DeityCard> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20.r),
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0), // Blur intensity
+              filter: ImageFilter.blur(
+                sigmaX: 8.0,
+                sigmaY: 8.0,
+              ), // Blur intensity
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
                 decoration: BoxDecoration(
-                  color: Colors.black.withAlpha(51), // Transparent background for the content area
+                  color: Colors.black.withAlpha(
+                    51,
+                  ), // Transparent background for the content area
                   // Optional: a subtle gradient for the background color itself
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Colors.white.withAlpha(25), Colors.white.withAlpha(12)],
+                    colors: [
+                      Colors.white.withAlpha(25),
+                      Colors.white.withAlpha(12),
+                    ],
                   ),
                 ),
                 child: Column(
@@ -81,8 +92,16 @@ class _DeityCardState extends State<DeityCard> {
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         shadows: [
-                          Shadow(offset: Offset(3.0, 3.0), blurRadius: 6.0, color: Colors.black.withAlpha(150)),
-                          Shadow(offset: Offset(1.5, 1.5), blurRadius: 3.0, color: Colors.grey.withAlpha(100)),
+                          Shadow(
+                            offset: Offset(3.0, 3.0),
+                            blurRadius: 6.0,
+                            color: Colors.black.withAlpha(150),
+                          ),
+                          Shadow(
+                            offset: Offset(1.5, 1.5),
+                            blurRadius: 3.0,
+                            color: Colors.grey.withAlpha(100),
+                          ),
                         ],
                       ),
                     ),
@@ -94,7 +113,13 @@ class _DeityCardState extends State<DeityCard> {
                         fontFamily: AppTextStyles.amaticSC,
                         fontSize: isLandscape ? 14.sp : 28.sp,
                         color: Colors.white,
-                        shadows: [Shadow(offset: Offset(2.0, 2.0), blurRadius: 4.0, color: Colors.black.withAlpha(120))],
+                        shadows: [
+                          Shadow(
+                            offset: Offset(2.0, 2.0),
+                            blurRadius: 4.0,
+                            color: Colors.black.withAlpha(120),
+                          ),
+                        ],
                       ),
                     ),
                   ],

@@ -1,10 +1,10 @@
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
-  static final NotificationService _notificationService = NotificationService._internal();
+  static final NotificationService _notificationService =
+      NotificationService._internal();
 
   factory NotificationService() {
     return _notificationService;
@@ -16,7 +16,8 @@ class NotificationService {
   static const channelName = 'Oracle d\'Asgard';
   static const channelDescription = 'Notifications pour l\'Oracle d\'Asgard';
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   bool _isInitialized = false;
 
   Future<void> init() async {
@@ -26,21 +27,23 @@ class NotificationService {
       final AndroidInitializationSettings initializationSettingsAndroid =
           AndroidInitializationSettings('@mipmap/ic_launcher');
 
-      final DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings(
-        requestSoundPermission: false,
-        requestBadgePermission: false,
-        requestAlertPermission: false,
-      );
+      final DarwinInitializationSettings initializationSettingsIOS =
+          DarwinInitializationSettings(
+            requestSoundPermission: false,
+            requestBadgePermission: false,
+            requestAlertPermission: false,
+          );
 
-      final InitializationSettings initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid,
-        iOS: initializationSettingsIOS,
-        macOS: initializationSettingsIOS,
-      );
+      final InitializationSettings initializationSettings =
+          InitializationSettings(
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsIOS,
+            macOS: initializationSettingsIOS,
+          );
 
       // Initialize timezones only once and in a safe way
       tz.initializeTimeZones();
-      
+
       // Use UTC as fallback if local timezone fails
       try {
         tz.setLocalLocation(tz.getLocation('Europe/Paris'));
@@ -48,10 +51,8 @@ class NotificationService {
         tz.setLocalLocation(tz.UTC);
       }
 
-      await flutterLocalNotificationsPlugin.initialize(
-        initializationSettings,
-      );
-      
+      await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
       _isInitialized = true;
     } catch (e) {
       // Silently fail - notifications are not critical for app startup
@@ -91,7 +92,7 @@ class NotificationService {
 
   Future<void> cancelAllNotifications() async {
     if (!_isInitialized) return; // Skip if not initialized
-    
+
     try {
       await flutterLocalNotificationsPlugin.cancelAll();
     } catch (e) {

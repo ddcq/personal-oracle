@@ -28,7 +28,13 @@ class ProgressBar extends StatelessWidget {
               color: Colors.white,
               fontSize: 22.sp,
               fontWeight: FontWeight.bold,
-              shadows: [Shadow(color: Colors.black.withAlpha(128), offset: Offset(2, 2), blurRadius: 4)],
+              shadows: [
+                Shadow(
+                  color: Colors.black.withAlpha(128),
+                  offset: Offset(2, 2),
+                  blurRadius: 4,
+                ),
+              ],
             ),
           ),
         SizedBox(height: 12.h),
@@ -38,7 +44,14 @@ class ProgressBar extends StatelessWidget {
             borderRadius: BorderRadius.circular(15.r),
             border: Border.all(color: borderColor, width: 3.w),
             color: Colors.black.withAlpha(77),
-            boxShadow: [BoxShadow(color: Colors.black.withAlpha(128), offset: Offset(0, 4), blurRadius: 6, spreadRadius: 1)],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withAlpha(128),
+                offset: Offset(0, 4),
+                blurRadius: 6,
+                spreadRadius: 1,
+              ),
+            ],
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12.r),
@@ -47,7 +60,10 @@ class ProgressBar extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [darkColor.withAlpha(128), baseColor.withAlpha(102)],
+                      colors: [
+                        darkColor.withAlpha(128),
+                        baseColor.withAlpha(102),
+                      ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),
@@ -79,7 +95,13 @@ class ProgressBar extends StatelessWidget {
                       color: Colors.white,
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
-                      shadows: [Shadow(color: Colors.black.withAlpha(204), offset: Offset(1, 1), blurRadius: 2)],
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withAlpha(204),
+                          offset: Offset(1, 1),
+                          blurRadius: 2,
+                        ),
+                      ],
                     ),
                   ),
                 ),

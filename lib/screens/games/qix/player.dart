@@ -3,7 +3,8 @@ import 'package:flutter/foundation.dart'; // Import for VoidCallback
 import 'dart:ui' as ui; // For Image
 import 'package:oracle_d_asgard/screens/games/qix/arena.dart';
 
-import 'package:oracle_d_asgard/screens/games/qix/constants.dart' as game_constants;
+import 'package:oracle_d_asgard/screens/games/qix/constants.dart'
+    as game_constants;
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/components/animated_character_component.dart'; // Import AnimatedCharacterComponent
@@ -29,7 +30,8 @@ class Player extends PositionComponent {
   List<IntVector2> currentPath = [];
   IntVector2? pathStartGridPosition;
   dp.Direction? currentDirection; // Current direction for automatic movement
-  bool _isManualInput = false; // True if the last direction change was from user input
+  bool _isManualInput =
+      false; // True if the last direction change was from user input
 
   late AnimatedCharacterComponent _characterSprite;
 
@@ -47,17 +49,24 @@ class Player extends PositionComponent {
     anchor = Anchor.topLeft;
     position = gridPosition.toVector2() * cellSize;
     final double playerSpeedCellsPerSecond =
-        (game_constants.kBasePlayerSpeedCellsPerSecond - difficulty * game_constants.kPlayerSpeedChangePerLevelCellsPerSecond).clamp(
-          1.0,
-          double.infinity,
-        ); // Ensure speed doesn't go below 1 cell/sec
+        (game_constants.kBasePlayerSpeedCellsPerSecond -
+                difficulty *
+                    game_constants.kPlayerSpeedChangePerLevelCellsPerSecond)
+            .clamp(
+              1.0,
+              double.infinity,
+            ); // Ensure speed doesn't go below 1 cell/sec
     _moveSpeed = playerSpeedCellsPerSecond * cellSize;
     _characterSprite = AnimatedCharacterComponent(
       characterSpriteSheet: characterSpriteSheet,
       characterIndex: _characterIndex, // Character1
-      size: Vector2.all(cellSize * _characterSpriteScale), // 4 times the cell size
+      size: Vector2.all(
+        cellSize * _characterSpriteScale,
+      ), // 4 times the cell size
       anchor: Anchor.center, // Center the sprite on the player component
-      position: Vector2.all(cellSize / 2), // Center the character within the cell
+      position: Vector2.all(
+        cellSize / 2,
+      ), // Center the character within the cell
     );
     add(_characterSprite);
   }
@@ -85,11 +94,15 @@ class Player extends PositionComponent {
       _isManualInput = isManual;
     }
     // Update the character sprite's direction
-    _characterSprite.direction = _mapDirectionToCharacterDirection(currentDirection);
+    _characterSprite.direction = _mapDirectionToCharacterDirection(
+      currentDirection,
+    );
   }
 
   // Helper to map Flame Direction to CharacterDirection
-  CharacterDirection _mapDirectionToCharacterDirection(dp.Direction? direction) {
+  CharacterDirection _mapDirectionToCharacterDirection(
+    dp.Direction? direction,
+  ) {
     switch (direction) {
       case dp.Direction.up:
         return CharacterDirection.up;
@@ -118,7 +131,8 @@ class Player extends PositionComponent {
     if (position.distanceTo(targetPixelPosition) > _positionSnapThreshold) {
       position.moveToTarget(targetPixelPosition, _moveSpeed * dt);
     } else {
-      position = targetPixelPosition; // Snap to target to avoid floating point inaccuracies
+      position =
+          targetPixelPosition; // Snap to target to avoid floating point inaccuracies
       gridPosition = targetGridPosition; // Update logical grid position
 
       // If player has reached target, and there's a current direction, move again
@@ -137,7 +151,9 @@ class Player extends PositionComponent {
 
   void _findNextAutoDirection() {
     dp.Direction? oppositeDirection = _getOppositeDirection(currentDirection);
-    List<dp.Direction> possibleDirections = _getPossibleDirections(oppositeDirection);
+    List<dp.Direction> possibleDirections = _getPossibleDirections(
+      oppositeDirection,
+    );
 
     if (state == PlayerState.onEdge) {
       _handleOnEdgeState(possibleDirections);
@@ -145,7 +161,9 @@ class Player extends PositionComponent {
       _handleDrawingState(possibleDirections);
     }
     // Update the character sprite's direction after currentDirection might have changed
-    _characterSprite.direction = _mapDirectionToCharacterDirection(currentDirection);
+    _characterSprite.direction = _mapDirectionToCharacterDirection(
+      currentDirection,
+    );
   }
 
   dp.Direction? _getOppositeDirection(dp.Direction? direction) {
@@ -165,7 +183,12 @@ class Player extends PositionComponent {
 
   List<dp.Direction> _getPossibleDirections(dp.Direction? oppositeDirection) {
     List<dp.Direction> possibleDirections = [];
-    List<dp.Direction> allDirections = [dp.Direction.up, dp.Direction.down, dp.Direction.left, dp.Direction.right];
+    List<dp.Direction> allDirections = [
+      dp.Direction.up,
+      dp.Direction.down,
+      dp.Direction.left,
+      dp.Direction.right,
+    ];
 
     for (dp.Direction dir in allDirections) {
       if (dir != oppositeDirection) {
@@ -182,7 +205,8 @@ class Player extends PositionComponent {
     List<dp.Direction> edgeDirections = [];
     for (dp.Direction dir in possibleDirections) {
       IntVector2 nextPos = _getNewGridPosition(dir);
-      bool isNextPosEdge = arena.getGridValue(nextPos.x, nextPos.y) == game_constants.kGridEdge;
+      bool isNextPosEdge =
+          arena.getGridValue(nextPos.x, nextPos.y) == game_constants.kGridEdge;
       if (isNextPosEdge) {
         edgeDirections.add(dir);
       }
@@ -193,7 +217,8 @@ class Player extends PositionComponent {
       _isManualInput = false;
     } else if (edgeDirections.length > 1) {
       // Prioritize continuing straight if possible
-      if (currentDirection != null && edgeDirections.contains(currentDirection)) {
+      if (currentDirection != null &&
+          edgeDirections.contains(currentDirection)) {
         currentDirection = currentDirection;
         _isManualInput = false;
       } else {
@@ -254,13 +279,16 @@ class Player extends PositionComponent {
   }
 
   bool _isMovingOffEdge(IntVector2 newGridPosition) {
-    bool isNewPositionOnEdge = arena.getGridValue(newGridPosition.x, newGridPosition.y) == game_constants.kGridEdge;
+    bool isNewPositionOnEdge =
+        arena.getGridValue(newGridPosition.x, newGridPosition.y) ==
+        game_constants.kGridEdge;
     return !isNewPositionOnEdge && !_isManualInput;
   }
 
   bool move(dp.Direction direction) {
     // Only allow new move if player has reached the current target
-    if (position.distanceTo(targetGridPosition.toVector2() * cellSize) > _positionSnapThreshold) {
+    if (position.distanceTo(targetGridPosition.toVector2() * cellSize) >
+        _positionSnapThreshold) {
       return false;
     }
 
@@ -290,7 +318,9 @@ class Player extends PositionComponent {
   }
 
   void _handleOnEdgeMovement(IntVector2 newGridPosition) {
-    bool isNewPositionOnEdge = arena.getGridValue(newGridPosition.x, newGridPosition.y) == game_constants.kGridEdge;
+    bool isNewPositionOnEdge =
+        arena.getGridValue(newGridPosition.x, newGridPosition.y) ==
+        game_constants.kGridEdge;
     if (!isNewPositionOnEdge) {
       // Moving off the edge
       state = PlayerState.drawing;
@@ -305,7 +335,9 @@ class Player extends PositionComponent {
   }
 
   void _handleDrawingMovement(IntVector2 newGridPosition) {
-    bool isNewPositionOnEdge = arena.getGridValue(newGridPosition.x, newGridPosition.y) == game_constants.kGridEdge;
+    bool isNewPositionOnEdge =
+        arena.getGridValue(newGridPosition.x, newGridPosition.y) ==
+        game_constants.kGridEdge;
     if (isNewPositionOnEdge) {
       // Hit an existing boundary
       arena.addPathPoint(IntVector2(newGridPosition.x, newGridPosition.y));

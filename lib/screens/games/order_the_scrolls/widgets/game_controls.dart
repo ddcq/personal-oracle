@@ -8,7 +8,12 @@ class GameControls extends StatelessWidget {
   final VoidCallback onValidate;
   final VoidCallback onReset;
 
-  const GameControls({super.key, required this.controller, required this.onValidate, required this.onReset});
+  const GameControls({
+    super.key,
+    required this.controller,
+    required this.onValidate,
+    required this.onReset,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +46,19 @@ class GameControls extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.black.withAlpha(150), // Changed to black with alpha 150
+              color: Colors.black.withAlpha(
+                150,
+              ), // Changed to black with alpha 150
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: const Color(0xFF22C55E), width: 2),
             ),
             child: const Text(
               '✅ Bravo ! Vous avez reconstitué l\'histoire et gagné toutes les cartes ! ',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
               textAlign: TextAlign.center,
             ),
           ),

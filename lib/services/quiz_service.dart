@@ -45,7 +45,7 @@ class QuizService {
       deity.traits.forEach((trait, weight) {
         matchScore += (scores[trait] ?? 0) * weight;
       });
-      
+
       if (matchScore > bestScore) {
         bestScore = matchScore;
         bestMatch = key;

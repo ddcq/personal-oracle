@@ -24,9 +24,6 @@ class _AppRestartWrapperState extends State<AppRestartWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return KeyedSubtree(
-      key: _key,
-      child: widget.child,
-    );
+    return KeyedSubtree(key: _key, child: widget.child);
   }
 }

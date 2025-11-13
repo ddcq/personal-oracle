@@ -41,7 +41,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
 
     _game = PuzzleGame(rows: _rows, cols: _cols);
     _flameGame = PuzzleFlameGame(
-      puzzleGame: _game!, 
+      puzzleGame: _game!,
       onRewardEarned: _showVictoryDialog,
       currentLevel: _currentLevel,
     );
@@ -71,7 +71,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
 
   void _resetGame() {
     if (!_isInitialized || _game == null) return;
-    
+
     final dimensions = _calculatePuzzleDimensions(context);
 
     // Update the game with the new piece size and board dimensions
@@ -80,7 +80,10 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     _game!.cols = _cols;
 
     setState(() {
-      _game!.initializeAndScatter(dimensions['puzzleBoardBounds'], MediaQuery.of(context).size);
+      _game!.initializeAndScatter(
+        dimensions['puzzleBoardBounds'],
+        MediaQuery.of(context).size,
+      );
     });
     _flameGame!.reset();
   }
@@ -102,9 +105,17 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     final double boardX = (screenWidth - calculatedPuzzleWidth) / 2;
     final double boardY = (screenHeight - calculatedPuzzleHeight) / 2;
 
-    final Rect puzzleBoardBounds = Rect.fromLTWH(boardX, boardY, calculatedPuzzleWidth, calculatedPuzzleHeight);
+    final Rect puzzleBoardBounds = Rect.fromLTWH(
+      boardX,
+      boardY,
+      calculatedPuzzleWidth,
+      calculatedPuzzleHeight,
+    );
 
-    return {'pieceSize': calculatedPieceSize, 'puzzleBoardBounds': puzzleBoardBounds};
+    return {
+      'pieceSize': calculatedPieceSize,
+      'puzzleBoardBounds': puzzleBoardBounds,
+    };
   }
 
   void _showVictoryDialog(CollectibleCard? rewardCard) async {
@@ -112,17 +123,17 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     final gamificationService = getIt<GamificationService>();
     _currentLevel++;
     await gamificationService.savePuzzleDifficulty(_currentLevel);
-    
+
     // Update grid size for new level
     final newGridSize = _getGridSizeForLevel(_currentLevel);
     _rows = newGridSize;
     _cols = newGridSize;
-    
+
     // Update the flame game's current level
     if (_flameGame != null) {
       _flameGame!.currentLevel = _currentLevel;
     }
-    
+
     _flameGame?.overlays.add('victoryOverlay');
   }
 
@@ -148,7 +159,10 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
         ),
         title: Text(
           '${'puzzle_screen_title'.tr()} - ${'level'.tr()} $_currentLevel (${_rows}x$_cols)',
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [
           IconButton(
@@ -156,7 +170,11 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
             onPressed: () {
               GameHelpDialog.show(
                 context,
-                ['puzzle_screen_rule_1'.tr(), 'puzzle_screen_rule_2'.tr(), 'puzzle_screen_rule_3'.tr()],
+                [
+                  'puzzle_screen_rule_1'.tr(),
+                  'puzzle_screen_rule_2'.tr(),
+                  'puzzle_screen_rule_3'.tr(),
+                ],
                 onGamePaused: () => _flameGame!.pauseEngine(),
                 onGameResumed: () => _flameGame!.resumeEngine(),
               );

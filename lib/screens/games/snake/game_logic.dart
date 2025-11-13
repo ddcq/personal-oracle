@@ -58,7 +58,8 @@ class GameState {
   dp.Direction direction;
   dp.Direction nextDirection;
   dp.Direction? pendingDirection; // Queue for rapid direction changes
-  int movesSinceDirectionChange; // Track moves in current direction for 2x2 blocks
+  int
+  movesSinceDirectionChange; // Track moves in current direction for 2x2 blocks
   bool isGameRunning;
   bool isGameOver;
   bool bonusJustCollected;
@@ -86,12 +87,16 @@ class GameState {
     this.foodJustEaten = false,
     required this.gridWidth,
     required this.gridHeight,
-  })  : foodType = ValueNotifier(foodType),
-        collectedBonuses = collectedBonuses ?? [],
-        activeBonusEffects = activeBonusEffects ?? [];
+  }) : foodType = ValueNotifier(foodType),
+       collectedBonuses = collectedBonuses ?? [],
+       activeBonusEffects = activeBonusEffects ?? [];
 
   /// Creates a GameState with the default initial values.
-  factory GameState.initial({required int gridWidth, required int gridHeight, List<IntVector2>? obstacles}) {
+  factory GameState.initial({
+    required int gridWidth,
+    required int gridHeight,
+    List<IntVector2>? obstacles,
+  }) {
     final Random random = Random();
     final obstacleList = obstacles ?? [];
 
@@ -102,7 +107,13 @@ class GameState {
 
     // Check all horizontal paths (left to right) on even rows
     for (int y = 0; y < gridHeight; y += 2) {
-      int pathLength = _calculateStraightDistanceWithObstacles(IntVector2(0, y), dp.Direction.right, gridWidth, gridHeight, obstacleList);
+      int pathLength = _calculateStraightDistanceWithObstacles(
+        IntVector2(0, y),
+        dp.Direction.right,
+        gridWidth,
+        gridHeight,
+        obstacleList,
+      );
       if (pathLength > maxPathLength) {
         maxPathLength = pathLength;
         bestStartPosition = IntVector2(0, y);
@@ -112,7 +123,13 @@ class GameState {
 
     // Check all vertical paths (bottom to top) on even columns
     for (int x = 0; x < gridWidth; x += 2) {
-      int pathLength = _calculateStraightDistanceWithObstacles(IntVector2(x, gridHeight - 2), dp.Direction.up, gridWidth, gridHeight, obstacleList);
+      int pathLength = _calculateStraightDistanceWithObstacles(
+        IntVector2(x, gridHeight - 2),
+        dp.Direction.up,
+        gridWidth,
+        gridHeight,
+        obstacleList,
+      );
       if (pathLength > maxPathLength) {
         maxPathLength = pathLength;
         bestStartPosition = IntVector2(x, gridHeight - 2);
@@ -131,14 +148,17 @@ class GameState {
 
       foodIsValid = true;
       // Check against snake
-      if ((initialFood.x - bestStartPosition.x).abs() < 2 && (initialFood.y - bestStartPosition.y).abs() < 2) {
+      if ((initialFood.x - bestStartPosition.x).abs() < 2 &&
+          (initialFood.y - bestStartPosition.y).abs() < 2) {
         foodIsValid = false;
       }
       // Check against obstacles
       if (foodIsValid) {
         for (int j = 0; j < 2; j++) {
           for (int i = 0; i < 2; i++) {
-            if (obstacleList.contains(IntVector2(initialFood.x + i, initialFood.y + j))) {
+            if (obstacleList.contains(
+              IntVector2(initialFood.x + i, initialFood.y + j),
+            )) {
               foodIsValid = false;
               break;
             }
@@ -151,7 +171,11 @@ class GameState {
     return GameState(
       snake: [
         SnakeSegment(position: bestStartPosition, type: 'head'),
-        SnakeSegment(position: _getPreviousPosition(bestStartPosition, bestDirection), type: 'body', subPattern: _getInitialPattern(bestDirection)),
+        SnakeSegment(
+          position: _getPreviousPosition(bestStartPosition, bestDirection),
+          type: 'body',
+          subPattern: _getInitialPattern(bestDirection),
+        ),
       ],
       food: initialFood,
       foodType: FoodType.regular,
@@ -170,7 +194,10 @@ class GameState {
     );
   }
 
-  static IntVector2 _getPreviousPosition(IntVector2 position, dp.Direction direction) {
+  static IntVector2 _getPreviousPosition(
+    IntVector2 position,
+    dp.Direction direction,
+  ) {
     switch (direction) {
       case dp.Direction.up:
         return IntVector2(position.x, position.y + 2);
@@ -196,7 +223,13 @@ class GameState {
     }
   }
 
-  static int _calculateStraightDistanceWithObstacles(IntVector2 start, dp.Direction direction, int gridWidth, int gridHeight, List<IntVector2> obstacles) {
+  static int _calculateStraightDistanceWithObstacles(
+    IntVector2 start,
+    dp.Direction direction,
+    int gridWidth,
+    int gridHeight,
+    List<IntVector2> obstacles,
+  ) {
     int distance = 0;
     IntVector2 current = start;
     while (true) {
@@ -219,7 +252,11 @@ class GameState {
       for (int y = 0; y < 2; y++) {
         for (int x = 0; x < 2; x++) {
           final checkPos = IntVector2(current.x + x, current.y + y);
-          if (checkPos.x < 0 || checkPos.x >= gridWidth || checkPos.y < 0 || checkPos.y >= gridHeight || obstacles.contains(checkPos)) {
+          if (checkPos.x < 0 ||
+              checkPos.x >= gridWidth ||
+              checkPos.y < 0 ||
+              checkPos.y >= gridHeight ||
+              obstacles.contains(checkPos)) {
             collision = true;
             break;
           }
@@ -244,7 +281,9 @@ class GameState {
       obstacles: obstacles.map((obstacle) => obstacle.clone()).toList(),
       activeBonus: activeBonus?.clone(),
       collectedBonuses: List<BonusType>.from(collectedBonuses),
-      activeBonusEffects: activeBonusEffects.map((effect) => effect.clone()).toList(),
+      activeBonusEffects: activeBonusEffects
+          .map((effect) => effect.clone())
+          .toList(),
       score: score,
       direction: direction,
       nextDirection: nextDirection,
@@ -274,8 +313,10 @@ class GameLogic {
   static const double bonusSpawnProbability = 1;
   static const double bonusLifetime = 8.0;
   static const double bonusEffectDuration = 8.0;
-  static const double speedBonusMultiplier = 0.7; // 30% faster (multiply time by 0.7)
-  static const double freezeBonusMultiplier = 1.3; // 30% slower (multiply time by 1.3)
+  static const double speedBonusMultiplier =
+      0.7; // 30% faster (multiply time by 0.7)
+  static const double freezeBonusMultiplier =
+      1.3; // 30% slower (multiply time by 1.3)
 
   VoidCallback? onRottenFoodEaten;
   VoidCallback? onConfettiTrigger;
@@ -289,41 +330,51 @@ class GameLogic {
 
     state.bonusJustCollected = false;
     state.foodJustEaten = false;
-    
+
     // Check if direction is changing
     bool directionChanging = state.direction != state.nextDirection;
-    
+
     // Apply nextDirection
     state.direction = state.nextDirection;
-    
+
     // Reset or increment move counter
     if (directionChanging) {
       state.movesSinceDirectionChange = 0;
     } else {
       state.movesSinceDirectionChange++;
     }
-    
+
     // If there's a pending direction and we've moved enough in current direction
     // (need at least 2 moves for 2x2 blocks to clear)
-    if (state.pendingDirection != null && state.movesSinceDirectionChange >= 2) {
+    if (state.pendingDirection != null &&
+        state.movesSinceDirectionChange >= 2) {
       state.nextDirection = state.pendingDirection!;
       state.pendingDirection = null;
     }
-    
+
     IntVector2 headPos = state.snake.first.position;
     IntVector2 newHeadPos = _getNewHeadPosition(headPos, state.direction);
 
     final currentSnakePositions = state.snake.map((s) => s.position).toList();
 
     // Check for bonus effects
-    bool hasGhostEffect = state.activeBonusEffects.any((effect) => effect.type == BonusType.ghost);
-    bool hasShieldEffect = state.activeBonusEffects.any((effect) => effect.type == BonusType.shield);
-    
+    bool hasGhostEffect = state.activeBonusEffects.any(
+      (effect) => effect.type == BonusType.ghost,
+    );
+    bool hasShieldEffect = state.activeBonusEffects.any(
+      (effect) => effect.type == BonusType.shield,
+    );
+
     // Shield takes priority over ghost if both are active
     bool ignoreObstacles = hasShieldEffect || hasGhostEffect;
 
     // Check collision (ignore obstacles if ghost or shield is active)
-    if (_isCollision(state, newHeadPos, currentSnakePositions, ignoreObstacles: ignoreObstacles)) {
+    if (_isCollision(
+      state,
+      newHeadPos,
+      currentSnakePositions,
+      ignoreObstacles: ignoreObstacles,
+    )) {
       state.pendingGameOver = true;
     }
 
@@ -356,14 +407,24 @@ class GameLogic {
     // 2. Add the old head (now the first body segment)
     String? oldHeadSubPattern;
     if (state.snake.length > 1) {
-      oldHeadSubPattern = _getPattern(newHeadPos, state.snake.first.position, state.snake[1].position);
+      oldHeadSubPattern = _getPattern(
+        newHeadPos,
+        state.snake.first.position,
+        state.snake[1].position,
+      );
     } else {
       // If the snake was just a head, it becomes a straight body segment.
       final dx = newHeadPos.x - state.snake.first.position.x;
       final dy = newHeadPos.y - state.snake.first.position.y;
       oldHeadSubPattern = '${-dx},${-dy},$dx,$dy';
     }
-    newSnake.add(SnakeSegment(position: state.snake.first.position, type: 'body', subPattern: oldHeadSubPattern));
+    newSnake.add(
+      SnakeSegment(
+        position: state.snake.first.position,
+        type: 'body',
+        subPattern: oldHeadSubPattern,
+      ),
+    );
 
     // 3. Add the rest of the body segments (from state.snake[1] onwards, excluding the old head at index 0)
     // These segments keep their position and pattern.
@@ -391,7 +452,10 @@ class GameLogic {
     return state;
   }
 
-  IntVector2 _getNewHeadPosition(IntVector2 currentHead, dp.Direction direction) {
+  IntVector2 _getNewHeadPosition(
+    IntVector2 currentHead,
+    dp.Direction direction,
+  ) {
     switch (direction) {
       case dp.Direction.up:
         return IntVector2(currentHead.x, currentHead.y - 1);
@@ -404,9 +468,17 @@ class GameLogic {
     }
   }
 
-  bool _isCollision(GameState state, IntVector2 newHeadPos, List<IntVector2> snakePositions, {bool ignoreObstacles = false}) {
+  bool _isCollision(
+    GameState state,
+    IntVector2 newHeadPos,
+    List<IntVector2> snakePositions, {
+    bool ignoreObstacles = false,
+  }) {
     // Wall collision (head is 2x2)
-    if (newHeadPos.x < 0 || newHeadPos.x >= state.gridWidth - 1 || newHeadPos.y < 0 || newHeadPos.y >= state.gridHeight - 1) {
+    if (newHeadPos.x < 0 ||
+        newHeadPos.x >= state.gridWidth - 1 ||
+        newHeadPos.y < 0 ||
+        newHeadPos.y >= state.gridHeight - 1) {
       return true;
     }
 
@@ -414,8 +486,11 @@ class GameLogic {
     // The head can overlap with the neck (first body segment) after direction change, so skip first 2 elements.
     for (int i = 2; i < snakePositions.length; i++) {
       final bodyPos = snakePositions[i];
-      if ((newHeadPos.x - bodyPos.x).abs() < 2 && (newHeadPos.y - bodyPos.y).abs() < 2) {
-        debugPrint('Snake self-collision: newHeadPos=$newHeadPos, bodyPos=$bodyPos (segment $i)');
+      if ((newHeadPos.x - bodyPos.x).abs() < 2 &&
+          (newHeadPos.y - bodyPos.y).abs() < 2) {
+        debugPrint(
+          'Snake self-collision: newHeadPos=$newHeadPos, bodyPos=$bodyPos (segment $i)',
+        );
         return true;
       }
     }
@@ -440,19 +515,23 @@ class GameLogic {
 
   bool _handleFoodConsumption(GameState state, IntVector2 newHeadPos) {
     // Food is 2x2, head is 2x2. Check for overlap.
-    if ((newHeadPos.x - state.food.x).abs() < 2 && (newHeadPos.y - state.food.y).abs() < 2) {
+    if ((newHeadPos.x - state.food.x).abs() < 2 &&
+        (newHeadPos.y - state.food.y).abs() < 2) {
       state.foodJustEaten = true;
       if (state.foodType.value == FoodType.golden) {
         state.score += _scoreGoldenFood;
       } else if (state.foodType.value == FoodType.regular) {
         state.score += _scoreRegularFood;
       } else if (state.foodType.value == FoodType.rotten) {
-        state.score -= (_scoreRottenFoodPenaltyBase + (level * _scoreRottenFoodPenaltyPerLevel));
+        state.score -=
+            (_scoreRottenFoodPenaltyBase +
+            (level * _scoreRottenFoodPenaltyPerLevel));
         onRottenFoodEaten?.call();
       }
 
       // Trigger confetti if score is above threshold and food is not rotten
-      if (state.score >= SnakeFlameGame.victoryScoreThreshold && state.foodType.value != FoodType.rotten) {
+      if (state.score >= SnakeFlameGame.victoryScoreThreshold &&
+          state.foodType.value != FoodType.rotten) {
         onConfettiTrigger?.call();
       }
       return true;
@@ -461,7 +540,9 @@ class GameLogic {
   }
 
   bool _handleBonusCollection(GameState state, IntVector2 newHeadPos) {
-    if (state.activeBonus != null && (newHeadPos.x - state.activeBonus!.position.x).abs() < 2 && (newHeadPos.y - state.activeBonus!.position.y).abs() < 2) {
+    if (state.activeBonus != null &&
+        (newHeadPos.x - state.activeBonus!.position.x).abs() < 2 &&
+        (newHeadPos.y - state.activeBonus!.position.y).abs() < 2) {
       final bonusType = state.activeBonus!.type;
 
       if (bonusType == BonusType.coin) {
@@ -473,15 +554,22 @@ class GameLogic {
       }
 
       // Check if already have this bonus type
-      final existingEffectIndex = state.activeBonusEffects.indexWhere((e) => e.type == bonusType);
-      
+      final existingEffectIndex = state.activeBonusEffects.indexWhere(
+        (e) => e.type == bonusType,
+      );
+
       if (existingEffectIndex != -1) {
         // Replace existing bonus with new one (reset timer)
-        state.activeBonusEffects[existingEffectIndex] = ActiveBonusEffect(type: bonusType, activationTime: 0.0);
+        state.activeBonusEffects[existingEffectIndex] = ActiveBonusEffect(
+          type: bonusType,
+          activationTime: 0.0,
+        );
       } else {
         // Special rule: Shield replaces Ghost (shield is stronger)
         if (bonusType == BonusType.shield) {
-          final ghostIndex = state.activeBonusEffects.indexWhere((e) => e.type == BonusType.ghost);
+          final ghostIndex = state.activeBonusEffects.indexWhere(
+            (e) => e.type == BonusType.ghost,
+          );
           if (ghostIndex != -1) {
             state.activeBonusEffects.removeAt(ghostIndex);
             state.collectedBonuses.remove(BonusType.ghost);
@@ -489,11 +577,13 @@ class GameLogic {
         }
         // If collecting ghost while having shield, add it but shield rules take priority
         // (no special handling needed, just add it normally)
-        
+
         state.collectedBonuses.add(bonusType);
-        state.activeBonusEffects.add(ActiveBonusEffect(type: bonusType, activationTime: 0.0));
+        state.activeBonusEffects.add(
+          ActiveBonusEffect(type: bonusType, activationTime: 0.0),
+        );
       }
-      
+
       state.activeBonus = null;
       onBonusCollected?.call();
       state.bonusJustCollected = true;
@@ -526,7 +616,11 @@ class GameLogic {
       extraOccupied.add(IntVector2(pos.x + 1, pos.y + 1));
     }
 
-    IntVector2 newFood = _generateValidPositionFor2x2(state, random, extraOccupiedCells: extraOccupied);
+    IntVector2 newFood = _generateValidPositionFor2x2(
+      state,
+      random,
+      extraOccupiedCells: extraOccupied,
+    );
 
     if (random.nextDouble() < _goldenFoodProbability) {
       state.foodType.value = FoodType.golden;
@@ -537,7 +631,8 @@ class GameLogic {
     state.foodAge = 0.0;
 
     // Randomly spawn bonus
-    if (state.activeBonus == null && random.nextDouble() < bonusSpawnProbability) {
+    if (state.activeBonus == null &&
+        random.nextDouble() < bonusSpawnProbability) {
       spawnBonus(state);
     }
   }
@@ -549,7 +644,12 @@ class GameLogic {
     if (state.obstacles.isEmpty) {
       bonusTypes = [BonusType.speed, BonusType.freeze, BonusType.coin];
     } else {
-      bonusTypes = [BonusType.speed, BonusType.shield, BonusType.freeze, BonusType.ghost];
+      bonusTypes = [
+        BonusType.speed,
+        BonusType.shield,
+        BonusType.freeze,
+        BonusType.ghost,
+      ];
     }
 
     final randomBonusType = bonusTypes[random.nextInt(bonusTypes.length)];
@@ -558,23 +658,38 @@ class GameLogic {
       state.food,
       IntVector2(state.food.x + 1, state.food.y),
       IntVector2(state.food.x, state.food.y + 1),
-      IntVector2(state.food.x + 1, state.food.y + 1)
+      IntVector2(state.food.x + 1, state.food.y + 1),
     };
 
-    IntVector2 bonusPosition = _generateValidPositionFor2x2(state, random, extraOccupiedCells: extraOccupied);
+    IntVector2 bonusPosition = _generateValidPositionFor2x2(
+      state,
+      random,
+      extraOccupiedCells: extraOccupied,
+    );
 
-    state.activeBonus = Bonus(position: bonusPosition, type: randomBonusType, spawnTime: 0.0);
+    state.activeBonus = Bonus(
+      position: bonusPosition,
+      type: randomBonusType,
+      spawnTime: 0.0,
+    );
   }
 
-  void changeDirection(GameState state, dp.Direction newDirection, {bool isRetroactive = false}) {
+  void changeDirection(
+    GameState state,
+    dp.Direction newDirection, {
+    bool isRetroactive = false,
+  }) {
     if (!state.isGameRunning || state.isGameOver) return;
 
     // For 2x2 blocks, we need to ensure we've moved at least once in the current direction
     // before allowing another direction change
     final effectiveDirection = state.nextDirection;
-    
+
     // Check if it's opposite to nextDirection (the planned direction)
-    final bool isOppositeToNext = _isOppositeDirection(effectiveDirection, newDirection);
+    final bool isOppositeToNext = _isOppositeDirection(
+      effectiveDirection,
+      newDirection,
+    );
 
     // If opposite to next direction
     if (isOppositeToNext) {
@@ -589,13 +704,15 @@ class GameLogic {
     }
 
     // Also check if opposite to pendingDirection (if it exists)
-    if (state.pendingDirection != null && _isOppositeDirection(state.pendingDirection!, newDirection)) {
+    if (state.pendingDirection != null &&
+        _isOppositeDirection(state.pendingDirection!, newDirection)) {
       // Ignore this as it would create a U-turn with the pending direction
       return;
     }
 
     // For 2x2 blocks: if we just changed direction, queue the next change
-    if (state.movesSinceDirectionChange < 1 && state.nextDirection != newDirection) {
+    if (state.movesSinceDirectionChange < 1 &&
+        state.nextDirection != newDirection) {
       // Don't queue if already same as pending
       if (state.pendingDirection != newDirection) {
         state.pendingDirection = newDirection;
@@ -611,9 +728,9 @@ class GameLogic {
 
   bool _isOppositeDirection(dp.Direction dir1, dp.Direction dir2) {
     return (dir1 == dp.Direction.up && dir2 == dp.Direction.down) ||
-           (dir1 == dp.Direction.down && dir2 == dp.Direction.up) ||
-           (dir1 == dp.Direction.left && dir2 == dp.Direction.right) ||
-           (dir1 == dp.Direction.right && dir2 == dp.Direction.left);
+        (dir1 == dp.Direction.down && dir2 == dp.Direction.up) ||
+        (dir1 == dp.Direction.left && dir2 == dp.Direction.right) ||
+        (dir1 == dp.Direction.right && dir2 == dp.Direction.left);
   }
 
   void rotateLeft(GameState state) {
@@ -663,14 +780,19 @@ class GameLogic {
     // Expand snake and food to all their occupied cells
     final snakeCells = state.snake.expand((s) {
       final pos = s.position;
-      return [pos, IntVector2(pos.x + 1, pos.y), IntVector2(pos.x, pos.y + 1), IntVector2(pos.x + 1, pos.y + 1)];
+      return [
+        pos,
+        IntVector2(pos.x + 1, pos.y),
+        IntVector2(pos.x, pos.y + 1),
+        IntVector2(pos.x + 1, pos.y + 1),
+      ];
     }).toSet();
 
     final foodCells = {
       state.food,
       IntVector2(state.food.x + 1, state.food.y),
       IntVector2(state.food.x, state.food.y + 1),
-      IntVector2(state.food.x + 1, state.food.y + 1)
+      IntVector2(state.food.x + 1, state.food.y + 1),
     };
 
     final targetObstacleCount = _baseObstacles + level;
@@ -680,7 +802,10 @@ class GameLogic {
     while (obstacleCount < targetObstacleCount && attempts < 1000) {
       attempts++;
       // Generate top-left corner, ensuring it's not on the very edge for a 4x4 obstacle
-      IntVector2 topLeft = IntVector2(random.nextInt(state.gridWidth - 3), random.nextInt(state.gridHeight - 3));
+      IntVector2 topLeft = IntVector2(
+        random.nextInt(state.gridWidth - 3),
+        random.nextInt(state.gridHeight - 3),
+      );
 
       // Ensure the top-left corner is on an even coordinate to align with the old grid
       if (topLeft.x.isOdd) topLeft = IntVector2(topLeft.x - 1, topLeft.y);
@@ -694,8 +819,15 @@ class GameLogic {
       }
 
       // Check for overlap with snake, existing obstacles, or food
-      final occupiedCells = {...snakeCells, ...foodCells, ...state.obstacles, ...newObstacles};
-      bool isOccupied = obstacleCells.any((cell) => occupiedCells.contains(cell));
+      final occupiedCells = {
+        ...snakeCells,
+        ...foodCells,
+        ...state.obstacles,
+        ...newObstacles,
+      };
+      bool isOccupied = obstacleCells.any(
+        (cell) => occupiedCells.contains(cell),
+      );
 
       if (!isOccupied) {
         newObstacles.addAll(obstacleCells);
@@ -721,13 +853,21 @@ class GameLogic {
     }
   }
 
-  String _getPattern(IntVector2 prevPos, IntVector2 currentPos, IntVector2 nextPos) {
+  String _getPattern(
+    IntVector2 prevPos,
+    IntVector2 currentPos,
+    IntVector2 nextPos,
+  ) {
     final prevRelative = prevPos - currentPos;
     final nextRelative = nextPos - currentPos;
     return '${prevRelative.x},${prevRelative.y},${nextRelative.x},${nextRelative.y}';
   }
 
-  IntVector2 _generateValidPositionFor2x2(GameState state, Random random, {Set<IntVector2>? extraOccupiedCells}) {
+  IntVector2 _generateValidPositionFor2x2(
+    GameState state,
+    Random random, {
+    Set<IntVector2>? extraOccupiedCells,
+  }) {
     final Set<IntVector2> occupied = {};
 
     // Add all snake cells
@@ -775,7 +915,10 @@ class GameLogic {
       attempts = 0;
       do {
         attempts++;
-        position = IntVector2(random.nextInt(state.gridWidth - 1), random.nextInt(state.gridHeight - 1));
+        position = IntVector2(
+          random.nextInt(state.gridWidth - 1),
+          random.nextInt(state.gridHeight - 1),
+        );
         positionIsValid = true;
         for (int j = 0; j < 2; j++) {
           for (int i = 0; i < 2; i++) {

@@ -24,8 +24,18 @@ class WordSearchController with ChangeNotifier {
   GamePhase gamePhase = GamePhase.searchingWords;
 
   // Game Data
-  WordSearchGridResult _gridResult = WordSearchGridResult(grid: [], placedWords: [], secretWordUsed: '');
-  MythCard? _mythCard = MythCard(id: 'default', title: 'Default', imagePath: '', description: '', detailedStory: '');
+  WordSearchGridResult _gridResult = WordSearchGridResult(
+    grid: [],
+    placedWords: [],
+    secretWordUsed: '',
+  );
+  MythCard? _mythCard = MythCard(
+    id: 'default',
+    title: 'Default',
+    imagePath: '',
+    description: '',
+    detailedStory: '',
+  );
   String _instructionClue = '';
   List<String> _sortedWordsToFind = [];
   NextChapter? _nextChapter;
@@ -41,7 +51,8 @@ class WordSearchController with ChangeNotifier {
 
   // Getters
   List<List<String>> get grid => _gridResult.grid;
-  List<String> get wordsToFind => _sortedWordsToFind; // Now returns the pre-sorted list
+  List<String> get wordsToFind =>
+      _sortedWordsToFind; // Now returns the pre-sorted list
   String get secretWord => _gridResult.secretWordUsed;
   MythCard get mythCard => _mythCard!;
   String get instructionClue => _instructionClue;
@@ -63,7 +74,9 @@ class WordSearchController with ChangeNotifier {
     do {
       generationAttempts++;
       if (generationAttempts > maxGenerationAttempts) {
-        _handleGenerationFailure('Impossible de générer une grille. Réessayez plus tard.');
+        _handleGenerationFailure(
+          'Impossible de générer une grille. Réessayez plus tard.',
+        );
         return;
       }
 
@@ -78,13 +91,17 @@ class WordSearchController with ChangeNotifier {
       }
 
       final longWords = wordsToPlace.where((word) => word.length >= 5).toList();
-      final shortWords = wordsToPlace.where((word) => word.length == 4).toList();
+      final shortWords = wordsToPlace
+          .where((word) => word.length == 4)
+          .toList();
 
       if (longWords.isEmpty) {
         continue;
       }
 
-      final secretWords = norseRiddles.map((r) => normalizeForWordSearch(r.name)).toList()..sort((a, b) => b.length.compareTo(a.length));
+      final secretWords =
+          norseRiddles.map((r) => normalizeForWordSearch(r.name)).toList()
+            ..sort((a, b) => b.length.compareTo(a.length));
 
       final height = 5 + level;
       final width = 3 + level;
@@ -121,14 +138,17 @@ class WordSearchController with ChangeNotifier {
   }
 
   List<String> _extractAndNormalizeWords(MythCard mythCard) {
-    return extractWordsFromMythCard(mythCard).map(normalizeForWordSearch).toSet().toList();
+    return extractWordsFromMythCard(
+      mythCard,
+    ).map(normalizeForWordSearch).toSet().toList();
   }
 
   void _selectRiddle() {
     final secretWordName = _gridResult.secretWordUsed;
     final riddle = norseRiddles.firstWhere(
       (r) => normalizeForWordSearch(r.name) == secretWordName,
-      orElse: () => const NorseRiddle(name: '?', clues: ['Trouvez les mots cachés.']),
+      orElse: () =>
+          const NorseRiddle(name: '?', clues: ['Trouvez les mots cachés.']),
     );
     _instructionClue = riddle.clues[_random.nextInt(riddle.clues.length)];
   }
@@ -327,15 +347,25 @@ class WordSearchController with ChangeNotifier {
       return;
     }
     final startOffset = currentSelection.first;
-    final _SelectionStepsResult stepsResult = _calculateSelectionSteps(startOffset, offset);
+    final _SelectionStepsResult stepsResult = _calculateSelectionSteps(
+      startOffset,
+      offset,
+    );
 
-    final newSelection = _generateNewSelection(startOffset, stepsResult.direction, stepsResult.steps);
+    final newSelection = _generateNewSelection(
+      startOffset,
+      stepsResult.direction,
+      stepsResult.steps,
+    );
     currentSelection.clear();
     currentSelection.addAll(newSelection);
     notifyListeners();
   }
 
-  _SelectionStepsResult _calculateSelectionSteps(Offset startOffset, Offset endOffset) {
+  _SelectionStepsResult _calculateSelectionSteps(
+    Offset startOffset,
+    Offset endOffset,
+  ) {
     final deltaX = endOffset.dx - startOffset.dx;
     final deltaY = endOffset.dy - startOffset.dy;
     final direction = _snapAngleToDirection(atan2(deltaY, deltaX));
@@ -347,8 +377,18 @@ class WordSearchController with ChangeNotifier {
     return _SelectionStepsResult(direction, steps);
   }
 
-  List<Offset> _generateNewSelection(Offset startOffset, _Direction direction, int steps) {
-    return [for (var i = 0; i <= steps; i++) Offset(startOffset.dx + direction.dx * i, startOffset.dy + direction.dy * i)];
+  List<Offset> _generateNewSelection(
+    Offset startOffset,
+    _Direction direction,
+    int steps,
+  ) {
+    return [
+      for (var i = 0; i <= steps; i++)
+        Offset(
+          startOffset.dx + direction.dx * i,
+          startOffset.dy + direction.dy * i,
+        ),
+    ];
   }
 
   void endSelection() {
@@ -357,7 +397,9 @@ class WordSearchController with ChangeNotifier {
       notifyListeners();
       return;
     }
-    String selectedWord = currentSelection.map((offset) => grid[offset.dy.toInt()][offset.dx.toInt()]).join('');
+    String selectedWord = currentSelection
+        .map((offset) => grid[offset.dy.toInt()][offset.dx.toInt()])
+        .join('');
     _checkAndConfirmWord(selectedWord);
 
     currentSelection.clear();
@@ -411,7 +453,10 @@ class WordSearchController with ChangeNotifier {
 
   void _onSecretWordSuccess() async {
     if (_nextChapter != null) {
-      await _gamificationService.unlockStoryPart(_nextChapter!.story.id, _nextChapter!.chapter.id);
+      await _gamificationService.unlockStoryPart(
+        _nextChapter!.story.id,
+        _nextChapter!.chapter.id,
+      );
       if (level < 10) {
         await _gamificationService.saveWordSearchDifficulty(level + 1);
       }

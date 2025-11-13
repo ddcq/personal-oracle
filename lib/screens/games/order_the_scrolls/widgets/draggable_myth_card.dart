@@ -47,13 +47,23 @@ class DraggableMythCard extends StatelessWidget {
             child: SizedBox(
               width: size * 0.9,
               height: size * 0.9,
-              child: MythCardContent(card: card, index: index, size: size * 0.9, controller: controller, isDragging: true),
+              child: MythCardContent(
+                card: card,
+                index: index,
+                size: size * 0.9,
+                controller: controller,
+                isDragging: true,
+              ),
             ),
           ),
           childWhenDragging: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.grey[300]!, width: 2, style: BorderStyle.solid),
+              border: Border.all(
+                color: Colors.grey[300]!,
+                width: 2,
+                style: BorderStyle.solid,
+              ),
               color: Colors.grey[100],
             ),
             child: const Icon(Icons.add, color: Colors.grey, size: 32),
@@ -64,8 +74,18 @@ class DraggableMythCard extends StatelessWidget {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               transform:
-                  Matrix4.translationValues(0.0, isHovering ? -4.0 : 0.0, 0.0) * Matrix4.diagonal3Values(isHovering ? 1.05 : 1.0, isHovering ? 1.05 : 1.0, 1.0),
-              child: MythCardContent(card: card, index: index, size: size, controller: controller),
+                  Matrix4.translationValues(0.0, isHovering ? -4.0 : 0.0, 0.0) *
+                  Matrix4.diagonal3Values(
+                    isHovering ? 1.05 : 1.0,
+                    isHovering ? 1.05 : 1.0,
+                    1.0,
+                  ),
+              child: MythCardContent(
+                card: card,
+                index: index,
+                size: size,
+                controller: controller,
+              ),
             ),
           ),
         );

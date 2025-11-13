@@ -18,14 +18,19 @@ class GameController extends ChangeNotifier {
   bool _showVictoryPopup = false; // New property
   MythCard? _selectedMythCard;
   CollectibleCard? _rewardCard; // New property for reward card
-  MythCard? _nextChapterToUnlock; // The specific chapter to unlock if a story part is the reward
-  bool _allChaptersEarned = false; // Flag to indicate if all story chapters have been earned
-  MythCard? _unlockedStoryChapter; // The specific story chapter that was unlocked
+  MythCard?
+  _nextChapterToUnlock; // The specific chapter to unlock if a story part is the reward
+  bool _allChaptersEarned =
+      false; // Flag to indicate if all story chapters have been earned
+  MythCard?
+  _unlockedStoryChapter; // The specific story chapter that was unlocked
   List<bool?> _placementResults = []; // To store correctness of each card
 
   GameController() {
     _selectedStory = getMythStories().first; // Initialize with the dummy story
-    _shuffledCards = List<MythCard>.from(_selectedStory.correctOrder); // Initialize with dummy story's cards
+    _shuffledCards = List<MythCard>.from(
+      _selectedStory.correctOrder,
+    ); // Initialize with dummy story's cards
     _placementResults = List<bool?>.filled(_shuffledCards.length, null);
   }
 
@@ -39,7 +44,8 @@ class GameController extends ChangeNotifier {
   bool get showVictoryPopup => _showVictoryPopup; // Getter for new property
   MythCard? get selectedMythCard => _selectedMythCard;
   CollectibleCard? get rewardCard => _rewardCard; // Getter for new property
-  MythCard? get unlockedStoryChapter => _unlockedStoryChapter; // Getter for unlocked story chapter
+  MythCard? get unlockedStoryChapter =>
+      _unlockedStoryChapter; // Getter for unlocked story chapter
   List<bool?> get placementResults => _placementResults;
 
   Future<void> loadNewStory() async {
@@ -67,12 +73,16 @@ class GameController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Map<String, dynamic>?> _findNextEarnableStoryAndChapter(List<MythStory> allStories) async {
+  Future<Map<String, dynamic>?> _findNextEarnableStoryAndChapter(
+    List<MythStory> allStories,
+  ) async {
     final List<Map<String, dynamic>> earnableChapters = [];
 
     for (var story in allStories) {
       final progress = await _gamificationService.getStoryProgress(story.id);
-      final unlockedParts = progress != null ? jsonDecode(progress['parts_unlocked']) : [];
+      final unlockedParts = progress != null
+          ? jsonDecode(progress['parts_unlocked'])
+          : [];
 
       // Find the next unearned chapter in order
       MythCard? nextChapterToEarn;
@@ -140,7 +150,8 @@ class GameController extends ChangeNotifier {
 
   Future<void> _handleAllChaptersEarnedReward() async {
     final unearnedContent = await _gamificationService.getUnearnedContent();
-    final cards = (unearnedContent['unearned_collectible_cards'] as List).cast<CollectibleCard>();
+    final cards = (unearnedContent['unearned_collectible_cards'] as List)
+        .cast<CollectibleCard>();
     if (cards.isNotEmpty) {
       final card = cards[Random().nextInt(cards.length)];
       await _gamificationService.unlockCollectibleCard(card);
@@ -149,7 +160,10 @@ class GameController extends ChangeNotifier {
   }
 
   Future<void> _handleChapterUnlockReward() async {
-    await _gamificationService.unlockStoryPart(_selectedStory.id, _nextChapterToUnlock!.id);
+    await _gamificationService.unlockStoryPart(
+      _selectedStory.id,
+      _nextChapterToUnlock!.id,
+    );
     _unlockedStoryChapter = _nextChapterToUnlock;
     _rewardCard = null;
   }
@@ -184,7 +198,8 @@ class GameController extends ChangeNotifier {
 
   bool isOrderCompletelyCorrect() {
     if (!_validated) return false;
-    return _shuffledCards.asMap().entries.every((e) => e.value.id == _selectedStory.correctOrder[e.key].id);
+    return _shuffledCards.asMap().entries.every(
+      (e) => e.value.id == _selectedStory.correctOrder[e.key].id,
+    );
   }
-
-  }
+}

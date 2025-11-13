@@ -9,7 +9,11 @@ class WordSearchGridResult {
   final List<String> placedWords;
   final String secretWordUsed;
 
-  WordSearchGridResult({required this.grid, required this.placedWords, required this.secretWordUsed});
+  WordSearchGridResult({
+    required this.grid,
+    required this.placedWords,
+    required this.secretWordUsed,
+  });
 }
 
 class _PlacedWord {
@@ -45,13 +49,20 @@ WordSearchGridResult generateWordSearchGrid({
   while (attempts < 100) {
     attempts++;
 
-    final grid = List.generate(height, (_) => List<String?>.filled(width, null));
+    final grid = List.generate(
+      height,
+      (_) => List<String?>.filled(width, null),
+    );
     final placedWords = <_PlacedWord>[];
     int emptyCells = width * height;
 
     // Partition words based on the new rules
-    final priorityWords = longWords.where((word) => !stopWords.contains(word)).toList();
-    final longStopWords = longWords.where((word) => stopWords.contains(word)).toList();
+    final priorityWords = longWords
+        .where((word) => !stopWords.contains(word))
+        .toList();
+    final longStopWords = longWords
+        .where((word) => stopWords.contains(word))
+        .toList();
     final secondaryWords = [...shortWords, ...longStopWords];
 
     // Place priority words
@@ -60,7 +71,16 @@ WordSearchGridResult generateWordSearchGrid({
       wordWasPlacedInPass = false;
       priorityWords.shuffle(random);
       for (final word in List.of(priorityWords)) {
-        int placedCount = _tryPlaceWord(grid, word, placedWords, directions, width, height, random, emptyCells);
+        int placedCount = _tryPlaceWord(
+          grid,
+          word,
+          placedWords,
+          directions,
+          width,
+          height,
+          random,
+          emptyCells,
+        );
         if (placedCount > 0) {
           emptyCells -= placedCount;
           priorityWords.remove(word);
@@ -76,7 +96,16 @@ WordSearchGridResult generateWordSearchGrid({
       wordWasPlacedInPass = false;
       secondaryWords.shuffle(random);
       for (final word in List.of(secondaryWords)) {
-        int placedCount = _tryPlaceWord(grid, word, placedWords, directions, width, height, random, emptyCells);
+        int placedCount = _tryPlaceWord(
+          grid,
+          word,
+          placedWords,
+          directions,
+          width,
+          height,
+          random,
+          emptyCells,
+        );
         if (placedCount > 0) {
           emptyCells -= placedCount;
           secondaryWords.remove(word);
@@ -91,13 +120,21 @@ WordSearchGridResult generateWordSearchGrid({
     }
 
     if (emptyCells < 11) {
-      final List<String> fittingWords = secretWords.where((sw) => sw.isNotEmpty && sw.length <= emptyCells).toList();
+      final List<String> fittingWords = secretWords
+          .where((sw) => sw.isNotEmpty && sw.length <= emptyCells)
+          .toList();
 
       final String secretWord;
       if (fittingWords.isNotEmpty) {
-        final int maxLength = fittingWords.fold(0, (maxLen, word) => max(maxLen, word.length));
-        final List<String> longestFittingWords = fittingWords.where((sw) => sw.length == maxLength).toList();
-        secretWord = longestFittingWords[random.nextInt(longestFittingWords.length)];
+        final int maxLength = fittingWords.fold(
+          0,
+          (maxLen, word) => max(maxLen, word.length),
+        );
+        final List<String> longestFittingWords = fittingWords
+            .where((sw) => sw.length == maxLength)
+            .toList();
+        secretWord =
+            longestFittingWords[random.nextInt(longestFittingWords.length)];
       } else {
         secretWord = 'DEFAULT';
       }
@@ -111,17 +148,36 @@ WordSearchGridResult generateWordSearchGrid({
           }
         }
       }
-      final finalGrid = grid.map((row) => row.map((cell) => cell!).toList()).toList();
+      final finalGrid = grid
+          .map((row) => row.map((cell) => cell!).toList())
+          .toList();
       final placedWordStrings = placedWords.map((pw) => pw.word).toList();
 
-      if (_isGridValid(finalGrid, placedWordStrings, directions, width, height)) {
-        return WordSearchGridResult(grid: finalGrid, placedWords: placedWordStrings, secretWordUsed: secretWord);
+      if (_isGridValid(
+        finalGrid,
+        placedWordStrings,
+        directions,
+        width,
+        height,
+      )) {
+        return WordSearchGridResult(
+          grid: finalGrid,
+          placedWords: placedWordStrings,
+          secretWordUsed: secretWord,
+        );
       }
     }
   }
 
-  final finalFallbackGrid = List.generate(height, (_) => List.generate(width, (_) => '?'));
-  return WordSearchGridResult(grid: finalFallbackGrid, placedWords: [], secretWordUsed: '');
+  final finalFallbackGrid = List.generate(
+    height,
+    (_) => List.generate(width, (_) => '?'),
+  );
+  return WordSearchGridResult(
+    grid: finalFallbackGrid,
+    placedWords: [],
+    secretWordUsed: '',
+  );
 }
 
 bool _areWordsNotObscured(List<_PlacedWord> placedWords) {
@@ -151,7 +207,13 @@ bool _areWordsNotObscured(List<_PlacedWord> placedWords) {
   return true;
 }
 
-bool _isGridValid(List<List<String>> grid, List<String> placedWords, List<_Direction> directions, int width, int height) {
+bool _isGridValid(
+  List<List<String>> grid,
+  List<String> placedWords,
+  List<_Direction> directions,
+  int width,
+  int height,
+) {
   for (final word in placedWords) {
     int occurrences = 0;
     for (var r = 0; r < height; r++) {
@@ -196,7 +258,16 @@ int _tryPlaceWord(
       final directionPicker = UniqueRandomPicker(directions);
       while (directionPicker.isNotEmpty) {
         final dir = directionPicker.pick()!;
-        if (_canPlaceWordAt(grid, word, r, c, dir, width, height, isFirstWord: isFirstWord)) {
+        if (_canPlaceWordAt(
+          grid,
+          word,
+          r,
+          c,
+          dir,
+          width,
+          height,
+          isFirstWord: isFirstWord,
+        )) {
           possiblePlacements.add(_Placement(r, c, dir));
         }
       }
@@ -227,7 +298,11 @@ int _tryPlaceWord(
   return 0;
 }
 
-int _calculateNewLetters(List<List<String?>> grid, String word, _Placement placement) {
+int _calculateNewLetters(
+  List<List<String?>> grid,
+  String word,
+  _Placement placement,
+) {
   int newLettersCount = 0;
   for (var i = 0; i < word.length; i++) {
     final r = placement.row + i * placement.dir.dy;
@@ -239,7 +314,16 @@ int _calculateNewLetters(List<List<String?>> grid, String word, _Placement place
   return newLettersCount;
 }
 
-bool _canPlaceWordAt(List<List<String?>> grid, String word, int row, int col, _Direction dir, int width, int height, {required bool isFirstWord}) {
+bool _canPlaceWordAt(
+  List<List<String?>> grid,
+  String word,
+  int row,
+  int col,
+  _Direction dir,
+  int width,
+  int height, {
+  required bool isFirstWord,
+}) {
   bool sharesLetter = false;
   int overlapCount = 0;
   int newLettersCount = 0;

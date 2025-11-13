@@ -14,7 +14,7 @@ class AppConstants {
   static const Color borderLight = Color(0xFFD0D0D0);
   static const Color textLight = Color(0xFF333333);
   static const Color textDark = Color(0xFFFFFFFF);
-  
+
   // Traits de personnalité
   static const List<String> personalityTraits = [
     'courage',
@@ -26,19 +26,19 @@ class AppConstants {
     'nature',
     'honor',
   ];
-  
+
   // Espacement
   static const double paddingSmall = 8.0;
   static const double paddingMedium = 16.0;
   static const double paddingLarge = 24.0;
   static const double paddingXLarge = 32.0;
-  
+
   // Rayons de bordure
   static const double radiusSmall = 8.0;
   static const double radiusMedium = 12.0;
   static const double radiusLarge = 16.0;
   static const double radiusXLarge = 20.0;
-  
+
   // Tailles d'icônes
   static const double iconSmall = 24.0;
   static const double iconMedium = 48.0;

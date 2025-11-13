@@ -8,19 +8,23 @@ import 'package:oracle_d_asgard/screens/games/snake/main_screen.dart';
 class SnakePreliminaryScreen extends StatelessWidget {
   const SnakePreliminaryScreen({super.key});
 
-  static Widget _buildBonusInfo(String imagePath, String nameKey, String effectKey) {
+  static Widget _buildBonusInfo(
+    String imagePath,
+    String nameKey,
+    String effectKey,
+  ) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Image.asset(
-          imagePath,
-          width: 24,
-          height: 24,
-        ),
+        Image.asset(imagePath, width: 24, height: 24),
         const SizedBox(width: 8),
         Text(
           '${nameKey.tr()}: ',
-          style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         Text(
           effectKey.tr(),
@@ -32,12 +36,16 @@ class SnakePreliminaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
     final Widget gameInfoLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+        color: Colors.black.withAlpha(128),
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -51,20 +59,44 @@ class SnakePreliminaryScreen extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             'snake_bonus_title'.tr(),
-            style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 12),
-          _buildBonusInfo('assets/images/snake/speed.png', 'snake_bonus_speed_name', 'snake_bonus_speed_effect'),
+          _buildBonusInfo(
+            'assets/images/snake/speed.png',
+            'snake_bonus_speed_name',
+            'snake_bonus_speed_effect',
+          ),
           const SizedBox(height: 8),
-          _buildBonusInfo('assets/images/snake/shield.png', 'snake_bonus_shield_name', 'snake_bonus_shield_effect'),
+          _buildBonusInfo(
+            'assets/images/snake/shield.png',
+            'snake_bonus_shield_name',
+            'snake_bonus_shield_effect',
+          ),
           const SizedBox(height: 8),
-          _buildBonusInfo('assets/images/snake/freeze.png', 'snake_bonus_freeze_name', 'snake_bonus_freeze_effect'),
+          _buildBonusInfo(
+            'assets/images/snake/freeze.png',
+            'snake_bonus_freeze_name',
+            'snake_bonus_freeze_effect',
+          ),
           const SizedBox(height: 8),
-          _buildBonusInfo('assets/images/snake/ghost.png', 'snake_bonus_ghost_name', 'snake_bonus_ghost_effect'),
+          _buildBonusInfo(
+            'assets/images/snake/ghost.png',
+            'snake_bonus_ghost_name',
+            'snake_bonus_ghost_effect',
+          ),
           const SizedBox(height: 8),
           Text(
             'snake_bonus_duration'.tr(),
-            style: const TextStyle(color: Colors.white70, fontSize: 12, fontStyle: FontStyle.italic),
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 12,
+              fontStyle: FontStyle.italic,
+            ),
           ),
         ],
       ),
@@ -74,7 +106,10 @@ class SnakePreliminaryScreen extends StatelessWidget {
       text: 'snake_preliminary_screen_start_button'.tr(),
       color: const Color(0xFF22C55E), // Color from menu
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const SnakeGame()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SnakeGame()),
+        );
       },
     );
 
@@ -95,7 +130,14 @@ class SnakePreliminaryScreen extends StatelessWidget {
                           startButton,
                         ],
                       )
-                    : Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[gameInfoLayout, const SizedBox(height: 32), startButton]),
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          gameInfoLayout,
+                          const SizedBox(height: 32),
+                          startButton,
+                        ],
+                      ),
               ),
             ),
             SafeArea(

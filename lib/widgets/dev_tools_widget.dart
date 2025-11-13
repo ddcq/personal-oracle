@@ -36,18 +36,27 @@ class DevToolsWidget extends StatelessWidget {
 
   Future<void> _unlockAllCollectibleCards(CardVersion version) async {
     final gamificationService = getIt<GamificationService>();
-    final allCardsOfVersion = allCollectibleCards.where((card) => card.version == version).toList();
+    final allCardsOfVersion = allCollectibleCards
+        .where((card) => card.version == version)
+        .toList();
     for (var card in allCardsOfVersion) {
       await gamificationService.unlockCollectibleCard(card);
     }
-    onShowSnackBar('profile_screen_all_cards_unlocked'.tr(namedArgs: {'version': version.name}));
+    onShowSnackBar(
+      'profile_screen_all_cards_unlocked'.tr(
+        namedArgs: {'version': version.name},
+      ),
+    );
   }
 
   Future<void> _unlockAllStories() async {
     final gamificationService = getIt<GamificationService>();
     final allStories = getMythStories();
     for (var story in allStories) {
-      await gamificationService.unlockStory(story.id, story.correctOrder.map((card) => card.id).toList());
+      await gamificationService.unlockStory(
+        story.id,
+        story.correctOrder.map((card) => card.id).toList(),
+      );
     }
     onShowSnackBar('profile_screen_all_stories_unlocked'.tr());
   }
@@ -77,7 +86,11 @@ class DevToolsWidget extends StatelessWidget {
             ChibiButton(
               color: ChibiColors.buttonRed,
               onPressed: _clearAndRebuildDatabase,
-              child: const Icon(Icons.delete_forever, color: Colors.white, size: 20),
+              child: const Icon(
+                Icons.delete_forever,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
             ChibiButton(
               color: ChibiColors.buttonBlue,
@@ -87,12 +100,20 @@ class DevToolsWidget extends StatelessWidget {
             ChibiButton(
               color: ChibiColors.buttonPurple,
               onPressed: _showRandomVictoryPopup,
-              child: const Icon(Icons.celebration, color: Colors.white, size: 20),
+              child: const Icon(
+                Icons.celebration,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
             ChibiButton(
               color: ChibiColors.buttonYellow,
               onPressed: _clearCache,
-              child: const Icon(Icons.cleaning_services, color: Colors.white, size: 20),
+              child: const Icon(
+                Icons.cleaning_services,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
           ],
         ),
@@ -103,13 +124,21 @@ class DevToolsWidget extends StatelessWidget {
             ChibiButton(
               color: ChibiColors.buttonGreen,
               onPressed: () => _unlockAllCollectibleCards(CardVersion.chibi),
-              child: const Icon(Icons.card_giftcard, color: Colors.white, size: 20),
+              child: const Icon(
+                Icons.card_giftcard,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
             SizedBox(width: 20.w),
             ChibiButton(
               color: ChibiColors.buttonOrange,
               onPressed: () => _unlockAllCollectibleCards(CardVersion.premium),
-              child: const Icon(Icons.card_membership, color: Colors.white, size: 20),
+              child: const Icon(
+                Icons.card_membership,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
             SizedBox(width: 20.w),
             ChibiButton(

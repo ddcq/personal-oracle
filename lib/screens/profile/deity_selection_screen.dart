@@ -41,14 +41,18 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
     final gamificationService = getIt<GamificationService>();
 
     // 1. Get all possible quiz deity IDs
-    final allPossibleQuizDeityIds = QuizService.getAllowedQuizDeityIds().toSet();
+    final allPossibleQuizDeityIds = QuizService.getAllowedQuizDeityIds()
+        .toSet();
 
     // 2. Get all chibi collectible cards (to access their videoUrl and imagePath)
-    final allChibiCards = allCollectibleCards.where((card) => card.version == CardVersion.chibi).toList();
+    final allChibiCards = allCollectibleCards
+        .where((card) => card.version == CardVersion.chibi)
+        .toList();
     final allChibiCardsMap = {for (var card in allChibiCards) card.id: card};
 
     // 3. Get unlocked collectible cards
-    final unlockedCards = await gamificationService.getUnlockedCollectibleCards();
+    final unlockedCards = await gamificationService
+        .getUnlockedCollectibleCards();
     final unlockedCardIds = unlockedCards.map((card) => card.id).toSet();
 
     final List<Deity> finalDeities = [];
@@ -117,7 +121,9 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
       appBar: ChibiAppBar(titleText: 'Choisir une Divinité'),
       body: AppBackground(
         child: Padding(
-          padding: EdgeInsets.only(top: kToolbarHeight + MediaQuery.of(context).padding.top),
+          padding: EdgeInsets.only(
+            top: kToolbarHeight + MediaQuery.of(context).padding.top,
+          ),
           child: FutureBuilder<List<Deity>>(
             future: _deitiesFuture,
             builder: (context, snapshot) {
@@ -130,13 +136,19 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
               }
 
               final deities = snapshot.data!;
-              if (!mounted) return const SizedBox.shrink(); // Ensure widget is still mounted
+              if (!mounted)
+                return const SizedBox.shrink(); // Ensure widget is still mounted
 
               // Initialize _pageController only once
               if (!_pageControllerInitialized) {
-                _currentPage = deities.indexWhere((d) => d.id == widget.currentDeityId);
+                _currentPage = deities.indexWhere(
+                  (d) => d.id == widget.currentDeityId,
+                );
                 if (_currentPage == -1) _currentPage = 0;
-                _pageController = PageController(initialPage: _currentPage, viewportFraction: 0.8);
+                _pageController = PageController(
+                  initialPage: _currentPage,
+                  viewportFraction: 0.8,
+                );
                 _pageControllerInitialized = true;
               }
 
@@ -155,7 +167,11 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
                       // This container with a transparent color makes the entire area hittable.
                       return Container(
                         color: Colors.transparent,
-                        child: _DeityCard(deity: deities[index], pageController: _pageController, pageIndex: index),
+                        child: _DeityCard(
+                          deity: deities[index],
+                          pageController: _pageController,
+                          pageIndex: index,
+                        ),
                       );
                     },
                   ),
@@ -163,14 +179,20 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
                     isLeft: true,
                     isVisible: _currentPage > 0,
                     onPressed: () {
-                      _pageController.previousPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+                      _pageController.previousPage(
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeInOut,
+                      );
                     },
                   ),
                   _buildNavigationArrow(
                     isLeft: false,
                     isVisible: _currentPage < deities.length - 1,
                     onPressed: () {
-                      _pageController.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeInOut,
+                      );
                     },
                   ),
                 ],
@@ -182,7 +204,11 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
     );
   }
 
-  Widget _buildNavigationArrow({required bool isLeft, required bool isVisible, required VoidCallback onPressed}) {
+  Widget _buildNavigationArrow({
+    required bool isLeft,
+    required bool isVisible,
+    required VoidCallback onPressed,
+  }) {
     if (!isVisible) {
       return const SizedBox.shrink();
     }
@@ -190,9 +216,15 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
       left: isLeft ? 10 : null,
       right: isLeft ? null : 10,
       child: Container(
-        decoration: BoxDecoration(color: Colors.black.withAlpha(120), shape: BoxShape.circle),
+        decoration: BoxDecoration(
+          color: Colors.black.withAlpha(120),
+          shape: BoxShape.circle,
+        ),
         child: IconButton(
-          icon: Icon(isLeft ? Icons.arrow_back_ios_new : Icons.arrow_forward_ios, color: Colors.white),
+          icon: Icon(
+            isLeft ? Icons.arrow_back_ios_new : Icons.arrow_forward_ios,
+            color: Colors.white,
+          ),
           onPressed: onPressed,
         ),
       ),
@@ -205,7 +237,11 @@ class _DeityCard extends StatefulWidget {
   final PageController pageController;
   final int pageIndex;
 
-  const _DeityCard({required this.deity, required this.pageController, required this.pageIndex});
+  const _DeityCard({
+    required this.deity,
+    required this.pageController,
+    required this.pageIndex,
+  });
 
   @override
   State<_DeityCard> createState() => _DeityCardState();
@@ -236,7 +272,9 @@ class _DeityCardState extends State<_DeityCard> {
     if (!_scrollController.hasClients) return;
 
     final bool isScrollable = _scrollController.position.maxScrollExtent > 0;
-    final bool isAtBottom = _scrollController.position.pixels >= _scrollController.position.maxScrollExtent;
+    final bool isAtBottom =
+        _scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent;
 
     final bool shouldShow = isScrollable && !isAtBottom;
 
@@ -260,75 +298,100 @@ class _DeityCardState extends State<_DeityCard> {
 
         return Transform.scale(scale: value, child: child);
       },
-      child: SimpleGestureDetector(
-        onTap: _selectDeity,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
-          decoration: BoxDecoration(
-            color: Colors.black.withAlpha(100),
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: Colors.amber.withAlpha(150), width: 2),
-            boxShadow: [
-              BoxShadow(color: Colors.black.withAlpha(150), blurRadius: 20, spreadRadius: 5),
-              BoxShadow(color: Colors.amber.withAlpha(70), blurRadius: 30, spreadRadius: -10),
-            ],
-          ),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Stack(
-                children: [
-                  OrientationBuilder(
-                    builder: (context, orientation) {
-                      if (orientation == Orientation.portrait) {
-                        return _buildPortraitLayout(context);
-                      } else {
-                        return _buildLandscapeLayout(context);
-                      }
-                    },
+      child:
+          SimpleGestureDetector(
+            onTap: _selectDeity,
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.black.withAlpha(100),
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(
+                  color: Colors.amber.withAlpha(150),
+                  width: 2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(150),
+                    blurRadius: 20,
+                    spreadRadius: 5,
                   ),
-                  if (_showScrollIndicator) ...[
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: IgnorePointer(
-                          child: Container(
-                            height: constraints.maxHeight * 0.1,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(30)),
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [Colors.black.withAlpha(0), Colors.black.withAlpha(100)],
+                  BoxShadow(
+                    color: Colors.amber.withAlpha(70),
+                    blurRadius: 30,
+                    spreadRadius: -10,
+                  ),
+                ],
+              ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Stack(
+                    children: [
+                      OrientationBuilder(
+                        builder: (context, orientation) {
+                          if (orientation == Orientation.portrait) {
+                            return _buildPortraitLayout(context);
+                          } else {
+                            return _buildLandscapeLayout(context);
+                          }
+                        },
+                      ),
+                      if (_showScrollIndicator) ...[
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: IgnorePointer(
+                              child: Container(
+                                height: constraints.maxHeight * 0.1,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.vertical(
+                                    bottom: Radius.circular(30),
+                                  ),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.black.withAlpha(0),
+                                      Colors.black.withAlpha(100),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 10,
-                      left: 0,
-                      right: 0,
-                      child: Center(
-                        child: IconButton(
-                          icon: const Icon(Icons.arrow_downward, color: Colors.white),
-                          onPressed: () {
-                            _scrollController.animateTo(
-                              _scrollController.position.maxScrollExtent,
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeOut,
-                            );
-                          },
+                        Positioned(
+                          bottom: 10,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.arrow_downward,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                _scrollController.animateTo(
+                                  _scrollController.position.maxScrollExtent,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.easeOut,
+                                );
+                              },
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                ],
-              );
-            },
+                      ],
+                    ],
+                  );
+                },
+              ),
+            ),
+          ).animate().scale(
+            begin: const Offset(0.8, 0.8),
+            end: const Offset(1.0, 1.0),
+            duration: 500.ms,
+            curve: Curves.easeOutBack,
           ),
-        ),
-      ).animate().scale(begin: const Offset(0.8, 0.8), end: const Offset(1.0, 1.0), duration: 500.ms, curve: Curves.easeOutBack),
     );
   }
 
@@ -370,7 +433,13 @@ class _DeityCardState extends State<_DeityCard> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [_buildDeityName(), const SizedBox(height: 15), _buildDeityDescription(), const SizedBox(height: 30), _buildSelectButton(context)],
+                children: [
+                  _buildDeityName(),
+                  const SizedBox(height: 15),
+                  _buildDeityDescription(),
+                  const SizedBox(height: 30),
+                  _buildSelectButton(context),
+                ],
               ),
             ),
           ),
@@ -380,11 +449,18 @@ class _DeityCardState extends State<_DeityCard> {
   }
 
   Widget _buildDeityImage() {
-    Widget imageWidget = (widget.deity.videoUrl != null && widget.deity.videoUrl!.isNotEmpty)
-        ? CustomVideoPlayer(videoUrl: widget.deity.videoUrl!, placeholderAsset: widget.deity.icon)
+    Widget imageWidget =
+        (widget.deity.videoUrl != null && widget.deity.videoUrl!.isNotEmpty)
+        ? CustomVideoPlayer(
+            videoUrl: widget.deity.videoUrl!,
+            placeholderAsset: widget.deity.icon,
+          )
         : Container(
             decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage(widget.deity.icon), fit: BoxFit.cover),
+              image: DecorationImage(
+                image: AssetImage(widget.deity.icon),
+                fit: BoxFit.cover,
+              ),
             ),
           );
 
@@ -395,7 +471,11 @@ class _DeityCardState extends State<_DeityCard> {
       );
     }
 
-    return SizedBox(width: 180, height: 180, child: ClipOval(child: imageWidget));
+    return SizedBox(
+      width: 180,
+      height: 180,
+      child: ClipOval(child: imageWidget),
+    );
   }
 
   Widget _buildDeityName() {
@@ -407,7 +487,9 @@ class _DeityCardState extends State<_DeityCard> {
         fontSize: 50,
         color: Colors.white,
         fontWeight: FontWeight.bold,
-        shadows: [Shadow(color: Colors.black, blurRadius: 10, offset: Offset(2, 2))],
+        shadows: [
+          Shadow(color: Colors.black, blurRadius: 10, offset: Offset(2, 2)),
+        ],
       ),
     );
   }
@@ -418,7 +500,12 @@ class _DeityCardState extends State<_DeityCard> {
       child: Text(
         widget.deity.description,
         textAlign: TextAlign.center,
-        style: TextStyle(fontFamily: AppTextStyles.amarante, fontSize: 18, color: Colors.white.withAlpha(200), height: 1.4),
+        style: TextStyle(
+          fontFamily: AppTextStyles.amarante,
+          fontSize: 18,
+          color: Colors.white.withAlpha(200),
+          height: 1.4,
+        ),
       ),
     );
   }
@@ -434,6 +521,10 @@ class _DeityCardState extends State<_DeityCard> {
   }
 
   Widget _buildSelectButton(BuildContext context) {
-    return ChibiButton(text: 'Choisir', color: Colors.amber, onPressed: _selectDeity);
+    return ChibiButton(
+      text: 'Choisir',
+      color: Colors.amber,
+      onPressed: _selectDeity,
+    );
   }
 }

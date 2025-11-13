@@ -57,7 +57,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   List<Deity> _allSelectableDeities = [];
 
   CollectibleCard? _nextAdRewardCard; // New: to store the next card from ad
-  MythStory? _nextAdRewardStory; // New: to store the next story to unlock from ad
+  MythStory?
+  _nextAdRewardStory; // New: to store the next story to unlock from ad
 
   @override
   void initState() {
@@ -74,7 +75,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadNextAdRewardCard() async {
     final gamificationService = getIt<GamificationService>();
-    _nextAdRewardCard = await gamificationService.getRandomUnearnedCollectibleCard(); // Assuming this method exists or will be created
+    _nextAdRewardCard = await gamificationService
+        .getRandomUnearnedCollectibleCard(); // Assuming this method exists or will be created
     setState(() {}); // Update UI after loading
   }
 
@@ -88,14 +90,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final gamificationService = getIt<GamificationService>();
 
     // 1. Get all possible quiz deity IDs
-    final allPossibleQuizDeityIds = QuizService.getAllowedQuizDeityIds().toSet();
+    final allPossibleQuizDeityIds = QuizService.getAllowedQuizDeityIds()
+        .toSet();
 
     // 2. Get all chibi collectible cards (to access their videoUrl and imagePath)
-    final allChibiCards = allCollectibleCards.where((card) => card.version == CardVersion.chibi).toList();
+    final allChibiCards = allCollectibleCards
+        .where((card) => card.version == CardVersion.chibi)
+        .toList();
     final allChibiCardsMap = {for (var card in allChibiCards) card.id: card};
 
     // 3. Get unlocked collectible cards
-    final unlockedCards = await gamificationService.getUnlockedCollectibleCards();
+    final unlockedCards = await gamificationService
+        .getUnlockedCollectibleCards();
     final unlockedCardIds = unlockedCards.map((card) => card.id).toSet();
 
     final List<Deity> tempDeities = [];
@@ -201,9 +207,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           title: Text(
             'profile_screen_change_name'.tr(),
             textAlign: TextAlign.center,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontFamily: AppTextStyles.amaticSC, color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 30),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontFamily: AppTextStyles.amaticSC,
+              color: Colors.black87,
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
           ),
           content: TextField(
             controller: _nameController,
@@ -212,8 +221,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             decoration: InputDecoration(
               hintText: 'profile_screen_new_name'.tr(),
               hintStyle: TextStyle(color: Colors.black.withAlpha(128)),
-              enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.black54)),
-              focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
+              enabledBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black54),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.amber),
+              ),
             ),
           ),
           actions: <Widget>[
@@ -230,7 +243,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ChibiButton(
                   color: Colors.amber,
                   onPressed: () {
-                    getIt<GamificationService>().saveProfileName(_nameController.text);
+                    getIt<GamificationService>().saveProfileName(
+                      _nameController.text,
+                    );
                     setState(() {
                       _profileName = _nameController.text;
                     });
@@ -272,12 +287,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ad.show(
             onUserEarnedReward: (ad, reward) async {
               final gamificationService = getIt<GamificationService>();
-              final rewardCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+              final rewardCard = await gamificationService
+                  .selectRandomUnearnedCollectibleCard();
 
               if (rewardCard != null) {
                 _showRewardDialog(rewardCard: rewardCard);
               } else {
-                _showRewardDialog(title: 'Toutes les cartes sont débloquées !', content: 'Vous avez déjà débloqué toutes les cartes disponibles.');
+                _showRewardDialog(
+                  title: 'Toutes les cartes sont débloquées !',
+                  content:
+                      'Vous avez déjà débloqué toutes les cartes disponibles.',
+                );
               }
               _refreshProfileData(); // Refresh the UI to show the new card
             },
@@ -299,7 +319,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
 
     RewardedAd.load(
-      adUnitId: 'ca-app-pub-9329709593733606/7159103317', // Same ad unit ID for now
+      adUnitId:
+          'ca-app-pub-9329709593733606/7159103317', // Same ad unit ID for now
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
@@ -320,17 +341,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onUserEarnedReward: (ad, reward) async {
               final gamificationService = getIt<GamificationService>();
               if (_nextAdRewardStory != null) {
-                final unlockedStory = await gamificationService.selectRandomUnearnedMythStory(
-                  _nextAdRewardStory!,
-                ); // Unlock the first chapter of the selected story
+                final unlockedStory = await gamificationService
+                    .selectRandomUnearnedMythStory(
+                      _nextAdRewardStory!,
+                    ); // Unlock the first chapter of the selected story
 
                 if (unlockedStory != null) {
-                  _showRewardDialog(unlockedStoryChapter: unlockedStory.correctOrder.first);
+                  _showRewardDialog(
+                    unlockedStoryChapter: unlockedStory.correctOrder.first,
+                  );
                 } else {
-                  _showRewardDialog(title: 'Histoire déjà débloquée !', content: 'Vous avez déjà débloqué tous les chapitres de cette histoire.');
+                  _showRewardDialog(
+                    title: 'Histoire déjà débloquée !',
+                    content:
+                        'Vous avez déjà débloqué tous les chapitres de cette histoire.',
+                  );
                 }
               } else {
-                _showRewardDialog(title: 'Toutes les histoires sont débloquées !', content: 'Vous avez déjà débloqué toutes les histoires disponibles.');
+                _showRewardDialog(
+                  title: 'Toutes les histoires sont débloquées !',
+                  content:
+                      'Vous avez déjà débloqué toutes les histoires disponibles.',
+                );
               }
               _refreshProfileData(); // Refresh the UI to show the new story progress
             },
@@ -340,7 +372,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           setState(() {
             _isAdLoading = false;
           });
-          _showSnackBar('Échec du chargement de la publicité. Veuillez réessayer.');
+          _showSnackBar(
+            'Échec du chargement de la publicité. Veuillez réessayer.',
+          );
         },
       ),
     );
@@ -348,7 +382,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _showSnackBar(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -368,7 +404,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (allStories.isNotEmpty) {
         final randomStory = allStories[random.nextInt(allStories.length)];
         if (randomStory.correctOrder.isNotEmpty) {
-          final randomChapter = randomStory.correctOrder[random.nextInt(randomStory.correctOrder.length)];
+          final randomChapter = randomStory
+              .correctOrder[random.nextInt(randomStory.correctOrder.length)];
           _showRewardDialog(unlockedStoryChapter: randomChapter);
         }
       }
@@ -398,16 +435,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                return Center(child: Text('${'profile_screen_error_prefix'.tr()}: ${snapshot.error}'));
+                return Center(
+                  child: Text(
+                    '${'profile_screen_error_prefix'.tr()}: ${snapshot.error}',
+                  ),
+                );
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('profile_screen_no_data_available'.tr()));
+                return Center(
+                  child: Text('profile_screen_no_data_available'.tr()),
+                );
               } else {
-                final List<Map<String, dynamic>> snakeScores = snapshot.data![0];
+                final List<Map<String, dynamic>> snakeScores =
+                    snapshot.data![0];
                 final List<CollectibleCard> unlockedCards = snapshot.data![1];
-                final List<Map<String, dynamic>> storyProgress = snapshot.data![2];
+                final List<Map<String, dynamic>> storyProgress =
+                    snapshot.data![2];
                 final String? savedName = snapshot.data![3];
                 final String? savedDeityIconId = snapshot.data![4];
-                final List<Map<String, dynamic>> asgardWallScores = snapshot.data![5];
+                final List<Map<String, dynamic>> asgardWallScores =
+                    snapshot.data![5];
 
                 if (_profileName == null && savedName != null) {
                   _profileName = savedName;
@@ -417,88 +463,106 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }
 
                 return ListView(
-                  padding: EdgeInsets.only(top: kToolbarHeight, left: 16.0, right: 16.0, bottom: 16.0),
+                  padding: EdgeInsets.only(
+                    top: kToolbarHeight,
+                    left: 16.0,
+                    right: 16.0,
+                    bottom: 16.0,
+                  ),
                   children: [
                     FutureBuilder<List<Map<String, dynamic>>>(
-                    future: _quizResultsFuture,
-                    builder: (context, quizSnapshot) {
-                      if (quizSnapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (quizSnapshot.hasError) {
-                        return Center(child: Text('${'profile_screen_quiz_loading_error'.tr()}: ${quizSnapshot.error}'));
-                      } else if (!quizSnapshot.hasData || quizSnapshot.data!.isEmpty) {
-                        return const SizedBox.shrink();
-                      } else {
-                        final lastQuizResult = quizSnapshot.data!.first;
-                        final deityName = lastQuizResult['deity_name'];
-                        _profileName ??= deityName;
+                      future: _quizResultsFuture,
+                      builder: (context, quizSnapshot) {
+                        if (quizSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (quizSnapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              '${'profile_screen_quiz_loading_error'.tr()}: ${quizSnapshot.error}',
+                            ),
+                          );
+                        } else if (!quizSnapshot.hasData ||
+                            quizSnapshot.data!.isEmpty) {
+                          return const SizedBox.shrink();
+                        } else {
+                          final lastQuizResult = quizSnapshot.data!.first;
+                          final deityName = lastQuizResult['deity_name'];
+                          _profileName ??= deityName;
 
-                        return ProfileHeader(
-                          profileName: _profileName,
-                          selectedDeityId: _selectedDeityId,
-                          allSelectableDeities: _allSelectableDeities,
-                          onNameChanged: (newName) {
-                            setState(() {
-                              _profileName = newName;
-                            });
-                          },
-                          onDeityChanged: (newDeityId) {
-                            _selectedDeityId = newDeityId;
-                            _refreshProfileData();
-                          },
-                          onEditName: () => _showEditNameDialog(context),
-                        );
-                      }
-                    },
-                  ),
-
-                  const SizedBox(height: 20),
-                  _buildSectionTitle('profile_screen_game_scores'.tr()),
-                  GameScoresPodium(scores: snakeScores, gameName: 'Snake'),
-                  const SizedBox(height: 20),
-                  GameScoresPodium(scores: asgardWallScores, gameName: 'Asgard Wall'),
-                  const SizedBox(height: 20),
-
-                  _buildSectionTitle('profile_screen_collectible_cards'.tr()),
-                  CollectibleCardGrid(
-                    cards: unlockedCards,
-                    nextAdRewardCard: _nextAdRewardCard,
-                    isAdLoading: _isAdLoading,
-                    showRewardedAd: _showRewardedAd,
-                  ),
-                  const SizedBox(height: 20),
-                  SimpleGestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _tapCount++;
-                        if (_tapCount >= 5) {
-                          _showHiddenButtons = true;
+                          return ProfileHeader(
+                            profileName: _profileName,
+                            selectedDeityId: _selectedDeityId,
+                            allSelectableDeities: _allSelectableDeities,
+                            onNameChanged: (newName) {
+                              setState(() {
+                                _profileName = newName;
+                              });
+                            },
+                            onDeityChanged: (newDeityId) {
+                              _selectedDeityId = newDeityId;
+                              _refreshProfileData();
+                            },
+                            onEditName: () => _showEditNameDialog(context),
+                          );
                         }
-                      });
-                    },
-                    child: _buildSectionTitle('profile_screen_unlocked_stories'.tr()),
-                  ),
-                  UnlockedStoriesGrid(
-                    storyProgress: storyProgress,
-                    nextAdRewardStory: _nextAdRewardStory,
-                    isAdLoading: _isAdLoading,
-                    showRewardedStoryAd: _showRewardedStoryAd,
-                  ),
-                  const SizedBox(height: 50),
-                  if (_showHiddenButtons)
-                    DevToolsWidget(
-                      onVictoryPopupTest: _showRandomVictoryPopup,
-                      onShowSnackBar: (message) {
-                        _showSnackBar(message);
-                        setState(() {}); // Refresh the UI after dev actions
                       },
                     ),
-                  const SizedBox(height: 50),
-                ],
-              );
-            }
-          },
-        ),
+
+                    const SizedBox(height: 20),
+                    _buildSectionTitle('profile_screen_game_scores'.tr()),
+                    GameScoresPodium(scores: snakeScores, gameName: 'Snake'),
+                    const SizedBox(height: 20),
+                    GameScoresPodium(
+                      scores: asgardWallScores,
+                      gameName: 'Asgard Wall',
+                    ),
+                    const SizedBox(height: 20),
+
+                    _buildSectionTitle('profile_screen_collectible_cards'.tr()),
+                    CollectibleCardGrid(
+                      cards: unlockedCards,
+                      nextAdRewardCard: _nextAdRewardCard,
+                      isAdLoading: _isAdLoading,
+                      showRewardedAd: _showRewardedAd,
+                    ),
+                    const SizedBox(height: 20),
+                    SimpleGestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _tapCount++;
+                          if (_tapCount >= 5) {
+                            _showHiddenButtons = true;
+                          }
+                        });
+                      },
+                      child: _buildSectionTitle(
+                        'profile_screen_unlocked_stories'.tr(),
+                      ),
+                    ),
+                    UnlockedStoriesGrid(
+                      storyProgress: storyProgress,
+                      nextAdRewardStory: _nextAdRewardStory,
+                      isAdLoading: _isAdLoading,
+                      showRewardedStoryAd: _showRewardedStoryAd,
+                    ),
+                    const SizedBox(height: 50),
+                    if (_showHiddenButtons)
+                      DevToolsWidget(
+                        onVictoryPopupTest: _showRandomVictoryPopup,
+                        onShowSnackBar: (message) {
+                          _showSnackBar(message);
+                          setState(() {}); // Refresh the UI after dev actions
+                        },
+                      ),
+                    const SizedBox(height: 50),
+                  ],
+                );
+              }
+            },
+          ),
         ),
       ),
     );
@@ -515,14 +579,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
           fontWeight: FontWeight.bold,
           fontSize: 40,
           letterSpacing: 2.0,
-          shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+          shadows: [
+            const Shadow(
+              blurRadius: 15.0,
+              color: Colors.black87,
+              offset: Offset(4.0, 4.0),
+            ),
+          ],
         ),
         textAlign: TextAlign.center,
       ),
     );
   }
 
-  void _showRewardDialog({CollectibleCard? rewardCard, MythCard? unlockedStoryChapter, String? title, String? content}) {
+  void _showRewardDialog({
+    CollectibleCard? rewardCard,
+    MythCard? unlockedStoryChapter,
+    String? title,
+    String? content,
+  }) {
     if (mounted) {
       showDialog(
         context: context,
@@ -557,6 +632,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
   }
-
-
 }

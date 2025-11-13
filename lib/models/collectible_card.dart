@@ -17,5 +17,6 @@ abstract class CollectibleCard with _$CollectibleCard {
     @Default(CardVersion.epic) CardVersion version,
   }) = _CollectibleCard;
 
-  factory CollectibleCard.fromJson(Map<String, dynamic> json) => _$CollectibleCardFromJson(json);
+  factory CollectibleCard.fromJson(Map<String, dynamic> json) =>
+      _$CollectibleCardFromJson(json);
 }
