@@ -9,6 +9,7 @@ enum MusicType { mainMenu, story, card, none }
 class SoundService with ChangeNotifier {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isMuted = false;
+  bool _isFxMuted = false; // New property for FX mute state
   MusicType _currentMusic = MusicType.none;
   MusicType _previousMusic = MusicType.none;
   String? currentCardId;
@@ -25,6 +26,12 @@ class SoundService with ChangeNotifier {
   }
 
   bool get isMuted => _isMuted;
+  bool get isFxMuted => _isFxMuted; // Getter for FX mute state
+
+  void setFxMuted(bool muted) {
+    _isFxMuted = muted;
+    notifyListeners();
+  }
 
   Future<void> playMainMenuMusic() async {
     if (!_isMuted) {
@@ -169,7 +176,7 @@ class SoundService with ChangeNotifier {
   }
 
   Future<void> playSoundEffect(String assetPath) async {
-    if (!_isMuted) {
+    if (!_isFxMuted) { // Check _isFxMuted instead of _isMuted
       try {
         // Create a new AudioPlayer for each sound effect to allow overlapping
         final player = AudioPlayer();

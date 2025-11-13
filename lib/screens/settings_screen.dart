@@ -23,12 +23,22 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   late Future<List<CollectibleCard>> _unlockedCardsFuture;
+  bool _isFxEnabled = true; // Default to true
 
   @override
   void initState() {
     super.initState();
     _unlockedCardsFuture = getIt<GamificationService>()
         .getUnlockedCollectibleCards();
+    _loadFxSettings();
+  }
+
+  Future<void> _loadFxSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isFxEnabled = prefs.getBool('isFxEnabled') ?? true;
+    });
+    getIt<SoundService>().setFxMuted(!_isFxEnabled);
   }
 
   Future<void> _launchUrl(String url) async {
@@ -76,6 +86,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               _buildSectionTitle('profile_screen_settings'.tr()),
               _buildSoundSettings(),
+              _buildFxSoundSettings(), // Call the new FX sound settings widget
               const SizedBox(height: 10),
               _buildLanguageSettings(),
               const SizedBox(height: 20),
@@ -271,6 +282,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               );
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFxSoundSettings() {
+    final soundService = getIt<SoundService>();
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'settings_screen_fx_sound'.tr(),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: AppTextStyles.amaticSC,
+              fontSize: 22,
+            ),
+          ),
+          Switch(
+            value: _isFxEnabled,
+            onChanged: (bool newValue) async {
+              setState(() {
+                _isFxEnabled = newValue;
+              });
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('isFxEnabled', newValue);
+              soundService.setFxMuted(!newValue);
+            },
+            activeColor: Colors.white,
+            inactiveThumbColor: Colors.grey,
+            inactiveTrackColor: Colors.grey.withOpacity(0.5),
           ),
         ],
       ),
