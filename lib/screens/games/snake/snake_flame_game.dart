@@ -46,7 +46,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const double _shakeIntensity = 10.0;
   static const int _shakeDurationMs = 200;
   static const int _shakeIntervalMs = 50;
-  static const int _gameSpeedInitial = 300; // milliseconds
+  static const int _gameSpeedInitial = 150; // milliseconds
   static const double _growthAnimationPeriod = 0.15;
   static const double _foodRottingTimeBase = 12.0;
   static const double _foodRottingTimeLevelFactor = 0.5;
@@ -55,8 +55,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const int _vibrationDurationLong = 500;
   static const int _vibrationAmplitudeHigh = 255;
   static const int victoryScoreThreshold = 100;
-  static const int _minGameSpeed = 100;
-  static const double _gracePeriodDuration = 0.1; // 100 milliseconds
+  static const int _minGameSpeed = 50;
+
 
   late final GameLogic gameLogic;
   ValueNotifier<GameState>? _gameState;
@@ -72,10 +72,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
   late final ValueNotifier<double> remainingFoodTime = ValueNotifier<double>(0);
   bool _isLoaded = false;
-
-  GameState? _preCollisionState;
-  bool _inGracePeriod = false;
-  double _gracePeriodTimer = 0.0;
 
   @override
   Color backgroundColor() => Colors.transparent;
@@ -102,6 +98,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   late SpriteComponent _foodComponent;
   SpriteComponent? _bonusComponent;
   final List<SpriteComponent> _obstacles = [];
+  final List<RectangleComponent> _obstacleBackgrounds = [];
 
   // Sprites
   late final Sprite regularFoodSprite;
@@ -109,6 +106,10 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   late final Sprite obstacleSprite;
   late final Sprite rottenFoodSprite;
   late final Map<BonusType, Sprite> bonusSprites = {};
+  
+  // Background components
+  RectangleComponent? _foodBackground;
+  RectangleComponent? _bonusBackground;
 
   // Animation
   late final TimerComponent _growthAnimationTimer;
@@ -130,18 +131,24 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     const int minBaseGridDimension = 10;
     final int baseGridDimension = (minBaseGridDimension + level - 1).clamp(minBaseGridDimension, maxBaseGridDimension).toInt();
 
-    int calculatedGridWidth;
-    int calculatedGridHeight;
+    int baseGridWidth;
+    int baseGridHeight;
+    double tempCellSize;
 
     if (screenWidth < screenHeight) {
-      calculatedGridWidth = baseGridDimension;
-      cellSize = screenWidth / calculatedGridWidth;
-      calculatedGridHeight = (screenHeight / cellSize).round();
+      baseGridWidth = baseGridDimension;
+      tempCellSize = screenWidth / baseGridWidth;
+      baseGridHeight = (screenHeight / tempCellSize).round();
     } else {
-      calculatedGridHeight = baseGridDimension;
-      cellSize = screenHeight / calculatedGridHeight;
-      calculatedGridWidth = (screenWidth / cellSize).round();
+      baseGridHeight = baseGridDimension;
+      tempCellSize = screenHeight / baseGridHeight;
+      baseGridWidth = (screenWidth / tempCellSize).round();
     }
+
+    // Double the resolution for the new "half-square" grid
+    final calculatedGridWidth = baseGridWidth * 2;
+    final calculatedGridHeight = baseGridHeight * 2;
+    cellSize = tempCellSize / 2;
 
     gameLogic = GameLogic(level: level);
     gameLogic.onRottenFoodEaten = onRottenFoodEaten;
@@ -178,8 +185,16 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     );
     add(_snakeComponent);
 
+    // Initialize food background
+    _foodBackground = RectangleComponent(
+      position: Vector2.zero(),
+      size: Vector2.all(cellSize * 2),
+      paint: Paint()..color = Colors.red.withValues(alpha: 0.3),
+    );
+    add(_foodBackground!);
+
     // Initialize components once
-    _foodComponent = SpriteComponent(sprite: regularFoodSprite, position: Vector2.zero(), size: Vector2.all(cellSize));
+    _foodComponent = SpriteComponent(sprite: regularFoodSprite, position: Vector2.zero(), size: Vector2.all(cellSize * 2));
     add(_foodComponent);
 
     // Initialize growth animation timer
@@ -207,18 +222,35 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     // Update food component position and sprite
     _foodComponent.position = gameState.value.food.toVector2() * cellSize;
     _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
+    
+    // Update food background position
+    _foodBackground?.position = gameState.value.food.toVector2() * cellSize;
 
     // Clear and re-add obstacles
     for (var obstacle in _obstacles) {
       obstacle.removeFromParent();
     }
     _obstacles.clear();
-    for (int i = 0; i < gameState.value.obstacles.length; i += 4) {
+    for (var background in _obstacleBackgrounds) {
+      background.removeFromParent();
+    }
+    _obstacleBackgrounds.clear();
+    for (int i = 0; i < gameState.value.obstacles.length; i += 16) {
       final obstacleTopLeft = gameState.value.obstacles[i];
+      
+      // Add background
+      final background = RectangleComponent(
+        position: (obstacleTopLeft.toOffset() * cellSize).toVector2(),
+        size: Vector2.all(cellSize * 4),
+        paint: Paint()..color = Colors.grey.withValues(alpha: 0.4),
+      );
+      _obstacleBackgrounds.add(background);
+      add(background);
+      
       final newObstacle = SpriteComponent(
         sprite: obstacleSprite,
         position: (obstacleTopLeft.toOffset() * cellSize).toVector2(),
-        size: Vector2.all(cellSize * 2),
+        size: Vector2.all(cellSize * 4),
       );
       _obstacles.add(newObstacle);
       add(newObstacle);
@@ -240,17 +272,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   void update(double dt) {
     super.update(dt);
 
-    if (_inGracePeriod) {
-      _gracePeriodTimer += dt;
-      if (_gracePeriodTimer > _gracePeriodDuration) {
-        _inGracePeriod = false;
-        gameState.value.isGameOver = true;
-        _processGameOver();
-      }
-      return;
-    }
-
-    if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
+if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
       return;
     }
 
@@ -313,8 +335,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
         gameState.value.foodType.value = FoodType.rotten;
         _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
       } else if (gameState.value.foodType.value == FoodType.rotten) {
-        final currentSnakePositions = gameState.value.snake.map((s) => s.position).toList();
-        gameLogic.generateNewFood(gameState.value, currentSnakePositions); // Disappear and generate new food
+        gameLogic.generateNewFood(gameState.value); // Disappear and generate new food
         _foodComponent.position = gameState.value.food.toVector2() * cellSize;
         _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
       }
@@ -379,20 +400,31 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     }
 
     _foodComponent.position = gameState.value.food.toVector2() * cellSize;
+    _foodBackground?.position = gameState.value.food.toVector2() * cellSize;
     remove(_foodComponent);
-    _foodComponent = SpriteComponent(sprite: _getFoodSprite(gameState.value.foodType.value), position: _foodComponent.position, size: Vector2.all(cellSize));
+    _foodComponent = SpriteComponent(sprite: _getFoodSprite(gameState.value.foodType.value), position: _foodComponent.position, size: Vector2.all(cellSize * 2));
     add(_foodComponent);
 
     if (gameState.value.activeBonus != null && _bonusComponent == null) {
+      // Add bonus background
+      _bonusBackground = RectangleComponent(
+        position: gameState.value.activeBonus!.position.toVector2() * cellSize,
+        size: Vector2.all(cellSize * 2),
+        paint: Paint()..color = Colors.yellow.withValues(alpha: 0.3),
+      );
+      add(_bonusBackground!);
+      
       _bonusComponent = SpriteComponent(
         sprite: bonusSprites[gameState.value.activeBonus!.type]!,
         position: gameState.value.activeBonus!.position.toVector2() * cellSize,
-        size: Vector2.all(cellSize),
+        size: Vector2.all(cellSize * 2),
       );
       add(_bonusComponent!);
     } else if (gameState.value.activeBonus == null && _bonusComponent != null) {
       _bonusComponent!.removeFromParent();
       _bonusComponent = null;
+      _bonusBackground?.removeFromParent();
+      _bonusBackground = null;
       onBonusCollected?.call();
     }
   }
@@ -424,10 +456,10 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     final newState = gameLogic.updateGame(oldState.clone());
 
     if (newState.pendingGameOver) {
-      _preCollisionState = oldState;
-      _inGracePeriod = true;
-      _gracePeriodTimer = 0.0;
-      // Don't pause engine, let the update loop handle the grace period timer
+      // Game over immediately
+      gameState.value = newState; // update to the final state before game over
+      _processGameOver();
+      return;
     }
 
     gameState.value = newState;
@@ -435,19 +467,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
 
   void requestDirectionChange(dp.Direction newDirection) {
-    if (_inGracePeriod) {
-      final tempState = _preCollisionState!.clone();
-      if (gameLogic.performRetrospectiveUpdate(tempState, newDirection)) {
-        _inGracePeriod = false;
-        _gracePeriodTimer = 0.0;
-        gameState.value = tempState;
-        _processGameUpdate(_preCollisionState!);
-        // No need to resume engine as it was never paused
-        timeSinceLastTick = 0;
-      }
-      return;
-    }
-
     if (!gameState.value.isGameRunning || gameState.value.isGameOver) return;
 
     // Queue direction change for next tick
@@ -462,12 +481,12 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     _obstacles.clear();
 
     // Re-add obstacles based on current gameState
-    for (int i = 0; i < gameState.value.obstacles.length; i += 4) {
+    for (int i = 0; i < gameState.value.obstacles.length; i += 16) {
       final obstacleTopLeft = gameState.value.obstacles[i];
       final newObstacle = SpriteComponent(
         sprite: obstacleSprite,
         position: (obstacleTopLeft.toOffset() * cellSize).toVector2(),
-        size: Vector2.all(cellSize * 2),
+        size: Vector2.all(cellSize * 4),
       );
       _obstacles.add(newObstacle);
       add(newObstacle);
@@ -475,10 +494,10 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   }
 
   IntVector2? _findDestroyedObstacle(List<IntVector2> oldObstacles, List<IntVector2> newObstacles) {
-    // Obstacles are in blocks of 4, find which block is missing
-    for (int i = 0; i < oldObstacles.length; i += 4) {
-      if (i + 3 < oldObstacles.length) {
-        final oldBlock = oldObstacles.getRange(i, i + 4).toList();
+    // Obstacles are in blocks of 16, find which block is missing
+    for (int i = 0; i < oldObstacles.length; i += 16) {
+      if (i + 15 < oldObstacles.length) {
+        final oldBlock = oldObstacles.getRange(i, i + 16).toList();
         final blockStillExists = oldBlock.every((pos) => newObstacles.contains(pos));
 
         if (!blockStillExists) {
@@ -492,7 +511,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
   void _triggerRockExplosion(IntVector2 obstacleTopLeft) {
     final position = (obstacleTopLeft.toOffset() * cellSize).toVector2();
-    final size = Vector2.all(cellSize * 2);
+    final size = Vector2.all(cellSize * 4);
     final center = position + size / 2;
 
     // Play explosion sound
@@ -505,14 +524,14 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     // Step 2: Rock fragments - split rock into 4 pieces
     final random = Random();
-    final fragmentSize = Vector2.all(cellSize); // Each fragment is 1 cell
+    final fragmentSize = Vector2.all(cellSize * 2); // Each fragment is 2x2 cells
 
     // Create 4 fragments (top-left, top-right, bottom-left, bottom-right)
     final fragmentOffsets = [
       Vector2(0, 0), // Top-left
-      Vector2(cellSize, 0), // Top-right
-      Vector2(0, cellSize), // Bottom-left
-      Vector2(cellSize, cellSize), // Bottom-right
+      Vector2(cellSize * 2, 0), // Top-right
+      Vector2(0, cellSize * 2), // Bottom-left
+      Vector2(cellSize * 2, cellSize * 2), // Bottom-right
     ];
 
     final fragmentVelocities = [

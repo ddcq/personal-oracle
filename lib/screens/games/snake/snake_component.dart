@@ -1,24 +1,23 @@
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart'; // Import effects
-import 'package:flutter/animation.dart'; // For Curves
-import 'package:flutter/foundation.dart'; // For ValueNotifier
-import 'dart:ui';
-import 'dart:math'; // For pi
+import 'package:flame/effects.dart';
+import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
-
 class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameGame> {
   ValueNotifier<GameState> gameState;
   final double cellSize;
+  final Sprite snakeHeadSprite;
   final Sprite snakeBodySprite;
 
-  static const double _tailSize1Factor = 1.0;
+  static const double _tailSize1Factor = 2.0;
 
   // Components
   late SpriteComponent _headComponent;
+  late RectangleComponent _headBackground;
 
   late final Vector2 _top;
   late final Vector2 _bottom;
@@ -36,7 +35,6 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
   double _animationDuration;
   final Curve _animationCurve = Curves.linear;
 
-  // Setter for animationDuration
   set animationDuration(double value) {
     _animationDuration = value;
   }
@@ -44,60 +42,68 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
   SnakeComponent({
     required this.gameState,
     required this.cellSize,
-    required Sprite snakeHeadSprite,
+    required this.snakeHeadSprite,
     required this.snakeBodySprite,
     required double animationDuration,
   }) : _animationDuration = animationDuration,
        _previousHeadPosition = (gameState.value.snake[0].position.toVector2() * cellSize).toOffset(),
        _currentHeadPosition = (gameState.value.snake[0].position.toVector2() * cellSize).toOffset(),
        _animationProgress = 0.0 {
-    _headComponent = SpriteComponent(sprite: snakeHeadSprite, size: Vector2.all(cellSize * 1.5), anchor: Anchor.center);
+    // Head background
+    _headBackground = RectangleComponent(
+      size: Vector2.all(cellSize * 2),
+      anchor: Anchor.center,
+      paint: Paint()..color = Colors.green.withValues(alpha: 0.3),
+    );
+    add(_headBackground);
+    
+    _headComponent = SpriteComponent(sprite: snakeHeadSprite, size: Vector2.all(cellSize * 2), anchor: Anchor.center);
     add(_headComponent);
-    _top = Vector2(cellSize * 0.5, cellSize * 0.18);
-    _bottom = Vector2(cellSize * 0.5, cellSize * 0.82);
-    _left = Vector2(cellSize * 0.18, cellSize * 0.5);
-    _right = Vector2(cellSize * 0.82, cellSize * 0.5);
-    _smallRadius = cellSize * 0.25;
-    _halfCellOffset = Vector2(cellSize * 0.5, cellSize * 0.5);
+    
+    // Doubled positions for 2x2 blocks
+    _top = Vector2(cellSize * 1.0, cellSize * 0.36);
+    _bottom = Vector2(cellSize * 1.0, cellSize * 1.64);
+    _left = Vector2(cellSize * 0.36, cellSize * 1.0);
+    _right = Vector2(cellSize * 1.64, cellSize * 1.0);
+    _smallRadius = cellSize * 0.5;
+    _halfCellOffset = Vector2(cellSize * 1.0, cellSize * 1.0);
+    
     _cornerCenters = {
-      // Top-Left (snake turns from up to left, or from left to up)
-      '0,-1,-1,0': [_top, Vector2(cellSize * 0.4, cellSize * 0.4), _left],
-      '-1,0,0,-1': [_left, Vector2(cellSize * 0.4, cellSize * 0.4), _top],
-      // Top-Right (snake turns from up to right, or from right to up)
-      '0,-1,1,0': [_top, Vector2(cellSize * 0.6, cellSize * 0.4), _right],
-      '1,0,0,-1': [_right, Vector2(cellSize * 0.6, cellSize * 0.4), _top],
-      // Bottom-Left (snake turns from down to left, or from left to down)
-      '0,1,-1,0': [_bottom, Vector2(cellSize * 0.4, cellSize * 0.6), _left],
-      '-1,0,0,1': [_left, Vector2(cellSize * 0.4, cellSize * 0.6), _bottom],
-      // Bottom-Right (snake turns from down to right, or from right to down)
-      '0,1,1,0': [_bottom, Vector2(cellSize * 0.6, cellSize * 0.6), _right],
-      '1,0,0,1': [_right, Vector2(cellSize * 0.6, cellSize * 0.6), _bottom],
-      // Horizontal segment
+      // Top-Left
+      '0,-1,-1,0': [_top, Vector2(cellSize * 0.8, cellSize * 0.8), _left],
+      '-1,0,0,-1': [_left, Vector2(cellSize * 0.8, cellSize * 0.8), _top],
+      // Top-Right
+      '0,-1,1,0': [_top, Vector2(cellSize * 1.2, cellSize * 0.8), _right],
+      '1,0,0,-1': [_right, Vector2(cellSize * 1.2, cellSize * 0.8), _top],
+      // Bottom-Left
+      '0,1,-1,0': [_bottom, Vector2(cellSize * 0.8, cellSize * 1.2), _left],
+      '-1,0,0,1': [_left, Vector2(cellSize * 0.8, cellSize * 1.2), _bottom],
+      // Bottom-Right
+      '0,1,1,0': [_bottom, Vector2(cellSize * 1.2, cellSize * 1.2), _right],
+      '1,0,0,1': [_right, Vector2(cellSize * 1.2, cellSize * 1.2), _bottom],
+      // Horizontal
       '-1,0,1,0': [_left, _halfCellOffset, _right],
       '1,0,-1,0': [_right, _halfCellOffset, _left],
-      // Vertical segment
+      // Vertical
       '0,-1,0,1': [_top, _halfCellOffset, _bottom],
       '0,1,0,-1': [_bottom, _halfCellOffset, _top],
     };
+    
     _cornerRotations = {
       // Straight
-      '-1,0,1,0': [-90.0, -90.0, -90.0], // left -> right
-      '1,0,-1,0': [90.0, 90.0, 90.0], // right -> left
-      '0,-1,0,1': [0.0, 0.0, 0.0], // top -> bottom
-      '0,1,0,-1': [180.0, 180.0, 180.0], // bottom -> top
+      '-1,0,1,0': [-90.0, -90.0, -90.0],
+      '1,0,-1,0': [90.0, 90.0, 90.0],
+      '0,-1,0,1': [0.0, 0.0, 0.0],
+      '0,1,0,-1': [180.0, 180.0, 180.0],
       // Corners
-      // top-left
-      '0,-1,-1,0': [10.0, 45.0, 80.0], // top -> left
-      '-1,0,0,-1': [-100.0, -135.0, -170.0], // left -> top
-      // top-right
-      '0,-1,1,0': [-10.0, -45.0, -80.0], // top -> right
-      '1,0,0,-1': [100.0, 135.0, 170.0], // right -> top
-      // bottom-left
-      '0,1,-1,0': [170.0, 135.0, 100.0], // bottom -> left
-      '-1,0,0,1': [-80.0, -45.0, -10.0], // left -> bottom
-      // bottom-right
-      '0,1,1,0': [-170.0, -135.0, -100.0], // bottom -> right
-      '1,0,0,1': [80.0, 45.0, 10.0], // right -> bottom
+      '0,-1,-1,0': [10.0, 45.0, 80.0],
+      '-1,0,0,-1': [-100.0, -135.0, -170.0],
+      '0,-1,1,0': [-10.0, -45.0, -80.0],
+      '1,0,0,-1': [100.0, 135.0, 170.0],
+      '0,1,-1,0': [170.0, 135.0, 100.0],
+      '-1,0,0,1': [-80.0, -45.0, -10.0],
+      '0,1,1,0': [-170.0, -135.0, -100.0],
+      '1,0,0,1': [80.0, 45.0, 10.0],
     };
   }
 
@@ -109,14 +115,10 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
 
   double _calculateShortestAngle(double currentAngle, double targetAngle) {
     targetAngle = targetAngle % (2 * pi);
-    if (targetAngle < 0) {
-      targetAngle += (2 * pi);
-    }
+    if (targetAngle < 0) targetAngle += (2 * pi);
 
     currentAngle = currentAngle % (2 * pi);
-    if (currentAngle < 0) {
-      currentAngle += (2 * pi);
-    }
+    if (currentAngle < 0) currentAngle += (2 * pi);
 
     double angleDifference = targetAngle - currentAngle;
 
@@ -130,9 +132,8 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
   }
 
   void updateGameState(GameState newGameState) {
-    _previousHeadPosition = _currentHeadPosition; // Copy current head position to previous
+    _previousHeadPosition = _currentHeadPosition;
 
-    // Calculate target angle for rotation
     double targetAngle = 0;
     switch (newGameState.direction) {
       case dp.Direction.right:
@@ -150,8 +151,6 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
     }
 
     final angleDifference = _calculateShortestAngle(_headComponent.angle, targetAngle);
-
-    // Apply RotateEffect.by with the shortest angle difference
     _headComponent.add(RotateEffect.by(angleDifference, EffectController(duration: _animationDuration, curve: _animationCurve)));
 
     gameState.value = newGameState;
@@ -167,16 +166,27 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
     canvas.restore();
   }
 
+  void _renderBackground(Canvas canvas, Vector2 position, Vector2 size) {
+    final paint = Paint()..color = Colors.green.withValues(alpha: 0.3);
+    canvas.drawRect(
+      Rect.fromLTWH(position.x, position.y, size.x, size.y),
+      paint,
+    );
+  }
+
   @override
   void render(Canvas canvas) {
     super.render(canvas);
 
-    // Render the body and tail
-    for (int i = 1; i < gameState.value.snake.length; i++) {
+    // Render body and tail (skip index 1 which is the neck hidden under the head)
+    for (int i = 2; i < gameState.value.snake.length; i++) {
       final segment = gameState.value.snake[i];
       final segmentPosition = segment.position.toVector2() * cellSize;
       final type = segment.type;
       final subPattern = segment.subPattern;
+
+      // Draw background for body segment (2x2 block)
+      _renderBackground(canvas, segmentPosition, Vector2.all(cellSize * 2));
 
       if (type == 'body' && subPattern != null) {
         final centers = _cornerCenters[subPattern];
@@ -189,7 +199,6 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
           }
         }
       } else if (type == 'tail' && subPattern != null) {
-        // New tail animation logic
         final centers = _cornerCenters[subPattern];
         final rotations = _cornerRotations[subPattern];
 
@@ -205,12 +214,13 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
       }
     }
 
-    // Head of the snake - handled by _headComponent
+    // Head animation
     Offset animatedHeadPosition = _currentHeadPosition;
     if (_animationProgress < _animationDuration) {
       final t = _animationCurve.transform(_animationProgress / _animationDuration);
       animatedHeadPosition = Offset.lerp(_previousHeadPosition, _currentHeadPosition, t)!;
     }
-    _headComponent.position = Vector2(animatedHeadPosition.dx + cellSize / 2, animatedHeadPosition.dy + cellSize / 2);
+    _headComponent.position = Vector2(animatedHeadPosition.dx + cellSize, animatedHeadPosition.dy + cellSize);
+    _headBackground.position = Vector2(animatedHeadPosition.dx + cellSize, animatedHeadPosition.dy + cellSize);
   }
 }
