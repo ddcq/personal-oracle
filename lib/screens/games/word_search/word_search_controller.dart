@@ -9,6 +9,7 @@ import 'package:oracle_d_asgard/services/word_search_generator.dart';
 import 'package:oracle_d_asgard/utils/game_utils.dart';
 import 'package:oracle_d_asgard/utils/text_utils.dart';
 import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/services/sound_service.dart';
 
 enum GamePhase { searchingWords, unscramblingSecret, victory }
 
@@ -419,6 +420,7 @@ class WordSearchController with ChangeNotifier {
   void _confirmWord(String word) {
     foundWords.add(word);
     confirmedSelection.addAll(currentSelection);
+    getIt<SoundService>().playSoundEffect('audio/coin.mp3');
     if (foundWords.length == wordsToFind.length) {
       gamePhase = GamePhase.unscramblingSecret;
     }
