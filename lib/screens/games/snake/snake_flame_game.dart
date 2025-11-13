@@ -46,7 +46,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const double _shakeIntensity = 10.0;
   static const int _shakeDurationMs = 200;
   static const int _shakeIntervalMs = 50;
-  static const int _gameSpeedInitial = 150; // milliseconds
+  static const int _gameSpeedInitial = 300; // milliseconds
   static const double _growthAnimationPeriod = 0.15;
   static const double _foodRottingTimeBase = 12.0;
   static const double _foodRottingTimeLevelFactor = 0.5;
