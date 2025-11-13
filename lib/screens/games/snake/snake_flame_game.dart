@@ -416,15 +416,17 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       if (gameState.value.score > oldScore) {
         switch (oldFoodType) {
           case FoodType.regular:
-            if (Platform.isAndroid || Platform.isIOS)
+            if (Platform.isAndroid || Platform.isIOS) {
               Vibration.vibrate(duration: _vibrationDurationShort);
+            }
             break;
           case FoodType.golden:
-            if (Platform.isAndroid || Platform.isIOS)
+            if (Platform.isAndroid || Platform.isIOS) {
               Vibration.vibrate(
                 duration: _vibrationDurationShort,
                 amplitude: _vibrationAmplitudeHigh,
               );
+            }
             break;
           default:
             break;

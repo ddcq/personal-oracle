@@ -13,6 +13,7 @@ import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/widgets/app_restart_wrapper.dart';
+import 'package:oracle_d_asgard/widgets/music_selector.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -23,14 +24,14 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   late Future<List<CollectibleCard>> _unlockedCardsFuture;
-  bool _isFxEnabled = true; // Default to true
+  bool _isFxEnabled = true;
 
   @override
   void initState() {
     super.initState();
-    _unlockedCardsFuture = getIt<GamificationService>()
-        .getUnlockedCollectibleCards();
+    _unlockedCardsFuture = getIt<GamificationService>().getUnlockedCollectibleCards();
     _loadFxSettings();
+    _loadReadingPageMusicSettings();
   }
 
   Future<void> _loadFxSettings() async {
@@ -39,6 +40,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _isFxEnabled = prefs.getBool('isFxEnabled') ?? true;
     });
     getIt<SoundService>().setFxMuted(!_isFxEnabled);
+  }
+
+  Future<void> _loadReadingPageMusicSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    final selection = prefs.getString('readingPageMusicSelection');
+    final soundService = getIt<SoundService>();
+    
+    if (selection == 'mute') {
+      soundService.setReadingPageMusic(null);
+    } else if (selection == null || selection == 'default') {
+      soundService.setReadingPageMusic('audio/reading.mp3');
+    } else {
+      soundService.setReadingPageMusicByCardId(selection);
+    }
   }
 
   Future<void> _launchUrl(String url) async {
@@ -86,7 +101,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               _buildSectionTitle('profile_screen_settings'.tr()),
               _buildSoundSettings(),
-              _buildFxSoundSettings(), // Call the new FX sound settings widget
+              _buildFxSoundSettings(),
+              _buildReadingPageMusicSettings(),
               const SizedBox(height: 10),
               _buildLanguageSettings(),
               const SizedBox(height: 20),
@@ -169,122 +185,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget _buildSoundSettings() {
     final soundService = getIt<SoundService>();
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'profile_screen_ambient_music'.tr(),
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: AppTextStyles.amaticSC,
-              fontSize: 22,
-            ),
-          ),
-          ListenableBuilder(
-            listenable: soundService,
-            builder: (context, child) {
-              return FutureBuilder<List<CollectibleCard>>(
-                future: _unlockedCardsFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  if (snapshot.hasError) {
-                    return const Text(
-                      'Error',
-                      style: TextStyle(color: Colors.white),
-                    );
-                  }
 
-                  final unlockedCards = snapshot.data ?? [];
-                  final List<DropdownMenuItem<String>> items = [
-                    DropdownMenuItem<String>(
-                      value: 'mute',
-                      child: SizedBox(
-                        width: 120,
-                        child: Text('settings_screen_sound_mute'.tr(), overflow: TextOverflow.ellipsis),
-                      ),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: 'default',
-                      child: SizedBox(
-                        width: 120,
-                        child: Text('settings_screen_sound_default'.tr(), overflow: TextOverflow.ellipsis),
-                      ),
-                    ),
-                  ];
-
-                  final Set<String> addedCardIds = {};
-                  for (var card in unlockedCards) {
-                    if (addedCardIds.add(card.id)) { // Add only if not already present
-                      items.add(
-                        DropdownMenuItem<String>(
-                          value: card.id,
-                          child: SizedBox(
-                            width: 120,
-                            child: Text(
-                              card.title,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  }
-
-                  String? currentValue;
-                  if (soundService.isMuted) {
-                    currentValue = 'mute';
-                  } else if (soundService.currentCardId != null) {
-                    currentValue = soundService.currentCardId;
-                  } else {
-                    currentValue = 'default';
-                  }
-
-                  // Ensure currentValue is in the list of items, otherwise default to 'default'
-                  if (items
-                      .where((item) => item.value == currentValue)
-                      .isEmpty) {
-                    currentValue = 'default';
-                  }
-
-                  return Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: DropdownButton<String>(
-                      value: currentValue,
-                      underline: const SizedBox(),
-                      dropdownColor: Colors.black87,
-                      style: const TextStyle(color: Colors.white),
-                      items: items,
-                      onChanged: (String? newValue) {
-                        if (newValue == 'mute') {
-                          soundService.setMuted(true);
-                        } else if (newValue == 'default') {
-                          soundService.setMuted(false); // Ensure unmuted
-                          soundService.playMainMenuMusic();
-                        } else if (newValue != null) {
-                          soundService.setMuted(false); // Ensure unmuted
-                          soundService.playCardMusic(newValue);
-                        }
-                      },
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
+    return MusicSelector(
+      label: 'profile_screen_ambient_music'.tr(),
+      soundService: soundService,
+      unlockedCardsFuture: _unlockedCardsFuture,
+      isReadingMusic: false,
+      onChanged: (String? newValue) async {
+        final prefs = await SharedPreferences.getInstance();
+        if (newValue == 'mute') {
+          await prefs.setString('ambientMusicSelection', 'mute');
+          soundService.setMuted(true);
+        } else if (newValue == 'default') {
+          await prefs.setString('ambientMusicSelection', 'default');
+          soundService.setMuted(false);
+          soundService.playMainMenuMusic();
+        } else if (newValue != null) {
+          await prefs.setString('ambientMusicSelection', newValue);
+          soundService.setMuted(false);
+          soundService.playCardMusic(newValue, asAmbient: true);
+        }
+      },
     );
   }
 
@@ -314,12 +235,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
               await prefs.setBool('isFxEnabled', newValue);
               soundService.setFxMuted(!newValue);
             },
-            activeColor: Colors.white,
+            activeTrackColor: Colors.white,
             inactiveThumbColor: Colors.grey,
-            inactiveTrackColor: Colors.grey.withOpacity(0.5),
+            inactiveTrackColor: Colors.grey.withAlpha(128),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildReadingPageMusicSettings() {
+    final soundService = getIt<SoundService>();
+
+    return MusicSelector(
+      label: 'settings_screen_reading_page_music'.tr(),
+      soundService: soundService,
+      unlockedCardsFuture: _unlockedCardsFuture,
+      isReadingMusic: true,
+      onChanged: (String? newValue) async {
+        final prefs = await SharedPreferences.getInstance();
+        if (newValue == 'mute') {
+          await prefs.setString('readingPageMusicSelection', 'mute');
+          soundService.setReadingPageMusic(null);
+        } else if (newValue == 'default') {
+          await prefs.setString('readingPageMusicSelection', 'default');
+          soundService.setReadingPageMusic('audio/reading.mp3');
+        } else if (newValue != null) {
+          await prefs.setString('readingPageMusicSelection', newValue);
+          soundService.setReadingPageMusicByCardId(newValue);
+        }
+      },
     );
   }
 

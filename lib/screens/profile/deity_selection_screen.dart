@@ -136,8 +136,9 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
               }
 
               final deities = snapshot.data!;
-              if (!mounted)
+              if (!mounted) {
                 return const SizedBox.shrink(); // Ensure widget is still mounted
+              }
 
               // Initialize _pageController only once
               if (!_pageControllerInitialized) {

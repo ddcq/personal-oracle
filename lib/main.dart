@@ -136,12 +136,64 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       // Continue - database errors will be handled per-operation
     }
 
-    // Start music with error handling
+    // Load audio settings before starting music
+    await _loadAudioSettings();
+
+    // Start music with error handling (only if not already started by _loadAudioSettings)
     try {
-      getIt<SoundService>().playMainMenuMusic();
+      final prefs = await SharedPreferences.getInstance();
+      final ambientMusicSelection = prefs.getString('ambientMusicSelection');
+      // Only play main menu if no custom music was selected
+      if (ambientMusicSelection == null || ambientMusicSelection == 'default') {
+        getIt<SoundService>().playMainMenuMusic();
+      }
     } catch (e) {
       debugPrint('Failed to start music: $e');
       // Continue without music
+    }
+  }
+
+  Future<void> _loadAudioSettings() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final soundService = getIt<SoundService>();
+
+      // Load FX mute setting
+      final isFxEnabled = prefs.getBool('isFxEnabled') ?? true;
+      soundService.setFxMuted(!isFxEnabled);
+
+      // Load ambient music setting
+      final ambientMusicSelection = prefs.getString('ambientMusicSelection');
+      if (ambientMusicSelection == 'mute') {
+        soundService.setMuted(true);
+      } else if (ambientMusicSelection != null && ambientMusicSelection != 'default') {
+        // User selected a card music for ambient, will play it instead of default
+        soundService.setMuted(false);
+      } else {
+        // Default or null = play main menu music
+        soundService.setMuted(false);
+      }
+
+      // Load reading page music setting
+      final readingMusicSelection = prefs.getString('readingPageMusicSelection');
+      if (readingMusicSelection == 'mute') {
+        soundService.setReadingPageMusic(null);
+      } else if (readingMusicSelection == null || readingMusicSelection == 'default') {
+        soundService.setReadingPageMusic('audio/reading.mp3');
+      } else {
+        soundService.setReadingPageMusicByCardId(readingMusicSelection);
+      }
+
+      // Play the selected ambient music after loading settings
+      if (ambientMusicSelection != 'mute') {
+        if (ambientMusicSelection != null && ambientMusicSelection != 'default') {
+          soundService.playCardMusic(ambientMusicSelection, asAmbient: true);
+        }
+        // else playMainMenuMusic will be called after this method
+      }
+    } catch (e) {
+      debugPrint('Failed to load audio settings: $e');
+      // Continue with default settings
     }
   }
 
