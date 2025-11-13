@@ -279,6 +279,8 @@
   "profile_screen_all_cards_unlocked": "All {version} collectible cards unlocked!",
   "profile_screen_all_stories_unlocked": "All stories have been unlocked!",
   "profile_screen_ambient_music": "Ambient Music",
+  "settings_screen_sound_mute": "Mute",
+  "settings_screen_sound_default": "Default",,
   "profile_screen_cache_clear_failed": "Failed to clear cache",
   "profile_screen_cache_cleared_success": "Cache cleared successfully!",
   "profile_screen_change_name": "Change Name",

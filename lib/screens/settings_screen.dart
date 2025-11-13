@@ -194,14 +194,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       value: 'mute',
                       child: SizedBox(
                         width: 120,
-                        child: Text('Silence', overflow: TextOverflow.ellipsis),
+                        child: Text('settings_screen_sound_mute'.tr(), overflow: TextOverflow.ellipsis),
                       ),
                     ),
                     DropdownMenuItem<String>(
                       value: 'default',
                       child: SizedBox(
                         width: 120,
-                        child: Text('Défaut', overflow: TextOverflow.ellipsis),
+                        child: Text('settings_screen_sound_default'.tr(), overflow: TextOverflow.ellipsis),
                       ),
                     ),
                   ];
