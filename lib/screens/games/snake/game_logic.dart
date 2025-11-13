@@ -57,6 +57,8 @@ class GameState {
   int score;
   dp.Direction direction;
   dp.Direction nextDirection;
+  dp.Direction? pendingDirection; // Queue for rapid direction changes
+  int movesSinceDirectionChange; // Track moves in current direction for 2x2 blocks
   bool isGameRunning;
   bool isGameOver;
   bool bonusJustCollected;
@@ -75,6 +77,8 @@ class GameState {
     this.score = 0,
     this.direction = dp.Direction.right,
     this.nextDirection = dp.Direction.right,
+    this.pendingDirection,
+    this.movesSinceDirectionChange = 0,
     this.isGameRunning = false,
     this.isGameOver = false,
     this.bonusJustCollected = false,
@@ -145,7 +149,10 @@ class GameState {
     } while (!foodIsValid && attempts < 1000);
 
     return GameState(
-      snake: [SnakeSegment(position: bestStartPosition, type: 'head')],
+      snake: [
+        SnakeSegment(position: bestStartPosition, type: 'head'),
+        SnakeSegment(position: _getPreviousPosition(bestStartPosition, bestDirection), type: 'body', subPattern: _getInitialPattern(bestDirection)),
+      ],
       food: initialFood,
       foodType: FoodType.regular,
       foodAge: 0.0,
@@ -161,6 +168,32 @@ class GameState {
       gridWidth: gridWidth,
       gridHeight: gridHeight,
     );
+  }
+
+  static IntVector2 _getPreviousPosition(IntVector2 position, dp.Direction direction) {
+    switch (direction) {
+      case dp.Direction.up:
+        return IntVector2(position.x, position.y + 2);
+      case dp.Direction.down:
+        return IntVector2(position.x, position.y - 2);
+      case dp.Direction.left:
+        return IntVector2(position.x + 2, position.y);
+      case dp.Direction.right:
+        return IntVector2(position.x - 2, position.y);
+    }
+  }
+
+  static String _getInitialPattern(dp.Direction direction) {
+    switch (direction) {
+      case dp.Direction.up:
+        return '0,1,0,-1'; // vertical going up
+      case dp.Direction.down:
+        return '0,-1,0,1'; // vertical going down
+      case dp.Direction.left:
+        return '1,0,-1,0'; // horizontal going left
+      case dp.Direction.right:
+        return '-1,0,1,0'; // horizontal going right
+    }
   }
 
   static int _calculateStraightDistanceWithObstacles(IntVector2 start, dp.Direction direction, int gridWidth, int gridHeight, List<IntVector2> obstacles) {
@@ -215,6 +248,8 @@ class GameState {
       score: score,
       direction: direction,
       nextDirection: nextDirection,
+      pendingDirection: pendingDirection,
+      movesSinceDirectionChange: movesSinceDirectionChange,
       isGameRunning: isGameRunning,
       isGameOver: isGameOver,
       bonusJustCollected: bonusJustCollected,
@@ -254,7 +289,27 @@ class GameLogic {
 
     state.bonusJustCollected = false;
     state.foodJustEaten = false;
+    
+    // Check if direction is changing
+    bool directionChanging = state.direction != state.nextDirection;
+    
+    // Apply nextDirection
     state.direction = state.nextDirection;
+    
+    // Reset or increment move counter
+    if (directionChanging) {
+      state.movesSinceDirectionChange = 0;
+    } else {
+      state.movesSinceDirectionChange++;
+    }
+    
+    // If there's a pending direction and we've moved enough in current direction
+    // (need at least 2 moves for 2x2 blocks to clear)
+    if (state.pendingDirection != null && state.movesSinceDirectionChange >= 2) {
+      state.nextDirection = state.pendingDirection!;
+      state.pendingDirection = null;
+    }
+    
     IntVector2 headPos = state.snake.first.position;
     IntVector2 newHeadPos = _getNewHeadPosition(headPos, state.direction);
 
@@ -263,13 +318,16 @@ class GameLogic {
     // Check for bonus effects
     bool hasGhostEffect = state.activeBonusEffects.any((effect) => effect.type == BonusType.ghost);
     bool hasShieldEffect = state.activeBonusEffects.any((effect) => effect.type == BonusType.shield);
+    
+    // Shield takes priority over ghost if both are active
+    bool ignoreObstacles = hasShieldEffect || hasGhostEffect;
 
     // Check collision (ignore obstacles if ghost or shield is active)
-    if (_isCollision(state, newHeadPos, currentSnakePositions, ignoreObstacles: hasGhostEffect || hasShieldEffect)) {
+    if (_isCollision(state, newHeadPos, currentSnakePositions, ignoreObstacles: ignoreObstacles)) {
       state.pendingGameOver = true;
     }
 
-    // Handle shield effect - destroy obstacles on collision
+    // Handle shield effect - destroy obstacles on collision (shield rules take priority)
     if (hasShieldEffect) {
       final headCells = [
         newHeadPos,
@@ -414,8 +472,28 @@ class GameLogic {
         return true;
       }
 
-      state.collectedBonuses.add(bonusType);
-      state.activeBonusEffects.add(ActiveBonusEffect(type: bonusType, activationTime: 0.0));
+      // Check if already have this bonus type
+      final existingEffectIndex = state.activeBonusEffects.indexWhere((e) => e.type == bonusType);
+      
+      if (existingEffectIndex != -1) {
+        // Replace existing bonus with new one (reset timer)
+        state.activeBonusEffects[existingEffectIndex] = ActiveBonusEffect(type: bonusType, activationTime: 0.0);
+      } else {
+        // Special rule: Shield replaces Ghost (shield is stronger)
+        if (bonusType == BonusType.shield) {
+          final ghostIndex = state.activeBonusEffects.indexWhere((e) => e.type == BonusType.ghost);
+          if (ghostIndex != -1) {
+            state.activeBonusEffects.removeAt(ghostIndex);
+            state.collectedBonuses.remove(BonusType.ghost);
+          }
+        }
+        // If collecting ghost while having shield, add it but shield rules take priority
+        // (no special handling needed, just add it normally)
+        
+        state.collectedBonuses.add(bonusType);
+        state.activeBonusEffects.add(ActiveBonusEffect(type: bonusType, activationTime: 0.0));
+      }
+      
       state.activeBonus = null;
       onBonusCollected?.call();
       state.bonusJustCollected = true;
@@ -491,25 +569,51 @@ class GameLogic {
   void changeDirection(GameState state, dp.Direction newDirection, {bool isRetroactive = false}) {
     if (!state.isGameRunning || state.isGameOver) return;
 
-    final currentDirection = isRetroactive && state.snake.length > 1
-        ? _getDirectionFromPositions(state.snake[1].position, state.snake[0].position)
-        : state.direction;
+    // For 2x2 blocks, we need to ensure we've moved at least once in the current direction
+    // before allowing another direction change
+    final effectiveDirection = state.nextDirection;
+    
+    // Check if it's opposite to nextDirection (the planned direction)
+    final bool isOppositeToNext = _isOppositeDirection(effectiveDirection, newDirection);
 
-    final bool isOppositeDirection = ((currentDirection == dp.Direction.up && newDirection == dp.Direction.down) ||
-        (currentDirection == dp.Direction.down && newDirection == dp.Direction.up) ||
-        (currentDirection == dp.Direction.left && newDirection == dp.Direction.right) ||
-        (currentDirection == dp.Direction.right && newDirection == dp.Direction.left));
-
-    if (!isOppositeDirection) {
-      state.nextDirection = newDirection;
+    // If opposite to next direction
+    if (isOppositeToNext) {
+      // Allow direct U-turn only if snake has no body (length <= 2: head + neck)
+      if (state.snake.length <= 2) {
+        state.nextDirection = newDirection;
+        state.pendingDirection = null;
+        return;
+      }
+      // Otherwise ignore the U-turn completely (don't queue it)
+      return;
     }
+
+    // Also check if opposite to pendingDirection (if it exists)
+    if (state.pendingDirection != null && _isOppositeDirection(state.pendingDirection!, newDirection)) {
+      // Ignore this as it would create a U-turn with the pending direction
+      return;
+    }
+
+    // For 2x2 blocks: if we just changed direction, queue the next change
+    if (state.movesSinceDirectionChange < 1 && state.nextDirection != newDirection) {
+      // Don't queue if already same as pending
+      if (state.pendingDirection != newDirection) {
+        state.pendingDirection = newDirection;
+      }
+      return;
+    }
+
+    // Not opposite to next direction and safe to apply
+    state.nextDirection = newDirection;
+    // Clear pending if we set a new next direction
+    state.pendingDirection = null;
   }
 
-  dp.Direction _getDirectionFromPositions(IntVector2 from, IntVector2 to) {
-    if (to.x > from.x) return dp.Direction.right;
-    if (to.x < from.x) return dp.Direction.left;
-    if (to.y > from.y) return dp.Direction.down;
-    return dp.Direction.up;
+  bool _isOppositeDirection(dp.Direction dir1, dp.Direction dir2) {
+    return (dir1 == dp.Direction.up && dir2 == dp.Direction.down) ||
+           (dir1 == dp.Direction.down && dir2 == dp.Direction.up) ||
+           (dir1 == dp.Direction.left && dir2 == dp.Direction.right) ||
+           (dir1 == dp.Direction.right && dir2 == dp.Direction.left);
   }
 
   void rotateLeft(GameState state) {

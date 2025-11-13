@@ -17,7 +17,6 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
 
   // Components
   late SpriteComponent _headComponent;
-  late RectangleComponent _headBackground;
 
   late final Vector2 _top;
   late final Vector2 _bottom;
@@ -49,14 +48,6 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
        _previousHeadPosition = (gameState.value.snake[0].position.toVector2() * cellSize).toOffset(),
        _currentHeadPosition = (gameState.value.snake[0].position.toVector2() * cellSize).toOffset(),
        _animationProgress = 0.0 {
-    // Head background
-    _headBackground = RectangleComponent(
-      size: Vector2.all(cellSize * 2),
-      anchor: Anchor.center,
-      paint: Paint()..color = Colors.green.withValues(alpha: 0.3),
-    );
-    add(_headBackground);
-    
     _headComponent = SpriteComponent(sprite: snakeHeadSprite, size: Vector2.all(cellSize * 2), anchor: Anchor.center);
     add(_headComponent);
     
@@ -166,27 +157,18 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
     canvas.restore();
   }
 
-  void _renderBackground(Canvas canvas, Vector2 position, Vector2 size) {
-    final paint = Paint()..color = Colors.green.withValues(alpha: 0.3);
-    canvas.drawRect(
-      Rect.fromLTWH(position.x, position.y, size.x, size.y),
-      paint,
-    );
-  }
-
   @override
   void render(Canvas canvas) {
     super.render(canvas);
 
-    // Render body and tail (skip index 1 which is the neck hidden under the head)
+    // Render body and tail starting from index 2
+    // Index 0 = head, Index 1 = neck (always hidden under 2x2 head block)
+    // Body starts being visible from index 2 onwards
     for (int i = 2; i < gameState.value.snake.length; i++) {
       final segment = gameState.value.snake[i];
       final segmentPosition = segment.position.toVector2() * cellSize;
       final type = segment.type;
       final subPattern = segment.subPattern;
-
-      // Draw background for body segment (2x2 block)
-      _renderBackground(canvas, segmentPosition, Vector2.all(cellSize * 2));
 
       if (type == 'body' && subPattern != null) {
         final centers = _cornerCenters[subPattern];
@@ -221,6 +203,5 @@ class SnakeComponent extends PositionComponent with HasGameReference<SnakeFlameG
       animatedHeadPosition = Offset.lerp(_previousHeadPosition, _currentHeadPosition, t)!;
     }
     _headComponent.position = Vector2(animatedHeadPosition.dx + cellSize, animatedHeadPosition.dy + cellSize);
-    _headBackground.position = Vector2(animatedHeadPosition.dx + cellSize, animatedHeadPosition.dy + cellSize);
   }
 }

@@ -55,7 +55,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   static const int _vibrationDurationLong = 500;
   static const int _vibrationAmplitudeHigh = 255;
   static const int victoryScoreThreshold = 100;
-  static const int _minGameSpeed = 50;
 
 
   late final GameLogic gameLogic;
@@ -98,7 +97,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   late SpriteComponent _foodComponent;
   SpriteComponent? _bonusComponent;
   final List<SpriteComponent> _obstacles = [];
-  final List<RectangleComponent> _obstacleBackgrounds = [];
 
   // Sprites
   late final Sprite regularFoodSprite;
@@ -106,10 +104,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   late final Sprite obstacleSprite;
   late final Sprite rottenFoodSprite;
   late final Map<BonusType, Sprite> bonusSprites = {};
-  
-  // Background components
-  RectangleComponent? _foodBackground;
-  RectangleComponent? _bonusBackground;
 
   // Animation
   late final TimerComponent _growthAnimationTimer;
@@ -185,14 +179,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     );
     add(_snakeComponent);
 
-    // Initialize food background
-    _foodBackground = RectangleComponent(
-      position: Vector2.zero(),
-      size: Vector2.all(cellSize * 2),
-      paint: Paint()..color = Colors.red.withValues(alpha: 0.3),
-    );
-    add(_foodBackground!);
-
     // Initialize components once
     _foodComponent = SpriteComponent(sprite: regularFoodSprite, position: Vector2.zero(), size: Vector2.all(cellSize * 2));
     add(_foodComponent);
@@ -222,30 +208,14 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     // Update food component position and sprite
     _foodComponent.position = gameState.value.food.toVector2() * cellSize;
     _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
-    
-    // Update food background position
-    _foodBackground?.position = gameState.value.food.toVector2() * cellSize;
 
     // Clear and re-add obstacles
     for (var obstacle in _obstacles) {
       obstacle.removeFromParent();
     }
     _obstacles.clear();
-    for (var background in _obstacleBackgrounds) {
-      background.removeFromParent();
-    }
-    _obstacleBackgrounds.clear();
     for (int i = 0; i < gameState.value.obstacles.length; i += 16) {
       final obstacleTopLeft = gameState.value.obstacles[i];
-      
-      // Add background
-      final background = RectangleComponent(
-        position: (obstacleTopLeft.toOffset() * cellSize).toVector2(),
-        size: Vector2.all(cellSize * 4),
-        paint: Paint()..color = Colors.grey.withValues(alpha: 0.4),
-      );
-      _obstacleBackgrounds.add(background);
-      add(background);
       
       final newObstacle = SpriteComponent(
         sprite: obstacleSprite,
@@ -353,7 +323,25 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
   }
 
   double _calculateGameSpeed(int currentScore) {
-    return (_gameSpeedInitial - currentScore).clamp(_minGameSpeed, _gameSpeedInitial).toDouble();
+    // Logarithmic speed scaling:
+    // - Same speed at start (150ms at score 0)
+    // - Accelerates faster at beginning, slower later
+    // - At score 100, speed matches old linear formula (150-100 = 50ms)
+    // - No speed cap, continues to accelerate
+    
+    if (currentScore == 0) {
+      return _gameSpeedInitial.toDouble();
+    }
+    
+    // Using formula: speed = initial - k * log(score + 1)
+    // At score 100: 50 = 150 - k * log(101)
+    // k = (150 - 50) / log(101) = 100 / log(101) ≈ 21.7
+    const double k = 100 / 4.615120517; // log(101) ≈ 4.615
+    
+    final speed = _gameSpeedInitial - (k * log(currentScore + 1));
+    
+    // Allow speed to go below old minimum, but keep a reasonable floor
+    return speed.clamp(10.0, _gameSpeedInitial.toDouble());
   }
 
   void _processGameUpdate(GameState oldState) {
@@ -400,20 +388,11 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
     }
 
     _foodComponent.position = gameState.value.food.toVector2() * cellSize;
-    _foodBackground?.position = gameState.value.food.toVector2() * cellSize;
     remove(_foodComponent);
     _foodComponent = SpriteComponent(sprite: _getFoodSprite(gameState.value.foodType.value), position: _foodComponent.position, size: Vector2.all(cellSize * 2));
     add(_foodComponent);
 
     if (gameState.value.activeBonus != null && _bonusComponent == null) {
-      // Add bonus background
-      _bonusBackground = RectangleComponent(
-        position: gameState.value.activeBonus!.position.toVector2() * cellSize,
-        size: Vector2.all(cellSize * 2),
-        paint: Paint()..color = Colors.yellow.withValues(alpha: 0.3),
-      );
-      add(_bonusBackground!);
-      
       _bonusComponent = SpriteComponent(
         sprite: bonusSprites[gameState.value.activeBonus!.type]!,
         position: gameState.value.activeBonus!.position.toVector2() * cellSize,
@@ -423,8 +402,6 @@ if (!gameState.value.isGameRunning || gameState.value.isGameOver) {
     } else if (gameState.value.activeBonus == null && _bonusComponent != null) {
       _bonusComponent!.removeFromParent();
       _bonusComponent = null;
-      _bonusBackground?.removeFromParent();
-      _bonusBackground = null;
       onBonusCollected?.call();
     }
   }

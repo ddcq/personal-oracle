@@ -423,7 +423,7 @@ class _SnakeGameState extends State<SnakeGame> {
                     }
                     
                     return _BonusProgressWidget(
-                      key: ValueKey('${effect.type}_$index'),
+                      key: ValueKey('${effect.type}_${effect.activationTime}_$index'),
                       sprite: sprite,
                       effect: effect,
                     );
