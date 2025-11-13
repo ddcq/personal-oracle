@@ -159,11 +159,15 @@ class MinesweeperController with ChangeNotifier {
       // First click on a treasure, just reveal it. Do nothing else.
       // The second click will be handled by the 'if (board[row][col].isRevealed)' block above.
       soundService.playSoundEffect('audio/coin.mp3');
-    } else if (board[row][col].adjacentMines == 0 &&
-        board[row][col].adjacentTreasures == 0) {
-      _forEachAdjacentCell(row, col, (newRow, newCol) {
-        revealCell(newRow, newCol);
-      });
+    } else {
+      // Neither mine nor treasure, play 'poc.mp3'
+      soundService.playSoundEffect('audio/poc.mp3');
+      if (board[row][col].adjacentMines == 0 &&
+          board[row][col].adjacentTreasures == 0) {
+        _forEachAdjacentCell(row, col, (newRow, newCol) {
+          revealCell(newRow, newCol);
+        });
+      }
     }
     notifyListeners();
   }
@@ -183,6 +187,7 @@ class MinesweeperController with ChangeNotifier {
       return;
     }
     board[row][col].isFlagged = !board[row][col].isFlagged;
+    getIt<SoundService>().playSoundEffect('audio/scale.mp3');
     notifyListeners();
   }
 
