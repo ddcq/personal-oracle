@@ -115,6 +115,24 @@ class GameController extends ChangeNotifier {
     }
   }
 
+  void moveCardUp(int index) {
+    if (index > 0) {
+      final item = _shuffledCards.removeAt(index);
+      _shuffledCards.insert(index - 1, item);
+      clearPlacementResults();
+      notifyListeners();
+    }
+  }
+
+  void moveCardDown(int index) {
+    if (index < _shuffledCards.length - 1) {
+      final item = _shuffledCards.removeAt(index);
+      _shuffledCards.insert(index + 1, item);
+      clearPlacementResults();
+      notifyListeners();
+    }
+  }
+
   void setDraggedIndex(int? index) {
     _draggedIndex = index;
     notifyListeners();
