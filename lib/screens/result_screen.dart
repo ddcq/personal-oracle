@@ -40,6 +40,21 @@ class _ResultScreenState extends State<ResultScreen> {
     super.dispose();
   }
 
+  void _shareResult() {
+    final deityData = AppData.deities[widget.deity]!;
+    SharePlus.instance.share(
+      ShareParams(
+        text: 'result_screen_share_text'.tr(
+          namedArgs: {
+            'deity': deityData.name,
+            'description': deityData.description.tr(),
+            'link': 'https://play.google.com/store/apps/details?id=net.forhimandus.oracledasgard',
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final deityData = AppData.deities[widget.deity]!;
@@ -134,7 +149,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                             ],
                                           ),
                                           child: Text(
-                                            deityData.description,
+                                            deityData.description.tr(),
                                             style: TextStyle(
                                               fontSize: 0.05 * 1.sh,
                                               color: Colors.white70,
@@ -156,18 +171,11 @@ class _ResultScreenState extends State<ResultScreen> {
                                       children: [
                                         Expanded(
                                           child:
-                                              ChibiButton(
+                                                  ChibiButton(
                                                     color: const Color(
                                                       0xFF1E88E5,
                                                     ),
-                                                    onPressed: () {
-                                                      SharePlus.instance.share(
-                                                        ShareParams(
-                                                          text:
-                                                              'J\'ai découvert ma divinité tutélaire dans Oracle d\'Asgard : ${deityData.name} !\n\n${deityData.description}\n\nRejoignez-moi pour découvrir la vôtre !',
-                                                        ),
-                                                      );
-                                                    },
+                                                    onPressed: _shareResult,
                                                     child: const Icon(
                                                       Icons.share,
                                                       color: Colors.white,
@@ -387,7 +395,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                     ),
                                     SizedBox(height: 16.h),
                                     Text(
-                                      deityData.description,
+                                      deityData.description.tr(),
                                       style: TextStyle(
                                         fontSize: 16.sp,
                                         color: Colors.white70,
@@ -404,15 +412,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                 children: [
                                   ChibiButton(
                                     color: const Color(0xFF1E88E5), // Blue
-                                    onPressed: () {
-                                      // Implement sharing functionality
-                                      SharePlus.instance.share(
-                                        ShareParams(
-                                          text:
-                                              'J\'ai découvert ma divinité tutélaire dans Oracle d\'Asgard : ${deityData.name} !\n\n${deityData.description}\n\nRejoignez-moi pour découvrir la vôtre !',
-                                        ),
-                                      );
-                                    },
+                                    onPressed: _shareResult,
                                     child: const Icon(
                                       Icons.share,
                                       color: Colors.white,

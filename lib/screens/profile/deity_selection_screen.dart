@@ -119,7 +119,7 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: ChibiAppBar(titleText: 'Choisir une Divinité'),
+      appBar: ChibiAppBar(titleText: 'deity_selection_screen_title'.tr()),
       body: AppBackground(
         child: Padding(
           padding: EdgeInsets.only(
@@ -524,7 +524,7 @@ class _DeityCardState extends State<_DeityCard> {
 
   Widget _buildSelectButton(BuildContext context) {
     return ChibiButton(
-      text: 'Choisir',
+      text: 'deity_selection_screen_choose_button'.tr(),
       color: Colors.amber,
       onPressed: _selectDeity,
     );
