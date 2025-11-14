@@ -123,8 +123,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           tempDeities.add(
             Deity(
               id: card.id,
-              name: card.title,
-              title: card.title,
+              name: 'collectible_card_${card.id}_title'.tr(),
+              title: 'collectible_card_${card.id}_title'.tr(),
               icon: 'assets/images/${card.imagePath}',
               videoUrl: card.videoUrl,
               description: card.description,

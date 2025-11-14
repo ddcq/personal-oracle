@@ -211,7 +211,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
           ),
         ],
         title: Text(
-          widget.mythStory.title,
+          widget.mythStory.title.tr(),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.displayMedium?.copyWith(
             fontFamily: AppTextStyles.amaticSC,
@@ -319,7 +319,7 @@ class _StoryContentState extends State<_StoryContent> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      card.title,
+                      'story_${widget.mythStory.id}_card_${card.id}_title'.tr(),
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(
                             color: Theme.of(context).colorScheme.onSurface,
@@ -337,7 +337,7 @@ class _StoryContentState extends State<_StoryContent> {
                         Image.asset('assets/images/stories/${card.imagePath}'),
                       const SizedBox(height: 8.0),
                       Text(
-                        card.detailedStory,
+                        card.detailedStory.tr(),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                           fontSize: widget.fontSize,

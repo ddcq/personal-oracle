@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -149,9 +150,9 @@ class WordSearchController with ChangeNotifier {
     final riddle = norseRiddles.firstWhere(
       (r) => normalizeForWordSearch(r.name) == secretWordName,
       orElse: () =>
-          const NorseRiddle(name: '?', clues: ['Trouvez les mots cachés.']),
+          const NorseRiddle(name: '?', clues: ['word_search_default_clue']),
     );
-    _instructionClue = riddle.clues[_random.nextInt(riddle.clues.length)];
+    _instructionClue = riddle.clues[_random.nextInt(riddle.clues.length)].tr();
   }
 
   static const Set<String> _stopWords = {

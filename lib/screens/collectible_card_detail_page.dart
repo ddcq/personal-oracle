@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:oracle_d_asgard/models/collectible_card.dart';
@@ -50,7 +51,7 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            widget.card.title,
+            'collectible_card_${widget.card.id}_title'.tr(),
             style: TextStyle(
               color: Colors.white,
               fontFamily: AppTextStyles.amaticSC,
@@ -107,7 +108,7 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
             ),
             const SizedBox(height: 20),
             Text(
-              widget.card.title,
+              'collectible_card_${widget.card.id}_title'.tr(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
@@ -117,7 +118,7 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
             ),
             const SizedBox(height: 10),
             Text(
-              widget.card.description,
+              'collectible_card_${widget.card.id}_description'.tr(),
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white70, fontSize: 18),
             ),
@@ -155,7 +156,7 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.card.title,
+                    'collectible_card_${widget.card.id}_title'.tr(),
                     textAlign: TextAlign.left,
                     style: const TextStyle(
                       color: Colors.white,
@@ -165,7 +166,7 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    widget.card.description,
+                    'collectible_card_${widget.card.id}_description'.tr(),
                     textAlign: TextAlign.left,
                     style: const TextStyle(color: Colors.white70, fontSize: 18),
                   ),

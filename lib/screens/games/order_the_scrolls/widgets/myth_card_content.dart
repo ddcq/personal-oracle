@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
@@ -75,7 +76,7 @@ class MythCardContent extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    card.title,
+                    'story_${controller.selectedStory.id}_card_${card.id}_title'.tr(),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: isDragging ? 14 : 16,

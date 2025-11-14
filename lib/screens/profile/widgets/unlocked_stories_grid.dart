@@ -31,7 +31,7 @@ class UnlockedStoriesGrid extends StatelessWidget {
           ? AdRewardButton(
               imagePath:
                   'assets/images/stories/${nextAdRewardStory!.correctOrder.first.imagePath}',
-              title: nextAdRewardStory!.title,
+              title: nextAdRewardStory!.title.tr(),
               icon: Icons.menu_book,
               isAdLoading: isAdLoading,
               onTap: showRewardedStoryAd,
@@ -69,7 +69,7 @@ class UnlockedStoriesGrid extends StatelessWidget {
         ? AdRewardButton(
             imagePath:
                 'assets/images/stories/${nextAdRewardStory!.correctOrder.first.imagePath}',
-            title: nextAdRewardStory!.title,
+            title: nextAdRewardStory!.title.tr(),
             icon: Icons.menu_book,
             isAdLoading: isAdLoading,
             onTap: showRewardedStoryAd,
@@ -148,7 +148,7 @@ class UnlockedStoriesGrid extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(top: 16.0),
                             child: Text(
-                              mythStory.title,
+                              mythStory.title.tr(),
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.bodyLarge
                                   ?.copyWith(

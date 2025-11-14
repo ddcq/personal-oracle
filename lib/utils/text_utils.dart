@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 
 /// Extracts a set of unique words with 4 or more characters from a MythCard.
@@ -8,7 +9,7 @@ import 'package:oracle_d_asgard/models/myth_card.dart';
 /// characters.
 Set<String> extractWordsFromMythCard(MythCard card) {
   final words = <String>{};
-  final textSources = [card.title, card.description, card.detailedStory];
+  final textSources = [card.title.tr(), card.description.tr(), card.detailedStory.tr()];
 
   final combinedText = textSources.join(' ');
 

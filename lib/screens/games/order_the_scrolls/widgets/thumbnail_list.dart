@@ -1,4 +1,5 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:oracle_d_asgard/utils/text_styles.dart';
@@ -85,7 +86,7 @@ class ThumbnailList extends StatelessWidget {
                         ),
                         Expanded(
                           child: Text(
-                            card.title,
+                            'story_${controller.selectedStory.id}_card_${card.id}_title'.tr(),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: fontSize,

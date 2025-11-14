@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:oracle_d_asgard/data/app_data.dart';
@@ -74,8 +75,8 @@ class _DeitySelectionScreenState extends State<DeitySelectionScreen> {
           finalDeities.add(
             Deity(
               id: card.id,
-              name: card.title,
-              title: card.title,
+              name: 'collectible_card_${card.id}_title'.tr(),
+              title: 'collectible_card_${card.id}_title'.tr(),
               icon: 'assets/images/${card.imagePath}',
               videoUrl: card.videoUrl,
               description: card.description,
@@ -499,7 +500,7 @@ class _DeityCardState extends State<_DeityCard> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Text(
-        widget.deity.description,
+        widget.deity.description.tr(),
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: AppTextStyles.amarante,

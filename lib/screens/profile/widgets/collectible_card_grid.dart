@@ -63,21 +63,21 @@ class CollectibleCardGrid extends StatelessWidget {
 
     for (final card in cards) {
       final currentCardPriority = tierPriority[card.version.name] ?? 0;
-      final existingCard = highestTierCards[card.title];
+      final existingCard = highestTierCards[card.id];
 
       if (existingCard == null) {
-        highestTierCards[card.title] = card;
+        highestTierCards[card.id] = card;
       } else {
         final existingCardPriority =
             tierPriority[existingCard.version.name] ?? 0;
         if (currentCardPriority > existingCardPriority) {
-          highestTierCards[card.title] = card;
+          highestTierCards[card.id] = card;
         }
       }
     }
 
     final filteredCards = highestTierCards.values.toList();
-    filteredCards.sort((a, b) => a.title.compareTo(b.title));
+    filteredCards.sort((a, b) => a.id.compareTo(b.id));
 
     final adRewardButton = nextAdRewardCard != null
         ? AdRewardButton(

@@ -109,7 +109,7 @@ class MusicSelector extends StatelessWidget {
                           child: SizedBox(
                             width: 120,
                             child: Text(
-                              card.title,
+                              'collectible_card_${card.id}_title'.tr(),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),

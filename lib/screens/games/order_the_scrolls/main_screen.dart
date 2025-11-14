@@ -75,7 +75,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
                 true, // Make background visible behind AppBar
             appBar: AppBar(
               title: Text(
-                controller.selectedStory.title,
+                controller.selectedStory.title.tr(),
                 style: ChibiTextStyles.storyTitle,
               ),
               backgroundColor: Colors.transparent,

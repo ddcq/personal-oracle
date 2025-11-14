@@ -620,6 +620,7 @@
   "word_search_screen_rule_4": "Once all words are found, a secret word will be requested.",
   "word_search_screen_rule_5": "Use the remaining letters to form the secret word and confirm your victory.",
   "word_search_screen_title": "Odin's Eye",
+  "word_search_default_clue": "Find the hidden words.",
   "snake_bonus_speed_name": "Speed",
   "snake_bonus_speed_effect": "+30% faster",
   "snake_bonus_shield_name": "Shield",

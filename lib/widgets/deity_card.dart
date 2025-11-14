@@ -1,5 +1,6 @@
 // deity_card.dart
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'dart:ui'; // For ImageFilter
@@ -107,7 +108,7 @@ class _DeityCardState extends State<DeityCard> {
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      widget.deity.title,
+                      widget.deity.title.tr(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: AppTextStyles.amaticSC,

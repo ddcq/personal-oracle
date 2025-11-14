@@ -130,10 +130,10 @@ class _VictoryPopupState extends State<VictoryPopup> {
                 ),
         ),
         const SizedBox(height: 10),
-        Text(card.title, style: _rewardTitleStyle, textAlign: TextAlign.center),
+        Text('collectible_card_${card.id}_title'.tr(), style: _rewardTitleStyle, textAlign: TextAlign.center),
         const SizedBox(height: 5),
         Text(
-          card.description,
+          card.description.tr(),
           style: _rewardDescriptionStyle,
           textAlign: TextAlign.center,
         ),
@@ -152,13 +152,13 @@ class _VictoryPopupState extends State<VictoryPopup> {
         ),
         const SizedBox(height: 10),
         Text(
-          storyChapter.title,
+          storyChapter.title.tr(),
           style: _rewardTitleStyle,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 5),
         Text(
-          storyChapter.description,
+          storyChapter.description.tr(),
           style: _rewardDescriptionStyle,
           textAlign: TextAlign.center,
         ),

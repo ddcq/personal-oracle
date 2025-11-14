@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -125,7 +126,7 @@ class DetailPanel extends StatelessWidget {
                                   : normalFontSize,
                               color: Colors.white,
                             ),
-                            child: Text(selectedCard.description),
+                            child: Text(selectedCard.description.tr()),
                           ),
                         ),
                       ],
