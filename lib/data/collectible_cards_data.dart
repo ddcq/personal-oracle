@@ -1,5 +1,6 @@
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/models/card_version.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 // Helper function to create all versions of a card
 List<CollectibleCard> _createCardVersions({
@@ -11,8 +12,8 @@ List<CollectibleCard> _createCardVersions({
   return [
     CollectibleCard(
       id: id,
-      title: titleKey,
-      description: descriptionKey,
+      title: titleKey.tr(),
+      description: descriptionKey.tr(),
       imagePath: 'cards/chibi/$id.webp',
       tags: tags,
       version: CardVersion.chibi,
@@ -20,8 +21,8 @@ List<CollectibleCard> _createCardVersions({
     ),
     CollectibleCard(
       id: id,
-      title: titleKey,
-      description: descriptionKey,
+      title: titleKey.tr(),
+      description: descriptionKey.tr(),
       imagePath: 'cards/premium/$id.webp',
       tags: tags,
       version: CardVersion.premium,
@@ -29,8 +30,8 @@ List<CollectibleCard> _createCardVersions({
     ),
     CollectibleCard(
       id: id,
-      title: titleKey,
-      description: descriptionKey,
+      title: titleKey.tr(),
+      description: descriptionKey.tr(),
       imagePath: 'cards/epic/$id.webp',
       tags: tags,
       version: CardVersion.epic,
