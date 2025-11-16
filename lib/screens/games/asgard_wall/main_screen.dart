@@ -707,9 +707,6 @@ class _GameScreenState extends State<GameScreen> {
           decoration: const BoxDecoration(
             image: DecorationImage(image: AssetImage('assets/images/backgrounds/landscape.jpg'), fit: BoxFit.cover),
           ),
-          child: Container(
-            color: Colors.black.withAlpha(128), // Overlay to darken the image
-          ),
         ), // The background is now at the bottom of the stack
         Scaffold(
           backgroundColor: Colors.transparent, // Make the scaffold transparent
