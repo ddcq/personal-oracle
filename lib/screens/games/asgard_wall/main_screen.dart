@@ -41,6 +41,26 @@ class PlacedPiece {
   });
 }
 
+class _Segment {
+  final Point<int> p1;
+  final Point<int> p2;
+
+  _Segment(int x1, int y1, int x2, int y2)
+      : p1 = (x1 < x2 || (x1 == x2 && y1 < y2)) ? Point(x1, y1) : Point(x2, y2),
+        p2 = (x1 < x2 || (x1 == x2 && y1 < y2)) ? Point(x2, y2) : Point(x1, y1);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _Segment &&
+          runtimeType == other.runtimeType &&
+          p1 == other.p1 &&
+          p2 == other.p2;
+
+  @override
+  int get hashCode => p1.hashCode ^ p2.hashCode;
+}
+
 class _GameScreenState extends State<GameScreen> {
   static const int boardWidth = 11;
   static const int boardHeight = 22;
@@ -52,6 +72,7 @@ class _GameScreenState extends State<GameScreen> {
     (index) => List.generate(boardWidth, (index) => false),
   );
   List<PlacedPiece> placedPieces = [];
+  Set<_Segment> _contour = {};
 
   // Timer for visual effects
   Timer? effectTimer;
@@ -109,6 +130,10 @@ class _GameScreenState extends State<GameScreen> {
         (index) => List.generate(boardWidth, (index) => false),
       );
       placedPieces = [];
+      _contour.clear();
+      for (int i = 0; i < boardWidth; i++) {
+        _contour.add(_Segment(i, boardHeight, i + 1, boardHeight));
+      }
       gameActive = true;
       _isPaused = false; // Ensure game is not paused on start
       currentPiece = []; // Empty the current piece
@@ -217,6 +242,41 @@ class _GameScreenState extends State<GameScreen> {
     return true;
   }
 
+  void _updateContour() {
+    for (int r = 0; r < currentPiece.length; r++) {
+      for (int c = 0; c < currentPiece[r].length; c++) {
+        if (currentPiece[r][c]) {
+          int x = pieceX + c;
+          int y = pieceY + r;
+
+          // Top edge
+          final topEdge = _Segment(x, y, x + 1, y);
+          if (!_contour.remove(topEdge)) {
+            _contour.add(topEdge);
+          }
+
+          // Bottom edge
+          final bottomEdge = _Segment(x, y + 1, x + 1, y + 1);
+          if (!_contour.remove(bottomEdge)) {
+            _contour.add(bottomEdge);
+          }
+
+          // Left edge
+          final leftEdge = _Segment(x, y, x, y + 1);
+          if (!_contour.remove(leftEdge)) {
+            _contour.add(leftEdge);
+          }
+
+          // Right edge
+          final rightEdge = _Segment(x + 1, y, x + 1, y + 1);
+          if (!_contour.remove(rightEdge)) {
+            _contour.add(rightEdge);
+          }
+        }
+      }
+    }
+  }
+
   // Place la pièce actuelle sur le plateau (elle devient fixe).
   void placePiece() {
     // Add to placed pieces list for rendering
@@ -246,6 +306,7 @@ class _GameScreenState extends State<GameScreen> {
       }
     }
 
+    _updateContour();
     _simulateBlockPlacement();
 
     // Check for inaccessible holes created by this piece
@@ -702,7 +763,19 @@ class _GameScreenState extends State<GameScreen> {
           );
 
           return Stack(
-            children: [boardGrid, ...placedPiecesWidgets, fallingPieceWidget],
+            children: [
+              boardGrid,
+              ...placedPiecesWidgets,
+              fallingPieceWidget,
+              CustomPaint(
+                size: Size(boardPixelWidth, boardPixelHeight),
+                painter: _ContourPainter(
+                  contour: _contour,
+                  cellWidth: cellWidth,
+                  cellHeight: cellHeight,
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -853,5 +926,36 @@ class _GameScreenState extends State<GameScreen> {
         ),
       ],
     );
+  }
+}
+
+class _ContourPainter extends CustomPainter {
+  final Set<_Segment> contour;
+  final double cellWidth;
+  final double cellHeight;
+
+  _ContourPainter({
+    required this.contour,
+    required this.cellWidth,
+    required this.cellHeight,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.cyanAccent // A bright color
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke;
+
+    for (final segment in contour) {
+      final p1 = Offset(segment.p1.x * cellWidth, segment.p1.y * cellHeight);
+      final p2 = Offset(segment.p2.x * cellWidth, segment.p2.y * cellHeight);
+      canvas.drawLine(p1, p2, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _ContourPainter oldDelegate) {
+    return oldDelegate.contour != contour;
   }
 }

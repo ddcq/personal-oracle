@@ -208,7 +208,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   bool isPointOnBoundary(IntVector2 point) {
     int x = point.x;
     int y = point.y;
-    if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) return false;
+    if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) return true;
     return _grid[y][x] == game_constants.kGridEdge;
   }
 
