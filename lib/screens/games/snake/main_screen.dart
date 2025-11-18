@@ -12,6 +12,8 @@ import 'package:oracle_d_asgard/widgets/joystick_controller.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' show Direction;
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
+import 'package:oracle_d_asgard/screens/games/snake/models/snake_models.dart';
+import 'package:oracle_d_asgard/screens/games/snake/models/snake_game_state.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 

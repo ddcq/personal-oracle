@@ -3,6 +3,7 @@ import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
+import 'package:oracle_d_asgard/screens/games/snake/models/snake_game_state.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;

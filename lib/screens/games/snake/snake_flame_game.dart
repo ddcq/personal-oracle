@@ -12,6 +12,8 @@ import 'package:flutter/services.dart';
 
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
+import 'package:oracle_d_asgard/screens/games/snake/models/snake_models.dart';
+import 'package:oracle_d_asgard/screens/games/snake/models/snake_game_state.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_component.dart';
 import 'package:oracle_d_asgard/screens/games/snake/rock_explosion_effect.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';

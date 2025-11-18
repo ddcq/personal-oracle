@@ -16,39 +16,14 @@ import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/models/wall_game_models.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
 
   @override
+  @override
   State<GameScreen> createState() => _GameScreenState();
-}
-
-// game_logic.dart (Simulé : La logique et l’état du jeu)
-// Les méthodes et l’état de jeu sont gérés par _GameScreenState.
-class PlacedPiece {
-  final int pieceIndex;
-  final int rotationIndex;
-  final int x;
-  final int y;
-  bool isNewlyPlaced = true;
-
-  PlacedPiece({required this.pieceIndex, required this.rotationIndex, required this.x, required this.y});
-}
-
-class _Segment {
-  final Point<int> p1;
-  final Point<int> p2;
-
-  _Segment(int x1, int y1, int x2, int y2)
-    : p1 = (x1 < x2 || (x1 == x2 && y1 < y2)) ? Point(x1, y1) : Point(x2, y2),
-      p2 = (x1 < x2 || (x1 == x2 && y1 < y2)) ? Point(x2, y2) : Point(x1, y1);
-
-  @override
-  bool operator ==(Object other) => identical(this, other) || other is _Segment && runtimeType == other.runtimeType && p1 == other.p1 && p2 == other.p2;
-
-  @override
-  int get hashCode => p1.hashCode ^ p2.hashCode;
 }
 
 class _GameScreenState extends State<GameScreen> {
@@ -59,7 +34,7 @@ class _GameScreenState extends State<GameScreen> {
   // The board is now for collision detection only.
   List<List<bool>> collisionBoard = List.generate(boardHeight, (index) => List.generate(boardWidth, (index) => false));
   List<PlacedPiece> placedPieces = [];
-  final Set<_Segment> _contour = {};
+  final Set<Segment> _contour = {};
 
   // Timer for visual effects
   Timer? effectTimer;
@@ -105,7 +80,7 @@ class _GameScreenState extends State<GameScreen> {
       placedPieces = [];
       _contour.clear();
       for (int i = 0; i < boardWidth; i++) {
-        _contour.add(_Segment(i, boardHeight, i + 1, boardHeight));
+        _contour.add(Segment(i, boardHeight, i + 1, boardHeight));
       }
       gameActive = true;
       _isPaused = false; // Ensure game is not paused on start
@@ -204,25 +179,25 @@ class _GameScreenState extends State<GameScreen> {
           int y = pieceY + r;
 
           // Top edge
-          final topEdge = _Segment(x, y, x + 1, y);
+          final topEdge = Segment(x, y, x + 1, y);
           if (!_contour.remove(topEdge)) {
             _contour.add(topEdge);
           }
 
           // Bottom edge
-          final bottomEdge = _Segment(x, y + 1, x + 1, y + 1);
+          final bottomEdge = Segment(x, y + 1, x + 1, y + 1);
           if (!_contour.remove(bottomEdge)) {
             _contour.add(bottomEdge);
           }
 
           // Left edge
-          final leftEdge = _Segment(x, y, x, y + 1);
+          final leftEdge = Segment(x, y, x, y + 1);
           if (!_contour.remove(leftEdge)) {
             _contour.add(leftEdge);
           }
 
           // Right edge
-          final rightEdge = _Segment(x + 1, y, x + 1, y + 1);
+          final rightEdge = Segment(x + 1, y, x + 1, y + 1);
           if (!_contour.remove(rightEdge)) {
             _contour.add(rightEdge);
           }
@@ -817,7 +792,7 @@ class _GameScreenState extends State<GameScreen> {
 }
 
 class _ContourPainter extends CustomPainter {
-  final Set<_Segment> contour;
+  final Set<Segment> contour;
   final double cellWidth;
   final double cellHeight;
 
