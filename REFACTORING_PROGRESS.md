@@ -1,13 +1,13 @@
-# Rapport de Refactoring - Phase 1 Complétée
+# Rapport de Refactoring - Phase 2 Complétée
 
-## Statut: Phase 1 Terminée ✅
+## Statut: Phase 1 & 2 Terminées ✅✅
 
-Date: 2025-11-18
-Temps écoulé: ~1h
+Date mise à jour: 2025-11-18
+Temps écoulé total: ~2.5h
 
 ## Travail accompli
 
-### Phase 1 - Extraction des modèles (COMPLÉTÉ)
+### Phase 1 - Extraction des modèles (COMPLÉTÉ ✅)
 
 #### Fichiers créés:
 1. ✅ `lib/screens/games/snake/models/snake_models.dart` (27 lignes)
@@ -49,51 +49,54 @@ Temps écoulé: ~1h
 ✅ Imports correctement configurés  
 ✅ Structure respectant l'architecture Flutter
 
-## Phase 2-5 - À implémenter
+### Phase 2 - Extraction logique métier (COMPLÉTÉ ✅)
 
-### Phase 2 - Extraction logique métier (3-4h estimé)
+#### Snake - Fichiers créés:
+1. ✅ `lib/screens/games/snake/utils/direction_utils.dart` (100 lignes)
+   - Map directionOffsets et singleStepOffsets
+   - getNewHeadPosition, getPreviousPosition
+   - getInitialPattern, isOppositeDirection
+   - calculateStraightDistanceWithObstacles
 
-#### Snake - Fichiers à créer:
-- [ ] `lib/screens/games/snake/utils/collision_utils.dart`
-  - Méthode `_isCollision` extraite
-  - Méthode `_calculateStraightDistanceWithObstacles` extraite
-  - Utilitaires de vérification 2x2 blocks
+2. ✅ `lib/screens/games/snake/utils/collision_utils.dart` (99 lignes)
+   - isBlock2x2Free, get2x2BlockCells
+   - isCollision avec support ignore obstacles
+   - do2x2BlocksOverlap
+   - getOccupiedCellsFromSnake, getAllOccupiedCells
 
-- [ ] `lib/screens/games/snake/managers/spawn_manager.dart`
-  - `generateNewFood(GameState state)`
-  - `spawnBonus(GameState state)`  
-  - `generateObstacles(GameState state)`
-  - `_generateValidPositionFor2x2` privé
+3. ✅ `lib/screens/games/snake/managers/spawn_manager.dart` (185 lignes)
+   - generateNewFood avec probabilité golden food
+   - spawnBonus (level-based bonus types)
+   - generateObstacles (4x4 blocks)
+   - removeObstacleBlock
+   - _generateValidPositionFor2x2 (privé)
 
-- [ ] `lib/screens/games/snake/utils/direction_utils.dart`
-  - Map constant `directionOffsets`
-  - `getNewHeadPosition(position, direction)`
-  - `getPreviousPosition(position, direction)`
-  - `isOppositeDirection(dir1, dir2)`
+#### Asgard Wall - Fichiers créés:
+1. ✅ `lib/screens/games/asgard_wall/logic/wall_game_logic.dart` (125 lignes)
+   - canPlacePiece
+   - updateContour
+   - checkInaccessibleHoles
+   - checkWallComplete
+   - isCellOccupied
 
-#### Asgard Wall - Fichiers à créer:
-- [ ] `lib/screens/games/asgard_wall/logic/wall_game_logic.dart`
-  - Class WallGameLogic avec méthodes:
-    - `canPlacePiece()`
-    - `placePiece()`
-    - `checkVictoryCondition()`
-    - `checkInaccessibleHoles()`
-    - `checkWallComplete()`
-    - `updateContour()`
+2. ✅ `lib/screens/games/asgard_wall/managers/piece_manager.dart` (71 lignes)
+   - generateNextPieces
+   - getRandomPieceIndex
+   - tryRotatePiece (avec wall kicks)
+   - getCenteredX
 
-- [ ] `lib/screens/games/asgard_wall/managers/piece_manager.dart`
-  - Class PieceManager avec:
-    - `generateNextPieces()`
-    - `spawnNewPiece()`
-    - `rotatePiece()`
+#### Modifications de fichiers existants:
+- ✅ game_logic.dart: 655 → 363 lignes (-45%)
+- ✅ snake_game_state.dart: utilise DirectionUtils
+- ✅ GameLogic délègue au SpawnManager
 
-- [ ] `lib/screens/games/asgard_wall/utils/input_handler.dart`
-  - Class InputHandler avec:
-    - `handleKeyPress()`
-    - `movePieceLeft/Right/Down()`
-    - `dropPiece()`
+### Validation Phase 2
+✅ Aucune erreur de compilation  
+✅ Logique métier isolée et testable
+✅ Réduction significative de la complexité
+✅ Commits Git propres avec messages descriptifs
 
-### Phase 3 - Extraction widgets (2-3h estimé)
+## Phase 3-5 - À implémenter
 
 - [ ] `lib/screens/games/asgard_wall/widgets/game_board_widget.dart`
   - GameBoardWidget (StatelessWidget)
