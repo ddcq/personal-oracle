@@ -174,10 +174,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       if (ambientMusicSelection == 'mute') {
         soundService.setMuted(true);
       } else if (ambientMusicSelection != null && ambientMusicSelection != 'default') {
-        // User selected a card music for ambient, will play it instead of default
         soundService.setMuted(false);
+        soundService.setAmbientMusicByCardId(ambientMusicSelection);
       } else {
-        // Default or null = play main menu music
         soundService.setMuted(false);
       }
 
@@ -194,13 +193,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       // Play the selected ambient music after loading settings
       if (ambientMusicSelection != 'mute') {
         if (ambientMusicSelection != null && ambientMusicSelection != 'default') {
-          soundService.playCardMusic(ambientMusicSelection, asAmbient: true);
+          soundService.playMainMenuMusic();
         }
-        // else playMainMenuMusic will be called after this method
       }
     } catch (e) {
       debugPrint('Failed to load audio settings: $e');
-      // Continue with default settings
     }
   }
 

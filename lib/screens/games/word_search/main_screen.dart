@@ -15,10 +15,7 @@ class WordSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => WordSearchController(),
-      child: const _WordSearchView(),
-    );
+    return ChangeNotifierProvider(create: (_) => WordSearchController(), child: const _WordSearchView());
   }
 }
 
@@ -28,8 +25,9 @@ class _WordSearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = context.watch<WordSearchController>();
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
-    _showVictoryDialog(context, controller); // Call the new method here
+    _showVictoryDialog(context, controller);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -67,29 +65,9 @@ class _WordSearchView extends StatelessWidget {
             child: SafeArea(
               child: controller.isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : Column(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0,
-                            ),
-                            child: _Grid(controller: controller),
-                          ),
-                        ),
-                        if (controller.gamePhase == GamePhase.searchingWords)
-                          Expanded(
-                            flex: 2,
-                            child: _WordList(controller: controller),
-                          )
-                        else
-                          Expanded(
-                            flex: 2,
-                            child: _SecretWordInput(controller: controller),
-                          ),
-                      ],
-                    ),
+                  : isLandscape
+                  ? _buildLandscapeLayout(controller)
+                  : _buildPortraitLayout(controller),
             ),
           ),
         ],
@@ -97,10 +75,43 @@ class _WordSearchView extends StatelessWidget {
     );
   }
 
-  void _showVictoryDialog(
-    BuildContext context,
-    WordSearchController controller,
-  ) {
+  Widget _buildPortraitLayout(WordSearchController controller) {
+    return Column(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: _Grid(controller: controller),
+          ),
+        ),
+        if (controller.gamePhase == GamePhase.searchingWords)
+          Expanded(flex: 2, child: _WordList(controller: controller))
+        else
+          Expanded(flex: 2, child: _SecretWordInput(controller: controller)),
+      ],
+    );
+  }
+
+  Widget _buildLandscapeLayout(WordSearchController controller) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _Grid(controller: controller),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: controller.gamePhase == GamePhase.searchingWords ? _WordList(controller: controller) : _SecretWordInput(controller: controller),
+        ),
+      ],
+    );
+  }
+
+  void _showVictoryDialog(BuildContext context, WordSearchController controller) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (controller.gamePhase == GamePhase.victory) {
         final bool isGenericVictory = controller.unlockedChapter == null;
@@ -113,8 +124,7 @@ class _WordSearchView extends StatelessWidget {
               isGenericVictory: isGenericVictory,
               onDismiss: () {
                 Navigator.of(context).pop();
-                controller
-                    .resetGame(); // Assuming you have a resetGame method in your controller
+                controller.resetGame(); // Assuming you have a resetGame method in your controller
               },
               onSeeRewards: () {
                 Navigator.of(context).pop(); // Close the dialog
@@ -134,6 +144,7 @@ class _Grid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     return LayoutBuilder(
       builder: (context, constraints) {
         final size = Size(constraints.maxWidth, constraints.maxHeight);
@@ -145,9 +156,7 @@ class _Grid extends StatelessWidget {
           return const SizedBox.shrink(); // Or a placeholder
         }
 
-        final childAspectRatio =
-            (constraints.maxWidth / columnCount) /
-            (constraints.maxHeight / rowCount);
+        final childAspectRatio = (constraints.maxWidth / columnCount) / (constraints.maxHeight / rowCount);
 
         return GestureDetector(
           onPanStart: controller.gamePhase == GamePhase.searchingWords
@@ -157,16 +166,10 @@ class _Grid extends StatelessWidget {
               : null,
           onPanUpdate: controller.gamePhase == GamePhase.searchingWords
               ? (details) {
-                  _handleInteraction(
-                    details.localPosition,
-                    size,
-                    isUpdate: true,
-                  );
+                  _handleInteraction(details.localPosition, size, isUpdate: true);
                 }
               : null,
-          onPanEnd: controller.gamePhase == GamePhase.searchingWords
-              ? (_) => controller.endSelection()
-              : null,
+          onPanEnd: controller.gamePhase == GamePhase.searchingWords ? (_) => controller.endSelection() : null,
           onTapUp: controller.gamePhase == GamePhase.unscramblingSecret
               ? (details) {
                   _handleInteraction(details.localPosition, size, isTap: true);
@@ -174,24 +177,15 @@ class _Grid extends StatelessWidget {
               : null,
           child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: columnCount,
-              childAspectRatio: childAspectRatio,
-            ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: columnCount, childAspectRatio: childAspectRatio),
             itemCount: rowCount * columnCount,
             itemBuilder: (context, index) {
               final row = index ~/ columnCount;
               final col = index % columnCount;
               final offset = Offset(col.toDouble(), row.toDouble());
               final isSelected = controller.currentSelection.contains(offset);
-              final isConfirmed = controller.confirmedSelection.contains(
-                offset,
-              );
-              return _buildGridCell(
-                isSelected,
-                isConfirmed,
-                controller.grid[row][col],
-              );
+              final isConfirmed = controller.confirmedSelection.contains(offset);
+              return _buildGridCell(isSelected, isConfirmed, controller.grid[row][col], isLandscape);
             },
           ),
         );
@@ -199,12 +193,7 @@ class _Grid extends StatelessWidget {
     );
   }
 
-  void _handleInteraction(
-    Offset localPosition,
-    Size size, {
-    bool isUpdate = false,
-    bool isTap = false,
-  }) {
+  void _handleInteraction(Offset localPosition, Size size, {bool isUpdate = false, bool isTap = false}) {
     final offset = _getGridOffset(localPosition, size);
     if (offset != null) {
       if (isTap) {
@@ -222,16 +211,15 @@ class _Grid extends StatelessWidget {
     final double cellHeight = size.height / controller.grid.length;
     final col = (localPosition.dx / cellWidth).floor();
     final row = (localPosition.dy / cellHeight).floor();
-    if (col >= 0 &&
-        col < controller.grid[0].length &&
-        row >= 0 &&
-        row < controller.grid.length) {
+    if (col >= 0 && col < controller.grid[0].length && row >= 0 && row < controller.grid.length) {
       return Offset(col.toDouble(), row.toDouble());
     }
     return null;
   }
 
-  Widget _buildGridCell(bool isSelected, bool isConfirmed, String text) {
+  Widget _buildGridCell(bool isSelected, bool isConfirmed, String text, bool isLandscape) {
+    final fontSize = isLandscape ? 16.0 : 18.0;
+
     return Container(
       decoration: BoxDecoration(
         color: isSelected
@@ -241,7 +229,9 @@ class _Grid extends StatelessWidget {
             : Colors.black.withAlpha(102),
         border: Border.all(color: Colors.white.withAlpha(150)),
       ),
-      child: Center(child: Text(text, style: ChibiTextStyles.dialogText)),
+      child: Center(
+        child: Text(text, style: ChibiTextStyles.dialogText.copyWith(fontSize: fontSize)),
+      ),
     );
   }
 }
@@ -252,6 +242,8 @@ class _WordList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Container(
       margin: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -268,7 +260,7 @@ class _WordList extends StatelessWidget {
             alignment: WrapAlignment.center,
             children: controller.wordsToFind.map((word) {
               final isFound = controller.foundWords.contains(word);
-              return _buildWordText(word, isFound);
+              return _buildWordText(word, isFound, isLandscape);
             }).toList(),
           ),
         ),
@@ -276,10 +268,13 @@ class _WordList extends StatelessWidget {
     );
   }
 
-  Widget _buildWordText(String word, bool isFound) {
+  Widget _buildWordText(String word, bool isFound, bool isLandscape) {
+    final fontSize = isLandscape ? 16.0 : 18.0;
+
     return Text(
       word,
       style: ChibiTextStyles.dialogText.copyWith(
+        fontSize: fontSize,
         decoration: isFound ? TextDecoration.lineThrough : TextDecoration.none,
         color: isFound ? Colors.white.withAlpha(128) : Colors.white,
         decorationColor: ChibiColors.buttonRed,
@@ -295,6 +290,9 @@ class _SecretWordInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final titleFontSize = isLandscape ? 19.6 : 28.0; // 28 * 0.7 = 19.6
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -302,30 +300,19 @@ class _SecretWordInput extends StatelessWidget {
           Text(
             controller.instructionClue,
             style: ChibiTextStyles.storyTitle.copyWith(
-              fontSize: 28.sp,
-              shadows: [
-                const Shadow(
-                  blurRadius: 20.0,
-                  color: Colors.black,
-                  offset: Offset(5.0, 5.0),
-                ),
-              ],
+              fontSize: titleFontSize.sp,
+              shadows: [const Shadow(blurRadius: 20.0, color: Colors.black, offset: Offset(5.0, 5.0))],
             ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 15),
           Wrap(
             alignment: WrapAlignment.center,
-            spacing: 4.0, // Horizontal spacing
-            runSpacing: 4.0, // Vertical spacing for wrapping
+            spacing: 4.0,
+            runSpacing: 4.0,
             children: List.generate(controller.secretWord.length, (index) {
-              final letter = (index < controller.currentSecretWordGuess.length)
-                  ? controller.currentSecretWordGuess[index]
-                  : '';
-              return _buildLetterContainer(
-                letter,
-                controller.isSecretWordError,
-              );
+              final letter = (index < controller.currentSecretWordGuess.length) ? controller.currentSecretWordGuess[index] : '';
+              return _buildLetterContainer(letter, controller.isSecretWordError, isLandscape);
             }),
           ),
         ],
@@ -333,22 +320,21 @@ class _SecretWordInput extends StatelessWidget {
     );
   }
 
-  Widget _buildLetterContainer(String letter, bool isError) {
+  Widget _buildLetterContainer(String letter, bool isError, bool isLandscape) {
+    final containerWidth = isLandscape ? 17.0.sp : 35.0.sp;
+    final containerHeight = containerWidth * 1.5;
+    final letterFontSize = isLandscape ? 14.0 : 24.0;
+
     return Container(
-      width: 35,
-      height: 50,
+      width: containerWidth,
+      height: containerHeight,
       decoration: BoxDecoration(
-        color: isError
-            ? ChibiColors.buttonRed.withAlpha(180)
-            : Colors.black.withAlpha(102),
+        color: isError ? ChibiColors.buttonRed.withAlpha(180) : Colors.black.withAlpha(102),
         border: Border.all(color: Colors.white.withAlpha(150), width: 2),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Center(
-        child: Text(
-          letter,
-          style: ChibiTextStyles.storyTitle.copyWith(fontSize: 30.sp),
-        ),
+        child: Text(letter, style: ChibiTextStyles.storyTitle.copyWith(fontSize: letterFontSize.sp)),
       ),
     );
   }

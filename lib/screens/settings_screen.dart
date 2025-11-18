@@ -199,11 +199,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
         } else if (newValue == 'default') {
           await prefs.setString('ambientMusicSelection', 'default');
           soundService.setMuted(false);
+          soundService.setAmbientMusicByCardId(null);
           soundService.playMainMenuMusic();
         } else if (newValue != null) {
           await prefs.setString('ambientMusicSelection', newValue);
           soundService.setMuted(false);
-          soundService.playCardMusic(newValue, asAmbient: true);
+          soundService.setAmbientMusicByCardId(newValue);
+          soundService.playMainMenuMusic();
         }
       },
     );

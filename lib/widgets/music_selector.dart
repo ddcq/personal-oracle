@@ -22,7 +22,6 @@ class MusicSelector extends StatelessWidget {
 
   String _getCurrentValue() {
     if (isReadingMusic) {
-      // Calculate current value for reading page music
       if (soundService.isReadingPageMusicMuted) {
         return 'mute';
       } else if (soundService.readingPageMusicCardId != null) {
@@ -33,11 +32,10 @@ class MusicSelector extends StatelessWidget {
         return 'default';
       }
     } else {
-      // Calculate current value for ambient music
       if (soundService.isMuted) {
         return 'mute';
-      } else if (soundService.currentCardId != null) {
-        return soundService.currentCardId!;
+      } else if (soundService.currentAmbientMusicCardId != null) {
+        return soundService.currentAmbientMusicCardId!;
       } else {
         return 'default';
       }

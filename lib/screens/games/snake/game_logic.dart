@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 import 'package:oracle_d_asgard/screens/games/snake/snake_segment.dart';
@@ -518,14 +520,19 @@ class GameLogic {
     if ((newHeadPos.x - state.food.x).abs() < 2 &&
         (newHeadPos.y - state.food.y).abs() < 2) {
       state.foodJustEaten = true;
+      final soundService = getIt<SoundService>();
+      
       if (state.foodType.value == FoodType.golden) {
         state.score += _scoreGoldenFood;
+        soundService.playSoundEffect('audio/scale.mp3');
       } else if (state.foodType.value == FoodType.regular) {
         state.score += _scoreRegularFood;
+        soundService.playSoundEffect('audio/poc.mp3');
       } else if (state.foodType.value == FoodType.rotten) {
         state.score -=
             (_scoreRottenFoodPenaltyBase +
             (level * _scoreRottenFoodPenaltyPerLevel));
+        soundService.playSoundEffect('audio/dramatic.mp3');
         onRottenFoodEaten?.call();
       }
 
@@ -544,10 +551,12 @@ class GameLogic {
         (newHeadPos.x - state.activeBonus!.position.x).abs() < 2 &&
         (newHeadPos.y - state.activeBonus!.position.y).abs() < 2) {
       final bonusType = state.activeBonus!.type;
+      final soundService = getIt<SoundService>();
 
       if (bonusType == BonusType.coin) {
         state.score += 20;
         state.activeBonus = null;
+        soundService.playSoundEffect('audio/coin.mp3');
         onBonusCollected?.call();
         state.bonusJustCollected = true;
         return true;
@@ -585,6 +594,7 @@ class GameLogic {
       }
 
       state.activeBonus = null;
+      soundService.playSoundEffect('audio/coin.mp3');
       onBonusCollected?.call();
       state.bonusJustCollected = true;
       return true;

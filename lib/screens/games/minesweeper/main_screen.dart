@@ -53,6 +53,7 @@ class _MinesweeperView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = context.watch<MinesweeperController>();
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (controller.isGameOver) {
@@ -94,7 +95,7 @@ class _MinesweeperView extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 onSeeRewards: () {
-                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.of(context).pop();
                   context.push('/profile');
                 },
               );
@@ -137,72 +138,122 @@ class _MinesweeperView extends StatelessWidget {
       ),
       body: AppBackground(
         child: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'minesweeper_treasures_found'.tr(
-                    namedArgs: {
-                      'found': '${controller.treasuresFound}',
-                      'total': '${controller.treasureCount}',
-                    },
-                  ),
-                  style: ChibiTextStyles.storyTitle,
-                ),
-              ),
-              _RuneLegend(),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: controller.cols,
-                    ),
-                    itemCount: controller.rows * controller.cols,
-                    itemBuilder: (context, index) {
-                      final row = index ~/ controller.cols;
-                      final col = index % controller.cols;
-                      final cell = controller.board[row][col];
-
-                      return SimpleGestureDetector(
-                        onTap: () => controller.revealCell(row, col),
-                        onLongPress: () => controller.toggleFlag(row, col),
-                        child:
-                            Container(
-                                  key: ValueKey(
-                                    '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
-                                  ), // Unique key for animation
-                                  decoration: BoxDecoration(
-                                    color: cell.isRevealed
-                                        ? Colors.grey[800]
-                                        : Colors.grey[600],
-                                    border: Border.all(
-                                      color: Colors.grey[900]!,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: _buildCellContent(cell, context),
-                                  ),
-                                )
-                                .animate(
-                                  key: ValueKey(
-                                    '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
-                                  ),
-                                )
-                                .scale(
-                                  duration: const Duration(milliseconds: 300),
-                                ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
+          child: isLandscape
+              ? _buildLandscapeLayout(controller)
+              : _buildPortraitLayout(controller),
         ),
       ),
+    );
+  }
+
+  Widget _buildPortraitLayout(MinesweeperController controller) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _TreasureCounter(
+            treasuresFound: controller.treasuresFound,
+            totalTreasures: controller.treasureCount,
+          ),
+        ),
+        const _RuneLegend(),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _MinesweeperGrid(controller: controller, isLandscape: false),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLandscapeLayout(MinesweeperController controller) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Center(
+            child: AspectRatio(
+              aspectRatio: 1.0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _MinesweeperGrid(controller: controller, isLandscape: true),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _TreasureCounter(
+                  treasuresFound: controller.treasuresFound,
+                  totalTreasures: controller.treasureCount,
+                  isLandscape: true,
+                ),
+                const SizedBox(height: 20),
+                const _RuneLegend(isLandscape: true),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MinesweeperGrid extends StatelessWidget {
+  final MinesweeperController controller;
+  final bool isLandscape;
+  
+  const _MinesweeperGrid({
+    required this.controller,
+    this.isLandscape = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: controller.cols,
+      ),
+      itemCount: controller.rows * controller.cols,
+      itemBuilder: (context, index) {
+        final row = index ~/ controller.cols;
+        final col = index % controller.cols;
+        final cell = controller.board[row][col];
+
+        return SimpleGestureDetector(
+          onTap: () => controller.revealCell(row, col),
+          onLongPress: () => controller.toggleFlag(row, col),
+          child: Container(
+            key: ValueKey(
+              '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
+            ),
+            decoration: BoxDecoration(
+              color: cell.isRevealed ? Colors.grey[800] : Colors.grey[600],
+              border: Border.all(
+                color: Colors.grey[900]!,
+              ),
+            ),
+            child: Center(
+              child: _buildCellContent(cell, context),
+            ),
+          )
+              .animate(
+                key: ValueKey(
+                  '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
+                ),
+              )
+              .scale(
+                duration: const Duration(milliseconds: 300),
+              ),
+        );
+      },
     );
   }
 
@@ -213,37 +264,44 @@ class _MinesweeperView extends StatelessWidget {
     if (!cell.isRevealed) {
       return const SizedBox.shrink();
     }
+    
+    final imageSize = isLandscape ? 30.0 : 40.0;
+    
     if (cell.hasMine) {
       return Image.asset(
         'assets/images/explosion.png',
         key: const ValueKey('explosion'),
-        width: 40,
-        height: 40,
-      ); // Explosion animation
+        width: imageSize,
+        height: imageSize,
+      );
     }
     if (cell.hasTreasure) {
       return Image.asset(
         'assets/images/sparkle.png',
         key: const ValueKey('sparkle'),
-        width: 40,
-        height: 40,
-      ); // Placeholder for treasure
+        width: imageSize,
+        height: imageSize,
+      );
     }
     if (cell.adjacentMines > 0 || cell.adjacentTreasures > 0) {
       List<Widget> counts = [];
       double baseFontSize = MediaQuery.of(context).size.width * 0.06;
+      
+      // Reduce font size in landscape mode
+      if (isLandscape) {
+        baseFontSize *= 0.6;
+      }
+      
       double currentFontSize = baseFontSize;
 
-      // Check if both mine and treasure runes will be displayed
       if (cell.adjacentMines > 0 && cell.adjacentTreasures > 0) {
-        currentFontSize =
-            baseFontSize * 0.75; // Reduce font size if both are present
+        currentFontSize = baseFontSize * 0.75;
       }
 
       if (cell.adjacentMines > 0) {
         counts.add(
           Text(
-            _getRuneForMines(cell.adjacentMines), // Use rune
+            _getRuneForMines(cell.adjacentMines),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red,
@@ -255,7 +313,7 @@ class _MinesweeperView extends StatelessWidget {
       if (cell.adjacentTreasures > 0) {
         counts.add(
           Text(
-            _getRuneForTreasures(cell.adjacentTreasures), // Use rune
+            _getRuneForTreasures(cell.adjacentTreasures),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.yellow,
@@ -283,8 +341,56 @@ String _getRuneForTreasures(int count) {
   return '';
 }
 
+class _TreasureCounter extends StatelessWidget {
+  final int treasuresFound;
+  final int totalTreasures;
+  final bool isLandscape;
+
+  const _TreasureCounter({
+    required this.treasuresFound,
+    required this.totalTreasures,
+    this.isLandscape = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final containerWidth = isLandscape ? screenWidth * 0.25 : screenWidth * 0.5;
+    final coinSize = (containerWidth - (totalTreasures - 1) * 8.0) / totalTreasures;
+    
+    return Center(
+      child: SizedBox(
+        width: containerWidth,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(totalTreasures, (index) {
+            final isFound = index < treasuresFound;
+            return ColorFiltered(
+              colorFilter: isFound
+                  ? const ColorFilter.mode(Colors.transparent, BlendMode.multiply)
+                  : const ColorFilter.matrix([
+                      0.2126, 0.7152, 0.0722, 0, 0,
+                      0.2126, 0.7152, 0.0722, 0, 0,
+                      0.2126, 0.7152, 0.0722, 0, 0,
+                      0,      0,      0,      1, 0,
+                    ]),
+              child: Image.asset(
+                'assets/images/sparkle.png',
+                width: coinSize,
+                height: coinSize,
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+}
+
 class _RuneLegend extends StatelessWidget {
-  const _RuneLegend();
+  final bool isLandscape;
+  
+  const _RuneLegend({this.isLandscape = false});
 
   List<Widget> _buildRuneTexts(
     List<String> runes,
@@ -307,21 +413,23 @@ class _RuneLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double uniformFontSize = MediaQuery.of(context).size.width * 0.035;
+    final double uniformFontSize = MediaQuery.of(context).size.width * (isLandscape ? 0.025 : 0.035);
+    final double imageSize = isLandscape ? 24.0 : 32.0;
+    
     TextStyle legendTextStyle = ChibiTextStyles.dialogText.copyWith(
       fontSize: uniformFontSize,
     );
     TextStyle mineRuneTextStyle = legendTextStyle.copyWith(
       color: Colors.red,
       fontSize: uniformFontSize * 1.5,
-    ); // Larger for rune
+    );
     TextStyle treasureRuneTextStyle = legendTextStyle.copyWith(
       color: Colors.yellow,
       fontSize: uniformFontSize * 1.5,
-    ); // Larger for rune
+    );
     TextStyle valueTextStyle = legendTextStyle.copyWith(
       fontSize: uniformFontSize * 0.8,
-    ); // Smaller for value
+    );
 
     return Container(
       padding: const EdgeInsets.all(6.0),
@@ -338,23 +446,22 @@ class _RuneLegend extends StatelessWidget {
           const SizedBox(height: 4),
           Wrap(
             spacing: 2.0,
-            runSpacing:
-                4.0, // Increased runSpacing to accommodate vertical layout
+            runSpacing: 4.0,
             children: [
               Image.asset(
                 'assets/images/explosion.png',
-                width: 32,
-                height: 32,
-              ), // Mine image
-              const SizedBox(width: 4), // Small space between image and runes
+                width: imageSize,
+                height: imageSize,
+              ),
+              const SizedBox(width: 4),
               ..._buildRuneTexts(mineRunes, mineRuneTextStyle, valueTextStyle),
               const SizedBox(width: 16),
               Image.asset(
                 'assets/images/sparkle.png',
-                width: 32,
-                height: 32,
-              ), // Treasure image
-              const SizedBox(width: 4), // Small space between image and runes
+                width: imageSize,
+                height: imageSize,
+              ),
+              const SizedBox(width: 4),
               ..._buildRuneTexts(
                 treasureRunes,
                 treasureRuneTextStyle,
