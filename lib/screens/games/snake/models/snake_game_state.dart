@@ -4,6 +4,7 @@ import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 import 'package:oracle_d_asgard/screens/games/snake/snake_segment.dart';
 import 'package:oracle_d_asgard/screens/games/snake/models/snake_models.dart';
+import 'package:oracle_d_asgard/screens/games/snake/utils/direction_utils.dart';
 
 /// Holds all the data representing the current state of the game.
 class GameState {
@@ -67,7 +68,7 @@ class GameState {
     dp.Direction bestDirection = dp.Direction.right;
 
     for (int y = 0; y < gridHeight; y += 2) {
-      int pathLength = _calculateStraightDistanceWithObstacles(
+      int pathLength = DirectionUtils.calculateStraightDistanceWithObstacles(
         IntVector2(0, y),
         dp.Direction.right,
         gridWidth,
@@ -82,7 +83,7 @@ class GameState {
     }
 
     for (int x = 0; x < gridWidth; x += 2) {
-      int pathLength = _calculateStraightDistanceWithObstacles(
+      int pathLength = DirectionUtils.calculateStraightDistanceWithObstacles(
         IntVector2(x, gridHeight - 2),
         dp.Direction.up,
         gridWidth,
@@ -129,9 +130,12 @@ class GameState {
       snake: [
         SnakeSegment(position: bestStartPosition, type: 'head'),
         SnakeSegment(
-          position: _getPreviousPosition(bestStartPosition, bestDirection),
+          position: DirectionUtils.getPreviousPosition(
+            bestStartPosition,
+            bestDirection,
+          ),
           type: 'body',
-          subPattern: _getInitialPattern(bestDirection),
+          subPattern: DirectionUtils.getInitialPattern(bestDirection),
         ),
       ],
       food: initialFood,
@@ -149,84 +153,6 @@ class GameState {
       gridWidth: gridWidth,
       gridHeight: gridHeight,
     );
-  }
-
-  static IntVector2 _getPreviousPosition(
-    IntVector2 position,
-    dp.Direction direction,
-  ) {
-    switch (direction) {
-      case dp.Direction.up:
-        return IntVector2(position.x, position.y + 2);
-      case dp.Direction.down:
-        return IntVector2(position.x, position.y - 2);
-      case dp.Direction.left:
-        return IntVector2(position.x + 2, position.y);
-      case dp.Direction.right:
-        return IntVector2(position.x - 2, position.y);
-    }
-  }
-
-  static String _getInitialPattern(dp.Direction direction) {
-    switch (direction) {
-      case dp.Direction.up:
-        return '0,1,0,-1';
-      case dp.Direction.down:
-        return '0,-1,0,1';
-      case dp.Direction.left:
-        return '1,0,-1,0';
-      case dp.Direction.right:
-        return '-1,0,1,0';
-    }
-  }
-
-  static int _calculateStraightDistanceWithObstacles(
-    IntVector2 start,
-    dp.Direction direction,
-    int gridWidth,
-    int gridHeight,
-    List<IntVector2> obstacles,
-  ) {
-    int distance = 0;
-    IntVector2 current = start;
-    while (true) {
-      switch (direction) {
-        case dp.Direction.up:
-          current = IntVector2(current.x, current.y - 2);
-          break;
-        case dp.Direction.down:
-          current = IntVector2(current.x, current.y + 2);
-          break;
-        case dp.Direction.left:
-          current = IntVector2(current.x - 2, current.y);
-          break;
-        case dp.Direction.right:
-          current = IntVector2(current.x + 2, current.y);
-          break;
-      }
-
-      bool collision = false;
-      for (int y = 0; y < 2; y++) {
-        for (int x = 0; x < 2; x++) {
-          final checkPos = IntVector2(current.x + x, current.y + y);
-          if (checkPos.x < 0 ||
-              checkPos.x >= gridWidth ||
-              checkPos.y < 0 ||
-              checkPos.y >= gridHeight ||
-              obstacles.contains(checkPos)) {
-            collision = true;
-            break;
-          }
-        }
-        if (collision) break;
-      }
-
-      if (collision) {
-        break;
-      }
-      distance++;
-    }
-    return distance;
   }
 
   GameState clone() {
