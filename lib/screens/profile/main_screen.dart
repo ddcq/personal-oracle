@@ -513,11 +513,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     const SizedBox(height: 20),
                     _buildSectionTitle('profile_screen_game_scores'.tr()),
-                    GameScoresPodium(scores: snakeScores, gameName: 'Snake'),
+                    GameScoresPodium(
+                      scores: snakeScores,
+                      gameName: 'Snake',
+                      noScoresText: 'profile_screen_no_snake_scores'.tr(),
+                      podiumTitle: 'profile_screen_snake_podium'.tr(),
+                    ),
                     const SizedBox(height: 20),
                     GameScoresPodium(
                       scores: asgardWallScores,
                       gameName: 'Asgard Wall',
+                      noScoresText: 'profile_screen_no_asgard_wall_scores'.tr(),
+                      podiumTitle: 'profile_screen_asgard_wall_podium'.tr(),
                     ),
                     const SizedBox(height: 20),
 
