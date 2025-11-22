@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'dart:async'; // For Completer
+import 'dart:async';
 
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_game_over_popup.dart';
@@ -78,7 +78,6 @@ class _SnakeGameState extends State<SnakeGame> {
       gamificationService: getIt<GamificationService>(),
       onGameEnd: _onGameEnd,
       onResetGame: _onResetGame,
-      onRottenFoodEaten: () => _game?.shakeScreen(),
       level: _currentLevel,
       onScoreChanged: () => setState(() {}),
       onConfettiTrigger: () {
@@ -557,83 +556,83 @@ class _BonusProgressWidget extends StatefulWidget {
   State<_BonusProgressWidget> createState() => _BonusProgressWidgetState();
 }
 
-class _BonusProgressWidgetState extends State<_BonusProgressWidget>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _BonusProgressWidgetState extends State<_BonusProgressWidget> {
   late double _startTime;
+  late double _progress;
+  Timer? _updateTimer;
 
   @override
   void initState() {
     super.initState();
     _startTime = widget.effect.activationTime;
-    final remainingDuration = GameLogic.bonusEffectDuration - _startTime;
+    _progress = 1.0 - (_startTime / GameLogic.bonusEffectDuration);
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: (remainingDuration * 1000).toInt()),
-      value: _startTime / GameLogic.bonusEffectDuration,
-    );
-
-    _controller.animateTo(1.0, curve: Curves.linear).then((_) {
-      // Animation finished, the widget should be removed by the parent
-      if (mounted) {
-        setState(() {}); // Force rebuild to trigger removal
+    _updateTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
       }
+
+      final elapsed = _startTime + (timer.tick * 0.1);
+      final newProgress = 1.0 - (elapsed / GameLogic.bonusEffectDuration);
+
+      if (newProgress <= 0) {
+        timer.cancel();
+        if (mounted) {
+          setState(() => _progress = 0);
+        }
+        return;
+      }
+
+      setState(() => _progress = newProgress);
     });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _updateTimer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        final progress = 1.0 - _controller.value;
-
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 30,
+          height: 30,
+          decoration: const BoxDecoration(shape: BoxShape.circle),
+          child: ClipOval(
+            child: RawImage(
+              image: widget.sprite.image,
+              fit: BoxFit.cover,
               width: 30,
               height: 30,
-              decoration: const BoxDecoration(shape: BoxShape.circle),
-              child: ClipOval(
-                child: RawImage(
-                  image: widget.sprite.image,
-                  fit: BoxFit.cover,
-                  width: 30,
-                  height: 30,
-                ),
-              ),
             ),
-            const SizedBox(height: 2),
-            Container(
-              width: 30,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Container(
+          width: 30,
+          height: 3,
+          decoration: BoxDecoration(
+            color: Colors.grey.withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(1.5),
+          ),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              width: 30 * _progress,
               height: 3,
               decoration: BoxDecoration(
-                color: Colors.grey.withValues(alpha: 0.3),
+                color: Colors.green,
                 borderRadius: BorderRadius.circular(1.5),
               ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  width: 30 * progress,
-                  height: 3,
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(1.5),
-                  ),
-                ),
-              ),
             ),
-          ],
-        );
-      },
+          ),
+        ),
+      ],
     );
   }
 }

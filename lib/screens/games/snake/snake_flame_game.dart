@@ -5,7 +5,6 @@ import 'package:flame/game.dart';
 import 'package:vibration/vibration.dart';
 
 import 'package:flame/extensions.dart';
-import 'dart:async' as async;
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,7 +26,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final Function(int, {required bool isVictory, CollectibleCard? wonCard})
   onGameEnd;
   final VoidCallback? onResetGame;
-  final VoidCallback? onRottenFoodEaten;
   final VoidCallback? onScoreChanged;
   final VoidCallback? onConfettiTrigger;
   final VoidCallback? onBonusCollected;
@@ -38,7 +36,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     required this.gamificationService,
     required this.onGameEnd,
     this.onResetGame,
-    this.onRottenFoodEaten,
     this.onScoreChanged,
     this.onConfettiTrigger,
     this.onBonusCollected,
@@ -46,9 +43,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     required this.level,
   });
 
-  static const double _shakeIntensity = 10.0;
-  static const int _shakeDurationMs = 200;
-  static const int _shakeIntervalMs = 50;
   static const int _gameSpeedInitial = 200; // milliseconds
   static const double _growthAnimationPeriod = 0.15;
   static const double _foodRottingTimeBase = 12.0;
@@ -78,28 +72,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
   @override
   Color backgroundColor() => Colors.transparent;
-
-  void shakeScreen() {
-    final originalPosition = camera.viewfinder.position.clone();
-
-    // Simple shake by rapidly changing camera position
-    async.Timer.periodic(const Duration(milliseconds: _shakeIntervalMs), (
-      timer,
-    ) {
-      if (timer.tick * _shakeIntervalMs > _shakeDurationMs) {
-        timer.cancel();
-        camera.viewfinder.position = originalPosition; // Reset camera position
-        return;
-      }
-      final random = Random();
-      camera.viewfinder.position =
-          originalPosition +
-          Vector2(
-            (random.nextDouble() - 0.5) * _shakeIntensity * 2,
-            (random.nextDouble() - 0.5) * _shakeIntensity * 2,
-          );
-    });
-  }
 
   double timeSinceLastTick = 0;
 
@@ -157,7 +129,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     cellSize = tempCellSize / 2;
 
     gameLogic = GameLogic(level: level);
-    gameLogic.onRottenFoodEaten = onRottenFoodEaten;
+
     gameLogic.onConfettiTrigger = onConfettiTrigger;
     gameLogic.onBonusCollected = onBonusCollected;
 
@@ -621,9 +593,6 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       );
       add(debris);
     }
-
-    // Step 4: Camera shake
-    shakeScreen();
   }
 
   @override
