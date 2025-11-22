@@ -246,6 +246,8 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       return;
     }
 
+    bool needsNotification = false;
+
     // Bonus aging logic
     if (gameState.value.activeBonus != null) {
       final bonus = gameState.value.activeBonus!;
@@ -260,6 +262,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
         gameState.value.activeBonus = null;
         _bonusComponent?.removeFromParent();
         _bonusComponent = null;
+        needsNotification = true;
       }
     }
 
@@ -279,19 +282,11 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
         }
       }
 
-      // Update the list
       gameState.value.activeBonusEffects.clear();
       gameState.value.activeBonusEffects.addAll(updatedEffects);
 
-      // If a bonus expired, force immediate notification
       if (updatedEffects.length < originalLength) {
-        final newState = gameState.value.clone();
-        // Schedule for next frame to avoid setState during build
-        Future.microtask(() {
-          if (!gameState.value.isGameOver) {
-            gameState.value = newState;
-          }
-        });
+        needsNotification = true;
       }
     }
 
@@ -299,14 +294,12 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     gameState.value.foodAge += dt;
     final double foodRottingTime =
         _foodRottingTimeBase -
-        (level * _foodRottingTimeLevelFactor); // Adjusted rotting time
-    // Defer the update to avoid calling setState during build
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      remainingFoodTime.value = foodRottingTime - gameState.value.foodAge;
-    });
+        (level * _foodRottingTimeLevelFactor);
+    
+    remainingFoodTime.value = foodRottingTime - gameState.value.foodAge;
+    
     if (gameState.value.foodAge >= foodRottingTime) {
-      // 8 seconds for each stage
-      gameState.value.foodAge = 0.0; // Reset timer after state change
+      gameState.value.foodAge = 0.0;
       if (gameState.value.foodType.value == FoodType.golden) {
         gameState.value.foodType.value = FoodType.regular;
         _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
@@ -316,10 +309,17 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       } else if (gameState.value.foodType.value == FoodType.rotten) {
         gameLogic.generateNewFood(
           gameState.value,
-        ); // Disappear and generate new food
+        );
         _foodComponent.position = gameState.value.food.toVector2() * cellSize;
         _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
       }
+      needsNotification = true;
+    }
+
+    // Notify listeners only once if any changes occurred
+    if (needsNotification) {
+      final temp = gameState.value;
+      gameState.value = temp;
     }
 
     timeSinceLastTick += dt;
@@ -370,8 +370,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
         _calculateGameSpeed(gameState.value.score) / 1000.0;
 
     if (oldBonusCount != gameState.value.activeBonusEffects.length) {
-      final temp = gameState.value.clone();
-      gameState.value = temp;
+      onBonusCollected?.call();
     }
 
     if (oldObstacleCount != gameState.value.obstacles.length) {
@@ -571,13 +570,13 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       add(fragment);
     }
 
-    // Step 3: Debris particles
-    const particleCount = 12;
+    // Step 3: Debris particles (reduced from 12 to 8)
+    const particleCount = 8;
     final debrisColors = [
-      const Color(0xFF808080), // Gray
-      const Color(0xFF696969), // Dim gray
-      const Color(0xFFA9A9A9), // Dark gray
-      const Color(0xFF5C4033), // Brown
+      const Color(0xFF808080),
+      const Color(0xFF696969),
+      const Color(0xFFA9A9A9),
+      const Color(0xFF5C4033),
     ];
 
     for (int i = 0; i < particleCount; i++) {
