@@ -1,0 +1,296 @@
+name: Release AAB (tag -> Play Store internal)
+
+on:
+  push:
+    tags:
+      - 'v*.*.*+*'  # n'acceptera que les tags au format vMAJOR.MINOR.PATCH+BUILD
+
+env:
+  PACKAGE_NAME: net.forhimandus.oracledasgard
+  PLAY_TRACK: internal
+
+jobs:
+  build:
+    name: Build AAB + generate changelog
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_version.outputs.version }}
+      release_body: ${{ steps.make_release_body.outputs.release_body }}
+      aab_path: ${{ steps.build_aab.outputs.aab_path }}
+
+    steps:
+      - name: Checkout (full, tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Ensure we are on a tag event
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        run: echo "Tag - ${GITHUB_REF#refs/tags/}"
+
+      - name: Validate tag format (vMAJOR.MINOR.PATCH+BUILD)
+        id: validate_tag
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          echo "Found tag: $TAG"
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+\+[0-9]+$ ]]; then
+            echo "ERROR: tag '$TAG' does not match required format vMAJOR.MINOR.PATCH+BUILD (example: v1.2.3+4)"
+            exit 1
+          fi
+          echo "ok"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Derive version from tag and write to pubspec.yaml
+        id: set_version
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"            # v1.2.3+4
+          # remove leading 'v' for pubspec format
+          VERSION="${TAG#v}"                        # 1.2.3+4
+          echo "Using version: $VERSION"
+
+          # replace 'version:' line in pubspec.yaml (first occurrence)
+          if grep -q "^version:" pubspec.yaml; then
+            # use portable sed:
+            python3 - <<'PY'
+            import io,sys,re
+            p='pubspec.yaml'
+            s=open(p,'r',encoding='utf-8').read()
+            s=re.sub(r'(?m)^version:.*$',f"version: {sys.argv[1]}",s, count=1)
+            open(p,'w',encoding='utf-8').write(s)
+            print("patched pubspec.yaml")
+            PY
+          else
+            echo "version: $VERSION" >> pubspec.yaml
+          fi
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Get previous tag (useful for changelog)
+        id: get_prev_tag
+        run: |
+          # get the current tag
+          CUR_TAG="${GITHUB_REF#refs/tags/}"
+          git fetch --tags
+          # list tags sorted by cretation date, exclude current, pick the most recent
+          PREV_TAG=$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags | grep -v "^${CUR_TAG}$" | head -n1 || true)
+          echo "current=$CUR_TAG" >> $GITHUB_OUTPUT
+          echo "previous=$PREV_TAG" >> $GITHUB_OUTPUT
+
+      - name: Extract commit messages between previous tag and current tag, format them (FR)
+        id: extract_commits
+        run: |
+          CUR_TAG="${{ steps.get_prev_tag.outputs.current }}"
+          PREV_TAG="${{ steps.get_prev_tag.outputs.previous }}"
+          echo "current tag: $CUR_TAG"
+          echo "previous tag: ${PREV_TAG:-<none>}"
+
+          if [ -z "$PREV_TAG" ]; then
+            # No previous tag - take all commits reachable by the tag
+            RANGE="$CUR_TAG"
+            LOG_CMD="git log --pretty=format:%s $CUR_TAG"
+          else
+            RANGE="$PREV_TAG..$CUR_TAG"
+            LOG_CMD="git log --pretty=format:%s $PREV_TAG..$CUR_TAG"
+          fi
+
+          echo "Using range: $RANGE"
+
+          # get commit subjects
+          COMMITS_RAW=$(eval $LOG_CMD || true)
+
+          # Format each commit:
+          # - remove conventional prefixes like feat:, fix:, chore:, docs:, perf:, refactor:
+          # - capitalize first letter
+          # - ensure ends with a period
+          python3 - <<'PY'
+            import sys,re
+            raw = sys.stdin.read().strip().splitlines()
+            out=[]
+            for s in raw:
+                s=s.strip()
+                # remove common prefixes (feat:, fix:, chore:, ...)
+                s=re.sub(r'^(feat|fix|chore|docs|perf|refactor|style|ci|test)(\(.+?\))?:\s*','',s, flags=re.I)
+                s=s.strip()
+                if not s:
+                    continue
+                # capitalize first character
+                s=s[0].upper()+s[1:] if len(s)>0 else s
+                # ensure ends with period
+                if not s.endswith(('.', '!', '?')):
+                    s = s + '.'
+                out.append(s)
+            print("\n".join(out))
+            PY
+          "<<<"$COMMITS_RAW > /tmp/commits_formatted.txt || true
+          # Save
+          cat /tmp/commits_formatted.txt || true
+          echo "commits_path=/tmp/commits_formatted.txt" >> $GITHUB_OUTPUT
+
+      - name: Generate multilingual changelog (FR auto + translate EN/ES) and produce release body
+        id: make_release_body
+        run: |
+          python3 - <<'PY'
+            import os
+            from pathlib import Path
+            from deep_translator import GoogleTranslator
+
+            # Read formatted commits
+            p=Path("/tmp/commits_formatted.txt")
+            if not p.exists():
+                commits = []
+            else:
+                commits = [l.strip() for l in p.read_text(encoding='utf-8').splitlines() if l.strip()]
+
+            if not commits:
+                fr_text = "Mise à jour automatique."
+            else:
+                # Build a short summary from commit messages:
+                # we will join them with space but try to stay below 300 chars later.
+                fr_text = " ".join(commits)
+            # Ensure <= 300 characters (cut at word boundary)
+            def truncate(s, n=300):
+                if len(s)<=n:
+                    return s
+                truncated = s[:n]
+                # cut back to last space to avoid mid-word
+                last_space = truncated.rfind(" ")
+                if last_space>0:
+                    truncated = truncated[:last_space]
+                return truncated
+
+            fr_text = truncate(fr_text,300)
+
+            # translate to English and Spanish using GoogleTranslator (web)
+            try:
+                en_text = GoogleTranslator(source='auto', target='en').translate(fr_text)
+            except Exception as e:
+                en_text = fr_text  # fallback to FR
+            try:
+                es_text = GoogleTranslator(source='auto', target='es').translate(fr_text)
+            except Exception as e:
+                es_text = fr_text
+
+            en_text = truncate(en_text,300)
+            es_text = truncate(es_text,300)
+
+            # Build release body with required tags
+            body = "<fr-FR>\\n" + fr_text + "\\n</fr-FR>\\n<en-US>\\n" + en_text + "\\n</en-US>\\n<es-ES>\\n" + es_text + "\\n</es-ES>"
+
+            # Print to stdout (GitHub Actions will capture)
+            print(body)
+
+            # Save to a file for later steps
+            outp="/tmp/release_body.txt"
+            Path(outp).write_text(body, encoding='utf-8')
+            print("SAVED_RELEASE_BODY_PATH="+outp)
+            PY
+          # expose the release body
+          echo "release_body<<EOF" >> $GITHUB_OUTPUT
+          cat /tmp/release_body.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Build Android AAB (release)
+        id: build_aab
+        run: |
+          flutter build appbundle --release
+          AAB_PATH="build/app/outputs/bundle/release/app-release.aab"
+          if [ ! -f "$AAB_PATH" ]; then
+            # Flutter sometimes names outputs with app-release.aab or app.aab depending on version/config
+            AAB_PATH=$(find build -type f -name "*.aab" | head -n1 || true)
+          fi
+          if [ -z "$AAB_PATH" ]; then
+            echo "ERROR: could not find generated .aab"
+            exit 1
+          fi
+          echo "aab_path=$AAB_PATH" >> $GITHUB_OUTPUT
+
+      - name: Upload AAB as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-aab
+          path: ${{ steps.build_aab.outputs.aab_path }}
+
+  release:
+    name: Create GitHub Release & publish to Play Store (internal)
+    runs-on: ubuntu-latest
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Checkout (for release metadata)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Prepare Release variables
+        id: prep
+        run: |
+          VERSION="${{ needs.build.outputs.version }}"
+          BODY=${{ needs.build.outputs.release_body }}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          # write body to file for release action
+          printf "%s" "$BODY" > release_body.txt
+          echo "release_body_path=release_body.txt" >> $GITHUB_OUTPUT
+
+      - name: Download AAB artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: android-aab
+          path: ./downloaded_artifacts
+
+      - name: Find AAB file
+        id: find_aab
+        run: |
+          AAB=$(find downloaded_artifacts -type f -name "*.aab" | head -n1 || true)
+          if [ -z "$AAB" ]; then
+            echo "ERROR: AAB not found in artifacts"
+            exit 1
+          fi
+          echo "aab=$AAB" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release (and upload AAB)
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.ref_name }}
+          name: Release ${{ needs.build.outputs.version }}
+          bodyFile: release_body.txt
+          artifacts: ${{ steps.find_aab.outputs.aab }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to Google Play (internal) - continue on error but report
+        id: publish_play
+        uses: r0adkll/upload-google-play@v1
+        continue-on-error: true
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT }}
+          packageName: ${{ env.PACKAGE_NAME }}
+          releaseFiles: ${{ steps.find_aab.outputs.aab }}
+          track: ${{ env.PLAY_TRACK }}
+          # optional: status (completed, draft, etc.)
+          # status: completed
+
+      - name: Check Publish Result
+        if: ${{ steps.publish_play.outcome != 'success' }}
+        run: |
+          echo "⚠️ Google Play publication failed or returned non-success."
+          echo "Check the 'Publish to Google Play' step logs for details."
+          # We do not fail the entire workflow here by design (user requested continue)
+          exit 0
+
+      - name: Final note
+        run: |
+          echo "Release ${{ needs.build.outputs.version }} created and AAB uploaded to GitHub Release."
+          if [ "${{ steps.publish_play.outcome }}" = "success" ]; then
+            echo "Published to Google Play (track: ${PLAY_TRACK})."
+          else
+            echo "Google Play publishing did not succeed — check step logs. The release and artifact are present in GitHub Releases."
+          fi
