@@ -87,7 +87,7 @@ jobs:
             s=re.sub(r'(?m)^version:.*$',f"version: {sys.argv[1]}",s, count=1)
             open(p,'w',encoding='utf-8').write(s)
             print("patched pubspec.yaml")
-            PY
+PY
           else
             echo "version: $VERSION" >> pubspec.yaml
           fi
@@ -149,7 +149,7 @@ jobs:
                     s = s + '.'
                 out.append(s)
             print("\n".join(out))
-            PY
+PY
           "<<<"$COMMITS_RAW > /tmp/commits_formatted.txt || true
           # Save
           cat /tmp/commits_formatted.txt || true
@@ -212,7 +212,7 @@ jobs:
             outp="/tmp/release_body.txt"
             Path(outp).write_text(body, encoding='utf-8')
             print("SAVED_RELEASE_BODY_PATH="+outp)
-            PY
+PY
           # expose the release body
           echo "release_body<<EOF" >> $GITHUB_OUTPUT
           cat /tmp/release_body.txt >> $GITHUB_OUTPUT
