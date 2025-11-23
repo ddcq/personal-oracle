@@ -79,15 +79,7 @@ jobs:
 
           # replace 'version:' line in pubspec.yaml (first occurrence)
           if grep -q "^version:" pubspec.yaml; then
-            # use portable sed:
-            python3 - <<'PY'
-            import io,sys,re
-            p='pubspec.yaml'
-            s=open(p,'r',encoding='utf-8').read()
-            s=re.sub(r'(?m)^version:.*$',f"version: {sys.argv[1]}",s, count=1)
-            open(p,'w',encoding='utf-8').write(s)
-            print("patched pubspec.yaml")
-PY
+            python3 .github/scripts/set_version.py "$VERSION"
           else
             echo "version: $VERSION" >> pubspec.yaml
           fi
@@ -128,29 +120,7 @@ PY
           COMMITS_RAW=$(eval $LOG_CMD || true)
 
           # Format each commit:
-          # - remove conventional prefixes like feat:, fix:, chore:, docs:, perf:, refactor:
-          # - capitalize first letter
-          # - ensure ends with a period
-          python3 - <<'PY'
-            import sys,re
-            raw = sys.stdin.read().strip().splitlines()
-            out=[]
-            for s in raw:
-                s=s.strip()
-                # remove common prefixes (feat:, fix:, chore:, ...)
-                s=re.sub(r'^(feat|fix|chore|docs|perf|refactor|style|ci|test)(\(.+?\))?:\s*','',s, flags=re.I)
-                s=s.strip()
-                if not s:
-                    continue
-                # capitalize first character
-                s=s[0].upper()+s[1:] if len(s)>0 else s
-                # ensure ends with period
-                if not s.endswith(('.', '!', '?')):
-                    s = s + '.'
-                out.append(s)
-            print("\n".join(out))
-PY
-          "<<<"$COMMITS_RAW > /tmp/commits_formatted.txt || true
+          python3 .github/scripts/extract_commits.py <<<"$COMMITS_RAW" > /tmp/commits_formatted.txt || true
           # Save
           cat /tmp/commits_formatted.txt || true
           echo "commits_path=/tmp/commits_formatted.txt" >> $GITHUB_OUTPUT
@@ -158,61 +128,7 @@ PY
       - name: Generate multilingual changelog (FR auto + translate EN/ES) and produce release body
         id: make_release_body
         run: |
-          python3 - <<'PY'
-            import os
-            from pathlib import Path
-            from deep_translator import GoogleTranslator
-
-            # Read formatted commits
-            p=Path("/tmp/commits_formatted.txt")
-            if not p.exists():
-                commits = []
-            else:
-                commits = [l.strip() for l in p.read_text(encoding='utf-8').splitlines() if l.strip()]
-
-            if not commits:
-                fr_text = "Mise à jour automatique."
-            else:
-                # Build a short summary from commit messages:
-                # we will join them with space but try to stay below 300 chars later.
-                fr_text = " ".join(commits)
-            # Ensure <= 300 characters (cut at word boundary)
-            def truncate(s, n=300):
-                if len(s)<=n:
-                    return s
-                truncated = s[:n]
-                # cut back to last space to avoid mid-word
-                last_space = truncated.rfind(" ")
-                if last_space>0:
-                    truncated = truncated[:last_space]
-                return truncated
-
-            fr_text = truncate(fr_text,300)
-
-            # translate to English and Spanish using GoogleTranslator (web)
-            try:
-                en_text = GoogleTranslator(source='auto', target='en').translate(fr_text)
-            except Exception as e:
-                en_text = fr_text  # fallback to FR
-            try:
-                es_text = GoogleTranslator(source='auto', target='es').translate(fr_text)
-            except Exception as e:
-                es_text = fr_text
-
-            en_text = truncate(en_text,300)
-            es_text = truncate(es_text,300)
-
-            # Build release body with required tags
-            body = "<fr-FR>\\n" + fr_text + "\\n</fr-FR>\\n<en-US>\\n" + en_text + "\\n</en-US>\\n<es-ES>\\n" + es_text + "\\n</es-ES>"
-
-            # Print to stdout (GitHub Actions will capture)
-            print(body)
-
-            # Save to a file for later steps
-            outp="/tmp/release_body.txt"
-            Path(outp).write_text(body, encoding='utf-8')
-            print("SAVED_RELEASE_BODY_PATH="+outp)
-PY
+          python3 .github/scripts/make_release_body.py
           # expose the release body
           echo "release_body<<EOF" >> $GITHUB_OUTPUT
           cat /tmp/release_body.txt >> $GITHUB_OUTPUT
