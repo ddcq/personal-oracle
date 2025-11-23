@@ -88,9 +88,9 @@ class _VictoryPopupState extends State<VictoryPopup> {
     );
   }
 
-  Widget _buildCardContent(CollectibleCard card, bool isLandscape) {
+  Widget _buildCardContent(CollectibleCard card) {
     final imageWidget = SizedBox(
-      height: isLandscape ? 200 : 150,
+      height: 150,
       child: card.videoUrl != null && card.videoUrl!.isNotEmpty
           ? CustomVideoPlayer(videoUrl: card.videoUrl!, placeholderAsset: addAssetPrefix(card.imagePath))
           : Image.asset(addAssetPrefix(card.imagePath), fit: BoxFit.contain),
@@ -100,60 +100,18 @@ class _VictoryPopupState extends State<VictoryPopup> {
 
     final descriptionWidget = Text(card.description.tr(), style: _rewardDescriptionStyle, textAlign: TextAlign.center);
 
-    if (isLandscape) {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Column(mainAxisSize: MainAxisSize.min, children: [imageWidget]),
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            flex: 3,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [titleWidget, const SizedBox(height: 10), descriptionWidget],
-            ),
-          ),
-        ],
-      );
-    }
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [imageWidget, const SizedBox(height: 10), titleWidget, const SizedBox(height: 5), descriptionWidget],
     );
   }
 
-  Widget _buildStoryContent(MythCard storyChapter, bool isLandscape) {
-    final imageWidget = Image.asset(addAssetPrefix('stories/${storyChapter.imagePath}'), height: isLandscape ? 200 : 150, fit: BoxFit.contain);
+  Widget _buildStoryContent(MythCard storyChapter) {
+    final imageWidget = Image.asset(addAssetPrefix('stories/${storyChapter.imagePath}'), height: 150, fit: BoxFit.contain);
 
     final titleWidget = Text(storyChapter.title.tr(), style: _rewardTitleStyle, textAlign: TextAlign.center);
 
     final descriptionWidget = Text(storyChapter.description.tr(), style: _rewardDescriptionStyle, textAlign: TextAlign.center);
-
-    if (isLandscape) {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Column(mainAxisSize: MainAxisSize.min, children: [imageWidget]),
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            flex: 3,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [titleWidget, const SizedBox(height: 10), descriptionWidget],
-            ),
-          ),
-        ],
-      );
-    }
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -163,15 +121,14 @@ class _VictoryPopupState extends State<VictoryPopup> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
-
     Widget content;
-    if (widget.isGenericVictory || (widget.rewardCard == null && widget.unlockedStoryChapter == null)) {
+    if (widget.isGenericVictory ||
+        (widget.rewardCard == null && widget.unlockedStoryChapter == null)) {
       content = _buildGenericContent();
     } else if (widget.rewardCard != null) {
-      content = _buildCardContent(widget.rewardCard!, isLandscape);
+      content = _buildCardContent(widget.rewardCard!);
     } else {
-      content = _buildStoryContent(widget.unlockedStoryChapter!, isLandscape);
+      content = _buildStoryContent(widget.unlockedStoryChapter!);
     }
 
     final buttonsRow = Row(
@@ -203,40 +160,55 @@ class _VictoryPopupState extends State<VictoryPopup> {
         height: MediaQuery.of(context).size.height,
         color: Colors.black54,
         child: Center(
-          child:
-              Container(
-                    constraints: BoxConstraints(maxWidth: isLandscape ? 800 : 400, maxHeight: MediaQuery.of(context).size.height * 0.9),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.blueGrey[800],
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [BoxShadow(color: Colors.black.withAlpha(128), blurRadius: 10, offset: const Offset(0, 5))],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'victory_popup_title'.tr(),
-                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                            fontFamily: AppTextStyles.amaticSC,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 70,
-                            letterSpacing: 2.0,
-                            shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
-                            decoration: TextDecoration.none,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        if (isLandscape) Flexible(child: SingleChildScrollView(child: content)) else content,
-                        const SizedBox(height: 20),
-                        buttonsRow,
-                      ],
-                    ),
-                  )
-                  .animate()
-                  .scale(begin: const Offset(0.1, 0.1), end: const Offset(1.0, 1.0), duration: 2.seconds, curve: Curves.easeOutBack)
-                  .fadeIn(duration: 2.seconds, curve: Curves.easeIn),
+          child: Container(
+            constraints: BoxConstraints(
+                maxWidth: 400,
+                maxHeight: MediaQuery.of(context).size.height * 0.9),
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.blueGrey[800],
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withAlpha(128),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5))
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'victory_popup_title'.tr(),
+                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                        fontFamily: AppTextStyles.amaticSC,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 70,
+                        letterSpacing: 2.0,
+                        shadows: [
+                          const Shadow(
+                              blurRadius: 15.0,
+                              color: Colors.black87,
+                              offset: Offset(4.0, 4.0))
+                        ],
+                        decoration: TextDecoration.none,
+                      ),
+                ),
+                const SizedBox(height: 20),
+                content,
+                const SizedBox(height: 20),
+                buttonsRow,
+              ],
+            ),
+          )
+              .animate()
+              .scale(
+                  begin: const Offset(0.1, 0.1),
+                  end: const Offset(1.0, 1.0),
+                  duration: 2.seconds,
+                  curve: Curves.easeOutBack)
+              .fadeIn(duration: 2.seconds, curve: Curves.easeIn),
         ),
       ),
     );

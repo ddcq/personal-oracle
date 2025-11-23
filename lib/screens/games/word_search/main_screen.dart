@@ -25,7 +25,6 @@ class _WordSearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = context.watch<WordSearchController>();
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     _showVictoryDialog(context, controller);
 
@@ -65,8 +64,6 @@ class _WordSearchView extends StatelessWidget {
             child: SafeArea(
               child: controller.isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : isLandscape
-                  ? _buildLandscapeLayout(controller)
                   : _buildPortraitLayout(controller),
             ),
           ),
@@ -92,50 +89,6 @@ class _WordSearchView extends StatelessWidget {
       ],
     );
   }
-
-  Widget _buildLandscapeLayout(WordSearchController controller) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 3,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _Grid(controller: controller),
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: controller.gamePhase == GamePhase.searchingWords ? _WordList(controller: controller) : _SecretWordInput(controller: controller),
-        ),
-      ],
-    );
-  }
-
-  void _showVictoryDialog(BuildContext context, WordSearchController controller) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (controller.gamePhase == GamePhase.victory) {
-        final bool isGenericVictory = controller.unlockedChapter == null;
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return VictoryPopup(
-              unlockedStoryChapter: controller.unlockedChapter?.chapter,
-              isGenericVictory: isGenericVictory,
-              onDismiss: () {
-                Navigator.of(context).pop();
-                controller.resetGame(); // Assuming you have a resetGame method in your controller
-              },
-              onSeeRewards: () {
-                Navigator.of(context).pop(); // Close the dialog
-                context.push('/profile');
-              },
-            );
-          },
-        );
-      }
-    });
-  }
 }
 
 class _Grid extends StatelessWidget {
@@ -144,7 +97,6 @@ class _Grid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     return LayoutBuilder(
       builder: (context, constraints) {
         final size = Size(constraints.maxWidth, constraints.maxHeight);
@@ -185,7 +137,7 @@ class _Grid extends StatelessWidget {
               final offset = Offset(col.toDouble(), row.toDouble());
               final isSelected = controller.currentSelection.contains(offset);
               final isConfirmed = controller.confirmedSelection.contains(offset);
-              return _buildGridCell(isSelected, isConfirmed, controller.grid[row][col], isLandscape);
+              return _buildGridCell(isSelected, isConfirmed, controller.grid[row][col]);
             },
           ),
         );
@@ -217,8 +169,8 @@ class _Grid extends StatelessWidget {
     return null;
   }
 
-  Widget _buildGridCell(bool isSelected, bool isConfirmed, String text, bool isLandscape) {
-    final fontSize = isLandscape ? 16.0 : 18.0;
+  Widget _buildGridCell(bool isSelected, bool isConfirmed, String text) {
+    const fontSize = 18.0;
 
     return Container(
       decoration: BoxDecoration(
@@ -242,8 +194,6 @@ class _WordList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
-
     return Container(
       margin: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -260,7 +210,7 @@ class _WordList extends StatelessWidget {
             alignment: WrapAlignment.center,
             children: controller.wordsToFind.map((word) {
               final isFound = controller.foundWords.contains(word);
-              return _buildWordText(word, isFound, isLandscape);
+              return _buildWordText(word, isFound);
             }).toList(),
           ),
         ),
@@ -268,8 +218,8 @@ class _WordList extends StatelessWidget {
     );
   }
 
-  Widget _buildWordText(String word, bool isFound, bool isLandscape) {
-    final fontSize = isLandscape ? 16.0 : 18.0;
+  Widget _buildWordText(String word, bool isFound) {
+    const fontSize = 18.0;
 
     return Text(
       word,
@@ -290,8 +240,7 @@ class _SecretWordInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
-    final titleFontSize = isLandscape ? 19.6 : 28.0; // 28 * 0.7 = 19.6
+    const titleFontSize = 28.0;
 
     return Center(
       child: Column(
@@ -312,7 +261,7 @@ class _SecretWordInput extends StatelessWidget {
             runSpacing: 4.0,
             children: List.generate(controller.secretWord.length, (index) {
               final letter = (index < controller.currentSecretWordGuess.length) ? controller.currentSecretWordGuess[index] : '';
-              return _buildLetterContainer(letter, controller.isSecretWordError, isLandscape);
+              return _buildLetterContainer(letter, controller.isSecretWordError);
             }),
           ),
         ],
@@ -320,10 +269,10 @@ class _SecretWordInput extends StatelessWidget {
     );
   }
 
-  Widget _buildLetterContainer(String letter, bool isError, bool isLandscape) {
-    final containerWidth = isLandscape ? 17.0.sp : 35.0.sp;
+  Widget _buildLetterContainer(String letter, bool isError) {
+    final containerWidth = 35.0.sp;
     final containerHeight = containerWidth * 1.5;
-    final letterFontSize = isLandscape ? 14.0 : 24.0;
+    const letterFontSize = 24.0;
 
     return Container(
       width: containerWidth,

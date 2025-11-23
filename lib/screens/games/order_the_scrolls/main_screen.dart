@@ -54,8 +54,6 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
     return ChangeNotifierProvider.value(
       value: _gameController,
       child: Consumer<GameController>(
@@ -108,54 +106,28 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
                             builder: (context, constraints) {
                               final totalHeight = constraints.maxHeight;
 
-                              if (isLandscape) {
-                                return Row(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    if (!isEnlarged)
-                                      Expanded(
-                                        flex: 3,
-                                        child: ThumbnailList(
-                                          controller: controller,
-                                        ),
-                                      ).animate().fadeIn(duration: 300.ms),
-                                    Expanded(
-                                      flex: isEnlarged ? 6 : 2,
-                                      child: DetailPanel(
+                              return Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.stretch,
+                                children: [
+                                  if (!isEnlarged)
+                                    SizedBox(
+                                      height: totalHeight * 0.6,
+                                      child: ThumbnailList(
                                         controller: controller,
-                                        isEnlarged: isEnlarged,
-                                        onToggleEnlargement: () =>
-                                            _isDetailPanelEnlarged.value =
-                                                !isEnlarged,
                                       ),
                                     ).animate().fadeIn(duration: 300.ms),
-                                  ],
-                                );
-                              } else {
-                                return Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    if (!isEnlarged)
-                                      SizedBox(
-                                        height: totalHeight * 0.6,
-                                        child: ThumbnailList(
-                                          controller: controller,
-                                        ),
-                                      ).animate().fadeIn(duration: 300.ms),
-                                    Expanded(
-                                      child: DetailPanel(
-                                        controller: controller,
-                                        isEnlarged: isEnlarged,
-                                        onToggleEnlargement: () =>
-                                            _isDetailPanelEnlarged.value =
-                                                !isEnlarged,
-                                      ),
-                                    ).animate().fadeIn(duration: 300.ms),
-                                  ],
-                                );
-                              }
+                                  Expanded(
+                                    child: DetailPanel(
+                                      controller: controller,
+                                      isEnlarged: isEnlarged,
+                                      onToggleEnlargement: () =>
+                                          _isDetailPanelEnlarged.value =
+                                              !isEnlarged,
+                                    ),
+                                  ).animate().fadeIn(duration: 300.ms),
+                                ],
+                              );
                             },
                           );
                         },

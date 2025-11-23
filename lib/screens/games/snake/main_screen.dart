@@ -350,32 +350,6 @@ class _SnakeGameState extends State<SnakeGame> {
                   _initializeNewGame();
                 }
 
-                final orientation = MediaQuery.of(context).orientation;
-
-                if (orientation == Orientation.landscape) {
-                  return Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            children: [
-                              JoystickController(
-                                onDirectionChanged: (direction) {
-                                  _game?.requestDirectionChange(direction);
-                                },
-                              ),
-                              const SizedBox(height: 16),
-                              _buildBonusList(),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(flex: 5, child: _buildGameArea(context)),
-                    ],
-                  );
-                } else {
                   // Portrait mode
                   return Column(
                     children: [
@@ -399,7 +373,6 @@ class _SnakeGameState extends State<SnakeGame> {
                       ),
                     ],
                   );
-                }
               } else {
                 // Show a loading indicator while the game is initializing
                 return const Center(child: CircularProgressIndicator());

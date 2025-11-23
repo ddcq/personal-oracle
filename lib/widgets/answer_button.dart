@@ -16,7 +16,6 @@ class AnswerButton extends StatelessWidget {
     required this.onPressed,
     required this.letter,
     this.gradientColors,
-    this.isLandscape = false,
   });
 
   @override

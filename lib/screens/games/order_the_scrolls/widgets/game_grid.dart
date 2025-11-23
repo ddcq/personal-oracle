@@ -24,9 +24,7 @@ class GameGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-    final crossAxisCount = isLandscape ? 4 : (screenWidth > 600 ? 3 : 2);
+    final crossAxisCount = screenWidth > 600 ? 3 : 2;
     final cardSize = (screenWidth - 48) / crossAxisCount - 8;
 
     return GridView.builder(

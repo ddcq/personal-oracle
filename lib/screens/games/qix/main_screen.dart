@@ -176,9 +176,6 @@ class _QixGameScreenState extends State<QixGameScreen> {
                     child: Text('qix_main_game_not_initialized_error'.tr()),
                   );
                 } else {
-                  final Orientation orientation = MediaQuery.of(
-                    context,
-                  ).orientation;
                   final Size screenSize = MediaQuery.of(context).size;
                   final double appBarHeight =
                       AppBar().preferredSize.height; // Standard AppBar height
@@ -204,104 +201,50 @@ class _QixGameScreenState extends State<QixGameScreen> {
 
                   Widget gameAndControls;
 
-                  if (orientation == Orientation.portrait) {
-                    // In portrait, game takes width, controls take remaining height
-                    arenaSize = math.min(
-                      availableWidth,
-                      availableHeight - controlsEstimatedHeight,
-                    );
-                    gameAndControls = Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: arenaSize,
-                          height: arenaSize,
-                          child: GestureDetector(
-                            onVerticalDragEnd: (details) {
-                              if (details.primaryVelocity! > 0) {
-                                _game!.handleDirectionChange(Direction.down);
-                              } else if (details.primaryVelocity! < 0) {
-                                _game!.handleDirectionChange(Direction.up);
-                              }
-                            },
-                            onHorizontalDragEnd: (details) {
-                              if (details.primaryVelocity! > 0) {
-                                _game!.handleDirectionChange(Direction.right);
-                              } else if (details.primaryVelocity! < 0) {
-                                _game!.handleDirectionChange(Direction.left);
-                              }
-                            },
-                            child: Container(
-                              color: Colors.blue[900],
-                              child: GameWidget(game: _game!),
-                            ),
+                  // In portrait, game takes width, controls take remaining height
+                  arenaSize = math.min(
+                    availableWidth,
+                    availableHeight - controlsEstimatedHeight,
+                  );
+                  gameAndControls = Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: arenaSize,
+                        height: arenaSize,
+                        child: GestureDetector(
+                          onVerticalDragEnd: (details) {
+                            if (details.primaryVelocity! > 0) {
+                              _game!.handleDirectionChange(Direction.down);
+                            } else if (details.primaryVelocity! < 0) {
+                              _game!.handleDirectionChange(Direction.up);
+                            }
+                          },
+                          onHorizontalDragEnd: (details) {
+                            if (details.primaryVelocity! > 0) {
+                              _game!.handleDirectionChange(Direction.right);
+                            } else if (details.primaryVelocity! < 0) {
+                              _game!.handleDirectionChange(Direction.left);
+                            }
+                          },
+                          child: Container(
+                            color: Colors.blue[900],
+                            child: GameWidget(game: _game!),
                           ),
                         ),
-                        const SizedBox(height: 16), // Spacing
-                        percentageDisplay,
-                        const SizedBox(height: 16), // Spacing
-                        Center(
-                          child: JoystickController(
-                            onDirectionChanged: (Direction direction) {
-                              _game!.handleDirectionChange(direction);
-                            },
-                          ),
+                      ),
+                      const SizedBox(height: 16), // Spacing
+                      percentageDisplay,
+                      const SizedBox(height: 16), // Spacing
+                      Center(
+                        child: JoystickController(
+                          onDirectionChanged: (Direction direction) {
+                            _game!.handleDirectionChange(direction);
+                          },
                         ),
-                      ],
-                    );
-                  } else {
-                    // Orientation.landscape
-                    // Game takes height, controls take remaining width
-                    arenaSize = math.min(
-                      availableHeight,
-                      availableWidth - controlsEstimatedHeight,
-                    );
-                    gameAndControls = Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: arenaSize,
-                          height: arenaSize,
-                          child: GestureDetector(
-                            onVerticalDragEnd: (details) {
-                              if (details.primaryVelocity! > 0) {
-                                _game!.handleDirectionChange(Direction.down);
-                              } else if (details.primaryVelocity! < 0) {
-                                _game!.handleDirectionChange(Direction.up);
-                              }
-                            },
-                            onHorizontalDragEnd: (details) {
-                              if (details.primaryVelocity! > 0) {
-                                _game!.handleDirectionChange(Direction.right);
-                              } else if (details.primaryVelocity! < 0) {
-                                _game!.handleDirectionChange(Direction.left);
-                              }
-                            },
-                            child: Container(
-                              color: Colors.blue[900],
-                              child: GameWidget(game: _game!),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                percentageDisplay,
-                                JoystickController(
-                                  onDirectionChanged: (Direction direction) {
-                                    _game!.handleDirectionChange(direction);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
+                      ),
+                    ],
+                  );
                   return Stack(
                     children: [
                       gameAndControls,

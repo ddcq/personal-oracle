@@ -9,9 +9,6 @@ class OrderTheScrollsPreliminaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-
     final Widget gameInfoLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
@@ -29,7 +26,7 @@ class OrderTheScrollsPreliminaryScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'order_the_scrolls_preliminary_screen_help_text'.tr(),
-            style: TextStyle(color: Colors.white, fontSize: 18),
+            style: const TextStyle(color: Colors.white, fontSize: 18),
             textAlign: TextAlign.center,
           ),
         ],
@@ -52,23 +49,14 @@ class OrderTheScrollsPreliminaryScreen extends StatelessWidget {
           children: [
             SafeArea(
               child: Center(
-                child: isLandscape
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Flexible(child: gameInfoLayout),
-                          const SizedBox(width: 20),
-                          startButton,
-                        ],
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          gameInfoLayout,
-                          const SizedBox(height: 32),
-                          startButton,
-                        ],
-                      ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    gameInfoLayout,
+                    const SizedBox(height: 32),
+                    startButton,
+                  ],
+                ),
               ),
             ),
             SafeArea(

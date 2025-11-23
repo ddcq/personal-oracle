@@ -13,13 +13,7 @@ class ThumbnailList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-    final double fontSize =
-        screenWidth *
-        (isLandscape
-            ? 0.03
-            : 0.06);
+    final double fontSize = screenWidth * 0.06;
 
     return ListView.builder(
       itemCount: controller.shuffledCards.length,

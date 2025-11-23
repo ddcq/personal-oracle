@@ -54,28 +54,15 @@ class _ChibiButtonState extends State<ChibiButton> {
     final Color lightColor = lighten(widget.color, 0.2);
     final Color darkColor = darken(widget.color, 0.2);
     final Color borderColor = darken(widget.color, 0.3);
-    final bool isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-
     final baseStyle = widget.textStyle ?? ChibiTextStyles.buttonText;
     // The font size on the design draft.
     const double designFontSize = 20.0;
 
     final TextStyle finalTextStyle;
-    if (isLandscape) {
-      // In landscape, scale the font size based on the screen height.
-      final textScaleFactor = ScreenUtil().textScaleFactor;
-      final scaleHeight = ScreenUtil().scaleHeight;
-      finalTextStyle = baseStyle.copyWith(
-        fontSize: designFontSize * scaleHeight * textScaleFactor,
-        letterSpacing: 1.5 * scaleHeight,
-      );
-    } else {
-      // In portrait, scale the font size based on the screen width (default .sp behavior).
-      finalTextStyle = baseStyle.copyWith(fontSize: designFontSize.sp);
-    }
+    // In portrait, scale the font size based on the screen width (default .sp behavior).
+    finalTextStyle = baseStyle.copyWith(fontSize: designFontSize.sp);
 
-    final borderWidth = isLandscape ? 3.h : 3.w;
+    final borderWidth = 3.w;
     return GestureDetector(
       onTap: widget.onPressed,
       onTapDown: _onTapDown,

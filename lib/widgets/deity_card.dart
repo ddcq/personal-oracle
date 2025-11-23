@@ -32,9 +32,6 @@ class _DeityCardState extends State<DeityCard> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -89,7 +86,7 @@ class _DeityCardState extends State<DeityCard> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: AppTextStyles.amaticSC,
-                        fontSize: isLandscape ? 24.sp : 48.sp,
+                        fontSize: 48.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         shadows: [
@@ -112,7 +109,7 @@ class _DeityCardState extends State<DeityCard> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: AppTextStyles.amaticSC,
-                        fontSize: isLandscape ? 14.sp : 28.sp,
+                        fontSize: 28.sp,
                         color: Colors.white,
                         shadows: [
                           Shadow(

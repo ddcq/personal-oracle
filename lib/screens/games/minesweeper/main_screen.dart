@@ -53,7 +53,6 @@ class _MinesweeperView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = context.watch<MinesweeperController>();
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (controller.isGameOver) {
@@ -138,9 +137,7 @@ class _MinesweeperView extends StatelessWidget {
       ),
       body: AppBackground(
         child: SafeArea(
-          child: isLandscape
-              ? _buildLandscapeLayout(controller)
-              : _buildPortraitLayout(controller),
+          child: _buildPortraitLayout(controller),
         ),
       ),
     );
@@ -160,44 +157,7 @@ class _MinesweeperView extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _MinesweeperGrid(controller: controller, isLandscape: false),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLandscapeLayout(MinesweeperController controller) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 3,
-          child: Center(
-            child: AspectRatio(
-              aspectRatio: 1.0,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _MinesweeperGrid(controller: controller, isLandscape: true),
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _TreasureCounter(
-                  treasuresFound: controller.treasuresFound,
-                  totalTreasures: controller.treasureCount,
-                  isLandscape: true,
-                ),
-                const SizedBox(height: 20),
-                const _RuneLegend(isLandscape: true),
-              ],
-            ),
+            child: _MinesweeperGrid(controller: controller),
           ),
         ),
       ],
@@ -207,11 +167,9 @@ class _MinesweeperView extends StatelessWidget {
 
 class _MinesweeperGrid extends StatelessWidget {
   final MinesweeperController controller;
-  final bool isLandscape;
   
   const _MinesweeperGrid({
     required this.controller,
-    this.isLandscape = false,
   });
 
   @override
@@ -265,7 +223,7 @@ class _MinesweeperGrid extends StatelessWidget {
       return const SizedBox.shrink();
     }
     
-    final imageSize = isLandscape ? 30.0 : 40.0;
+    const imageSize = 40.0;
     
     if (cell.hasMine) {
       return Image.asset(
@@ -286,11 +244,6 @@ class _MinesweeperGrid extends StatelessWidget {
     if (cell.adjacentMines > 0 || cell.adjacentTreasures > 0) {
       List<Widget> counts = [];
       double baseFontSize = MediaQuery.of(context).size.width * 0.06;
-      
-      // Reduce font size in landscape mode
-      if (isLandscape) {
-        baseFontSize *= 0.6;
-      }
       
       double currentFontSize = baseFontSize;
 
@@ -344,18 +297,16 @@ String _getRuneForTreasures(int count) {
 class _TreasureCounter extends StatelessWidget {
   final int treasuresFound;
   final int totalTreasures;
-  final bool isLandscape;
 
   const _TreasureCounter({
     required this.treasuresFound,
     required this.totalTreasures,
-    this.isLandscape = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final containerWidth = isLandscape ? screenWidth * 0.25 : screenWidth * 0.5;
+    final containerWidth = screenWidth * 0.5;
     final coinSize = (containerWidth - (totalTreasures - 1) * 8.0) / totalTreasures;
     
     return Center(
@@ -388,9 +339,7 @@ class _TreasureCounter extends StatelessWidget {
 }
 
 class _RuneLegend extends StatelessWidget {
-  final bool isLandscape;
-  
-  const _RuneLegend({this.isLandscape = false});
+  const _RuneLegend();
 
   List<Widget> _buildRuneTexts(
     List<String> runes,
@@ -413,8 +362,8 @@ class _RuneLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double uniformFontSize = MediaQuery.of(context).size.width * (isLandscape ? 0.025 : 0.035);
-    final double imageSize = isLandscape ? 24.0 : 32.0;
+    final double uniformFontSize = MediaQuery.of(context).size.width * 0.035;
+    const double imageSize = 32.0;
     
     TextStyle legendTextStyle = ChibiTextStyles.dialogText.copyWith(
       fontSize: uniformFontSize,
