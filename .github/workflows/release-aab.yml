@@ -3,7 +3,15 @@ name: Release AAB (tag -> Play Store internal)
 on:
   push:
     tags:
-      - 'v*.*.*+*'  # n'acceptera que les tags au format vMAJOR.MINOR.PATCH+BUILD
+      - 'v*.*.*\+*' # match tags like v1.2.3+4
+      - "v*.*.*" # alternative without build metadata
+      - "!v**-**" # exclude pre-release tags with hyphen
+
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Version tag (ex: v1.0.0 ou v1.0.0+33)"
+        required: true
 
 env:
   PACKAGE_NAME: net.forhimandus.oracledasgard
@@ -24,15 +32,28 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: Determine tag
+        id: tag
+        run: |
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            TAG="${{ github.event.inputs.tag }}"
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+          fi
+          echo "Using tag: $TAG"
 
-      - name: Ensure we are on a tag event
-        if: ${{ startsWith(github.ref, 'refs/tags/') }}
-        run: echo "Tag - ${GITHUB_REF#refs/tags/}"
+          # Validate tag format: vMAJOR.MINOR.PATCH[+BUILD]
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(\+[0-9]+)?$ ]]; then
+            echo "ERROR: tag '$TAG' does not match format vMAJOR.MINOR.PATCH[+BUILD]"
+            exit 1
+          fi
+
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Validate tag format (vMAJOR.MINOR.PATCH+BUILD)
         id: validate_tag
         run: |
-          TAG="${GITHUB_REF#refs/tags/}"
+          TAG="${{ steps.tag.outputs.tag }}"
           echo "Found tag: $TAG"
           if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+\+[0-9]+$ ]]; then
             echo "ERROR: tag '$TAG' does not match required format vMAJOR.MINOR.PATCH+BUILD (example: v1.2.3+4)"
@@ -51,7 +72,7 @@ jobs:
       - name: Derive version from tag and write to pubspec.yaml
         id: set_version
         run: |
-          TAG="${GITHUB_REF#refs/tags/}"            # v1.2.3+4
+          TAG="${{ steps.tag.outputs.tag }}"            # v1.2.3+4
           # remove leading 'v' for pubspec format
           VERSION="${TAG#v}"                        # 1.2.3+4
           echo "Using version: $VERSION"
@@ -77,7 +98,7 @@ jobs:
         id: get_prev_tag
         run: |
           # get the current tag
-          CUR_TAG="${GITHUB_REF#refs/tags/}"
+          CUR_TAG="${{ steps.tag.outputs.tag }}"
           git fetch --tags
           # list tags sorted by cretation date, exclude current, pick the most recent
           PREV_TAG=$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags | grep -v "^${CUR_TAG}$" | head -n1 || true)
@@ -222,7 +243,6 @@ jobs:
     name: Create GitHub Release & publish to Play Store (internal)
     runs-on: ubuntu-latest
     needs: build
-    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Checkout (for release metadata)
         uses: actions/checkout@v4
@@ -259,7 +279,7 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ github.ref_name }}
+          tag: v${{ needs.build.outputs.version }}
           name: Release ${{ needs.build.outputs.version }}
           bodyFile: release_body.txt
           artifacts: ${{ steps.find_aab.outputs.aab }}
