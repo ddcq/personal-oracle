@@ -10,6 +10,7 @@ import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 typedef IsGridEdgeChecker = bool Function(IntVector2 position);
 typedef IsPlayerPathChecker = bool Function(IntVector2 position);
+typedef IsFilledChecker = bool Function(IntVector2 position);
 typedef OnGameOver = void Function();
 
 class QixComponent extends PositionComponent with HasGameReference<QixGame> {
@@ -24,6 +25,7 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
   final int gridSize;
   final IsGridEdgeChecker isGridEdge;
   final IsPlayerPathChecker isPlayerPath;
+  final IsFilledChecker isFilled;
   final OnGameOver onGameOver;
   final ui.Image snakeHeadImage;
   final int difficulty;
@@ -50,6 +52,7 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
     required this.gridSize,
     required this.isGridEdge,
     required this.isPlayerPath,
+    required this.isFilled,
     required this.onGameOver,
     required this.snakeHeadImage,
     required this.difficulty,
@@ -90,37 +93,61 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
       _moveAngle = angleToPlayer;
     }
 
-    // Precalculate velocity (reused)
+    // Precalculate velocity
     _cachedVelocity.x = math.cos(_moveAngle) * speed;
     _cachedVelocity.y = math.sin(_moveAngle) * speed;
-    
-    final nextVirtualPosition = virtualPosition + _cachedVelocity * dt;
-    final nextGridPosition = IntVector2(
-      (nextVirtualPosition.x / cellSize).round(),
-      (nextVirtualPosition.y / cellSize).round(),
-    );
 
-    // Simplified collision detection
-    if (isGridEdge(nextGridPosition)) {
-      final currentGridPos = gridPosition;
-      bool bounced = false;
+    final displacement = _cachedVelocity * dt;
+    final distance = displacement.length;
+    final stepCount = (distance / (cellSize / 2)).ceil();
+    final stepDisplacement =
+        stepCount > 0 ? displacement / stepCount.toDouble() : Vector2.zero();
 
-      if (isGridEdge(IntVector2(nextGridPosition.x, currentGridPos.y))) {
-        _moveAngle = math.pi - _moveAngle;
-        bounced = true;
+    var nextVirtualPosition = virtualPosition;
+    bool collision = false;
+
+    for (int i = 0; i < stepCount; i++) {
+      var tempNextVirtualPosition = nextVirtualPosition + stepDisplacement;
+      final tempNextGridPosition = IntVector2(
+        (tempNextVirtualPosition.x / cellSize).round(),
+        (tempNextVirtualPosition.y / cellSize).round(),
+      );
+
+      if (isGridEdge(tempNextGridPosition) || isFilled(tempNextGridPosition)) {
+        collision = true;
+        final currentGridPos = IntVector2(
+          (nextVirtualPosition.x / cellSize).round(),
+          (nextVirtualPosition.y / cellSize).round(),
+        );
+
+        final hitHorizontal =
+            isGridEdge(IntVector2(tempNextGridPosition.x, currentGridPos.y)) ||
+                isFilled(IntVector2(tempNextGridPosition.x, currentGridPos.y));
+        final hitVertical =
+            isGridEdge(IntVector2(currentGridPos.x, tempNextGridPosition.y)) ||
+                isFilled(IntVector2(currentGridPos.x, tempNextGridPosition.y));
+
+        if (hitHorizontal && hitVertical) {
+          // Corner hit, reverse direction
+          _moveAngle += math.pi;
+        } else if (hitHorizontal) {
+          _moveAngle = math.pi - _moveAngle; // Horizontal collision
+        } else if (hitVertical) {
+          _moveAngle = -_moveAngle; // Vertical collision
+        } else {
+          // Fallback, reverse direction
+          _moveAngle += math.pi;
+        }
+
+        _moveAngle +=
+            (math.Random().nextDouble() - 0.5) * _randomPerturbationFactor;
+        break; // Exit loop on collision
+      } else {
+        nextVirtualPosition = tempNextVirtualPosition;
       }
+    }
 
-      if (isGridEdge(IntVector2(currentGridPos.x, nextGridPosition.y))) {
-        _moveAngle = -_moveAngle;
-        bounced = true;
-      }
-
-      if (!bounced) {
-        _moveAngle = _moveAngle + math.pi;
-      }
-
-      _moveAngle += (math.Random().nextDouble() - 0.5) * _randomPerturbationFactor;
-    } else {
+    if (!collision) {
       virtualPosition = nextVirtualPosition;
     }
 
