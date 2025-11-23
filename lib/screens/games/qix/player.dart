@@ -18,22 +18,24 @@ class Player extends PositionComponent {
 
   final ArenaComponent arena;
   final Function(PlayerState) onPlayerStateChanged;
-  final VoidCallback onSelfIntersection; // Add this line
+  final VoidCallback onSelfIntersection;
   final int gridSize;
   final double cellSize;
-  IntVector2 gridPosition; // Logical grid position
-  IntVector2 targetGridPosition; // Target grid position for smooth movement
-  late final double _moveSpeed; // Pixels per second
+  IntVector2 gridPosition;
+  IntVector2 targetGridPosition;
+  late final double _moveSpeed;
   final int difficulty;
 
   PlayerState state = PlayerState.onEdge;
   List<IntVector2> currentPath = [];
   IntVector2? pathStartGridPosition;
-  dp.Direction? currentDirection; // Current direction for automatic movement
-  bool _isManualInput =
-      false; // True if the last direction change was from user input
+  dp.Direction? currentDirection;
+  bool _isManualInput = false;
 
   late AnimatedCharacterComponent _characterSprite;
+  
+  // Cache for update calculations
+  final Vector2 _cachedTargetPixelPosition = Vector2.zero();
 
   Player({
     required this.gridSize,
@@ -127,22 +129,19 @@ class Player extends PositionComponent {
     }
 
     // Smoothly move towards the target grid position
-    Vector2 targetPixelPosition = targetGridPosition.toVector2() * cellSize;
-    if (position.distanceTo(targetPixelPosition) > _positionSnapThreshold) {
-      position.moveToTarget(targetPixelPosition, _moveSpeed * dt);
+    _cachedTargetPixelPosition.setFrom(targetGridPosition.toVector2() * cellSize);
+    if (position.distanceTo(_cachedTargetPixelPosition) > _positionSnapThreshold) {
+      position.moveToTarget(_cachedTargetPixelPosition, _moveSpeed * dt);
     } else {
-      position =
-          targetPixelPosition; // Snap to target to avoid floating point inaccuracies
-      gridPosition = targetGridPosition; // Update logical grid position
+      position = _cachedTargetPixelPosition.clone();
+      gridPosition = targetGridPosition;
 
-      // If player has reached target, and there's a current direction, move again
       if (currentDirection != null) {
         bool moved = move(currentDirection!);
         if (!moved) {
-          // Player cannot move in the current direction, find alternatives
           _findNextAutoDirection();
           if (currentDirection != null) {
-            move(currentDirection!); // Move in the new direction
+            move(currentDirection!);
           }
         }
       }

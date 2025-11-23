@@ -17,7 +17,7 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
   static const double _randomPerturbationFactor = 0.6;
   static const double _wobbleMagnitudeFactor = 0.25;
   static const double _wobbleFrequency = 5.0;
-  static const double _maxRotationFactor = 1 / 12; // Multiplied by math.pi
+  static const double _maxRotationFactor = 1 / 12;
   static const double _imageScaleFactor = 5.0;
 
   final double cellSize;
@@ -38,6 +38,11 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
   );
 
   double _animationTime = 0.0;
+  
+  // Cache for rendering calculations
+  late double _wobbleMagnitude;
+  final Vector2 _cachedRenderOffset = Vector2.zero();
+  final Vector2 _cachedVelocity = Vector2.zero();
 
   QixComponent({
     required IntVector2 initialGridPosition,
@@ -57,7 +62,7 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
                     game_constants.kMonsterSpeedChangePerLevelCellsPerSecond)
             .clamp(1.0, double.infinity) *
         cellSize;
-
+    _wobbleMagnitude = cellSize * _wobbleMagnitudeFactor;
     position = virtualPosition;
   }
 
@@ -66,12 +71,11 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
     super.update(dt);
     _animationTime += dt;
 
-    // --- Homing logic ---
+    // Homing logic
     final playerPosition = game.player.position;
     final vectorToPlayer = playerPosition - virtualPosition;
     final angleToPlayer = math.atan2(vectorToPlayer.y, vectorToPlayer.x);
 
-    // Normalize angle difference to be between -pi and pi
     double angleDifference = angleToPlayer - _moveAngle;
     while (angleDifference < -math.pi) {
       angleDifference += 2 * math.pi;
@@ -80,36 +84,32 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
       angleDifference -= 2 * math.pi;
     }
 
-    // Turn towards the player by 1 degree
     if (angleDifference.abs() > _turnStep) {
       _moveAngle += angleDifference.sign * _turnStep;
     } else {
       _moveAngle = angleToPlayer;
     }
-    // --- End Homing logic ---
 
-    // Calculate potential next position
-    final double velocityX = math.cos(_moveAngle) * speed;
-    final double velocityY = math.sin(_moveAngle) * speed;
-    final nextVirtualPosition =
-        virtualPosition + Vector2(velocityX, velocityY) * dt;
+    // Precalculate velocity (reused)
+    _cachedVelocity.x = math.cos(_moveAngle) * speed;
+    _cachedVelocity.y = math.sin(_moveAngle) * speed;
+    
+    final nextVirtualPosition = virtualPosition + _cachedVelocity * dt;
     final nextGridPosition = IntVector2(
       (nextVirtualPosition.x / cellSize).round(),
       (nextVirtualPosition.y / cellSize).round(),
     );
 
-    // Collision detection using isGridEdge
+    // Simplified collision detection
     if (isGridEdge(nextGridPosition)) {
       final currentGridPos = gridPosition;
       bool bounced = false;
 
-      // Check for horizontal collision (hitting a vertical wall)
       if (isGridEdge(IntVector2(nextGridPosition.x, currentGridPos.y))) {
         _moveAngle = math.pi - _moveAngle;
         bounced = true;
       }
 
-      // Check for vertical collision (hitting a horizontal wall)
       if (isGridEdge(IntVector2(currentGridPos.x, nextGridPosition.y))) {
         _moveAngle = -_moveAngle;
         bounced = true;
@@ -119,9 +119,7 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
         _moveAngle = _moveAngle + math.pi;
       }
 
-      _moveAngle +=
-          (math.Random().nextDouble() - 0.5) *
-          _randomPerturbationFactor; // Increased random perturbation
+      _moveAngle += (math.Random().nextDouble() - 0.5) * _randomPerturbationFactor;
     } else {
       virtualPosition = nextVirtualPosition;
     }
@@ -138,16 +136,12 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
   void render(Canvas canvas) {
     super.render(canvas);
 
-    final double wobbleMagnitude =
-        cellSize *
-        _wobbleMagnitudeFactor; // Restored magnitude for a visible effect
     final double wobbleOffset =
-        math.sin(_animationTime * _wobbleFrequency) * wobbleMagnitude;
+        math.sin(_animationTime * _wobbleFrequency) * _wobbleMagnitude;
 
     final perpendicularAngle = _moveAngle + math.pi / 2;
-    final renderOffset =
-        Vector2(math.cos(perpendicularAngle), math.sin(perpendicularAngle)) *
-        wobbleOffset;
+    _cachedRenderOffset.x = math.cos(perpendicularAngle) * wobbleOffset;
+    _cachedRenderOffset.y = math.sin(perpendicularAngle) * wobbleOffset;
 
     final double maxRotation = math.pi * _maxRotationFactor;
     final double rotation =
@@ -157,7 +151,7 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
     final center = Offset(size.x / 2, size.y / 2);
 
     canvas.save();
-    canvas.translate(center.dx + renderOffset.x, center.dy + renderOffset.y);
+    canvas.translate(center.dx + _cachedRenderOffset.x, center.dy + _cachedRenderOffset.y);
     canvas.rotate(visualAngle + rotation);
     canvas.translate(-center.dx, -center.dy);
 

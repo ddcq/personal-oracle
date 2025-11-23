@@ -27,7 +27,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   static const String _defaultRewardCardImagePath = 'cards/chibi/fenrir.webp';
 
   late ui.Image _rewardCardImage;
-  late ui.Image _undiscoveredAreaImage; // Add this line
+  late ui.Image _undiscoveredAreaImage;
   final int gridSize;
   final double cellSize;
   final String? rewardCardImagePath;
@@ -44,6 +44,12 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   final List<IntVector2> _boundaryPoints = [];
   late final Map<IntVector2, Rect> _cellRects;
   late QixComponent _qixComponent;
+  
+  // Performance optimizations: cache rendering
+  Path? _cachedPath;
+  bool _pathNeedsUpdate = false;
+  final List<SpriteComponent> _filledCellComponents = [];
+  final List<PositionComponent> _edgeCellComponents = [];
 
   ArenaComponent({
     required this.gridSize,
@@ -159,14 +165,18 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   void startPath(IntVector2 startPoint) {
     _currentDrawingPath.clear();
     _currentDrawingPath.add(startPoint);
+    _pathNeedsUpdate = true;
   }
 
   void addPathPoint(IntVector2 point) {
     _currentDrawingPath.add(point);
+    _pathNeedsUpdate = true;
   }
 
   void endPath() {
     _currentDrawingPath.clear();
+    _pathNeedsUpdate = true;
+    _cachedPath = null;
   }
 
   void _initializeGrid() {
@@ -261,6 +271,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     for (var point in playerPath) {
       _setGridValue(point.x, point.y, game_constants.kGridEdge);
       _boundaryPoints.add(point);
+      _updateCellComponent(point.x, point.y);
     }
   }
 
@@ -291,6 +302,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       for (final point in identifiedRegions[i].points) {
         _setGridValue(point.x, point.y, game_constants.kGridFilled);
         newlyFilledPoints.add(point);
+        _updateCellComponent(point.x, point.y);
       }
     }
   }
@@ -368,6 +380,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
         if (isEnclosed) {
           _setGridValue(x, y, game_constants.kGridFilled);
           demotedPoints.add(p);
+          _updateCellComponent(x, y);
         }
       }
     }
@@ -434,6 +447,51 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     return nearestPoint;
   }
 
+  void _updateCellComponent(int x, int y) {
+    final cellValue = _grid[y][x];
+    
+    if (cellValue == game_constants.kGridFilled) {
+      final sprite = _filledSprites[y * gridSize + x];
+      if (sprite != null) {
+        final component = SpriteComponent(
+          sprite: sprite,
+          size: Vector2.all(cellSize),
+          position: Vector2(x * cellSize, y * cellSize),
+        );
+        _filledCellComponents.add(component);
+        add(component);
+      }
+    } else if (cellValue == game_constants.kGridEdge) {
+      final component = PositionComponent(
+        size: Vector2.all(cellSize),
+        position: Vector2(x * cellSize, y * cellSize),
+      );
+      _edgeCellComponents.add(component);
+      add(component);
+    }
+  }
+
+  void _buildCachedPath() {
+    if (_currentDrawingPath.isEmpty) {
+      _cachedPath = null;
+      return;
+    }
+    
+    final path = Path();
+    path.moveTo(
+      _currentDrawingPath.first.x * cellSize + cellSize / 2,
+      _currentDrawingPath.first.y * cellSize + cellSize / 2,
+    );
+    for (int i = 1; i < _currentDrawingPath.length; i++) {
+      path.lineTo(
+        _currentDrawingPath[i].x * cellSize + cellSize / 2,
+        _currentDrawingPath[i].y * cellSize + cellSize / 2,
+      );
+    }
+    _cachedPath = path;
+    _pathNeedsUpdate = false;
+  }
+
   @override
   void update(double dt) {
     super.update(dt);
@@ -460,38 +518,22 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       backgroundPaint,
     );
 
-    // Render filled areas and boundaries
-    for (int y = 0; y < gridSize; y++) {
-      for (int x = 0; x < gridSize; x++) {
-        if (_grid[y][x] == game_constants.kGridFilled) {
-          final sprite = _filledSprites[y * gridSize + x];
-          if (sprite != null) {
-            sprite.render(
-              canvas,
-              position: Vector2(x * cellSize, y * cellSize),
-              size: Vector2.all(cellSize),
-            );
-          }
-        } else if (_grid[y][x] == game_constants.kGridEdge) {
-          canvas.drawRect(_cellRects[IntVector2(x, y)]!, _boundaryPaint);
-        }
-      }
+    // Render edge cells (boundaries) - still use direct rendering as they're less common
+    for (final component in _edgeCellComponents) {
+      canvas.drawRect(
+        Rect.fromLTWH(component.position.x, component.position.y, cellSize, cellSize),
+        _boundaryPaint,
+      );
     }
 
-    // Render current drawing path
+    // Render current drawing path with cache
     if (_currentDrawingPath.isNotEmpty) {
-      final path = Path();
-      path.moveTo(
-        _currentDrawingPath.first.x * cellSize + cellSize / 2,
-        _currentDrawingPath.first.y * cellSize + cellSize / 2,
-      );
-      for (int i = 1; i < _currentDrawingPath.length; i++) {
-        path.lineTo(
-          _currentDrawingPath[i].x * cellSize + cellSize / 2,
-          _currentDrawingPath[i].y * cellSize + cellSize / 2,
-        );
+      if (_pathNeedsUpdate || _cachedPath == null) {
+        _buildCachedPath();
       }
-      canvas.drawPath(path, _pathPaint);
+      if (_cachedPath != null) {
+        canvas.drawPath(_cachedPath!, _pathPaint);
+      }
     }
   }
 }
