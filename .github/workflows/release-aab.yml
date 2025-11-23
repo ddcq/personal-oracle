@@ -128,6 +128,7 @@ jobs:
       - name: Generate multilingual changelog (FR auto + translate EN/ES) and produce release body
         id: make_release_body
         run: |
+          pip install deep-translator
           python3 .github/scripts/make_release_body.py
           # expose the release body
           echo "release_body<<EOF" >> $GITHUB_OUTPUT
