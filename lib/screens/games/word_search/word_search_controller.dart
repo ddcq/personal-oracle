@@ -59,6 +59,7 @@ class WordSearchController with ChangeNotifier {
   MythCard get mythCard => _mythCard!;
   String get instructionClue => _instructionClue;
   NextChapter? get unlockedChapter => _nextChapter;
+  bool get isGameWon => gamePhase == GamePhase.victory;
 
   WordSearchController() {
     _initialize();

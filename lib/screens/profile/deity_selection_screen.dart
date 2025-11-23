@@ -329,15 +329,7 @@ class _DeityCardState extends State<_DeityCard> {
                 builder: (context, constraints) {
                   return Stack(
                     children: [
-                      OrientationBuilder(
-                        builder: (context, orientation) {
-                          if (orientation == Orientation.portrait) {
-                            return _buildPortraitLayout(context);
-                          } else {
-                            return _buildLandscapeLayout(context);
-                          }
-                        },
-                      ),
+                      _buildPortraitLayout(context),
                       if (_showScrollIndicator) ...[
                         Positioned.fill(
                           child: Align(
@@ -419,34 +411,6 @@ class _DeityCardState extends State<_DeityCard> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildLandscapeLayout(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Padding(padding: const EdgeInsets.all(20.0), child: _buildDeityImage()),
-        Expanded(
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 20, 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _buildDeityName(),
-                  const SizedBox(height: 15),
-                  _buildDeityDescription(),
-                  const SizedBox(height: 30),
-                  _buildSelectButton(context),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 

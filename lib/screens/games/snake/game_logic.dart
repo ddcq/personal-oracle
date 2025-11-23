@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
@@ -20,8 +19,6 @@ class GameLogic {
   static const int _scoreRegularFood = 10;
   static const int _scoreRottenFoodPenaltyBase = 10;
   static const int _scoreRottenFoodPenaltyPerLevel = 10;
-  static const double _goldenFoodProbability = 0.15;
-  static const int _baseObstacles = 1;
   static const double bonusSpawnProbability = 1;
   static const double bonusLifetime = 8.0;
   static const double bonusEffectDuration = 8.0;

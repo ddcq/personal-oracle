@@ -7,7 +7,6 @@ import 'package:oracle_d_asgard/screens/games/snake/rock_explosion_effect.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
-import 'package:flutter/material.dart';
 
 /// Manages visual effects for Snake game
 class EffectsManager {

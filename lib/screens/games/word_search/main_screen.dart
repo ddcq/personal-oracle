@@ -72,6 +72,29 @@ class _WordSearchView extends StatelessWidget {
     );
   }
 
+  void _showVictoryDialog(BuildContext context, WordSearchController controller) {
+    if (controller.isGameWon) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return VictoryPopup(
+              onDismiss: () {
+                Navigator.of(context).pop();
+              },
+              onSeeRewards: () {
+                Navigator.of(context).pop();
+                context.go('/rewards');
+              },
+              isGenericVictory: true,
+            );
+          },
+        );
+      });
+    }
+  }
+
   Widget _buildPortraitLayout(WordSearchController controller) {
     return Column(
       children: [
