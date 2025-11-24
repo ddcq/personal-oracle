@@ -132,9 +132,10 @@ jobs:
           pip install deep-translator
           python3 .github/scripts/make_release_body.py
           # expose the release body
-          echo "release_body<<EOF" >> $GITHUB_OUTPUT
+          DELIMITER=$(uuidgen)
+          echo "release_body<<$DELIMITER" >> $GITHUB_OUTPUT
           cat /tmp/release_body.txt >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "$DELIMITER" >> $GITHUB_OUTPUT
 
       - name: Build Android AAB (release)
         id: build_aab
