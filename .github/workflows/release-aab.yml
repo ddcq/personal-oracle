@@ -133,8 +133,9 @@ jobs:
           python3 .github/scripts/make_release_body.py
           # expose the release body
           DELIMITER=$(uuidgen)
+          RELEASE_BODY_CONTENT=$(cat /tmp/release_body.txt)
           echo "release_body<<$DELIMITER" >> $GITHUB_OUTPUT
-          cat /tmp/release_body.txt >> $GITHUB_OUTPUT
+          echo "$RELEASE_BODY_CONTENT" >> $GITHUB_OUTPUT
           echo "$DELIMITER" >> $GITHUB_OUTPUT
 
       - name: Build Android AAB (release)
