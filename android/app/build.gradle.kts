@@ -42,10 +42,13 @@ android {
     
     signingConfigs {
         create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String? ?: ""
-            keyPassword = keystoreProperties["keyPassword"] as String? ?: ""
+            val releaseKeyAlias = keystoreProperties["keyAlias"] as String?
+            keyAlias = releaseKeyAlias ?: ""
+            val releaseKeyPassword = keystoreProperties["keyPassword"] as String?
+            keyPassword = releaseKeyPassword ?: ""
             storeFile = keystoreProperties["storeFile"]?.let { file(it) } ?: null
-            storePassword = keystoreProperties["storePassword"] as String? ?: ""
+            val releaseStorePassword = keystoreProperties["storePassword"] as String?
+            storePassword = releaseStorePassword ?: ""
         }
     }
     
