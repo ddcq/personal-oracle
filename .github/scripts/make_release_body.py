@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
 from deep_translator import GoogleTranslator
+import re
 
-# Read formatted commits
-p=Path("/tmp/commits_formatted.txt")
+# Read raw commits
+p=Path("/tmp/commits_raw.txt")
 if not p.exists():
     commits = []
 else:
@@ -12,21 +13,17 @@ else:
 if not commits:
     fr_text = "Mise à jour automatique."
 else:
-    # Build a short summary from commit messages:
-    # we will join them with space but try to stay below 300 chars later.
-    fr_text = " ".join(commits)
-# Ensure <= 300 characters (cut at word boundary)
-def truncate(s, n=300):
-    if len(s)<=n:
-        return s
-    truncated = s[:n]
-    # cut back to last space to avoid mid-word
-    last_space = truncated.rfind(" ")
-    if last_space>0:
-        truncated = truncated[:last_space]
-    return truncated
-
-fr_text = truncate(fr_text,300)
+    filtered_commits = []
+    for commit in commits:
+        if commit.startswith("feat") or commit.startswith("fix"):
+            # Replace prefix with a dash and a space
+            formatted_commit = re.sub(r'^(feat|fix)(\(.+?\))?:\s*', '- ', commit)
+            filtered_commits.append(formatted_commit)
+    
+    if not filtered_commits:
+        fr_text = "Mise à jour de maintenance."
+    else:
+        fr_text = "\n".join(filtered_commits)
 
 # translate to English and Spanish using GoogleTranslator (web)
 try:
@@ -38,16 +35,9 @@ try:
 except Exception as e:
     es_text = fr_text
 
-en_text = truncate(en_text,300)
-es_text = truncate(es_text,300)
-
 # Build release body with required tags
 body = "<fr-FR>\n" + fr_text + "\n</fr-FR>\n<en-US>\n" + en_text + "\n</en-US>\n<es-ES>\n" + es_text + "\n</es-ES>"
-
-# Print to stdout (GitHub Actions will capture)
-print(body)
 
 # Save to a file for later steps
 outp="/tmp/release_body.txt"
 Path(outp).write_text(body, encoding='utf-8')
-print("SAVED_RELEASE_BODY_PATH="+outp)

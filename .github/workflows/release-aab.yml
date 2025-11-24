@@ -118,6 +118,7 @@ jobs:
 
           # get commit subjects
           COMMITS_RAW=$(eval $LOG_CMD || true)
+          echo "$COMMITS_RAW" > /tmp/commits_raw.txt
 
           # Format each commit:
           python3 .github/scripts/extract_commits.py <<<"$COMMITS_RAW" > /tmp/commits_formatted.txt || true
