@@ -42,17 +42,34 @@ android {
     
     signingConfigs {
         create("release") {
-            // Prioritize environment variables (from GitHub Secrets) over key.properties
-            keyAlias = System.getenv("ANDROID_KEYSTORE_ALIAS") ?: (keystoreProperties["keyAlias"] as String? ?: "")
-            keyPassword = System.getenv("ANDROID_KEYSTORE_PASSWORD") ?: (keystoreProperties["keyPassword"] as String? ?: "")
-            storePassword = System.getenv("ANDROID_KEYSTORE_STORE_PASSWORD") ?: (keystoreProperties["storePassword"] as String? ?: "")
+            val keyAliasFromEnv = System.getenv("ANDROID_KEYSTORE_ALIAS")
+            val keyPasswordFromEnv = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+            val storePasswordFromEnv = System.getenv("ANDROID_KEYSTORE_STORE_PASSWORD")
+            val keystorePathFromEnv = System.getenv("KEYSTORE_PATH")
 
-            val keystorePath = System.getenv("KEYSTORE_PATH") // Path to decoded .jks file from CI
-            if (keystorePath != null) {
-                storeFile = file(keystorePath)
+            // Prioritize environment variables (from GitHub Secrets) over key.properties
+            keyAlias = keyAliasFromEnv ?: (keystoreProperties["keyAlias"] as String?)
+            keyPassword = keyPasswordFromEnv ?: (keystoreProperties["keyPassword"] as String?)
+            storePassword = storePasswordFromEnv ?: (keystoreProperties["storePassword"] as String?)
+
+            if (keystorePathFromEnv != null) {
+                storeFile = file(keystorePathFromEnv)
             } else {
-                // Fallback to local key.properties if available
-                storeFile = keystoreProperties["storeFile"]?.let { file(it) } ?: null
+                storeFile = keystoreProperties["storeFile"]?.let { file(it) }
+            }
+
+            // Explicitly check for null/empty values and fail early with clear messages
+            if (keyAlias.isNullOrEmpty()) {
+                throw GradleException("Signing key alias (ANDROID_KEYSTORE_ALIAS or keyAlias in key.properties) not specified.")
+            }
+            if (keyPassword.isNullOrEmpty()) {
+                throw GradleException("Signing key password (ANDROID_KEYSTORE_PASSWORD or keyPassword in key.properties) not specified.")
+            }
+            if (storePassword.isNullOrEmpty()) {
+                throw GradleException("Signing store password (ANDROID_KEYSTORE_STORE_PASSWORD or storePassword in key.properties) not specified.")
+            }
+            if (storeFile == null || !storeFile!!.exists()) {
+                throw GradleException("Signing keystore file (KEYSTORE_PATH or storeFile in key.properties) not found or specified.")
             }
         }
     }
