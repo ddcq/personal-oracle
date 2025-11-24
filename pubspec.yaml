@@ -70,7 +70,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  dependency_validator: ^3.2.3
+  dependency_validator: ^5.0.3
   flutter_launcher_icons: ^0.14.4
   build_runner: ^2.9.0
   freezed: ^3.2.3
