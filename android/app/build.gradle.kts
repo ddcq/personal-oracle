@@ -42,13 +42,18 @@ android {
     
     signingConfigs {
         create("release") {
-            val releaseKeyAlias = keystoreProperties["keyAlias"] as String?
-            keyAlias = releaseKeyAlias ?: ""
-            val releaseKeyPassword = keystoreProperties["keyPassword"] as String?
-            keyPassword = releaseKeyPassword ?: ""
-            storeFile = keystoreProperties["storeFile"]?.let { file(it) } ?: null
-            val releaseStorePassword = keystoreProperties["storePassword"] as String?
-            storePassword = releaseStorePassword ?: ""
+            // Prioritize environment variables (from GitHub Secrets) over key.properties
+            keyAlias = System.getenv("ANDROID_KEYSTORE_ALIAS") ?: (keystoreProperties["keyAlias"] as String? ?: "")
+            keyPassword = System.getenv("ANDROID_KEYSTORE_PASSWORD") ?: (keystoreProperties["keyPassword"] as String? ?: "")
+            storePassword = System.getenv("ANDROID_KEYSTORE_STORE_PASSWORD") ?: (keystoreProperties["storePassword"] as String? ?: "")
+
+            val keystorePath = System.getenv("KEYSTORE_PATH") // Path to decoded .jks file from CI
+            if (keystorePath != null) {
+                storeFile = file(keystorePath)
+            } else {
+                // Fallback to local key.properties if available
+                storeFile = keystoreProperties["storeFile"]?.let { file(it) } ?: null
+            }
         }
     }
     

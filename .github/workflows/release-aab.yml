@@ -21,6 +21,11 @@ jobs:
   build:
     name: Build AAB + generate changelog
     runs-on: ubuntu-latest
+    env:
+      ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
+      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEYSTORE_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_STORE_PASSWORD }}
+      ANDROID_KEYSTORE_FILE_BASE64: ${{ secrets.ANDROID_KEYSTORE_FILE_BASE64 }}
     outputs:
       version: ${{ steps.set_version.outputs.version }}
       release_body: ${{ steps.make_release_body.outputs.release_body }}
@@ -138,6 +143,13 @@ jobs:
           echo "$RELEASE_BODY_CONTENT" >> $GITHUB_OUTPUT
           echo "$DELIMITER" >> $GITHUB_OUTPUT
 
+      - name: Decode Keystore File
+        id: decode_keystore
+        if: env.ANDROID_KEYSTORE_FILE_BASE64 != '' # Only run if the secret is provided
+        run: |
+          echo "Decoding keystore file..."
+          echo "${{ secrets.ANDROID_KEYSTORE_FILE_BASE64 }}" | base64 --decode > /tmp/upload-keystore.jks
+          echo "KEYSTORE_PATH=/tmp/upload-keystore.jks" >> $GITHUB_ENV # Make path available to subsequent steps
       - name: Build Android AAB (release)
         id: build_aab
         run: |
