@@ -143,13 +143,14 @@ jobs:
           echo "$RELEASE_BODY_CONTENT" >> $GITHUB_OUTPUT
           echo "$DELIMITER" >> $GITHUB_OUTPUT
 
-      - name: Decode Keystore File
-        id: decode_keystore
-        if: env.ANDROID_KEYSTORE_FILE_BASE64 != '' # Only run if the secret is provided
+      - name: Decode Keystore
         run: |
-          echo "Decoding keystore file..."
-          echo "${{ secrets.ANDROID_KEYSTORE_FILE_BASE64 }}" | base64 --decode > /tmp/upload-keystore.jks
-          echo "KEYSTORE_PATH=/tmp/upload-keystore.jks" >> $GITHUB_ENV # Make path available to subsequent steps
+          echo "${ANDROID_KEYSTORE_BASE64}" | base64 --decode > release.jks
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
+      - name: Export keystore path
+        run: echo "KEYSTORE_PATH=$PWD/release.jks" >> $GITHUB_ENV
       - name: Build Android AAB (release)
         id: build_aab
         run: |
