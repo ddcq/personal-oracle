@@ -70,6 +70,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          java-version: "11" # Explicitly set JDK to 11
 
       - name: Install dependencies
         run: flutter pub get
@@ -145,9 +146,8 @@ jobs:
 
       - name: Decode Keystore
         run: |
-          echo "${ANDROID_KEYSTORE_BASE64}" | base64 --decode > release.jks
-        env:
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          # Use the job-level environment variable
+          echo "${ANDROID_KEYSTORE_FILE_BASE64}" | base64 --decode > release.jks
 
       - name: Export keystore path
         run: echo "KEYSTORE_PATH=$PWD/release.jks" >> $GITHUB_ENV
