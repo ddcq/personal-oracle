@@ -70,7 +70,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          java-version: "11" # Explicitly set JDK to 11
+          java-version: "8" # Explicitly set JDK to 8 for broader keystore compatibility
 
       - name: Install dependencies
         run: flutter pub get
