@@ -196,10 +196,9 @@ jobs:
         id: prep
         run: |
           VERSION="${{ needs.build.outputs.version }}"
-          BODY=${{ needs.build.outputs.release_body }}
+          # Direct write of multi-line release_body to file, quoted to preserve newlines
+          echo "${{ needs.build.outputs.release_body }}" > release_body.txt
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          # write body to file for release action
-          printf "%s" "$BODY" > release_body.txt
           echo "release_body_path=release_body.txt" >> $GITHUB_OUTPUT
 
       - name: Download AAB artifact from build job
