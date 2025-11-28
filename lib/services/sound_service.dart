@@ -8,6 +8,7 @@ enum MusicType { mainMenu, story, card, none }
 
 class SoundService with ChangeNotifier {
   final AudioPlayer _musicPlayer = AudioPlayer();
+  final List<AudioPlayer> _fxPlayers = [];
   bool _isMuted = false;
   bool _isFxMuted = false;
   String? _readingPageMusicAsset;
@@ -19,6 +20,10 @@ class SoundService with ChangeNotifier {
   String? _currentAmbientMusicCardId;
 
   SoundService() {
+    // Constructor is now minimal
+  }
+
+  Future<void> init() async {
     _musicPlayer.setReleaseMode(ReleaseMode.loop);
     _readingPageMusicAsset = 'audio/reading.mp3';
 
@@ -27,6 +32,29 @@ class SoundService with ChangeNotifier {
         resumePreviousMusic();
       }
     });
+
+    // Configure the audio context for mixing sounds
+    final audioContext = AudioContext(
+      iOS: AudioContextIOS(
+        category: AVAudioSessionCategory.playback,
+        options: {
+          AVAudioSessionOptions.mixWithOthers,
+        },
+      ),
+      android: AudioContextAndroid(
+        isSpeakerphoneOn: true,
+        stayAwake: true,
+        contentType: AndroidContentType.sonification,
+        usageType: AndroidUsageType.game,
+        audioFocus: AndroidAudioFocus.none,
+      ),
+    );
+
+    try {
+      await AudioPlayer.global.setAudioContext(audioContext);
+    } catch (e) {
+      debugPrint('Error setting audio context: $e');
+    }
   }
 
   bool get isMuted => _isMuted;
@@ -295,13 +323,18 @@ class SoundService with ChangeNotifier {
   Future<void> playSoundEffect(String assetPath) async {
     if (!_isFxMuted) {
       try {
-        final player = AudioPlayer();
+        // Find an available player or create a new one
+        AudioPlayer? player = _fxPlayers.firstWhere(
+          (p) => p.state == PlayerState.completed || p.state == PlayerState.stopped,
+          orElse: () {
+            final newPlayer = AudioPlayer();
+            _fxPlayers.add(newPlayer);
+            return newPlayer;
+          },
+        );
+
         await player.setReleaseMode(ReleaseMode.release);
         await player.play(AssetSource(assetPath));
-
-        player.onPlayerComplete.listen((_) {
-          player.dispose();
-        });
       } catch (e) {
         debugPrint('Error playing sound effect $assetPath: $e');
       }
@@ -311,6 +344,10 @@ class SoundService with ChangeNotifier {
   @override
   void dispose() {
     _musicPlayer.dispose();
+    for (final player in _fxPlayers) {
+      player.dispose();
+    }
+    _fxPlayers.clear();
     super.dispose();
   }
 }

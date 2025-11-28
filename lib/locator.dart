@@ -6,9 +6,14 @@ import 'package:oracle_d_asgard/services/database_service.dart';
 
 final getIt = GetIt.instance;
 
-void setupLocator() {
+Future<void> setupLocator() async {
+  // Eager singleton for services that need to be initialized at startup
+  final soundService = SoundService();
+  await soundService.init();
+  getIt.registerSingleton<SoundService>(soundService);
+
+  // Lazy singletons for other services
   getIt.registerLazySingleton(() => GamificationService());
-  getIt.registerLazySingleton(() => SoundService());
   getIt.registerLazySingleton(() => DatabaseService());
   getIt.registerLazySingleton(() => CacheService());
 }

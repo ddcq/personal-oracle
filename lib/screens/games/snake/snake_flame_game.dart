@@ -296,7 +296,12 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
         _foodRottingTimeBase -
         (level * _foodRottingTimeLevelFactor);
     
-    remainingFoodTime.value = foodRottingTime - gameState.value.foodAge;
+    // Defer the update to avoid "setState during build" errors
+    Future.microtask(() {
+      if (isMounted) {
+        remainingFoodTime.value = foodRottingTime - gameState.value.foodAge;
+      }
+    });
     
     if (gameState.value.foodAge >= foodRottingTime) {
       gameState.value.foodAge = 0.0;

@@ -37,7 +37,7 @@ void main() async {
     // Continue without localization - app will use fallback locale
   }
 
-  setupLocator();
+  await setupLocator();
 
   runApp(
     AppRestartWrapper(
