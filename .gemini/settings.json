@@ -5,6 +5,12 @@
     }
   },
   "mcpServers": {
+    "dart": {
+      "command": "dart",
+      "args": [
+        "mcp-server"
+      ]
+    },
     "sequential-thinking": {
       "command": "npx",
       "args": [
