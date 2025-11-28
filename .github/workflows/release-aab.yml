@@ -98,6 +98,11 @@ jobs:
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Generate version.dart
+        run: |
+          mkdir -p lib/generated
+          echo "const String appVersion = '${{ steps.set_version.outputs.version }}';" > lib/generated/version.dart
+
       - name: Get previous tag (useful for changelog)
         id: get_prev_tag
         run: |
