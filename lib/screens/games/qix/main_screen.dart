@@ -9,6 +9,7 @@ import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/services/video_cache_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -54,6 +55,11 @@ class _QixGameScreenState extends State<QixGameScreen> {
     final int currentDifficulty = await gamificationService.getQixDifficulty();
     final CollectibleCard? potentialRewardCard = await gamificationService
         .selectRandomUnearnedCollectibleCard();
+
+    if (potentialRewardCard?.videoUrl != null &&
+        potentialRewardCard!.videoUrl!.isNotEmpty) {
+      getIt<VideoCacheService>().preloadVideo(potentialRewardCard.videoUrl!);
+    }
 
     _game = QixGame(
       onGameOver: () {

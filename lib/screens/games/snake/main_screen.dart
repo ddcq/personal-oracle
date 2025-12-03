@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_game_over_popup.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/services/video_cache_service.dart';
 import 'package:oracle_d_asgard/widgets/joystick_controller.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' show Direction;
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
@@ -38,7 +39,8 @@ class _SnakeGameState extends State<SnakeGame> {
   int _currentLevel = 1; // Initialize with default value
   Future<int>? _initializeGameFuture;
   bool _isGameInitialized = false;
-  bool _isLevelInitialized = false; // Track if level was loaded from DB
+  bool _isLevelInitialized = false;
+  CollectibleCard? _rewardCard;
 
   @override
   void initState() {
@@ -71,9 +73,18 @@ class _SnakeGameState extends State<SnakeGame> {
   // CLEAN GAME MANAGEMENT METHODS
   // ==========================================
 
+  Future<void> _preloadNextReward() async {
+    _rewardCard = await getIt<GamificationService>()
+        .selectRandomUnearnedCollectibleCard();
+    if (_rewardCard?.videoUrl != null && _rewardCard!.videoUrl!.isNotEmpty) {
+      await getIt<VideoCacheService>().preloadVideo(_rewardCard!.videoUrl!);
+    }
+  }
+
   /// Creates a new game instance at the current level
   void _initializeNewGame() {
     _game?.pauseEngine();
+    _preloadNextReward(); // Preload the reward
     _game = SnakeFlameGame(
       gamificationService: getIt<GamificationService>(),
       onGameEnd: _onGameEnd,
@@ -140,10 +151,7 @@ class _SnakeGameState extends State<SnakeGame> {
     CollectibleCard? wonCard,
   }) async {
     if (isVictory) {
-      final rewardCard =
-          wonCard ??
-          await getIt<GamificationService>()
-              .selectRandomUnearnedCollectibleCard();
+      final rewardCard = wonCard ?? _rewardCard;
       _showVictoryDialog(rewardCard);
     } else {
       _showGameOverDialog(score);

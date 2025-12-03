@@ -1,27 +1,27 @@
-import 'dart:async';
-import 'dart:math';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
-import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
+import 'dart:async';
+import 'dart:math';
+
 import 'package:oracle_d_asgard/components/victory_popup.dart';
-import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_components.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_data.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
-import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
-import 'package:oracle_d_asgard/utils/text_styles.dart';
-import 'package:oracle_d_asgard/locator.dart';
-import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/models/wall_game_models.dart';
+import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
+import 'package:oracle_d_asgard/services/video_cache_service.dart';
+import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
 
-  @override
   @override
   State<GameScreen> createState() => _GameScreenState();
 }
@@ -31,7 +31,6 @@ class _GameScreenState extends State<GameScreen> {
   static const int boardHeight = 22;
   static const int victoryHeight = 12;
 
-  // The board is now for collision detection only.
   List<List<bool>> collisionBoard = List.generate(
     boardHeight,
     (index) => List.generate(boardWidth, (index) => false),
@@ -39,32 +38,22 @@ class _GameScreenState extends State<GameScreen> {
   List<PlacedPiece> placedPieces = [];
   final Set<Segment> _contour = {};
 
-  // Timer for visual effects
   Timer? effectTimer;
-
   Timer? gameTimer;
   bool gameActive = false;
-  bool _isPaused = false; // New flag for pausing game logic
-  // gameWon and gameLost are now handled by navigation to dedicated screens.
+  bool _isPaused = false;
   FocusNode focusNode = FocusNode();
 
-  // Current piece
   List<List<bool>> currentPiece = [];
-  Color currentPieceColor =
-      Colors.blue; // Fallback color, not used if images work
   int pieceX = 0;
   int pieceY = 0;
   int currentPieceIndex = 0;
   int currentRotationIndex = 0;
-
-  // Score tracking
   int currentScore = 0;
-
-  // Queue of next pieces
   List<int> nextPieces = [];
-
-  // Assuming image files are named like 'p.webp', 'q.webp' etc. in assets/images/blocks/
   final List<String> pieceImageNames = ['o', 'i', 'z', 's', 't', 'j', 'l'];
+
+  CollectibleCard? _rewardCard;
 
   @override
   void initState() {
@@ -73,13 +62,21 @@ class _GameScreenState extends State<GameScreen> {
     startGame();
   }
 
-  // Initializes or resets the game.
+  Future<void> _preloadNextReward() async {
+    _rewardCard = await getIt<GamificationService>()
+        .selectRandomUnearnedCollectibleCard();
+    if (_rewardCard?.videoUrl != null && _rewardCard!.videoUrl!.isNotEmpty) {
+      await getIt<VideoCacheService>().preloadVideo(_rewardCard!.videoUrl!);
+    }
+  }
+
   void startGame() {
-    gameTimer?.cancel(); // Cancel previous timer if it exists
-    effectTimer?.cancel(); // Cancel previous visual effects timer
+    gameTimer?.cancel();
+    effectTimer?.cancel();
+
+    _preloadNextReward();
 
     setState(() {
-      // Reset board and effects
       collisionBoard = List.generate(
         boardHeight,
         (index) => List.generate(boardWidth, (index) => false),
@@ -90,16 +87,15 @@ class _GameScreenState extends State<GameScreen> {
         _contour.add(Segment(i, boardHeight, i + 1, boardHeight));
       }
       gameActive = true;
-      _isPaused = false; // Ensure game is not paused on start
-      currentPiece = []; // Empty the current piece
-      currentScore = 0; // Reset score
+      _isPaused = false;
+      currentPiece = [];
+      currentScore = 0;
     });
 
-    generateNextPieces(); // Génère les prochaines pièces
-    spawnNewPiece(); // Fait apparaître une nouvelle pièce
+    generateNextPieces();
+    spawnNewPiece();
 
-    // Lance le timer du jeu pour la descente automatique des pièces
-    gameTimer = Timer.periodic(Duration(milliseconds: 800), (timer) {
+    gameTimer = Timer.periodic(const Duration(milliseconds: 800), (timer) {
       if (gameActive && !_isPaused) {
         movePieceDown();
       } else if (!gameActive) {
@@ -107,61 +103,49 @@ class _GameScreenState extends State<GameScreen> {
       }
     });
 
-    // Timer pour les effets visuels temporaires (ex: brillance des blocs nouvellement placés)
-    effectTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+    effectTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (!_isPaused) {
         _updateVisualEffects();
       }
     });
   }
 
-  // Génère la queue des 5 prochaines pièces aléatoires.
   void generateNextPieces() {
     Random random = Random();
     nextPieces.clear();
 
-    // Toutes les pièces ont la même chance d'apparaître
     for (int i = 0; i < 5; i++) {
       int pieceIndex = random.nextInt(pieceImageNames.length);
       nextPieces.add(pieceIndex);
     }
   }
 
-  // Fait apparaître une nouvelle pièce en haut du plateau.
   void spawnNewPiece() {
     if (nextPieces.isEmpty) {
-      generateNextPieces(); // S’il n’y a plus de pièces, en génère de nouvelles.
+      generateNextPieces();
     }
 
-    // Prend la première pièce de la queue
     currentPieceIndex = nextPieces.removeAt(0);
-
-    // Ajoute une nouvelle pièce aléatoire à la fin de la queue
     Random random = Random();
     int newPieceIndex = random.nextInt(pieces.length);
     nextPieces.add(newPieceIndex);
 
-    currentRotationIndex = 0; // Commence toujours par la première rotation
+    currentRotationIndex = 0;
 
-    // Définit la forme de la pièce actuelle basée sur l’index et la rotation
     currentPiece = List.generate(
       pieces[currentPieceIndex][currentRotationIndex].length,
       (i) => List.from(pieces[currentPieceIndex][currentRotationIndex][i]),
     );
-    pieceX =
-        (boardWidth - currentPiece[0].length) ~/
-        2; // Centre la pièce horizontalement
-    pieceY = 0; // Place la pièce en haut du plateau
+    pieceX = (boardWidth - currentPiece[0].length) ~/ 2;
+    pieceY = 0;
 
-    // Vérifie si le jeu est perdu (nouvelle pièce ne peut pas être placée au départ)
     if (!canPlacePiece(pieceX, pieceY)) {
-      endGame(false); // Fin du jeu : défaite
+      endGame(false);
     }
 
-    setState(() {}); // Force la mise à jour de l'affichage
+    setState(() {});
   }
 
-  // Vérifie si la pièce actuelle peut être placée à une position donnée (x, y).
   bool canPlacePiece(int x, int y) {
     for (int row = 0; row < currentPiece.length; row++) {
       for (int col = 0; col < currentPiece[row].length; col++) {
@@ -169,12 +153,10 @@ class _GameScreenState extends State<GameScreen> {
           int boardX = x + col;
           int boardY = y + row;
 
-          // Vérifie les collisions avec les bords du plateau ou les blocs existants
-          if (boardX < 0 || // Hors limite à gauche
-              boardX >= boardWidth || // Hors limite à droite
-              boardY >= boardHeight || // Hors limite en bas
+          if (boardX < 0 ||
+              boardX >= boardWidth ||
+              boardY >= boardHeight ||
               (boardY >= 0 && collisionBoard[boardY][boardX])) {
-            // Collision avec un bloc existant
             return false;
           }
         }
@@ -190,25 +172,21 @@ class _GameScreenState extends State<GameScreen> {
           int x = pieceX + c;
           int y = pieceY + r;
 
-          // Top edge
           final topEdge = Segment(x, y, x + 1, y);
           if (!_contour.remove(topEdge)) {
             _contour.add(topEdge);
           }
 
-          // Bottom edge
           final bottomEdge = Segment(x, y + 1, x + 1, y + 1);
           if (!_contour.remove(bottomEdge)) {
             _contour.add(bottomEdge);
           }
 
-          // Left edge
           final leftEdge = Segment(x, y, x, y + 1);
           if (!_contour.remove(leftEdge)) {
             _contour.add(leftEdge);
           }
 
-          // Right edge
           final rightEdge = Segment(x + 1, y, x + 1, y + 1);
           if (!_contour.remove(rightEdge)) {
             _contour.add(rightEdge);
@@ -218,9 +196,7 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  // Place la pièce actuelle sur le plateau (elle devient fixe).
   void placePiece() {
-    // Add to placed pieces list for rendering
     placedPieces.add(
       PlacedPiece(
         pieceIndex: currentPieceIndex,
@@ -230,7 +206,6 @@ class _GameScreenState extends State<GameScreen> {
       ),
     );
 
-    // Update collision board
     for (int row = 0; row < currentPiece.length; row++) {
       for (int col = 0; col < currentPiece[row].length; col++) {
         if (currentPiece[row][col]) {
@@ -250,7 +225,6 @@ class _GameScreenState extends State<GameScreen> {
     _updateContour();
     _simulateBlockPlacement();
 
-    // Check for inaccessible holes created by this piece
     if (_checkInaccessibleHoles()) {
       endGame(false);
       return;
@@ -262,21 +236,13 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  // Placeholder pour simuler un effet sonore ou haptique.
-  void _simulateBlockPlacement() {
-    // Ici, on pourrait ajouter HapticFeedback.lightImpact() pour mobile (nécessite d'importer 'package:flutter/services.dart')
-    // ou jouer un son de pierre qui tombe.
-  }
+  void _simulateBlockPlacement() {}
 
-  // Met à jour les effets visuels (ex: fait disparaître la brillance des blocs après un certain temps).
   void _updateVisualEffects() {
     bool needsUpdate = false;
     for (final piece in placedPieces) {
       if (piece.isNewlyPlaced) {
-        // After a short delay, remove the "newly placed" effect.
-        // A simple random chance per frame to turn it off.
         if (Random().nextDouble() < 0.2) {
-          // 20% chance to turn off the effect per frame
           piece.isNewlyPlaced = false;
           needsUpdate = true;
         }
@@ -284,14 +250,13 @@ class _GameScreenState extends State<GameScreen> {
     }
 
     if (needsUpdate) {
-      setState(() {}); // Force update to make effects disappear
+      setState(() {});
     }
   }
 
-  // Vérifie si le joueur a gagné ou perdu.
   void checkVictoryCondition() {
     if (_checkWallComplete()) {
-      endGame(true); // Victoire !
+      endGame(true);
     }
   }
 
@@ -303,7 +268,6 @@ class _GameScreenState extends State<GameScreen> {
     final pieceWidth = piece[0].length;
     final pieceHeight = piece.length;
 
-    // Check all cells in the bounding box of the piece, with a 1-cell margin.
     final startX = x - 1;
     final endX = x + pieceWidth;
     final startY = y - 1;
@@ -311,21 +275,18 @@ class _GameScreenState extends State<GameScreen> {
 
     for (int cy = startY; cy <= endY; cy++) {
       for (int cx = startX; cx <= endX; cx++) {
-        // We are looking for an empty cell (a potential hole).
-        // It must be within the board and not on the top row (since it must have a block above).
         if (cx >= 0 &&
             cx < boardWidth &&
             cy > 0 &&
             cy < boardHeight &&
             !collisionBoard[cy][cx]) {
-          // Check if it's blocked on top, left, and right.
           final bool blockedTop = collisionBoard[cy - 1][cx];
           final bool blockedLeft = (cx == 0) || collisionBoard[cy][cx - 1];
           final bool blockedRight =
               (cx == boardWidth - 1) || collisionBoard[cy][cx + 1];
 
           if (blockedTop && blockedLeft && blockedRight) {
-            return true; // Found a hole.
+            return true;
           }
         }
       }
@@ -345,19 +306,17 @@ class _GameScreenState extends State<GameScreen> {
     return true;
   }
 
-  // Déplace la pièce vers le bas.
   void movePieceDown() {
     if (canPlacePiece(pieceX, pieceY + 1)) {
       setState(() {
         pieceY++;
       });
     } else {
-      placePiece(); // Si la pièce ne peut plus descendre, elle est posée.
+      placePiece();
       setState(() {});
     }
   }
 
-  // Déplace la pièce vers la gauche.
   void movePieceLeft() {
     if (canPlacePiece(pieceX - 1, pieceY)) {
       setState(() {
@@ -366,7 +325,6 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  // Déplace la pièce vers la droite.
   void movePieceRight() {
     if (canPlacePiece(pieceX + 1, pieceY)) {
       setState(() {
@@ -375,11 +333,9 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  // Fait pivoter la pièce.
   void rotatePiece() {
     if (!gameActive) return;
 
-    // Calculer la prochaine rotation
     int nextRotationIndex =
         (currentRotationIndex + 1) % pieces[currentPieceIndex].length;
     List<List<bool>> nextPiece = List.generate(
@@ -387,26 +343,21 @@ class _GameScreenState extends State<GameScreen> {
       (i) => List.from(pieces[currentPieceIndex][nextRotationIndex][i]),
     );
 
-    // Sauvegarde la pièce actuelle temporairement pour la restaurer si la rotation échoue
     List<List<bool>> tempPiece = currentPiece;
-    currentPiece = nextPiece; // Tente d'appliquer la nouvelle rotation
+    currentPiece = nextPiece;
 
     if (canPlacePiece(pieceX, pieceY)) {
-      // Rotation réussie sans décalage
       currentRotationIndex = nextRotationIndex;
       setState(() {});
     } else {
-      // Essaye de décaler la pièce pour permettre la rotation (kick)
       bool rotated = false;
       for (int offset = 1; offset <= 2; offset++) {
-        // Essaye à droite
         if (canPlacePiece(pieceX + offset, pieceY)) {
           pieceX += offset;
           currentRotationIndex = nextRotationIndex;
           rotated = true;
           break;
         }
-        // Essaye à gauche
         if (canPlacePiece(pieceX - offset, pieceY)) {
           pieceX -= offset;
           currentRotationIndex = nextRotationIndex;
@@ -416,7 +367,6 @@ class _GameScreenState extends State<GameScreen> {
       }
 
       if (!rotated) {
-        // Restaure la pièce originale si la rotation échoue après les décalages
         currentPiece = tempPiece;
       } else {
         setState(() {});
@@ -424,10 +374,9 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  // Gère les événements de touche du clavier.
   bool handleKeyPress(KeyEvent event) {
     if (!gameActive) {
-      return false; // Ignore les touches si le jeu n’est pas actif
+      return false;
     }
 
     if (event is KeyDownEvent) {
@@ -460,7 +409,6 @@ class _GameScreenState extends State<GameScreen> {
     return false;
   }
 
-  // Fait tomber la pièce instantanément au fond.
   void dropPiece() {
     int startY = pieceY;
     while (canPlacePiece(pieceX, pieceY + 1)) {
@@ -468,11 +416,10 @@ class _GameScreenState extends State<GameScreen> {
     }
     int floorsDropped = pieceY - startY;
     currentScore += floorsDropped;
-    placePiece(); // Une fois au fond, la pièce est posée.
+    placePiece();
     setState(() {});
   }
 
-  // Termine le jeu, affiche le message de victoire ou de défaite.
   void endGame(bool won) {
     gameTimer?.cancel();
     effectTimer?.cancel();
@@ -480,7 +427,6 @@ class _GameScreenState extends State<GameScreen> {
       gameActive = false;
     });
 
-    // Save the score
     final gamificationService = getIt<GamificationService>();
     gamificationService.saveGameScore('Asgard Wall', currentScore);
 
@@ -492,72 +438,45 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _showWinDialog() {
-    final gamificationService = getIt<GamificationService>();
-    gamificationService
-        .selectRandomUnearnedCollectibleCard()
-        .then((card) {
-          if (card != null) {
-            if (!mounted) return;
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return VictoryPopup(
-                  rewardCard: card,
-                  onDismiss: () {
-                    Navigator.of(context).pop();
-                    startGame();
-                  },
-                  onSeeRewards: () {
-                    Navigator.of(context).pop();
-                    context.go('/profile');
-                  },
-                );
-              },
-            );
-          } else {
-            // No card won, just show a simple victory message and restart
-            if (!mounted) return;
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return VictoryPopup(
-                  isGenericVictory: true,
-                  onDismiss: () {
-                    Navigator.of(context).pop();
-                    startGame();
-                  },
-                  onSeeRewards: () {
-                    Navigator.of(context).pop();
-                    context.go('/profile');
-                  },
-                );
-              },
-            );
-          }
-        })
-        .catchError((error) {
-          // Show generic victory popup in case of error
-          if (!mounted) return;
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return VictoryPopup(
-                isGenericVictory: true,
-                onDismiss: () {
-                  Navigator.of(context).pop();
-                  startGame();
-                },
-                onSeeRewards: () {
-                  Navigator.of(context).pop();
-                  context.go('/profile');
-                },
-              );
+    if (_rewardCard != null) {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return VictoryPopup(
+            rewardCard: _rewardCard,
+            onDismiss: () {
+              Navigator.of(context).pop();
+              startGame();
+            },
+            onSeeRewards: () {
+              Navigator.of(context).pop();
+              context.go('/profile');
             },
           );
-        });
+        },
+      );
+    } else {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return VictoryPopup(
+            isGenericVictory: true,
+            onDismiss: () {
+              Navigator.of(context).pop();
+              startGame();
+            },
+            onSeeRewards: () {
+              Navigator.of(context).pop();
+              context.go('/profile');
+            },
+          );
+        },
+      );
+    }
   }
 
   void _showLossDialog() {
@@ -571,38 +490,14 @@ class _GameScreenState extends State<GameScreen> {
             children: [
               Text(
                 'asgard_wall_game_screen_defeat'.tr(),
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white, // Changed to white
-                  fontFamily: AppTextStyles.amaticSC,
-                  shadows: [
-                    Shadow(
-                      blurRadius: 10.0,
-                      color: Colors.black,
-                      offset: Offset(2.0, 2.0),
-                    ),
-                  ],
-                ),
+                style: Theme.of(context).textTheme.headlineMedium,
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 'asgard_wall_game_screen_defeat_message'.tr(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontFamily: AppTextStyles.amaticSC, // Added font family
-                  shadows: [
-                    Shadow(
-                      blurRadius: 5.0,
-                      color: Colors.black,
-                      offset: Offset(1.0, 1.0),
-                    ),
-                  ],
-                ),
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ],
           ),
@@ -620,13 +515,12 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   void dispose() {
-    gameTimer?.cancel(); // Annule le timer du jeu à la suppression du widget
-    effectTimer?.cancel(); // Annule le timer des effets visuels
-    focusNode.dispose(); // Libère le FocusNode
+    gameTimer?.cancel();
+    effectTimer?.cancel();
+    focusNode.dispose();
     super.dispose();
   }
 
-  // Construit le plateau de jeu visuel.
   Widget buildBoard() {
     return Container(
       decoration: BoxDecoration(
@@ -748,11 +642,10 @@ class _GameScreenState extends State<GameScreen> {
               fit: BoxFit.cover,
             ),
           ),
-        ), // The background is now at the bottom of the stack
+        ),
         Scaffold(
-          backgroundColor: Colors.transparent, // Make the scaffold transparent
-          extendBodyBehindAppBar:
-              false, // The body does not extend behind the app bar
+          backgroundColor: Colors.transparent,
+          extendBodyBehindAppBar: false,
           appBar: ChibiAppBar(
             titleText: 'asgard_wall_game_screen_title'.tr(),
             leading: IconButton(
@@ -781,21 +674,17 @@ class _GameScreenState extends State<GameScreen> {
           body: Focus(
             focusNode: focusNode,
             onKeyEvent: (node, event) {
-              // Gère les événements clavier
               return handleKeyPress(event)
                   ? KeyEventResult.handled
                   : KeyEventResult.ignored;
             },
             child: SimpleGestureDetector(
-              // Permet de refocaliser le jeu en tapant n’importe où
               onTap: () => focusNode.requestFocus(),
               child: Column(
                 children: [
-                  // Zone de jeu principale avec plateau et aperçu des pièces
                   Expanded(
                     child: Row(
                       children: [
-                        // Plateau de jeu (prend 3 parts de l’espace)
                         Expanded(
                           flex: 3,
                           child: Center(
@@ -805,10 +694,7 @@ class _GameScreenState extends State<GameScreen> {
                             ),
                           ),
                         ),
-
-                        SizedBox(width: 16),
-
-                        // Aperçu des prochaines pièces
+                        const SizedBox(width: 16),
                         Expanded(
                           flex: 1,
                           child: NextPiecesPreview(
@@ -821,43 +707,49 @@ class _GameScreenState extends State<GameScreen> {
                       ],
                     ),
                   ),
-
-                  SizedBox(height: 16),
-
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ChibiButton(
                         onPressed: gameActive ? movePieceLeft : () {},
-                        color: Colors
-                            .blueGrey, // Consistent color for game controls
-                        child: Icon(Icons.arrow_left, color: Colors.white),
+                        color: Colors.blueGrey,
+                        child: const Icon(
+                          Icons.arrow_left,
+                          color: Colors.white,
+                        ),
                       ),
                       ChibiButton(
                         onPressed: gameActive ? rotatePiece : () {},
                         color: Colors.blueGrey,
-                        child: Icon(Icons.rotate_right, color: Colors.white),
+                        child: const Icon(
+                          Icons.rotate_right,
+                          color: Colors.white,
+                        ),
                       ),
                       ChibiButton(
                         onPressed: gameActive ? dropPiece : () {},
                         color: Colors.blueGrey,
-                        child: Icon(Icons.arrow_downward, color: Colors.white),
+                        child: const Icon(
+                          Icons.arrow_downward,
+                          color: Colors.white,
+                        ),
                       ),
                       ChibiButton(
                         onPressed: gameActive ? movePieceRight : () {},
                         color: Colors.blueGrey,
-                        child: Icon(Icons.arrow_right, color: Colors.white),
+                        child: const Icon(
+                          Icons.arrow_right,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),
-
-                  SizedBox(height: 16),
-
-                  // Bouton Nouvelle Partie (peut être utile pour redémarrer depuis le jeu)
+                  const SizedBox(height: 16),
                   ChibiButton(
                     onPressed: startGame,
                     text: 'asgard_wall_game_screen_restart'.tr(),
-                    color: const Color(0xFFFFD700), // Fond doré
+                    color: const Color(0xFFFFD700),
                   ),
                 ],
               ),
@@ -883,8 +775,7 @@ class _ContourPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors
-          .cyanAccent // A bright color
+      ..color = Colors.cyanAccent
       ..strokeWidth = 2.0
       ..style = PaintingStyle.stroke;
 

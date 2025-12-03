@@ -14,6 +14,8 @@ import 'package:oracle_d_asgard/utils/game_utils.dart';
 import 'dart:math';
 import 'package:flame/game.dart';
 import 'package:oracle_d_asgard/utils/image_picker_utils.dart';
+import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/services/video_cache_service.dart';
 
 class DashedRectangleComponent extends RectangleComponent {
   static const double _dashLength = 5.0;
@@ -92,7 +94,7 @@ class DashedRectangleComponent extends RectangleComponent {
 class PuzzleFlameGame extends FlameGame {
   final PuzzleGame puzzleGame;
   late ui.Image puzzleImage;
-  final GamificationService _gamificationService = GamificationService();
+  final GamificationService _gamificationService = getIt<GamificationService>();
   final Function(CollectibleCard? rewardCard) onRewardEarned;
   CollectibleCard? associatedCard;
   MythStory? associatedStory;
@@ -209,6 +211,10 @@ class PuzzleFlameGame extends FlameGame {
       final random = Random();
       final selected = availableCards[random.nextInt(availableCards.length)];
       associatedCard = selected;
+      if (associatedCard?.videoUrl != null &&
+          associatedCard!.videoUrl!.isNotEmpty) {
+        getIt<VideoCacheService>().preloadVideo(associatedCard!.videoUrl!);
+      }
       associatedStory = null;
       return selected.imagePath;
     } else {

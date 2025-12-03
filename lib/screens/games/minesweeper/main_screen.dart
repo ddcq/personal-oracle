@@ -14,7 +14,6 @@ import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 
 import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class MinesweeperScreen extends StatelessWidget {
@@ -74,11 +73,10 @@ class _MinesweeperView extends StatelessWidget {
       } else if (controller.isGameWon) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           final gamificationService = getIt<GamificationService>();
-          CollectibleCard? wonCard = await gamificationService
-              .selectRandomUnearnedCollectibleCard();
-
-          if (wonCard != null) {
-            await gamificationService.unlockCollectibleCard(wonCard);
+          if (controller.rewardCard != null) {
+            await gamificationService.unlockCollectibleCard(
+              controller.rewardCard!,
+            );
           }
 
           if (!context.mounted) return;
@@ -87,7 +85,7 @@ class _MinesweeperView extends StatelessWidget {
             context: context,
             builder: (BuildContext context) {
               return VictoryPopup(
-                rewardCard: wonCard,
+                rewardCard: controller.rewardCard,
                 unlockedStoryChapter: null,
                 onDismiss: () {
                   controller.initializeGame();

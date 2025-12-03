@@ -6,6 +6,7 @@ import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
+import 'package:oracle_d_asgard/services/video_cache_service.dart';
 
 import 'package:oracle_d_asgard/locator.dart';
 
@@ -62,7 +63,25 @@ class GameController extends ChangeNotifier {
       _nextChapterToUnlock = null;
       _allChaptersEarned = true;
     }
-    _rewardCard = null;
+
+    if (_allChaptersEarned) {
+      final unearnedContent = await _gamificationService.getUnearnedContent();
+      final cards = (unearnedContent['unearned_collectible_cards'] as List)
+          .cast<CollectibleCard>();
+      if (cards.isNotEmpty) {
+        _rewardCard = cards[Random().nextInt(cards.length)];
+        if (_rewardCard?.videoUrl != null &&
+            _rewardCard!.videoUrl!.isNotEmpty) {
+          getIt<VideoCacheService>().preloadVideo(_rewardCard!.videoUrl!);
+        }
+      } else {
+        _rewardCard = null;
+      }
+      _unlockedStoryChapter = null;
+    } else {
+      _unlockedStoryChapter = _nextChapterToUnlock;
+      _rewardCard = null;
+    }
 
     _shuffledCards = List<MythCard>.from(_selectedStory.correctOrder);
     _shuffledCards.shuffle();
@@ -147,7 +166,14 @@ class GameController extends ChangeNotifier {
   void validateOrder() async {
     _validated = true;
     if (isOrderCompletelyCorrect()) {
-      await _handleVictoryReward();
+      if (_rewardCard != null) {
+        await _gamificationService.unlockCollectibleCard(_rewardCard!);
+      } else if (_unlockedStoryChapter != null) {
+        await _gamificationService.unlockStoryPart(
+          _selectedStory.id,
+          _unlockedStoryChapter!.id,
+        );
+      }
       _showVictoryPopup = true;
     } else {
       _showIncorrectOrderPopup = true;
@@ -156,34 +182,6 @@ class GameController extends ChangeNotifier {
       }
     }
     notifyListeners();
-  }
-
-  Future<void> _handleVictoryReward() async {
-    if (_allChaptersEarned) {
-      await _handleAllChaptersEarnedReward();
-    } else if (_nextChapterToUnlock != null) {
-      await _handleChapterUnlockReward();
-    }
-  }
-
-  Future<void> _handleAllChaptersEarnedReward() async {
-    final unearnedContent = await _gamificationService.getUnearnedContent();
-    final cards = (unearnedContent['unearned_collectible_cards'] as List)
-        .cast<CollectibleCard>();
-    if (cards.isNotEmpty) {
-      final card = cards[Random().nextInt(cards.length)];
-      await _gamificationService.unlockCollectibleCard(card);
-      _rewardCard = card;
-    }
-  }
-
-  Future<void> _handleChapterUnlockReward() async {
-    await _gamificationService.unlockStoryPart(
-      _selectedStory.id,
-      _nextChapterToUnlock!.id,
-    );
-    _unlockedStoryChapter = _nextChapterToUnlock;
-    _rewardCard = null;
   }
 
   void incorrectOrderPopupShown() {
