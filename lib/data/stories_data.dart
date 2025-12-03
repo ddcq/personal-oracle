@@ -25,40 +25,35 @@ List<MythStory> getMythStories() {
           title: 'story_creation_of_the_world_card_1_title',
           description: 'story_creation_of_the_world_card_1_description',
           imagePath: 'creation_1.webp',
-          detailedStory: 'story_creation_of_the_world_card_1_detailed_story'
-              ,
+          detailedStory: 'story_creation_of_the_world_card_1_detailed_story',
         ),
         MythCard(
           id: '2',
           title: 'story_creation_of_the_world_card_2_title',
           description: 'story_creation_of_the_world_card_2_description',
           imagePath: 'creation_2.webp',
-          detailedStory: 'story_creation_of_the_world_card_2_detailed_story'
-              ,
+          detailedStory: 'story_creation_of_the_world_card_2_detailed_story',
         ),
         MythCard(
           id: '3',
           title: 'story_creation_of_the_world_card_3_title',
           description: 'story_creation_of_the_world_card_3_description',
           imagePath: 'creation_3.webp',
-          detailedStory: 'story_creation_of_the_world_card_3_detailed_story'
-              ,
+          detailedStory: 'story_creation_of_the_world_card_3_detailed_story',
         ),
         MythCard(
           id: '4',
           title: 'story_creation_of_the_world_card_4_title',
           description: 'story_creation_of_the_world_card_4_description',
           imagePath: 'creation_4.webp',
-          detailedStory: 'story_creation_of_the_world_card_4_detailed_story'
-              ,
+          detailedStory: 'story_creation_of_the_world_card_4_detailed_story',
         ),
         MythCard(
           id: '5',
           title: 'story_creation_of_the_world_card_5_title',
           description: 'story_creation_of_the_world_card_5_description',
           imagePath: 'creation_5.webp',
-          detailedStory: 'story_creation_of_the_world_card_5_detailed_story'
-              ,
+          detailedStory: 'story_creation_of_the_world_card_5_detailed_story',
         ),
       ],
     ),
@@ -71,48 +66,42 @@ List<MythStory> getMythStories() {
           title: 'story_war_of_aesir_and_vanir_card_1_title',
           description: 'story_war_of_aesir_and_vanir_card_1_description',
           imagePath: 'ases_vanes_1.webp',
-          detailedStory: 'story_war_of_aesir_and_vanir_card_1_detailed_story'
-              ,
+          detailedStory: 'story_war_of_aesir_and_vanir_card_1_detailed_story',
         ),
         MythCard(
           id: '2',
           title: 'story_war_of_aesir_and_vanir_card_2_title',
           description: 'story_war_of_aesir_and_vanir_card_2_description',
           imagePath: 'ases_vanes_2.webp',
-          detailedStory: 'story_war_of_aesir_and_vanir_card_2_detailed_story'
-              ,
+          detailedStory: 'story_war_of_aesir_and_vanir_card_2_detailed_story',
         ),
         MythCard(
           id: '3',
           title: 'story_war_of_aesir_and_vanir_card_3_title',
           description: 'story_war_of_aesir_and_vanir_card_3_description',
           imagePath: 'ases_vanes_3.webp',
-          detailedStory: 'story_war_of_aesir_and_vanir_card_3_detailed_story'
-              ,
+          detailedStory: 'story_war_of_aesir_and_vanir_card_3_detailed_story',
         ),
         MythCard(
           id: '4',
           title: 'story_war_of_aesir_and_vanir_card_4_title',
           description: 'story_war_of_aesir_and_vanir_card_4_description',
           imagePath: 'ases_vanes_4.webp',
-          detailedStory: 'story_war_of_aesir_and_vanir_card_4_detailed_story'
-              ,
+          detailedStory: 'story_war_of_aesir_and_vanir_card_4_detailed_story',
         ),
         MythCard(
           id: '5',
           title: 'story_war_of_aesir_and_vanir_card_5_title',
           description: 'story_war_of_aesir_and_vanir_card_5_description',
           imagePath: 'ases_vanes_5.webp',
-          detailedStory: 'story_war_of_aesir_and_vanir_card_5_detailed_story'
-              ,
+          detailedStory: 'story_war_of_aesir_and_vanir_card_5_detailed_story',
         ),
         MythCard(
           id: '6',
           title: 'story_war_of_aesir_and_vanir_card_6_title',
           description: 'story_war_of_aesir_and_vanir_card_6_description',
           imagePath: 'ases_vanes_6.webp',
-          detailedStory: 'story_war_of_aesir_and_vanir_card_6_detailed_story'
-              ,
+          detailedStory: 'story_war_of_aesir_and_vanir_card_6_detailed_story',
         ),
       ],
     ),
@@ -228,40 +217,35 @@ List<MythStory> getMythStories() {
           title: 'story_the_forging_of_mjolnir_card_1_title',
           description: 'story_the_forging_of_mjolnir_card_1_description',
           imagePath: 'forge_1.webp',
-          detailedStory: 'story_the_forging_of_mjolnir_card_1_detailed_story'
-              ,
+          detailedStory: 'story_the_forging_of_mjolnir_card_1_detailed_story',
         ),
         MythCard(
           id: '2',
           title: 'story_the_forging_of_mjolnir_card_2_title',
           description: 'story_the_forging_of_mjolnir_card_2_description',
           imagePath: 'forge_2.webp',
-          detailedStory: 'story_the_forging_of_mjolnir_card_2_detailed_story'
-              ,
+          detailedStory: 'story_the_forging_of_mjolnir_card_2_detailed_story',
         ),
         MythCard(
           id: '3',
           title: 'story_the_forging_of_mjolnir_card_3_title',
           description: 'story_the_forging_of_mjolnir_card_3_description',
           imagePath: 'forge_3.webp',
-          detailedStory: 'story_the_forging_of_mjolnir_card_3_detailed_story'
-              ,
+          detailedStory: 'story_the_forging_of_mjolnir_card_3_detailed_story',
         ),
         MythCard(
           id: '4',
           title: 'story_the_forging_of_mjolnir_card_4_title',
           description: 'story_the_forging_of_mjolnir_card_4_description',
           imagePath: 'forge_4.webp',
-          detailedStory: 'story_the_forging_of_mjolnir_card_4_detailed_story'
-              ,
+          detailedStory: 'story_the_forging_of_mjolnir_card_4_detailed_story',
         ),
         MythCard(
           id: '5',
           title: 'story_the_forging_of_mjolnir_card_5_title',
           description: 'story_the_forging_of_mjolnir_card_5_description',
           imagePath: 'forge_5.webp',
-          detailedStory: 'story_the_forging_of_mjolnir_card_5_detailed_story'
-              ,
+          detailedStory: 'story_the_forging_of_mjolnir_card_5_detailed_story',
         ),
       ],
     ),
@@ -438,48 +422,42 @@ List<MythStory> getMythStories() {
           title: 'story_the_punishment_of_loki_card_1_title',
           description: 'story_the_punishment_of_loki_card_1_description',
           imagePath: 'chatiment_1.webp',
-          detailedStory: 'story_the_punishment_of_loki_card_1_detailed_story'
-              ,
+          detailedStory: 'story_the_punishment_of_loki_card_1_detailed_story',
         ),
         MythCard(
           id: '2',
           title: 'story_the_punishment_of_loki_card_2_title',
           description: 'story_the_punishment_of_loki_card_2_description',
           imagePath: 'chatiment_2.webp',
-          detailedStory: 'story_the_punishment_of_loki_card_2_detailed_story'
-              ,
+          detailedStory: 'story_the_punishment_of_loki_card_2_detailed_story',
         ),
         MythCard(
           id: '3',
           title: 'story_the_punishment_of_loki_card_3_title',
           description: 'story_the_punishment_of_loki_card_3_description',
           imagePath: 'chatiment_3.webp',
-          detailedStory: 'story_the_punishment_of_loki_card_3_detailed_story'
-              ,
+          detailedStory: 'story_the_punishment_of_loki_card_3_detailed_story',
         ),
         MythCard(
           id: '4',
           title: 'story_the_punishment_of_loki_card_4_title',
           description: 'story_the_punishment_of_loki_card_4_description',
           imagePath: 'chatiment_4.webp',
-          detailedStory: 'story_the_punishment_of_loki_card_4_detailed_story'
-              ,
+          detailedStory: 'story_the_punishment_of_loki_card_4_detailed_story',
         ),
         MythCard(
           id: '5',
           title: 'story_the_punishment_of_loki_card_5_title',
           description: 'story_the_punishment_of_loki_card_5_description',
           imagePath: 'chatiment_5.webp',
-          detailedStory: 'story_the_punishment_of_loki_card_5_detailed_story'
-              ,
+          detailedStory: 'story_the_punishment_of_loki_card_5_detailed_story',
         ),
         MythCard(
           id: '6',
           title: 'story_the_punishment_of_loki_card_6_title',
           description: 'story_the_punishment_of_loki_card_6_description',
           imagePath: 'chatiment_6.webp',
-          detailedStory: 'story_the_punishment_of_loki_card_6_detailed_story'
-              ,
+          detailedStory: 'story_the_punishment_of_loki_card_6_detailed_story',
         ),
       ],
     ),

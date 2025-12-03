@@ -77,31 +77,39 @@ class _MainScreenState extends State<MainScreen> {
                     alignment: Alignment.topCenter,
                     child: Padding(
                       padding: EdgeInsets.only(top: 20.h),
-                      child: Text(
-                        'main_screen_title'.tr(),
-                        textAlign: TextAlign.center,
-                        style: ChibiTextStyles.appBarTitle,
-                      ).animate().slideY(
-                            begin: -0.3,
-                            duration: 800.ms,
-                            curve: Curves.easeOutCubic,
-                          ).fadeIn(duration: 600.ms),
+                      child:
+                          Text(
+                                'main_screen_title'.tr(),
+                                textAlign: TextAlign.center,
+                                style: ChibiTextStyles.appBarTitle,
+                              )
+                              .animate()
+                              .slideY(
+                                begin: -0.3,
+                                duration: 800.ms,
+                                curve: Curves.easeOutCubic,
+                              )
+                              .fadeIn(duration: 600.ms),
                     ),
                   ),
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
                       child: ClipRect(
-                        child: Image.asset(
-                          'assets/images/odin_chibi.png',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          alignment: Alignment.topCenter,
-                        ).animate(delay: 400.ms).slideY(
-                              begin: -0.1,
-                              duration: 800.ms,
-                              curve: Curves.easeOutCubic,
-                            ).fadeIn(duration: 600.ms),
+                        child:
+                            Image.asset(
+                                  'assets/images/odin_chibi.png',
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  alignment: Alignment.topCenter,
+                                )
+                                .animate(delay: 400.ms)
+                                .slideY(
+                                  begin: -0.1,
+                                  duration: 800.ms,
+                                  curve: Curves.easeOutCubic,
+                                )
+                                .fadeIn(duration: 600.ms),
                       ),
                     ),
                   ),
@@ -118,68 +126,77 @@ class _MainScreenState extends State<MainScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(
-                          width: double.infinity,
-                          child: ChibiButton(
-                            text: 'main_screen_play'.tr(),
-                            color: ChibiColors.buttonOrange,
-                            onPressed: () {
-                              context.go('/games');
-                            },
-                          ),
-                        ).animate(delay: 800.ms).slideX(
+                              width: double.infinity,
+                              child: ChibiButton(
+                                text: 'main_screen_play'.tr(),
+                                color: ChibiColors.buttonOrange,
+                                onPressed: () {
+                                  context.go('/games');
+                                },
+                              ),
+                            )
+                            .animate(delay: 800.ms)
+                            .slideX(
                               begin: -0.3,
                               duration: 400.ms,
                               curve: Curves.easeOutCubic,
-                            ).fadeIn(duration: 300.ms),
+                            )
+                            .fadeIn(duration: 300.ms),
                         SizedBox(height: 10.h),
                         SizedBox(
-                          width: double.infinity,
-                          child: ChibiButton(
-                            text: 'main_screen_guardian_deity'.tr(),
-                            color: ChibiColors.buttonBlue,
-                            onPressed: () {
-                              context.go('/quiz');
-                            },
-                          ),
-                        ).animate(delay: 1000.ms).slideX(
+                              width: double.infinity,
+                              child: ChibiButton(
+                                text: 'main_screen_guardian_deity'.tr(),
+                                color: ChibiColors.buttonBlue,
+                                onPressed: () {
+                                  context.go('/quiz');
+                                },
+                              ),
+                            )
+                            .animate(delay: 1000.ms)
+                            .slideX(
                               begin: -0.3,
                               duration: 400.ms,
                               curve: Curves.easeOutCubic,
-                            ).fadeIn(duration: 300.ms),
+                            )
+                            .fadeIn(duration: 300.ms),
                         SizedBox(height: 10.h),
                         Row(
-                          children: [
-                            Expanded(
-                              child: ChibiButton(
-                                color: ChibiColors.buttonRed,
-                                onPressed: () {
-                                  context.go('/profile');
-                                },
-                                child: const Icon(
-                                  Icons.emoji_events,
-                                  color: Colors.white,
+                              children: [
+                                Expanded(
+                                  child: ChibiButton(
+                                    color: ChibiColors.buttonRed,
+                                    onPressed: () {
+                                      context.go('/profile');
+                                    },
+                                    child: const Icon(
+                                      Icons.emoji_events,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            SizedBox(width: 10.w),
-                            Expanded(
-                              child: ChibiButton(
-                                color: ChibiColors.buttonGreen,
-                                onPressed: () {
-                                  context.go('/settings');
-                                },
-                                child: const Icon(
-                                  Icons.settings,
-                                  color: Colors.white,
+                                SizedBox(width: 10.w),
+                                Expanded(
+                                  child: ChibiButton(
+                                    color: ChibiColors.buttonGreen,
+                                    onPressed: () {
+                                      context.go('/settings');
+                                    },
+                                    child: const Icon(
+                                      Icons.settings,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ).animate(delay: 1200.ms).slideX(
+                              ],
+                            )
+                            .animate(delay: 1200.ms)
+                            .slideX(
                               begin: -0.3,
                               duration: 400.ms,
                               curve: Curves.easeOutCubic,
-                            ).fadeIn(duration: 300.ms),
+                            )
+                            .fadeIn(duration: 300.ms),
                       ],
                     ),
                   ),

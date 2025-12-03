@@ -36,13 +36,8 @@ class ThumbnailList extends StatelessWidget {
         return SimpleGestureDetector(
           onTap: () => controller.selectMythCard(card),
           child: Card(
-            margin: const EdgeInsets.symmetric(
-              vertical: 4,
-              horizontal: 16,
-            ),
-            color: isSelected
-                ? Colors.blueGrey[700]
-                : Colors.blueGrey[900],
+            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+            color: isSelected ? Colors.blueGrey[700] : Colors.blueGrey[900],
             elevation: isSelected ? 12 : 8,
             shadowColor: Colors.black.withAlpha(128),
             shape: RoundedRectangleBorder(
@@ -79,7 +74,8 @@ class ThumbnailList extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      'story_${controller.selectedStory.id}_card_${card.id}_title'.tr(),
+                      'story_${controller.selectedStory.id}_card_${card.id}_title'
+                          .tr(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: fontSize,
@@ -103,17 +99,31 @@ class ThumbnailList extends StatelessWidget {
                       children: [
                         if (!isFirst)
                           IconButton(
-                            icon: const Icon(Icons.arrow_upward, color: Colors.white, size: 32),
+                            icon: const Icon(
+                              Icons.arrow_upward,
+                              color: Colors.white,
+                              size: 32,
+                            ),
                             onPressed: () => controller.moveCardUp(index),
                             padding: const EdgeInsets.all(8),
-                            constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                            constraints: const BoxConstraints(
+                              minWidth: 48,
+                              minHeight: 48,
+                            ),
                           ),
                         if (!isLast)
                           IconButton(
-                            icon: const Icon(Icons.arrow_downward, color: Colors.white, size: 32),
+                            icon: const Icon(
+                              Icons.arrow_downward,
+                              color: Colors.white,
+                              size: 32,
+                            ),
                             onPressed: () => controller.moveCardDown(index),
                             padding: const EdgeInsets.all(8),
-                            constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                            constraints: const BoxConstraints(
+                              minWidth: 48,
+                              minHeight: 48,
+                            ),
                           ),
                       ],
                     ),

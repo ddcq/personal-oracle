@@ -43,7 +43,7 @@ void main() {
       );
 
       final clone = bonus.clone();
-      
+
       // Modifying original position should not affect clone
       expect(clone.position, isNot(same(bonus.position)));
     });

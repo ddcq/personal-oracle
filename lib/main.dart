@@ -23,10 +23,12 @@ import 'package:oracle_d_asgard/widgets/app_restart_wrapper.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    systemNavigationBarColor: Colors.transparent,
-  ));
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+    ),
+  );
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   // Initialize EasyLocalization with error handling
@@ -173,7 +175,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       final ambientMusicSelection = prefs.getString('ambientMusicSelection');
       if (ambientMusicSelection == 'mute') {
         soundService.setMuted(true);
-      } else if (ambientMusicSelection != null && ambientMusicSelection != 'default') {
+      } else if (ambientMusicSelection != null &&
+          ambientMusicSelection != 'default') {
         soundService.setMuted(false);
         soundService.setAmbientMusicByCardId(ambientMusicSelection);
       } else {
@@ -181,10 +184,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       }
 
       // Load reading page music setting
-      final readingMusicSelection = prefs.getString('readingPageMusicSelection');
+      final readingMusicSelection = prefs.getString(
+        'readingPageMusicSelection',
+      );
       if (readingMusicSelection == 'mute') {
         soundService.setReadingPageMusic(null);
-      } else if (readingMusicSelection == null || readingMusicSelection == 'default') {
+      } else if (readingMusicSelection == null ||
+          readingMusicSelection == 'default') {
         soundService.setReadingPageMusic('audio/reading.mp3');
       } else {
         soundService.setReadingPageMusicByCardId(readingMusicSelection);
@@ -192,7 +198,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
       // Play the selected ambient music after loading settings
       if (ambientMusicSelection != 'mute') {
-        if (ambientMusicSelection != null && ambientMusicSelection != 'default') {
+        if (ambientMusicSelection != null &&
+            ambientMusicSelection != 'default') {
           soundService.playMainMenuMusic();
         }
       }

@@ -64,8 +64,9 @@ class SpawnManager {
 
     final randomBonusType = bonusTypes[random.nextInt(bonusTypes.length)];
 
-    final Set<IntVector2> extraOccupied =
-        CollisionUtils.get2x2BlockCells(state.food).toSet();
+    final Set<IntVector2> extraOccupied = CollisionUtils.get2x2BlockCells(
+      state.food,
+    ).toSet();
 
     IntVector2 bonusPosition = _generateValidPositionFor2x2(
       state,

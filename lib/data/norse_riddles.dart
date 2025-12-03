@@ -1,4 +1,3 @@
-
 /// Represents a single enigma from Norse mythology.
 class NorseRiddle {
   /// The name of the god, creature, or object. The answer to the riddle.

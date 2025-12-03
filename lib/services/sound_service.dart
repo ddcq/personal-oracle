@@ -37,9 +37,7 @@ class SoundService with ChangeNotifier {
     final audioContext = AudioContext(
       iOS: AudioContextIOS(
         category: AVAudioSessionCategory.playback,
-        options: {
-          AVAudioSessionOptions.mixWithOthers,
-        },
+        options: {AVAudioSessionOptions.mixWithOthers},
       ),
       android: AudioContextAndroid(
         isSpeakerphoneOn: true,
@@ -75,7 +73,7 @@ class SoundService with ChangeNotifier {
         await _musicPlayer.stop();
         await _musicPlayer.setReleaseMode(ReleaseMode.loop);
         await _musicPlayer.setVolume(1.0);
-        
+
         if (_currentAmbientMusicCardId != null) {
           await _playAmbientMusicFromCard(_currentAmbientMusicCardId!);
         } else {
@@ -139,7 +137,7 @@ class SoundService with ChangeNotifier {
         await _musicPlayer.stop();
         await _musicPlayer.setReleaseMode(ReleaseMode.loop);
         await _musicPlayer.setVolume(0.5);
-        
+
         if (_readingPageMusicCardId != null) {
           await playStoryMusicFromCard(_readingPageMusicCardId!);
         } else {
@@ -325,7 +323,9 @@ class SoundService with ChangeNotifier {
       try {
         // Find an available player or create a new one
         AudioPlayer? player = _fxPlayers.firstWhere(
-          (p) => p.state == PlayerState.completed || p.state == PlayerState.stopped,
+          (p) =>
+              p.state == PlayerState.completed ||
+              p.state == PlayerState.stopped,
           orElse: () {
             final newPlayer = AudioPlayer();
             _fxPlayers.add(newPlayer);

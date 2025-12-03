@@ -24,7 +24,8 @@ class EffectsManager {
           return;
         }
         final random = Random();
-        camera.viewfinder.position = originalPosition +
+        camera.viewfinder.position =
+            originalPosition +
             Vector2(
               (random.nextDouble() - 0.5) * SnakeGameConfig.shakeIntensity * 2,
               (random.nextDouble() - 0.5) * SnakeGameConfig.shakeIntensity * 2,

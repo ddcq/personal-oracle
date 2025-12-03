@@ -43,7 +43,9 @@ class _VictoryPopupState extends State<VictoryPopup> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 2),
+    );
     _confettiController.play();
 
     // Play card music if a collectible card was won
@@ -58,30 +60,53 @@ class _VictoryPopupState extends State<VictoryPopup> {
     super.dispose();
   }
 
-  TextStyle get _rewardTitleStyle => Theme.of(context).textTheme.displayMedium!.copyWith(
-    fontFamily: AppTextStyles.amaticSC,
-    color: Colors.amber,
-    fontWeight: FontWeight.bold,
-    fontSize: 30,
-    letterSpacing: 1.0,
-    shadows: [Shadow(blurRadius: 8.0, color: Colors.black87, offset: const Offset(2.0, 2.0))],
-    decoration: TextDecoration.none,
-  );
+  TextStyle get _rewardTitleStyle =>
+      Theme.of(context).textTheme.displayMedium!.copyWith(
+        fontFamily: AppTextStyles.amaticSC,
+        color: Colors.amber,
+        fontWeight: FontWeight.bold,
+        fontSize: 30,
+        letterSpacing: 1.0,
+        shadows: [
+          Shadow(
+            blurRadius: 8.0,
+            color: Colors.black87,
+            offset: const Offset(2.0, 2.0),
+          ),
+        ],
+        decoration: TextDecoration.none,
+      );
 
   TextStyle get _rewardDescriptionStyle =>
-      Theme.of(context).textTheme.displayMedium!.copyWith(fontSize: 12, color: Colors.white70, decoration: TextDecoration.none);
+      Theme.of(context).textTheme.displayMedium!.copyWith(
+        fontSize: 12,
+        color: Colors.white70,
+        decoration: TextDecoration.none,
+      );
 
   Widget _buildGenericContent() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Image.asset('assets/images/odin-happy.webp', height: 150, fit: BoxFit.contain),
+        Image.asset(
+          'assets/images/odin-happy.webp',
+          height: 150,
+          fit: BoxFit.contain,
+        ),
         const SizedBox(height: 10),
-        Text('victory_popup_congratulations'.tr(), style: _rewardTitleStyle, textAlign: TextAlign.center),
+        Text(
+          'victory_popup_congratulations'.tr(),
+          style: _rewardTitleStyle,
+          textAlign: TextAlign.center,
+        ),
         const SizedBox(height: 5),
         Text(
           'victory_popup_generic_message'.tr(),
-          style: const TextStyle(fontSize: 16, color: Colors.white70, decoration: TextDecoration.none),
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.white70,
+            decoration: TextDecoration.none,
+          ),
           textAlign: TextAlign.center,
         ),
       ],
@@ -92,30 +117,65 @@ class _VictoryPopupState extends State<VictoryPopup> {
     final imageWidget = SizedBox(
       height: 150,
       child: card.videoUrl != null && card.videoUrl!.isNotEmpty
-          ? CustomVideoPlayer(videoUrl: card.videoUrl!, placeholderAsset: addAssetPrefix(card.imagePath))
+          ? CustomVideoPlayer(
+              videoUrl: card.videoUrl!,
+              placeholderAsset: addAssetPrefix(card.imagePath),
+            )
           : Image.asset(addAssetPrefix(card.imagePath), fit: BoxFit.contain),
     );
 
-    final titleWidget = Text('collectible_card_${card.id}_title'.tr(), style: _rewardTitleStyle, textAlign: TextAlign.center);
+    final titleWidget = Text(
+      'collectible_card_${card.id}_title'.tr(),
+      style: _rewardTitleStyle,
+      textAlign: TextAlign.center,
+    );
 
-    final descriptionWidget = Text(card.description.tr(), style: _rewardDescriptionStyle, textAlign: TextAlign.center);
+    final descriptionWidget = Text(
+      card.description.tr(),
+      style: _rewardDescriptionStyle,
+      textAlign: TextAlign.center,
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [imageWidget, const SizedBox(height: 10), titleWidget, const SizedBox(height: 5), descriptionWidget],
+      children: [
+        imageWidget,
+        const SizedBox(height: 10),
+        titleWidget,
+        const SizedBox(height: 5),
+        descriptionWidget,
+      ],
     );
   }
 
   Widget _buildStoryContent(MythCard storyChapter) {
-    final imageWidget = Image.asset(addAssetPrefix('stories/${storyChapter.imagePath}'), height: 150, fit: BoxFit.contain);
+    final imageWidget = Image.asset(
+      addAssetPrefix('stories/${storyChapter.imagePath}'),
+      height: 150,
+      fit: BoxFit.contain,
+    );
 
-    final titleWidget = Text(storyChapter.title.tr(), style: _rewardTitleStyle, textAlign: TextAlign.center);
+    final titleWidget = Text(
+      storyChapter.title.tr(),
+      style: _rewardTitleStyle,
+      textAlign: TextAlign.center,
+    );
 
-    final descriptionWidget = Text(storyChapter.description.tr(), style: _rewardDescriptionStyle, textAlign: TextAlign.center);
+    final descriptionWidget = Text(
+      storyChapter.description.tr(),
+      style: _rewardDescriptionStyle,
+      textAlign: TextAlign.center,
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [imageWidget, const SizedBox(height: 10), titleWidget, const SizedBox(height: 5), descriptionWidget],
+      children: [
+        imageWidget,
+        const SizedBox(height: 10),
+        titleWidget,
+        const SizedBox(height: 5),
+        descriptionWidget,
+      ],
     );
   }
 
@@ -160,55 +220,61 @@ class _VictoryPopupState extends State<VictoryPopup> {
         height: MediaQuery.of(context).size.height,
         color: Colors.black54,
         child: Center(
-          child: Container(
-            constraints: BoxConstraints(
-                maxWidth: 400,
-                maxHeight: MediaQuery.of(context).size.height * 0.9),
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.blueGrey[800],
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withAlpha(128),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5))
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'victory_popup_title'.tr(),
-                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                        fontFamily: AppTextStyles.amaticSC,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 70,
-                        letterSpacing: 2.0,
-                        shadows: [
-                          const Shadow(
-                              blurRadius: 15.0,
-                              color: Colors.black87,
-                              offset: Offset(4.0, 4.0))
-                        ],
-                        decoration: TextDecoration.none,
-                      ),
-                ),
-                const SizedBox(height: 20),
-                content,
-                const SizedBox(height: 20),
-                buttonsRow,
-              ],
-            ),
-          )
-              .animate()
-              .scale(
-                  begin: const Offset(0.1, 0.1),
-                  end: const Offset(1.0, 1.0),
-                  duration: 2.seconds,
-                  curve: Curves.easeOutBack)
-              .fadeIn(duration: 2.seconds, curve: Curves.easeIn),
+          child:
+              Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 400,
+                      maxHeight: MediaQuery.of(context).size.height * 0.9,
+                    ),
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey[800],
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(128),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'victory_popup_title'.tr(),
+                          style: Theme.of(context).textTheme.displayMedium
+                              ?.copyWith(
+                                fontFamily: AppTextStyles.amaticSC,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 70,
+                                letterSpacing: 2.0,
+                                shadows: [
+                                  const Shadow(
+                                    blurRadius: 15.0,
+                                    color: Colors.black87,
+                                    offset: Offset(4.0, 4.0),
+                                  ),
+                                ],
+                                decoration: TextDecoration.none,
+                              ),
+                        ),
+                        const SizedBox(height: 20),
+                        content,
+                        const SizedBox(height: 20),
+                        buttonsRow,
+                      ],
+                    ),
+                  )
+                  .animate()
+                  .scale(
+                    begin: const Offset(0.1, 0.1),
+                    end: const Offset(1.0, 1.0),
+                    duration: 2.seconds,
+                    curve: Curves.easeOutBack,
+                  )
+                  .fadeIn(duration: 2.seconds, curve: Curves.easeIn),
         ),
       ),
     );

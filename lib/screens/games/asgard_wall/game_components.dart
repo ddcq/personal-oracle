@@ -4,11 +4,18 @@ import 'package:easy_localization/easy_localization.dart';
 /// Widget d'aperçu des prochaines pièces
 class NextPiecesPreview extends StatelessWidget {
   final List<int> nextPieces;
-  final List<List<List<List<bool>>>> piecesData; // Passer les données des pièces
+  final List<List<List<List<bool>>>>
+  piecesData; // Passer les données des pièces
   final List<String> pieceImageNames;
   final int currentScore;
 
-  const NextPiecesPreview({super.key, required this.nextPieces, required this.piecesData, required this.pieceImageNames, required this.currentScore});
+  const NextPiecesPreview({
+    super.key,
+    required this.nextPieces,
+    required this.piecesData,
+    required this.pieceImageNames,
+    required this.currentScore,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +24,21 @@ class NextPiecesPreview extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF0F3460), // Couleur de fond du conteneur
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFFFD700), width: 1), // Bordure dorée
+        border: Border.all(
+          color: const Color(0xFFFFD700),
+          width: 1,
+        ), // Bordure dorée
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Score: $currentScore',
-            style: const TextStyle(color: Color(0xFFFFD700), fontWeight: FontWeight.bold, fontSize: 18),
+            style: const TextStyle(
+              color: Color(0xFFFFD700),
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12),
@@ -45,7 +59,10 @@ class NextPiecesPreview extends StatelessWidget {
             return Container(
               margin: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(color: Colors.black26, borderRadius: BorderRadius.circular(4)),
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(4),
+              ),
               child: Image.asset(
                 'assets/images/blocks/$pieceImageName.webp',
                 width: previewPiece[0].length * 15.0,

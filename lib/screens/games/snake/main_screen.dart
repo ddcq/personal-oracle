@@ -350,29 +350,29 @@ class _SnakeGameState extends State<SnakeGame> {
                   _initializeNewGame();
                 }
 
-                  // Portrait mode
-                  return Column(
-                    children: [
-                      Expanded(child: _buildGameArea(context)),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            children: [
-                              JoystickController(
-                                onDirectionChanged: (direction) {
-                                  _game?.requestDirectionChange(direction);
-                                },
-                              ),
-                              const SizedBox(width: 16),
-                              _buildBonusList(),
-                            ],
-                          ),
+                // Portrait mode
+                return Column(
+                  children: [
+                    Expanded(child: _buildGameArea(context)),
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          children: [
+                            JoystickController(
+                              onDirectionChanged: (direction) {
+                                _game?.requestDirectionChange(direction);
+                              },
+                            ),
+                            const SizedBox(width: 16),
+                            _buildBonusList(),
+                          ],
                         ),
                       ),
-                    ],
-                  );
+                    ),
+                  ],
+                );
               } else {
                 // Show a loading indicator while the game is initializing
                 return const Center(child: CircularProgressIndicator());

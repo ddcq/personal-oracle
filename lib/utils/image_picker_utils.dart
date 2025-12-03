@@ -6,6 +6,7 @@ String getRandomCardImagePath() {
     return 'home_illu.png'; // Fallback if no cards are defined
   }
   final random = Random();
-  final selectedCard = allCollectibleCards[random.nextInt(allCollectibleCards.length)];
+  final selectedCard =
+      allCollectibleCards[random.nextInt(allCollectibleCards.length)];
   return selectedCard.imagePath;
 }

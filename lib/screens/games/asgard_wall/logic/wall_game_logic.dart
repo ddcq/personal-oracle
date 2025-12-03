@@ -85,10 +85,15 @@ class WallGameLogic {
 
     for (int cy = startY; cy <= endY; cy++) {
       for (int cx = startX; cx <= endX; cx++) {
-        if (cx >= 0 && cx < boardWidth && cy > 0 && cy < boardHeight && !collisionBoard[cy][cx]) {
+        if (cx >= 0 &&
+            cx < boardWidth &&
+            cy > 0 &&
+            cy < boardHeight &&
+            !collisionBoard[cy][cx]) {
           final bool blockedTop = collisionBoard[cy - 1][cx];
           final bool blockedLeft = (cx == 0) || collisionBoard[cy][cx - 1];
-          final bool blockedRight = (cx == boardWidth - 1) || collisionBoard[cy][cx + 1];
+          final bool blockedRight =
+              (cx == boardWidth - 1) || collisionBoard[cy][cx + 1];
 
           if (blockedTop && blockedLeft && blockedRight) {
             return true;

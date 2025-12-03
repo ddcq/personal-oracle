@@ -161,12 +161,11 @@ class GameLogic {
     return state;
   }
 
-
   bool _handleFoodConsumption(GameState state, IntVector2 newHeadPos) {
     if (CollisionUtils.do2x2BlocksOverlap(newHeadPos, state.food)) {
       state.foodJustEaten = true;
       final soundService = getIt<SoundService>();
-      
+
       if (state.foodType.value == FoodType.golden) {
         state.score += _scoreGoldenFood;
         soundService.playSoundEffect('audio/scale.mp3');
@@ -255,7 +254,6 @@ class GameLogic {
     return multiplier;
   }
 
-
   void generateNewFood(GameState state) {
     spawnManager.generateNewFood(state);
   }
@@ -302,7 +300,10 @@ class GameLogic {
     }
 
     if (state.pendingDirection != null &&
-        DirectionUtils.isOppositeDirection(state.pendingDirection!, newDirection)) {
+        DirectionUtils.isOppositeDirection(
+          state.pendingDirection!,
+          newDirection,
+        )) {
       return;
     }
 

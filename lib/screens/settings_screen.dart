@@ -29,7 +29,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    _unlockedCardsFuture = getIt<GamificationService>().getUnlockedCollectibleCards();
+    _unlockedCardsFuture = getIt<GamificationService>()
+        .getUnlockedCollectibleCards();
     _loadFxSettings();
     _loadReadingPageMusicSettings();
   }
@@ -64,12 +65,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _shareApp() async {
-    const String appLink = 'https://play.google.com/store/apps/details?id=net.forhimandus.oracledasgard';
-    await SharePlus.instance.share(ShareParams(text: 'settings_screen_share_text'.tr(namedArgs: {'appLink': appLink})));
+    const String appLink =
+        'https://play.google.com/store/apps/details?id=net.forhimandus.oracledasgard';
+    await SharePlus.instance.share(
+      ShareParams(
+        text: 'settings_screen_share_text'.tr(namedArgs: {'appLink': appLink}),
+      ),
+    );
   }
 
   Future<void> _rateApp() async {
-    await _launchUrl('https://play.google.com/store/apps/details?id=net.forhimandus.oracledasgard');
+    await _launchUrl(
+      'https://play.google.com/store/apps/details?id=net.forhimandus.oracledasgard',
+    );
   }
 
   @override
@@ -103,12 +111,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Column(
                 children: [
                   ListTile(
-                    title: Text('settings_screen_share_app'.tr(), style: const TextStyle(color: Colors.white)),
+                    title: Text(
+                      'settings_screen_share_app'.tr(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
                     trailing: const Icon(Icons.share, color: Colors.white),
                     onTap: _shareApp,
                   ),
                   ListTile(
-                    title: Text('settings_screen_rate_app'.tr(), style: const TextStyle(color: Colors.white)),
+                    title: Text(
+                      'settings_screen_rate_app'.tr(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
                     trailing: const Icon(Icons.star, color: Colors.white),
                     onTap: _rateApp,
                   ),
@@ -116,7 +130,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               const SizedBox(height: 20),
               ListTile(
-                title: Text('settings_screen_about_button'.tr(), style: const TextStyle(color: Colors.white)),
+                title: Text(
+                  'settings_screen_about_button'.tr(),
+                  style: const TextStyle(color: Colors.white),
+                ),
                 trailing: const Icon(Icons.info_outline, color: Colors.white),
                 onTap: () => context.go('/about'),
               ),
@@ -138,7 +155,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           fontWeight: FontWeight.bold,
           fontSize: 40,
           letterSpacing: 2.0,
-          shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
+          shadows: [
+            const Shadow(
+              blurRadius: 15.0,
+              color: Colors.black87,
+              offset: Offset(4.0, 4.0),
+            ),
+          ],
         ),
         textAlign: TextAlign.center,
       ),
@@ -182,9 +205,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           Text(
             'settings_screen_fx_sound'.tr(),
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC, fontSize: 22),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: AppTextStyles.amaticSC,
+              fontSize: 22,
+            ),
           ),
           Switch(
             value: _isFxEnabled,
@@ -237,9 +263,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           Text(
             'profile_screen_language'.tr(),
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: AppTextStyles.amaticSC, fontSize: 22),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontFamily: AppTextStyles.amaticSC,
+              fontSize: 22,
+            ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -258,7 +287,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     children: [
                       Text('🇺🇸', style: TextStyle(fontSize: 18)),
                       const SizedBox(width: 8),
-                      Text('profile_screen_language_english'.tr(), style: const TextStyle(color: Colors.white)),
+                      Text(
+                        'profile_screen_language_english'.tr(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     ],
                   ),
                 ),
@@ -268,7 +300,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     children: [
                       Text('🇫🇷', style: TextStyle(fontSize: 18)),
                       const SizedBox(width: 8),
-                      Text('profile_screen_language_french'.tr(), style: const TextStyle(color: Colors.white)),
+                      Text(
+                        'profile_screen_language_french'.tr(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     ],
                   ),
                 ),
@@ -278,7 +313,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     children: [
                       Text('🇪🇸', style: TextStyle(fontSize: 18)),
                       const SizedBox(width: 8),
-                      Text('profile_screen_language_spanish'.tr(), style: const TextStyle(color: Colors.white)),
+                      Text(
+                        'profile_screen_language_spanish'.tr(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     ],
                   ),
                 ),
@@ -287,8 +325,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 if (newLocale != null && newLocale != context.locale) {
                   await context.setLocale(newLocale);
                   final prefs = await SharedPreferences.getInstance();
-                  await prefs.setString('language_code', newLocale.languageCode);
-                  await prefs.setString('country_code', newLocale.countryCode ?? '');
+                  await prefs.setString(
+                    'language_code',
+                    newLocale.languageCode,
+                  );
+                  await prefs.setString(
+                    'country_code',
+                    newLocale.countryCode ?? '',
+                  );
 
                   // Restart the app to apply language changes everywhere
                   if (mounted) {

@@ -116,10 +116,7 @@ void main() {
 
       test('should not detect same direction as opposite', () {
         expect(
-          DirectionUtils.isOppositeDirection(
-            dp.Direction.up,
-            dp.Direction.up,
-          ),
+          DirectionUtils.isOppositeDirection(dp.Direction.up, dp.Direction.up),
           isFalse,
         );
       });

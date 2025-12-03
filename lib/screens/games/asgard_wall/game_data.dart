@@ -15,5 +15,15 @@ const List<String> pieceShapes = [
 // Convertit les chaînes de formes en listes de booléens.
 // Cette partie serait dans game_data.dart si "pieces" était une fonction.
 final List<List<List<List<bool>>>> pieces = pieceShapes
-    .map((s) => s.split('/').map((r) => r.split('|').map((l) => l.split('').map((c) => c == '1').toList()).toList()).toList())
+    .map(
+      (s) => s
+          .split('/')
+          .map(
+            (r) => r
+                .split('|')
+                .map((l) => l.split('').map((c) => c == '1').toList())
+                .toList(),
+          )
+          .toList(),
+    )
     .toList();

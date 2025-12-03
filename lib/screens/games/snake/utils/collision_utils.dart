@@ -11,7 +11,9 @@ class CollisionUtils {
   ) {
     for (int j = 0; j < 2; j++) {
       for (int i = 0; i < 2; i++) {
-        if (occupiedCells.contains(IntVector2(position.x + i, position.y + j))) {
+        if (occupiedCells.contains(
+          IntVector2(position.x + i, position.y + j),
+        )) {
           return false;
         }
       }

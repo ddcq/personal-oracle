@@ -33,7 +33,7 @@ class Player extends PositionComponent {
   bool _isManualInput = false;
 
   late AnimatedCharacterComponent _characterSprite;
-  
+
   // Cache for update calculations
   final Vector2 _cachedTargetPixelPosition = Vector2.zero();
 
@@ -129,8 +129,11 @@ class Player extends PositionComponent {
     }
 
     // Smoothly move towards the target grid position
-    _cachedTargetPixelPosition.setFrom(targetGridPosition.toVector2() * cellSize);
-    if (position.distanceTo(_cachedTargetPixelPosition) > _positionSnapThreshold) {
+    _cachedTargetPixelPosition.setFrom(
+      targetGridPosition.toVector2() * cellSize,
+    );
+    if (position.distanceTo(_cachedTargetPixelPosition) >
+        _positionSnapThreshold) {
       position.moveToTarget(_cachedTargetPixelPosition, _moveSpeed * dt);
     } else {
       position = _cachedTargetPixelPosition.clone();

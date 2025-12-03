@@ -128,39 +128,41 @@ class _QuizScreenState extends State<QuizScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.all(20.w),
-                margin: EdgeInsets.all(20.w),
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(
-                    0,
-                    0,
-                    0,
-                    0.5,
-                  ), // Semi-transparent background
-                  borderRadius: BorderRadius.circular(15.r),
-                ),
-                child: AutoSizeText(
-                  question.question,
-                  textAlign: TextAlign.center,
-                  maxLines: 4, // Allow multiple lines for questions
-                  minFontSize: 10.0,
-                  stepGranularity: 1.0,
-                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.sp, // Max font size
-                        shadows: [
-                          const Shadow(
-                            blurRadius: 10.0,
-                            color: Colors.black87,
-                            offset: Offset(3.0, 3.0),
+                    padding: EdgeInsets.all(20.w),
+                    margin: EdgeInsets.all(20.w),
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(
+                        0,
+                        0,
+                        0,
+                        0.5,
+                      ), // Semi-transparent background
+                      borderRadius: BorderRadius.circular(15.r),
+                    ),
+                    child: AutoSizeText(
+                      question.question,
+                      textAlign: TextAlign.center,
+                      maxLines: 4, // Allow multiple lines for questions
+                      minFontSize: 10.0,
+                      stepGranularity: 1.0,
+                      style: Theme.of(context).textTheme.displayMedium
+                          ?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp, // Max font size
+                            shadows: [
+                              const Shadow(
+                                blurRadius: 10.0,
+                                color: Colors.black87,
+                                offset: Offset(3.0, 3.0),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                ),
-              ).animate(
-                key: ValueKey('question_portrait_$currentQuestion'),
-              ).fadeIn(duration: 300.ms).slideY(begin: -0.1, duration: 400.ms),
+                    ),
+                  )
+                  .animate(key: ValueKey('question_portrait_$currentQuestion'))
+                  .fadeIn(duration: 300.ms)
+                  .slideY(begin: -0.1, duration: 400.ms),
               Expanded(
                 child: ListView.separated(
                   shrinkWrap: true,
@@ -172,8 +174,9 @@ class _QuizScreenState extends State<QuizScreen> {
                       'A'.codeUnitAt(0) + index,
                     );
                     final traits = answer.scores.keys.toList();
-                    final gradientColors =
-                        traits.isNotEmpty ? TraitColors.gradients[traits.first] : null;
+                    final gradientColors = traits.isNotEmpty
+                        ? TraitColors.gradients[traits.first]
+                        : null;
 
                     return Padding(
                       padding: EdgeInsets.only(
@@ -181,15 +184,19 @@ class _QuizScreenState extends State<QuizScreen> {
                         right: 20.w,
                         bottom: 10.h,
                       ),
-                      child: AnswerButton(
-                        text: answer.text,
-                        onPressed: () => handleAnswer(index),
-                        letter: letter,
-                        gradientColors: gradientColors,
-                      ).animate(
-                        key: ValueKey('${currentQuestion}_$index'),
-                        delay: (index * 100).ms,
-                      ).slideY(begin: 0.2, duration: 300.ms).fadeIn(duration: 200.ms),
+                      child:
+                          AnswerButton(
+                                text: answer.text,
+                                onPressed: () => handleAnswer(index),
+                                letter: letter,
+                                gradientColors: gradientColors,
+                              )
+                              .animate(
+                                key: ValueKey('${currentQuestion}_$index'),
+                                delay: (index * 100).ms,
+                              )
+                              .slideY(begin: 0.2, duration: 300.ms)
+                              .fadeIn(duration: 200.ms),
                     );
                   },
                 ),

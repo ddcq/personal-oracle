@@ -47,40 +47,37 @@ class _GameOverPopupState extends State<GameOverPopup>
                   ),
                 ),
                 child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.asset(
-                            'assets/images/odin_sad.png',
-                            height: 100,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset('assets/images/odin_sad.png', height: 100),
+                    const SizedBox(height: 16),
+                    widget.content,
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ChibiButton(
+                          color: ChibiColors.buttonGreen,
+                          onPressed: widget.onReplay,
+                          child: const Icon(
+                            Icons.replay,
+                            color: Colors.white,
+                            size: 32,
                           ),
-                          const SizedBox(height: 16),
-                          widget.content,
-                          const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ChibiButton(
-                                color: ChibiColors.buttonGreen,
-                                onPressed: widget.onReplay,
-                                child: const Icon(
-                                  Icons.replay,
-                                  color: Colors.white,
-                                  size: 32,
-                                ),
-                              ),
-                              ChibiButton(
-                                color: ChibiColors.buttonOrange,
-                                onPressed: widget.onMenu,
-                                child: const Icon(
-                                  Icons.home,
-                                  color: Colors.white,
-                                  size: 32,
-                                ),
-                              ),
-                            ],
+                        ),
+                        ChibiButton(
+                          color: ChibiColors.buttonOrange,
+                          onPressed: widget.onMenu,
+                          child: const Icon(
+                            Icons.home,
+                            color: Colors.white,
+                            size: 32,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               )
               .animate()
               .slideY(

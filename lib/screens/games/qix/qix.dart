@@ -40,7 +40,7 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
   );
 
   double _animationTime = 0.0;
-  
+
   // Cache for rendering calculations
   late double _wobbleMagnitude;
   final Vector2 _cachedRenderOffset = Vector2.zero();
@@ -100,8 +100,9 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
     final displacement = _cachedVelocity * dt;
     final distance = displacement.length;
     final stepCount = (distance / (cellSize / 2)).ceil();
-    final stepDisplacement =
-        stepCount > 0 ? displacement / stepCount.toDouble() : Vector2.zero();
+    final stepDisplacement = stepCount > 0
+        ? displacement / stepCount.toDouble()
+        : Vector2.zero();
 
     var nextVirtualPosition = virtualPosition;
     bool collision = false;
@@ -122,10 +123,10 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
 
         final hitHorizontal =
             isGridEdge(IntVector2(tempNextGridPosition.x, currentGridPos.y)) ||
-                isFilled(IntVector2(tempNextGridPosition.x, currentGridPos.y));
+            isFilled(IntVector2(tempNextGridPosition.x, currentGridPos.y));
         final hitVertical =
             isGridEdge(IntVector2(currentGridPos.x, tempNextGridPosition.y)) ||
-                isFilled(IntVector2(currentGridPos.x, tempNextGridPosition.y));
+            isFilled(IntVector2(currentGridPos.x, tempNextGridPosition.y));
 
         if (hitHorizontal && hitVertical) {
           // Corner hit, reverse direction
@@ -178,7 +179,10 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
     final center = Offset(size.x / 2, size.y / 2);
 
     canvas.save();
-    canvas.translate(center.dx + _cachedRenderOffset.x, center.dy + _cachedRenderOffset.y);
+    canvas.translate(
+      center.dx + _cachedRenderOffset.x,
+      center.dy + _cachedRenderOffset.y,
+    );
     canvas.rotate(visualAngle + rotation);
     canvas.translate(-center.dx, -center.dy);
 

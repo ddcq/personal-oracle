@@ -26,7 +26,7 @@ class BonusConfig {
   static const double spawnProbability = 1.0;
   static const double lifetime = 8.0; // seconds
   static const double effectDuration = 8.0; // seconds
-  
+
   // Bonus multipliers
   static const double speedMultiplier = 0.7; // 30% faster
   static const double freezeMultiplier = 1.3; // 30% slower

@@ -76,7 +76,8 @@ class MythCardContent extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'story_${controller.selectedStory.id}_card_${card.id}_title'.tr(),
+                    'story_${controller.selectedStory.id}_card_${card.id}_title'
+                        .tr(),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: isDragging ? 14 : 16,

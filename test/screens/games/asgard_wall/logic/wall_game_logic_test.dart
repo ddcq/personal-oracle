@@ -23,7 +23,7 @@ void main() {
           [true],
           [true],
         ];
-        
+
         expect(logic.canPlacePiece(piece, 5, 0, collisionBoard), isTrue);
       });
 
@@ -32,7 +32,7 @@ void main() {
           [true, true],
           [true, true],
         ];
-        
+
         expect(logic.canPlacePiece(piece, -1, 5, collisionBoard), isFalse);
       });
 
@@ -41,7 +41,7 @@ void main() {
           [true, true],
           [true, true],
         ];
-        
+
         expect(
           logic.canPlacePiece(
             piece,
@@ -58,7 +58,7 @@ void main() {
           [true, true],
           [true, true],
         ];
-        
+
         expect(
           logic.canPlacePiece(
             piece,
@@ -75,9 +75,9 @@ void main() {
           [true, true],
           [true, true],
         ];
-        
+
         collisionBoard[5][5] = true;
-        
+
         expect(logic.canPlacePiece(piece, 5, 5, collisionBoard), isFalse);
       });
 
@@ -86,7 +86,7 @@ void main() {
           [true, false],
           [true, true],
         ];
-        
+
         expect(logic.canPlacePiece(piece, 3, 3, collisionBoard), isTrue);
       });
     });
@@ -99,29 +99,37 @@ void main() {
       test('should return true when victory zone is filled', () {
         final victoryStartRow =
             WallGameLogic.boardHeight - WallGameLogic.victoryHeight;
-        
-        for (int row = victoryStartRow; row < WallGameLogic.boardHeight; row++) {
+
+        for (
+          int row = victoryStartRow;
+          row < WallGameLogic.boardHeight;
+          row++
+        ) {
           for (int col = 0; col < WallGameLogic.boardWidth; col++) {
             collisionBoard[row][col] = true;
           }
         }
-        
+
         expect(logic.checkWallComplete(collisionBoard), isTrue);
       });
 
       test('should return false when victory zone has one gap', () {
         final victoryStartRow =
             WallGameLogic.boardHeight - WallGameLogic.victoryHeight;
-        
-        for (int row = victoryStartRow; row < WallGameLogic.boardHeight; row++) {
+
+        for (
+          int row = victoryStartRow;
+          row < WallGameLogic.boardHeight;
+          row++
+        ) {
           for (int col = 0; col < WallGameLogic.boardWidth; col++) {
             collisionBoard[row][col] = true;
           }
         }
-        
+
         // Leave one gap
         collisionBoard[victoryStartRow][5] = false;
-        
+
         expect(logic.checkWallComplete(collisionBoard), isFalse);
       });
     });
@@ -158,22 +166,28 @@ void main() {
         final piece = [
           [true, true, true],
         ];
-        
+
         // Create walls
         collisionBoard[4][4] = true;
         collisionBoard[5][3] = true;
         collisionBoard[5][5] = true;
-        
+
         // Place piece that creates inaccessible hole at (4,5)
-        expect(logic.checkInaccessibleHoles(piece, 3, 5, collisionBoard), isTrue);
+        expect(
+          logic.checkInaccessibleHoles(piece, 3, 5, collisionBoard),
+          isTrue,
+        );
       });
 
       test('should not detect accessible holes', () {
         final piece = [
           [true],
         ];
-        
-        expect(logic.checkInaccessibleHoles(piece, 5, 5, collisionBoard), isFalse);
+
+        expect(
+          logic.checkInaccessibleHoles(piece, 5, 5, collisionBoard),
+          isFalse,
+        );
       });
     });
   });

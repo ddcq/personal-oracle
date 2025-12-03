@@ -107,8 +107,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
                               final totalHeight = constraints.maxHeight;
 
                               return Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.stretch,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   if (!isEnlarged)
                                     SizedBox(

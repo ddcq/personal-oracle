@@ -20,8 +20,8 @@ class Segment {
   final Point<int> p2;
 
   Segment(int x1, int y1, int x2, int y2)
-      : p1 = (x1 < x2 || (x1 == x2 && y1 < y2)) ? Point(x1, y1) : Point(x2, y2),
-        p2 = (x1 < x2 || (x1 == x2 && y1 < y2)) ? Point(x2, y2) : Point(x1, y1);
+    : p1 = (x1 < x2 || (x1 == x2 && y1 < y2)) ? Point(x1, y1) : Point(x2, y2),
+      p2 = (x1 < x2 || (x1 == x2 && y1 < y2)) ? Point(x2, y2) : Point(x1, y1);
 
   @override
   bool operator ==(Object other) =>

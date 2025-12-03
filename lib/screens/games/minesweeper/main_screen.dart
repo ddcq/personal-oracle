@@ -136,9 +136,7 @@ class _MinesweeperView extends StatelessWidget {
         ],
       ),
       body: AppBackground(
-        child: SafeArea(
-          child: _buildPortraitLayout(controller),
-        ),
+        child: SafeArea(child: _buildPortraitLayout(controller)),
       ),
     );
   }
@@ -167,10 +165,8 @@ class _MinesweeperView extends StatelessWidget {
 
 class _MinesweeperGrid extends StatelessWidget {
   final MinesweeperController controller;
-  
-  const _MinesweeperGrid({
-    required this.controller,
-  });
+
+  const _MinesweeperGrid({required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -188,28 +184,25 @@ class _MinesweeperGrid extends StatelessWidget {
         return SimpleGestureDetector(
           onTap: () => controller.revealCell(row, col),
           onLongPress: () => controller.toggleFlag(row, col),
-          child: Container(
-            key: ValueKey(
-              '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
-            ),
-            decoration: BoxDecoration(
-              color: cell.isRevealed ? Colors.grey[800] : Colors.grey[600],
-              border: Border.all(
-                color: Colors.grey[900]!,
-              ),
-            ),
-            child: Center(
-              child: _buildCellContent(cell, context),
-            ),
-          )
-              .animate(
-                key: ValueKey(
-                  '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
-                ),
-              )
-              .scale(
-                duration: const Duration(milliseconds: 300),
-              ),
+          child:
+              Container(
+                    key: ValueKey(
+                      '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
+                    ),
+                    decoration: BoxDecoration(
+                      color: cell.isRevealed
+                          ? Colors.grey[800]
+                          : Colors.grey[600],
+                      border: Border.all(color: Colors.grey[900]!),
+                    ),
+                    child: Center(child: _buildCellContent(cell, context)),
+                  )
+                  .animate(
+                    key: ValueKey(
+                      '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
+                    ),
+                  )
+                  .scale(duration: const Duration(milliseconds: 300)),
         );
       },
     );
@@ -222,9 +215,9 @@ class _MinesweeperGrid extends StatelessWidget {
     if (!cell.isRevealed) {
       return const SizedBox.shrink();
     }
-    
+
     const imageSize = 40.0;
-    
+
     if (cell.hasMine) {
       return Image.asset(
         'assets/images/explosion.png',
@@ -244,7 +237,7 @@ class _MinesweeperGrid extends StatelessWidget {
     if (cell.adjacentMines > 0 || cell.adjacentTreasures > 0) {
       List<Widget> counts = [];
       double baseFontSize = MediaQuery.of(context).size.width * 0.06;
-      
+
       double currentFontSize = baseFontSize;
 
       if (cell.adjacentMines > 0 && cell.adjacentTreasures > 0) {
@@ -307,8 +300,9 @@ class _TreasureCounter extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final containerWidth = screenWidth * 0.5;
-    final coinSize = (containerWidth - (totalTreasures - 1) * 8.0) / totalTreasures;
-    
+    final coinSize =
+        (containerWidth - (totalTreasures - 1) * 8.0) / totalTreasures;
+
     return Center(
       child: SizedBox(
         width: containerWidth,
@@ -318,12 +312,31 @@ class _TreasureCounter extends StatelessWidget {
             final isFound = index < treasuresFound;
             return ColorFiltered(
               colorFilter: isFound
-                  ? const ColorFilter.mode(Colors.transparent, BlendMode.multiply)
+                  ? const ColorFilter.mode(
+                      Colors.transparent,
+                      BlendMode.multiply,
+                    )
                   : const ColorFilter.matrix([
-                      0.2126, 0.7152, 0.0722, 0, 0,
-                      0.2126, 0.7152, 0.0722, 0, 0,
-                      0.2126, 0.7152, 0.0722, 0, 0,
-                      0,      0,      0,      1, 0,
+                      0.2126,
+                      0.7152,
+                      0.0722,
+                      0,
+                      0,
+                      0.2126,
+                      0.7152,
+                      0.0722,
+                      0,
+                      0,
+                      0.2126,
+                      0.7152,
+                      0.0722,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      1,
+                      0,
                     ]),
               child: Image.asset(
                 'assets/images/sparkle.png',
@@ -364,7 +377,7 @@ class _RuneLegend extends StatelessWidget {
   Widget build(BuildContext context) {
     final double uniformFontSize = MediaQuery.of(context).size.width * 0.035;
     const double imageSize = 32.0;
-    
+
     TextStyle legendTextStyle = ChibiTextStyles.dialogText.copyWith(
       fontSize: uniformFontSize,
     );

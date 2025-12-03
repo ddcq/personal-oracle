@@ -45,8 +45,7 @@ class MinesweeperPreliminaryScreen extends StatelessWidget {
                     gameInfoLayout,
                     const SizedBox(height: 32),
                     ChibiButton(
-                      text:
-                          'minesweeper_preliminary_screen_start_button'.tr(),
+                      text: 'minesweeper_preliminary_screen_start_button'.tr(),
                       color: Colors.brown, // Color from menu
                       onPressed: () {
                         Navigator.push(

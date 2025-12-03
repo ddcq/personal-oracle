@@ -27,7 +27,9 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 5));
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 5),
+    );
     _confettiController.play();
   }
 
@@ -45,7 +47,8 @@ class _ResultScreenState extends State<ResultScreen> {
           namedArgs: {
             'deity': deityData.name,
             'description': deityData.description.tr(),
-            'link': 'https://play.google.com/store/apps/details?id=net.forhimandus.oracledasgard',
+            'link':
+                'https://play.google.com/store/apps/details?id=net.forhimandus.oracledasgard',
           },
         ),
       ),
@@ -71,49 +74,98 @@ class _ResultScreenState extends State<ResultScreen> {
                       children: [
                         FittedBox(
                           fit: BoxFit.contain,
-                          child: Text(
-                            'result_screen_congratulations'.tr(),
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                              fontFamily: AppTextStyles.amaticSC,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 70.sp,
-                              letterSpacing: 2.0.sp,
-                              shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
-                            ),
-                          ).animate(delay: 200.ms).slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutBack).fadeIn(duration: 600.ms),
+                          child:
+                              Text(
+                                    'result_screen_congratulations'.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displayMedium
+                                        ?.copyWith(
+                                          fontFamily: AppTextStyles.amaticSC,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 70.sp,
+                                          letterSpacing: 2.0.sp,
+                                          shadows: [
+                                            const Shadow(
+                                              blurRadius: 15.0,
+                                              color: Colors.black87,
+                                              offset: Offset(4.0, 4.0),
+                                            ),
+                                          ],
+                                        ),
+                                  )
+                                  .animate(delay: 200.ms)
+                                  .slideY(
+                                    begin: -0.3,
+                                    duration: 800.ms,
+                                    curve: Curves.easeOutBack,
+                                  )
+                                  .fadeIn(duration: 600.ms),
                         ),
                         SizedBox(height: 16.h),
                         Text(
-                          'result_screen_guardian_deity_is'.tr(),
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            shadows: [const Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(2.0, 2.0))],
-                          ),
-                        ).animate(delay: 600.ms).slideY(begin: -0.2, duration: 600.ms, curve: Curves.easeOutCubic).fadeIn(duration: 400.ms),
+                              'result_screen_guardian_deity_is'.tr(),
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.headlineSmall
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    shadows: [
+                                      const Shadow(
+                                        blurRadius: 10.0,
+                                        color: Colors.black,
+                                        offset: Offset(2.0, 2.0),
+                                      ),
+                                    ],
+                                  ),
+                            )
+                            .animate(delay: 600.ms)
+                            .slideY(
+                              begin: -0.2,
+                              duration: 600.ms,
+                              curve: Curves.easeOutCubic,
+                            )
+                            .fadeIn(duration: 400.ms),
                         SizedBox(height: 32.h),
-                        DeityCard(
-                          deity: deityData,
-                        ).animate(delay: 1000.ms).scale(begin: const Offset(0.8, 0.8), duration: 800.ms, curve: Curves.easeOutBack).fadeIn(duration: 600.ms),
+                        DeityCard(deity: deityData)
+                            .animate(delay: 1000.ms)
+                            .scale(
+                              begin: const Offset(0.8, 0.8),
+                              duration: 800.ms,
+                              curve: Curves.easeOutBack,
+                            )
+                            .fadeIn(duration: 600.ms),
                         SizedBox(height: 32.h),
                         Container(
                           width: 1.sw,
                           padding: EdgeInsets.all(24.w),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [Colors.blueGrey.shade800, Colors.blueGrey.shade900], // Darker, muted gradient
+                              colors: [
+                                Colors.blueGrey.shade800,
+                                Colors.blueGrey.shade900,
+                              ], // Darker, muted gradient
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
-                            borderRadius: BorderRadius.circular(20.r), // Slightly more rounded
-                            border: Border.all(color: Colors.blueGrey.shade700, width: 3.w), // More prominent border
+                            borderRadius: BorderRadius.circular(
+                              20.r,
+                            ), // Slightly more rounded
+                            border: Border.all(
+                              color: Colors.blueGrey.shade700,
+                              width: 3.w,
+                            ), // More prominent border
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withAlpha(150), // Darker shadow
-                                offset: Offset(0, 8.h), // More pronounced 3D effect
+                                color: Colors.black.withAlpha(
+                                  150,
+                                ), // Darker shadow
+                                offset: Offset(
+                                  0,
+                                  8.h,
+                                ), // More pronounced 3D effect
                                 blurRadius: 12.r,
                                 spreadRadius: 2.r,
                               ),
@@ -124,12 +176,20 @@ class _ResultScreenState extends State<ResultScreen> {
                             children: [
                               Text(
                                 'result_screen_your_profile'.tr(),
-                                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold, color: Colors.amber),
+                                style: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.amber,
+                                ),
                               ),
                               SizedBox(height: 16.h),
                               Text(
                                 deityData.description.tr(),
-                                style: TextStyle(fontSize: 16.sp, color: Colors.white70, height: 1.5),
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: Colors.white70,
+                                  height: 1.5,
+                                ),
                               ),
                             ],
                           ),
@@ -141,7 +201,10 @@ class _ResultScreenState extends State<ResultScreen> {
                             ChibiButton(
                               color: const Color(0xFF1E88E5), // Blue
                               onPressed: _shareResult,
-                              child: const Icon(Icons.share, color: Colors.white),
+                              child: const Icon(
+                                Icons.share,
+                                color: Colors.white,
+                              ),
                             ),
                             ChibiButton(
                               color: Colors.amber,
@@ -152,7 +215,10 @@ class _ResultScreenState extends State<ResultScreen> {
                                 }
                                 GoRouter.of(context).go('/');
                               },
-                              child: const Icon(Icons.home, color: Colors.white),
+                              child: const Icon(
+                                Icons.home,
+                                color: Colors.white,
+                              ),
                             ),
                           ],
                         ),

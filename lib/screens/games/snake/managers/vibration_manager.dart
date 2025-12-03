@@ -7,9 +7,7 @@ class VibrationManager {
   /// Vibrate when eating regular food
   static Future<void> vibrateOnRegularFood() async {
     if (Platform.isAndroid || Platform.isIOS) {
-      await Vibration.vibrate(
-        duration: SnakeGameConfig.vibrationDurationShort,
-      );
+      await Vibration.vibrate(duration: SnakeGameConfig.vibrationDurationShort);
     }
   }
 
@@ -36,9 +34,7 @@ class VibrationManager {
   /// Vibrate when game over (long)
   static Future<void> vibrateOnGameOver() async {
     if (Platform.isAndroid || Platform.isIOS) {
-      await Vibration.vibrate(
-        duration: SnakeGameConfig.vibrationDurationLong,
-      );
+      await Vibration.vibrate(duration: SnakeGameConfig.vibrationDurationLong);
     }
   }
 
@@ -49,10 +45,7 @@ class VibrationManager {
   }) async {
     if (Platform.isAndroid || Platform.isIOS) {
       if (amplitude != null) {
-        await Vibration.vibrate(
-          duration: duration,
-          amplitude: amplitude,
-        );
+        await Vibration.vibrate(duration: duration, amplitude: amplitude);
       } else {
         await Vibration.vibrate(duration: duration);
       }

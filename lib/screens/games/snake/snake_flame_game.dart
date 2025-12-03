@@ -293,16 +293,15 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     // Food aging logic
     gameState.value.foodAge += dt;
     final double foodRottingTime =
-        _foodRottingTimeBase -
-        (level * _foodRottingTimeLevelFactor);
-    
+        _foodRottingTimeBase - (level * _foodRottingTimeLevelFactor);
+
     // Defer the update to avoid "setState during build" errors
     Future.microtask(() {
       if (isMounted) {
         remainingFoodTime.value = foodRottingTime - gameState.value.foodAge;
       }
     });
-    
+
     if (gameState.value.foodAge >= foodRottingTime) {
       gameState.value.foodAge = 0.0;
       if (gameState.value.foodType.value == FoodType.golden) {
@@ -312,9 +311,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
         gameState.value.foodType.value = FoodType.rotten;
         _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
       } else if (gameState.value.foodType.value == FoodType.rotten) {
-        gameLogic.generateNewFood(
-          gameState.value,
-        );
+        gameLogic.generateNewFood(gameState.value);
         _foodComponent.position = gameState.value.food.toVector2() * cellSize;
         _foodComponent.sprite = _getFoodSprite(gameState.value.foodType.value);
       }
