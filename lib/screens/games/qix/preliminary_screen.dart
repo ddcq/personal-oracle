@@ -20,7 +20,7 @@ class QixPreliminaryScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset('assets/images/preliminary/qix.webp', width: 120),
+          Image.asset('assets/images/menu/qix.webp', width: 120),
           const SizedBox(height: 16),
           Text(
             'qix_preliminary_screen_help_text'.tr(),

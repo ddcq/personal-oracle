@@ -20,48 +20,18 @@ class MenuPrincipal extends StatelessWidget {
         const Color(0xFF76A2A5),
         () => context.go('/order_the_scrolls_preliminary'),
       ),
-      _MiniJeuItem(
-        'games_menu_asgard_wall'.tr(),
-        'assets/images/menu/asgard_wall.webp',
-        const Color(0xFF2F3845),
-        () => context.go('/asgard_wall_preliminary'),
-      ),
-      _MiniJeuItem(
-        'games_menu_scattered_runes'.tr(),
-        'assets/images/menu/puzzle.webp',
-        const Color(0xFF5E6282),
-        () => context.go('/puzzle_preliminary'),
-      ),
-      _MiniJeuItem(
-        'games_menu_midgard_serpent'.tr(),
-        'assets/images/menu/snake.webp',
-        const Color(0xFFB9DAE3),
-        () => context.go('/snake_preliminary'),
-      ),
-      _MiniJeuItem(
-        'games_menu_territory_conquest'.tr(),
-        'assets/images/menu/qix.webp',
-        const Color(0xFF565575),
-        () => context.go('/qix_preliminary'),
-      ),
-      _MiniJeuItem(
-        'games_menu_odin_eye'.tr(),
-        'assets/images/menu/word_search.webp',
-        const Color(0xFF6E759F),
-        () => context.go('/word_search_preliminary'),
-      ),
+      _MiniJeuItem('games_menu_asgard_wall'.tr(), 'assets/images/menu/asgard_wall.webp', const Color(0xFF2F3845), () => context.go('/asgard_wall_preliminary')),
+      _MiniJeuItem('games_menu_scattered_runes'.tr(), 'assets/images/menu/puzzle.webp', const Color(0xFF5E6282), () => context.go('/puzzle_preliminary')),
+      _MiniJeuItem('games_menu_midgard_serpent'.tr(), 'assets/images/menu/snake.webp', const Color(0xFFB9DAE3), () => context.go('/snake_preliminary')),
+      _MiniJeuItem('games_menu_territory_conquest'.tr(), 'assets/images/menu/qix.webp', const Color(0xFF565575), () => context.go('/qix_preliminary')),
+      _MiniJeuItem('games_menu_odin_eye'.tr(), 'assets/images/menu/word_search.webp', const Color(0xFF6E759F), () => context.go('/word_search_preliminary')),
       _MiniJeuItem(
         'games_menu_andvari_loot'.tr(),
         'assets/images/menu/minesweeper.webp',
         const Color(0xFF7B8295),
         () => context.go('/minesweeper_preliminary'),
       ),
-      _MiniJeuItem(
-        'games_menu_quiz'.tr(),
-        'assets/images/menu/quiz.webp',
-        const Color(0xFFC89B6C),
-        () => context.go('/quiz_preliminary'),
-      ),
+      _MiniJeuItem('games_menu_quiz'.tr(), 'assets/images/menu/quiz.webp', const Color(0xFF55999C), () => context.go('/quiz_preliminary')),
     ];
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -78,34 +48,17 @@ class MenuPrincipal extends StatelessWidget {
         child: SafeArea(
           child: GridView.builder(
             padding: EdgeInsets.all(20.w),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
-              childAspectRatio: 0.7,
-            ),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 15, mainAxisSpacing: 15, childAspectRatio: 0.7),
             itemCount: jeux.length,
             itemBuilder: (context, index) {
               final jeu = jeux[index];
               return ChibiButton(
-                    color: jeu.color,
-                    onPressed: jeu.onPressed,
-                    iconPath: jeu.iconPath,
-                    text: jeu.label,
-                    textStyle: TextStyle(
-                      fontFamily: 'Amarante',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.sp,
-                      color: Colors.white,
-                    ),
-                  )
-                  .animate(delay: (index * 120).ms)
-                  .slideY(
-                    begin: 0.2,
-                    duration: 500.ms,
-                    curve: Curves.easeOutCubic,
-                  )
-                  .fadeIn(duration: 300.ms);
+                color: jeu.color,
+                onPressed: jeu.onPressed,
+                iconPath: jeu.iconPath,
+                text: jeu.label,
+                textStyle: TextStyle(fontFamily: 'Amarante', fontWeight: FontWeight.bold, fontSize: 12.sp, color: Colors.white),
+              ).animate(delay: (index * 120).ms).slideY(begin: 0.2, duration: 500.ms, curve: Curves.easeOutCubic).fadeIn(duration: 300.ms);
             },
           ),
         ),

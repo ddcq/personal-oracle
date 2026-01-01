@@ -46,7 +46,7 @@ class SnakePreliminaryScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset('assets/images/preliminary/snake.webp', width: 120),
+          Image.asset('assets/images/menu/snake.webp', width: 120),
           const SizedBox(height: 16),
           Text(
             'snake_preliminary_screen_help_text'.tr(),

@@ -20,7 +20,7 @@ class OrderTheScrollsPreliminaryScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
-            'assets/images/preliminary/order_the_scrolls.webp',
+            'assets/images/menu/order_the_scrolls.webp',
             width: 120,
           ),
           const SizedBox(height: 16),

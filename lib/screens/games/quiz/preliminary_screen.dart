@@ -20,7 +20,7 @@ class QuizPreliminaryScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset('assets/images/preliminary/quiz.webp', width: 120),
+          Image.asset('assets/images/menu/quiz.webp', width: 120),
           const SizedBox(height: 16),
           Text(
             'quiz_preliminary_screen_help_text'.tr(),
