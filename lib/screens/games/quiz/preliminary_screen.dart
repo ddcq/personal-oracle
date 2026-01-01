@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
-
 class QuizPreliminaryScreen extends StatelessWidget {
   const QuizPreliminaryScreen({super.key});
 

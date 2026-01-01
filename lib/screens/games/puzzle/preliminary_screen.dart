@@ -83,5 +83,3 @@ class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
     );
   }
 }
-
-
