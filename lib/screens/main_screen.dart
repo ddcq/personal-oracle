@@ -142,24 +142,7 @@ class _MainScreenState extends State<MainScreen> {
                               curve: Curves.easeOutCubic,
                             )
                             .fadeIn(duration: 300.ms),
-                        SizedBox(height: 10.h),
-                        SizedBox(
-                              width: double.infinity,
-                              child: ChibiButton(
-                                text: 'main_screen_guardian_deity'.tr(),
-                                color: ChibiColors.buttonBlue,
-                                onPressed: () {
-                                  context.go('/quiz');
-                                },
-                              ),
-                            )
-                            .animate(delay: 1000.ms)
-                            .slideX(
-                              begin: -0.3,
-                              duration: 400.ms,
-                              curve: Curves.easeOutCubic,
-                            )
-                            .fadeIn(duration: 300.ms),
+
                         SizedBox(height: 10.h),
                         Row(
                               children: [
