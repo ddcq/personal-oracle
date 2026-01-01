@@ -632,5 +632,8 @@
   "word_search_screen_rule_3": "Select letters by sliding your finger across the grid.",
   "word_search_screen_rule_4": "Once all words are found, a secret word will be requested.",
   "word_search_screen_rule_5": "Use the remaining letters to form the secret word and confirm your victory.",
-  "word_search_screen_title": "Odin's Eye"
+  "word_search_screen_title": "Odin's Eye",
+    "games_menu_quiz": "Quiz of the Gods",
+    "quiz_preliminary_screen_help_text": "Answer the questions of the gods and discover which deity watches over you.",
+    "quiz_preliminary_screen_start_button": "Start the Quiz"
 }

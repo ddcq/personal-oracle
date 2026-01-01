@@ -632,5 +632,8 @@
   "word_search_screen_rule_3": "Selecciona letras deslizando el dedo por la cuadrícula.",
   "word_search_screen_rule_4": "Una vez encontradas todas las palabras, se pedirá una palabra secreta.",
   "word_search_screen_rule_5": "Usa las letras restantes para formar la palabra secreta y confirma tu victoria.",
-  "word_search_screen_title": "El Ojo de Odín"
+  "word_search_screen_title": "El Ojo de Odín",
+    "games_menu_quiz": "Cuestionario de los Dioses",
+    "quiz_preliminary_screen_help_text": "Responde a las preguntas de los dioses y descubre qué deidad vela por ti.",
+    "quiz_preliminary_screen_start_button": "Comenzar el Cuestionario"
 }
