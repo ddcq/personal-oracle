@@ -10,6 +10,7 @@ class ChibiButton extends StatefulWidget {
   final Color color;
   final VoidCallback? onPressed; // Made nullable
   final TextStyle? textStyle;
+  final String? iconPath; // New property for icon
 
   const ChibiButton({
     super.key,
@@ -18,9 +19,12 @@ class ChibiButton extends StatefulWidget {
     this.onPressed,
     this.child,
     this.textStyle,
+    this.iconPath, // Initialize new property
   }) : assert(
-         text != null || child != null,
-         'Either text or child must be provided',
+         text != null ||
+             child != null ||
+             iconPath != null, // Ensure at least one content type is provided
+         'Either text, child, or iconPath must be provided',
        );
 
   @override
@@ -55,14 +59,56 @@ class _ChibiButtonState extends State<ChibiButton> {
     final Color darkColor = darken(widget.color, 0.2);
     final Color borderColor = darken(widget.color, 0.3);
     final baseStyle = widget.textStyle ?? ChibiTextStyles.buttonText;
-    // The font size on the design draft.
-    const double designFontSize = 20.0;
-
     final TextStyle finalTextStyle;
-    // In portrait, scale the font size based on the screen width (default .sp behavior).
-    finalTextStyle = baseStyle.copyWith(fontSize: designFontSize.sp);
+
+    if (widget.textStyle?.fontSize != null) {
+      // If the passed style already has a font size, respect it.
+      finalTextStyle = baseStyle;
+    } else {
+      // Otherwise, apply the default size.
+      const double designFontSize = 20.0;
+      finalTextStyle = baseStyle.copyWith(fontSize: designFontSize.sp);
+    }
 
     final borderWidth = 3.w;
+
+    Widget buttonContent;
+    if (widget.child != null) {
+      buttonContent = widget.child!;
+    } else if (widget.iconPath != null) {
+      // If iconPath is provided, create a Column with Image and Text
+      buttonContent = Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            // Image fills the available space
+            child: Image.asset(
+              widget.iconPath!,
+              fit: BoxFit.cover, // Fill width
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            widget.text ?? '', // Text as label, can be empty if not provided
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: finalTextStyle,
+          ),
+        ],
+      );
+    } else {
+      // Default to just text if no child or iconPath
+      buttonContent = FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          widget.text!,
+          textAlign: TextAlign.center,
+          style: finalTextStyle,
+        ),
+      );
+    }
+
     return GestureDetector(
       onTap: widget.onPressed,
       onTapDown: _onTapDown,
@@ -91,20 +137,13 @@ class _ChibiButtonState extends State<ChibiButton> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.r),
-                  child: Container(
-                    padding: EdgeInsets.all(borderWidth * 2),
-                    color: widget.color,
-                    child:
-                        widget.child ??
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            widget.text!,
-                            textAlign: TextAlign.center,
-                            style: finalTextStyle,
-                          ),
+                  child: widget.iconPath != null
+                      ? buttonContent
+                      : Container(
+                          padding: EdgeInsets.all(borderWidth * 2),
+                          color: widget.color,
+                          child: buttonContent,
                         ),
-                  ),
                 ),
               )
               .animate(target: _isPressed ? 1 : 0)

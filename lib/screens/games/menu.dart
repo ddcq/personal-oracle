@@ -1,12 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/widgets/chibi_button.dart'; // Import ChibiButton
 
 class MenuPrincipal extends StatelessWidget {
   const MenuPrincipal({super.key});
@@ -16,43 +16,49 @@ class MenuPrincipal extends StatelessWidget {
     final jeux = <_MiniJeuItem>[
       _MiniJeuItem(
         'games_menu_reorder_history'.tr(),
-        const Color(0xFF6366F1),
+        'assets/images/menu/order_the_scrolls.webp',
+        const Color(0xFF76A2A5),
         () => context.go('/order_the_scrolls_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_asgard_wall'.tr(),
-        const Color(0xFFEF4444),
+        'assets/images/menu/asgard_wall.webp',
+        const Color(0xFF2F3845),
         () => context.go('/asgard_wall_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_scattered_runes'.tr(),
-        const Color(0xFF06B6D4),
+        'assets/images/menu/puzzle.webp',
+        const Color(0xFF5E6282),
         () => context.go('/puzzle_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_midgard_serpent'.tr(),
-        const Color(0xFF22C55E),
+        'assets/images/menu/snake.webp',
+        const Color(0xFFB9DAE3),
         () => context.go('/snake_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_territory_conquest'.tr(),
-        const Color(0xFFFF6B35),
+        'assets/images/menu/qix.webp',
+        const Color(0xFF565575),
         () => context.go('/qix_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_odin_eye'.tr(),
-        const Color(0xFF8B5CF6),
+        'assets/images/menu/word_search.webp',
+        const Color(0xFF6E759F),
         () => context.go('/word_search_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_andvari_loot'.tr(),
-        Colors.brown,
+        'assets/images/menu/minesweeper.webp',
+        const Color(0xFF7B8295),
         () => context.go('/minesweeper_preliminary'),
       ),
     ];
     return Scaffold(
-      extendBodyBehindAppBar:
-          true, // Permet au body de s’étendre derrière l’AppBar
+      extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
         titleText: 'games_menu_mini_games'.tr(),
         leading: IconButton(
@@ -64,34 +70,37 @@ class MenuPrincipal extends StatelessWidget {
       ),
       body: AppBackground(
         child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // Generate ChibiButtons from the jeux list
-                  ...jeux.asMap().entries.map((entry) {
-                    int index = entry.key;
-                    _MiniJeuItem jeu = entry.value;
-                    return Padding(
-                          padding: EdgeInsets.only(bottom: 15.h),
-                          child: ChibiButton(
-                            text: jeu.label,
-                            color: jeu.color,
-                            onPressed: jeu.onPressed,
-                          ),
-                        )
-                        .animate(delay: (index * 120).ms)
-                        .slideY(
-                          begin: 0.2,
-                          duration: 500.ms,
-                          curve: Curves.easeOutCubic,
-                        )
-                        .fadeIn(duration: 300.ms);
-                  }),
-                ],
-              ),
+          child: GridView.builder(
+            padding: EdgeInsets.all(20.w),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 15,
+              mainAxisSpacing: 15,
+              childAspectRatio: 0.7,
             ),
+            itemCount: jeux.length,
+            itemBuilder: (context, index) {
+              final jeu = jeux[index];
+              return ChibiButton(
+                    color: jeu.color,
+                    onPressed: jeu.onPressed,
+                    iconPath: jeu.iconPath,
+                    text: jeu.label,
+                    textStyle: TextStyle(
+                      fontFamily: 'Amarante',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12.sp,
+                      color: Colors.white,
+                    ),
+                  )
+                  .animate(delay: (index * 120).ms)
+                  .slideY(
+                    begin: 0.2,
+                    duration: 500.ms,
+                    curve: Curves.easeOutCubic,
+                  )
+                  .fadeIn(duration: 300.ms);
+            },
           ),
         ),
       ),
@@ -101,8 +110,9 @@ class MenuPrincipal extends StatelessWidget {
 
 class _MiniJeuItem {
   final String label;
+  final String iconPath;
   final Color color;
   final VoidCallback onPressed;
 
-  _MiniJeuItem(this.label, this.color, this.onPressed);
+  _MiniJeuItem(this.label, this.iconPath, this.color, this.onPressed);
 }
