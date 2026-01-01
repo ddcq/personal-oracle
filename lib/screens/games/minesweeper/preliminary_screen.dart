@@ -20,7 +20,7 @@ class MinesweeperPreliminaryScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset('assets/images/sparkle.png', width: 80, height: 80),
+          Image.asset('assets/images/menu/minesweeper.webp', width: 80, height: 80),
           const SizedBox(height: 16),
           Text(
             'minesweeper_preliminary_screen_help_text'.tr(),

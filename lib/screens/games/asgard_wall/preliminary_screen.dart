@@ -20,7 +20,7 @@ class AsgardWallGameScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset('assets/images/preliminary/asgard_wall.webp', width: 120),
+          Image.asset('assets/images/menu/asgard_wall.webp', width: 120),
           const SizedBox(height: 16),
           Text(
             'asgard_wall_preliminary_screen_help_text'.tr(),

@@ -4,9 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/chibi_button.dart';
 
 import 'package:oracle_d_asgard/screens/games/puzzle/main_screen.dart';
-import 'dart:math';
-import 'package:flutter/services.dart';
-import 'dart:ui' as ui;
+
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 // =========================================
@@ -32,7 +30,7 @@ class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
       ),
       child: Column(
         children: [
-          const PuzzleImageTile(size: 80),
+          Image.asset('assets/images/menu/puzzle.webp', width: 120),
           const SizedBox(height: 16),
           Text(
             'puzzle_preliminary_screen_help_text'.tr(),
@@ -86,87 +84,4 @@ class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
   }
 }
 
-class PuzzleImageTile extends StatefulWidget {
-  final double size;
-  const PuzzleImageTile({super.key, required this.size});
 
-  @override
-  State<PuzzleImageTile> createState() => _PuzzleImageTileState();
-}
-
-class _PuzzleImageTileState extends State<PuzzleImageTile> {
-  ui.Image? _image;
-  int? _tileIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadImage();
-  }
-
-  Future<void> _loadImage() async {
-    final ByteData data = await rootBundle.load(
-      'assets/images/puzzle_chibi.png',
-    );
-    final ui.Codec codec = await ui.instantiateImageCodec(
-      data.buffer.asUint8List(),
-    );
-    final ui.FrameInfo fi = await codec.getNextFrame();
-    if (mounted) {
-      setState(() {
-        _image = fi.image;
-        _tileIndex = Random().nextInt(9);
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_image == null || _tileIndex == null) {
-      return SizedBox(
-        width: widget.size,
-        height: widget.size,
-        child: const CircularProgressIndicator(),
-      );
-    }
-    return CustomPaint(
-      size: Size(widget.size, widget.size),
-      painter: PuzzleTilePainter(image: _image!, tileIndex: _tileIndex!),
-    );
-  }
-}
-
-class PuzzleTilePainter extends CustomPainter {
-  final ui.Image image;
-  final int tileIndex;
-
-  PuzzleTilePainter({required this.image, required this.tileIndex});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double sheetWidth = image.width.toDouble();
-    final double sheetHeight = image.height.toDouble();
-    const int tilesPerRow = 3;
-    final double tileWidth = sheetWidth / tilesPerRow;
-    final double tileHeight = sheetHeight / tilesPerRow;
-
-    final int tileCol = tileIndex % tilesPerRow;
-    final int tileRow = tileIndex ~/ tilesPerRow;
-
-    final Rect sourceRect = Rect.fromLTWH(
-      tileCol * tileWidth,
-      tileRow * tileHeight,
-      tileWidth,
-      tileHeight,
-    );
-
-    final Rect destRect = Rect.fromLTWH(0, 0, size.width, size.height);
-
-    canvas.drawImageRect(image, sourceRect, destRect, Paint());
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}

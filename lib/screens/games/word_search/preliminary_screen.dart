@@ -21,7 +21,7 @@ class WordSearchPreliminaryScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
-            'assets/images/preliminary/word_search.webp',
+            'assets/images/menu/word_search.webp',
             width: 120,
             height: 120,
           ),

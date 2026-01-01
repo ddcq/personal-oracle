@@ -633,7 +633,7 @@
   "word_search_screen_rule_4": "Une fois tous les mots trouvés, un mot secret vous sera demandé.",
   "word_search_screen_rule_5": "Utilisez les lettres restantes pour former le mot secret et valider votre victoire.",
   "word_search_screen_title": "L'Œil d'Odin",
-    "games_menu_quiz": "Quiz des Dieux",
-    "quiz_preliminary_screen_help_text": "Répondez aux questions des dieux et découvrez quelle divinité veille sur vous.",
-    "quiz_preliminary_screen_start_button": "Commencer le Quiz"
+  "games_menu_quiz": "Ma divinité gardienne",
+  "quiz_preliminary_screen_help_text": "Répondez aux questions des dieux et découvrez quelle divinité veille sur vous.",
+  "quiz_preliminary_screen_start_button": "Commencer le Quiz"
 }
