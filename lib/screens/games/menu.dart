@@ -56,6 +56,12 @@ class MenuPrincipal extends StatelessWidget {
         const Color(0xFF7B8295),
         () => context.go('/minesweeper_preliminary'),
       ),
+      _MiniJeuItem(
+        'games_menu_quiz'.tr(),
+        'assets/images/menu/quiz.webp',
+        const Color(0xFFC89B6C),
+        () => context.go('/quiz_preliminary'),
+      ),
     ];
     return Scaffold(
       extendBodyBehindAppBar: true,
