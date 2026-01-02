@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:oracle_d_asgard/screens/games/asgard_wall/main_screen.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
@@ -58,7 +58,7 @@ class VictoryScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 32),
                 SizedBox(height: 32),
-                ChibiButton(
+                ChibiTextButton(
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -69,7 +69,7 @@ class VictoryScreen extends StatelessWidget {
                   color: const Color(0xFFFFD700),
                 ),
                 SizedBox(height: 16),
-                ChibiButton(
+                ChibiTextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },

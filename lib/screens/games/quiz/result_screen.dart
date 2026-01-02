@@ -5,7 +5,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:confetti/confetti.dart';
 import 'package:oracle_d_asgard/data/app_data.dart';
 import 'package:oracle_d_asgard/widgets/deity_card.dart'; // 👈 Import it
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/confetti_overlay.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
@@ -198,15 +198,15 @@ class _ResultScreenState extends State<ResultScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            ChibiButton(
+                            ChibiIconButton(
                               color: const Color(0xFF1E88E5), // Blue
                               onPressed: _shareResult,
-                              child: const Icon(
+                              icon: const Icon(
                                 Icons.share,
                                 color: Colors.white,
                               ),
                             ),
-                            ChibiButton(
+                            ChibiIconButton(
                               color: Colors.amber,
                               onPressed: () {
                                 // Force navigation to home
@@ -215,10 +215,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                 }
                                 GoRouter.of(context).go('/');
                               },
-                              child: const Icon(
-                                Icons.home,
-                                color: Colors.white,
-                              ),
+                              icon: const Icon(Icons.home, color: Colors.white),
                             ),
                           ],
                         ),

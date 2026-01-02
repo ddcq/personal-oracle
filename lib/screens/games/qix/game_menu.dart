@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 
 class GameMenu extends StatelessWidget {
   final VoidCallback onStartGame;
@@ -57,7 +57,7 @@ class GameMenu extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 32),
-          ChibiButton(
+          ChibiTextButton(
             onPressed: onStartGame,
             text: 'qix_game_menu_start_button'.tr(),
             color: const Color(0xFFFF6B35),

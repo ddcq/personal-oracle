@@ -27,7 +27,7 @@ import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
 
 import 'package:oracle_d_asgard/widgets/dev_tools_widget.dart';
 import 'package:oracle_d_asgard/locator.dart';
@@ -233,14 +233,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ChibiButton(
+                ChibiIconButton(
                   color: Colors.grey,
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Icon(Icons.cancel, color: Colors.white),
+                  icon: const Icon(Icons.cancel, color: Colors.white),
                 ),
-                ChibiButton(
+                ChibiIconButton(
                   color: Colors.amber,
                   onPressed: () {
                     getIt<GamificationService>().saveProfileName(
@@ -251,7 +251,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     });
                     Navigator.of(context).pop();
                   },
-                  child: const Icon(Icons.save, color: Colors.white),
+                  icon: const Icon(Icons.save, color: Colors.white),
                 ),
               ],
             ),

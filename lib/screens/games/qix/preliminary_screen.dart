@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/screens/games/qix/main_screen.dart';
 
 class QixPreliminaryScreen extends StatelessWidget {
@@ -31,7 +31,7 @@ class QixPreliminaryScreen extends StatelessWidget {
       ),
     );
 
-    final Widget startButton = ChibiButton(
+    final Widget startButton = ChibiTextButton(
       text: 'qix_preliminary_screen_start_button'.tr(),
       color: const Color(0xFFFF6B35), // Color from menu
       onPressed: () {

@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
 
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart'; // Import MythCard
@@ -194,21 +194,21 @@ class _VictoryPopupState extends State<VictoryPopup> {
     final buttonsRow = Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        ChibiButton(
+        ChibiIconButton(
           color: ChibiColors.buttonOrange,
           onPressed: () => context.go('/'),
-          child: const Icon(Icons.home, color: Colors.white, size: 32),
+          icon: const Icon(Icons.home, color: Colors.white, size: 32),
         ),
         if (!widget.hideReplayButton)
-          ChibiButton(
+          ChibiIconButton(
             color: ChibiColors.buttonGreen,
             onPressed: widget.onDismiss,
-            child: const Icon(Icons.replay, color: Colors.white, size: 32),
+            icon: const Icon(Icons.replay, color: Colors.white, size: 32),
           ),
-        ChibiButton(
+        ChibiIconButton(
           color: ChibiColors.buttonBlue,
           onPressed: widget.onSeeRewards,
-          child: const Icon(Icons.emoji_events, color: Colors.white, size: 32),
+          icon: const Icon(Icons.emoji_events, color: Colors.white, size: 32),
         ),
       ],
     );

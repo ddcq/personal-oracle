@@ -13,7 +13,7 @@ import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class OrderTheScrollsGame extends StatefulWidget {
@@ -44,7 +44,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
   Widget validationButton() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: ChibiButton(
+      child: ChibiTextButton(
         text: 'order_the_scrolls_screen_validate_order'.tr(),
         color: const Color(0xFFF9A825), // Orange color
         onPressed: () => _gameController.validateOrder(),

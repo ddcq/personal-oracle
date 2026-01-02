@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 
 class GuideJormungandrPopup extends StatelessWidget {
   final VoidCallback onStartGame;
@@ -41,7 +41,7 @@ class GuideJormungandrPopup extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 16.h),
-            ChibiButton(
+            ChibiTextButton(
               text: 'widgets_guide_jormungandr_popup_start_button'.tr(),
               color: const Color(0xFF22C55E),
               onPressed: () {

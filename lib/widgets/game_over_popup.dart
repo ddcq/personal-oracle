@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart'; // Import ChibiColors
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -56,19 +56,19 @@ class _GameOverPopupState extends State<GameOverPopup>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ChibiButton(
+                        ChibiIconButton(
                           color: ChibiColors.buttonGreen,
                           onPressed: widget.onReplay,
-                          child: const Icon(
+                          icon: const Icon(
                             Icons.replay,
                             color: Colors.white,
                             size: 32,
                           ),
                         ),
-                        ChibiButton(
+                        ChibiIconButton(
                           color: ChibiColors.buttonOrange,
                           onPressed: widget.onMenu,
-                          child: const Icon(
+                          icon: const Icon(
                             Icons.home,
                             color: Colors.white,
                             size: 32,

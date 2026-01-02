@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/models/card_version.dart';
 
@@ -83,33 +83,33 @@ class DevToolsWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ChibiButton(
+            ChibiIconButton(
               color: ChibiColors.buttonRed,
               onPressed: _clearAndRebuildDatabase,
-              child: const Icon(
+              icon: const Icon(
                 Icons.delete_forever,
                 color: Colors.white,
                 size: 20,
               ),
             ),
-            ChibiButton(
+            ChibiIconButton(
               color: ChibiColors.buttonBlue,
               onPressed: _unlockAllStories,
-              child: const Icon(Icons.book, color: Colors.white, size: 20),
+              icon: const Icon(Icons.book, color: Colors.white, size: 20),
             ),
-            ChibiButton(
+            ChibiIconButton(
               color: ChibiColors.buttonPurple,
               onPressed: _showRandomVictoryPopup,
-              child: const Icon(
+              icon: const Icon(
                 Icons.celebration,
                 color: Colors.white,
                 size: 20,
               ),
             ),
-            ChibiButton(
+            ChibiIconButton(
               color: ChibiColors.buttonYellow,
               onPressed: _clearCache,
-              child: const Icon(
+              icon: const Icon(
                 Icons.cleaning_services,
                 color: Colors.white,
                 size: 20,
@@ -121,30 +121,30 @@ class DevToolsWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ChibiButton(
+            ChibiIconButton(
               color: ChibiColors.buttonGreen,
               onPressed: () => _unlockAllCollectibleCards(CardVersion.chibi),
-              child: const Icon(
+              icon: const Icon(
                 Icons.card_giftcard,
                 color: Colors.white,
                 size: 20,
               ),
             ),
             SizedBox(width: 20.w),
-            ChibiButton(
+            ChibiIconButton(
               color: ChibiColors.buttonOrange,
               onPressed: () => _unlockAllCollectibleCards(CardVersion.premium),
-              child: const Icon(
+              icon: const Icon(
                 Icons.card_membership,
                 color: Colors.white,
                 size: 20,
               ),
             ),
             SizedBox(width: 20.w),
-            ChibiButton(
+            ChibiIconButton(
               color: ChibiColors.buttonYellow,
               onPressed: () => _unlockAllCollectibleCards(CardVersion.epic),
-              child: const Icon(Icons.diamond, color: Colors.white, size: 20),
+              icon: const Icon(Icons.diamond, color: Colors.white, size: 20),
             ),
           ],
         ),
