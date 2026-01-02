@@ -15,7 +15,8 @@ import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/services/video_cache_service.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -711,34 +712,31 @@ class _GameScreenState extends State<GameScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ChibiButton(
+                      ChibiIconButton(
                         onPressed: gameActive ? movePieceLeft : () {},
                         color: Colors.blueGrey,
-                        child: const Icon(
-                          Icons.arrow_left,
-                          color: Colors.white,
-                        ),
+                        icon: const Icon(Icons.arrow_left, color: Colors.white),
                       ),
-                      ChibiButton(
+                      ChibiIconButton(
                         onPressed: gameActive ? rotatePiece : () {},
                         color: Colors.blueGrey,
-                        child: const Icon(
+                        icon: const Icon(
                           Icons.rotate_right,
                           color: Colors.white,
                         ),
                       ),
-                      ChibiButton(
+                      ChibiIconButton(
                         onPressed: gameActive ? dropPiece : () {},
                         color: Colors.blueGrey,
-                        child: const Icon(
+                        icon: const Icon(
                           Icons.arrow_downward,
                           color: Colors.white,
                         ),
                       ),
-                      ChibiButton(
+                      ChibiIconButton(
                         onPressed: gameActive ? movePieceRight : () {},
                         color: Colors.blueGrey,
-                        child: const Icon(
+                        icon: const Icon(
                           Icons.arrow_right,
                           color: Colors.white,
                         ),
@@ -746,7 +744,7 @@ class _GameScreenState extends State<GameScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  ChibiButton(
+                  ChibiTextButton(
                     onPressed: startGame,
                     text: 'asgard_wall_game_screen_restart'.tr(),
                     color: const Color(0xFFFFD700),

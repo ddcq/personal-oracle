@@ -2,11 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart'; // Import ChibiButton
+import 'package:oracle_d_asgard/widgets/chibi_menu_button.dart';
 
 class MenuPrincipal extends StatelessWidget {
   const MenuPrincipal({super.key});
@@ -35,7 +34,7 @@ class MenuPrincipal extends StatelessWidget {
       _MiniJeuItem(
         'games_menu_midgard_serpent'.tr(),
         'assets/images/menu/snake.webp',
-        const Color(0xFFB9DAE3),
+        const Color(0xFF498289),
         () => context.go('/snake_preliminary'),
       ),
       _MiniJeuItem(
@@ -87,25 +86,13 @@ class MenuPrincipal extends StatelessWidget {
             itemCount: jeux.length,
             itemBuilder: (context, index) {
               final jeu = jeux[index];
-              return ChibiButton(
-                    color: jeu.color,
-                    onPressed: jeu.onPressed,
-                    iconPath: jeu.iconPath,
-                    text: jeu.label,
-                    textStyle: TextStyle(
-                      fontFamily: 'Amarante',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12.sp,
-                      color: Colors.white,
-                    ),
-                  )
-                  .animate(delay: (index * 120).ms)
-                  .slideY(
-                    begin: 0.2,
-                    duration: 500.ms,
-                    curve: Curves.easeOutCubic,
-                  )
-                  .fadeIn(duration: 300.ms);
+              return ChibiMenuButton(
+                key: ValueKey<int>(index), // Add key for animation delay
+                color: jeu.color,
+                onPressed: jeu.onPressed,
+                iconPath: jeu.iconPath,
+                text: jeu.label,
+              );
             },
           ),
         ),

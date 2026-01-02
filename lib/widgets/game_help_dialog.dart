@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/app_dialog.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
@@ -76,15 +76,15 @@ class GameHelpDialog extends StatelessWidget {
       ),
       actions: [
         if (onGoToHome != null)
-          ChibiButton(
+          ChibiIconButton(
             color: ChibiColors.buttonRed,
             onPressed: onGoToHome,
-            child: const Icon(Icons.home, color: Colors.white, size: 32),
+            icon: const Icon(Icons.home, color: Colors.white, size: 32),
           ),
-        ChibiButton(
+        ChibiIconButton(
           color: ChibiColors.buttonBlue,
           onPressed: onGameResumed,
-          child: const Icon(Icons.play_arrow, color: Colors.white, size: 32),
+          icon: const Icon(Icons.play_arrow, color: Colors.white, size: 32),
         ),
       ],
     );

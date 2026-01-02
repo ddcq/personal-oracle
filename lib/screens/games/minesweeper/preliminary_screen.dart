@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/screens/games/minesweeper/main_screen.dart';
 
 class MinesweeperPreliminaryScreen extends StatelessWidget {
@@ -48,7 +48,7 @@ class MinesweeperPreliminaryScreen extends StatelessWidget {
                   children: <Widget>[
                     gameInfoLayout,
                     const SizedBox(height: 32),
-                    ChibiButton(
+                    ChibiTextButton(
                       text: 'minesweeper_preliminary_screen_start_button'.tr(),
                       color: Colors.brown, // Color from menu
                       onPressed: () {

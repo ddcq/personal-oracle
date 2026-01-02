@@ -1,37 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter/services.dart'; // Added for HapticFeedback
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
-class ChibiButton extends StatefulWidget {
-  final String? text;
-  final Widget? child;
+class ChibiIconButton extends StatefulWidget {
+  final Widget icon;
   final Color color;
-  final VoidCallback? onPressed; // Made nullable
-  final TextStyle? textStyle;
-  final String? iconPath; // New property for icon
+  final VoidCallback? onPressed;
+  final double? size;
 
-  const ChibiButton({
+  const ChibiIconButton({
     super.key,
-    this.text,
+    required this.icon,
     required this.color,
     this.onPressed,
-    this.child,
-    this.textStyle,
-    this.iconPath, // Initialize new property
-  }) : assert(
-         text != null ||
-             child != null ||
-             iconPath != null, // Ensure at least one content type is provided
-         'Either text, child, or iconPath must be provided',
-       );
+    this.size,
+  });
 
   @override
-  State<ChibiButton> createState() => _ChibiButtonState();
+  State<ChibiIconButton> createState() => _ChibiIconButtonState();
 }
 
-class _ChibiButtonState extends State<ChibiButton> {
+class _ChibiIconButtonState extends State<ChibiIconButton> {
   bool _isPressed = false;
 
   void _onTapDown(_) {
@@ -58,56 +48,8 @@ class _ChibiButtonState extends State<ChibiButton> {
     final Color lightColor = lighten(widget.color, 0.2);
     final Color darkColor = darken(widget.color, 0.2);
     final Color borderColor = darken(widget.color, 0.3);
-    final baseStyle = widget.textStyle ?? ChibiTextStyles.buttonText;
-    final TextStyle finalTextStyle;
-
-    if (widget.textStyle?.fontSize != null) {
-      // If the passed style already has a font size, respect it.
-      finalTextStyle = baseStyle;
-    } else {
-      // Otherwise, apply the default size.
-      const double designFontSize = 20.0;
-      finalTextStyle = baseStyle.copyWith(fontSize: designFontSize.sp);
-    }
 
     final borderWidth = 3.w;
-
-    Widget buttonContent;
-    if (widget.child != null) {
-      buttonContent = widget.child!;
-    } else if (widget.iconPath != null) {
-      // If iconPath is provided, create a Column with Image and Text
-      buttonContent = Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            // Image fills the available space
-            child: Image.asset(
-              widget.iconPath!,
-              fit: BoxFit.cover, // Fill width
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            widget.text ?? '', // Text as label, can be empty if not provided
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: finalTextStyle,
-          ),
-        ],
-      );
-    } else {
-      // Default to just text if no child or iconPath
-      buttonContent = FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Text(
-          widget.text!,
-          textAlign: TextAlign.center,
-          style: finalTextStyle,
-        ),
-      );
-    }
 
     return GestureDetector(
       onTap: widget.onPressed,
@@ -137,13 +79,14 @@ class _ChibiButtonState extends State<ChibiButton> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.r),
-                  child: widget.iconPath != null
-                      ? buttonContent
-                      : Container(
-                          padding: EdgeInsets.all(borderWidth * 2),
-                          color: widget.color,
-                          child: buttonContent,
-                        ),
+                  child: Container(
+                    color: widget.color,
+                    child: SizedBox(
+                      width: widget.size ?? 48.w, // Default size
+                      height: widget.size ?? 48.w, // Default size
+                      child: Center(child: widget.icon),
+                    ),
+                  ),
                 ),
               )
               .animate(target: _isPressed ? 1 : 0)

@@ -11,7 +11,7 @@ import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
 import 'package:oracle_d_asgard/services/quiz_service.dart';
@@ -487,7 +487,7 @@ class _DeityCardState extends State<_DeityCard> {
   }
 
   Widget _buildSelectButton(BuildContext context) {
-    return ChibiButton(
+    return ChibiTextButton(
       text: 'deity_selection_screen_choose_button'.tr(),
       color: Colors.amber,
       onPressed: _selectDeity,

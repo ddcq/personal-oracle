@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GameControls extends StatelessWidget {
@@ -29,7 +29,7 @@ class GameControls extends StatelessWidget {
       return SizedBox(
         width: double.infinity,
         height: 50.h, // Adjusted height with .h
-        child: ChibiButton(
+        child: ChibiTextButton(
           // Replaced TextButton with ChibiButton
           text: 'Valider l\'ordre',
           color: const Color(0xFFF9A825), // Orange color from main screen
@@ -67,7 +67,7 @@ class GameControls extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           height: 50.h, // Adjusted height with .h
-          child: ChibiButton(
+          child: ChibiTextButton(
             // Replaced TextButton with ChibiButton
             text: 'Rejouer avec un autre mythe',
             color: const Color(0xFF1E88E5), // Blue color from main screen

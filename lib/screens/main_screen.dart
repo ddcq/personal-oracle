@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:oracle_d_asgard/widgets/chibi_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -127,7 +129,7 @@ class _MainScreenState extends State<MainScreen> {
                       children: [
                         SizedBox(
                               width: double.infinity,
-                              child: ChibiButton(
+                              child: ChibiTextButton(
                                 text: 'main_screen_play'.tr(),
                                 color: ChibiColors.buttonOrange,
                                 onPressed: () {
@@ -147,12 +149,12 @@ class _MainScreenState extends State<MainScreen> {
                         Row(
                               children: [
                                 Expanded(
-                                  child: ChibiButton(
+                                  child: ChibiIconButton(
                                     color: ChibiColors.buttonRed,
                                     onPressed: () {
                                       context.go('/profile');
                                     },
-                                    child: const Icon(
+                                    icon: const Icon(
                                       Icons.emoji_events,
                                       color: Colors.white,
                                     ),
@@ -160,12 +162,12 @@ class _MainScreenState extends State<MainScreen> {
                                 ),
                                 SizedBox(width: 10.w),
                                 Expanded(
-                                  child: ChibiButton(
+                                  child: ChibiIconButton(
                                     color: ChibiColors.buttonGreen,
                                     onPressed: () {
                                       context.go('/settings');
                                     },
-                                    child: const Icon(
+                                    icon: const Icon(
                                       Icons.settings,
                                       color: Colors.white,
                                     ),
