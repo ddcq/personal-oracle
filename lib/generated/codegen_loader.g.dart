@@ -1,0 +1,2830 @@
+// DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
+
+// ignore_for_file: prefer_single_quotes, avoid_renaming_method_parameters, constant_identifier_names
+
+import 'dart:ui';
+
+import 'package:easy_localization/easy_localization.dart' show AssetLoader;
+
+class CodegenLoader extends AssetLoader {
+  const CodegenLoader();
+
+  @override
+  Future<Map<String, dynamic>?> load(String path, Locale locale) {
+    return Future.value(mapLocales[locale.toString()]);
+  }
+
+  static const Map<String, dynamic> _es_ES = {
+    "about_screen_about_content":
+        "Esta aplicación es un homenaje al fascinante mundo de la mitología nórdica. Fue diseñada para ofrecer una experiencia inmersiva y educativa a través de cuestionarios, historias y minijuegos.",
+    "about_screen_about_title": "Acerca de la aplicación",
+    "about_screen_contact_us": "Contáctanos",
+    "about_screen_contribution_content":
+        "Este proyecto es de código abierto. No dudes en contribuir en GitHub.",
+    "about_screen_contribution_title": "Contribución",
+    "about_screen_creators_content":
+        "Creado por un pequeño equipo de entusiastas de la mitología, narradores y desarrolladores unidos por el amor a las leyendas.",
+    "about_screen_creators_lead_dev": "Desarrollador y diseñador principal:",
+    "about_screen_creators_title": "Equipo / Creadores",
+    "about_screen_disclaimer_content":
+        "Esta aplicación está basada en la mitología nórdica y no está afiliada, patrocinada ni respaldada por Marvel.",
+    "about_screen_disclaimer_title": "Descargo de responsabilidad",
+    "about_screen_github_link": "Ver en GitHub",
+    "about_screen_legal_title": "Legal",
+    "about_screen_privacy_link": "Política de privacidad",
+    "about_screen_roadmap_content":
+        "Próximamente: nuevos reinos, más historias y desafíos míticos. ¡Mantente atento a la próxima saga!",
+    "about_screen_roadmap_title": "Próximas funciones / Hoja de ruta",
+    "about_screen_support_title": "Apoya el proyecto",
+    "about_screen_tech_content":
+        "Desarrollado con Flutter y potenciado por bibliotecas de código abierto. Este proyecto también cobró vida gracias a varias herramientas de IA: Nightcafé para imágenes, Gemini CLI para codificación, Vidnoz para animaciones y Suno para música.",
+    "about_screen_tech_title": "Tecnologías e IA",
+    "about_screen_terms_link": "Términos de servicio",
+    "about_screen_thanks_content":
+        "Un sincero agradecimiento a todos los mitólogos, historiadores y entusiastas cuyo trabajo ha inspirado e informado este proyecto.",
+    "about_screen_thanks_title": "Agradecimientos especiales",
+    "about_screen_version_content":
+        "Estás usando la versión {{version}} de la aplicación Oracle d’Asgard.",
+    "about_screen_version_title": "Versión de la aplicación",
+    "about_screen_vision_content":
+        "Oracle d’Asgard nació de una pasión por la mitología nórdica y la narración. Nuestra visión es revivir los mitos antiguos mediante experiencias interactivas que combinan aprendizaje, juego y arte. Cada acertijo, cada historia, cada runa que encuentres contiene un fragmento de esa antigua magia.",
+    "about_screen_vision_title": "Historia y Visión",
+    "app_title": "Oráculo de Asgard",
+    "asgard_wall_game_screen_congratulations": "¡Felicidades!",
+    "asgard_wall_game_screen_defeat": "¡Derrota!",
+    "asgard_wall_game_screen_defeat_message":
+        "💥 ¡Un agujero en el muro!\nLos Æsir no pagarán al gigante.",
+    "asgard_wall_game_screen_next_pieces": "Siguientes Piezas",
+    "asgard_wall_game_screen_restart": "Reiniciar el Muro",
+    "asgard_wall_game_screen_title": "Muro de Asgard",
+    "asgard_wall_game_screen_victory": "¡Victoria!",
+    "asgard_wall_game_screen_victory_message":
+        "¡Has logrado una hazaña digna de los dioses!",
+    "asgard_wall_preliminary_screen_help_text":
+        "Ayuda a Hrimthur a construir el muro de Asgard colocando los bloques que caen. ¡Alcanza la altura de la victoria sin dejar huecos inalcanzables!",
+    "asgard_wall_preliminary_screen_start_button": "Comenzar a Construir",
+    "asgard_wall_welcome_screen_rule_1":
+        "Construye el muro perfecto como el gigante constructor. Tu objetivo es llenar todos los espacios hasta la línea dorada sin dejar huecos completamente cerrados.",
+    "asgard_wall_welcome_screen_rule_2":
+        "Controles: ←→ o A/D para mover, ↑/W/Espacio/Q/E para rotar, ↓/S para soltar (Controles táctiles disponibles en el juego)",
+    "collectible_card_audhumla_description":
+        "La vaca primordial, nacida del hielo derretido al principio de los tiempos, al igual que el gigante Ymir. De sus ubres fluyeron cuatro ríos de leche que alimentaron a Ymir y garantizaron su supervivencia. Al lamer un bloque de hielo salado, Audhumla reveló a Buri, el primero de los dioses y antepasado de Odín. Así, es el origen de ambas estirpes, la de los gigantes y la de los dioses, que se enfrentarán durante el Ragnarök.",
+    "collectible_card_audhumla_title": "Audhumla la Vaca Cósmica",
+    "collectible_card_baldr_description":
+        "El dios de la luz, la belleza y la pureza, hijo de Odín y Frigg. Amado por todos, su presencia traía alegría y paz. Un sueño profético sobre su propia muerte llevó a su madre, Frigg, a hacer que todo en la creación jurara no hacerle daño. Solo el muérdago, considerado demasiado joven e inofensivo, fue pasado por alto. Su trágica muerte, orquestada por Loki, fue el primer y más terrible presagio del Ragnarök, el fin de los tiempos.",
+    "collectible_card_baldr_title": "Baldr el Bueno",
+    "collectible_card_bifrost_description":
+        "El vibrante y reluciente puente arcoíris que conecta Midgard, el mundo de los hombres, con Asgard, la fortaleza de los dioses. Se describe como hecho de fuego, aire y agua, y es más fuerte que cualquier otra estructura. Está permanentemente custodiado por el dios Heimdall, quien vigila su acceso desde su puesto de guardia, Himinbjörg. Bifrost colapsará durante el Ragnarök bajo el peso de los gigantes de fuego liderados por Surt.",
+    "collectible_card_bifrost_title": "Bifrost",
+    "collectible_card_bragi_description":
+        "El dios de la poesía, la elocuencia y la música. Es el esposo de Idunn, guardiana de las manzanas de la juventud. Bragi es representado como un sabio anciano con una larga barba, cuyas palabras son tan hermosas que encantan a todos los que las escuchan. Es el skald (poeta) de la corte de los dioses en Asgard, dando la bienvenida a los guerreros valientes que llegan a Valhalla con sus cantos épicos que relatan sus hazañas y la gloria de los dioses.",
+    "collectible_card_bragi_title": "Bragi",
+    "collectible_card_brisingamen_description":
+        "El magnífico y legendario collar de la diosa Freyja. Su nombre significa 'la joya de fuego'. Fue forjado por cuatro enanos expertos. Para obtenerlo, Freyja tuvo que pasar una noche con cada uno de ellos. Este collar es símbolo de su belleza, seducción y poder sobre el amor y el deseo. Fue robado por Loki y recuperado por Heimdall después de una feroz batalla en la que ambos tomaron la forma de focas.",
+    "collectible_card_brisingamen_title": "Brisingamen",
+    "collectible_card_brokkr_sindri_description":
+        "Dos hermanos enanos, maestros herreros famosos por su habilidad inigualable. Tras una artimaña de Loki, hicieron una apuesta con el dios: que podrían crear objetos más maravillosos que los fabricados por los hijos de Ivaldi. Forjaron así tres tesoros excepcionales: el jabalí dorado Gullinbursti para Freyr, el anillo dorado Draupnir para Odín, y el más famoso de todos, el martillo Mjöllnir para Thor, a pesar de un pequeño defecto (su mango corto) debido a la interferencia de Loki.",
+    "collectible_card_brokkr_sindri_title": "Brokkr y Sindri",
+    "collectible_card_draupnir_description":
+        "El anillo mágico de oro puro poseído por Odín, uno de los mayores tesoros de los dioses. Forjado por los enanos Brokkr y Sindri, su nombre significa 'el que gotea'. Tiene la extraordinaria capacidad de multiplicarse: cada nueve noches, produce ocho nuevos anillos de oro idénticos en peso y calidad. Draupnir fue colocado por Odín en la pira funeraria de su hijo Baldr como signo de respeto, pero fue devuelto a él desde el reino de los muertos.",
+    "collectible_card_draupnir_title": "Draupnir el Anillo",
+    "collectible_card_fenrir_description":
+        "El gigantesco lobo, uno de los tres hijos monstruosos de Loki y la giganta Angrboda. Los dioses, asustados por su rápido crecimiento y las profecías que anunciaban que causaría su ruina, decidieron encadenarlo. Tras romper dos cadenas, finalmente fue atado con el vínculo mágico Gleipnir. Durante el Ragnarök, se liberará y cumplirá su destino devorando a Odín, antes de ser asesinado por Vidar, el hijo de Odín.",
+    "collectible_card_fenrir_title": "Fenrir el Lobo",
+    "collectible_card_freyja_description":
+        "Gran diosa de la mitología nórdica, asociada con el amor, la belleza y la fertilidad, pero también con la guerra, la riqueza y la magia (seidr). Hermana gemela de Freyr, es la más bella de las diosas. Reina sobre su propio reino, Fólkvangr, donde acoge a la mitad de los guerreros que murieron heroicamente en batalla, mientras que la otra mitad va al Valhalla de Odín. Posee el collar Brisingamen y un carro tirado por dos gatos.",
+    "collectible_card_freyja_title": "Freyja",
+    "collectible_card_frigg_description":
+        "Diosa del amor, el matrimonio y la maternidad, esposa de Odín y reina de Asgard. Es la madre de Baldr, el dios amado. Dotada de profecía, conoce el destino de todos los seres, incluido su hijo, pero no puede cambiarlo. Su amor maternal la llevó a proteger a Baldr haciendo que toda la creación jurara un voto, un intento desesperado que fue frustrado por la astucia de Loki.",
+    "collectible_card_frigg_title": "Frigg la Madre",
+    "collectible_card_ginnungagap_description":
+        "El abismo inmenso y silencioso que existía antes de toda creación. Era un vacío sin fondo, bordeado al norte por el reino helado de Niflheim y al sur por el reino ardiente de Muspelheim. Del encuentro entre el aliento helado de Niflheim y las chispas ardientes de Muspelheim en el centro de Ginnungagap surgió la vida, dando nacimiento al gigante primordial Ymir y a la vaca cósmica Audhumla.",
+    "collectible_card_ginnungagap_title": "El Ginnungagap",
+    "collectible_card_gjallarhorn_description":
+        "El 'Cuerno Resonante' del dios Heimdall. Lo utiliza para vigilar el puente Bifrost. El sonido de este cuerno es tan poderoso que puede escucharse en los nueve mundos. Heimdall tocará el Gjallarhorn solo una vez, pero será por un acontecimiento trascendental: lo usará para alertar a todos los dioses del inicio del Ragnarök, cuando los gigantes y los monstruos lancen su asalto final contra Asgard.",
+    "collectible_card_gjallarhorn_title": "Gjallarhorn",
+    "collectible_card_gleipnir_description":
+        "La cadena mágica forjada por los enanos para atar al lobo Fenrir. A diferencia de las pesadas cadenas anteriores que Fenrir había roto, Gleipnir era tan fina y flexible como una cinta de seda. Estaba hecha de seis ingredientes imposibles: el sonido del paso de un gato, la barba de una mujer, las raíces de una montaña, los tendones de un oso, el aliento de un pez y la saliva de un pájaro. Es el único vínculo que Fenrir nunca pudo romper.",
+    "collectible_card_gleipnir_title": "Gleipnir",
+    "collectible_card_gungnir_description":
+        "La lanza infalible de Odín, que nunca falla su objetivo. Su nombre significa 'la que oscila'. También fue forjada por los enanos, los hijos de Ivaldi, y obtenida por Loki. Un juramento grabado en su punta garantiza su precisión. Gungnir es un símbolo del poder y la autoridad de Odín como dios de la guerra. Fue sacrificándose a sí mismo, colgado de Yggdrasil y atravesado por su propia lanza, como Odín adquirió el conocimiento de las runas.",
+    "collectible_card_gungnir_title": "Gungnir la Lanza",
+    "collectible_card_heimdall_description":
+        "El vigilante guardián de Asgard, apostado en la entrada del puente Bifrost para evitar que los gigantes invadan el reino de los dioses. Nacido de nueve madres, posee sentidos sobrehumanos: su vista penetrante le permite ver a cientos de leguas de distancia y su oído es tan fino que puede oír crecer la hierba. Es el custodio del cuerno Gjallarhorn. Durante el Ragnarök, será el último en caer, matando a su enemigo eterno Loki en una batalla en la que ambos se destruirán mutuamente.",
+    "collectible_card_heimdall_title": "Heimdall",
+    "collectible_card_hel_description":
+        "Hija de Loki y de la giganta Angrboda, hermana del lobo Fenrir y de la serpiente Jörmungandr. Desterrada por Odín, se convirtió en la soberana del reino de los muertos, Helheim. A menudo se la representa con un cuerpo mitad vivo y mitad en descomposición. Reina sobre las almas de aquellos que murieron de enfermedad o vejez, en contraste con los guerreros que murieron en combate y van al Valhalla o al Fólkvangr. Su poder sobre los muertos es absoluto.",
+    "collectible_card_hel_title": "Hel",
+    "collectible_card_helheim_description":
+        "El reino de los muertos, uno de los nueve mundos, gobernado por la diosa Hel. Es un lugar oscuro, frío y brumoso, situado en las profundidades de Niflheim. Allí van las almas de quienes no murieron heroicamente en batalla. La entrada a Helheim está custodiada por el monstruoso perro Garm. Incluso los dioses no pueden escapar sin el permiso de Hel, como lo demuestra el vano intento de devolver la vida a Baldr.",
+    "collectible_card_helheim_title": "Helheim",
+    "collectible_card_hofund_description":
+        "La brillante espada del dios guardián Heimdall. Su nombre significa 'cabeza del hombre', posiblemente en referencia a un pomo tallado. Al igual que su dueño, la espada es símbolo de vigilancia y protección para Asgard. Aunque menos famosa que otras armas divinas como Mjöllnir o Gungnir, Hofund es un arma poderosa que Heimdall usará en su batalla final y mutuamente destructiva contra Loki durante el Ragnarök.",
+    "collectible_card_hofund_title": "Hofund",
+    "collectible_card_hrimthurs_description":
+        "Un gigante (Jötunn) que se presentó ante los dioses como un simple constructor. Propuso una apuesta audaz: construir una fortaleza inexpugnable alrededor de Asgard en solo tres estaciones. Como pago, exigió a la diosa Freyja, así como el Sol y la Luna. Los dioses aceptaron, pensando que la tarea era imposible. Pero el gigante, ayudado por su caballo mágico Svadilfari, progresó tan rápido que los dioses se asustaron y pidieron a Loki que interviniera.",
+    "collectible_card_hrimthurs_title": "Hrimthurs el Constructor",
+    "collectible_card_huginnmuninn_description":
+        "Los dos cuervos posados sobre los hombros de Odín. Sus nombres significan 'Pensamiento' (Huginn) y 'Memoria' (Muninn). Cada mañana, Odín los envía a recorrer los nueve mundos. A su regreso, le susurran al oído todo lo que han visto y oído. Son las fuentes de información del Padre de Todos, otorgándole un conocimiento casi omnisciente de los acontecimientos pasados, presentes y futuros, y ayudándolo en su insaciable búsqueda de sabiduría.",
+    "collectible_card_huginnmuninn_title": "Huginn y Muninn",
+    "collectible_card_idunn_description":
+        "Diosa de la juventud y la eternidad, esposa del dios poeta Bragi. Es la guardiana de las manzanas doradas, frutos mágicos que otorgan a los dioses su juventud e inmortalidad. Sin estas manzanas, los dioses envejecerían y morirían como simples mortales. Idunn fue secuestrada una vez por el gigante Thjazi con la complicidad de Loki, lo que obligó a los dioses a envejecer hasta que Loki se vio obligado a traerla de vuelta a Asgard.",
+    "collectible_card_idunn_title": "Idunn",
+    "collectible_card_jormungandr_description":
+        "La Serpiente de Midgard, uno de los tres hijos de Loki y de la giganta Angrboda. Arrojada al océano que rodea Midgard por Odín, creció tanto que terminó rodeando el mundo de los hombres y mordiéndose la cola, de ahí su apodo 'Serpiente del Mundo'. Es el enemigo jurado de Thor. Durante el Ragnarök, los dos adversarios se enfrentarán en una batalla titánica. Thor matará a Jörmungandr, pero sucumbirá a su veneno nueve pasos después.",
+    "collectible_card_jormungandr_title": "Jörmungandr",
+    "collectible_card_loki_description":
+        "Dios del engaño, la discordia y la metamorfosis. Hijo de gigantes pero aceptado entre los dioses Æsir, es hermano de sangre de Odín. Inteligente y encantador, utiliza sus talentos para ayudar a los dioses a salir de situaciones difíciles, pero su naturaleza traviesa y caótica también lo lleva a ser la fuente de la mayoría de sus problemas. Padre de monstruos como Fenrir, Jörmungandr y Hel, su papel se vuelve cada vez más oscuro, culminando en el desencadenamiento del Ragnarök.",
+    "collectible_card_loki_title": "Loki",
+    "collectible_card_mjollnir_description":
+        "El legendario martillo de Thor, forjado por los enanos Brokkr y Sindri. Símbolo tanto de protección como de destrucción, puede controlar los rayos y el trueno. Mjöllnir nunca falla su objetivo y siempre regresa a su portador después de ser lanzado. Es una de las armas más poderosas de los dioses, indispensable en la lucha eterna contra las fuerzas del caos, especialmente los gigantes.",
+    "collectible_card_mjollnir_title": "Mjöllnir",
+    "collectible_card_njord_description":
+        "Dios del mar, del viento, de la pesca y de la riqueza. Pertenece a la familia de los dioses Vanir, pero fue a vivir a Asgard con sus hijos, Freyja y Freyr, como rehén tras la guerra entre los Æsir y los Vanir. Es invocado por los marineros para obtener viajes seguros y buenas capturas. Su infeliz matrimonio con la giganta Skadi, que amaba las montañas mientras él amaba el mar, ilustra la oposición entre estos dos mundos.",
+    "collectible_card_njord_title": "Njord",
+    "collectible_card_odin_description":
+        "El Padre de Todos, el dios principal del panteón nórdico. Dios de la sabiduría, la guerra, la muerte, la poesía y la magia (las runas). Reina sobre Asgard desde su trono Hlidskjalf, desde donde puede observar los nueve mundos. Sacrificó un ojo para beber del manantial de Mimir y adquirir el conocimiento universal. Acompañado por sus cuervos Huginn y Muninn y sus lobos Geri y Freki, prepara a los dioses y a los hombres para el Ragnarök.",
+    "collectible_card_odin_title": "Odín",
+    "collectible_card_sif_description":
+        "Diosa de la fertilidad, la tierra y las cosechas, esposa de Thor. Era famosa por su magnífico cabello dorado puro, que simbolizaba los campos de trigo maduros. Un día, por travesura, Loki le cortó el cabello. Furioso, Thor obligó a Loki a deshacer su fechoría. Loki entonces ordenó a los enanos forjar un nuevo cabello de oro, que crecía como cabello real, además de otros tesoros para los dioses.",
+    "collectible_card_sif_title": "Sif del Cabello Dorado",
+    "collectible_card_skadi_description":
+        "Diosa gigante asociada con el tiro con arco, el invierno, las montañas y el esquí. Hija del gigante Thjazi, fue a Asgard para vengar la muerte de su padre, asesinado por los dioses. Como compensación, los dioses le ofrecieron casarse con uno de ellos, pero debía elegirlo viendo solo sus pies. Eligió a Njord pensando que era Baldr. Su unión fue un fracaso, ya que Skadi no podía soportar vivir lejos de sus montañas nevadas.",
+    "collectible_card_skadi_title": "Skadi",
+    "collectible_card_sleipnir_description":
+        "El caballo de Odín, nacido de la unión de Loki transformado en yegua y Svadilfari. El más rápido de todos los caballos en los nueve mundos, capaz de galopar sobre tierra, mar y aire. Sleipnir es el corcel fiel de Odín, que lo transporta entre los mundos durante sus viajes. Sus ocho patas simbolizan su velocidad sobrenatural y su capacidad para moverse entre dimensiones.",
+    "collectible_card_sleipnir_title": "Sleipnir el Caballo de Ocho Patas",
+    "collectible_card_svadilfari_description":
+        "El caballo mágico y excepcionalmente fuerte del gigante constructor Hrimthurs. Su nombre significa 'viajero desafortunado'. La velocidad y la fuerza de Svadilfari eran tales que permitieron a su amo construir el muro de Asgard a una velocidad prodigiosa, amenazando con hacer que el gigante ganara la apuesta. Para sabotear la obra, Loki se transformó en una hermosa yegua y atrajo a Svadilfari lejos de su amo, impidiendo así que el muro se completara a tiempo.",
+    "collectible_card_svadilfari_title": "Svadilfari el Caballo",
+    "collectible_card_thor_description":
+        "El dios del trueno, hijo de Odín y Jörd (la Tierra). Protector devoto de Asgard y de los humanos (Midgard), es conocido por su fuerza prodigiosa y su valentía inquebrantable. Armado con su martillo Mjöllnir, que siempre regresa a su mano, su cinturón Megingjord que multiplica su fuerza por diez, y sus guantes de hierro Járngreipr, lucha incansablemente contra los gigantes y monstruos que amenazan el orden cósmico.",
+    "collectible_card_thor_title": "Thor el Protector",
+    "collectible_card_thrym_description":
+        "El formidable rey de los gigantes de escarcha (Jötun) que se atrevió a robar el martillo de Thor, Mjöllnir. A cambio de su devolución, exigió la mano de la diosa Freyja. Para recuperar su arma, Thor se disfrazó de Freyja, acompañado de Loki como sirviente. El engaño funcionó, y una vez el martillo estuvo en su poder, Thor mató a Thrym y a toda su corte, restaurando el honor de los dioses.",
+    "collectible_card_thrym_title": "Thrym el Gigante",
+    "collectible_card_tyr_description":
+        "El dios de la guerra, la ley y la justicia. De valor ejemplar, fue el único dios que se atrevió a acercarse al lobo Fenrir cuando se volvió demasiado grande y amenazante. Para demostrarle al lobo que no querían atraparlo con la cadena mágica Gleipnir, Týr colocó su mano derecha en la boca de la bestia. Cuando Fenrir se dio cuenta de que estaba encadenado, le arrancó la mano. Este sacrificio neutralizó al lobo hasta el Ragnarök.",
+    "collectible_card_tyr_title": "Týr el Sacrificado",
+    "collectible_card_yggdrasil_description":
+        "El Árbol del Mundo, un inmenso y eterno fresno que se encuentra en el centro del cosmos nórdico. Sus ramas se extienden sobre los nueve mundos y su tronco los conecta. Tres raíces principales lo sostienen, cada una sumergida en un manantial: el manantial de Urd en Asgard, el manantial de Mimir en la tierra de los gigantes y Hvergelmir en Niflheim. Yggdrasil es atacado constantemente por diversas criaturas, como el dragón Nidhogg que roe sus raíces, pero siempre sobrevive, simbolizando la resistencia de la vida.",
+    "collectible_card_yggdrasil_title": "Yggdrasil",
+    "collectible_card_ymir_description":
+        "El primer ser vivo, un gigante primordial nacido del encuentro del fuego de Muspelheim y el hielo de Niflheim en el vacío de Ginnungagap. De su sudor nacieron los primeros gigantes. Fue alimentado por la vaca cósmica Audhumla. Finalmente, fue asesinado por los dioses Odín y sus hermanos, Vili y Vé. De su cuerpo crearon el mundo: su carne se convirtió en la tierra, su sangre en los océanos, sus huesos en las montañas y su cráneo en la bóveda celeste.",
+    "collectible_card_ymir_title": "Ymir el Gigante Primordial",
+    "deity_astrid_description":
+        "Lees el futuro en las estrellas y las runas. Los reyes y jarls buscan tu consejo, pues ves los hilos del destino que otros ignoran.",
+    "deity_astrid_title": "La Visionaria Estelar",
+    "deity_audhumla_description":
+        "Eres la fuente de toda vida, alimentando el mundo con tu esencia. Como Audhumla, eres paciente y generosa: un pilar de la creación.",
+    "deity_audhumla_title": "La Vaca Cósmica",
+    "deity_baldr_description":
+        "Puro y amado por todos, encarnas la luz y la belleza. Como Baldr, tu presencia trae alegría y armonía, aunque sigues siendo vulnerable a las fuerzas oscuras.",
+    "deity_baldr_title": "El Dios Brillante",
+    "deity_bjorn_description":
+        "Tu fuerza es legendaria, tan implacable como una avalancha. Proteges a tu clan con ferocidad silenciosa, y tu lealtad es la roca sobre la que tus aliados construyen su confianza.",
+    "deity_bjorn_title": "El Oso de Hielo",
+    "deity_bragi_description":
+        "Maestro de las palabras y la música, inspiras y conmueves los corazones. Como Bragi, usas el arte para contar historias y celebrar la vida.",
+    "deity_bragi_title": "El Poeta Divino",
+    "deity_fenrir_description":
+        "Poderoso e indomable, representas la fuerza bruta y la libertad. Como Fenrir, eres una fuerza de la naturaleza imposible de contener.",
+    "deity_fenrir_title": "El Lobo Desencadenado",
+    "deity_freydis_description":
+        "Eres una skjaldmö, una doncella escudo cuyo coraje inspira canciones. Nunca retrocedes y trazas tu propio camino con determinación de hierro.",
+    "deity_freydis_title": "El Hacha Intrépida",
+    "deity_freyja_description":
+        "Apasionada e intuitiva, sigues tu corazón. Como Freyja, traes belleza y amor al mundo.",
+    "deity_freyja_title": "La Dama del Amor",
+    "deity_frigg_description":
+        "Sabia y compasiva, cuidas a tus seres queridos. Como Frigg, prevés y evitas el peligro.",
+    "deity_frigg_title": "La Protectora",
+    "deity_heimdall_description":
+        "Vigilante y perceptivo, eres el protector de los reinos. Como Heimdall, posees sentidos agudos y lealtad inquebrantable.",
+    "deity_heimdall_title": "El Guardián del Puente",
+    "deity_hel_description":
+        "Justa e imparcial, gobiernas sobre el reino de los muertos. Como Hel, aceptas la dualidad de la vida y la muerte y tratas a todos con equidad.",
+    "deity_hel_title": "La Soberana de los Muertos",
+    "deity_hrimthurs_description":
+        "Imponente y antiguo, eres una fuerza primordial de la naturaleza. Como Hrimthurs, eres resistente e inquebrantable, símbolo del poder elemental.",
+    "deity_hrimthurs_title": "El Gigante de Escarcha",
+    "deity_idunn_description":
+        "Fuente de juventud y vitalidad, mantienes el equilibrio de la vida. Como Idunn, eres amable y generosa, trayendo renovación y frescura.",
+    "deity_idunn_title": "La Guardiana de las Manzanas",
+    "deity_ingrid_description":
+        "Gobiernas con sabiduría y justicia. Tu gente te sigue no por miedo, sino por respeto y amor, pues encarnas el honor y el liderazgo.",
+    "deity_ingrid_title": "La Jarl de Noble Corazón",
+    "deity_jormungandr_description":
+        "Inmensa y misteriosa, rodeas el mundo: una fuerza imparable. Como Jörmungandr, eres poderosa y silenciosa, guardiana de las profundidades.",
+    "deity_jormungandr_title": "La Serpiente del Mundo",
+    "deity_loki_description":
+        "Creativo e impredecible, encuentras soluciones únicas. Como Loki, desafías el orden establecido.",
+    "deity_loki_title": "El Cambiaformas",
+    "deity_njord_description":
+        "Tranquilo y generoso, gobiernas los océanos y traes prosperidad. Como Njord, eres apacible pero poderoso e impredecible.",
+    "deity_njord_title": "El Dios de los Mares y los Vientos",
+    "deity_odin_description":
+        "Sabio y astuto, buscas el conocimiento por encima de todo. Como Odín, estás dispuesto a sacrificarte para comprender los misterios del mundo.",
+    "deity_odin_title": "El Padre de Todos",
+    "deity_ragnar_description":
+        "Tu mente es tan afilada como tu hacha. Sobresales en estrategia y engaño, usando la inteligencia como tu mejor arma para superar a tus enemigos.",
+    "deity_ragnar_title": "El Cuervo Astuto",
+    "deity_selection_screen_choose_button": "Elegir",
+    "deity_selection_screen_title": "Elegir una deidad",
+    "deity_sif_description":
+        "Bella y fértil, simbolizas la abundancia y la cosecha. Como Sif, traes vida y prosperidad a quienes te rodean.",
+    "deity_sif_title": "La Diosa del Cabello Dorado",
+    "deity_skadi_description":
+        "Independiente y salvaje, eres la señora de las montañas y los inviernos. Como Skadi, eres resiliente e indomable, encarnando la fuerza de la naturaleza.",
+    "deity_skadi_title": "La Diosa Cazadora",
+    "deity_sleipnir_description":
+        "Rápido y leal, eres el más noble de los corceles, capaz de atravesar los mundos. Como Sleipnir, eres un compañero fiel y un guía seguro.",
+    "deity_sleipnir_title": "El Caballo de Ocho Patas",
+    "deity_svadilfari_description":
+        "Poderoso e incansable, logras grandes hazañas de construcción. Como Svadilfari, eres un creador trabajador de lo imposible.",
+    "deity_svadilfari_title": "El Caballo Constructor",
+    "deity_sven_description":
+        "El horizonte es tu único hogar verdadero. Has navegado por aguas desconocidas y enfrentado tormentas monstruosas, con el alma ardiendo por descubrir lo que hay más allá del mapa.",
+    "deity_sven_title": "El Explorador del Mar",
+    "deity_thor_description":
+        "Fuerte y valiente, proteges a quienes te rodean. Como Thor, enfrentas los desafíos con determinación.",
+    "deity_thor_title": "El Tronador",
+    "deity_thrym_description":
+        "Poderoso y exigente, eres un adversario formidable. Como Thrym, eres una fuerza que no debe subestimarse, capaz de desafiar incluso a los dioses.",
+    "deity_thrym_title": "El Rey de los Gigantes",
+    "deity_tyr_description":
+        "Honorable y justo, defiendes la justicia. Como Týr, te sacrificas por lo correcto, incluso a gran costo.",
+    "deity_tyr_title": "El Justo",
+    "deity_ymir_description":
+        "Antiguo y colosal, eres el origen de toda existencia. Como Ymir, eres una fuerza fundamental: un pilar del mundo, vasto y silencioso.",
+    "deity_ymir_title": "El Gigante Primordial",
+    "games_menu_andvari_loot": "El Botín de Andvari",
+    "games_menu_asgard_wall": "Muro de Asgard",
+    "games_menu_midgard_serpent": "La Serpiente de Midgard",
+    "games_menu_mini_games": "Mini Juegos",
+    "games_menu_odin_eye": "El Ojo de Odín",
+    "games_menu_reorder_history": "Reordenar la Historia",
+    "games_menu_scattered_runes": "Runas Dispersas",
+    "games_menu_territory_conquest": "Conquista de Territorios",
+    "level": "Nivel",
+    "main_screen_guardian_deity": "Mi Deidad Guardiana",
+    "main_screen_play": "Jugar",
+    "main_screen_profile": "Perfil",
+    "main_screen_rewards": "Mis Recompensas",
+    "main_screen_settings": "Ajustes",
+    "main_screen_title": "Oráculo de Asgard",
+    "minesweeper_game_over": "¡BOOM! Has tocado una mina.",
+    "minesweeper_preliminary_screen_help_text":
+        "El tesoro maldito del enano Andvari está oculto. ¡Limpia las casillas y encuentra las monedas de oro sin activar trampas!",
+    "minesweeper_preliminary_screen_start_button":
+        "Comenzar la Búsqueda del Tesoro",
+    "minesweeper_rule_1":
+        "El objetivo es encontrar todos los tesoros sin activar ninguna mina.",
+    "minesweeper_rule_2":
+        "Toca una casilla para revelarla. Si hay una mina, pierdes.",
+    "minesweeper_rule_3":
+        "Si la casilla revelada contiene una runa, indica el número de minas o tesoros adyacentes.",
+    "minesweeper_rule_4":
+        "Las runas rojas indican minas adyacentes; las amarillas, tesoros cercanos.",
+    "minesweeper_rule_5":
+        "Mantén pulsada una casilla para colocar o quitar una bandera que marque una posible mina.",
+    "minesweeper_rule_6": "¡Encuentra todos los tesoros para ganar el juego!",
+    "minesweeper_rune_legend": "Leyenda de Runas:",
+    "minesweeper_title": "El Botín de Andvari",
+    "minesweeper_treasures_found": "Tesoros encontrados: {found} / {total}",
+    "myth_story_page_ad_display_failed":
+        "Error al mostrar el anuncio. Inténtalo de nuevo.",
+    "myth_story_page_ad_loading_failed":
+        "Error al cargar el anuncio. Inténtalo de nuevo.",
+    "myth_story_page_chapter_locked": "Capítulo bloqueado",
+    "myth_story_page_chapter_unlocked_success":
+        "¡Capítulo desbloqueado con éxito!",
+    "myth_story_page_close_button": "Cerrar",
+    "myth_story_page_error_prefix": "Error",
+    "myth_story_page_font_size_title": "Tamaño de fuente",
+    "myth_story_page_sample_text": "Texto de muestra",
+    "myth_story_page_unlock_with_ad": "Desbloquear con anuncio",
+    "norse_riddle_asgard_clue_1": "Soy la fortaleza de los dioses Æsir.",
+    "norse_riddle_asgard_clue_2":
+        "Mis muros fueron construidos por un gigante y su caballo.",
+    "norse_riddle_asgard_clue_3": "El puente arcoíris conduce a mis puertas.",
+    "norse_riddle_bifrost_clue_1":
+        "Soy un puente de fuego custodiado por un dios vigilante.",
+    "norse_riddle_bifrost_clue_2":
+        "Mis tres colores conectan el mundo de los hombres con el de los dioses.",
+    "norse_riddle_bifrost_clue_3":
+        "Me romperé bajo el peso de los gigantes al final de los tiempos.",
+    "norse_riddle_fenrir_clue_1":
+        "Mi mandíbula, al abrirse, toca el cielo y la tierra.",
+    "norse_riddle_fenrir_clue_2":
+        "Los dioses me ataron con engaños usando una cinta de seda.",
+    "norse_riddle_fenrir_clue_3": "Devoraré a Odín durante la batalla final.",
+    "norse_riddle_freya_clue_1": "Lloro lágrimas de oro por mi esposo perdido.",
+    "norse_riddle_freya_clue_2":
+        "Gobierno sobre Fólkvangr y recibo a la mitad de los guerreros caídos.",
+    "norse_riddle_freya_clue_3":
+        "Mi collar, Brísingamen, es el más hermoso de los tesoros.",
+    "norse_riddle_frigg_clue_1":
+        "Conozco el destino de todos, pero guardo silencio.",
+    "norse_riddle_frigg_clue_2": "Soy la esposa de Odín y la reina de Asgard.",
+    "norse_riddle_frigg_clue_3":
+        "Lloré por la muerte de mi hijo resplandeciente.",
+    "norse_riddle_gjallarhorn_clue_1":
+        "Mi sonido puede oírse en todos los mundos.",
+    "norse_riddle_gjallarhorn_clue_2":
+        "Soy el cuerno de advertencia del guardián de Bifröst.",
+    "norse_riddle_gjallarhorn_clue_3":
+        "Anunciaré el comienzo de la batalla final.",
+    "norse_riddle_gungnir_clue_1": "Soy la lanza que nunca falla su objetivo.",
+    "norse_riddle_gungnir_clue_2":
+        "Mi dueño se colgó de un árbol con mi punta en su costado.",
+    "norse_riddle_gungnir_clue_3":
+        "Un juramento hecho sobre mi punta es irrompible.",
+    "norse_riddle_huginn_clue_1":
+        "Cada mañana me marcho, solo para regresar al anochecer.",
+    "norse_riddle_huginn_clue_2":
+        "Soy el Pensamiento, volando para el Padre de Todo.",
+    "norse_riddle_huginn_clue_3": "Mi hermano es la Memoria.",
+    "norse_riddle_hvergelmir_clue_1":
+        "Soy la fuente de todos los ríos, en el corazón de Niflheim.",
+    "norse_riddle_hvergelmir_clue_2":
+        "Mi caldero hierve, y mis aguas congelan todo a su paso.",
+    "norse_riddle_hvergelmir_clue_3": "De mí nacen los once ríos de Élivágar.",
+    "norse_riddle_jormungandr_clue_1":
+        "Soy tan grande que rodeo el mundo de los hombres.",
+    "norse_riddle_jormungandr_clue_2":
+        "Soy la Serpiente de Midgard, hijo de Loki.",
+    "norse_riddle_jormungandr_clue_3":
+        "Mi enemigo jurado es el dios del trueno.",
+    "norse_riddle_jotunheim_clue_1":
+        "Soy el reino de los gigantes, más allá de Midgard.",
+    "norse_riddle_jotunheim_clue_2":
+        "Mis montañas son frías y mis habitantes formidables.",
+    "norse_riddle_jotunheim_clue_3":
+        "Aquí es donde Thor suele venir buscando una pelea.",
+    "norse_riddle_loki_clue_1":
+        "Soy el padre de los monstruos y el maestro del engaño.",
+    "norse_riddle_loki_clue_2": "Mi sangre fue mezclada con la de Odín.",
+    "norse_riddle_loki_clue_3": "Cambio de forma como cambio de pensamiento.",
+    "norse_riddle_midgard_clue_1": "Soy el reino de los mortales.",
+    "norse_riddle_midgard_clue_2": "Una serpiente gigante rodea mis costas.",
+    "norse_riddle_midgard_clue_3":
+        "Soy protegido por el hijo de Odín que empuña un martillo.",
+    "norse_riddle_mjolnir_clue_1": "Siempre regreso a la mano de mi amo.",
+    "norse_riddle_mjolnir_clue_2":
+        "Mi vuelo por el cielo es el sonido del trueno.",
+    "norse_riddle_mjolnir_clue_3":
+        "Soy el aplastador, el terror de los gigantes.",
+    "norse_riddle_nidavellir_clue_1":
+        "Mis forjas resuenan con el sonido de los martillos.",
+    "norse_riddle_nidavellir_clue_2":
+        "Soy el reino subterráneo de los maestros artesanos.",
+    "norse_riddle_nidavellir_clue_3":
+        "Aquí nacen los mayores tesoros de los dioses.",
+    "norse_riddle_nidavellir_clue_4": "Mis habitantes huyen de la luz del sol.",
+    "norse_riddle_odin_clue_1": "Intercambié un ojo por sabiduría.",
+    "norse_riddle_odin_clue_2":
+        "Mis dos cuervos recorren el mundo para traerme noticias.",
+    "norse_riddle_odin_clue_3":
+        "Soy el Padre de Todo, gobernando desde Asgard.",
+    "norse_riddle_ragnarok_clue_1": "Soy el crepúsculo de los dioses.",
+    "norse_riddle_ragnarok_clue_2":
+        "El sol se volverá negro y la tierra se hundirá en el mar.",
+    "norse_riddle_ragnarok_clue_3":
+        "Soy un final, pero también un nuevo comienzo.",
+    "norse_riddle_thor_clue_1": "Mi carro es tirado por cabras.",
+    "norse_riddle_thor_clue_2":
+        "Soy el protector de Midgard y el hijo de Odín.",
+    "norse_riddle_thor_clue_3": "El trueno retumba cuando lanzo mi martillo.",
+    "norse_riddle_tyr_clue_1": "Sacrifiqué mi mano para encadenar a un lobo.",
+    "norse_riddle_tyr_clue_2":
+        "Soy el dios manco de la justicia y la guerra heroica.",
+    "norse_riddle_tyr_clue_3": "Mi nombre es sinónimo de valor.",
+    "norse_riddle_valhalla_clue_1":
+        "Mi techo está cubierto con escudos dorados.",
+    "norse_riddle_valhalla_clue_2":
+        "Aquí, los guerreros de élite banquetean y combaten cada día.",
+    "norse_riddle_valhalla_clue_3":
+        "Soy el gran salón de Odín para los muertos dignos.",
+    "norse_riddle_valkyries_clue_1":
+        "Cabalgamos por los cielos, eligiendo a los caídos en batalla.",
+    "norse_riddle_valkyries_clue_2":
+        "Servimos a Odín, llevando héroes a Valhalla.",
+    "norse_riddle_valkyries_clue_3":
+        "Nuestros nombres resuenan en los campos de batalla.",
+    "norse_riddle_yggdrasil_clue_1": "Mis raíces conectan tres mundos.",
+    "norse_riddle_yggdrasil_clue_2":
+        "Soy el Árbol del Mundo, un fresno eterno.",
+    "norse_riddle_yggdrasil_clue_3":
+        "Un águila, una ardilla y un dragón viven en mí.",
+    "order_the_scrolls_help_dialog_rule_1":
+        "Coloca las cartas en orden cronológico según la mitología nórdica.",
+    "order_the_scrolls_help_dialog_rule_2":
+        "Arrastra una carta sobre otra para intercambiarlas.",
+    "order_the_scrolls_help_dialog_rule_3":
+        "El icono ⭲ indica una carta movible.",
+    "order_the_scrolls_help_dialog_rule_4":
+        "Ordénalas de la primera a la última etapa.",
+    "order_the_scrolls_help_dialog_rule_5":
+        "Haz clic en \"Validar Orden\" para comprobar.",
+    "order_the_scrolls_help_dialog_rule_6":
+        "Las cartas correctas aparecerán con un borde verde ✅.",
+    "order_the_scrolls_preliminary_screen_help_text":
+        "Coloca las cartas mitológicas en orden cronológico y reconstruye la historia legendaria de los dioses nórdicos.",
+    "order_the_scrolls_preliminary_screen_start_button": "Comenzar",
+    "order_the_scrolls_screen_incorrect_order":
+        "❌ Lo siento, el orden es incorrecto.",
+    "order_the_scrolls_screen_validate_order": "Validar Orden",
+    "profile_screen_ad_failed":
+        "Error al mostrar el anuncio. Inténtalo de nuevo.",
+    "profile_screen_ad_label": "(anuncio)",
+    "profile_screen_all_cards_unlocked":
+        "¡Todas las cartas coleccionables {version} desbloqueadas!",
+    "profile_screen_all_stories_unlocked":
+        "¡Todas las historias han sido desbloqueadas!",
+    "profile_screen_ambient_music": "Música Ambiental",
+    "profile_screen_cache_clear_failed": "Error al borrar el caché",
+    "profile_screen_cache_cleared_success": "¡Caché borrado con éxito!",
+    "profile_screen_change_name": "Cambiar Nombre",
+    "profile_screen_chapter_unlocked": "¡Capítulo desbloqueado con éxito!",
+    "profile_screen_collectible_cards": "Cartas Coleccionables",
+    "profile_screen_database_clear_failed":
+        "Error al borrar y reconstruir la base de datos",
+    "profile_screen_database_cleared_success":
+        "¡Base de datos borrada y reconstruida con éxito!",
+    "profile_screen_error_prefix": "Error",
+    "profile_screen_game_scores": "Puntuaciones del Juego",
+    "profile_screen_language": "Idioma",
+    "profile_screen_language_english": "Inglés",
+    "profile_screen_language_french": "Francés",
+    "profile_screen_language_spanish": "Español",
+    "profile_screen_new_name": "Nuevo Nombre",
+    "profile_screen_no_asgard_wall_scores":
+        "Aún no hay puntuaciones del Muro de Asgard.",
+    "profile_screen_no_collectible_cards":
+        "Aún no se han desbloqueado cartas coleccionables.",
+    "profile_screen_no_data_available": "No hay datos disponibles.",
+    "profile_screen_no_snake_scores":
+        "Aún no hay puntuaciones de la Serpiente.",
+    "profile_screen_no_unlocked_stories":
+        "Aún no se han desbloqueado historias.",
+    "profile_screen_ok_button": "OK",
+    "profile_screen_quiz_loading_error":
+        "Error al cargar el resultado del cuestionario",
+    "profile_screen_save": "Guardar",
+    "profile_screen_settings": "Configuración",
+    "profile_screen_snake_podium": "Podio de la Serpiente",
+    "profile_screen_asgard_wall_podium": "Podio del Muro de Asgard",
+    "profile_screen_unlocked_stories": "Historias Desbloqueadas",
+    "puzzle_preliminary_screen_help_text":
+        "Ensamblar los fragmentos de runas antiguas para liberar su poder místico.",
+    "puzzle_preliminary_screen_start_button": "Comenzar el Rompecabezas",
+    "puzzle_screen_rule_1":
+        "Reorganiza las piezas para formar la imagen completa.",
+    "puzzle_screen_rule_2": "Desliza las piezas hacia los espacios vacíos.",
+    "puzzle_screen_rule_3":
+        "El objetivo es completar la imagen lo más rápido posible.",
+    "puzzle_screen_title": "Runas Dispersas",
+    "qix_game_menu_controls":
+        "⌨️ Controles de Teclado ⌨️\nFlechas para moverse, Espacio para dibujar lentamente.",
+    "qix_game_menu_description":
+        "Jörmungandr, la Serpiente del Mundo, ha invadido los reinos sagrados. ¡Dibuja fronteras mágicas para recuperar el 75% del territorio y aprisionar a la bestia!",
+    "qix_game_menu_start_button": "⚔️ Comenzar la Conquista",
+    "qix_game_menu_title": "Los Nueve Reinos",
+    "qix_main_error_prefix": "Error",
+    "qix_main_game_not_initialized_error": "Error: Juego no inicializado.",
+    "qix_main_screen_defeat_message":
+        "Has sido derrotado. ¡Inténtalo de nuevo!",
+    "qix_main_screen_defeat_title": "¡DERROTA!",
+    "qix_main_screen_rule_1":
+        "Dibuja líneas para capturar territorios. ¡Evita a los enemigos y sus rastros!",
+    "qix_main_screen_rule_2": "Captura más del 75% de la tierra para ganar.",
+    "qix_main_screen_rule_3":
+        "Si un enemigo golpea tu línea mientras dibujas, pierdes una vida.",
+    "qix_main_screen_rule_4": "Si un enemigo te toca, pierdes una vida.",
+    "qix_main_screen_rule_5":
+        "Recoge bonificaciones para obtener ventajas temporales.",
+    "qix_main_screen_title": "Conquista de Territorios",
+    "qix_preliminary_screen_help_text":
+        "Guía a Odín y dibuja formas para conquistar los territorios de los nueve mundos, pero ¡cuidado con Fenrir al acecho!",
+    "qix_preliminary_screen_start_button": "Comenzar",
+    "question_10_answer_1": "Leer la mente",
+    "question_10_answer_2": "Volverte invencible",
+    "question_10_answer_3": "Viajar entre mundos",
+    "question_10_answer_4": "Calmar los corazones",
+    "question_10_text": "¿Qué tipo de poder preferirías?",
+    "question_11_answer_1": "El mentor misterioso",
+    "question_11_answer_2": "El guerrero leal",
+    "question_11_answer_3": "El embaucador impredecible",
+    "question_11_answer_4": "La figura amable pero formidable",
+    "question_11_text": "Si fueras un héroe de cine, serías...",
+    "question_12_answer_1": "Resolver un enigma antiguo",
+    "question_12_answer_2": "Luchar contra un dragón",
+    "question_12_answer_3": "Revertir una situación desesperada",
+    "question_12_answer_4": "Reunir a los enemigos alrededor de una mesa",
+    "question_12_text": "¿Qué tipo de desafío te atrae más?",
+    "question_1_answer_1": "Buscar información antes de actuar",
+    "question_1_answer_2": "Lanzarte de cabeza",
+    "question_1_answer_3": "Encontrar un enfoque creativo",
+    "question_1_answer_4": "Reunir a otros para actuar juntos",
+    "question_1_text":
+        "Cuando enfrentas un gran desafío, tu primera reacción es:",
+    "question_2_answer_1": "Tu capacidad para comprender situaciones complejas",
+    "question_2_answer_2": "Tu determinación frente a los obstáculos",
+    "question_2_answer_3": "Tu empatía y conexión con los demás",
+    "question_2_answer_4": "Tu inquebrantable sentido moral",
+    "question_2_text": "Tu mayor fortaleza es:",
+    "question_3_answer_1": "El sabio consejero que escucha",
+    "question_3_answer_2": "El líder que toma decisiones",
+    "question_3_answer_3": "El que aporta creatividad y novedad",
+    "question_3_answer_4": "El mediador que resuelve conflictos",
+    "question_3_text": "En un grupo, tú eres a menudo:",
+    "question_4_answer_1": "Una fuente de reflexión y sabiduría",
+    "question_4_answer_2": "Un campo de desafíos y aventuras",
+    "question_4_answer_3": "Inspiración para la creatividad y la pasión",
+    "question_4_answer_4": "Un recordatorio del orden natural de las cosas",
+    "question_4_text": "Tu relación con la naturaleza es:",
+    "question_5_answer_1": "Permanecer en la ignorancia",
+    "question_5_answer_2": "Ser cobarde ante el peligro",
+    "question_5_answer_3": "Perder tu libertad creativa",
+    "question_5_answer_4": "Traicionar tus principios",
+    "question_5_text": "Tu mayor temor sería:",
+    "question_6_answer_1": "Profundo y reflexivo, basado en la comprensión",
+    "question_6_answer_2": "Protector y leal con quienes amas",
+    "question_6_answer_3": "Apasionado e intenso",
+    "question_6_answer_4": "Justo y respetuoso",
+    "question_6_text": "Tu enfoque del amor y las relaciones:",
+    "question_7_answer_1": "Líder estratégico",
+    "question_7_answer_2": "El que motiva a todos",
+    "question_7_answer_3": "El creativo que rompe las reglas",
+    "question_7_answer_4": "El que equilibra y calma",
+    "question_7_text": "¿Qué papel prefieres en el trabajo en grupo?",
+    "question_8_answer_1": "Una biblioteca silenciosa",
+    "question_8_answer_2": "Una arena de combate",
+    "question_8_answer_3": "Un bosque encantado",
+    "question_8_answer_4": "Una sala del trono",
+    "question_8_text": "¿Qué entorno te representa mejor?",
+    "question_9_answer_1": "Reflexionas y luego actúas con sabiduría",
+    "question_9_answer_2": "Proteges a los débiles con fuerza",
+    "question_9_answer_3": "Manipulas la situación para darle la vuelta",
+    "question_9_answer_4": "Te indignas y buscas la paz",
+    "question_9_text": "¿Cómo reaccionas ante la injusticia?",
+    "result_screen_congratulations": "¡Felicidades!",
+    "result_screen_guardian_deity_is": "Tu deidad guardiana es:",
+    "result_screen_share_text":
+        "¡Descubrí mi deidad guardiana en Oracle de Asgard: {deity}!\n\n{description}\n\n¡Únete a mí para descubrir la tuya!\n\n{link}",
+    "result_screen_your_profile": "Tu Perfil",
+    "settings_screen_about_button": "Acerca de",
+    "settings_screen_fx_sound": "Efectos de Sonido",
+    "settings_screen_rate_app": "Calificar la aplicación",
+    "settings_screen_reading_page_music": "Música de Lectura",
+    "settings_screen_share_app": "Compartir la aplicación",
+    "settings_screen_share_text":
+        "Echa un vistazo a esta increíble aplicación: {appLink}",
+    "settings_screen_sound_default": "Predeterminado",
+    "settings_screen_sound_mute": "Silencio",
+    "settings_screen_support_us_title": "Apóyanos",
+    "settings_screen_title": "Configuración",
+    "snake_bonus_duration": "Los efectos duran 8 segundos",
+    "snake_bonus_freeze_effect": "-30% más lento",
+    "snake_bonus_freeze_name": "Congelación",
+    "snake_bonus_ghost_effect": "Atraviesa obstáculos",
+    "snake_bonus_ghost_name": "Fantasma",
+    "snake_bonus_shield_effect": "Destruye obstáculos",
+    "snake_bonus_shield_name": "Escudo",
+    "snake_bonus_speed_effect": "+30% más rápido",
+    "snake_bonus_speed_name": "Velocidad",
+    "snake_bonus_title": "Bonus:",
+    "snake_game_over_popup_message":
+        "Jörmungandr ha perecido...\nPuntuación final: {score}",
+    "snake_game_over_popup_title": "⚰️ ¡Ragnarök!",
+    "snake_preliminary_screen_help_text":
+        "Guía a Jörmungandr, la serpiente de Midgard, para crecer sin morder su propia cola, chocar con rocas o golpear el borde del mundo.",
+    "snake_preliminary_screen_start_button": "Comenzar",
+    "snake_screen_error_prefix": "Error",
+    "snake_screen_loading": "Cargando...",
+    "snake_screen_rule_1":
+        "Desliza el dedo por la pantalla para cambiar la dirección de la serpiente.",
+    "snake_screen_rule_2": "Come manzanas para crecer y ganar puntos.",
+    "snake_screen_rule_3":
+        "Evita chocar contra las paredes, rocas o tu propio cuerpo.",
+    "snake_screen_rule_4": "Las manzanas doradas dan más puntos.",
+    "snake_screen_rule_5":
+        "Las manzanas podridas te hacen perder puntos y te ralentizan.",
+    "snake_screen_rule_6":
+        "Cuanto mayor sea tu puntuación, más rápido se moverá la serpiente.",
+    "snake_screen_score": "Puntuación: {score}",
+    "snake_screen_score_default": "Puntuación: 0",
+    "snake_screen_time_seconds_suffix": "s",
+    "story_creation_of_the_world_card_1_description":
+        "Antes de toda creación, solo existía Ginnungagap, el abismo infinito donde las llamas de Muspellheim y el hielo de Niflheim se enfrentaban en silenciosa espera.",
+    "story_creation_of_the_world_card_1_detailed_story":
+        "En el amanecer del tiempo, antes de que existieran el mundo, el mar, el cielo o la tierra, solo existía Ginnungagap: el abismo insondable, el vacío primordial que se extendía en una soledad infinita.\n\nNo era ni luz ni oscuridad, ni calor ni frío, sino una nada absoluta, donde nada podía nacer ni morir, porque nada aún existía. Este vacío colosal separaba dos reinos de naturaleza opuesta, como dos fuerzas antagónicas que aguardaban su confrontación cósmica.\n\nAl norte de Ginnungagap se encontraba Niflheim, el mundo del hielo eterno y la niebla, de donde fluían los once ríos de Élivágar, cuyas aguas eran tan frías que se congelaban al instante en el vacío. Al sur ardía Muspellheim, el reino del fuego eterno e inextinguible, custodiado por el gigante Surtr, quien blandía su espada llameante mientras esperaba el día en que incendiaría todos los mundos.\n\nAsí, las fuerzas primordiales se enfrentaban a través de la inmensidad del vacío, preparando la creación mediante su propia oposición.",
+    "story_creation_of_the_world_card_1_title": "Ginnungagap",
+    "story_creation_of_the_world_card_2_description":
+        "Cuando las chispas ardientes de Muspellheim se encontraron con las brumas heladas de Niflheim, el hielo se derritió en torrentes de agua primordial, dando origen a la esencia de la vida.",
+    "story_creation_of_the_world_card_2_detailed_story":
+        "Durante incontables eones, el fuego y el hielo permanecieron separados por la vastedad de Ginnungagap. Pero lentamente, de forma inexorable, las chispas ardientes de Muspellheim comenzaron a desplazarse hacia el norte, arrastradas por imperceptibles vientos cósmicos.\n\nCuando esas chispas de puro calor se encontraron con las brumas heladas de Niflheim en el corazón del vacío, ocurrió un fenómeno extraordinario. Por primera vez desde el comienzo del tiempo, el hielo comenzó a derretirse, liberando torrentes de agua primordial.\n\nEstas gotas de agua, nacidas de la milagrosa unión de los opuestos, cayeron en el abismo de Ginnungagap. Allí, impregnadas con la fuerza vital nacida de esa imposible fusión de fuego y hielo, comenzaron a agitarse con energía creativa.\n\nFue el primer milagro de la existencia: de la oposición de las fuerzas contrarias surgió la posibilidad misma de la vida. El agua primordial llevaba en sí la semilla de todo lo que habría de existir.",
+    "story_creation_of_the_world_card_2_title": "Fuego y Hielo",
+    "story_creation_of_the_world_card_3_description":
+        "De estas aguas surgieron Ymir, el primer gigante —colosal y caótico—, y Audhumla, la vaca nutridora. Juntos prepararon el camino para los dioses y las futuras generaciones.",
+    "story_creation_of_the_world_card_3_detailed_story":
+        "De las aguas primordiales surgió un ser colosal: Ymir, el primer gigante, también conocido como Aurgelmir. Su carne estaba hecha de hielo derretido, sus huesos de roca ancestral, y sus ojos brillaban con una luz fría como las estrellas recién nacidas.\n\nA su lado apareció una inmensa vaca llamada Audhumla, alimentada por las dulces gotas de agua formadas en Ginnungagap. Audhumla fue la fuente de vida para Ymir, proporcionándole la leche necesaria para su supervivencia. Mientras lamía el hielo de las montañas, pronto reveló a Buri, el primer dios, cuyos descendientes darían origen a los Aesir.\n\nAsí comenzó la primera generación de gigantes y dioses, marcando el amanecer de la historia del mundo. Ymir se convirtió en el padre de los gigantes, mientras Audhumla nutría a los seres que darían forma al universo.",
+    "story_creation_of_the_world_card_3_title":
+        "El Nacimiento de Ymir y Audhumla",
+    "story_creation_of_the_world_card_4_description":
+        "Odín y sus hermanos enfrentaron a Ymir, la encarnación del caos. Su muerte desató torrentes de sangre que ahogaron a casi todos los gigantes, alterando para siempre el equilibrio del cosmos.",
+    "story_creation_of_the_world_card_4_detailed_story":
+        "Los dioses, conscientes de que Ymir representaba una amenaza para el equilibrio del cosmos, decidieron poner fin a su reinado caótico. Odín, Vili y Vé, los tres hermanos divinos, unieron sus fuerzas para enfrentarse al gigante primordial.\n\nEn una batalla épica, lograron abatir a Ymir. Su cuerpo colosal se derrumbó en Ginnungagap, y su sangre comenzó a fluir en torrentes. Esta sangre inundó casi todos los otros gigantes, ahogándolos en un océano de caos.\n\nPero los dioses no se detuvieron tras su muerte. Usaron su cuerpo para dar forma al mundo: su carne se convirtió en la tierra, sus huesos en montañas, su sangre en mares y ríos, y su cráneo en el cielo. Así, de la muerte del gigante nació el universo tal como lo conocemos.",
+    "story_creation_of_the_world_card_4_title": "La Muerte de Ymir",
+    "story_creation_of_the_world_card_5_description":
+        "A partir del cuerpo de Ymir, los dioses forjaron el universo: la tierra de su carne, las montañas de sus huesos, los mares de su sangre y el cielo de su cráneo, dando forma al mundo de los hombres —Midgard—.",
+    "story_creation_of_the_world_card_5_detailed_story":
+        "Después de derrotar a Ymir, los dioses se dedicaron a modelar el mundo a partir de su cuerpo colosal. Comenzaron dividiéndolo en dos mitades iguales, creando así la tierra y el cielo.\n\nLa carne de Ymir se convirtió en tierra fértil, cubierta de frondosos bosques y verdes llanuras. Sus huesos fueron quebrados y alzados como majestuosas montañas, formando las cordilleras que cruzan el mundo. Su sangre, que había inundado a los gigantes, fue canalizada para formar mares profundos y ríos serpenteantes.\n\nEl cráneo de Ymir fue elevado para formar el cielo, sostenido por cuatro enanos que representaban los puntos cardinales: Norte, Sur, Este y Oeste. Las estrellas fueron colocadas en el firmamento como linternas brillantes, mientras que la luna y el sol fueron creados para regir el tiempo.\n\nAsí nació Midgard, el mundo de los hombres, en el centro del universo, rodeado por los nueve reinos interconectados. Los dioses habían forjado un cosmos armonioso a partir del caos primordial.",
+    "story_creation_of_the_world_card_5_title": "La Creación del Mundo",
+    "story_creation_of_the_world_title": "El Nacimiento del Mundo",
+    "story_fenrir_chained_card_1_description":
+        "Fenrir, el monstruoso lobo y hijo de Loki, es acogido en Asgard para mantenerse bajo estrecha vigilancia. Aunque aún joven, su tamaño y apetito en crecimiento ya infunden terror.",
+    "story_fenrir_chained_card_1_detailed_story":
+        "Fenrir era hijo de Loki y de la gigante Angrboda, una criatura nacida de las uniones prohibidas entre dioses y las fuerzas del caos. Desde su nacimiento, el enorme lobo mostró una naturaleza salvaje y una fuerza que desafiaba toda comprensión.\n\nConscientes del peligro que representaba, y según las sombrías profecías de las Nornas, los dioses tomaron una decisión audaz: en lugar de desterrarlo o matarlo, eligieron criarlo en Asgard, esperando mantenerlo bajo control — o tal vez incluso domarlo.\n\nPero Fenrir crecía con cada día que pasaba, aumentando su tamaño y ferocidad a un ritmo aterrador. Sus ojos amarillos brillaban con una inteligencia inquietante, y sus colmillos afilados podían triturar incluso los huesos más duros. Solo Tyr, el valiente dios de la guerra, se atrevía a acercarse a la bestia para alimentarla, ganándose así su frágil confianza.",
+    "story_fenrir_chained_card_1_title": "Fenrir Criado por los Dioses",
+    "story_fenrir_chained_card_2_description":
+        "Los dioses inventan un juego para probar la fuerza de Fenrir, pero ni Leyding ni Dromi —las cadenas forjadas por los enanos— pueden contenerlo: las rompe con un solo movimiento de sus músculos.",
+    "story_fenrir_chained_card_2_detailed_story":
+        "Cuando Fenrir creció tanto que superaba incluso a los dioses más poderosos, el miedo se apoderó de Asgard. Las profecías anunciaban que devoraría a Odín durante el Ragnarök, y su creciente poder hacía que esta amenaza pareciera inevitable.\n\nEntonces los dioses decidieron encadenarlo. Disfrazaron la acción como un juego —un desafío para probar su fuerza legendaria. Fenrir, todavía ingenuo a pesar de su tamaño, aceptó ser atado con Leyding, la cadena más fuerte jamás forjada por los enanos.\n\nPero con un simple encogimiento de hombros, el lobo rompió Leyding como si fuera un hilo. Los eslabones de hierro volaron en todas direcciones. Fingiendo admiración, los dioses intentaron de nuevo con Dromi, una cadena aún más gruesa y resistente.\n\nFenrir la destrozó de un solo movimiento, revelando una fuerza sobrenatural que hizo comprender a los dioses que ninguna cadena ordinaria podría contener jamás a esta criatura del caos.",
+    "story_fenrir_chained_card_2_title": "Las Cadenas Fallan",
+    "story_fenrir_chained_card_3_description":
+        "Los dioses ordenan a los enanos forjar Gleipnir, un vínculo mágico tejido con elementos imposibles. Parece una cinta de seda, pero contiene un poder de otro mundo.",
+    "story_fenrir_chained_card_3_detailed_story":
+        "Al darse cuenta de que la fuerza bruta nunca sometería a Fenrir, Odín envió en secreto un mensajero a los enanos de Svartalfheim. Estos maestros herreros, capaces de crear maravillas imposibles, recibieron una petición extraordinaria.\n\nDebían crear Gleipnir, un lazo mágico tejido con seis ingredientes imposibles: el sonido de los pasos de un gato, la barba de una mujer, las raíces de una montaña, los tendones de un oso, el aliento de un pez y la saliva de un pájaro.\n\nEstos materiales místicos, invisibles e intangibles fueron combinados por los enanos en sus forjas encantadas. El resultado fue una paradoja: Gleipnir parecía una simple cinta de seda —fina y suave al tacto—, pero contenía una magia lo bastante poderosa como para atar las fuerzas más destructivas del universo.\n\nCuando los dioses recibieron esta cadena milagrosa, supieron que por fin poseían el arma que podría contener al lobo del destino.",
+    "story_fenrir_chained_card_3_title": "Gleipnir",
+    "story_fenrir_chained_card_4_description":
+        "Fenrir, desconfiando de esta extraña cadena, acepta ser atado solo si uno de los dioses coloca su mano en sus fauces como prueba de sinceridad y buena fe.",
+    "story_fenrir_chained_card_4_detailed_story":
+        "Cuando los dioses presentaron Gleipnir a Fenrir, el lobo —ya precavido tras los intentos anteriores— examinó con cuidado el extraño lazo. A pesar de su aspecto frágil, algo en él despertó sus instintos más profundos.\n\n“Esta cadena me parece sospechosa”, dijo Fenrir, olfateando Gleipnir. “Parece débil, pero percibo una poderosa magia en su interior. Si esto no es más que otro de vuestros juegos, ¿por qué no usáis cadenas comunes?”\n\nLos dioses intentaron tranquilizarlo, fingiendo que, como ya había roto las cadenas anteriores, querían probar esta nueva creación de los enanos.\n\nPero Fenrir impuso sus condiciones con una voz tan profunda que hizo temblar los cimientos mismos de Asgard: “Me dejaré atar con esta cinta, pero solo si uno de vosotros pone su mano en mi boca como prenda de buena fe. Así, si me engañáis, al menos uno de vosotros pagará el precio de esta traición.”",
+    "story_fenrir_chained_card_4_title": "El Desafío",
+    "story_fenrir_chained_card_5_description":
+        "Tyr, el único que ha ganado la confianza del lobo, coloca su mano en sus fauces. Cuando Fenrir descubre el engaño, muerde y arranca la mano del dios del valor.",
+    "story_fenrir_chained_card_5_detailed_story":
+        "Un pesado silencio cayó sobre la asamblea de los dioses. Todos sabían que estaban a punto de engañar a Fenrir —y que quien pusiera su mano en la boca del lobo seguramente la perdería—. Nadie se atrevía a ofrecerse.\n\nSolo Tyr, el dios del valor y el honor, dio un paso al frente. Era el único que había alimentado a Fenrir, el único en quien el lobo aún confiaba. Sin vacilar, fiel a su reputación de valentía, extendió su mano derecha y la colocó entre las fauces mortales de la bestia.\n\nEntonces, Gleipnir fue atado alrededor de las patas de Fenrir. El lobo intentó romperlo como había hecho con las otras cadenas, tensando cada músculo, tirando con todas sus fuerzas. Pero cuanto más se esforzaba, más se apretaba el lazo mágico.\n\nAl darse cuenta de que había sido engañado y que permanecería prisionero por la eternidad, Fenrir alzó sus ojos amarillos hacia Tyr. Una mirada de tristeza y furia cruzó entre dios y bestia. Luego, con un solo y seco movimiento, Fenrir cerró sus mandíbulas, arrancando la mano de Tyr con un crujido espantoso.\n\nDespués, Fenrir fue arrastrado a una isla desolada y encadenado a una roca en las profundidades de la tierra, donde permanece prisionero hasta el Ragnarök —el día en que finalmente romperá sus ataduras y devorará a Odín—.\n\nAsí perdió Tyr su mano, pero ganó la gratitud eterna de los dioses por su heroico sacrificio que salvó los Nueve Reinos... al menos por un tiempo.",
+    "story_fenrir_chained_card_5_title": "El Sacrificio de Tyr",
+    "story_fenrir_chained_title": "Fenrir Encadenado",
+    "story_loading_card_description":
+        "Por favor, espera mientras el juego se carga.",
+    "story_loading_card_detailed_story":
+        "La historia se está preparando para ti. Esto puede tardar unos momentos dependiendo de tu dispositivo y velocidad de conexión. ¡Gracias por tu paciencia!",
+    "story_loading_card_title": "Cargando...",
+    "story_loading_title": "Cargando la Historia",
+    "story_mead_of_poetry_card_1_description":
+        "Dos enanos transforman la sangre de Kvasir —ser nacido de la sabiduría— en una bebida de inspiración divina.",
+    "story_mead_of_poetry_card_1_detailed_story":
+        "Cuando se selló la frágil paz entre los Aesir y los Vanir, los dioses mezclaron su saliva, y de este pacto nació Kvasir, un ser de conocimiento puro. Kvasir recorría los mundos, respondiendo a las preguntas de dioses y hombres; su palabra era visión, su aliento una canción. Pero la codicia despertó en los corazones de dos enanos, Fjalar y Galar, sedientos de poder. Mediante engaños, atrajeron a Kvasir a una cueva, lo mataron y recogieron su sangre. En enormes calderos mezclaron esta sangre con la miel más pura y lanzaron sus runas como se siembran semillas. El líquido adquirió un tono dorado, brillando con un resplandor que parecía contener versos y profecías. Los enanos pronto comprendieron que no era una bebida cualquiera: era la fuente de la poesía, la savia de las palabras y la sabiduría. Nombraron los recipientes Óðrerir, Boðn y Són, y guardaron su tesoro celosamente, ignorando que este robo provocaría envidia y tragedia entre gigantes y dioses por igual. Así nació, de la violencia y la traición, la esencia misma de la inspiración.",
+    "story_mead_of_poetry_card_1_title": "La Sangre de Kvasir",
+    "story_mead_of_poetry_card_2_description":
+        "El gigante Suttungr se apodera de la hidromiel y la esconde en una montaña, custodiada por su hija Gunnlöð.",
+    "story_mead_of_poetry_card_2_detailed_story":
+        "Cuando se reveló la traición de los enanos y el robo de la esencia de Kvasir, estalló la ira. Los familiares de la víctima, indignados, exigieron justicia. Acorralados, Fjalar y Galar ofrecieron su tesoro como rescate: la bebida de versos y visión. El gigante Suttungr, un ser de gran estatura y apetito por maravillas, aceptó sin dudar. Transportó los tres calderos a la montaña de Hnitbjörg, tallando una cámara tan profunda que incluso la luz parecía reacia a descender. Allí, entre estalactitas como colmillos de piedra, grabó runas de sellado y tejió defensas y encantamientos a su alrededor. Para proteger el regalo que otorgaba sabiduría, confió a su hija Gunnlöð —dulce y feroz, con ojos color miel. Gunnlöð pasaba días y noches cantando a su custodia y, a veces, probando el aroma que permanecía: la hidromiel irradiaba un aura viva. Las olas de deseo y soledad apretaban su corazón; se convirtió en la llave viviente de un tesoro que era a la vez promesa y maldición. Así, el néctar de las palabras dormía, vigilado por el amor filial y el orgullo de un gigante.",
+    "story_mead_of_poetry_card_2_title": "El Tesoro de Suttungr",
+    "story_mead_of_poetry_card_3_description":
+        "Odín se disfraza y usa astucia y un taladro mágico para perforar la montaña y alcanzar la hidromiel.",
+    "story_mead_of_poetry_card_3_detailed_story":
+        "El gran Odín, siempre sediento de conocimiento y poder, supo del escondite de la hidromiel y no deseaba otra cosa que probarla. Bajo la identidad de Bölverk —un alias y máscara de trabajo— se presentó ante Baugi, hermano de Suttungr, y ofreció su labor. Con palabras sabias y gestos pacientes, ganó la confianza del gigante. Halagado, Baugi aceptó usar un barreno mágico llamado Rati para perforar la roca. La herramienta chilló y la piedra crujió; el canto del hierro sobre la piedra resonó como una profecía. Cuando finalmente el aire pasó por la abertura, Odín se deslizó por ella —no con fuerza, sino con astucia: se transformó en serpiente y reptó a través de la grieta, rozando la piedra cálida. Dentro, el resplandor de los calderos brillaba como el amanecer de un mundo nuevo. Sabía que la sabiduría no se entregaría sin precio, y que debía engañar al amor y al deber por igual para apoderarse del néctar de los dioses. Pero ningún acto era demasiado vil para él cuando el premio era el habla inmortal.",
+    "story_mead_of_poetry_card_3_title": "El Engaño de Odín",
+    "story_mead_of_poetry_card_4_description":
+        "Odín encanta a Gunnlöð y gana el derecho a probar la hidromiel tres veces, cambiando el destino del tesoro.",
+    "story_mead_of_poetry_card_4_detailed_story":
+        "En el crepúsculo dorado de la cueva, Odín encontró a Gunnlöð. La hija del gigante, a la vez feroz y tierna, vivía al ritmo de los calderos: escuchaba el murmullo de la hidromiel como otros escuchan oraciones. Odín habló no con tono de gobernante, sino como un viajero que sabe escuchar. Le contó la soledad de los cielos, la carga de la sabiduría y la belleza de los versos. Conmovida por sus palabras y su inesperada dulzura, Gunnlöð le ofreció tres noches de hospitalidad. Cada amanecer, le permitió beber de la copa; y en la tercera noche, el dios—maestro del engaño—bebió todo el primer caldero, luego el segundo y, finalmente, el último. El néctar encendió su espíritu: vio las canciones aún no cantadas, las palabras que harían temblar los mundos. Gunnlöð, traicionada, observó cómo su tesoro desaparecía, llevado por la silueta de un ave sagrada. Su pena se mezcló con la vergüenza, pero el destino ya había cambiado: la poesía tenía nuevos dueños para siempre.",
+    "story_mead_of_poetry_card_4_title": "La Seducción de Gunnlöð",
+    "story_mead_of_poetry_card_5_description":
+        "Transformado en un gran ave, Odín escapa con la hidromiel mientras Suttungr lo persigue a través de la tormenta.",
+    "story_mead_of_poetry_card_5_detailed_story":
+        "Tan pronto como los calderos quedaron vacíos, Odín se transformó: alas y plumas brotaron de su espalda, tomando la forma de un majestuoso ave de presa, su silueta oscura enmarcada por el resplandor de la cueva. Saltó de la montaña, con la hidromiel goteando en gotas doradas de su pico, dejando estelas de luz a través de la lluvia. Al escuchar los gritos de su hija, Suttungr también tomó la forma de un águila monstruosa y se lanzó a la persecución. Ambos seres atravesaron las nubes; los relámpagos surcaban su vuelo y los cielos rugían como una forja. Sus alas batían el aire como velas azotadas por la tormenta, y la distancia entre la sabiduría y la ira se medía en latidos. Abajo, las tierras contemplaban dos sombras colosales: una portando el don de los dioses, la otra la furia de un padre afligido. El vuelo de Odín se convirtió en una épica que mantenía al mundo suspendido entre asombro y terror.",
+    "story_mead_of_poetry_card_5_title": "El Vuelo del Águila",
+    "story_mead_of_poetry_card_6_description":
+        "Odín lleva la hidromiel de regreso a Asgard, pero unas pocas gotas caen sobre los mortales, dando origen a la poesía humana.",
+    "story_mead_of_poetry_card_6_detailed_story":
+        "Al fin, al llegar al umbral de Asgard, el ave se posó en el gran salón de los dioses y retomó su forma divina: Odín, portador de un conocimiento ardiente y un secreto robado. Escupió la hidromiel en copas doradas; los dioses bebieron, y la poesía resonó en sus almas. Los salones se llenaron de nuevas canciones, inspiraciones inesperadas y constelaciones de palabras entretejidas como redes. Sin embargo, en la prisa de su vuelo, algunas gotas doradas cayeron sobre la tierra. Esas perlas del destino tocaron los labios de los mortales: algunas se convirtieron en versos que desafiaron a los dioses, mientras que otras solo trajeron ilusión o locura. Así nació la poesía para dioses y hombres por igual: maravilla y castigo, fruto de un robo divino y un deseo irrefrenable de conocimiento. Desde entonces, el mundo lleva dentro de sí esta mezcla de luz y caída.",
+    "story_mead_of_poetry_card_6_title": "El Don y la Pérdida",
+    "story_mead_of_poetry_title": "La Hidromiel de la Poesía",
+    "story_the_death_of_baldr_card_1_description":
+        "Baldr, amado por todos los dioses, es atormentado por sueños proféticos que anuncian su muerte. Su luz comienza a titilar, y los dioses, inquietos, sienten que un destino oscuro e inevitable se aproxima.",
+    "story_the_death_of_baldr_card_1_detailed_story":
+        "Hubo un tiempo, distante y sagrado, en que los dioses caminaban por los cielos de Asgard y gobernaban los Nueve Mundos. Entre ellos, ninguno era más amado que Baldr, el radiante hijo de Odín y Frigg. Era la luz encarnada, la belleza perfecta hecha divina, un dios tan puro que incluso los seres más oscuros lo reverenciaban. Dondequiera que iba, la paz lo seguía, la risa florecía y los corazones se llenaban de calor.\n\nPero un día, ese brillo comenzó a desvanecerse. Noche tras noche, Baldr fue consumido por sueños oscuros—visiones aterradoras y tan claras como la profecía. Se veía a sí mismo morir, atravesado por un arma desconocida, y los ecos de su muerte resonaban a través de las raíces de Yggdrasil. Las pesadillas se aferraban a él, y las contaba a los demás, pálido y tembloroso hasta la médula.\n\nLos dioses no rieron. Porque los sueños de Baldr no eran meras ilusiones. Llevaban en su interior la cruda verdad de lo que estaba por venir. Un escalofrío recorrió los salones dorados de los Æsir, pues si Baldr moría… sería el mundo mismo el que comenzaría a caer en la oscuridad.",
+    "story_the_death_of_baldr_card_1_title": "Las Pesadillas de Baldr",
+    "story_the_death_of_baldr_card_2_description":
+        "Para salvar a su hijo, Frigg obtiene juramentos de todas las cosas existentes, para que ninguna pueda dañar a Baldr. Sin embargo, pasa por alto el muérdago—débil e insignificante—creyendo que no representa peligro alguno.",
+    "story_the_death_of_baldr_card_2_detailed_story":
+        "Frigg, reina de los cielos, no podía soportar tal amenaza. Su amor por Baldr era infinito, y el solo pensamiento de su muerte era un tormento peor que mil muertes propias. Impulsada por la angustia y la determinación, emprendió un viaje sagrado.\n\nA través de los vientos helados de Niflheim, las tierras ardientes de Muspellheim, los bosques profundos de Alfheim y hasta las sombras de Helheim, buscó los juramentos de toda cosa viva e inerte. De las piedras, que no golpearían a su hijo. De las aguas, que no lo ahogarían. Del fuego, que no lo quemaría. De las bestias, que nunca lo atacarían. De cada planta, cada metal, cada elemento, extrajo promesas sagradas de no dañar jamás a Baldr.\n\nCuando su tarea terminó, Asgard volvió a respirar en paz. Nada, parecía, podía dañar al dios amado. Sin embargo, en su prisa, Frigg consideró una planta humilde y discreta demasiado trivial—una pequeña ramita de muérdago que colgaba de las ramas de los viejos robles. Demasiado joven, demasiado frágil, pensó. No podría dañar a nadie.\n\nY así, la dejó pasar.",
+    "story_the_death_of_baldr_card_2_title": "El Juramento de Frigg",
+    "story_the_death_of_baldr_card_3_description":
+        "Loki descubre la falla: el muérdago no ha jurado protección. Disfrazado de anciana, engaña a Frigg para que revele la verdad y arranca la planta frágil, transformándola en un arma del cruel destino.",
+    "story_the_death_of_baldr_card_3_detailed_story":
+        "Donde otros vieron descuido, Loki vio oportunidad. El dios del caos, el ingenio y la discordia—siempre atento a las debilidades—sintió en el aire el aroma de la agitación venidera.\n\nTomando la forma de una anciana, se acercó a Frigg, ofreciéndole la compañía de un alma gentil y curiosa. Habló con suavidad, haciendo las preguntas correctas en el momento justo, con esa ternura engañosa que tantas veces ocultaba su malicia.\n\n“¿Han jurado todas las cosas del mundo proteger a Baldr?”, preguntó, con voz temblorosa y fingida fragilidad.\n\n“Todas”, respondió Frigg con una sonrisa cansada. “Todas… excepto quizá una. Un pequeño brote de muérdago que cuelga de los árboles al oeste de Valhalla. Es tan tierno, tan joven, tan inofensivo...”\n\nEso fue todo lo que Loki necesitó. La agradeció, se inclinó profundamente y desapareció en las sombras. Sus pasos lo guiaron directamente a los robles sagrados, donde el muérdago se mecía suavemente bajo el viento otoñal. Con precisión calculada, lo arrancó, sintiendo en él la clave de un destino que pronto desataría. Porque incluso lo más frágil, en manos de la malicia, puede convertirse en un arma mortal.",
+    "story_the_death_of_baldr_card_3_title": "El Muérdago",
+    "story_the_death_of_baldr_card_4_description":
+        "Loki moldea el muérdago en forma de flecha y se la entrega a Höd, el hermano ciego de Baldr. Bajo la apariencia de un juego inocente, guía su mano, convirtiéndolo en el instrumento involuntario de un fratricidio trágico.",
+    "story_the_death_of_baldr_card_4_detailed_story":
+        "De regreso en su guarida, Loki comenzó su labor. Moldeó el muérdago con cuidado, dándole forma de una flecha delgada y flexible. Parecía insignificante—frágil incluso—pero latía con un poder siniestro. Era la única cosa en toda la creación capaz de herir a Baldr, y Loki lo sabía.\n\nPronto llegó el día de los juegos en Asgard. En las grandes llanuras del palacio, los dioses se reunieron para divertirse con un extraño pasatiempo: lanzaban armas, piedras y lanzas contra Baldr, quien permanecía impasible, ileso ante cualquier golpe. Pues creían que nada, nunca más, podría dañarlo.\n\nEntonces Loki se acercó a Höd, el hermano ciego de Baldr, que permanecía apartado, silencioso y solo.\n\n“¿Por qué no participas en el juego, noble Höd?”, susurró Loki con dulzura. “Tu hermano merece también tu tributo. Aquí—toma esta flecha. Permíteme guiar tu mano.”\n\nHöd, ciego pero puro de corazón, aceptó sin sospecha alguna. No tenía razón para dudar. Tensó su arco y sintió la fría mano de Loki colocar la flecha entre sus dedos.\n\nY la soltó.",
+    "story_the_death_of_baldr_card_4_title": "La Flecha",
+    "story_the_death_of_baldr_card_5_description":
+        "La flecha de muérdago atraviesa el corazón de Baldr. El dios radiante cae, mortalmente herido. Asgard se sumerge en el silencio y la desesperación, mientras Loki se desliza en las sombras, portador del caos.",
+    "story_the_death_of_baldr_card_5_detailed_story":
+        "El silencio cayó incluso antes de que la flecha alcanzara su objetivo. Cortó el aire—casi invisible, casi irreal—y se hundió en el pecho de Baldr con una precisión terrible.\n\nGritó—una sola vez. Un sonido corto y agudo que heló la sangre de los inmortales. Luego cayó, como fulminado por un rayo.\n\nUn silencio mortal cubrió Asgard. La risa cesó. Las sonrisas desaparecieron. La confusión dio paso al horror, y el horror, a la desesperación. Frigg corrió hacia adelante, cayendo de rodillas, sosteniendo el cuerpo sin vida de su hijo, y su grito de dolor resonó tan fuerte que incluso las estrellas lo oyeron.\n\nHöd, al darse cuenta de lo que había hecho, dejó caer su arco y lloró amargamente, inconsolable. No había sido más que una herramienta—un peón en las manos de una mente cruel. Pero eso no disminuía la tragedia.\n\nY Loki, maestro del engaño, se desvaneció entre las sombras, con una leve sonrisa en los labios.\n\nBaldr había muerto. Y con él, una parte irremplazable de la luz del mundo desapareció. Aquel día, los dioses comprendieron que el ocaso se cernía sobre ellos. El hilo del destino había sido cortado. Ragnarök—el crepúsculo de los dioses—había comenzado.",
+    "story_the_death_of_baldr_card_5_title": "La Muerte de Baldr",
+    "story_the_death_of_baldr_title": "La Muerte de Baldr",
+    "story_the_forging_of_mjolnir_card_1_description":
+        "Por puro travieso, Loki corta el cabello dorado de Sif — esposa de Thor — famoso por su brillo semejante al oro. Su cruel acto causa vergüenza a Sif y despierta la furia atronadora de Thor.",
+    "story_the_forging_of_mjolnir_card_1_detailed_story":
+        "En tiempos antiguos, Loki, dios del engaño y la travesura, se encontraba terriblemente aburrido. Para saciar su hambre de caos, decidió atormentar a Sif, la radiante esposa de Thor, conocida en todos los reinos por su cabello dorado que parecía capturar la luz del sol. Mientras ella dormía plácidamente, Loki se acercó con una sonrisa maliciosa y cortó cada preciado mechón. Cuando Sif despertó y vio su cabeza rapada, sus gritos de desesperación resonaron por todo Asgard. Thor, al enterarse de tan vil acto contra su amada, estalló en una furia tan intensa que la tierra misma tembló bajo sus pies. Juró que Loki pagaría caro por su crimen. Incluso los dioses temieron la tormenta que estaba a punto de desatarse sobre el embaucador.",
+    "story_the_forging_of_mjolnir_card_1_title": "El Cabello de Sif",
+    "story_the_forging_of_mjolnir_card_2_description":
+        "Cuando Thor descubre la humillación de Sif, captura a Loki y amenaza con romperle los huesos a menos que encuentre una manera de enmendarse. Aterrorizado, Loki promete darle a Sif un cabello aún más hermoso que antes.",
+    "story_the_forging_of_mjolnir_card_2_detailed_story":
+        "Ardiendo de furia, Thor atrapó a Loki por la garganta y lo levantó como si no pesara nada. Sus ojos brillaban como relámpagos y su voz tronaba en los salones de Asgard: “¡Tramposo vil! ¡Te atreviste a deshonrar a mi esposa! Te aplastaré como al insecto que eres si no reparas tu fechoría.” Preso del pánico, Loki comprendió que había ido demasiado lejos. Intentó escapar del agarre de Thor, pero la fuerza del dios era implacable. Desesperado, suplicó por una oportunidad para enmendarse. “¡Le traeré a Sif un cabello más espléndido que antes, lo juro con mi propia sangre!” gritó. Thor, aunque todavía furioso, le concedió esta oportunidad, advirtiendo que el más mínimo fallo le costaría cada hueso de su cuerpo. La cuenta atrás de Loki había comenzado.",
+    "story_the_forging_of_mjolnir_card_2_title": "La Amenaza de Thor",
+    "story_the_forging_of_mjolnir_card_3_description":
+        "Para cumplir su promesa, Loki desciende a Svartalfheim, el reino de los herreros enanos. Suplica a Brokkr y Sindri que forjen tesoros divinos dignos de aplacar a Thor y a los dioses.",
+    "story_the_forging_of_mjolnir_card_3_detailed_story":
+        "Sabiendo que no podía cumplir su promesa solo, Loki se adentró en las oscuras profundidades de Svartalfheim, el reino de los enanos. Allí gobernaban Brokkr y Sindri, dos hermanos cuya destreza superaba a la de cualquier ser en los Nueve Reinos. En sus forjas ardientes, daban forma a maravillas con los metales más puros, templados por fuego eterno. Loki, tan astuto como siempre, explicó su situación: necesitaba cabello dorado vivo para Sif y un regalo digno del poder de Thor. Intrigados y halagados, los enanos aceptaron el desafío. Prometieron forjar no solo el nuevo cabello de Sif, sino otros tesoros dignos de los dioses. Sus martillos resonaban en las sombras, saltando chispas como estrellas recién nacidas. Loki observaba impaciente, ya tramando nuevas artimañas para manipular el resultado a su favor.",
+    "story_the_forging_of_mjolnir_card_3_title": "Los Herreros Enanos",
+    "story_the_forging_of_mjolnir_card_4_description":
+        "Bajo los martillos de los enanos nacen grandes tesoros: Draupnir, Gungnir y finalmente Mjöllnir, el martillo de Thor. Loki intenta sabotear su trabajo, pero aunque el mango queda corto, el poder del martillo es incomparable.",
+    "story_the_forging_of_mjolnir_card_4_detailed_story":
+        "Brokkr y Sindri comenzaron su trabajo, con el rostro ennegrecido por el calor de la forja y el corazón lleno de orgullo. Primero crearon a Draupnir, el anillo dorado que generaba ocho nuevos anillos cada nueve noches, luego a Gungnir, la lanza de Odín que nunca fallaba su objetivo. Pero su mayor obra aún estaba por llegar: Mjöllnir, el martillo destinado a Thor. Temiendo que tal arma hiciera a los dioses demasiado poderosos, Loki buscó sabotear su trabajo. Transformado en una mosca, mordió repetidamente a Brokkr, intentando romper su concentración. El enano, aunque endurecido por años de forja, se sobresaltó por un instante y el mango del martillo resultó más corto de lo previsto. Sin embargo, Mjöllnir nació: un arma tan poderosa que podía invocar relámpagos, destruir montañas y siempre regresar a la mano de Thor. Incluso imperfecto, superaba a todas las demás creaciones.",
+    "story_the_forging_of_mjolnir_card_4_title": "La Creación de Mjöllnir",
+    "story_the_forging_of_mjolnir_card_5_description":
+        "Los tesoros son presentados a los dioses. Thor recibe Mjöllnir, una maravilla de poder. Aunque su mango es corto, se convierte en el arma sagrada que hará temblar a gigantes y enemigos de Asgard.",
+    "story_the_forging_of_mjolnir_card_5_detailed_story":
+        "Cuando los tesoros fueron finalmente presentados a los dioses, todos quedaron maravillados. Odín admiró a Draupnir y Gungnir, consciente de que aumentarían su poder y gloria. Pero el momento más grande llegó cuando Thor tomó a Mjöllnir. El martillo palpitaba en su mano, irradiando un poder puro que hacía temblar el aire mismo. Thor supo de inmediato que esta arma sería el instrumento de su fuerza y el terror de sus enemigos. Cierto, su mango era más corto de lo planeado, pero su poder era inimaginable. Los dioses declararon que Loki había cumplido su promesa, aunque no sin sus habituales artimañas. Thor, medio indulgente, eligió celebrar el regalo en lugar de castigar la travesura. Desde ese día, Mjöllnir se convirtió en el símbolo del poder divino de Thor y en el arma sagrada que defendería Asgard de sus enemigos.",
+    "story_the_forging_of_mjolnir_card_5_title": "El Regalo a Thor",
+    "story_the_forging_of_mjolnir_title": "La Forja de Mjöllnir",
+    "story_the_punishment_of_loki_card_1_description":
+        "Tras la muerte de Baldr, provocada por el engaño de Loki, el embaucador huyó, cambiando de forma una y otra vez, escondiéndose en una cabaña abierta a los cuatro vientos, temiendo la venganza de los dioses.",
+    "story_the_punishment_of_loki_card_1_detailed_story":
+        "Cuando Baldr, amado por todos, fue abatido por la flecha guiada por la astucia de Loki, un silencio lúgubre cayó sobre Asgard. La risa habitual del embaucador fue reemplazada por un corazón que latía con miedo y orgullo. Previendo la ira de los Æsir, Loki cambió de forma: se deslizó como una serpiente entre las piedras del río, voló como un ave solitaria sobre los acantilados afilados, o se disfrazó de anciano de ojos inquietos. Cada transformación era solo un truco contra el destino, pero incluso en sus disfraces más ingeniosos, su crimen ardía como una llama oscura que nadie podía extinguir. Se instaló en un valle remoto, construyendo una extraña cabaña con cuatro puertas orientadas a cada horizonte, siempre atento al peligro. Las noches eran largas y frías, y junto a su fuego Loki meditaba: la astucia contra la lealtad, la libertad contra la condena. El viento susurraba los pasos de Odín y los Æsir, y cada crujido del bosque resonaba como una venganza que se acercaba. Su huida no era más que un respiro frágil, y la red del destino se apretaba inexorablemente alrededor del dios cambiante, como una sombra lista para consumirlo.",
+    "story_the_punishment_of_loki_card_1_title": "La Huida del Embaucador",
+    "story_the_punishment_of_loki_card_2_description":
+        "Bajo las órdenes de Odín, los Æsir y sus aliados juraron que ningún rincón del cosmos ofrecería refugio a Loki. La propia naturaleza se convirtió en su aliada en una caza inevitable e implacable.",
+    "story_the_punishment_of_loki_card_2_detailed_story":
+        "En el gran salón de Asgard, los rostros de los Æsir no mostraban ira, sino una fría determinación. Odín, el Padre de Todo, alzó su único ojo hacia los cielos y juró que Loki no hallaría refugio bajo el firmamento. La caza comenzó: los halcones de Odín surcaron los bosques, los lobos de Fenrir olfatearon cada rastro en la nieve, y los guerreros de Asgard peinaron valles y montañas. Incluso los Vanir, antiguos aliados, prestaron sus dones a la búsqueda. La naturaleza misma conspiró contra Loki: cada piedra rodaba bajo sus pasos, cada ráfaga de viento llevaba su olor, cada río reflejaba su huida desesperada. Pasaron días y noches, y con ellos creció la certeza: nadie puede escapar para siempre de aquellos a quienes ha traicionado. La caza ya no parecía una simple persecución, sino un juicio cósmico, donde cada rincón del mundo participaba en la justicia divina. La venganza estaba tejida en el tejido mismo de la existencia, y los pasos de los cazadores divinos hacían temblar la tierra, como si los Nueve Reinos contuvieran la respiración.",
+    "story_the_punishment_of_loki_card_2_title": "La Caza de los Dioses",
+    "story_the_punishment_of_loki_card_3_description":
+        "En forma de salmón plateado, Loki intenta evadir a sus perseguidores, pero la red tejida por los dioses se cierra. El agarre implacable de Thor lo arranca de las aguas, entregándolo a la justicia divina.",
+    "story_the_punishment_of_loki_card_3_detailed_story":
+        "Llevado a la desesperación, Loki se deslizó en un río helado y tomó la forma de un salmón de escamas plateadas que reflejaban el frío resplandor de la luna. Saltando de roca en roca, esperaba burlar a sus perseguidores. Pero los Æsir, armados con la sabiduría de Odín, ya habían preparado una red colosal—tejida con cuerdas encantadas, tan vasta que parecía cubrir todo el valle. Los dioses avanzaron río abajo, apretando su trampa con la paciencia de cazadores que saben que la presa no puede escapar del destino. El salmón saltó fuera del agua, los músculos tensos, los costados brillando, en un último intento desesperado de huir. Pero Thor, con fuerza divina, lo atrapó por la cola y lo lanzó a la orilla. La red se cerró a su alrededor como la propia telaraña del destino. Recuperando su forma verdadera, Loki se encontró rodeado de rostros severos: el ojo de Odín ardiendo con juicio, el de Thor con ira y poder, y las miradas de los demás Æsir fijas en su condena. La rebeldía aún chispeaba en sus ojos, pero tras ella se arrastraba la sombra del miedo. Su don del cambio de forma lo había abandonado, y sabía que la justicia de los dioses no vacilaría.",
+    "story_the_punishment_of_loki_card_3_title": "La Captura en la Red",
+    "story_the_punishment_of_loki_card_4_description":
+        "Los dioses recordaron sus crímenes y decretaron un castigo eterno. Loki vería destruida su descendencia, y de sus propios hijos surgirían las cadenas que lo atarían, sellando su cruel y definitivo destino.",
+    "story_the_punishment_of_loki_card_4_detailed_story":
+        "Encadenado ante los Æsir, Loki escuchó cómo las acusaciones caían como martillos sobre un yunque: la muerte de Baldr, las humillaciones que había infligido a los dioses, y cada engaño desde el amanecer del tiempo. Algunos exigieron su muerte inmediata, pero Odín levantó la mano, declarando que tal final sería demasiado misericordioso. El castigo debía durar tanto como el mundo mismo. Así se decretó que Loki sería atado en una caverna profunda y oscura, condenado a soportar el veneno de una serpiente que goteaba sobre su rostro. Pero antes de que comenzara ese tormento, una crueldad aún mayor fue ejecutada: sus hijos, Nárfi y Váli, fueron enfrentados entre sí, y de sus entrañas los dioses forjaron las cadenas que ataron a su padre. La sangre de Loki fue destruida, su futuro borrado, y cada eslabón de sus cadenas era un recordatorio cruel de su traición. El juicio de los Æsir no buscaba solo castigar, sino esculpir el sufrimiento en la eternidad misma—un monumento de dolor, grabado en piedra y sangre, advirtiendo a todos que la traición contra lo divino conlleva el precio más alto.",
+    "story_the_punishment_of_loki_card_4_title": "El Juicio Implacable",
+    "story_the_punishment_of_loki_card_5_description":
+        "En una cueva helada, Loki es clavado a la roca con las entrañas de sus hijos. Sus palabras desafiantes resuenan en el vacío—una promesa de venganza, aunque impotente ante las cadenas divinas.",
+    "story_the_punishment_of_loki_card_5_detailed_story":
+        "En una caverna glacial, los dioses ejecutaron la sentencia. Loki fue tendido sobre una piedra pulida por el frío, con los brazos y las piernas extendidos por cadenas hechas con las entrañas de sus hijos. Los más poderosos de los Æsir tensaron esos lazos vivientes, sujetándolos a la roca con fuerza divina, sin dejar esperanza de escape. Gotas heladas caían del techo, golpeando rítmicamente su rostro, ya marcado por el dolor y la desesperación. A su alrededor, los dioses observaban—algunos satisfechos, otros perturbados por la crueldad de su propia justicia. A pesar de su agonía, Loki logró lanzar palabras de desafío, jurando que esa injusticia no quedaría sin venganza. Pero sus gritos resonaron por la caverna, tragados por la piedra y la sombra. Se convirtió en un espectro dentro de la roca, un susurro de tormenta y venganza por venir. La tierra misma pareció beber su tormento, absorbiéndolo por la eternidad.",
+    "story_the_punishment_of_loki_card_5_title":
+        "El Encadenamiento Bajo la Roca",
+    "story_the_punishment_of_loki_card_6_description":
+        "Una serpiente suspendida arriba deja caer veneno ardiente sobre Loki, cuyos gritos sacuden la tierra. Sin embargo, Sigyn, siempre fiel, recoge cada gota, suavizando un tormento eterno que da forma al mundo.",
+    "story_the_punishment_of_loki_card_6_detailed_story":
+        "Sobre el rostro de Loki colgaba una serpiente, cuyo veneno corrosivo caía gota a gota, causando una agonía sin fin. Cada gota quemaba su piel, arrancándole gritos que sacudían la caverna y las montañas sobre ella. Pero no fue abandonado. Sigyn, su fiel esposa, permaneció a su lado, sosteniendo un cuenco para recoger el veneno y aliviar su sufrimiento. Pero cuando el cuenco se llenaba, debía vaciarlo, y durante ese breve instante el veneno caía sobre el rostro de Loki, ardiendo con furia insoportable. Sus alaridos resonaban hasta Midgard, haciendo temblar la tierra y los reinos de los hombres. Así comenzó su tormento eterno—atado con la sangre de sus hijos, atormentado por el veneno, pero consolado por el amor inquebrantable de Sigyn. Este castigo cruel se convirtió en una cicatriz viva sobre el cosmos, una advertencia para dioses y mortales por igual, y una promesa de que en el Ragnarök, la furia de Loki sería liberada, envolviendo los Nueve Reinos en un caos devastador.",
+    "story_the_punishment_of_loki_card_6_title": "El Veneno y la Lealtad",
+    "story_the_punishment_of_loki_title": "El Castigo de Loki",
+    "story_the_serpent_fishing_card_1_description":
+        "Thor viaja hasta el gigante Hymir para pedir su ayuda en conseguir un caldero inmenso, lo bastante grande como para contener la hidromiel de los dioses. Su encuentro marca el inicio de una frágil alianza.",
+    "story_the_serpent_fishing_card_1_detailed_story":
+        "En el amanecer de una mañana gris y helada, Thor, el dios guerrero, cruzó el umbral de una caverna congelada donde moraba Hymir —el gigante cuya piel era tan dura como la escarcha y cuyos ojos parecían abismos sin fondo—. El aliento del dios formaba nubes blancas en el aire inmóvil, y cada uno de sus pasos resonaba en el silencio del dominio del coloso. No venía como conquistador, sino para rogar la ayuda de Hymir en la búsqueda de un caldero colosal, lo bastante grande como para contener la hidromiel de los dioses. El gigante soltó una carcajada profunda que hizo temblar las paredes de piedra y sacudió las estalactitas sobre sus cabezas. Luego su diversión se tornó en sospecha: ¿qué quería ese ser venido de los cielos en su reino helado? Tras un largo momento en que el silencio pesó más que las palabras, se forjó una frágil alianza. Hymir aceptó, aunque con desconfianza y desafío: el océano los aguardaba —indómito e implacable—. El destino ya parecía pender sobre las olas, y nadie sabía que ese pacto los llevaría a enfrentarse con una criatura capaz de poner a prueba la imaginación y el valor de los dioses.",
+    "story_the_serpent_fishing_card_1_title": "La Búsqueda del Caldero",
+    "story_the_serpent_fishing_card_2_description":
+        "Para atraer a una criatura digna de su desafío, Hymir exige un cebo extraordinario. Thor arranca la cabeza de un poderoso toro, cuya sangre caliente convoca los poderes abisales del mar.",
+    "story_the_serpent_fishing_card_2_detailed_story":
+        "Bajo un cielo pesado, cubierto de nubes negras y bajas, Hymir formuló su exigencia con un rugido que hizo vibrar la caverna: para atraer a la criatura de las profundidades, necesitarían un cebo digno de su fuerza. Thor, sin un instante de vacilación, se dirigió hacia el rebaño del gigante y eligió al toro más poderoso entre ellos. La bestia bramó, con los ojos reflejando la conciencia de su destino, sus pezuñas golpeando el suelo helado. Thor sujetó sus cuernos y, con un esfuerzo sobrehumano, lo derribó; su sangre caliente se derramó en un río carmesí que resaltaba sobre el blanco inmaculado del hielo. Hymir observó en silencio, dividido entre la admiración y la ira, mientras Thor levantaba la cabeza del toro y la alzaba como un trofeo ofrecido a las olas. El aire vibraba con el olor a hierro y muerte. Las gaviotas giraban sobre ellos, atraídas por el sacrificio brutal. Cada gota de sangre sobre la nieve parecía llamar a las profundidades, y el viento comenzó a aullar, como si el propio océano supiera que un enfrentamiento extraordinario estaba a punto de comenzar.",
+    "story_the_serpent_fishing_card_2_title": "El Sacrificio del Toro",
+    "story_the_serpent_fishing_card_3_description":
+        "Thor y Hymir parten en un diminuto bote, enfrentando olas furiosas y un cielo tormentoso. El mar ruge, como si presintiera la confrontación que sacudirá los mundos.",
+    "story_the_serpent_fishing_card_3_detailed_story":
+        "Subieron a un frágil bote, tan pequeño que parecía que su sola fuerza podría romper sus tablas con cada oleaje. Hymir, gigantesco, tomó los remos y cortó las olas con golpes lentos y poderosos, haciendo que salpicaduras plateadas se alzaran en el aire. A su lado, Thor miraba el horizonte, con los ojos ardiendo con una llama que ni el viento ni el frío podían apagar. El mar se enfurecía, sus vastas olas azotaban la frágil embarcación, mientras las nubes se acumulaban, espesas y negras, amenazando con tragarse el cielo en un caos de truenos. Thor ató la ensangrentada cabeza del toro a un anzuelo de acero oscuro, sus manos firmes a pesar del vaivén interminable del bote. Cada chapoteo sonaba como un tambor fúnebre, cada ráfaga de viento recordaba que navegaban al borde del mundo conocido. El silencio entre ellos era denso —cargado de miedo y desafío—, pues ambos sentían que lo que llamaban desde las profundidades no era una criatura común, sino un monstruo capaz de sacudir los océanos y el destino de los dioses.",
+    "story_the_serpent_fishing_card_3_title": "El Océano Infinito",
+    "story_the_serpent_fishing_card_4_description":
+        "La Serpiente de Midgard irrumpe desde el mar —inmensa y aterradora—, sus anillos levantan tormentas. Thor lucha contra ella con las manos desnudas, desafiando al océano y a la criatura que rodea el mundo.",
+    "story_the_serpent_fishing_card_4_detailed_story":
+        "El silencio del océano se rompió de pronto en un estruendo monstruoso: la línea tensa vibró como un relámpago de acero, y Thor tiró con todas sus fuerzas. El mar estalló, y un antiguo horror surgió —escamas oscuras como la noche, ojos que brillaban con oro fundido, anillos que envolvían el aire como si pretendieran apresar al mundo mismo—. La serpiente de las profundidades emergió, vomitando torrentes de espuma y furia. El bote amenazaba con astillarse bajo el peso de la bestia. Thor, con los pies firmes sobre la madera empapada, sujetó la cuerda como si quisiera contener al propio mar. Hymir, paralizado por el terror, se encogió, con los ojos fijos en las fauces abiertas que podían devorar montañas y fortalezas enteras. La serpiente enfurecida azotaba las olas, transformándolas en tempestades. Cada segundo parecía suspender el tiempo mismo —equilibrado entre la victoria y la catástrofe— mientras los truenos y relámpagos iluminaban su lucha titánica.",
+    "story_the_serpent_fishing_card_4_title": "La Mordida de las Profundidades",
+    "story_the_serpent_fishing_card_5_description":
+        "Cuando Thor se dispone a descargar su poder sobre la serpiente, Hymir, aterrorizado, corta la cuerda. La criatura desaparece en las profundidades, dejando una amenaza latente y un duelo inconcluso.",
+    "story_the_serpent_fishing_card_5_detailed_story":
+        "Los ojos de Thor ardían con furia divina mientras se preparaba para abatir a la serpiente, cada músculo tenso, cada fibra de su ser vibrando con poder puro. Pero antes de que pudiera dar el golpe, un grito de terror resonó detrás de él. Hymir, preso del pánico, había agarrado la cuerda y, en un acto desesperado, la cortó. La serpiente, liberada de su vínculo, desapareció en las profundidades con un rugido que hizo temblar todo el océano.\n\nEl bote volcó por el impacto, arrojando a Thor y a Hymir a las aguas heladas. El dios del trueno emergió, jadeante, con el cabello pegado al rostro por la sal. Hymir, temblando de frío y miedo, se aferró a una tabla a la deriva. El silencio cayó sobre el mar, roto solo por el suave golpeteo de las olas y las respiraciones entrecortadas de los dos sobrevivientes.\n\nThor miró hacia el horizonte, con el corazón pesado. No había matado a la serpiente de las profundidades, pero había sobrevivido a una prueba que habría quebrado a cualquier otro ser. El destino de los dioses seguía siendo incierto, pero una cosa era segura: la lucha contra las fuerzas del caos apenas acababa de comenzar.",
+    "story_the_serpent_fishing_card_5_title": "La Batalla Inconclusa",
+    "story_the_serpent_fishing_title": "La Pesca de la Serpiente",
+    "story_the_wall_of_asgard_card_1_description":
+        "Tras la guerra contra los Vanir, Asgard queda vulnerable. Los Æsir se reúnen y deciden que deben construir un nuevo muro —más fuerte y alto que nunca— para defender su reino.",
+    "story_the_wall_of_asgard_card_1_detailed_story":
+        "La guerra entre los Æsir y los Vanir, dos clanes divinos de poder formidable, había quebrado el equilibrio de los Nueve Mundos. Aunque finalmente se alcanzó una paz frágil, las cicatrices del conflicto permanecían visibles, y los dioses sabían que nunca desaparecerían por completo. El muro que antes protegía Asgard yacía en ruinas, dejando su ciudad divina expuesta a ataques de gigantes y otras amenazas externas. Odín, Thor y los demás Æsir convocaron entonces una gran asamblea, el sagrado Thing, para discutir cómo reconstruir sus defensas. Muchos hablaron, pero prevaleció una verdad: necesitaban una nueva fortaleza —tan fuerte y majestuosa que ningún enemigo, ni siquiera los poderosos Jötnar, pudiera derribarla jamás. Esta decisión, nacida de los pesados recuerdos de la guerra, pondría en marcha una cadena de eventos que nadie aún podía prever.",
+    "story_the_wall_of_asgard_card_1_title":
+        "Los Dioses Buscan Proteger Asgard",
+    "story_the_wall_of_asgard_card_2_description":
+        "Un gigante misterioso llamado Hrimthurs se presenta ante los dioses y ofrece construir un muro infranqueable en seis meses. A cambio, exige a Freyja, el sol y la luna —un precio que los Æsir consideran escandaloso.",
+    "story_the_wall_of_asgard_card_2_detailed_story":
+        "Mientras los Æsir continuaban su debate, un extraño gigante cruzó las puertas de Asgard. Se presentó como un maestro constructor, un gigante llamado Hrimthurs. Su oferta fue asombrosa: prometía reconstruir un muro tan sólido que ninguna fuerza podría derribarlo, y hacerlo en apenas seis meses. Pero su precio era terrible —exigía la mano de Freyja, diosa de la belleza y el amor, junto con el sol y la luna, las fuentes mismas de luz y vida. Los Æsir quedaron atónitos. Perder a Freyja heriría el honor de Asgard, y ceder el sol y la luna sumiría a los mundos en oscuridad eterna. Sin embargo, tentados por la promesa de un muro impenetrable, eligieron aceptar, aunque no sin astucia: decretaron que el gigante no recibiría ayuda alguna más que la de su caballo, y que la obra debía completarse antes del primer día del verano. El dado estaba echado.",
+    "story_the_wall_of_asgard_card_2_title":
+        "El Gigante Constructor Ofrece su Ayuda",
+    "story_the_wall_of_asgard_card_3_description":
+        "Hrimthurs y su caballo Svadilfari comienzan la tarea. Las piedras se elevan tan rápido que los dioses se inquietan —parece que realmente podría terminar antes del plazo.",
+    "story_the_wall_of_asgard_card_3_detailed_story":
+        "Al día siguiente, Hrimthurs comenzó a trabajar con un vigor asombroso. Su leal caballo, Svadilfari, lo ayudaba a transportar enormes bloques de piedra que ningún otro ser podría mover. Juntos laboraban día y noche sin descanso. Al principio, los Æsir confiaban en su engaño, pero pronto comenzaron a dudar al ver cómo el muro crecía a un ritmo aterrador. Cada día las piedras se elevaban más; cada noche la fortaleza parecía avanzar a zancadas de gigante. En pocas semanas, gran parte del perímetro de Asgard ya se erguía alto, sólido e inmenso. Odín y los demás dioses, normalmente calmados y sabios, ahora conferenciaban con inquietud. Si el gigante lograba terminar a tiempo, estarían obligados a darle a Freyja, el sol y la luna. Su plan comenzaba a volverse en su contra, y la desesperación comenzaba a apoderarse de ellos.",
+    "story_the_wall_of_asgard_card_3_title": "El Gigante Comienza la Obra",
+    "story_the_wall_of_asgard_card_4_description":
+        "Al ver el peligro, Loki propone un ardid: se transforma en yegua y distrae a Svadilfari, privando a Hrimthurs de su ayudante más vital.",
+    "story_the_wall_of_asgard_card_4_detailed_story":
+        "Cuando se acercaba la fecha límite y la ansiedad de los Æsir crecía, Loki, el dios del engaño, ofreció su ayuda. Aunque a menudo era la causa de sus problemas, podía ser útil en tiempos desesperados. Su plan fue audaz: se transformó en una hermosa yegua, elegante y radiante, y apareció ante Svadilfari. Encantado, el semental la siguió, abandonando a su amo. Hrimthurs, desconcertado y enfurecido, tuvo que continuar solo —pero ni siquiera su fuerza inmensa era suficiente para mover las piedras sin su caballo. Durante varias noches, Loki, aún en forma de yegua, mantuvo a Svadilfari distraído y alejado de la obra, retrasando la construcción el tiempo justo. Los dioses observaron con una mezcla de alivio y asombro, sabiendo que el truco de Loki había salvado su reino —aunque conscientes de que tal engaño podría un día exigir un alto precio.",
+    "story_the_wall_of_asgard_card_4_title": "La Intervención de Loki",
+    "story_the_wall_of_asgard_card_5_description":
+        "Privado de su caballo, Hrimthurs se da cuenta de que no puede terminar el muro. Engañado, estalla en cólera y amenaza con destruir Asgard y aplastar a los propios dioses.",
+    "story_the_wall_of_asgard_card_5_detailed_story":
+        "Cuando Hrimthurs descubrió que había sido engañado, su furia estalló como una tormenta. El gigante golpeó el suelo con sus puños y rugió con tanta fuerza que las montañas parecían temblar. Sin Svadilfari, no podía completar la obra, y comprendió que los Æsir nunca habían tenido intención de cumplir su palabra. Loco de rabia, intentó derribar las piedras ya colocadas, jurando reducir Asgard a cenizas y aplastar a los dioses bajo su fuerza. Los Æsir, que temían este momento, se prepararon para la batalla. Thor, con Mjöllnir en la mano, aguardaba el momento de atacar. Odín observaba en solemne silencio —ya no se trataba de astucia, sino de un choque entre el poder bruto de un gigante y la voluntad inquebrantable de los dioses de Asgard.",
+    "story_the_wall_of_asgard_card_5_title": "La Furia del Gigante",
+    "story_the_wall_of_asgard_card_6_description":
+        "Odín, Thor y los Æsir enfrentan a Hrimthurs en una batalla titánica. El cielo se parte con truenos y magia hasta que el gigante es abatido y Asgard queda finalmente a salvo.",
+    "story_the_wall_of_asgard_card_6_detailed_story":
+        "La furia de Hrimthurs alcanzó su punto máximo mientras se lanzaba contra los muros incompletos. Thor se adelantó, blandiendo a Mjöllnir, y asestó golpes tan poderosos que el cielo estalló en relámpagos. Odín invocó hechizos para proteger a los suyos, mientras los demás Æsir luchaban junto al dios del trueno. La batalla resonó por todo Asgard: cada golpe del gigante sacudía la tierra, y cada martillazo destrozaba la piedra. A pesar de su fuerza titánica, Hrimthurs no pudo resistir la ira combinada de los dioses. Con un último rugido, Thor asestó un golpe aplastante que destrozó el cráneo del gigante. Hrimthurs cayó, su cuerpo golpeando el suelo con un estruendo ensordecedor. Su forma inerte quedó como un recordatorio sombrío de que incluso la astucia podía conducir a la sangre derramada. Asgard fue salvado —pero la victoria tuvo un precio.",
+    "story_the_wall_of_asgard_card_6_title": "La Batalla Final",
+    "story_the_wall_of_asgard_card_7_description":
+        "Tras su victoria, los Æsir reconstruyen el muro de Asgard usando las piedras ya colocadas. Celebran su triunfo y juran defender su reino contra toda amenaza futura.",
+    "story_the_wall_of_asgard_card_7_detailed_story":
+        "Con Hrimthurs derrotado, los Æsir se volvieron hacia las ruinas de su obra. Las piedras que había colocado eran de una resistencia notable, y en lugar de destruirlas, los dioses decidieron utilizarlas para construir su propio muro. Piedra por piedra, completaron la fortaleza de Asgard —esta vez como verdaderos dueños de su destino. Las nuevas murallas se alzaron, imponentes e irrompibles, símbolo de su unidad restaurada tras la guerra con los Vanir y la amenaza del gigante. Se celebraron grandes festejos, y aunque el engaño de Loki había causado mucho caos, fue honrado por la astucia que aseguró la victoria. Los Æsir juraron defender Asgard a cualquier precio y velar por su reino hasta el mismísimo Ragnarök. El muro se convirtió en el baluarte eterno de su poder —una señal de que incluso ante las mayores amenazas, los dioses prevalecerían.",
+    "story_the_wall_of_asgard_card_7_title": "La Reconstrucción de Asgard",
+    "story_the_wall_of_asgard_title": "El Muro de Asgard",
+    "story_thors_hammer_card_1_description":
+        "Una mañana, Thor descubre que su martillo, Mjölnir, ha sido robado. Privado de su arma más poderosa, todo Asgard queda vulnerable ante las fuerzas del caos que amenazan los Nueve Reinos.",
+    "story_thors_hammer_card_1_detailed_story":
+        "Una mañana, Thor despertó con una furia tan terrible que hizo temblar todo Asgard. ¡Su martillo, Mjölnir —su posesión más preciada—, había desaparecido! Esta arma legendaria, forjada por los enanos en las profundidades de Svartalfheim, podía comandar el rayo y destrozar montañas.\n\nSin Mjölnir, Thor no era más que un dios ordinario. Peor aún, sin esta arma divina, todos los dioses de Asgard quedaban indefensos ante las fuerzas del caos que amenazaban constantemente los Nueve Reinos.\n\nLa búsqueda comenzó de inmediato. Heimdall escudriñó los horizontes con su mirada aguda, Odín envió a sus cuervos Huginn y Muninn hasta los rincones más lejanos del cosmos, pero el martillo seguía sin aparecer. Pronto las sospechas recayeron sobre los gigantes, los enemigos eternos de los dioses.",
+    "story_thors_hammer_card_1_title": "El Robo de Mjölnir",
+    "story_thors_hammer_card_2_description":
+        "El gigante Thrym admite haber robado a Mjölnir y exige la mano de Freyja en matrimonio a cambio de su devolución. Su descarada petición enfurece a los dioses y provoca la ira de la propia diosa.",
+    "story_thors_hammer_card_2_detailed_story":
+        "La investigación llevó rápidamente hasta el gigante de escarcha Thrym, rey de los gigantes en las heladas tierras de Jötunheim. Lejos de negar su crimen, admitió sin vergüenza haber robado el martillo y lo escondió bajo tierra, donde ningún dios podría alcanzarlo.\n\nPero Thrym expuso sus condiciones con una sonrisa astuta: solo devolvería a Mjölnir si los dioses le entregaban la mano de la bella Freyja en matrimonio. La diosa del amor y la belleza debía convertirse en su esposa y reinar junto a él sobre el reino de los gigantes.\n\nEsta petición escandalosa llenó de indignación a todos los dioses de Asgard. ¿Cómo se atrevía a reclamar a la más hermosa de las diosas a cambio de un objeto robado? La propia Freyja estalló en una furia tan grande que su collar mágico, Brísingamen, se rompió bajo la fuerza de su ira. Los muros de Valhalla temblaron con su cólera.",
+    "story_thors_hammer_card_2_title": "El Rescate de Thrym",
+    "story_thors_hammer_card_3_description":
+        "Para engañar a Thrym, Loki sugiere que Thor se disfrace de Freyja. A regañadientes, el dios del trueno acepta, poniéndose un vestido de novia y un velo para engañar a los gigantes.",
+    "story_thors_hammer_card_3_detailed_story":
+        "Entonces Loki tuvo una idea tan audaz como absurda: ¡Thor debía disfrazarse de Freyja para engañar a Thrym! La idea de que el más masculino de los dioses se vistiera de mujer divertía al astuto embaucador sin medida.\n\nThor rugió en protesta: “¡Jamás! ¡Los dioses se burlarán de mí por toda la eternidad! ¡Mi reputación como guerrero quedará arruinada!”\n\nPero el sabio Heimdall intervino: “¿Prefieres acaso ver a los gigantes invadir Asgard mientras permanecemos indefensos? Sin Mjölnir, estamos perdidos.”\n\nA regañadientes, Thor aceptó. Con la ayuda de Loki, se vistió con un magnífico traje de novia, se cubrió con un velo adornado con joyas y colocó el collar reparado de Freyja alrededor de su cuello. Sus poderosas manos quedaron ocultas bajo largos guantes de seda. Así disfrazado, el dios del trueno parecía una tímida novia velada.",
+    "story_thors_hammer_card_3_title": "El Disfraz",
+    "story_thors_hammer_card_4_description":
+        "Durante el banquete de bodas, Thor devora un buey, ocho salmones y tres barriles de hidromiel. Los gigantes sospechan, pero Loki justifica su apetito diciendo que ha ayunado por amor.",
+    "story_thors_hammer_card_4_detailed_story":
+        "Al principio, el engaño pareció funcionar a la perfección. Thrym recibió a su ‘novia’ con una alegría desbordante y organizó de inmediato un gran banquete de bodas. Todos los gigantes de Jötunheim se reunieron para celebrar tan extraordinaria unión.\n\nPero durante el festín, Thor no pudo contener su legendario apetito. Olvidando su papel, devoró un buey entero, ocho salmones y todos los platos destinados a las mujeres. Luego vació tres barriles enteros de hidromiel de un solo trago, despertando las sospechas de los gigantes.\n\n“¡Por mi barba!” exclamó Thrym, con los ojos desorbitados. “¡Jamás he visto a una mujer comer y beber con tal apetito! ¿Por qué festeja la dulce Freyja con tanta voracidad?”\n\nLoki, siempre rápido para mentir, respondió con suavidad: “Noble Thrym, Freyja estaba tan ansiosa por esta boda que no ha comido nada en ocho días y ocho noches. ¡Solo el hambre la guía ahora!”",
+    "story_thors_hammer_card_4_title": "El Banquete",
+    "story_thors_hammer_card_5_description":
+        "Cuando Mjölnir es colocado sobre el regazo de Thor para bendecir la boda, él lo toma, arranca su velo y masacra a Thrym y a los gigantes en una tormenta de relámpagos.",
+    "story_thors_hammer_card_5_detailed_story":
+        "Tranquilizado por la explicación de Loki, Thrym decidió proceder con la ceremonia. Siguiendo la antigua costumbre, ordenó que se trajera el martillo de Thor para bendecir la unión, colocándolo sobre el regazo de la novia como símbolo de fertilidad y protección.\n\nEn el instante en que Mjölnir tocó sus rodillas, Thor sintió que su fuerza divina regresaba como una ola. Sus ojos ardieron de alegría y de furia contenida. Con un solo y poderoso movimiento, arrancó su velo y desgarró el vestido de novia.\n\n“¡Soy Thor, hijo de Odín!” rugió, alzando su martillo en alto. “¡Y esta es mi respuesta a tu chantaje!”\n\nDe Mjölnir estallaron rayos mientras Thor desataba su ira sobre Thrym y todos los gigantes reunidos. El trueno sacudió el salón mientras los relámpagos convertían el banquete de bodas en un campo de batalla.\n\nAsí recuperó Thor su martillo, y nunca más los gigantes se atrevieron a desafiar abiertamente al dios del trueno.",
+    "story_thors_hammer_card_5_title": "La Retribución",
+    "story_thors_hammer_title": "El Martillo de Thor",
+    "story_war_of_aesir_and_vanir_card_1_description":
+        "La magia de los Vanir asombra pero inquieta a los Aesir, y la desconfianza comienza a arraigarse.",
+    "story_war_of_aesir_and_vanir_card_1_detailed_story":
+        "En el gran salón de los dioses del cielo, las llamas de las antorchas proyectaban sombras vacilantes en las paredes, como si escucharan los susurros de los inmortales. Los Vanir, maestros de los campos y las cosechas, habían introducido un nuevo tipo de magia —nacida de la tierra y de las estaciones— que fascinaba tanto como atemorizaba. Los Aesir, guerreros de Asgard, miraban con recelo este poder: este conocimiento ajeno amenazaba su autoridad. Entre ellos, algunos veían oportunidad, otros peligro. Las palabras se convirtieron en acusaciones, y las acusaciones en una furia apenas contenida. El silencio entre discursos ya no era de respeto, sino la quietud antes de la tormenta. La codicia se mezclaba con el miedo, el orgullo con la envidia. El viento que azotaba las puertas del salón parecía presagiar la ruptura. Cuando las miradas se tornaron demasiado pesadas y las manos se cerraron sobre los apoyabrazos, todos comprendieron que el hilo que unía a estos dos clanes estaba a punto de romperse. El frágil equilibrio del mundo ya se inclinaba hacia el caos.",
+    "story_war_of_aesir_and_vanir_card_1_title": "La Sombra de la Discordia",
+    "story_war_of_aesir_and_vanir_card_2_description":
+        "El conflicto estalla tras el intento de los Aesir de destruir a una hechicera Vanir.",
+    "story_war_of_aesir_and_vanir_card_2_detailed_story":
+        "La tensión tomó forma en una mujer de los Vanir —mensajera y maestra de los poderes arcanos de la fertilidad. Su radiante belleza y conocimiento misterioso perturbaban el orden establecido. Los Aesir, incapaces de tolerar tal independencia, buscaron silenciarla con el fuego. Pero tres veces las llamas consumieron su cuerpo, y tres veces renació, más fuerte y resplandeciente, como si la tierra misma se negara a entregarla al fuego. Este acto reveló el abismo que separaba a los dos pueblos. Los Vanir, indignados por este sacrilegio, se alzaron en armas, invocando los vientos y las cosechas para que los ayudaran. Los Aesir, heridos en su orgullo, empuñaron sus lanzas y se prepararon para la batalla. La guerra no comenzó con un grito, sino con un silencio fatal, cuando todos supieron que no había vuelta atrás. La primera sangre pronto corrió, y con ella se rompió la ilusión de una paz duradera. Desde entonces, el aire se llenó de cenizas y maldiciones.",
+    "story_war_of_aesir_and_vanir_card_2_title": "La Chispa de la Guerra",
+    "story_war_of_aesir_and_vanir_card_3_description":
+        "Aesir y Vanir chocan sin tregua, devastando tierra y cielo por igual.",
+    "story_war_of_aesir_and_vanir_card_3_detailed_story":
+        "Así comenzó una guerra que ninguna mente mortal podría haber concebido. Los Aesir atacaban con la furia del trueno, sus armas forjadas en los fuegos de las eternas fraguas. Los Vanir respondían invocando la fertilidad de la tierra, convirtiendo campos en trampas vivientes, convocando torrentes y bosques donde antes había desolación. Cada batalla destrozaba el mundo, cada victoria pronto se tornaba derrota. Las murallas de Asgard temblaban, y las llanuras de los Vanir se reducían a cenizas. Ningún bando retrocedía, y aun así, ninguno avanzaba. La guerra interminable se convirtió en una herida que no sanaba. Las canciones de los skalds ya no celebraban triunfos, sino solo ruina interminable. Los vientos llevaban el humo de las tierras incendiadas a los reinos mortales, y hasta Yggdrasil, el árbol cósmico, parecía gemir bajo el peso de esta discordia. En los ojos de los dioses ya no había orgullo, sino el cansancio de una lucha inútil. Y aun así, ninguno cedía primero.",
+    "story_war_of_aesir_and_vanir_card_3_title": "La Guerra de los Dioses",
+    "story_war_of_aesir_and_vanir_card_4_description":
+        "Agotados, los dioses intercambian rehenes para sellar una frágil tregua.",
+    "story_war_of_aesir_and_vanir_card_4_detailed_story":
+        "Cuando se había derramado demasiada sangre, y las armas pesaban tanto como los corazones, surgió una idea de entre las ruinas de la batalla. Los dos clanes, incapaces de derrotarse, decidieron intentar un acto de confianza: el intercambio de rehenes. Los Vanir enviaron a dos de sus más sabios —un hermano y una hermana cuya belleza y poder superaban incluso los de los campos y ríos. Los Aesir, a su vez, ofrecieron a un maestro de runas, guardián de secretos ancestrales, y a otro dios de lengua afilada. El intercambio se selló no con alegría, sino con recelo, cada paso cargado de duda. Los rehenes cruzaron llanuras y fortalezas enemigas, llevando consigo las frágiles esperanzas de una paz incierta. El aire estaba tenso como la cuerda de un arco, y cada mirada podía convertirse en amenaza en cualquier momento. Sin embargo, a través de este acto de cautela, comenzó a volver un delicado equilibrio. Por primera vez en siglos, los dioses levantaron no sus armas, sino sus juramentos.",
+    "story_war_of_aesir_and_vanir_card_4_title": "Los Rehenes del Destino",
+    "story_war_of_aesir_and_vanir_card_5_description":
+        "Los rehenes cumplen su palabra, y los dioses aprenden a unir sus fuerzas.",
+    "story_war_of_aesir_and_vanir_card_5_detailed_story":
+        "El tiempo hizo lo suyo, y lentamente los rehenes se convirtieron en algo más que garantes: se convirtieron en puentes. Los Vanir, acogidos entre los Aesir, enseñaron la magia de la tierra, revelando los secretos de la cosecha y las estaciones. Los Aesir, a cambio, compartieron la disciplina de sus runas, el valor en la batalla y el orden de sus leyes. Los rencores no desaparecieron de inmediato, pero a través de años de paciencia y pruebas compartidas, se tejieron lazos. Los hijos de estas uniones divinas llevaban en sí ambas herencias: la fuerza del trueno y la fertilidad de la tierra. Los banquetes reemplazaron a las batallas, y las canciones volvieron a celebrar la fuerza de la unidad en lugar de la desolación de la guerra. Sin embargo, en cada mirada permanecía una sombra: el recuerdo de la guerra, como una cicatriz que el tiempo no podía borrar. Aun así, por un tiempo, la paz reinó: frágil, pero real.",
+    "story_war_of_aesir_and_vanir_card_5_title":
+        "La Reconciliación de los Dioses",
+    "story_war_of_aesir_and_vanir_card_6_description":
+        "Aesir y Vanir unen sus fuerzas de manera definitiva, preparándose para el futuro.",
+    "story_war_of_aesir_and_vanir_card_6_detailed_story":
+        "El fin de la guerra no fue una victoria, sino un reconocimiento mutuo. Los Aesir comprendieron que no podían gobernar solos sobre el cielo y la batalla, y los Vanir aceptaron que la tierra y la fertilidad debían unirse con la fuerza y la ley. Comenzó una nueva era, en la que los dos clanes —largos enemigos— se sentaron lado a lado en los salones de Asgard. Los juramentos que pronunciaron resonaban como piedras colocadas en el lecho de un río: sólidos, pero sujetos a la corriente del destino. Los dioses sabían que vendrían pruebas, que el caos no había desaparecido, pero comprendieron que solo la unidad podría garantizar la supervivencia cuando llegara el crepúsculo venidero. Así, de las cenizas de la discordia nació la alianza. Los skalds cantaron entonces no la gloria de la victoria, sino la sabiduría del compromiso, y sus canciones resonaron incluso en los reinos mortales. Los Vanir y los Aesir se convirtieron en un solo pueblo divino, unidos no por la sangre derramada, sino por la sangre compartida.",
+    "story_war_of_aesir_and_vanir_card_6_title": "La Alianza Sellada",
+    "story_war_of_aesir_and_vanir_title": "La Guerra de los Aesir y los Vanir",
+    "victory_popup_congratulations": "¡Felicidades!",
+    "victory_popup_generic_message":
+        "¡Has logrado una hazaña digna de los dioses!",
+    "victory_popup_title": "¡Victoria!",
+    "widgets_custom_video_player_codec_incompatible":
+        "Formato de video no compatible",
+    "widgets_custom_video_player_error_loading_music":
+        "Error al cargar la música de la carta {cardId}: {error}",
+    "widgets_custom_video_player_error_loading_video":
+        "Error al cargar el video: {error}",
+    "widgets_custom_video_player_error_resuming_music":
+        "Error al reanudar la música: {error}",
+    "widgets_custom_video_player_failed_download":
+        "Error al descargar la imagen desde {url}: {statusCode}",
+    "widgets_custom_video_player_network_error": "Error de conexión de red",
+    "widgets_custom_video_player_playback_error":
+        "Error en la reproducción de video",
+    "widgets_custom_video_player_timeout": "Tiempo de carga del video agotado",
+    "widgets_custom_video_player_timeout_loading_music":
+        "Tiempo de espera agotado al cargar la música de la carta {cardId}",
+    "widgets_game_help_dialog_title": "Ayuda",
+    "widgets_guide_jormungandr_popup_controls":
+        "⌨️ Controles:\n↑↓←→ Flechas | R: Reiniciar",
+    "widgets_guide_jormungandr_popup_description":
+        "Ayuda a la Serpiente del Mundo a crecer\ndevorando las ofrendas de los mortales",
+    "widgets_guide_jormungandr_popup_start_button": "Despertar a la Serpiente",
+    "widgets_guide_jormungandr_popup_title": "Guía a Jörmungandr",
+    "word_search_default_clue": "Encuentra las palabras ocultas.",
+    "word_search_preliminary_screen_help_text":
+        "Odín sacrificó su ojo por sabiduría. Encuentra las palabras ocultas relacionadas con la mitología nórdica en la cuadrícula de runas.",
+    "word_search_preliminary_screen_start_button": "Comenzar la Búsqueda",
+    "word_search_screen_rule_1":
+        "Encuentra todas las palabras ocultas en la cuadrícula.",
+    "word_search_screen_rule_2":
+        "Las palabras pueden ser horizontales, verticales o diagonales, y leerse en ambas direcciones.",
+    "word_search_screen_rule_3":
+        "Selecciona letras deslizando el dedo por la cuadrícula.",
+    "word_search_screen_rule_4":
+        "Una vez encontradas todas las palabras, se pedirá una palabra secreta.",
+    "word_search_screen_rule_5":
+        "Usa las letras restantes para formar la palabra secreta y confirma tu victoria.",
+    "word_search_screen_title": "El Ojo de Odín",
+    "games_menu_quiz": "Mi Deidad Guardiana",
+    "quiz_preliminary_screen_help_text":
+        "Responde a las preguntas de los dioses y descubre qué deidad vela por ti.",
+    "quiz_preliminary_screen_start_button": "Comenzar el Cuestionario",
+  };
+  static const Map<String, dynamic> _fr_FR = {
+    "about_screen_about_content":
+        "Cette application est un hommage au monde fascinant de la mythologie nordique. Elle a été conçue pour offrir une expérience immersive et éducative à travers des quiz, des histoires et des mini-jeux.",
+    "about_screen_about_title": "À propos de l'application",
+    "about_screen_contact_us": "Nous contacter",
+    "about_screen_contribution_content":
+        "Ce projet est open source. N'hésitez pas à contribuer sur GitHub.",
+    "about_screen_contribution_title": "Contribution",
+    "about_screen_creators_content":
+        "Créé par une petite équipe de passionnés de mythologie, de conteurs et de développeurs unis par l'amour des légendes.",
+    "about_screen_creators_lead_dev": "Développeur & Concepteur Principal :",
+    "about_screen_creators_title": "Équipe & Créateurs",
+    "about_screen_disclaimer_content":
+        "Cette application est basée sur la mythologie nordique et n'est pas affiliée, sponsorisée ou approuvée par Marvel.",
+    "about_screen_disclaimer_title": "Avertissement",
+    "about_screen_github_link": "Voir sur GitHub",
+    "about_screen_legal_title": "Légal",
+    "about_screen_privacy_link": "Politique de confidentialité",
+    "about_screen_roadmap_content":
+        "Prochainement : de nouveaux royaumes, plus d'histoires et des défis mythiques. Restez à l'écoute pour la prochaine saga !",
+    "about_screen_roadmap_title": "Fonctionnalités Futures / Roadmap",
+    "about_screen_support_title": "Soutenir le projet",
+    "about_screen_tech_content":
+        "Construit avec Flutter et propulsé par des bibliothèques open-source. Ce projet a également été ramené à la vie avec l'aide de plusieurs outils d'IA : Nightcafé pour les images, Gemini CLI pour le codage, Vidnoz pour les animations et Suno pour les musiques.",
+    "about_screen_tech_title": "Technologies & IA",
+    "about_screen_terms_link": "Conditions d'utilisation",
+    "about_screen_thanks_content":
+        "Un merci spécial à nos premiers testeurs et soutiens qui ont aidé à façonner l'Oracle d'Asgard. Vos retours ont forgé ce royaume comme les nains forgent les armes divines.",
+    "about_screen_thanks_title": "Remerciements",
+    "about_screen_version_content":
+        "Vous utilisez la version {version} de l'application Oracle d'Asgard.",
+    "about_screen_version_title": "Version de l'application",
+    "about_screen_vision_content":
+        "Oracle d’Asgard est né d’une passion pour la mythologie nordique et la narration. Notre vision est de faire revivre les mythes anciens à travers des expériences interactives qui mêlent apprentissage, jeu et art. Chaque énigme, chaque histoire, chaque rune que vous rencontrez porte un fragment de cette magie ancestrale.",
+    "about_screen_vision_title": "Histoire & Vision",
+    "app_title": "Oracle d'Asgard",
+    "asgard_wall_game_screen_congratulations": "Félicitations !",
+    "asgard_wall_game_screen_defeat": "Défaite !",
+    "asgard_wall_game_screen_defeat_message":
+        "💥 Un trou dans la muraille!\nLes Ases ne paieront pas le géant.",
+    "asgard_wall_game_screen_next_pieces": "Prochaines pièces",
+    "asgard_wall_game_screen_restart": "Redémarrer le Mur",
+    "asgard_wall_game_screen_title": "Muraille d’Asgard",
+    "asgard_wall_game_screen_victory": "Victoire !",
+    "asgard_wall_game_screen_victory_message":
+        "Vous avez accompli un exploit digne des dieux !",
+    "asgard_wall_preliminary_screen_help_text":
+        "Aidez Hrumthur à construire la muraille d’Asgard en plaçant les blocs qui tombent. Atteignez la hauteur de la victoire sans laisser de trous inaccessibles !",
+    "asgard_wall_preliminary_screen_start_button": "Commencer la construction",
+    "asgard_wall_welcome_screen_rule_1":
+        "Construisez la muraille parfaite comme le géant bâtisseur. Votre objectif est de remplir toutes les cases jusqu’à la ligne dorée sans laisser de trous inaccessibles (fermés de tous les côtés).",
+    "asgard_wall_welcome_screen_rule_2":
+        "Contrôles: ←→ ou A/D pour bouger, ↑/W/Space/Q/E pour pivoter, ↓/S pour descendre (Les contrôles tactiles sont disponibles en jeu)",
+    "collectible_card_audhumla_description":
+        "La vache primordiale, née de la fonte des glaces au commencement des temps, tout comme le géant Ymir. De ses pis coulaient quatre rivières de lait qui nourrirent Ymir et permirent sa survie. En léchant un bloc de glace salé, Audhumla mit à jour Buri, le premier des dieux et l'ancêtre d'Odin. Elle est donc à l'origine des deux lignées, celle des géants et celle des dieux, qui s'affronteront durant le Ragnarök.",
+    "collectible_card_audhumla_title": "Audhumla la Vache Cosmique",
+    "collectible_card_baldr_description":
+        "Le dieu de la lumière, de la beauté et de la pureté, fils d'Odin et de Frigg. Adoré de tous, sa présence apportait joie et paix. Un rêve prémonitoire de sa propre mort poussa sa mère, Frigg, à faire jurer à toute chose dans la création de ne jamais lui nuire. Seul le gui, jugé trop jeune et inoffensif, fut oublié. Sa mort tragique, orchestrée par Loki, fut le premier et plus terrible présage de la venue du Ragnarök, la fin des temps.",
+    "collectible_card_baldr_title": "Baldr le Bon",
+    "collectible_card_bifrost_description":
+        "Le pont arc-en-ciel vibrant et chatoyant qui relie Midgard, le monde des hommes, à Asgard, la forteresse des dieux. Il est décrit comme étant fait de feu, d'air et d'eau, et est plus solide que n'importe quelle autre structure. Il est gardé en permanence par le dieu Heimdall, qui en surveille l'accès depuis son poste de garde, Himinbjörg. Le Bifrost s'effondrera lors du Ragnarök sous le poids des géants de feu menés par Surt.",
+    "collectible_card_bifrost_title": "Bifrost",
+    "collectible_card_bragi_description":
+        "Le dieu de la poésie, de l'éloquence et de la musique. Il est l'époux d'Idunn, la gardienne des pommes de jouvence. Bragi est représenté comme un vieil homme sage à la longue barbe, dont les paroles sont si belles qu'elles charment tous ceux qui les entendent. Il est le scalde (poète) de la cour des dieux à Asgard, accueillant les guerriers valeureux arrivant au Valhalla avec ses chants épiques qui relatent leurs hauts faits et la gloire des dieux.",
+    "collectible_card_bragi_title": "Bragi",
+    "collectible_card_brisingamen_description":
+        "Le magnifique et légendaire collier de la déesse Freyja. Son nom signifie \"le bijou de feu\". Il fut forgé par quatre nains experts. Pour l'obtenir, Freyja dut passer une nuit avec chacun d'eux. Ce collier est le symbole de sa beauté, de sa séduction et de son pouvoir sur l'amour et le désir. Il fut volé par Loki et récupéré par Heimdall après un combat acharné où tous deux prirent la forme de phoques.",
+    "collectible_card_brisingamen_title": "Brisingamen",
+    "collectible_card_brokkr_sindri_description":
+        "Deux frères nains, maîtres forgerons réputés pour leur habileté inégalée. Suite à une ruse de Loki, ils firent le pari avec le dieu qu'ils pourraient créer des objets plus merveilleux que ceux créés par les fils d'Ivaldi. Ils forgèrent ainsi trois trésors exceptionnels : le sanglier d'or Gullinbursti pour Freyr, l'anneau d'or Draupnir pour Odin, et le plus célèbre de tous, le marteau Mjöllnir pour Thor, malgré un défaut mineur (son manche court) dû à une intervention de Loki.",
+    "collectible_card_brokkr_sindri_title": "Brokkr et Sindri",
+    "collectible_card_draupnir_description":
+        "L'anneau magique en or pur possédé par Odin, l'un des plus grands trésors des dieux. Forgé par les nains Brokkr et Sindri, son nom signifie \"le goutteur\". Il possède la capacité extraordinaire de se multiplier : toutes les neuf nuits, il produit huit nouveaux anneaux d'or de poids et de qualité identiques. Draupnir fut placé par Odin sur le bûcher funéraire de son fils Baldr en signe de respect, mais lui fut retourné du royaume des morts.",
+    "collectible_card_draupnir_title": "Draupnir l'Anneau",
+    "collectible_card_fenrir_description":
+        "Le loup gigantesque, l'un des trois enfants monstrueux de Loki et de la géante Angrboda. Les dieux, effrayés par sa croissance rapide et les prophéties annonçant qu'il causerait leur perte, décidèrent de l'enchaîner. Après avoir brisé deux chaînes, il fut finalement lié par le lien magique Gleipnir. Lors du Ragnarök, il se libérera et accomplira son destin en dévorant Odin, avant d'être tué par Vidar, le fils d'Odin.",
+    "collectible_card_fenrir_title": "Fenrir le Loup",
+    "collectible_card_freyja_description":
+        "Déesse majeure de la mythologie nordique, associée à l'amour, la beauté, la fertilité, mais aussi à la guerre, la richesse et la magie (le seidr). Sœur jumelle de Freyr, elle est la plus belle des déesses. Elle règne sur son propre royaume, Fólkvangr, où elle accueille la moitié des guerriers morts héroïquement au combat, l'autre moitié allant au Valhalla d'Odin. Elle possède le collier Brisingamen et un char tiré par deux chats.",
+    "collectible_card_freyja_title": "Freyja",
+    "collectible_card_frigg_description":
+        "Déesse de l'amour, du mariage et de la maternité, épouse d'Odin et reine d'Asgard. Elle est la mère de Baldr, le dieu bien-aimé. Dotée du don de prophétie, elle connaît le destin de tous les êtres, y compris celui de son fils, mais ne peut le changer. Son amour maternel la poussa à protéger Baldr en faisant prêter serment à toute la création, une tentative désespérée qui fut déjouée par la ruse de Loki.",
+    "collectible_card_frigg_title": "Frigg la Mère",
+    "collectible_card_ginnungagap_description":
+        "Le vide béant et silencieux qui existait avant toute création. C'était un abîme sans fond, bordé au nord par le royaume glacial de Niflheim et au sud par le royaume ardent de Muspelheim. C'est de la rencontre entre le souffle glacé de Niflheim et les étincelles brûlantes de Muspelheim au centre du Ginnungagap que la vie a émergé, donnant naissance au géant primordial Ymir et à la vache cosmique Audhumla.",
+    "collectible_card_ginnungagap_title": "Le Ginnungagap",
+    "collectible_card_gjallarhorn_description":
+        "La \"Corne retentissante\" du dieu Heimdall. Il l'utilise pour surveiller le pont Bifrost. Le son de cette corne est si puissant qu'il peut être entendu dans les neuf mondes. Heimdall ne sonnera du Gjallarhorn qu'une seule fois, mais ce sera pour un événement capital : il l'utilisera pour alerter tous les dieux du début du Ragnarök, lorsque les géants et les monstres lanceront leur assaut final contre Asgard.",
+    "collectible_card_gjallarhorn_title": "Gjallarhorn",
+    "collectible_card_gleipnir_description":
+        "La chaîne magique forgée par les nains pour lier le loup Fenrir. Contrairement aux lourdes chaînes précédentes que Fenrir avait brisées, Gleipnir était aussi fin et souple qu'un ruban de soie. Il était fabriqué à partir de six ingrédients impossibles : le son des pas d'un chat, la barbe d'une femme, les racines d'une montagne, les tendons d'un ours, le souffle d'un poisson et la salive d'un oiseau. C'est le seul lien que Fenrir ne put jamais briser.",
+    "collectible_card_gleipnir_title": "Gleipnir",
+    "collectible_card_gungnir_description":
+        "La lance infaillible d'Odin, qui ne manque jamais sa cible. Son nom signifie \"la chancelante\". Elle fut également forgée par des nains, les fils d'Ivaldi, et obtenue par Loki. Un serment gravé sur sa pointe garantit sa précision. Gungnir est un symbole du pouvoir et de l'autorité d'Odin en tant que dieu de la guerre. C'est en se sacrifiant, pendu à Yggdrasil et transpercé par sa propre lance, qu'Odin acquit la connaissance des runes.",
+    "collectible_card_gungnir_title": "Gungnir la Lance",
+    "collectible_card_heimdall_description":
+        "Le gardien vigilant d'Asgard, posté à l'entrée du pont Bifrost pour empêcher les géants d'envahir le royaume des dieux. Né de neuf mères, il possède des sens surhumains : sa vue perçante lui permet de voir à des centaines de lieues et son ouïe est si fine qu'il peut entendre l'herbe pousser. Il est le détenteur de la corne Gjallarhorn. Lors du Ragnarök, il sera le dernier à tomber, tuant son éternel ennemi Loki dans un combat où ils s'entretueront.",
+    "collectible_card_heimdall_title": "Heimdall",
+    "collectible_card_hel_description":
+        "Fille de Loki et de la géante Angrboda, sœur du loup Fenrir et du serpent Jörmungandr. Bannie par Odin, elle devint la souveraine du royaume des morts, Helheim. Elle est souvent représentée avec un corps à moitié vivant et à moitié décomposé. Elle règne sur les âmes de ceux qui sont morts de maladie ou de vieillesse, par opposition aux guerriers morts au combat qui vont au Valhalla ou à Fólkvangr. Son pouvoir sur les morts est absolu.",
+    "collectible_card_hel_title": "Hel",
+    "collectible_card_helheim_description":
+        "Le royaume des morts, l'un des neuf mondes, gouverné par la déesse Hel. C'est un lieu sombre, froid et brumeux, situé dans les profondeurs de Niflheim. C'est là que vont les âmes de ceux qui ne sont pas morts de manière héroïque au combat. L'entrée de Helheim est gardée par le chien monstrueux Garm. Même les dieux ne peuvent en réchapper sans la permission de Hel, comme le montre la vaine tentative de ramener Baldr à la vie.",
+    "collectible_card_helheim_title": "Helheim",
+    "collectible_card_hofund_description":
+        "L'épée étincelante du dieu gardien Heimdall. Son nom signifie \"tête d'homme\", possiblement en référence à un pommeau sculpté. Comme son propriétaire, l'épée est un symbole de vigilance et de protection pour Asgard. Bien que moins célèbre que d'autres armes divines comme Mjöllnir ou Gungnir, Hofund est une arme puissante qui sera utilisée par Heimdall lors de son combat final et mutuellement destructeur contre Loki durant le Ragnarök.",
+    "collectible_card_hofund_title": "Hofund",
+    "collectible_card_hrimthurs_description":
+        "Un géant (Jötunn) qui se présenta aux dieux sous les traits d'un simple bâtisseur. Il leur proposa un marché audacieux : construire une forteresse imprenable autour d'Asgard en seulement trois saisons. En paiement, il réclamait la déesse Freyja, ainsi que le Soleil et la Lune. Les dieux acceptèrent, pensant la tâche impossible. Mais le géant, aidé de son cheval magique Svadilfari, avança si vite que les dieux prirent peur et demandèrent à Loki d'intervenir.",
+    "collectible_card_hrimthurs_title": "Hrimthurs le Bâtisseur",
+    "collectible_card_huginnmuninn_description":
+        "Les deux corbeaux perchés sur les épaules d'Odin. Leurs noms signifient \"Pensée\" (Huginn) et \"Mémoire\" (Muninn). Chaque matin, Odin les envoie parcourir les neuf mondes. À leur retour, ils lui murmurent à l'oreille tout ce qu'ils ont vu et entendu. Ils sont les sources d'information du Père de Tout, lui conférant une connaissance quasi omnisciente des événements passés, présents et à venir, et l'aidant dans sa quête insatiable de sagesse.",
+    "collectible_card_huginnmuninn_title": "Huginn et Muninn",
+    "collectible_card_idunn_description":
+        "Déesse de la jeunesse et de l'éternité, épouse du dieu poète Bragi. Elle est la gardienne des pommes d'or, des fruits magiques qui confèrent aux dieux leur jeunesse et leur immortalité. Sans ces pommes, les dieux vieilliraient et mourraient comme de simples mortels. Idunn fut un jour enlevée par le géant Thjazi avec la complicité de Loki, forçant les dieux à vieillir jusqu'à ce que Loki soit contraint de la ramener à Asgard.",
+    "collectible_card_idunn_title": "Idunn",
+    "collectible_card_jormungandr_description":
+        "Le Serpent de Midgard, l'un des trois enfants de Loki et de la géante Angrboda. Jeté dans l'océan qui entoure Midgard par Odin, il grandit de manière si démesurée qu'il finit par encercler le monde des hommes et se mordre la queue, d'où son surnom de \"Serpent-Monde\". Il est l'ennemi juré de Thor. Lors du Ragnarök, les deux adversaires s'affronteront dans un combat titanesque. Thor tuera Jörmungandr mais succombera à son venin neuf pas plus loin.",
+    "collectible_card_jormungandr_title": "Jörmungandr",
+    "collectible_card_loki_description":
+        "Dieu de la ruse, de la discorde et de la métamorphose. Fils de géants mais admis parmi les dieux Ases, il est le frère de sang d'Odin. Intelligent et charmeur, il utilise ses talents pour aider les dieux à se sortir de situations difficiles, mais sa nature malicieuse et chaotique le pousse aussi à être à l'origine de la plupart de leurs problèmes. Père de monstres comme Fenrir, Jörmungandr et Hel, son rôle devient de plus en plus sombre, jusqu'à provoquer le Ragnarök.",
+    "collectible_card_loki_title": "Loki",
+    "collectible_card_mjollnir_description":
+        "Le marteau légendaire de Thor, forgé par les nains Brokkr et Sindri. Symbole de protection et de destruction, il est capable de contrôler la foudre et le tonnerre. Mjöllnir ne manque jamais sa cible et revient toujours à son porteur après avoir été lancé. C'est l'une des armes les plus puissantes des dieux, indispensable dans la lutte éternelle contre les forces du chaos, notamment les géants.",
+    "collectible_card_mjollnir_title": "Mjöllnir",
+    "collectible_card_njord_description":
+        "Dieu de la mer, du vent, de la pêche et de la richesse. Il appartient à la famille des dieux Vanes, mais vint vivre à Asgard avec ses enfants, Freyja et Freyr, comme otage après la guerre entre les Ases et les Vanes. Il est invoqué par les marins pour des voyages sûrs et de bonnes prises. Son mariage malheureux avec la géante Skadi, qui aimait les montagnes tandis qu'il aimait la mer, illustre l'opposition entre ces deux mondes.",
+    "collectible_card_njord_title": "Njord",
+    "collectible_card_odin_description":
+        "Le Père de Tout, le dieu principal du panthéon nordique. Dieu de la sagesse, de la guerre, de la mort, de la poésie et de la magie (runes). Il règne sur Asgard depuis son trône Hlidskjalf, d'où il peut observer les neuf mondes. Il a sacrifié un œil pour boire à la source de Mimir et acquérir la connaissance universelle. Accompagné de ses corbeaux Huginn et Muninn et de ses loups Geri et Freki, il prépare les dieux et les hommes pour le Ragnarök.",
+    "collectible_card_odin_title": "Odin",
+    "collectible_card_sif_description":
+        "Déesse de la fertilité, de la terre et des moissons, épouse de Thor. Elle était célèbre pour sa magnifique chevelure d'or pur, qui symbolisait les champs de blé mûr. Un jour, par malice, Loki lui coupa les cheveux. Furieux, Thor força Loki à réparer son méfait. Loki dut alors commander aux nains de forger une nouvelle chevelure d'or, qui poussait comme de vrais cheveux, ainsi que d'autres trésors pour les dieux.",
+    "collectible_card_sif_title": "Sif aux Cheveux d’Or",
+    "collectible_card_skadi_description":
+        "Déesse géante associée à la chasse à l'arc, à l'hiver, aux montagnes et au ski. Fille du géant Thjazi, elle se rendit à Asgard pour venger la mort de son père, tué par les dieux. En guise de compensation, les dieux lui offrirent d'épouser l'un d'entre eux, mais elle devait le choisir en ne voyant que leurs pieds. Elle choisit Njord en pensant qu'il s'agissait de Baldr. Leur union fut un échec, Skadi ne supportant pas de vivre loin de ses montagnes enneigées.",
+    "collectible_card_skadi_title": "Skadi",
+    "collectible_card_sleipnir_description":
+        "Le cheval d'Odin, né de l'union de Loki transformé en jument et de Svadilfari. Le plus rapide de tous les chevaux des neuf mondes, capable de galoper sur terre, sur mer et dans les airs. Sleipnir est le fidèle destrier d'Odin, le transportant à travers les mondes lors de ses voyages. Ses huit pattes symbolisent sa vitesse surnaturelle et sa capacité à se mouvoir entre les dimensions.",
+    "collectible_card_sleipnir_title": "Sleipnir le Cheval à Huit Pattes",
+    "collectible_card_svadilfari_description":
+        "Le cheval magique et exceptionnellement fort du géant bâtisseur Hrimthurs. Son nom signifie \"voyageur malchanceux\". La rapidité et la puissance de Svadilfari étaient telles qu'il permettait à son maître de construire la muraille d'Asgard à une vitesse prodigieuse, menaçant de faire gagner le pari au géant. Pour saboter le travail, Loki se transforma en une magnifique jument et attira Svadilfari loin de son maître, empêchant ainsi l'achèvement du mur à temps.",
+    "collectible_card_svadilfari_title": "Svadilfari le Cheval",
+    "collectible_card_thor_description":
+        "Le dieu du tonnerre, fils d'Odin et de Jörd (la Terre). Protecteur dévoué d'Asgard et des humains (Midgard), il est connu pour sa force prodigieuse et son courage sans faille. Armé de son marteau Mjöllnir, qui revient toujours dans sa main, de sa ceinture Megingjord qui décuple sa force, et de ses gants de fer Járngreipr, il combat sans relâche les géants et les monstres qui menacent l'ordre cosmique.",
+    "collectible_card_thor_title": "Thor le Protecteur",
+    "collectible_card_thrym_description":
+        "Le redoutable roi des géants de glace (Jötun) qui commit l'audace de voler Mjöllnir, le marteau de Thor. En échange de sa restitution, il exigea la main de la déesse Freyja. Pour récupérer son arme, Thor se déguisa en Freyja, accompagné de Loki en servante. La ruse fonctionna, et une fois le marteau en sa possession, Thor massacra Thrym et toute sa cour, restaurant l'honneur des dieux.",
+    "collectible_card_thrym_title": "Thrym le Géant",
+    "collectible_card_tyr_description":
+        "Le dieu de la guerre, du droit et de la justice. D'un courage exemplaire, il est le seul dieu qui osa approcher le loup Fenrir lorsque celui-ci devint trop grand et menaçant. Pour prouver aux loup qu'ils ne voulaient pas le piéger avec la chaîne magique Gleipnir, Týr plaça sa main droite dans la gueule de la bête. Quand Fenrir comprit qu'il était enchaîné, il lui arracha la main. Ce sacrifice permit de neutraliser le loup jusqu'au Ragnarök.",
+    "collectible_card_tyr_title": "Týr le Sacrifié",
+    "collectible_card_yggdrasil_description":
+        "L'Arbre Monde, un frêne immense et éternel qui est au centre du cosmos nordique. Ses branches s'étendent sur les neuf mondes et son tronc les relie. Trois racines principales le soutiennent, chacune plongeant dans une source : la source d'Urd à Asgard, la source de Mimir au pays des géants, et Hvergelmir à Niflheim. Yggdrasil est constamment attaqué par diverses créatures, comme le dragon Nidhogg qui ronge ses racines, mais il survit toujours, symbolisant la résilience de la vie.",
+    "collectible_card_yggdrasil_title": "Yggdrasil",
+    "collectible_card_ymir_description":
+        "Le premier être vivant, un géant primordial né de la rencontre du feu de Muspelheim et de la glace de Niflheim dans le vide du Ginnungagap. De sa sueur naquirent les premiers géants. Il fut nourri par la vache cosmique Audhumla. Finalement, il fut tué par les dieux Odin et ses frères, Vili et Vé. De son corps, ils créèrent le monde : sa chair devint la terre, son sang les océans, ses os les montagnes et son crâne la voûte céleste.",
+    "collectible_card_ymir_title": "Ymir le Géant Primordial",
+    "deity_astrid_description":
+        "Tu lis l’avenir dans les étoiles et les runes. Tes conseils sont recherchés par les rois et les jarls, car tu vois les fils du destin que d’autres ignorent.",
+    "deity_astrid_title": "la Visionnaire Étoilée",
+    "deity_audhumla_description":
+        "Tu es la source de toute vie, nourrissant le monde de ton essence. Comme Audhumla, tu es patient et généreux, un pilier de la création.",
+    "deity_audhumla_title": "La Vache Cosmique",
+    "deity_baldr_description":
+        "Pur et aimé de tous, tu incarnes la lumière et la beauté. Comme Baldr, ta présence apporte joie et harmonie, mais tu es aussi vulnérable aux forces obscures.",
+    "deity_baldr_title": "Le Dieu Lumineux",
+    "deity_bjorn_description":
+        "Ta force est légendaire, aussi implacable qu’une avalanche. Tu protèges ton clan avec une férocité silencieuse, et ta loyauté est le roc sur lequel tes alliés bâtissent leur confiance.",
+    "deity_bjorn_title": "l’Ours des Glaces",
+    "deity_bragi_description":
+        "Maître des mots et de la musique, tu inspires et émeus les cœurs. Comme Bragi, tu utilises l’art pour raconter des histoires et célébrer la vie.",
+    "deity_bragi_title": "Le Poète Divin",
+    "deity_fenrir_description":
+        "Puissant et indomptable, tu représentes la force brute et la liberté. Comme Fenrir, tu es une force de la nature, difficile à contenir.",
+    "deity_fenrir_title": "Le Loup Inchaîné",
+    "deity_freydis_description":
+        "Tu es une skjaldmö, une guerrière au bouclier dont le courage inspire les chants. Tu ne recules devant aucun combat et traces ton propre chemin avec une détermination de fer.",
+    "deity_freydis_title": "la Hache Intrépide",
+    "deity_freyja_description":
+        "Passionnée et intuitive, tu suis ton cœur. Comme Freyja, tu apportes beauté et amour dans le monde.",
+    "deity_freyja_title": "Dame de l’Amour",
+    "deity_frigg_description":
+        "Sage et protectrice, tu veilles sur ton entourage. Comme Frigg, tu anticipes et préviens les dangers.",
+    "deity_frigg_title": "La Protectrice",
+    "deity_heimdall_description":
+        "Vigilant et perspicace, tu es le protecteur des royaumes. Comme Heimdall, tu as une perception aiguë et une loyauté inébranlable.",
+    "deity_heimdall_title": "Le Gardien des Ponts",
+    "deity_hel_description":
+        "Juste et impartiale, tu régnes sur le royaume des défunts. Comme Hel, tu acceptes la dualité de la vie et de la mort, et tu traites chacun avec équité.",
+    "deity_hel_title": "La Souveraine des Morts",
+    "deity_hrimthurs_description":
+        "Imposant et ancien, tu es une force primordiale de la nature. Comme Hrimthurs, tu es résistant et inébranlable, représentant la puissance des éléments.",
+    "deity_hrimthurs_title": "Le Géant de Givre",
+    "deity_idunn_description":
+        "Source de jeunesse et de vitalité, tu maintiens l’équilibre de la vie. Comme Idunn, tu es généreux et bienveillant, apportant renouveau et fraîcheur.",
+    "deity_idunn_title": "La Gardienne des Pommes",
+    "deity_ingrid_description":
+        "Tu commandes avec sagesse et justice. Ton peuple te suit non par peur, mais par respect et amour, car tu incarnes l’honneur et le leadership.",
+    "deity_ingrid_title": "la Jarl au Cœur Noble",
+    "deity_jormungandr_description":
+        "Immense et mystérieux, tu encercles le monde, une force inéluctable. Comme Jörmungandr, tu es une présence puissante et silencieuse, gardien des profondeurs.",
+    "deity_jormungandr_title": "Le Serpent Monde",
+    "deity_loki_description":
+        "Créatif et imprévisible, tu trouves des solutions uniques. Comme Loki, tu remets en question l’ordre établi.",
+    "deity_loki_title": "Le Changeur de Forme",
+    "deity_njord_description":
+        "Calme et généreux, tu maîtrises les océans et apportes la prospérité. Comme Njord, tu es une force apaisante, mais aussi puissante et imprévisible.",
+    "deity_njord_title": "Le Dieu des Mers et des Vents",
+    "deity_odin_description":
+        "Sage et rusé, tu cherches la connaissance avant tout. Comme Odin, tu es prêt à sacrifier pour comprendre les mystères du monde.",
+    "deity_odin_title": "Le Père de Tout",
+    "deity_ragnar_description":
+        "Ton esprit est aussi vif que ta hache. Tu excelles dans la stratégie et la tromperie, utilisant l’intelligence comme ta meilleure arme pour déjouer tes ennemis.",
+    "deity_ragnar_title": "le Corbeau Rusé",
+    "deity_selection_screen_choose_button": "Choisir",
+    "deity_selection_screen_title": "Choisir une divinité",
+    "deity_sif_description":
+        "Belle et fertile, tu symbolises l’abondance et la récolte. Comme Sif, tu es une source de vie et de prospérité, apportant la richesse à ceux qui t’entourent.",
+    "deity_sif_title": "La Déesse aux Cheveux d’Or",
+    "deity_skadi_description":
+        "Indépendante et sauvage, tu es la maîtresse des montagnes et des hivers. Comme Skadi, tu es résiliente et unyielding, représentant la puissance des éléments.",
+    "deity_skadi_title": "La Déesse Chasseresse",
+    "deity_sleipnir_description":
+        "Rapide et loyal, tu es le plus noble des destriers, capable de traverser les mondes. Comme Sleipnir, tu es un compagnon fiable et un guide sûr.",
+    "deity_sleipnir_title": "Le Cheval à Huit Pattes",
+    "deity_svadilfari_description":
+        "Puissant et infatigable, tu es capable de réaliser des exploits de construction. Comme Svadilfari, tu es un travailleur acharné et un bâtisseur de l’impossible.",
+    "deity_svadilfari_title": "Le Cheval Bâtisseur",
+    "deity_sven_description":
+        "L’horizon est ta seule véritable maison. Tu as navigué sur des eaux inconnues et bravé des tempêtes monstrueuses, ton âme brûlant du désir de découvrir ce qui se trouve au-delà des cartes.",
+    "deity_sven_title": "l’Explorateur des Mers",
+    "deity_thor_description":
+        "Fort et courageux, tu protèges ceux qui t’entourent. Comme Thor, tu affrontes les défis de front avec détermination.",
+    "deity_thor_title": "Le Tonnerre",
+    "deity_thrym_description":
+        "Puissant et exigeant, tu es un adversaire redoutable. Comme Thrym, tu es une force à ne pas sous-estimer, capable de défier même les dieux.",
+    "deity_thrym_title": "Le Roi des Géants",
+    "deity_tyr_description":
+        "Droit et honorable, tu défends la justice. Comme Týr, tu sacrifies pour ce qui est juste, même à grands frais.",
+    "deity_tyr_title": "Le Juste",
+    "deity_ymir_description":
+        "Ancien et colossal, tu es l’origine de toute existence. Comme Ymir, tu es une force fondamentale, un pilier du monde, dont la présence est immense et silencieuse.",
+    "deity_ymir_title": "Le Géant Primordial",
+    "games_menu_andvari_loot": "Le Butin d'Andvari",
+    "games_menu_asgard_wall": "La Muraille d'Asgard",
+    "games_menu_midgard_serpent": "Le Serpent de Midgard",
+    "games_menu_mini_games": "Mini-Jeux",
+    "games_menu_odin_eye": "L'Œil d'Odin",
+    "games_menu_reorder_history": "Réordonne l'Histoire",
+    "games_menu_scattered_runes": "Les Runes Dispersées",
+    "games_menu_territory_conquest": "Conquête de Territoire",
+    "level": "Niveau",
+    "main_screen_guardian_deity": "Ma divinité gardienne",
+    "main_screen_play": "Mini-jeux",
+    "main_screen_profile": "Trophés",
+    "main_screen_rewards": "Mes récompenses",
+    "main_screen_settings": "Paramètres",
+    "main_screen_title": "Oracle d'Asgard",
+    "minesweeper_game_over": "BOUM ! Vous avez touché une mine.",
+    "minesweeper_preliminary_screen_help_text":
+        "Le trésor maudit du nain Andvari est caché. Dégagez les cases et trouvez les pièces d'or sans faire exploser les pièges !",
+    "minesweeper_preliminary_screen_start_button":
+        "Commencer la Chasse au Trésor",
+    "minesweeper_rule_1":
+        "Le but est de trouver tous les trésors sans déclencher de mines.",
+    "minesweeper_rule_2":
+        "Appuyez sur une case pour la révéler. Si c'est une mine, la partie est perdue.",
+    "minesweeper_rule_3":
+        "Si la case révélée contient une rune, cela indique le nombre de mines ou de trésors adjacents.",
+    "minesweeper_rule_4":
+        "Les runes rouges indiquent les mines adjacentes, les runes jaunes indiquent les trésors adjacents.",
+    "minesweeper_rule_5":
+        "Appuyez longuement sur une case pour y placer ou retirer un drapeau, marquant ainsi une mine suspectée.",
+    "minesweeper_rule_6": "Trouvez tous les trésors pour gagner la partie !",
+    "minesweeper_rune_legend": "Légende des Runes:",
+    "minesweeper_title": "Le Butin d'Andvari",
+    "minesweeper_treasures_found": "Trésors trouvés: {found} / {total}",
+    "myth_story_page_ad_display_failed":
+        "Échec de l'affichage de la publicité. Veuillez réessayer.",
+    "myth_story_page_ad_loading_failed":
+        "Échec du chargement de la publicité. Veuillez réessayer.",
+    "myth_story_page_chapter_locked": "Chapitre verrouillé",
+    "myth_story_page_chapter_unlocked_success":
+        "Chapitre débloqué avec succès !",
+    "myth_story_page_close_button": "Fermer",
+    "myth_story_page_error_prefix": "Erreur",
+    "myth_story_page_font_size_title": "Taille de la police",
+    "myth_story_page_sample_text": "Exemple de texte",
+    "myth_story_page_unlock_with_ad": "Débloquer avec une pub",
+    "norse_riddle_asgard_clue_1": "Je suis la forteresse des dieux Ases.",
+    "norse_riddle_asgard_clue_2":
+        "Mes murs ont été construits par un géant et son cheval.",
+    "norse_riddle_asgard_clue_3": "Le pont arc-en-ciel mène à mes portes.",
+    "norse_riddle_bifrost_clue_1":
+        "Je suis un pont de feu gardé par un dieu vigilant.",
+    "norse_riddle_bifrost_clue_2":
+        "Mes trois couleurs relient le monde des hommes à celui des dieux.",
+    "norse_riddle_bifrost_clue_3":
+        "Je me briserai sous le poids des géants à la fin des temps.",
+    "norse_riddle_fenrir_clue_1":
+        "Ma mâchoire, une fois ouverte, touche le ciel et la terre.",
+    "norse_riddle_fenrir_clue_2":
+        "Les dieux m’ont enchaîné par la ruse avec un ruban de soie.",
+    "norse_riddle_fenrir_clue_3":
+        "Je dévorerai Odin lors de la dernière bataille.",
+    "norse_riddle_freya_clue_1":
+        "Je pleure des larmes d’or pour mon époux parti.",
+    "norse_riddle_freya_clue_2":
+        "Je règne sur le Fólkvangr et reçois la moitié des guerriers morts.",
+    "norse_riddle_freya_clue_3":
+        "Mon collier, Brísingamen, est le plus beau des trésors.",
+    "norse_riddle_frigg_clue_1":
+        "Je connais le destin de tous, mais je garde le silence.",
+    "norse_riddle_frigg_clue_2":
+        "Je suis l’épouse d’Odin et la reine d’Asgard.",
+    "norse_riddle_frigg_clue_3": "J’ai pleuré la mort de mon fils lumineux.",
+    "norse_riddle_gjallarhorn_clue_1":
+        "Mon son peut être entendu dans tous les mondes.",
+    "norse_riddle_gjallarhorn_clue_2":
+        "Je suis la corne d’alarme du gardien du Bifrost.",
+    "norse_riddle_gjallarhorn_clue_3":
+        "J’annoncerai le début de la bataille finale.",
+    "norse_riddle_gungnir_clue_1":
+        "Je suis la lance qui ne manque jamais sa cible.",
+    "norse_riddle_gungnir_clue_2":
+        "Mon propriétaire s’est pendu à un arbre avec moi dans le flanc.",
+    "norse_riddle_gungnir_clue_3":
+        "Un serment prêté sur ma pointe est inviolable.",
+    "norse_riddle_huginn_clue_1":
+        "Chaque matin, je pars pour ne revenir qu’au soir.",
+    "norse_riddle_huginn_clue_2":
+        "Je suis la Pensée qui vole pour le Père de Tout.",
+    "norse_riddle_huginn_clue_3": "Mon frère est la Mémoire.",
+    "norse_riddle_hvergelmir_clue_1":
+        "Je suis la source de toutes les rivières, au cœur de Niflheim.",
+    "norse_riddle_hvergelmir_clue_2":
+        "Mon chaudron bouillonne, et mes eaux gèlent tout sur leur passage.",
+    "norse_riddle_hvergelmir_clue_3":
+        "C’est de moi que naissent les onze fleuves d’Élivágar.",
+    "norse_riddle_jormungandr_clue_1":
+        "Je suis si grand que j’encercle le monde des hommes.",
+    "norse_riddle_jormungandr_clue_2":
+        "Je suis le Serpent de Midgard, enfant de Loki.",
+    "norse_riddle_jormungandr_clue_3":
+        "Mon ennemi juré est le dieu du tonnerre.",
+    "norse_riddle_jotunheim_clue_1":
+        "Je suis le royaume des géants, au-delà de Midgard.",
+    "norse_riddle_jotunheim_clue_2":
+        "Mes montagnes sont froides et mes habitants redoutables.",
+    "norse_riddle_jotunheim_clue_3":
+        "C’est ici que Thor vient souvent chercher querelle.",
+    "norse_riddle_loki_clue_1":
+        "Je suis le père de monstres et le maître de la tromperie.",
+    "norse_riddle_loki_clue_2": "Mon sang s’est mêlé à celui d’Odin.",
+    "norse_riddle_loki_clue_3": "Je change de forme comme je change d’avis.",
+    "norse_riddle_midgard_clue_1": "Je suis le royaume des mortels.",
+    "norse_riddle_midgard_clue_2": "Un serpent géant entoure mes côtes.",
+    "norse_riddle_midgard_clue_3":
+        "Je suis protégé par le fils d’Odin au marteau.",
+    "norse_riddle_mjolnir_clue_1":
+        "Je reviens toujours à la main de mon maître.",
+    "norse_riddle_mjolnir_clue_2":
+        "Mon vol dans le ciel est le son du tonnerre.",
+    "norse_riddle_mjolnir_clue_3": "Je suis le broyeur, terreur des géants.",
+    "norse_riddle_nidavellir_clue_1":
+        "Mes forges résonnent des coups de marteau.",
+    "norse_riddle_nidavellir_clue_2":
+        "Je suis le royaume souterrain des artisans du métal.",
+    "norse_riddle_nidavellir_clue_3":
+        "C’est ici que naissent les plus grands trésors des dieux.",
+    "norse_riddle_nidavellir_clue_4":
+        "Mes habitants fuient la lumière du soleil.",
+    "norse_riddle_odin_clue_1": "J’ai échangé un œil contre la sagesse.",
+    "norse_riddle_odin_clue_2":
+        "Mes deux corbeaux parcourent le monde pour m’informer.",
+    "norse_riddle_odin_clue_3":
+        "Je suis le Père de Tout, régnant depuis Asgard.",
+    "norse_riddle_ragnarok_clue_1": "Je suis le crépuscule des dieux.",
+    "norse_riddle_ragnarok_clue_2":
+        "Le soleil deviendra noir et la terre sombrera dans la mer.",
+    "norse_riddle_ragnarok_clue_3":
+        "Je suis une fin, mais aussi un nouveau commencement.",
+    "norse_riddle_thor_clue_1": "Mon char est tiré par des boucs.",
+    "norse_riddle_thor_clue_2":
+        "Je suis le protecteur de Midgard et le fils d’Odin.",
+    "norse_riddle_thor_clue_3":
+        "Le tonnerre gronde quand je lance mon marteau.",
+    "norse_riddle_tyr_clue_1": "J’ai sacrifié ma main pour enchaîner un loup.",
+    "norse_riddle_tyr_clue_2":
+        "Je suis le dieu manchot de la justice et de la guerre héroïque.",
+    "norse_riddle_tyr_clue_3": "Mon nom est synonyme de courage.",
+    "norse_riddle_valhalla_clue_1": "Mon toit est couvert de boucliers dorés.",
+    "norse_riddle_valhalla_clue_2":
+        "Ici, les guerriers d’élite festoient et combattent chaque jour.",
+    "norse_riddle_valhalla_clue_3":
+        "Je suis le grand hall d’Odin pour les morts valeureux.",
+    "norse_riddle_valkyries_clue_1":
+        "Nous chevauchons les cieux, choisissant les morts au combat.",
+    "norse_riddle_valkyries_clue_2":
+        "Nous servons Odin, portant les héros au Valhalla.",
+    "norse_riddle_valkyries_clue_3":
+        "Nos noms résonnent sur les champs de bataille.",
+    "norse_riddle_yggdrasil_clue_1": "Mes racines unissent trois mondes.",
+    "norse_riddle_yggdrasil_clue_2":
+        "Je suis l’Arbre du Monde, un frêne éternel.",
+    "norse_riddle_yggdrasil_clue_3":
+        "Un aigle, un écureuil et un dragon vivent en moi.",
+    "order_the_scrolls_help_dialog_rule_1":
+        "Remettez les cartes dans l'ordre chronologique du mythe nordique.",
+    "order_the_scrolls_help_dialog_rule_2":
+        "Glissez une carte sur une autre pour les échanger.",
+    "order_the_scrolls_help_dialog_rule_3":
+        "L'icône ⭲ indique qu'une carte est déplaçable.",
+    "order_the_scrolls_help_dialog_rule_4":
+        "Organisez-les de la première à la dernière étape.",
+    "order_the_scrolls_help_dialog_rule_5":
+        "Cliquez sur \"Valider l'ordre\" pour vérifier.",
+    "order_the_scrolls_help_dialog_rule_6":
+        "Les cartes correctes apparaîtront avec un contour vert ✅.",
+    "order_the_scrolls_preliminary_screen_help_text":
+        "Remettez les cartes mythologiques dans l'ordre chronologique et reconstituez l'histoire légendaire des dieux nordiques.",
+    "order_the_scrolls_preliminary_screen_start_button": "Commencer",
+    "order_the_scrolls_screen_incorrect_order":
+        "❌ Désolé, l’ordre est incorrect.",
+    "order_the_scrolls_screen_validate_order": "Valider l’ordre",
+    "profile_screen_ad_failed":
+        "Échec de l'affichage de la publicité. Veuillez réessayer.",
+    "profile_screen_ad_label": "(pub)",
+    "profile_screen_all_cards_unlocked":
+        "Toutes les cartes à collectionner {version} débloquées !",
+    "profile_screen_all_stories_unlocked":
+        "Toutes les histoires ont été débloquées !",
+    "profile_screen_ambient_music": "Musique d'ambiance",
+    "profile_screen_cache_clear_failed": "Échec de la suppression du cache",
+    "profile_screen_cache_cleared_success": "Cache vidé avec succès !",
+    "profile_screen_change_name": "Changer le nom",
+    "profile_screen_chapter_unlocked": "Chapitre débloqué avec succès !",
+    "profile_screen_collectible_cards": "Cartes à collectionner",
+    "profile_screen_database_clear_failed":
+        "Échec de l'effacement et reconstruction de la base de données",
+    "profile_screen_database_cleared_success":
+        "Base de données effacée et reconstruite avec succès !",
+    "profile_screen_error_prefix": "Erreur",
+    "profile_screen_game_scores": "Scores de jeu",
+    "profile_screen_language": "Langue",
+    "profile_screen_language_english": "Anglais",
+    "profile_screen_language_french": "Français",
+    "profile_screen_language_spanish": "Espagnol",
+    "profile_screen_new_name": "Nouveau nom",
+    "profile_screen_no_asgard_wall_scores":
+        "Aucun score de la Muraille d'Asgard pour l'instant.",
+    "profile_screen_no_collectible_cards":
+        "Aucune carte à collectionner débloquée pour l’instant.",
+    "profile_screen_no_data_available": "Aucune donnée disponible.",
+    "profile_screen_no_snake_scores": "Aucun score de Snake pour l’instant.",
+    "profile_screen_no_unlocked_stories":
+        "Aucune histoire débloquée pour l’instant.",
+    "profile_screen_ok_button": "OK",
+    "profile_screen_quiz_loading_error":
+        "Erreur lors du chargement du résultat du quiz",
+    "profile_screen_save": "Sauvegarder",
+    "profile_screen_settings": "Paramètres",
+    "profile_screen_snake_podium": "Podium du Serpent",
+    "profile_screen_asgard_wall_podium": "Podium de la Muraille d'Asgard",
+    "profile_screen_unlocked_stories": "Histoires débloquées",
+    "puzzle_preliminary_screen_help_text":
+        "Assemble les fragments des anciennes runes pour déverrouiller leur pouvoir mystique",
+    "puzzle_preliminary_screen_start_button": "Commencer le Puzzle",
+    "puzzle_screen_rule_1":
+        "Réorganisez les tuiles pour former l'image complète.",
+    "puzzle_screen_rule_2": "Glissez les tuiles dans les espaces vides.",
+    "puzzle_screen_rule_3":
+        "Le but est de reconstituer l'image le plus rapidement possible.",
+    "puzzle_screen_title": "Les runes dispersées",
+    "qix_game_menu_controls":
+        "⌨️ Commandes Clavier ⌨️\nFlèches pour bouger, Espace pour tracer lentement.",
+    "qix_game_menu_description":
+        "Jörmungand, le Serpent-Monde, a envahi les royaumes sacrés. Trace des frontières magiques pour reconquérir 75% du territoire et emprisonner la bête !",
+    "qix_game_menu_start_button": "⚔️ Commencer la Conquête",
+    "qix_game_menu_title": "Les Neuf Royaumes",
+    "qix_main_error_prefix": "Erreur",
+    "qix_main_game_not_initialized_error": "Erreur: Jeu non initialisé.",
+    "qix_main_screen_defeat_message": "Vous avez été vaincu. Réessayez !",
+    "qix_main_screen_defeat_title": "DÉFAITE !",
+    "qix_main_screen_rule_1":
+        "Tracez des lignes pour capturer des territoires. Évitez les ennemis et leurs lignes !",
+    "qix_main_screen_rule_2": "Capturez plus de 75% du territoire pour gagner.",
+    "qix_main_screen_rule_3":
+        "Si un ennemi touche votre ligne en construction, vous perdez une vie.",
+    "qix_main_screen_rule_4":
+        "Si un ennemi touche votre corps, vous perdez une vie.",
+    "qix_main_screen_rule_5":
+        "Collectez les bonus pour des avantages temporaires.",
+    "qix_main_screen_title": "Conquête de Territoire",
+    "qix_preliminary_screen_help_text":
+        "Guidez Odin et dessinez des formes pour conquérir les territoires des 9 mondes, mais attention à Fenrir qui rôde, prêt à frapper !",
+    "qix_preliminary_screen_start_button": "Commencer",
+    "question_10_answer_1": "Lire dans les pensées",
+    "question_10_answer_2": "Devenir invincible",
+    "question_10_answer_3": "Voyager entre les mondes",
+    "question_10_answer_4": "Apaiser les cœurs",
+    "question_10_text": "Quel type de pouvoir préfèrerais-tu ?",
+    "question_11_answer_1": "Le mentor mystérieux",
+    "question_11_answer_2": "Le guerrier loyal",
+    "question_11_answer_3": "Le trickster imprévisible",
+    "question_11_answer_4": "La figure douce mais redoutable",
+    "question_11_text": "Si tu étais un héros de film, tu serais…",
+    "question_12_answer_1": "Résoudre une énigme ancienne",
+    "question_12_answer_2": "Affronter un dragon",
+    "question_12_answer_3": "Retourner une situation désespérée",
+    "question_12_answer_4": "Réunir des ennemis autour d'une table",
+    "question_12_text": "Quel type de défi t'attire le plus ?",
+    "question_1_answer_1": "Chercher des informations avant d’agir",
+    "question_1_answer_2": "Foncer tête baissée",
+    "question_1_answer_3": "Trouver une approche créative",
+    "question_1_answer_4": "Rassembler les autres pour agir ensemble",
+    "question_1_text": "Face à un défi important, ta première réaction est :",
+    "question_2_answer_1": "Ta capacité à comprendre les situations complexes",
+    "question_2_answer_2": "Ta détermination face aux obstacles",
+    "question_2_answer_3": "Ton empathie et ta connexion aux autres",
+    "question_2_answer_4": "Ton sens moral inébranlable",
+    "question_2_text": "Ta plus grande force est :",
+    "question_3_answer_1": "Le conseiller sage qui écoute",
+    "question_3_answer_2": "Le leader qui prend les décisions",
+    "question_3_answer_3": "Celui qui apporte créativité et nouveauté",
+    "question_3_answer_4": "Le médiateur qui résout les conflits",
+    "question_3_text": "Dans un groupe, tu es souvent :",
+    "question_4_answer_1": "Source de réflexion et de sagesse",
+    "question_4_answer_2": "Terrain de défis et d’aventures",
+    "question_4_answer_3": "Inspiration pour créativité et passion",
+    "question_4_answer_4": "Rappel de l’ordre naturel des choses",
+    "question_4_text": "Ta relation à la nature est :",
+    "question_5_answer_1": "Rester dans l’ignorance",
+    "question_5_answer_2": "Être lâche face au danger",
+    "question_5_answer_3": "Perdre ta liberté créative",
+    "question_5_answer_4": "Trahir tes principes",
+    "question_5_text": "Ta plus grande peur serait :",
+    "question_6_answer_1": "Profonde et réfléchie, basée sur la compréhension",
+    "question_6_answer_2": "Protectrice et loyale envers ceux que tu aimes",
+    "question_6_answer_3": "Passionnée et intense",
+    "question_6_answer_4": "Équitable et respectueuse",
+    "question_6_text": "Ton approche de l’amour et des relations :",
+    "question_7_answer_1": "Leader stratégique",
+    "question_7_answer_2": "Celui qui motive tout le monde",
+    "question_7_answer_3": "Le créatif qui casse les codes",
+    "question_7_answer_4": "Celui qui équilibre et apaise",
+    "question_7_text": "Quel rôle préfères-tu dans un travail de groupe ?",
+    "question_8_answer_1": "Une bibliothèque silencieuse",
+    "question_8_answer_2": "Une arène de combat",
+    "question_8_answer_3": "Une forêt enchantée",
+    "question_8_answer_4": "Une salle du trône",
+    "question_8_text": "Quel environnement te ressemble le plus ?",
+    "question_9_answer_1": "Tu réfléchis puis agis avec sagesse",
+    "question_9_answer_2": "Tu protèges les plus faibles par la force",
+    "question_9_answer_3": "Tu manipules pour renverser la situation",
+    "question_9_answer_4": "Tu t’indignes et cherches la paix",
+    "question_9_text": "Comment réagis-tu face à une injustice ?",
+    "result_screen_congratulations": "Félicitations !",
+    "result_screen_guardian_deity_is": "Ta divinité gardienne est :",
+    "result_screen_share_text":
+        "J'ai découvert ma divinité tutélaire dans Oracle d'Asgard : {deity} !\n\n{description}\n\nRejoignez-moi pour découvrir la vôtre !\n\n{link}",
+    "result_screen_your_profile": "Votre Profil",
+    "settings_screen_about_button": "À propos",
+    "settings_screen_fx_sound": "Effets Sonores",
+    "settings_screen_rate_app": "Noter l'application",
+    "settings_screen_reading_page_music": "Musique de Lecture",
+    "settings_screen_share_app": "Partager l'application",
+    "settings_screen_share_text":
+        "Découvrez cette super application : {appLink}",
+    "settings_screen_sound_default": "Défaut",
+    "settings_screen_sound_mute": "Silence",
+    "settings_screen_support_us_title": "Soutenez-nous",
+    "settings_screen_title": "Paramètres",
+    "snake_bonus_duration": "Les effets durent 8 secondes",
+    "snake_bonus_freeze_effect": "-30% plus lent",
+    "snake_bonus_freeze_name": "Gel",
+    "snake_bonus_ghost_effect": "Traverse les obstacles",
+    "snake_bonus_ghost_name": "Fantôme",
+    "snake_bonus_shield_effect": "Détruit les obstacles",
+    "snake_bonus_shield_name": "Bouclier",
+    "snake_bonus_speed_effect": "+30% plus rapide",
+    "snake_bonus_speed_name": "Vitesse",
+    "snake_bonus_title": "Bonus :",
+    "snake_game_over_popup_message":
+        "Jörmungandr a péri...\nScore final: {score}",
+    "snake_game_over_popup_title": "⚰️ Ragnarök !",
+    "snake_preliminary_screen_help_text":
+        "Guidez Jörmungandr, le serpent de Midgard, pour qu’il grandisse sans mordre sa propre queue, s’écraser contre les rochers ni heurter les bords du monde.",
+    "snake_preliminary_screen_start_button": "Commencer",
+    "snake_screen_error_prefix": "Erreur",
+    "snake_screen_loading": "Chargement...",
+    "snake_screen_rule_1":
+        "Faites glisser votre doigt (swipe) sur l’écran pour changer la direction du serpent.",
+    "snake_screen_rule_2":
+        "Mangez les pommes pour grandir et marquez des points.",
+    "snake_screen_rule_3":
+        "Évitez de toucher les murs, les rochers ou votre propre corps.",
+    "snake_screen_rule_4": "Les pommes dorées donnent plus de points.",
+    "snake_screen_rule_5":
+        "Les pommes pourries vous font perdre des points et ralentir.",
+    "snake_screen_rule_6":
+        "Plus votre score est élevé, plus le serpent accélère.",
+    "snake_screen_score": "Score: {score}",
+    "snake_screen_score_default": "Score: 0",
+    "snake_screen_time_seconds_suffix": "s",
+    "story_creation_of_the_world_card_1_description":
+        "Avant toute création, seul existait Ginnungagap, l’abîme infini où se faisaient face les flammes de Muspellheim et les glaces de Niflheim, opposées dans une attente silencieuse.",
+    "story_creation_of_the_world_card_1_detailed_story":
+        "Au commencement des temps, avant que n’existe aucun monde, aucune mer, aucun ciel, aucun terre, il n’y avait que le Ginnungagap - le vide béant, l’abîme primordial qui s’étendait dans une solitude infinie.\n\nCe n’était ni lumière ni ténèbres, ni chaud ni froid, mais un néant absolu où rien ne pouvait naître ni mourir, car rien n’existait encore. Ce vide colossal séparait deux royaumes aux natures opposées, comme deux forces antagonistes attendant leur confrontation cosmique.\n\nAu nord du Ginnungagap s’étendait Niflheim, le monde de glace et de brouillard éternel, d’où coulaient les onze rivières Élivágar, charriant des eaux si froides qu’elles gelaient instantanément dans le vide. Au sud brûlait Muspellheim, le royaume du feu éternel et inextinguible, gardé par le géant Surtr brandissant son épée flamboyante, dans l’attente du jour où il incendierait tous les mondes.\n\nAinsi les forces primordiales se faisaient face dans l’immensité du vide, préparant la création dans leur opposition même.",
+    "story_creation_of_the_world_card_1_title": "Ginnungagap",
+    "story_creation_of_the_world_card_2_description":
+        "Lorsque les étincelles ardentes de Muspellheim rencontrèrent les brumes glacées de Niflheim, la glace fondit en torrents d’eau primordiale, donnant naissance à l’essence de la vie.",
+    "story_creation_of_the_world_card_2_detailed_story":
+        "Pendant des éons innombrables, le feu et la glace demeurèrent séparés par l’immensité du Ginnungagap. Mais lentement, inexorablement, les étincelles ardentes de Muspellheim commencèrent à dériver vers le nord, portées par des vents cosmiques imperceptibles.\n\nLorsque ces étincelles de chaleur pure rencontrèrent les brumes glacées de Niflheim dans le cœur du vide, un phénomène extraordinaire se produisit. La glace se mit à fondre pour la première fois depuis le début des temps, libérant des torrents d’eau primordiale.\n\nCes gouttes d’eau, nées de la rencontre miraculeuse entre les extrêmes, tombèrent dans l’abîme du Ginnungagap. Là, animées par la force vitale née de cette union impossible entre le feu et la glace, elles commencèrent à grouiller d’une énergie créatrice.\n\nC’était le premier miracle de l’existence : de l’opposition entre les forces contraires naissait la possibilité même de la vie. L’eau primordiale portait en elle le germe de tout ce qui allait exister.",
+    "story_creation_of_the_world_card_2_title": "Feu et glace",
+    "story_creation_of_the_world_card_3_description":
+        "De ces eaux naquit Ymir, premier géant, colossal et chaotique, accompagné d’Audhumla, la vache nourricière. Ensemble, ils ouvrirent la voie aux dieux et aux lignées à venir.",
+    "story_creation_of_the_world_card_3_detailed_story":
+        "De l’eau primordiale, un être colossal émergea : Ymir, le premier géant, aussi connu sous le nom d’Aurgelmir. Sa chair était faite de glace fondue, ses os de roches anciennes, et ses yeux brillaient d’une lueur froide comme les étoiles naissantes.\n\nÀ côté de lui, une vache immense nommée Audhumla apparut, nourrie par les gouttes d’eau sucrée qui s’étaient formées dans le Ginnungagap. Audhumla était la source de vie pour Ymir, lui fournissant le lait nécessaire à sa survie. En léchant la glace des montagnes, elle découvrit bientôt Buri, le premier dieu, dont la descendance allait donner naissance aux Ases.\n\nAinsi naquit la première génération de géants et de dieux, marquant le début de l’histoire du monde. Ymir devint le père des géants, tandis qu’Audhumla nourrissait les êtres qui allaient façonner l’univers.",
+    "story_creation_of_the_world_card_3_title":
+        "La naissance d’Ymir et d’Audhumla",
+    "story_creation_of_the_world_card_4_description":
+        "Odin et ses frères affrontèrent Ymir, incarnation du chaos. Sa mort libéra des flots de sang qui engloutirent presque tous les géants, bouleversant à jamais l’équilibre du cosmos.",
+    "story_creation_of_the_world_card_4_detailed_story":
+        "Les dieux, conscients que Ymir représentait une menace pour l’équilibre du cosmos, décidèrent de mettre fin à son règne chaotique. Odin, Vili et Vé, les trois frères divins, s’unirent pour affronter le géant primordial.\n\nDans une bataille épique, ils parvinrent à tuer Ymir. Son corps colossal s’effondra dans le Ginnungagap, et son sang se mit à couler en torrents. Ce sang inonda presque tous les autres géants, les noyant dans un océan de chaos.\n\nMais les dieux ne se contentèrent pas de tuer Ymir. Ils utilisèrent son corps pour façonner le monde : sa chair devint la terre, ses os les montagnes, son sang les mers et les rivières, et son crâne le ciel. Ainsi, de la mort du géant naquit l’univers tel que nous le connaissons.",
+    "story_creation_of_the_world_card_4_title": "La mort d’Ymir",
+    "story_creation_of_the_world_card_5_description":
+        "Du corps d’Ymir, les dieux forgèrent l’univers : la terre de sa chair, les montagnes de ses os, les mers de son sang, et le ciel de son crâne, donnant forme au monde des hommes, Midgard.",
+    "story_creation_of_the_world_card_5_detailed_story":
+        "Les dieux, après avoir vaincu Ymir, se mirent à l’œuvre pour façonner le monde à partir de son corps colossal. Ils commencèrent par diviser son corps en deux moitiés égales, créant ainsi la terre et le ciel.\n\nLa chair d’Ymir devint la terre fertile, couverte de forêts luxuriantes et de plaines verdoyantes. Ses os furent brisés et érigés en montagnes majestueuses, formant les chaînes montagneuses qui traversent le monde. Son sang, qui avait inondé les géants, fut canalisé pour former les mers profondes et les rivières sinueuses.\n\nLe crâne d’Ymir fut soulevé pour créer le ciel, soutenu par quatre nains représentant les points cardinaux : Nord, Sud, Est et Ouest. Les étoiles furent placées dans le ciel comme des lanternes scintillantes, tandis que la lune et le soleil furent créés pour réguler le temps.\n\nAinsi naquit Midgard, le monde des hommes, au centre de l’univers, entouré par les neuf mondes interconnectés. Les dieux avaient façonné un cosmos harmonieux à partir du chaos primordial.",
+    "story_creation_of_the_world_card_5_title": "La création du monde",
+    "story_creation_of_the_world_title": "La naissance du monde",
+    "story_fenrir_chained_card_1_description":
+        "Fenrir, le loup monstrueux fils de Loki, est accueilli à Asgard pour être surveillé de près. Bien qu’encore jeune, il inspire déjà la terreur par sa taille et son appétit grandissant.",
+    "story_fenrir_chained_card_1_detailed_story":
+        "Fenrir était le fils de Loki et de la géante Angrboda, une créature née des unions interdites entre les dieux et les forces du chaos. Dès sa naissance, le loup gigantesque manifestait une nature sauvage et une force qui dépassait l’entendement.\n\nConscients du danger qu’il représentait selon les sinistres prophéties des Nornes, les dieux prirent une décision audacieuse : plutôt que de le bannir ou de le tuer, ils décidèrent de l’élever à Asgard pour mieux le surveiller et peut-être l’apprivoiser.\n\nMais Fenrir grandissait de jour en jour, et sa taille comme sa férocité croissaient à un rythme effrayant. Ses yeux jaunes brillaient d’une intelligence inquiétante, et ses crocs acérés pouvaient broyer les os les plus solides. Seul Tyr, le courageux dieu de la guerre, osait s’approcher de la bête pour la nourrir, gagnant ainsi sa confiance fragile.",
+    "story_fenrir_chained_card_1_title": "Fenrir élevé par les dieux",
+    "story_fenrir_chained_card_2_description":
+        "Les dieux inventent un jeu pour tester la force de Fenrir, mais ni Leyding ni Dromi, les chaînes forgées par les nains, ne résistent : il les brise d’un simple élan de ses muscles.",
+    "story_fenrir_chained_card_2_detailed_story":
+        "Quand Fenrir devint si grand qu’il dominait même les plus imposants des dieux, la peur s’installa à Asgard. Les prophéties annonçaient qu’il dévorerait Odin lors du Ragnarök, et sa puissance grandissante rendait cette menace de plus en plus réelle.\n\nLes dieux décidèrent alors de l’enchaîner. Ils présentèrent cela comme un jeu, un défi pour tester sa force légendaire. Fenrir, encore naïf malgré sa taille, accepta de se laisser lier par Leyding, la plus solide des chaînes forgées par les nains.\n\nMais d’un simple mouvement d’épaules, le loup brisa Leyding comme un vulgaire fil. Les maillons de fer volèrent dans toutes les directions. Les dieux, feignant l’admiration, tentèrent alors avec Dromi, une chaîne encore plus massive et résistante.\n\nFenrir la réduisit en miettes d’un seul élan, révélant une force si surnaturelle que les dieux comprirent qu’aucune chaîne ordinaire ne pourrait jamais retenir cette créature du chaos.",
+    "story_fenrir_chained_card_2_title": "Les chaînes échouent",
+    "story_fenrir_chained_card_3_description":
+        "Les dieux commandent aux nains de forger Gleipnir, un lien magique tissé d’éléments impossibles. Il ressemble à un ruban de soie mais enferme une puissance surnaturelle.",
+    "story_fenrir_chained_card_3_detailed_story":
+        "Comprenant qu’aucune force brute ne pourrait venir à bout de Fenrir, Odin envoya secrètement un messager chez les nains de Svartalfheim. Ces maîtres forgerons, capables de créer des merveilles impossibles, reçurent une commande extraordinaire.\n\nIls devaient créer Gleipnir, un lien magique tissé à partir de six éléments impossibles à trouver : le bruit des pas d’un chat, la barbe d’une femme, les racines d’une montagne, les tendons d’un ours, le souffle d’un poisson et la salive d’un oiseau.\n\nCes ingrédients mystiques, invisibles et intangibles, furent assemblés par les nains dans leurs forges enchantées. Le résultat était paradoxal : Gleipnir ressemblait à un simple ruban de soie, fin et lisse au toucher, mais il contenait une puissance magique capable de lier les forces les plus destructrices de l’univers.\n\nQuand les dieux reçurent cette chaîne miraculeuse, ils surent qu’ils tenaient enfin l’arme capable d’entraver le loup du destin.",
+    "story_fenrir_chained_card_3_title": "Gleipnir",
+    "story_fenrir_chained_card_4_description":
+        "Fenrir, méfiant face à cette chaîne étrange, accepte de se laisser lier uniquement si un dieu place sa main dans sa gueule en gage de sincérité et de bonne foi.",
+    "story_fenrir_chained_card_4_detailed_story":
+        "Quand les dieux présentèrent Gleipnir à Fenrir, le loup, désormais méfiant après les tentatives précédentes, examina attentivement ce lien étrange. Malgré son apparence fragile, quelque chose dans cette chaîne éveillait ses instincts les plus profonds.\n\nCette chaîne me semble suspecte, dit Fenrir en reniflant Gleipnir. Elle paraît faible, mais je sens en elle une magie puissante. Si c’est encore un de vos jeux, pourquoi ne pas utiliser des chaînes ordinaires ?\n\nLes dieux tentèrent de le rassurer, prétendant que c’était justement parce qu’il avait brisé les chaînes précédentes qu’ils voulaient tester cette nouvelle création des nains.\n\nMais Fenrir posa ses conditions d’une voix grave qui fit trembler les fondations d’Asgard : J’accepte de me laisser enchaîner avec ce lien, mais seulement si l’un d’entre vous place sa main dans ma gueule en gage de bonne foi. Ainsi, si vous me trompez, au moins l’un de vous paiera le prix de cette trahison.",
+    "story_fenrir_chained_card_4_title": "Le défi",
+    "story_fenrir_chained_card_5_description":
+        "Tyr, le seul à avoir gagné la confiance du loup, place sa main dans sa gueule. Lorsque Fenrir réalise la ruse, il mord et arrache la main du dieu du courage.",
+    "story_fenrir_chained_card_5_detailed_story":
+        "Un lourd silence tomba sur l’assemblée des dieux. Tous savaient qu’ils s’apprêtaient à trahir Fenrir, et que celui qui placerait sa main dans la gueule du loup la perdrait à coup sûr. Personne n’osait se porter volontaire.\n\nSeul Tyr, le dieu du courage et de l’honneur, s’avança. Il était le seul à avoir nourri Fenrir, le seul en qui le loup avait encore confiance. Sans hésitation, fidèle à sa réputation de bravoure, il tendit sa main droite et la plaça entre les mâchoires redoutables de la bête.\n\nGleipnir fut alors attaché autour des pattes de Fenrir. Le loup tenta de le briser comme les chaînes précédentes, bandant tous ses muscles, tirant de toutes ses forces. Mais plus il luttait, plus le lien magique se resserrait.\n\nRéalisant qu’il avait été dupé et qu’il resterait prisonnier pour l’éternité, Fenrir leva ses yeux jaunes vers Tyr. Un regard de tristesse et de rage mêlées passa entre le dieu et la bête. Puis, d’un coup sec, Fenrir referma sa mâchoire, arrachant la main de Tyr dans un craquement sinistre.\n\nFenrir fut ensuite traîné vers une île déserte et attaché à un rocher au plus profond de la terre, où il demeure enchaîné jusqu’au Ragnarök, le jour où il brisera enfin ses liens pour dévorer Odin.\n\nAinsi Tyr perdit-il sa main, mais gagna l’éternelle reconnaissance des dieux pour son sacrifice héroïque qui sauva les neuf mondes... du moins temporairement.",
+    "story_fenrir_chained_card_5_title": "Le sacrifice de Tyr",
+    "story_fenrir_chained_title": "Fenrir Enchaîné",
+    "story_loading_card_description":
+        "Veuillez patienter pendant le chargement du jeu.",
+    "story_loading_card_detailed_story":
+        "L'histoire est en cours de chargement. Cela peut prendre quelques instants en fonction de votre connexion Internet. Merci de votre patience.",
+    "story_loading_card_title": "Chargement...",
+    "story_loading_title": "Chargement de l'histoire",
+    "story_mead_of_poetry_card_1_description":
+        "Deux nains transforment le sang de Kvasir, être né de la sagesse, en un breuvage d’inspiration divine.",
+    "story_mead_of_poetry_card_1_detailed_story":
+        "Lorsque la paix fragile entre les Æsir et les Vanes fut scellée, les divins mêlèrent leurs bouches et de ce pacte naquit Kvasir, être de connaissance pure. Kvasir parcourait les mondes, répondant aux questions des dieux et des hommes; sa parole était clairvoyance, sa respiration un chant. Mais l’avarice vibra dans le cœur de deux nains, Fjalar et Galar, assoiffés de pouvoir. Par la ruse, ils attirèrent Kvasir dans une caverne, le tuèrent et recueillirent son sang. Dans des chaudrons massifs, ils mêlèrent ce sang au miel le plus pur et versèrent leurs runes comme on jette des semences. Le liquide prit une teinte dorée, miroitant d’un éclat qui semblait contenir des vers et des prophéties. Les nains comprirent vite que ce n’était plus qu’un breuvage: c’était la source de la poésie, la sève des mots et des savoirs. Ils nommèrent les cuves Óðrerir, Boðn et Són, et gardèrent jalousement leur trésor, ignorant que ce vol allait déclencher convoitise et tragédie parmi géants et dieux. Ainsi naquit, dans la violence et la perfidie, l’essence même de l’inspiration.",
+    "story_mead_of_poetry_card_1_title": "Le Sang de Kvasir",
+    "story_mead_of_poetry_card_2_description":
+        "Le géant Suttungr s’empare de l’hydromel et le cache au cœur d’une montagne, sous la garde de sa fille Gunnlöð.",
+    "story_mead_of_poetry_card_2_detailed_story":
+        "Découvrant la trahison des nains et le vol de la sève de Kvasir, la colère éclata. Le père de la victime, outragé, chercha des comptes. Fjalar et Galar, acculés, offrirent en rançon leur trésor: la boisson des vers et des visions. Le géant Suttungr, homme de haute stature et d’appétit pour les merveilles, accepta sans hésiter. Il transporta les trois cuves jusque dans la montagne de Hnitbjörg, creusant une chambre si profonde que même la lumière hésitait à y descendre. Là, au milieu de stalactites comme des dents de pierre, il grava des runes de scellement et posa autour d’elles défenses et enchantements. Pour garder le don qui rendait sage, il confia la veille à sa fille Gunnlöð, jeune géante au regard de miel, douce et farouche à la fois. Gunnlöð passa des jours et des nuits à chanter des gardiens et à goûter parfois l’arôme qui flottait: l’hydromel diffusait une aura presque vivante. Les vagues de désir et de solitude la firent étroite de cœur; elle devint la clef vivante d’un trésor qui sonnait comme promesse et malédiction. Ainsi le nectar des mots dormait, surveillé par l’amour filial et l’orgueil d’un géant.",
+    "story_mead_of_poetry_card_2_title": "Le Trésor de Suttungr",
+    "story_mead_of_poetry_card_3_description":
+        "Odin se déguise et use de ruse et d’un foret enchanté pour percer la montagne et atteindre l’hydromel.",
+    "story_mead_of_poetry_card_3_detailed_story":
+        "Le grand Odin, assoiffé de savoir et de pouvoir, apprit la cachette de l’hydromel et n’eut d’autre envie que d’en boire. Sous le voile de Bölverk, nom d’emprunt et masque de labeur, il se présenta chez Baugi, le frère de Suttungr, et offrit ses services. Par des paroles savantes et des gestes de patience, il obtint l’aide du robuste Baugi, qui, flatté, accepta d’user d’un foret magique, Rati, pour percer la roche. La tarière grinça et la pierre craquela; le chant du fer contre la pierre résonna comme un présage. Quand l’air enfin passa, Odin se glissa dans la faille — non en force, mais en ruse: il se transforma en serpent et ramper par l’ouverture, frôlant la pierre chaude. À l’intérieur, la lueur des cuves se dessinait comme l’aube d’un monde nouveau. Il savait que la sagesse ne se rendrait pas sans prix, et qu’il lui faudrait tromper l’amour et le devoir pour s’emparer du nectar des dieux. Pourtant, aucun acte n’était pour lui trop vil si l’enjeu était la parole immortelle.",
+    "story_mead_of_poetry_card_3_title": "La Ruse d’Odin",
+    "story_mead_of_poetry_card_4_description":
+        "Odin charme Gunnlöð et obtient de goûter trois fois à l’hydromel, renversant le destin du trésor.",
+    "story_mead_of_poetry_card_4_detailed_story":
+        "Dans la pénombre dorée de la caverne, Odin retrouva Gunnlöð. La fille du géant, gardienne à la fois farouche et vulnérable, vivait dans le rythme des cuves: elle écoutait le murmure de l’hydromel comme d’autres écoutent des prières. Odin parla, non pas du ton du puissant, mais du ton du voyageur qui sait écouter: il conta la solitude des grands cieux, le poids de la connaissance et la beauté des vers. Gunnlöð, touchée par ces paroles et par une tendresse inattendue, offrit trois nuits d’hospitalité. À chaque aube, elle laissa le visiteur goûter la coupe; à la troisième nuit, le dieu, en maître de ruse, but toute la cuve d’un trait, puis la suivante, puis la troisième. Le nectar embrasa son esprit: il vit les chants futurs, les paroles qui feraient frissonner les mondes. Gunnlöð, trahie, vit son trésor quitter le rocher, transporté par la silhouette d’un oiseau sacré. La douleur de l’abandon se mêla à la honte, mais le destin avait déjà basculé: la poésie changeait définitivement de maître.",
+    "story_mead_of_poetry_card_4_title": "La Séduction de Gunnlöð",
+    "story_mead_of_poetry_card_5_description":
+        "Transformé en oiseau immense, Odin s’évade avec l’hydromel tandis que Suttungr le poursuit à travers la tempête.",
+    "story_mead_of_poetry_card_5_detailed_story":
+        "Au moment où les cuves furent vidées, Odin se métamorphosa: ailes et plumes jaillirent de son dos, et il prit la forme d’un grand oiseau de proie, silhouette noire découpée sur la lueur de la caverne. Il bondit hors de la montagne, l’hydromel coulant en gouttes d’or de son bec, traçant des filets de lumière dans la pluie. Alerté par les cris de sa fille, Suttungr prit à son tour la forme d’un monstre ailé et fondit à la poursuite. Les deux entités déchirèrent les nuages; les éclairs zébrèrent leur course, et le ciel résonna comme une forge. Les ailes frappaient l’air comme des voiles de navires en furie, et la distance entre la sagesse et la colère se mesurait en battements d’ailes. Les terres en dessous virent deux ombres colossales : l’une portait le don des dieux, l’autre la colère d’un père privé. La fuite d’Odin fut une épopée qui suspendit le monde entre admiration et effroi.",
+    "story_mead_of_poetry_card_5_title": "La Fuite de l’Aigle",
+    "story_mead_of_poetry_card_6_description":
+        "Odin rapporte l’hydromel à Asgard, mais quelques gouttes tombent aux mortels, donnant naissance à la poésie humaine.",
+    "story_mead_of_poetry_card_6_detailed_story":
+        "Parvenu enfin au seuil d’Asgard, l’oiseau se posa dans la grande salle des dieux et reprit forme divine: Odin, porteur d’un savoir brûlant et d’un secret volé. Il cracha l’hydromel dans des coupes d’or; les dieux burent et la poésie fit vibrer leurs âmes. Les halls résonnèrent de chants nouveaux, d’inspirations imprévues, de constellations verbales qui se tissèrent comme des toiles. Mais la hâte de la fuite avait laissé échapper quelques gouttes dorées qui tombèrent en pluie sur la terre des hommes. Ces perles du destin rencontrèrent des lèvres mortelles: certains en firent des poèmes qui défiaient les dieux, d’autres n’obtinrent que des illusions ou la folie. Ainsi la poésie naquit pour les dieux et pour les hommes: merveille et malédiction à la fois, fruit d’un larcin divin et d’un désir irrépressible de savoir. Depuis, le monde porte en lui ce mélange de lumière et de chute.",
+    "story_mead_of_poetry_card_6_title": "Le Don et la Perte",
+    "story_mead_of_poetry_title": "L’Hydromel de la Poésie",
+    "story_the_death_of_baldr_card_1_description":
+        "Baldr, dieu aimé de tous, est hanté par des songes prophétiques annonçant sa mort. Sa lumière vacille, et les dieux, inquiets, sentent qu’un destin sombre et inéluctable approche.",
+    "story_the_death_of_baldr_card_1_detailed_story":
+        "Il fut un temps, lointain et sacré, où les dieux arpentaient les cieux d’Asgard et régnaient sur les neuf mondes. Parmi eux, nul n’était plus aimé que Baldr, le fils rayonnant d’Odin et de Frigg. Il était la lumière incarnée, la beauté sans faille, un dieu si pur que même les plus sombres créatures le respectaient. Partout où il marchait, la paix s’installait, les rires naissaient, et les cœurs se réchauffaient.\n\nMais un jour, cette clarté vacilla. Baldr fut envahi, nuit après nuit, par des songes noirs, des visions terrifiantes et claires comme des prophéties. Il se voyait périr, transpercé par une arme inconnue, et les échos de sa mort retentissaient jusque dans les racines d’Yggdrasil. Ces cauchemars ne le quittaient plus, et il les rapportait aux siens, le visage pâle, l’âme ébranlée.\n\nLes dieux, eux, ne rirent pas. Car les rêves de Baldr n’étaient point de simples illusions. Ils portaient en eux la vérité crue de l’avenir. Un frisson parcourut les couloirs dorés du palais des Ases. Car si Baldr devait périr… alors, c’était le monde lui-même qui s’apprêtait à sombrer.",
+    "story_the_death_of_baldr_card_1_title": "Cauchemars de Baldr",
+    "story_the_death_of_baldr_card_2_description":
+        "Pour sauver son fils, Frigg obtient des serments de toutes les choses du monde afin qu’aucune ne blesse Baldr. Mais elle néglige le gui, frêle et discret, croyant ce végétal trop insignifiant.",
+    "story_the_death_of_baldr_card_2_detailed_story":
+        "Frigg, la reine des cieux, ne pouvait tolérer cette menace. Son amour pour Baldr était infini, et l’idée même de le voir disparaître lui était plus insupportable que mille morts. Elle se mit donc en route, portée par la détresse et la détermination.\n\nÀ travers les vents glacés de Niflheim, les terres brûlantes de Muspellheim, les forêts profondes d’Alfheim jusqu’aux abysses de Helheim, elle fit prêter serment à toutes choses existantes. Aux pierres, de ne point heurter son fils. À l’eau, de ne point le noyer. Au feu, de ne pas le brûler. Aux animaux, de ne jamais l’attaquer. À chaque plante, à chaque métal, à chaque élément, elle extorqua une promesse sacrée de ne jamais nuire à Baldr.\n\nLorsque son œuvre fut achevée, Asgard respira de nouveau. Plus rien ne semblait pouvoir blesser le dieu bien-aimé. Mais, dans sa précipitation, Frigg jugea sans importance une plante modeste et discrète, un végétal insignifiant suspendu aux branches des vieux chênes : le gui. Trop jeune, trop frêle, pensa-t-elle. Il ne saurait blesser qui que ce soit.\n\nEt ainsi, elle passa son chemin.",
+    "story_the_death_of_baldr_card_2_title": "Le serment de Frigg",
+    "story_the_death_of_baldr_card_3_description":
+        "Loki découvre la faille : le gui n’a pas prêté serment. Déguisé en vieille femme, il arrache la vérité à Frigg et cueille cette plante fragile, en la transformant en arme d’un destin cruel.",
+    "story_the_death_of_baldr_card_3_detailed_story":
+        "Là où les dieux voient l’oubli, Loki voit une ouverture. Le dieu du chaos, de la ruse et de la discorde, toujours à l’affût d’un secret ou d’une faille, sentit dans l’air la possibilité d’un bouleversement.\n\nPrenant l’apparence d’une vieille femme, il s’introduisit auprès de Frigg, lui tenant compagnie comme une âme curieuse et bienveillante. Il sut poser les bonnes questions, au bon moment, avec cette douceur trompeuse qui lui était coutumière.\n\n« Toutes les choses du monde ont-elles promis de protéger Baldr ? demanda-t-il d’une voix chevrotante.\n\n— Toutes, répondit Frigg avec un sourire fatigué. Toutes… sauf peut-être une. Une simple pousse de gui, qui pend aux arbres à l’ouest du Valhalla. Elle est si tendre, si jeune, si inoffensive... »\n\nCe fut tout ce que Loki avait besoin d’entendre. Il remercia, s’inclina, puis s’évanouit dans les ombres. Ses pas le menèrent aussitôt aux chênes sacrés, là où le gui verdissait doucement au vent d’automne. D’un geste calculé, il le cueillit, sentant en lui la clef d’un destin qu’il allait briser. Car même le plus fragile des êtres, entre les mains du mal, peut devenir une arme fatale.",
+    "story_the_death_of_baldr_card_3_title": "Le gui",
+    "story_the_death_of_baldr_card_4_description":
+        "Loki façonne le gui en flèche et la remet à Höd, le frère aveugle de Baldr. Sous prétexte d’un jeu innocent, il guide sa main, faisant de lui l’instrument involontaire d’un fratricide tragique.",
+    "story_the_death_of_baldr_card_4_detailed_story":
+        "De retour dans son antre, Loki se mit à l’ouvrage. Il façonna le gui avec soin, lui donnant la forme d’une flèche fine et souple. Elle n’avait rien d’impressionnant, et pourtant, elle vibrait d’un pouvoir sinistre. C’était la seule chose au monde qui pouvait toucher Baldr, et Loki le savait.\n\nBientôt, arriva le jour des jeux en Asgard. Dans la grande plaine du palais, les dieux s’étaient rassemblés pour s’amuser d’un étrange divertissement : ils lançaient des armes, des pierres, des lances, contre Baldr, qui restait debout sans la moindre égratignure. Car rien, pensaient-ils, ne pouvait plus lui faire de mal.\n\nC’est alors que Loki s’approcha de Höd, le frère aveugle de Baldr, silencieux et solitaire à l’écart de la fête.\n\n« Pourquoi ne participez-vous pas, noble Höd ? murmura-t-il avec douceur. Votre frère mérite aussi un hommage de votre part. Voici une flèche... laissez-moi guider votre bras. »\n\nHöd, privé de la vue mais non du cœur, accepta sans malice. Il n’avait aucun soupçon, aucune raison de douter. Il tendit son arc, sentit la main de Loki poser la flèche entre ses doigts.\n\nEt tira.",
+    "story_the_death_of_baldr_card_4_title": "La flèche",
+    "story_the_death_of_baldr_card_5_description":
+        "La flèche en gui frappe Baldr en plein cœur. Le dieu lumineux s’effondre, mortellement atteint. Asgard plonge dans le silence et le désespoir, tandis que Loki s’éclipse, porteur du chaos.",
+    "story_the_death_of_baldr_card_5_detailed_story":
+        "Le silence s’abattit avant même que la flèche n’atteigne sa cible. Elle fendit l’air, presque invisible, presque irréelle. Puis elle se planta dans la poitrine de Baldr avec une précision terrible.\n\nIl poussa un cri, un seul. Un son bref, déchirant, qui glaça le sang des immortels. Puis il s’effondra, comme frappé par la foudre.\n\nUn silence de mort enveloppa Asgard. Les rires cessèrent, les sourires s’éteignirent. L’incompréhension précéda l’horreur, qui bientôt se mua en désespoir. Frigg accourut, tomba à genoux, enlaça le corps inerte de son fils, hurlant un chagrin que même les étoiles entendirent.\n\nHöd, découvrant ce qu’il avait fait, laissa tomber son arc et sanglota, inconsolable. Il n’avait été que l’instrument, le jouet d’un esprit malin. Mais cela n’ôta rien à la tragédie.\n\nEt Loki, maître de la discorde, s’éclipsa dans les ombres, le sourire aux lèvres.\n\nBaldr était mort. Et avec lui, une part irremplaçable de la lumière du monde. Ce jour-là, les dieux comprirent que le crépuscule approchait. Le fil du destin avait été tranché. Ragnarök, le crépuscule des dieux, s’était mis en marche.",
+    "story_the_death_of_baldr_card_5_title": "La mort de Baldr",
+    "story_the_death_of_baldr_title": "La Mort de Baldr",
+    "story_the_forging_of_mjolnir_card_1_description":
+        "Par pur amusement, Loki coupe les cheveux dorés de Sif, épouse de Thor, connus pour leur éclat semblable à l’or. Ce geste cruel provoque la honte de Sif et la colère grondante de Thor.",
+    "story_the_forging_of_mjolnir_card_1_detailed_story":
+        "Dans les temps anciens, Loki, dieu de la malice et des tours perfides, s’ennuyait cruellement. Pour assouvir son besoin de chaos, il décida de s’en prendre à Sif, l’épouse de Thor, réputée pour sa beauté rayonnante et surtout pour ses cheveux d’or qui semblaient capturer la lumière du soleil. Alors qu’elle dormait paisiblement, Loki s’approcha silencieusement et, avec un sourire narquois, coupa chaque mèche précieuse. Lorsque Sif s’éveilla et découvrit sa chevelure mutilée, son désespoir résonna dans tout Asgard. Thor, découvrant l’affront infligé à son épouse, entra dans une fureur si terrible que la terre trembla sous ses pas. Il jura de faire payer à Loki cet outrage. Les dieux eux-mêmes redoutaient la tempête de colère qui menaçait de s’abattre sur le coupable.",
+    "story_the_forging_of_mjolnir_card_1_title": "Cheveux de Sif",
+    "story_the_forging_of_mjolnir_card_2_description":
+        "Découvrant l’humiliation de Sif, Thor saisit Loki et le menace de le briser en mille morceaux s’il ne trouve pas une solution. Terrifié, Loki promet d’offrir à Sif une chevelure encore plus belle.",
+    "story_the_forging_of_mjolnir_card_2_detailed_story":
+        "Thor, ivre de rage, attrapa Loki par la gorge et le souleva comme une plume. Ses yeux flamboyaient comme la foudre, et sa voix, grondante, résonnait dans les halls d’Asgard : « Misérable filou ! Tu as osé porter atteinte à l’honneur de mon épouse ! Je vais t’écraser comme la vermine que tu es si tu n’effaces pas ton crime ! » Pris de panique, Loki réalisa qu’il avait été trop loin. Il tenta de se débattre, mais la poigne du dieu du tonnerre l’écrasait. Alors, avec une ruse feinte, il supplia Thor de lui laisser une chance de réparer son forfait. « J’apporterai à Sif une chevelure encore plus splendide que la précédente, je le jure sur mon sang ! » promit-il. Thor, bien qu’encore furieux, accepta, mais lui fit comprendre que la moindre déception lui coûterait tous ses os. Le compte à rebours de Loki venait de commencer.",
+    "story_the_forging_of_mjolnir_card_2_title": "Menace de Thor",
+    "story_the_forging_of_mjolnir_card_3_description":
+        "Pour tenir sa promesse, Loki descend dans Svartalfheim, le royaume des nains forgerons. Il supplie Brokkr et Sindri de créer des trésors divins capables de calmer la colère de Thor et des dieux.",
+    "story_the_forging_of_mjolnir_card_3_detailed_story":
+        "Conscient qu’il ne pouvait s’en sortir seul, Loki descendit dans les profondeurs sombres de Svartalfheim, le royaume des nains. Là régnaient Brokkr et Sindri, deux frères forgerons dont l’habileté dépassait celle de tous les artisans des neuf mondes. Dans leurs forges embrasées, ils façonnaient les merveilles les plus précieuses, du métal le plus pur, nourri par le feu éternel. Loki, rusé, leur exposa son dilemme : il devait offrir à Sif une chevelure d’or vivante et à Thor un présent digne de sa grandeur. Intrigués et flattés, les nains acceptèrent le défi. Ils promirent de forger non seulement une nouvelle chevelure pour Sif, mais aussi des trésors destinés aux dieux eux-mêmes. Leurs marteaux résonnèrent dans la pénombre, et des étincelles jaillirent comme des étoiles naissantes. Loki, impatient, observait en silence, déjà prêt à semer ses ruses pour tirer plus qu’il n’avait demandé.",
+    "story_the_forging_of_mjolnir_card_3_title": "Les nains forgerons",
+    "story_the_forging_of_mjolnir_card_4_description":
+        "Sous le marteau des nains naissent des trésors : Draupnir, Gungnir et enfin Mjöllnir, le marteau de Thor. Loki tente de saboter l’œuvre, mais le marteau, bien que court, est redoutable.",
+    "story_the_forging_of_mjolnir_card_4_detailed_story":
+        "Brokkr et Sindri se mirent à l’ouvrage, le visage noirci par la chaleur de la forge, le cœur gonflé de fierté. Ils commencèrent par créer Draupnir, l’anneau d’or magique qui produisait huit nouveaux anneaux tous les neuf jours, puis Gungnir, la lance d’Odin qui ne manquait jamais sa cible. Mais leur plus grand chef-d’œuvre fut Mjöllnir, le marteau destiné à Thor. Loki, craignant qu’un tel trésor ne rende les dieux trop puissants, tenta de saboter leur travail. Il se transforma en mouche et piqua Brokkr à plusieurs reprises pour briser sa concentration. Le forgeron, bien qu’endurci, sursauta légèrement, et le manche du marteau se retrouva plus court qu’il ne devait l’être. Malgré cela, Mjöllnir naquit, un marteau si puissant qu’il pouvait convoquer la foudre, pulvériser les montagnes et toujours revenir à la main de son maître. Même imparfait, il surpassait tout autre arme jamais forgée.",
+    "story_the_forging_of_mjolnir_card_4_title": "Création de Mjöllnir",
+    "story_the_forging_of_mjolnir_card_5_description":
+        "Les trésors sont présentés aux dieux. Thor reçoit Mjöllnir, merveille de puissance. Malgré son manche court, il devient l’arme sacrée qui fera trembler géants et ennemis d’Asgard.",
+    "story_the_forging_of_mjolnir_card_5_detailed_story":
+        "Lorsque les trésors furent présentés aux dieux, tous furent émerveillés. Odin contempla Draupnir et Gungnir, comprenant qu’ils renforceraient son pouvoir et sa gloire. Mais le moment le plus attendu fut celui où Thor s’empara de Mjöllnir. Le marteau vibra dans sa main, dégageant une puissance brute qui fit frémir l’air autour de lui. Thor sentit aussitôt que cette arme deviendrait l’instrument de sa grandeur et la terreur de ses ennemis. Certes, le manche était trop court, mais sa force surpassait tout ce que l’on pouvait imaginer. Les dieux décidèrent que Loki avait accompli sa promesse, bien qu’à contrecœur et avec ses habituelles manigances. Thor pardonna à demi au filou, préférant célébrer l’acquisition d’une arme qui assurerait la protection d’Asgard contre les géants. Mjöllnir devint dès ce jour le symbole du pouvoir de Thor et l’un des trésors les plus sacrés du panthéon nordique.",
+    "story_the_forging_of_mjolnir_card_5_title": "Offrande à Thor",
+    "story_the_forging_of_mjolnir_title": "La forge de Mjöllnir",
+    "story_the_punishment_of_loki_card_1_description":
+        "Après la mort de Baldr, trahi par la ruse de Loki, le fauteur de troubles s’enfuit, changeant sans cesse de forme et se cachant dans une cabane aux quatre horizons, redoutant la vengeance des dieux.",
+    "story_the_punishment_of_loki_card_1_detailed_story":
+        "Lorsque Baldr, le dieu aimé de tous, fut frappé par la flèche guidée par la ruse de Loki, un silence funèbre s’abattit sur Asgard. Les éclats de rire habituels de Loki furent remplacés par un cœur battant la peur et l’orgueil. Pressentant la colère des Ases, il changea de forme : serpent glissant entre les pierres des rivières, oiseau solitaire battant des ailes au-dessus des falaises escarpées, vieillard au regard fuyant. Chaque transformation n’était qu’une feinte contre le destin, et pourtant, même dans ses pires déguisements, son crime brillait comme une lumière sombre que nul ne pouvait éteindre. Il s’installa dans une vallée reculée, bâtissant une cabane étrange aux quatre portes ouvertes sur l’horizon, pour guetter chaque menace. Les nuits étaient longues et glaciales, et assis devant son feu, Loki rumina ses pensées : ruse contre loyauté, liberté contre fatalité. Le vent portait le murmure des pas d’Odin et des Ases, et chaque craquement dans la forêt résonnait comme l’écho d’une vengeance imminente. La fuite n’était qu’un sursis fragile, et le filet du destin se resserrait inexorablement autour du dieu changeant, comme une ombre prête à l’engloutir.",
+    "story_the_punishment_of_loki_card_1_title":
+        "La fuite du fauteur de troubles",
+    "story_the_punishment_of_loki_card_2_description":
+        "Sous la direction d’Odin, les Ases et leurs alliés jurent que nul recoin du cosmos ne servira de refuge à Loki. La nature elle-même devient leur alliée dans une chasse inéluctable et implacable.",
+    "story_the_punishment_of_loki_card_2_detailed_story":
+        "Dans la grande salle d’assemblée d’Asgard, les visages des Ases étaient marqués non par la colère mais par une détermination glaciale. Odin, le Père de Tout, leva son unique œil vers le ciel, et jura que Loki ne trouverait aucun refuge sous la voûte du monde. La traque commença : les faucons d’Odin planèrent au-dessus des forêts, les loups de Fenrir flairèrent chaque piste dans la neige, et les guerriers d’Asgard sillonnèrent vallées et montagnes. Même les Vanes, alliés depuis longtemps des Ases, prêtèrent leurs dons pour retrouver le traître. La nature elle-même semblait conspirer contre Loki : chaque pierre roulait sous ses pas, chaque souffle de vent portait son odeur, chaque rivière reflétait sa fuite éperdue. Les jours et les nuits se succédaient, mais la certitude grandissait : nul ne peut échapper éternellement à ceux qu’il a trahis. La traque ne ressemblait plus à une chasse ordinaire, mais à un châtiment cosmique, où chaque recoin du monde participait à la justice divine. La vengeance était inscrite dans l’ordre même des choses, et les pas des chasseurs divins faisaient vibrer la terre, comme si les neuf royaumes tout entiers retenaient leur souffle.",
+    "story_the_punishment_of_loki_card_2_title": "La traque des dieux",
+    "story_the_punishment_of_loki_card_3_description":
+        "Sous la forme d’un saumon argenté, Loki tente d’échapper à ses poursuivants, mais le filet tissé par les dieux se resserre. Thor, d’une poigne infaillible, l’arrache aux flots et le livre à la justice divine.",
+    "story_the_punishment_of_loki_card_3_detailed_story":
+        "Poussé à bout, Loki se glissa dans une rivière glaciale et prit la forme d’un saumon aux écailles étincelantes, réfléchissant la lueur froide de la lune. Bondissant de rocher en rocher, il espérait semer ses poursuivants, mais les Ases, armés de la sagesse d’Odin, avaient déjà préparé un filet colossal, tissé de cordes enchantées et si vaste qu’il semblait englober toute la vallée. Les dieux descendirent le courant, resserrant leur piège avec la patience des chasseurs qui savent que la proie ne peut échapper à l’inévitable. Le saumon bondit hors de l’eau, muscles tendus et flancs étincelants, tentant un dernier effort désespéré pour s’échapper. Mais Thor, d’une poigne divine, l’attrapa par la queue et le projeta sur la berge. Le filet se referma sur lui comme une toile de destin inéluctable. Reprenant sa forme humaine, Loki se retrouva entouré de visages sévères, les yeux d’Odin brûlant de jugement, ceux de Thor emplis de force et de colère, et ceux des autres Ases fixant son destin. La défiance brillait encore dans ses yeux, mais derrière cette flamme, l’ombre de la peur s’insinuait insidieusement. Son pouvoir de transformation avait été vaincu, et il comprit que la justice des dieux ne faillirait jamais.",
+    "story_the_punishment_of_loki_card_3_title": "La capture au filet",
+    "story_the_punishment_of_loki_card_4_description":
+        "Les dieux rappellent ses crimes et décident d’un châtiment éternel. Loki verra sa descendance brisée, et de ses propres fils naîtront les chaînes qui l’attacheront, scellant un sort cruel et sans retour.",
+    "story_the_punishment_of_loki_card_4_detailed_story":
+        "Enchaîné devant les Ases, Loki entendit les accusations tomber comme des marteaux frappant un enclume : la mort de Baldr, les humiliations infligées aux dieux, et toutes les ruses accumulées depuis l’aube des temps. Certains réclamaient sa mort immédiate, mais Odin leva la main, déclarant que la fin serait trop douce. Le châtiment devait refléter la durée même du monde. Alors fut décidé que Loki serait attaché dans une caverne profonde et sombre, forcé de supporter le venin d’un serpent suspendu au-dessus de son visage. Mais avant même ce supplice, une cruauté plus terrible fut infligée : ses fils, Nárfi et Váli, furent transformés l’un contre l’autre, et de leurs entrailles les dieux forgèrent les chaînes qui retenaient leur père. La descendance de Loki était détruite, son avenir effacé, et chaque lien tissé était un rappel cruel de sa trahison. Le jugement des Ases ne se contentait pas de punir, il érigeait la souffrance en monument éternel, gravé dans la pierre et le sang, destiné à rappeler à tous que la ruse contre le divin se paie au prix fort.",
+    "story_the_punishment_of_loki_card_4_title": "Le jugement sans pitié",
+    "story_the_punishment_of_loki_card_5_description":
+        "Dans une caverne glaciale, Loki est cloué à la roche par les entrailles de ses enfants. Ses paroles de défi résonnent dans le vide, promesse d’une vengeance future, mais impuissante face aux chaînes divines.",
+    "story_the_punishment_of_loki_card_5_detailed_story":
+        "Dans une caverne glaciale, les dieux accomplirent la sentence. Loki fut étendu sur une pierre polie par le froid, ses bras et ses jambes écartés par les chaînes façonnées à partir des entrailles de ses fils. Les Ases les plus puissants tirèrent sur ces liens organiques, les clouant à la roche avec une force divine qui ne laissait aucun espoir de mouvement. Des gouttes glacées perlaient du plafond, tombant en rythme cruel sur son visage brûlé de douleur et de désespoir. Autour de lui, les dieux observaient : certains satisfaits, d’autres troublés par la cruauté de leur justice. Loki, malgré les tortures, parvint à lancer des paroles de défi, jurant que cette injustice ne resterait pas impunie. Mais les échos de ses cris se perdirent dans la caverne, engloutis par le silence de pierre et la noirceur des lieux. Il devint une ombre dans la roche, un présage de tempête et de vengeance à venir. La terre elle-même semblait boire sa douleur, l’absorbant pour l’éternité.",
+    "story_the_punishment_of_loki_card_5_title":
+        "'L’enchaînement sous la pierre",
+    "story_the_punishment_of_loki_card_6_description":
+        "Un serpent suspendu laisse tomber son venin brûlant sur Loki, dont les hurlements ébranlent la terre. Mais Sigyn, fidèle, recueille goutte après goutte, adoucissant un supplice éternel qui façonne le monde.",
+    "story_the_punishment_of_loki_card_6_detailed_story":
+        "Au-dessus du visage de Loki, un serpent dont le venin corrosif tombait goutte à goutte, distillait une torture infinie. Chaque perle brûlait sa peau et le fit hurler dans un écho qui secouait les rochers et la caverne entière. Pourtant, il ne fut pas laissé seul. Sigyn, son épouse, resta à ses côtés, fidèle malgré tout, tenant un bol pour recueillir le poison et soulager ses souffrances. Mais lorsque la coupe était pleine, le venin tombait sur le visage de Loki, le frappant avec une intensité brûlante. Ses hurlements résonnaient jusqu’à Midgard, ébranlant la terre et les royaumes des hommes. Ainsi commença son supplice éternel : enchaîné par le sang de ses fils, tourmenté par le venin, sauvé par l’amour indéfectible de Sigyn. Ce châtiment cruel devint une cicatrice vivante du cosmos, un avertissement pour tous les dieux et les hommes, et une promesse que lors du Ragnarök, la fureur de Loki se libérerait, enveloppant les neuf mondes dans un chaos dévastateur.",
+    "story_the_punishment_of_loki_card_6_title": "Le venin et la fidélité",
+    "story_the_punishment_of_loki_title": "Le Châtiment de Loki",
+    "story_the_serpent_fishing_card_1_description":
+        "Thor se rend chez le géant Hymir afin de demander son aide pour obtenir un chaudron immense, capable de contenir l’hydromel des dieux. Leur rencontre marque le début d’une alliance fragile.",
+    "story_the_serpent_fishing_card_1_detailed_story":
+        "À l’aube d’un matin gris et glacial, Thor, le dieu guerrier, franchit les portes d’une caverne gelée où vivait Hymir, le géant à la peau dure comme le givre et aux yeux semblables à des abîmes insondables. Le souffle du dieu formait des nuages blancs dans l’air figé, et chacun de ses pas résonnait dans le silence de la demeure du colosse. Il ne venait pas en conquérant, mais en implorant l’aide d’Hymir pour retrouver un chaudron d’une taille colossale, capable de contenir l’hydromel des dieux. Le géant laissa échapper un rire grave, qui fit vibrer les parois de pierre et ébranla les stalactites au-dessus de leur tête. Puis son amusement se mua en méfiance : que voulait cet être des cieux dans son royaume glacé ? Après un long moment où le silence pesa plus que les mots, une alliance fragile se forma. Hymir accepta, mais avec arrière-pensée et défi : l’océan les attendait, indompté et impitoyable. Le destin, déjà, semblait suspendu aux vagues, et nul ne savait que cette alliance allait les confronter à une créature capable de défier l’imagination et le courage des dieux.",
+    "story_the_serpent_fishing_card_1_title": "La quête du chaudron",
+    "story_the_serpent_fishing_card_2_description":
+        "Pour attirer une créature digne de leur défi, Hymir exige un appât hors du commun. Thor arrache la tête d’un taureau puissant, dont le sang chaud appelle les forces abyssales de l’océan.",
+    "story_the_serpent_fishing_card_2_detailed_story":
+        "Sous un ciel chargé de nuages noirs et bas, Hymir posa son exigence avec un grondement qui fit trembler la caverne : pour attirer la créature des abysses, il fallait un appât digne de sa puissance. Thor, sans un souffle d’hésitation, se dirigea vers le troupeau du géant et choisit le plus robuste des taureaux. L’animal mugissait, ses yeux reflétant une conscience de sa fin prochaine, ses sabots frappant la neige gelée. Thor agrippa les cornes et, d’un effort surhumain, renversa la bête, son sang chaud s’écoulant en une rivière écarlate qui contrastait avec la blancheur immaculée de la glace. Hymir observa en silence, partagé entre admiration et colère, tandis que Thor soulevait la tête du taureau, la brandissant comme un trophée offert aux flots. L’air vibrait de l’odeur du fer et de la mort. Les mouettes tournaient au-dessus, comme attirées par ce sacrifice brutal. Chaque goutte de sang sur la neige semblait appeler les profondeurs, et le vent se mit à hurler, comme si l’océan lui-même savait qu’un affrontement extraordinaire allait commencer.",
+    "story_the_serpent_fishing_card_2_title": "Le sacrifice du taureau",
+    "story_the_serpent_fishing_card_3_description":
+        "Thor et Hymir s’embarquent sur une barque minuscule, affrontant des vagues furieuses et un ciel orageux. La mer rugit, comme si elle pressentait l’affrontement qui allait bouleverser les mondes.",
+    "story_the_serpent_fishing_card_3_detailed_story":
+        "Ils prirent place dans une barque frêle, si petite que l’on aurait cru que leur puissance suffirait à briser son bois à chaque vague. Hymir, immense, saisit les rames et fendit les flots avec des gestes lents et puissants, faisant éclater l’eau dans des gerbes argentées. À ses côtés, Thor fixait l’horizon, ses yeux brillant d’une flamme que ni le vent ni le froid ne pouvaient éteindre. La mer se déchaînait, ses vagues immenses frappant la frêle embarcation, tandis que les nuages s’amoncelaient, lourds et noirs, menaçant d’engloutir le ciel dans un chaos de tonnerre. Thor lia la tête sanglante du taureau à un hameçon d’acier sombre, ses mains rapides malgré le roulis incessant. Chaque clapotis semblait battre le rythme d’un tambour funèbre, chaque rafale rappelant qu’ils naviguaient aux confins du monde connu. Le silence entre eux était lourd, chargé de crainte et de défi, car tous deux pressentaient que ce qu’ils convoquaient des profondeurs n’était pas une créature ordinaire, mais un monstre capable de bouleverser les océans et le destin des dieux.",
+    "story_the_serpent_fishing_card_3_title": "L’océan sans fin",
+    "story_the_serpent_fishing_card_4_description":
+        "Le serpent de Midgard surgit des flots, immense et terrifiant, ses anneaux soulevant des tempêtes. Thor lutte à mains nues pour le retenir, défiant l’océan et la créature qui étreint le monde.",
+    "story_the_serpent_fishing_card_4_detailed_story":
+        "Le silence de l’océan éclata soudain en un fracas monstrueux : la ligne tendue vibra comme un éclair de métal et Thor tira de toutes ses forces. L’eau explosa, et une horreur antique apparut, écailles sombres comme la nuit, yeux d’un jaune incandescent, anneaux enserrant l’air comme pour englober le monde. Le serpent des profondeurs surgit, vomissant torrents d’écume et de fureur. La barque menaçait de se briser sous le poids de la bête. Thor, pieds ancrés dans le bois trempé, tenait la corde comme s’il voulait retenir l’océan lui-même. Hymir, glacé par la terreur, recula, ses yeux écarquillés fixant la gueule béante capable d’engloutir montagnes et citadelles. Le serpent, enragé, se tordait et ses anneaux fracassaient les vagues en tempêtes. Chaque seconde semblait suspendre le temps, oscillant entre la victoire et la catastrophe, tandis que le tonnerre et les éclairs illuminaient cette lutte titanesque.",
+    "story_the_serpent_fishing_card_4_title": "La morsure des profondeurs",
+    "story_the_serpent_fishing_card_5_description":
+        "Alors que Thor s’apprête à abattre sa puissance sur le serpent, Hymir, terrorisé, coupe la ligne. La créature disparaît dans les profondeurs, laissant une menace suspendue et un duel inachevé.",
+    "story_the_serpent_fishing_card_5_detailed_story":
+        "Thor, le regard incandescent, était prêt à abattre sa puissance sur le serpent, chaque muscle tendu, chaque fibre de son être vibrant d’une énergie divine. Mais avant qu’il ne puisse frapper, un cri de terreur s’éleva derrière lui. Hymir, dans un élan de panique, avait saisi la corde et, d’un geste désespéré, la rompit. Le serpent, libéré de son lien, disparut dans les profondeurs avec un rugissement qui fit trembler l’océan tout entier.\n\nLa barque chavira sous le choc, projetant Thor et Hymir dans les eaux glacées. Le dieu du tonnerre émergea, haletant, ses cheveux collés à son visage par l’eau salée. Hymir, tremblant de froid et de peur, se cramponna à une planche flottante. Le silence retomba sur l’océan, seulement troublé par le clapotis des vagues et le souffle rauque des deux survivants.\n\nThor regarda l’horizon, le cœur lourd. Il n’avait pas vaincu le serpent des profondeurs, mais il avait survécu à une épreuve qui aurait brisé n’importe quel autre être. Le destin des dieux restait incertain, mais une chose était claire : la lutte contre les forces du chaos ne faisait que commencer.",
+    "story_the_serpent_fishing_card_5_title": "Le combat inachevé",
+    "story_the_serpent_fishing_title": "La Pêche au Serpent",
+    "story_the_wall_of_asgard_card_1_description":
+        "Après la guerre contre les Vanes, Asgard est vulnérable. Les Ases se rassemblent et décident qu’il leur faut une nouvelle muraille, plus solide et plus haute que jamais, pour protéger leur royaume.",
+    "story_the_wall_of_asgard_card_1_detailed_story":
+        "La guerre entre les Ases et les Vanes, deux clans divins aux puissances redoutables, avait bouleversé l’équilibre des neuf mondes. Même si une paix fragile fut conclue, les cicatrices de ce conflit restaient visibles, et les dieux savaient qu’elles ne s’effaceraient jamais totalement. La muraille qui protégeait autrefois Asgard avait été réduite en ruines, laissant leur cité divine exposée aux attaques des géants et aux menaces extérieures. Odin, Thor et les autres Ases convoquèrent alors une grande assemblée, le Thing sacré, pour débattre de la manière de rebâtir leurs défenses. Chacun apporta son avis, mais une évidence s’imposait : il fallait une forteresse nouvelle, si solide et si majestueuse qu’aucun ennemi, pas même les puissants Jötunns, ne pourrait jamais l’abattre. Cette décision, marquée par la gravité des souvenirs de guerre, allait ouvrir la voie à une série d’événements que nul ne pouvait encore imaginer.",
+    "story_the_wall_of_asgard_card_1_title":
+        "Les Dieux cherchent à protéger Asgard",
+    "story_the_wall_of_asgard_card_2_description":
+        "Un mystérieux géant, Hrimthurs, se présente aux dieux et propose de bâtir une muraille invincible en six mois. En échange, il exige Freyja, le soleil et la lune, un prix que les Ases jugent exorbitant.",
+    "story_the_wall_of_asgard_card_2_detailed_story":
+        "Alors que les Ases débattaient encore de leur dilemme, un étranger imposant franchit les portes d’Asgard. Il se présenta comme un maître bâtisseur, un géant du nom de Hrimthurs. Son offre était stupéfiante : il promettait de rebâtir une muraille si solide qu’aucune force ne pourrait jamais la renverser, et ce, en l’espace de six mois seulement. Mais son prix était terrifiant : il réclamait la main de Freyja, la déesse de la beauté et de l’amour, ainsi que le soleil et la lune, sources de lumière et de vie. Les Ases, choqués par cette demande, hésitèrent. Perdre Freyja serait une blessure à l’honneur d’Asgard, et céder le soleil et la lune plongerait les mondes dans les ténèbres éternelles. Pourtant, attirés par l’idée d’une muraille imprenable, ils décidèrent d’accepter, mais avec une ruse en tête : ils imposèrent que le géant n’aurait aucune aide, hormis son cheval, et qu’il devait terminer avant le premier jour de l’été. Les dés étaient jetés.",
+    "story_the_wall_of_asgard_card_2_title":
+        "Le géant bâtisseur propose son aide",
+    "story_the_wall_of_asgard_card_3_description":
+        "Hrimthurs et son cheval Svadilfari commencent l’ouvrage. Les pierres s’élèvent si vite que les dieux s’inquiètent : il semble réellement capable de finir avant la date fixée.",
+    "story_the_wall_of_asgard_card_3_detailed_story":
+        "Dès le lendemain, Hrimthurs se mit à l’ouvrage avec une vigueur impressionnante. Son fidèle cheval, Svadilfari, l’aidait à transporter d’énormes blocs de pierre que nul autre être n’aurait pu soulever. Ensemble, ils travaillaient nuit et jour, sans répit. Les Ases, d’abord confiants dans leur ruse, commencèrent à douter en voyant la vitesse à laquelle la muraille prenait forme. Chaque jour, les pierres s’élevaient plus haut, chaque nuit, la forteresse semblait avancer d’un pas de géant vers son achèvement. En quelques semaines, une grande partie de l’enceinte entourant Asgard était déjà debout, solide et massive. Odin et les autres dieux, habituellement sereins, se consultaient désormais avec inquiétude. Si le géant parvenait à achever son œuvre à temps, ils devraient tenir parole et céder Freyja, le soleil et la lune. Leur plan risquait de se retourner contre eux, et le désespoir commença à poindre.",
+    "story_the_wall_of_asgard_card_3_title":
+        "Le géant commence la construction",
+    "story_the_wall_of_asgard_card_4_description":
+        "Voyant le danger, Loki propose une ruse : il se métamorphose en jument et attire Svadilfari, privant Hrimthurs de son plus précieux allié dans la construction de la muraille.",
+    "story_the_wall_of_asgard_card_4_detailed_story":
+        "Alors que la date limite approchait et que l’angoisse des Ases montait, Loki, le dieu de la ruse, offrit son aide. Bien que souvent cause de leurs malheurs, il savait se rendre utile dans les situations désespérées. Son plan était audacieux : il se métamorphosa en une magnifique jument, luisante et vive, et se présenta devant Svadilfari. Le cheval, séduit, se lança à sa poursuite, abandonnant son maître. Hrimthurs, désemparé, dut continuer seul, mais même sa force colossale ne suffisait pas pour déplacer les blocs sans son destrier. Pendant plusieurs nuits, Loki, sous sa forme équine, attira Svadilfari toujours plus loin, retardant la construction de manière décisive. Les dieux observaient avec un mélange de soulagement et de stupeur, conscients que la ruse de Loki venait de sauver leur royaume, mais aussi que de telles tromperies pourraient avoir des conséquences inattendues.",
+    "story_the_wall_of_asgard_card_4_title": "L’intervention de Loki",
+    "story_the_wall_of_asgard_card_5_description":
+        "Privé de son cheval, Hrimthurs comprend qu’il ne pourra pas finir la muraille. Trompé, il entre dans une rage furieuse et menace de détruire Asgard et d’écraser les dieux eux-mêmes.",
+    "story_the_wall_of_asgard_card_5_detailed_story":
+        "Quand Hrimthurs réalisa qu’il avait été dupé, sa rage éclata comme une tempête. Le géant frappa la terre de ses poings et poussa un cri si terrible que les montagnes elles-mêmes semblèrent trembler. Sans Svadilfari, il était incapable d’achever l’œuvre, et il comprit que les Ases n’avaient jamais eu l’intention de tenir leur promesse. Fou de colère, il tenta de renverser les blocs déjà posés, jurant de réduire Asgard en cendres et d’écraser les dieux sous sa force. Les Ases, qui avaient redouté ce moment, se préparèrent à le combattre. Thor, la main crispée sur Mjöllnir, attendait l’instant où il pourrait frapper. Odin, quant à lui, observait avec gravité : ce duel n’était plus une affaire de ruse, mais un affrontement direct entre la puissance brute d’un géant et la volonté indomptable des dieux d’Asgard.",
+    "story_the_wall_of_asgard_card_5_title": "La colère du géant",
+    "story_the_wall_of_asgard_card_6_description":
+        "Odin, Thor et les Ases affrontent Hrimthurs dans un combat titanesque. Le ciel se déchire de tonnerre et de magie, jusqu’à ce que le géant soit terrassé et Asgard finalement sauvé.",
+    "story_the_wall_of_asgard_card_6_detailed_story":
+        "La rage de Hrimthurs atteignit son paroxysme lorsqu’il se lança contre les murailles inachevées. Thor bondit en avant, brandissant Mjöllnir, et abattit des coups si puissants que le ciel se couvrit d’éclairs. Odin invoqua des enchantements pour protéger ses frères, tandis que les autres Ases combattaient aux côtés du dieu du tonnerre. La bataille résonna dans tout Asgard : chaque coup de poing du géant faisait trembler la terre, chaque coup de marteau faisait exploser des blocs de pierre. Malgré sa force titanesque, Hrimthurs ne put résister longtemps face à la fureur combinée des dieux. Thor, dans un rugissement de colère, asséna le coup final qui pulvérisa le crâne du géant. Hrimthurs s’effondra, écrasant le sol dans un fracas assourdissant. Son corps inerte rappela à tous que même la ruse pouvait mener à des affrontements sanglants. Asgard était sauvé, mais la victoire avait un prix.",
+    "story_the_wall_of_asgard_card_6_title": "La bataille finale",
+    "story_the_wall_of_asgard_card_7_description":
+        "Après leur victoire, les Ases reconstruisent la muraille d’Asgard en utilisant les pierres déjà posées. Ils célèbrent leur triomphe et jurent de protéger leur royaume contre toute menace future.",
+    "story_the_wall_of_asgard_card_7_detailed_story":
+        "Une fois Hrimthurs vaincu, les Ases se tournèrent vers les ruines de son ouvrage. Les blocs de pierre qu’il avait posés étaient d’une solidité remarquable, et plutôt que de les détruire, les dieux décidèrent de les utiliser pour bâtir leur propre muraille. Ainsi, pierre après pierre, ils achevèrent la forteresse d’Asgard, cette fois en maîtres de leur destinée. La nouvelle enceinte se dressait, imposante et invincible, symbole de leur unité retrouvée après la guerre contre les Vanes et la menace du géant. Des fêtes grandioses furent organisées, et bien que Loki eût provoqué tout ce chaos par ses tromperies, il fut honoré pour sa ruse qui avait permis leur victoire. Les Ases jurèrent de défendre Asgard, quoi qu’il en coûte, et de veiller sur leur royaume jusqu’au Ragnarök. La muraille devint le rempart éternel de leur puissance et le signe que, même face aux menaces les plus grandes, les dieux sauraient triompher.",
+    "story_the_wall_of_asgard_card_7_title": "La reconstruction d’Asgard",
+    "story_the_wall_of_asgard_title": "La Muraille d’Asgard",
+    "story_thors_hammer_card_1_description":
+        "Un matin, Thor découvre que son marteau Mjöllnir a été volé. Privé de sa plus grande arme, Asgard entier devient vulnérable face aux forces du chaos qui menacent les neuf mondes.",
+    "story_thors_hammer_card_1_detailed_story":
+        "Un matin, Thor se réveilla dans une rage terrible qui fit trembler tout Asgard. Son marteau Mjöllnir, sa plus précieuse possession, avait disparu ! Cette arme légendaire, forgée par les nains dans les profondeurs de Svartalfheim, était capable de contrôler la foudre et de pulvériser les montagnes.\n\nSans Mjöllnir, Thor n’était plus qu’un dieu ordinaire. Pire encore, sans cette arme divine, tous les dieux d’Asgard étaient vulnérables face aux forces du chaos qui menaçaient constamment les neuf mondes.\n\nLes recherches commencèrent immédiatement. Heimdall scruta les horizons avec sa vue perçante, Odin envoya ses corbeaux Hugin et Munin aux quatre coins du cosmos, mais le marteau demeurait introuvable. C’est alors que les soupçons se portèrent vers les géants, éternels ennemis des dieux.",
+    "story_thors_hammer_card_1_title": "Mjöllnir est volé",
+    "story_thors_hammer_card_2_description":
+        "Le géant Thrym avoue avoir volé Mjöllnir et exige la main de Freyja en mariage pour le rendre. Sa demande outrageante indigne les dieux et provoque la fureur de la déesse elle-même.",
+    "story_thors_hammer_card_2_detailed_story":
+        "Les investigations menèrent rapidement au géant Thrym, roi des géants de givre dans les terres glacées de Jötunheim. Loin de nier son forfait, il avoua sans honte avoir dérobé le marteau et l’avoir caché dans les profondeurs de la terre, là où aucun dieu ne pourrait le trouver.\n\nMais Thrym posa ses conditions avec un sourire narquois : il ne rendrait Mjöllnir que si les dieux lui donnaient la main de la belle Freyja en mariage. La déesse de l’amour et de la beauté devrait devenir son épouse et régner à ses côtés sur le royaume des géants.\n\nCette demande outrageante indigna tous les dieux d’Asgard. Comment oser réclamer la plus belle des déesses en échange d’un objet volé ? Freyja elle-même entra dans une colère si terrible que son collier magique Brísingamen se brisa sous la force de sa fureur. Les murs du Valhalla tremblèrent sous sa rage.",
+    "story_thors_hammer_card_2_title": "Le chantage de Thrym",
+    "story_thors_hammer_card_3_description":
+        "Pour duper Thrym, Loki suggère que Thor se déguise en Freyja. À contrecœur, le dieu du tonnerre accepte et enfile une robe de mariée et un voile pour tromper les géants.",
+    "story_thors_hammer_card_3_detailed_story":
+        "C’est alors que Loki eut une idée aussi audacieuse que ridicule : Thor devrait se déguiser en Freyja pour tromper Thrym ! L’idée de voir le plus viril des dieux revêtir des habits de femme amusa beaucoup le rusé Loki.\n\nThor protesta violemment : \"Jamais ! Les dieux se moqueront de moi pour l’éternité ! Ma réputation de guerrier sera ruinée !\"\n\nMais Heimdall le sage intervint: \"Préfères-tu que les géants envahissent Asgard sans que nous puissions nous défendre ? Sans Mjöllnir, nous sommes perdus.\"\n\nÀ contrecœur, Thor accepta. Avec l’aide de Loki, il revêtit une magnifique robe de mariée, se couvrit d’un voile orné de bijoux précieux, et plaça sur sa poitrine le collier réparé de Freyja. Ses mains puissantes furent dissimulées sous de longs gants de soie. Ainsi déguisé, le dieu du tonnerre ressemblait à une épouse timide et voilée.",
+    "story_thors_hammer_card_3_title": "Déguisement",
+    "story_thors_hammer_card_4_description":
+        "Lors du banquet, Thor dévore un bœuf, huit saumons et trois tonneaux d’hydromel. Les géants doutent, mais Loki justifie son appétit par une longue période de jeûne amoureux.",
+    "story_thors_hammer_card_4_detailed_story":
+        "Le stratagème sembla d’abord fonctionner parfaitement. Thrym accueillit sa \"fiancée\" avec une joie débordante et organisa immédiatement un grand banquet nuptial. Tous les géants de Jötunheim furent conviés pour célébrer cette union extraordinaire.\n\nMais au cours du festin, Thor ne put contenir son appétit légendaire. Oubliant son rôle, il dévora un bœuf entier, huit saumons, et engloutit tous les mets destinés aux femmes. Il vida ensuite trois tonneaux entiers d’hydromel d’un trait, éveillant les soupçons des géants.\n\n\"Par ma barbe !\" s’exclama Thrym, les yeux écarquillés. \"Je n’ai jamais vu une femme manger et boire avec un tel appétit ! Pourquoi la belle Freyja se montre-t-elle si vorace ?\n\nLoki, toujours prompt à mentir, répondit avec aplomb : \"Noble Thrym, Freyja était si excitée par ce mariage qu’elle n’a pas touché à la nourriture depuis huit jours et huit nuits ! C’est la faim qui la rend si affamée.\"",
+    "story_thors_hammer_card_4_title": "Le festin",
+    "story_thors_hammer_card_5_description":
+        "Lorsque Mjöllnir est placé sur ses genoux pour bénir le mariage, Thor le saisit aussitôt, déchire son voile et massacre Thrym et les géants dans un orage de foudre.",
+    "story_thors_hammer_card_5_detailed_story":
+        "Thrym, rassuré par l’explication de Loki, décida de procéder à la cérémonie. Selon la tradition, il ordonna qu’on apporte le marteau de Thor pour bénir l’union et le placer sur les genoux de la mariée, symbole de fertilité et de protection.\n\nDès que Mjöllnir fut posé sur ses genoux, Thor sentit sa force divine revenir en lui comme un torrent. Ses yeux s’enflammèrent de joie et de rage contenues. D’un geste puissant, il arracha son voile et déchira sa robe de mariée.\n\n\"Je suis Thor, fils d’Odin !\" rugit-it en brandissant son marteau. \"Et voici ma réponse à votre chantage !\n\nLa foudre jaillit de Mjöllnir tandis que Thor massacrait Thrym et tous les géants présents dans un déchaînement de violence divine. Les éclairs illuminèrent la salle du festin transformée en champ de bataille, et le tonnerre résonna dans tout Jötunheim.\n\nAinsi Thor récupéra-t-il son marteau, et jamais plus les géants n’osèrent défier ouvertement le dieu du tonnerre.\"",
+    "story_thors_hammer_card_5_title": "Récupération",
+    "story_thors_hammer_title": "Le Marteau de Thor",
+    "story_war_of_aesir_and_vanir_card_1_description":
+        "La magie des Vanes émerveille mais inquiète les Ases, et la méfiance s’installe.",
+    "story_war_of_aesir_and_vanir_card_1_detailed_story":
+        "Dans la grande salle des dieux du ciel, les flammes des torches projetaient sur les murs des ombres vacillantes qui semblaient écouter les murmures des immortels. Les Vanes, maîtres des champs et des récoltes, avaient introduit une magie nouvelle, née de la terre et des saisons, qui fascinait autant qu’elle effrayait. Les Ases, guerriers d’Asgard, regardaient cette puissance d’un œil méfiant : ce savoir étranger remettait en cause leur autorité. Parmi eux, certains y voyaient une chance, d’autres une menace. Les mots échangés se transformèrent en accusations, et les accusations en colères à peine contenues. Le silence entre deux discours n’était plus celui du respect, mais celui d’un orage prêt à éclater. L’avidité se mêlait à la crainte, et l’orgueil à la jalousie. Le vent qui soufflait contre les portes de la salle semblait lui-même annoncer une rupture. Quand le regard des uns devint trop lourd, quand les mains se crispèrent sur les accoudoirs, chacun comprit que le fil qui unissait ces deux clans était sur le point de se rompre. L’équilibre fragile du monde s’inclinait déjà vers le chaos.",
+    "story_war_of_aesir_and_vanir_card_1_title": "L’ombre de la discorde",
+    "story_war_of_aesir_and_vanir_card_2_description":
+        "Un conflit éclate après que les Ases aient tenté de détruire une magicienne vane.",
+    "story_war_of_aesir_and_vanir_card_2_detailed_story":
+        "La tension trouva son incarnation dans une femme venue des Vanes, messagère et maîtresse des arcanes de la fertilité. Sa beauté éclatante et son savoir mystérieux troublaient l’ordre établi. Les Ases, incapables de supporter une telle indépendance, tentèrent de la réduire au silence par le feu. Mais trois fois les flammes dévorèrent son corps, et trois fois elle renaquit, plus forte, plus rayonnante, comme si la terre elle-même refusait de la céder aux flammes. Cet affrontement révéla au grand jour l’abîme qui séparait les deux peuples. Les Vanes, outrés de ce sacrilège, se levèrent en armes, appelant les vents et les moissons à leur aide. Les Ases, blessés dans leur fierté, saisirent leurs lances et se préparèrent au combat. La guerre n’éclata pas dans un cri, mais dans un silence funeste, lorsque chacun sut qu’aucun retour en arrière n’était possible. Le premier sang coula bientôt, et avec lui se brisa l’illusion d’une paix durable. Désormais, l’air était chargé de cendres et de malédictions.",
+    "story_war_of_aesir_and_vanir_card_2_title": "L’étincelle de la guerre",
+    "story_war_of_aesir_and_vanir_card_3_description":
+        "Ases et Vanes s’affrontent sans répit, ravageant terres et cieux.",
+    "story_war_of_aesir_and_vanir_card_3_detailed_story":
+        "Alors s’ouvrit une guerre que nul mortel n’aurait pu concevoir. Les Ases frappaient avec la violence du tonnerre, leurs armes forgées dans le feu des forges éternelles. Les Vanes ripostaient en invoquant la fécondité des terres, transformant les champs en pièges vivants, faisant jaillir des torrents et des forêts là où il n’y avait que désolation. Chaque bataille déchirait le monde, chaque victoire semblait aussitôt se transformer en défaite. Les murs d’Asgard tremblaient, et les plaines des Vanes se couvraient de cendres. Aucun camp ne reculait, et pourtant aucun n’avançait. La guerre, interminable, devenait une blessure qui ne se refermait pas. Les chants des scaldes ne racontaient plus des triomphes, mais des ravages sans fin. Les vents portaient la fumée des incendies jusque dans les royaumes des mortels, et même Yggdrasil, l’arbre cosmique, semblait gémir sous le poids de cette discorde. Dans les regards des dieux, on ne lisait plus la fierté, mais la lassitude d’un affrontement stérile. Pourtant, nul ne voulait céder le premier.",
+    "story_war_of_aesir_and_vanir_card_3_title": "La guerre des dieux",
+    "story_war_of_aesir_and_vanir_card_4_description":
+        "Épuisés, les dieux échangent des otages pour sceller une trêve fragile.",
+    "story_war_of_aesir_and_vanir_card_4_detailed_story":
+        "Quand le sang eut trop coulé, quand les armes devinrent aussi lourdes que les cœurs, une idée germa des ruines de la bataille. Les deux clans, incapables de vaincre, décidèrent de tenter un acte de confiance : l’échange d’otages. Les Vanes envoyèrent deux de leurs plus sages, un frère et une sœur dont la beauté et la puissance surpassaient celles des champs et des rivières. Les Ases, de leur côté, offrirent un maître des runes, gardien des secrets anciens, et un autre dieu à la langue acérée. Cet échange fut scellé non dans la joie, mais dans la méfiance, chaque pas franchi étant alourdi par le soupçon. Les otages traversèrent les plaines et les forteresses ennemies, portant avec eux les espoirs fragiles d’une paix encore incertaine. L’air était tendu comme une corde d’arc, et chaque regard jeté sur eux pouvait à tout instant devenir une menace. Pourtant, à travers cet acte de prudence, un frêle équilibre commença à renaître. Pour la première fois depuis longtemps, les dieux ne brandissaient pas leurs armes, mais leurs serments.",
+    "story_war_of_aesir_and_vanir_card_4_title": "Les otages du destin",
+    "story_war_of_aesir_and_vanir_card_5_description":
+        "Les otages tiennent parole, et les dieux apprennent à unir leurs forces.",
+    "story_war_of_aesir_and_vanir_card_5_detailed_story":
+        "Le temps fit son œuvre, et peu à peu, les otages devinrent plus que des garants : ils devinrent des ponts. Les Vanes, accueillis parmi les Ases, enseignèrent l’art de la magie de la terre, dévoilant les secrets des récoltes et des saisons. Les Ases, en retour, partagèrent la rigueur de leurs runes, le courage de leurs batailles et la discipline de leurs lois. Les rancunes ne disparurent pas en un souffle, mais à travers des années de patience et d’épreuves partagées, les liens se tissèrent. Les enfants de ces unions divines portaient en eux deux héritages, celui du tonnerre et celui de la fertilité. Les festins remplacèrent les guerres, et les chants célébrèrent à nouveau la puissance de l’union plutôt que la désolation des combats. Mais au fond de chaque regard, une ombre subsistait : le souvenir de la guerre n’était jamais loin, comme une cicatrice que le temps ne pouvait effacer. Pourtant, pour un temps, la paix régnait, fragile mais réelle.",
+    "story_war_of_aesir_and_vanir_card_5_title": "La réconciliation des dieux",
+    "story_war_of_aesir_and_vanir_card_6_description":
+        "Ases et Vanes unissent définitivement leurs forces, préparant l’avenir.",
+    "story_war_of_aesir_and_vanir_card_6_detailed_story":
+        "La fin de la guerre ne fut pas une victoire, mais une reconnaissance mutuelle. Les Ases comprirent qu’ils ne pouvaient régner seuls sur le ciel et la guerre, et les Vanes acceptèrent que la terre et la fécondité devaient s’unir à la force et à la loi. Une nouvelle ère s’ouvrit, où les deux clans si longtemps ennemis siégeaient côte à côte dans les halls d’Asgard. Les serments prononcés résonnaient comme des pierres posées dans le lit d’un fleuve : solides, mais soumis aux flots du destin. Les dieux savaient que les épreuves ne manqueraient pas, que le chaos n’avait pas disparu, mais ils comprirent que seule leur union pouvait donner une chance de survie lors du crépuscule annoncé. Ainsi, de la cendre de la discorde naquit l’alliance. Les scaldes chantèrent alors non pas la gloire d’une victoire, mais la sagesse d’un compromis, et ces chants résonnèrent jusque dans les royaumes des mortels. Les Vanes et les Ases devinrent un seul peuple divin, liés non par le sang versé, mais par le sang partagé.",
+    "story_war_of_aesir_and_vanir_card_6_title": "L’alliance scellée",
+    "story_war_of_aesir_and_vanir_title": "La Guerre des Ases et des Vanes",
+    "victory_popup_congratulations": "Félicitations !",
+    "victory_popup_generic_message":
+        "Vous avez accompli un exploit digne des dieux !",
+    "victory_popup_title": "Victoire !",
+    "widgets_custom_video_player_codec_incompatible":
+        "Format vidéo non supporté",
+    "widgets_custom_video_player_error_loading_music":
+        "Erreur lors du chargement de la musique pour la carte {cardId}: {error}",
+    "widgets_custom_video_player_error_loading_video":
+        "Erreur lors du chargement de la vidéo: {error}",
+    "widgets_custom_video_player_error_resuming_music":
+        "Erreur lors de la reprise de la musique: {error}",
+    "widgets_custom_video_player_failed_download":
+        "Échec du téléchargement de l'image depuis {url}: {statusCode}",
+    "widgets_custom_video_player_network_error": "Erreur de connexion réseau",
+    "widgets_custom_video_player_playback_error": "Erreur de lecture vidéo",
+    "widgets_custom_video_player_timeout":
+        "Délai d'attente de chargement vidéo dépassé",
+    "widgets_custom_video_player_timeout_loading_music":
+        "Délai d'attente dépassé lors du chargement de la musique pour la carte {cardId}",
+    "widgets_game_help_dialog_title": "Aide",
+    "widgets_guide_jormungandr_popup_controls":
+        "⌨️ Contrôles:\n↑↓←→ Flèches | R: Recommencer",
+    "widgets_guide_jormungandr_popup_description":
+        "Aide le serpent-monde à grandir\nen dévorant les offrandes des mortels",
+    "widgets_guide_jormungandr_popup_start_button": "Réveiller le Serpent",
+    "widgets_guide_jormungandr_popup_title": "Guide Jörmungandr",
+    "word_search_default_clue": "Trouvez les mots cachés.",
+    "word_search_preliminary_screen_help_text":
+        "Odin a sacrifié son œil pour la connaissance. Trouvez les mots cachés liés à la mythologie nordique dans la grille de runes.",
+    "word_search_preliminary_screen_start_button": "Commencer la Recherche",
+    "word_search_screen_rule_1": "Trouvez tous les mots cachés dans la grille.",
+    "word_search_screen_rule_2":
+        "Les mots peuvent être horizontaux, verticaux ou diagonaux, et peuvent être lus dans les deux sens.",
+    "word_search_screen_rule_3":
+        "Sélectionnez les lettres en faisant glisser votre doigt sur la grille.",
+    "word_search_screen_rule_4":
+        "Une fois tous les mots trouvés, un mot secret vous sera demandé.",
+    "word_search_screen_rule_5":
+        "Utilisez les lettres restantes pour former le mot secret et valider votre victoire.",
+    "word_search_screen_title": "L'Œil d'Odin",
+    "games_menu_quiz": "Ma divinité gardienne",
+    "quiz_preliminary_screen_help_text":
+        "Répondez aux questions des dieux et découvrez quelle divinité veille sur vous.",
+    "quiz_preliminary_screen_start_button": "Commencer le Quiz",
+  };
+  static const Map<String, dynamic> _en_US = {
+    "about_screen_about_content":
+        "This application is a tribute to the fascinating world of Norse mythology. It was designed to provide an immersive and educational experience through quizzes, stories, and mini-games.",
+    "about_screen_about_title": "About the App",
+    "about_screen_contact_us": "Contact Us",
+    "about_screen_contribution_content":
+        "This project is open source. Feel free to contribute on GitHub.",
+    "about_screen_contribution_title": "Contribution",
+    "about_screen_creators_content":
+        "Created by a small team of mythology enthusiasts, storytellers, and developers united by a love for legends.",
+    "about_screen_creators_lead_dev": "Lead Developer & Designer:",
+    "about_screen_creators_title": "Team / Creators",
+    "about_screen_disclaimer_content":
+        "This application is based on Norse mythology and is not affiliated with, sponsored, or endorsed by Marvel.",
+    "about_screen_disclaimer_title": "Disclaimer",
+    "about_screen_github_link": "View on GitHub",
+    "about_screen_legal_title": "Legal",
+    "about_screen_privacy_link": "Privacy Policy",
+    "about_screen_roadmap_content":
+        "Coming soon: new realms, more stories, and mythic challenges. Stay tuned for the next saga!",
+    "about_screen_roadmap_title": "Future Features / Roadmap",
+    "about_screen_support_title": "Support the Project",
+    "about_screen_tech_content":
+        "Built with Flutter and powered by open-source libraries. This project was also brought to life with the help of several AI tools: Nightcafé for images, Gemini CLI for coding, Vidnoz for animations, and Suno for music.",
+    "about_screen_tech_title": "Technologies & AI",
+    "about_screen_terms_link": "Terms of Service",
+    "about_screen_thanks_content":
+        "A heartfelt thank you to all the mythologists, historians, and enthusiasts whose work has inspired and informed this project.",
+    "about_screen_thanks_title": "Special Thanks",
+    "about_screen_version_content":
+        "You are using version {{version}} of the Oracle d’Asgard app.",
+    "about_screen_version_title": "App Version",
+    "about_screen_vision_content":
+        "Oracle d’Asgard was born from a passion for Norse mythology and storytelling. Our vision is to revive ancient myths through interactive experiences that blend learning, play, and art. Every riddle, every story, every rune you encounter carries a fragment of that ancient magic.",
+    "about_screen_vision_title": "Story & Vision",
+    "app_title": "Oracle of Asgard",
+    "asgard_wall_game_screen_congratulations": "Congratulations!",
+    "asgard_wall_game_screen_defeat": "Defeat!",
+    "asgard_wall_game_screen_defeat_message":
+        "💥 A hole in the wall!\nThe Æsir will not pay the giant.",
+    "asgard_wall_game_screen_next_pieces": "Next Pieces",
+    "asgard_wall_game_screen_restart": "Restart the Wall",
+    "asgard_wall_game_screen_title": "Wall of Asgard",
+    "asgard_wall_game_screen_victory": "Victory!",
+    "asgard_wall_game_screen_victory_message":
+        "You have accomplished a feat worthy of the gods!",
+    "asgard_wall_preliminary_screen_help_text":
+        "Help Hrimthur build the wall of Asgard by placing the falling blocks. Reach the height of victory without leaving unreachable holes!",
+    "asgard_wall_preliminary_screen_start_button": "Start Building",
+    "asgard_wall_welcome_screen_rule_1":
+        "Build the perfect wall like the giant builder. Your goal is to fill all the spaces up to the golden line without leaving unreachable (fully enclosed) holes.",
+    "asgard_wall_welcome_screen_rule_2":
+        "Controls: ←→ or A/D to move, ↑/W/Space/Q/E to rotate, ↓/S to drop (Touch controls available in-game)",
+    "collectible_card_audhumla_description":
+        "The primordial cow, born from melting ice at the beginning of time, just like the giant Ymir. From her udders flowed four rivers of milk that nourished Ymir and ensured his survival. By licking a salty block of ice, Audhumla revealed Buri, the first of the gods and Odin's ancestor. She is thus the origin of both lineages, that of giants and that of gods, who will clash during Ragnarök.",
+    "collectible_card_audhumla_title": "Audhumla the Cosmic Cow",
+    "collectible_card_baldr_description":
+        "The god of light, beauty, and purity, son of Odin and Frigg. Beloved by all, his presence brought joy and peace. A prophetic dream of his own death prompted his mother, Frigg, to make everything in creation swear never to harm him. Only mistletoe, deemed too young and harmless, was overlooked. His tragic death, orchestrated by Loki, was the first and most terrible omen of the coming of Ragnarök, the end of times.",
+    "collectible_card_baldr_title": "Baldr the Good",
+    "collectible_card_bifrost_description":
+        "The vibrant and shimmering rainbow bridge that connects Midgard, the world of men, to Asgard, the fortress of the gods. It is described as being made of fire, air, and water, and is stronger than any other structure. It is permanently guarded by the god Heimdall, who watches over its access from his guard post, Himinbjörg. Bifrost will collapse during Ragnarök under the weight of the fire giants led by Surt.",
+    "collectible_card_bifrost_title": "Bifrost",
+    "collectible_card_bragi_description":
+        "The god of poetry, eloquence, and music. He is the husband of Idunn, keeper of the apples of youth. Bragi is depicted as a wise old man with a long beard, whose words are so beautiful they charm all who hear them. He is the skald (poet) of the gods' court in Asgard, welcoming valorous warriors arriving at Valhalla with his epic songs that recount their deeds and the glory of the gods.",
+    "collectible_card_bragi_title": "Bragi",
+    "collectible_card_brisingamen_description":
+        "The magnificent and legendary necklace of the goddess Freyja. Its name means 'fire jewel'. It was forged by four expert dwarfs. To obtain it, Freyja had to spend one night with each of them. This necklace is the symbol of her beauty, seduction, and power over love and desire. It was stolen by Loki and recovered by Heimdall after a fierce battle where both took the form of seals.",
+    "collectible_card_brisingamen_title": "Brisingamen",
+    "collectible_card_brokkr_sindri_description":
+        "Two dwarf brothers, master smiths renowned for their unmatched skill. Following a trick by Loki, they made a wager with the god that they could create more wonderful objects than those made by the sons of Ivaldi. They thus forged three exceptional treasures: the golden boar Gullinbursti for Freyr, the golden ring Draupnir for Odin, and the most famous of all, the hammer Mjöllnir for Thor, despite a minor flaw (its short handle) due to Loki's interference.",
+    "collectible_card_brokkr_sindri_title": "Brokkr and Sindri",
+    "collectible_card_draupnir_description":
+        "The magical ring of pure gold possessed by Odin, one of the greatest treasures of the gods. Forged by the dwarfs Brokkr and Sindri, its name means 'the dripper'. It has the extraordinary ability to multiply: every nine nights, it produces eight new gold rings of identical weight and quality. Draupnir was placed by Odin on his son Baldr's funeral pyre as a sign of respect, but was returned to him from the realm of the dead.",
+    "collectible_card_draupnir_title": "Draupnir the Ring",
+    "collectible_card_fenrir_description":
+        "The gigantic wolf, one of the three monstrous children of Loki and the giantess Angrboda. The gods, frightened by his rapid growth and prophecies announcing he would cause their doom, decided to chain him. After breaking two chains, he was finally bound by the magical bond Gleipnir. During Ragnarök, he will break free and fulfill his destiny by devouring Odin, before being killed by Vidar, Odin's son.",
+    "collectible_card_fenrir_title": "Fenrir the Wolf",
+    "collectible_card_freyja_description":
+        "Major goddess of Norse mythology, associated with love, beauty, fertility, but also war, wealth, and magic (seidr). Twin sister of Freyr, she is the most beautiful of goddesses. She rules over her own realm, Fólkvangr, where she welcomes half the warriors who died heroically in battle, the other half going to Odin's Valhalla. She possesses the necklace Brisingamen and a chariot pulled by two cats.",
+    "collectible_card_freyja_title": "Freyja",
+    "collectible_card_frigg_description":
+        "Goddess of love, marriage, and motherhood, wife of Odin and queen of Asgard. She is the mother of Baldr, the beloved god. Gifted with prophecy, she knows the fate of all beings, including her son, but cannot change it. Her maternal love drove her to protect Baldr by making all creation swear an oath, a desperate attempt that was thwarted by Loki's cunning.",
+    "collectible_card_frigg_title": "Frigg the Mother",
+    "collectible_card_ginnungagap_description":
+        "The gaping and silent void that existed before any creation. It was a bottomless abyss, bordered to the north by the icy realm of Niflheim and to the south by the fiery realm of Muspelheim. It was from the meeting between the icy breath of Niflheim and the burning sparks of Muspelheim at the center of Ginnungagap that life emerged, giving birth to the primordial giant Ymir and the cosmic cow Audhumla.",
+    "collectible_card_ginnungagap_title": "The Ginnungagap",
+    "collectible_card_gjallarhorn_description":
+        "The 'Resounding Horn' of the god Heimdall. He uses it to watch over the Bifrost bridge. The sound of this horn is so powerful it can be heard in all nine worlds. Heimdall will sound the Gjallarhorn only once, but it will be for a momentous event: he will use it to alert all gods of the beginning of Ragnarök, when giants and monsters launch their final assault against Asgard.",
+    "collectible_card_gjallarhorn_title": "Gjallarhorn",
+    "collectible_card_gleipnir_description":
+        "The magical chain forged by the dwarfs to bind the wolf Fenrir. Unlike the heavy previous chains that Fenrir had broken, Gleipnir was as fine and supple as a silk ribbon. It was made from six impossible ingredients: the sound of a cat's footstep, a woman's beard, the roots of a mountain, a bear's sinews, a fish's breath, and a bird's saliva. It is the only bond that Fenrir could never break.",
+    "collectible_card_gleipnir_title": "Gleipnir",
+    "collectible_card_gungnir_description":
+        "Odin's infallible spear, which never misses its target. Its name means 'the swaying one'. It was also forged by dwarfs, the sons of Ivaldi, and obtained by Loki. An oath carved on its tip guarantees its accuracy. Gungnir is a symbol of Odin's power and authority as god of war. It was by sacrificing himself, hanging from Yggdrasil and pierced by his own spear, that Odin acquired knowledge of the runes.",
+    "collectible_card_gungnir_title": "Gungnir the Spear",
+    "collectible_card_heimdall_description":
+        "The vigilant guardian of Asgard, stationed at the entrance of the Bifrost bridge to prevent giants from invading the realm of the gods. Born of nine mothers, he possesses superhuman senses: his piercing sight allows him to see hundreds of leagues away and his hearing is so fine he can hear grass growing. He is the keeper of the horn Gjallarhorn. During Ragnarök, he will be the last to fall, killing his eternal enemy Loki in a battle where they will kill each other.",
+    "collectible_card_heimdall_title": "Heimdall",
+    "collectible_card_hel_description":
+        "Daughter of Loki and the giantess Angrboda, sister of the wolf Fenrir and the serpent Jörmungandr. Banished by Odin, she became the sovereign of the realm of the dead, Helheim. She is often depicted with a body half living and half decomposed. She rules over the souls of those who died of sickness or old age, as opposed to warriors who died in combat and go to Valhalla or Fólkvangr. Her power over the dead is absolute.",
+    "collectible_card_hel_title": "Hel",
+    "collectible_card_helheim_description":
+        "The realm of the dead, one of the nine worlds, ruled by the goddess Hel. It is a dark, cold, and misty place, located in the depths of Niflheim. This is where the souls of those who did not die heroically in battle go. The entrance to Helheim is guarded by the monstrous dog Garm. Even the gods cannot escape without Hel's permission, as shown by the vain attempt to bring Baldr back to life.",
+    "collectible_card_helheim_title": "Helheim",
+    "collectible_card_hofund_description":
+        "The gleaming sword of the guardian god Heimdall. Its name means 'man's head', possibly referring to a carved pommel. Like its owner, the sword is a symbol of vigilance and protection for Asgard. Though less famous than other divine weapons like Mjöllnir or Gungnir, Hofund is a powerful weapon that will be used by Heimdall in his final and mutually destructive battle against Loki during Ragnarök.",
+    "collectible_card_hofund_title": "Hofund",
+    "collectible_card_hrimthurs_description":
+        "A giant (Jötunn) who presented himself to the gods as a simple builder. He proposed an audacious bargain: to build an impregnable fortress around Asgard in just three seasons. In payment, he demanded the goddess Freyja, as well as the Sun and Moon. The gods accepted, thinking the task impossible. But the giant, aided by his magical horse Svadilfari, progressed so quickly that the gods became frightened and asked Loki to intervene.",
+    "collectible_card_hrimthurs_title": "Hrimthurs the Builder",
+    "collectible_card_huginnmuninn_description":
+        "The two ravens perched on Odin's shoulders. Their names mean 'Thought' (Huginn) and 'Memory' (Muninn). Each morning, Odin sends them to traverse the nine worlds. Upon their return, they whisper in his ear everything they have seen and heard. They are the All-Father's sources of information, granting him quasi-omniscient knowledge of past, present, and future events, and helping him in his insatiable quest for wisdom.",
+    "collectible_card_huginnmuninn_title": "Huginn and Muninn",
+    "collectible_card_idunn_description":
+        "Goddess of youth and eternity, wife of the poet god Bragi. She is the keeper of the golden apples, magical fruits that grant the gods their youth and immortality. Without these apples, the gods would age and die like mere mortals. Idunn was once kidnapped by the giant Thjazi with Loki's complicity, forcing the gods to age until Loki was compelled to bring her back to Asgard.",
+    "collectible_card_idunn_title": "Idunn",
+    "collectible_card_jormungandr_description":
+        "The Serpent of Midgard, one of the three children of Loki and the giantess Angrboda. Thrown into the ocean surrounding Midgard by Odin, it grew so enormously that it ended up encircling the world of men and biting its own tail, hence its nickname 'World-Serpent'. It is Thor's sworn enemy. During Ragnarök, the two adversaries will clash in a titanic battle. Thor will kill Jörmungandr but will succumb to its venom nine steps later.",
+    "collectible_card_jormungandr_title": "Jörmungandr",
+    "collectible_card_loki_description":
+        "God of cunning, discord, and metamorphosis. Son of giants but admitted among the Æsir gods, he is Odin's blood brother. Intelligent and charming, he uses his talents to help the gods escape difficult situations, but his mischievous and chaotic nature also drives him to be the source of most of their problems. Father of monsters like Fenrir, Jörmungandr, and Hel, his role becomes increasingly dark, ultimately triggering Ragnarök.",
+    "collectible_card_loki_title": "Loki",
+    "collectible_card_mjollnir_description":
+        "Thor's legendary hammer, forged by the dwarfs Brokkr and Sindri. A symbol of both protection and destruction, it can control lightning and thunder. Mjöllnir never misses its target and always returns to its bearer after being thrown. It is one of the most powerful weapons of the gods, indispensable in the eternal struggle against forces of chaos, especially giants.",
+    "collectible_card_mjollnir_title": "Mjöllnir",
+    "collectible_card_njord_description":
+        "God of the sea, wind, fishing, and wealth. He belongs to the Vanir family of gods, but came to live in Asgard with his children, Freyja and Freyr, as a hostage after the war between the Æsir and Vanir. He is invoked by sailors for safe voyages and good catches. His unhappy marriage to the giantess Skadi, who loved the mountains while he loved the sea, illustrates the opposition between these two worlds.",
+    "collectible_card_njord_title": "Njord",
+    "collectible_card_odin_description":
+        "The All-Father, the principal god of the Norse pantheon. God of wisdom, war, death, poetry, and magic (runes). He rules over Asgard from his throne Hlidskjalf, from where he can observe the nine worlds. He sacrificed an eye to drink from Mimir's spring and acquire universal knowledge. Accompanied by his ravens Huginn and Muninn and his wolves Geri and Freki, he prepares gods and men for Ragnarök.",
+    "collectible_card_odin_title": "Odin",
+    "collectible_card_sif_description":
+        "Goddess of fertility, earth, and harvests, wife of Thor. She was famous for her magnificent pure golden hair, which symbolized ripe wheat fields. One day, out of mischief, Loki cut off her hair. Furious, Thor forced Loki to undo his misdeed. Loki then had to command the dwarves to forge new golden hair, which grew like real hair, as well as other treasures for the gods.",
+    "collectible_card_sif_title": "Sif of the Golden Hair",
+    "collectible_card_skadi_description":
+        "Giant goddess associated with archery, winter, mountains, and skiing. Daughter of the giant Thjazi, she went to Asgard to avenge her father's death, killed by the gods. As compensation, the gods offered her to marry one of them, but she had to choose by seeing only their feet. She chose Njord thinking it was Baldr. Their union was a failure, as Skadi could not bear living away from her snowy mountains.",
+    "collectible_card_skadi_title": "Skadi",
+    "collectible_card_sleipnir_description":
+        "Odin's horse, born from the union of Loki transformed into a mare and Svadilfari. The fastest of all horses in the nine worlds, capable of galloping on land, sea, and air. Sleipnir is Odin's faithful steed, carrying him across worlds during his journeys. His eight legs symbolize his supernatural speed and his ability to move between dimensions.",
+    "collectible_card_sleipnir_title": "Sleipnir the Eight-Legged Horse",
+    "collectible_card_svadilfari_description":
+        "The magical and exceptionally strong horse of the builder giant Hrimthurs. Its name means 'unlucky traveler'. Svadilfari's speed and power were such that it allowed its master to build Asgard's wall at prodigious speed, threatening to make the giant win the wager. To sabotage the work, Loki transformed into a beautiful mare and lured Svadilfari away from its master, thus preventing the wall's completion in time.",
+    "collectible_card_svadilfari_title": "Svadilfari the Horse",
+    "collectible_card_thor_description":
+        "The god of thunder, son of Odin and Jörd (the Earth). A devoted protector of Asgard and humans (Midgard), he is known for his prodigious strength and unwavering courage. Armed with his hammer Mjöllnir, which always returns to his hand, his belt Megingjord that multiplies his strength tenfold, and his iron gloves Járngreipr, he relentlessly fights giants and monsters that threaten cosmic order.",
+    "collectible_card_thor_title": "Thor the Protector",
+    "collectible_card_thrym_description":
+        "The formidable king of the frost giants (Jötun) who dared to steal Mjöllnir, Thor's hammer. In exchange for its return, he demanded the hand of the goddess Freyja. To retrieve his weapon, Thor disguised himself as Freyja, accompanied by Loki as a servant. The ruse worked, and once the hammer was in his possession, Thor slaughtered Thrym and his entire court, restoring the gods' honor.",
+    "collectible_card_thrym_title": "Thrym the Giant",
+    "collectible_card_tyr_description":
+        "The god of war, law, and justice. Of exemplary courage, he is the only god who dared approach the wolf Fenrir when it became too large and threatening. To prove to the wolf that they didn't want to trap him with the magical chain Gleipnir, Týr placed his right hand in the beast's mouth. When Fenrir realized he was chained, he tore off the hand. This sacrifice neutralized the wolf until Ragnarök.",
+    "collectible_card_tyr_title": "Týr the Sacrificed",
+    "collectible_card_yggdrasil_description":
+        "The World Tree, an immense and eternal ash that is at the center of the Norse cosmos. Its branches extend over the nine worlds and its trunk connects them. Three main roots support it, each plunging into a spring: Urd's spring in Asgard, Mimir's spring in the land of giants, and Hvergelmir in Niflheim. Yggdrasil is constantly attacked by various creatures, like the dragon Nidhogg that gnaws at its roots, but it always survives, symbolizing life's resilience.",
+    "collectible_card_yggdrasil_title": "Yggdrasil",
+    "collectible_card_ymir_description":
+        "The first living being, a primordial giant born from the meeting of fire from Muspelheim and ice from Niflheim in the void of Ginnungagap. From his sweat came the first giants. He was nourished by the cosmic cow Audhumla. Eventually, he was killed by the gods Odin and his brothers, Vili and Vé. From his body, they created the world: his flesh became the earth, his blood the oceans, his bones the mountains, and his skull the celestial vault.",
+    "collectible_card_ymir_title": "Ymir the Primordial Giant",
+    "deity_astrid_description":
+        "You read the future in stars and runes. Your counsel is sought by kings and jarls, for you see the threads of fate others ignore.",
+    "deity_astrid_title": "The Starry Visionary",
+    "deity_audhumla_description":
+        "You are the source of all life, nourishing the world with your essence. Like Audhumla, you are patient and generous—a pillar of creation.",
+    "deity_audhumla_title": "The Cosmic Cow",
+    "deity_baldr_description":
+        "Pure and beloved by all, you embody light and beauty. Like Baldr, your presence brings joy and harmony, though you remain vulnerable to dark forces.",
+    "deity_baldr_title": "The Shining God",
+    "deity_bjorn_description":
+        "Your strength is legendary, as relentless as an avalanche. You protect your clan with silent ferocity, and your loyalty is the rock on which your allies build their trust.",
+    "deity_bjorn_title": "The Ice Bear",
+    "deity_bragi_description":
+        "Master of words and music, you inspire and move hearts. Like Bragi, you use art to tell stories and celebrate life.",
+    "deity_bragi_title": "The Divine Poet",
+    "deity_fenrir_description":
+        "Powerful and untamable, you represent raw strength and freedom. Like Fenrir, you are a force of nature, impossible to contain.",
+    "deity_fenrir_title": "The Unchained Wolf",
+    "deity_freydis_description":
+        "You are a skjaldmö, a shield-maiden whose courage inspires songs. You never back down from a fight and carve your own path with iron determination.",
+    "deity_freydis_title": "The Fearless Axe",
+    "deity_freyja_description":
+        "Passionate and intuitive, you follow your heart. Like Freyja, you bring beauty and love into the world.",
+    "deity_freyja_title": "Lady of Love",
+    "deity_frigg_description":
+        "Wise and caring, you watch over your loved ones. Like Frigg, you foresee and prevent danger.",
+    "deity_frigg_title": "The Protector",
+    "deity_heimdall_description":
+        "Vigilant and perceptive, you are the protector of realms. Like Heimdall, you possess sharp senses and unwavering loyalty.",
+    "deity_heimdall_title": "The Bridge Guardian",
+    "deity_hel_description":
+        "Just and impartial, you rule over the realm of the dead. Like Hel, you accept the duality of life and death and treat all with fairness.",
+    "deity_hel_title": "The Sovereign of the Dead",
+    "deity_hrimthurs_description":
+        "Imposing and ancient, you are a primordial force of nature. Like Hrimthurs, you are resilient and unshakable, representing elemental power.",
+    "deity_hrimthurs_title": "The Frost Giant",
+    "deity_idunn_description":
+        "Source of youth and vitality, you maintain life’s balance. Like Idunn, you are kind and generous, bringing renewal and freshness.",
+    "deity_idunn_title": "The Keeper of Apples",
+    "deity_ingrid_description":
+        "You rule with wisdom and justice. Your people follow you not out of fear, but out of respect and love, for you embody honor and leadership.",
+    "deity_ingrid_title": "The Noble-Hearted Jarl",
+    "deity_jormungandr_description":
+        "Immense and mysterious, you encircle the world—an unstoppable force. Like Jörmungandr, you are powerful and silent, guardian of the depths.",
+    "deity_jormungandr_title": "The World Serpent",
+    "deity_loki_description":
+        "Creative and unpredictable, you find unique solutions. Like Loki, you challenge the established order.",
+    "deity_loki_title": "The Shape-Shifter",
+    "deity_njord_description":
+        "Calm and generous, you rule the oceans and bring prosperity. Like Njord, you are soothing yet powerful and unpredictable.",
+    "deity_njord_title": "The God of Seas and Winds",
+    "deity_odin_description":
+        "Wise and cunning, you seek knowledge above all else. Like Odin, you are ready to sacrifice to understand the mysteries of the world.",
+    "deity_odin_title": "The Allfather",
+    "deity_ragnar_description":
+        "Your mind is as sharp as your axe. You excel at strategy and deception, using intelligence as your greatest weapon to outwit your enemies.",
+    "deity_ragnar_title": "The Cunning Raven",
+    "deity_selection_screen_choose_button": "Choose",
+    "deity_selection_screen_title": "Choose a Deity",
+    "deity_sif_description":
+        "Beautiful and fertile, you symbolize abundance and harvest. Like Sif, you bring life and prosperity to those around you.",
+    "deity_sif_title": "The Golden-Haired Goddess",
+    "deity_skadi_description":
+        "Independent and wild, you are the mistress of mountains and winters. Like Skadi, you are resilient and unyielding, embodying nature’s might.",
+    "deity_skadi_title": "The Huntress Goddess",
+    "deity_sleipnir_description":
+        "Swift and loyal, you are the noblest of steeds, able to traverse worlds. Like Sleipnir, you are a reliable companion and a sure guide.",
+    "deity_sleipnir_title": "The Eight-Legged Horse",
+    "deity_svadilfari_description":
+        "Powerful and tireless, you achieve great feats of construction. Like Svadilfari, you are a hardworking creator of the impossible.",
+    "deity_svadilfari_title": "The Builder Horse",
+    "deity_sven_description":
+        "The horizon is your only true home. You have sailed unknown waters and braved monstrous storms, your soul burning with the desire to discover what lies beyond the map.",
+    "deity_sven_title": "The Sea Explorer",
+    "deity_thor_description":
+        "Strong and brave, you protect those around you. Like Thor, you face challenges head-on with determination.",
+    "deity_thor_title": "The Thunderer",
+    "deity_thrym_description":
+        "Powerful and demanding, you are a formidable adversary. Like Thrym, you are a force not to be underestimated, capable of challenging even the gods.",
+    "deity_thrym_title": "The King of Giants",
+    "deity_tyr_description":
+        "Honorable and fair, you defend justice. Like Týr, you sacrifice for what is right, even at great cost.",
+    "deity_tyr_title": "The Just",
+    "deity_ymir_description":
+        "Ancient and colossal, you are the origin of all existence. Like Ymir, you are a fundamental force—a pillar of the world, vast and silent.",
+    "deity_ymir_title": "The Primordial Giant",
+    "games_menu_andvari_loot": "Andvari’s Loot",
+    "games_menu_asgard_wall": "Wall of Asgard",
+    "games_menu_midgard_serpent": "The Serpent of Midgard",
+    "games_menu_mini_games": "Mini-Games",
+    "games_menu_odin_eye": "Odin’s Eye",
+    "games_menu_reorder_history": "Reorder History",
+    "games_menu_scattered_runes": "Scattered Runes",
+    "games_menu_territory_conquest": "Territory Conquest",
+    "level": "Level",
+    "main_screen_guardian_deity": "My Guardian Deity",
+    "main_screen_play": "Let's Play",
+    "main_screen_profile": "Profile",
+    "main_screen_rewards": "My Rewards",
+    "main_screen_settings": "Settings",
+    "main_screen_title": "Oracle of Asgard",
+    "minesweeper_game_over": "BOOM! You hit a mine.",
+    "minesweeper_preliminary_screen_help_text":
+        "The cursed treasure of the dwarf Andvari is hidden. Clear the tiles and find the gold coins without triggering traps!",
+    "minesweeper_preliminary_screen_start_button": "Begin the Treasure Hunt",
+    "minesweeper_rule_1":
+        "The goal is to find all treasures without triggering any mines.",
+    "minesweeper_rule_2": "Tap a tile to reveal it. If it’s a mine, you lose.",
+    "minesweeper_rule_3":
+        "If the revealed tile contains a rune, it indicates the number of adjacent mines or treasures.",
+    "minesweeper_rule_4":
+        "Red runes indicate adjacent mines; yellow runes indicate adjacent treasures.",
+    "minesweeper_rule_5":
+        "Long press a tile to place or remove a flag, marking a suspected mine.",
+    "minesweeper_rule_6": "Find all treasures to win the game!",
+    "minesweeper_rune_legend": "Rune Legend:",
+    "minesweeper_title": "Andvari’s Loot",
+    "minesweeper_treasures_found": "Treasures found: {found} / {total}",
+    "myth_story_page_ad_display_failed": "Ad display failed. Please try again.",
+    "myth_story_page_ad_loading_failed": "Ad loading failed. Please try again.",
+    "myth_story_page_chapter_locked": "Chapter locked",
+    "myth_story_page_chapter_unlocked_success":
+        "Chapter unlocked successfully!",
+    "myth_story_page_close_button": "Close",
+    "myth_story_page_error_prefix": "Error",
+    "myth_story_page_font_size_title": "Font Size",
+    "myth_story_page_sample_text": "Sample text",
+    "myth_story_page_unlock_with_ad": "Unlock with ad",
+    "norse_riddle_asgard_clue_1": "I am the fortress of the Aesir gods.",
+    "norse_riddle_asgard_clue_2":
+        "My walls were built by a giant and his horse.",
+    "norse_riddle_asgard_clue_3": "The rainbow bridge leads to my gates.",
+    "norse_riddle_bifrost_clue_1":
+        "I am a bridge of fire guarded by a watchful god.",
+    "norse_riddle_bifrost_clue_2":
+        "My three colors connect the world of men to the world of gods.",
+    "norse_riddle_bifrost_clue_3":
+        "I will shatter under the weight of giants at the end of time.",
+    "norse_riddle_fenrir_clue_1":
+        "My jaw, when opened, touches the sky and the earth.",
+    "norse_riddle_fenrir_clue_2":
+        "The gods bound me by trickery with a silken ribbon.",
+    "norse_riddle_fenrir_clue_3": "I will devour Odin during the final battle.",
+    "norse_riddle_freya_clue_1":
+        "I weep tears of gold for my departed husband.",
+    "norse_riddle_freya_clue_2":
+        "I rule over Fólkvangr and receive half of the slain warriors.",
+    "norse_riddle_freya_clue_3":
+        "My necklace, Brísingamen, is the most beautiful of treasures.",
+    "norse_riddle_frigg_clue_1": "I know the fate of all, but I remain silent.",
+    "norse_riddle_frigg_clue_2":
+        "I am the wife of Odin and the queen of Asgard.",
+    "norse_riddle_frigg_clue_3": "I wept for the death of my shining son.",
+    "norse_riddle_gjallarhorn_clue_1": "My sound can be heard in all worlds.",
+    "norse_riddle_gjallarhorn_clue_2":
+        "I am the warning horn of the guardian of Bifrost.",
+    "norse_riddle_gjallarhorn_clue_3":
+        "I will announce the beginning of the final battle.",
+    "norse_riddle_gungnir_clue_1":
+        "I am the spear that never misses its target.",
+    "norse_riddle_gungnir_clue_2":
+        "My owner hung himself from a tree with me in his side.",
+    "norse_riddle_gungnir_clue_3": "An oath sworn on my tip is unbreakable.",
+    "norse_riddle_huginn_clue_1":
+        "Every morning I leave, only to return at dusk.",
+    "norse_riddle_huginn_clue_2": "I am Thought, flying for the All-Father.",
+    "norse_riddle_huginn_clue_3": "My brother is Memory.",
+    "norse_riddle_hvergelmir_clue_1":
+        "I am the source of all rivers, in the heart of Niflheim.",
+    "norse_riddle_hvergelmir_clue_2":
+        "My cauldron boils, and my waters freeze everything in their path.",
+    "norse_riddle_hvergelmir_clue_3":
+        "From me, the eleven rivers of Élivágar are born.",
+    "norse_riddle_jormungandr_clue_1":
+        "I am so large that I encircle the world of men.",
+    "norse_riddle_jormungandr_clue_2":
+        "I am the Midgard Serpent, child of Loki.",
+    "norse_riddle_jormungandr_clue_3": "My sworn enemy is the god of thunder.",
+    "norse_riddle_jotunheim_clue_1":
+        "I am the realm of giants, beyond Midgard.",
+    "norse_riddle_jotunheim_clue_2":
+        "My mountains are cold and my inhabitants formidable.",
+    "norse_riddle_jotunheim_clue_3":
+        "It is here that Thor often comes looking for a fight.",
+    "norse_riddle_loki_clue_1":
+        "I am the father of monsters and the master of deceit.",
+    "norse_riddle_loki_clue_2": "My blood was mixed with Odin's.",
+    "norse_riddle_loki_clue_3": "I change my shape as I change my mind.",
+    "norse_riddle_midgard_clue_1": "I am the realm of mortals.",
+    "norse_riddle_midgard_clue_2": "A giant serpent surrounds my shores.",
+    "norse_riddle_midgard_clue_3":
+        "I am protected by the hammer-wielding son of Odin.",
+    "norse_riddle_mjolnir_clue_1": "I always return to my master's hand.",
+    "norse_riddle_mjolnir_clue_2":
+        "My flight through the sky is the sound of thunder.",
+    "norse_riddle_mjolnir_clue_3": "I am the crusher, the terror of giants.",
+    "norse_riddle_nidavellir_clue_1":
+        "My forges echo with the sound of hammers.",
+    "norse_riddle_nidavellir_clue_2":
+        "I am the underground kingdom of the master craftsmen.",
+    "norse_riddle_nidavellir_clue_3":
+        "It is here that the greatest treasures of the gods are born.",
+    "norse_riddle_nidavellir_clue_4": "My inhabitants flee from the sunlight.",
+    "norse_riddle_odin_clue_1": "I traded an eye for wisdom.",
+    "norse_riddle_odin_clue_2":
+        "My two ravens travel the world to bring me news.",
+    "norse_riddle_odin_clue_3": "I am the All-Father, ruling from Asgard.",
+    "norse_riddle_ragnarok_clue_1": "I am the twilight of the gods.",
+    "norse_riddle_ragnarok_clue_2":
+        "The sun will turn black and the earth will sink into the sea.",
+    "norse_riddle_ragnarok_clue_3": "I am an end, but also a new beginning.",
+    "norse_riddle_thor_clue_1": "My chariot is pulled by goats.",
+    "norse_riddle_thor_clue_2":
+        "I am the protector of Midgard and the son of Odin.",
+    "norse_riddle_thor_clue_3": "Thunder rumbles when I throw my hammer.",
+    "norse_riddle_tyr_clue_1": "I sacrificed my hand to bind a wolf.",
+    "norse_riddle_tyr_clue_2":
+        "I am the one-handed god of justice and heroic war.",
+    "norse_riddle_tyr_clue_3": "My name is synonymous with courage.",
+    "norse_riddle_valhalla_clue_1": "My roof is covered with golden shields.",
+    "norse_riddle_valhalla_clue_2":
+        "Here, elite warriors feast and fight every day.",
+    "norse_riddle_valhalla_clue_3":
+        "I am Odin's great hall for the worthy dead.",
+    "norse_riddle_valkyries_clue_1":
+        "We ride across the skies, choosing the slain in battle.",
+    "norse_riddle_valkyries_clue_2":
+        "We serve Odin, carrying heroes to Valhalla.",
+    "norse_riddle_valkyries_clue_3": "Our names echo on the battlefields.",
+    "norse_riddle_yggdrasil_clue_1": "My roots connect three worlds.",
+    "norse_riddle_yggdrasil_clue_2": "I am the World Tree, an eternal ash.",
+    "norse_riddle_yggdrasil_clue_3":
+        "An eagle, a squirrel, and a dragon live within me.",
+    "order_the_scrolls_help_dialog_rule_1":
+        "Put the cards back in chronological order according to Norse mythology.",
+    "order_the_scrolls_help_dialog_rule_2":
+        "Drag one card onto another to swap them.",
+    "order_the_scrolls_help_dialog_rule_3":
+        "The ⭲ icon indicates a movable card.",
+    "order_the_scrolls_help_dialog_rule_4":
+        "Arrange them from the first to the last step.",
+    "order_the_scrolls_help_dialog_rule_5":
+        "Click on \"Validate Order\" to check.",
+    "order_the_scrolls_help_dialog_rule_6":
+        "Correct cards will appear with a green border ✅.",
+    "order_the_scrolls_preliminary_screen_help_text":
+        "Put the mythological cards back in chronological order and reconstruct the legendary history of the Norse gods.",
+    "order_the_scrolls_preliminary_screen_start_button": "Start",
+    "order_the_scrolls_screen_incorrect_order":
+        "❌ Sorry, the order is incorrect.",
+    "order_the_scrolls_screen_validate_order": "Validate Order",
+    "profile_screen_ad_failed": "Ad display failed. Please try again.",
+    "profile_screen_ad_label": "(ad)",
+    "profile_screen_all_cards_unlocked":
+        "All {version} collectible cards unlocked!",
+    "profile_screen_all_stories_unlocked": "All stories have been unlocked!",
+    "profile_screen_ambient_music": "Ambient Music",
+    "profile_screen_cache_clear_failed": "Failed to clear cache",
+    "profile_screen_cache_cleared_success": "Cache cleared successfully!",
+    "profile_screen_change_name": "Change Name",
+    "profile_screen_chapter_unlocked": "Chapter unlocked successfully!",
+    "profile_screen_collectible_cards": "Collectible Cards",
+    "profile_screen_database_clear_failed":
+        "Failed to clear and rebuild database",
+    "profile_screen_database_cleared_success":
+        "Database cleared and rebuilt successfully!",
+    "profile_screen_error_prefix": "Error",
+    "profile_screen_game_scores": "Game Scores",
+    "profile_screen_language": "Language",
+    "profile_screen_language_english": "English",
+    "profile_screen_language_french": "French",
+    "profile_screen_language_spanish": "Spanish",
+    "profile_screen_new_name": "New Name",
+    "profile_screen_no_asgard_wall_scores": "No Asgard Wall scores yet.",
+    "profile_screen_no_collectible_cards": "No collectible cards unlocked yet.",
+    "profile_screen_no_data_available": "No data available.",
+    "profile_screen_no_snake_scores": "No Snake scores yet.",
+    "profile_screen_no_unlocked_stories": "No stories unlocked yet.",
+    "profile_screen_ok_button": "OK",
+    "profile_screen_quiz_loading_error": "Error loading quiz result",
+    "profile_screen_save": "Save",
+    "profile_screen_settings": "Settings",
+    "profile_screen_snake_podium": "Snake Podium",
+    "profile_screen_asgard_wall_podium": "Asgard Wall Podium",
+    "profile_screen_unlocked_stories": "Unlocked Stories",
+    "puzzle_preliminary_screen_help_text":
+        "Assemble the fragments of ancient runes to unlock their mystical power.",
+    "puzzle_preliminary_screen_start_button": "Start Puzzle",
+    "puzzle_screen_rule_1": "Rearrange the tiles to form the complete image.",
+    "puzzle_screen_rule_2": "Slide tiles into empty spaces.",
+    "puzzle_screen_rule_3":
+        "The goal is to complete the image as quickly as possible.",
+    "puzzle_screen_title": "Scattered Runes",
+    "qix_game_menu_controls":
+        "⌨️ Keyboard Controls ⌨️\nArrows to move, Space to draw slowly.",
+    "qix_game_menu_description":
+        "Jörmungandr, the World Serpent, has invaded the sacred realms. Draw magical borders to reclaim 75% of the territory and imprison the beast!",
+    "qix_game_menu_start_button": "⚔️ Begin the Conquest",
+    "qix_game_menu_title": "The Nine Realms",
+    "qix_main_error_prefix": "Error",
+    "qix_main_game_not_initialized_error": "Error: Game not initialized.",
+    "qix_main_screen_defeat_message": "You have been defeated. Try again!",
+    "qix_main_screen_defeat_title": "DEFEAT!",
+    "qix_main_screen_rule_1":
+        "Draw lines to capture territories. Avoid enemies and their trails!",
+    "qix_main_screen_rule_2": "Capture more than 75% of the land to win.",
+    "qix_main_screen_rule_3":
+        "If an enemy hits your line while drawing, you lose a life.",
+    "qix_main_screen_rule_4": "If an enemy touches your body, you lose a life.",
+    "qix_main_screen_rule_5": "Collect bonuses for temporary advantages.",
+    "qix_main_screen_title": "Territory Conquest",
+    "qix_preliminary_screen_help_text":
+        "Guide Odin and draw shapes to conquer the territories of the nine worlds—but beware of Fenrir lurking, ready to strike!",
+    "qix_preliminary_screen_start_button": "Start",
+    "question_10_answer_1": "Reading minds",
+    "question_10_answer_2": "Becoming invincible",
+    "question_10_answer_3": "Traveling between worlds",
+    "question_10_answer_4": "Soothing hearts",
+    "question_10_text": "What type of power would you prefer?",
+    "question_11_answer_1": "The mysterious mentor",
+    "question_11_answer_2": "The loyal warrior",
+    "question_11_answer_3": "The unpredictable trickster",
+    "question_11_answer_4": "The gentle but formidable figure",
+    "question_11_text": "If you were a movie hero, you would be...",
+    "question_12_answer_1": "Solving an ancient riddle",
+    "question_12_answer_2": "Fighting a dragon",
+    "question_12_answer_3": "Turning around a desperate situation",
+    "question_12_answer_4": "Bringing enemies together around a table",
+    "question_12_text": "What type of challenge attracts you most?",
+    "question_1_answer_1": "Seek information before acting",
+    "question_1_answer_2": "Rush in headfirst",
+    "question_1_answer_3": "Find a creative approach",
+    "question_1_answer_4": "Gather others to act together",
+    "question_1_text": "When facing a major challenge, your first reaction is:",
+    "question_2_answer_1": "Your ability to understand complex situations",
+    "question_2_answer_2": "Your determination in the face of obstacles",
+    "question_2_answer_3": "Your empathy and connection to others",
+    "question_2_answer_4": "Your unwavering moral sense",
+    "question_2_text": "Your greatest strength is:",
+    "question_3_answer_1": "The wise advisor who listens",
+    "question_3_answer_2": "The leader who makes decisions",
+    "question_3_answer_3": "The one who brings creativity and novelty",
+    "question_3_answer_4": "The mediator who resolves conflicts",
+    "question_3_text": "In a group, you are often:",
+    "question_4_answer_1": "A source of reflection and wisdom",
+    "question_4_answer_2": "A field of challenges and adventures",
+    "question_4_answer_3": "Inspiration for creativity and passion",
+    "question_4_answer_4": "A reminder of the natural order of things",
+    "question_4_text": "Your relationship with nature is:",
+    "question_5_answer_1": "Remaining in ignorance",
+    "question_5_answer_2": "Being cowardly in the face of danger",
+    "question_5_answer_3": "Losing your creative freedom",
+    "question_5_answer_4": "Betraying your principles",
+    "question_5_text": "Your greatest fear would be:",
+    "question_6_answer_1": "Deep and thoughtful, based on understanding",
+    "question_6_answer_2": "Protective and loyal to those you love",
+    "question_6_answer_3": "Passionate and intense",
+    "question_6_answer_4": "Fair and respectful",
+    "question_6_text": "Your approach to love and relationships:",
+    "question_7_answer_1": "Strategic leader",
+    "question_7_answer_2": "The one who motivates everyone",
+    "question_7_answer_3": "The creative who breaks the rules",
+    "question_7_answer_4": "The one who balances and soothes",
+    "question_7_text": "What role do you prefer in group work?",
+    "question_8_answer_1": "A silent library",
+    "question_8_answer_2": "A combat arena",
+    "question_8_answer_3": "An enchanted forest",
+    "question_8_answer_4": "A throne room",
+    "question_8_text": "Which environment best represents you?",
+    "question_9_answer_1": "You reflect then act with wisdom",
+    "question_9_answer_2": "You protect the weak with force",
+    "question_9_answer_3": "You manipulate to turn the situation around",
+    "question_9_answer_4": "You are outraged and seek peace",
+    "question_9_text": "How do you react to injustice?",
+    "result_screen_congratulations": "Congratulations!",
+    "result_screen_guardian_deity_is": "Your guardian deity is:",
+    "result_screen_share_text":
+        "I discovered my guardian deity in Oracle of Asgard: {deity}!\n\n{description}\n\nJoin me to discover yours!\n\n{link}",
+    "result_screen_your_profile": "Your Profile",
+    "settings_screen_about_button": "About",
+    "settings_screen_fx_sound": "Sound Effects",
+    "settings_screen_rate_app": "Rate the app",
+    "settings_screen_reading_page_music": "Reading Music",
+    "settings_screen_share_app": "Share the app",
+    "settings_screen_share_text": "Check out this cool app: {appLink}",
+    "settings_screen_sound_default": "Default",
+    "settings_screen_sound_mute": "Mute",
+    "settings_screen_support_us_title": "Support Us",
+    "settings_screen_title": "Settings",
+    "snake_bonus_duration": "Effects last 8 seconds",
+    "snake_bonus_freeze_effect": "-30% slower",
+    "snake_bonus_freeze_name": "Freeze",
+    "snake_bonus_ghost_effect": "Pass through obstacles",
+    "snake_bonus_ghost_name": "Ghost",
+    "snake_bonus_shield_effect": "Destroy obstacles",
+    "snake_bonus_shield_name": "Shield",
+    "snake_bonus_speed_effect": "+30% faster",
+    "snake_bonus_speed_name": "Speed",
+    "snake_bonus_title": "Bonus:",
+    "snake_game_over_popup_message":
+        "Jörmungandr has perished...\nFinal score: {score}",
+    "snake_game_over_popup_title": "⚰️ Ragnarök!",
+    "snake_preliminary_screen_help_text":
+        "Guide Jörmungandr, the serpent of Midgard, to grow without biting its own tail, crashing into rocks, or hitting the world’s edge.",
+    "snake_preliminary_screen_start_button": "Start",
+    "snake_screen_error_prefix": "Error",
+    "snake_screen_loading": "Loading...",
+    "snake_screen_rule_1":
+        "Swipe on the screen to change the snake’s direction.",
+    "snake_screen_rule_2": "Eat apples to grow and earn points.",
+    "snake_screen_rule_3": "Avoid hitting walls, rocks, or your own body.",
+    "snake_screen_rule_4": "Golden apples give more points.",
+    "snake_screen_rule_5": "Rotten apples make you lose points and slow down.",
+    "snake_screen_rule_6": "The higher your score, the faster the snake moves.",
+    "snake_screen_score": "Score: {score}",
+    "snake_screen_score_default": "Score: 0",
+    "snake_screen_time_seconds_suffix": "s",
+    "story_creation_of_the_world_card_1_description":
+        "Before all creation, there was only Ginnungagap, the infinite abyss where the flames of Muspellheim and the ice of Niflheim faced each other in silent anticipation.",
+    "story_creation_of_the_world_card_1_detailed_story":
+        "At the dawn of time, before any world, sea, sky, or land existed, there was only Ginnungagap—the yawning void, the primordial abyss stretching into infinite solitude.\n\nIt was neither light nor darkness, neither hot nor cold, but absolute nothingness, where nothing could be born or die, for nothing yet existed. This colossal emptiness separated two realms of opposite nature, like two antagonistic forces awaiting their cosmic confrontation.\n\nTo the north of Ginnungagap lay Niflheim, the world of eternal ice and mist, from which flowed the eleven rivers of Élivágar, carrying waters so cold they froze instantly in the void. To the south burned Muspellheim, the realm of eternal and unquenchable fire, guarded by the giant Surtr, who wielded his flaming sword as he awaited the day he would set all worlds ablaze.\n\nThus the primordial forces faced each other across the vastness of the void, preparing creation through their very opposition.",
+    "story_creation_of_the_world_card_1_title": "Ginnungagap",
+    "story_creation_of_the_world_card_2_description":
+        "When the blazing sparks of Muspellheim met the icy mists of Niflheim, the ice melted into torrents of primordial water, giving birth to the essence of life.",
+    "story_creation_of_the_world_card_2_detailed_story":
+        "For countless eons, fire and ice remained separated by the vastness of Ginnungagap. But slowly, inexorably, the fiery sparks of Muspellheim began to drift northward, carried by imperceptible cosmic winds.\n\nWhen these sparks of pure heat met the icy mists of Niflheim in the heart of the void, an extraordinary phenomenon occurred. For the first time since the beginning of time, the ice began to melt, releasing torrents of primordial water.\n\nThese drops of water, born from the miraculous union of opposites, fell into the abyss of Ginnungagap. There, infused with the vital force born from this impossible union of fire and ice, they began to stir with creative energy.\n\nIt was the first miracle of existence: from the opposition of contrary forces emerged the very possibility of life. The primordial water carried within it the seed of all that was to come.",
+    "story_creation_of_the_world_card_2_title": "Fire and Ice",
+    "story_creation_of_the_world_card_3_description":
+        "From these waters emerged Ymir, the first giant—colossal and chaotic—accompanied by Audhumla, the nourishing cow. Together, they paved the way for the gods and the lineages to come.",
+    "story_creation_of_the_world_card_3_detailed_story":
+        "From the primordial water, a colossal being arose: Ymir, the first giant, also known as Aurgelmir. His flesh was made of melted ice, his bones of ancient rock, and his eyes shone with a cold light like the newborn stars.\n\nBeside him appeared an immense cow named Audhumla, sustained by the sweet drops of water that had formed in Ginnungagap. Audhumla was the source of life for Ymir, providing the milk necessary for his survival. As she licked the ice of the mountains, she soon uncovered Buri, the first god, whose descendants would give rise to the Aesir.\n\nThus began the first generation of giants and gods, marking the dawn of the world’s history. Ymir became the father of the giants, while Audhumla nourished the beings who would shape the universe.",
+    "story_creation_of_the_world_card_3_title":
+        "The Birth of Ymir and Audhumla",
+    "story_creation_of_the_world_card_4_description":
+        "Odin and his brothers faced Ymir, the embodiment of chaos. His death unleashed floods of blood that drowned almost all the giants, forever altering the balance of the cosmos.",
+    "story_creation_of_the_world_card_4_detailed_story":
+        "The gods, aware that Ymir posed a threat to the balance of the cosmos, decided to end his chaotic reign. Odin, Vili, and Vé, the three divine brothers, joined forces to confront the primordial giant.\n\nIn an epic battle, they managed to slay Ymir. His colossal body collapsed into Ginnungagap, and his blood began to flow in torrents. This blood flooded nearly all the other giants, drowning them in an ocean of chaos.\n\nBut the gods did not stop at killing Ymir. They used his body to shape the world: his flesh became the earth, his bones the mountains, his blood the seas and rivers, and his skull the sky. Thus, from the death of the giant was born the universe as we know it.",
+    "story_creation_of_the_world_card_4_title": "The Death of Ymir",
+    "story_creation_of_the_world_card_5_description":
+        "From Ymir’s body, the gods forged the universe: the earth from his flesh, the mountains from his bones, the seas from his blood, and the sky from his skull, giving form to the world of men—Midgard.",
+    "story_creation_of_the_world_card_5_detailed_story":
+        "After defeating Ymir, the gods set to work shaping the world from his colossal body. They began by dividing it into two equal halves, thus creating the earth and the sky.\n\nYmir’s flesh became fertile land, covered in lush forests and green plains. His bones were broken and raised into majestic mountains, forming the ranges that span the world. His blood, which had flooded the giants, was channeled to form deep seas and winding rivers.\n\nYmir’s skull was lifted to create the sky, supported by four dwarves representing the cardinal points: North, South, East, and West. The stars were placed in the sky as glittering lanterns, while the moon and sun were created to govern time.\n\nThus was born Midgard, the world of men, at the center of the universe, surrounded by the nine interconnected realms. The gods had shaped a harmonious cosmos from primordial chaos.",
+    "story_creation_of_the_world_card_5_title": "The Creation of the World",
+    "story_creation_of_the_world_title": "The Birth of the World",
+    "story_fenrir_chained_card_1_description":
+        "Fenrir, the monstrous wolf and son of Loki, is welcomed into Asgard to be kept under close watch. Though still young, his sheer size and growing appetite already inspire terror.",
+    "story_fenrir_chained_card_1_detailed_story":
+        "Fenrir was the son of Loki and the giantess Angrboda—a creature born from the forbidden unions between gods and the forces of chaos. From birth, the massive wolf showed a wild nature and strength beyond comprehension.\n\nAware of the danger he posed, according to the grim prophecies of the Norns, the gods made a daring decision: instead of banishing or killing him, they chose to raise him in Asgard, hoping to keep him under control—or perhaps even tame him.\n\nBut Fenrir grew with each passing day, his size and ferocity increasing at a terrifying pace. His yellow eyes gleamed with a disturbing intelligence, and his razor-sharp fangs could crush even the hardest bones. Only Tyr, the brave god of war, dared to approach the beast to feed him, thus earning his fragile trust.",
+    "story_fenrir_chained_card_1_title": "Fenrir Raised by the Gods",
+    "story_fenrir_chained_card_2_description":
+        "The gods invent a game to test Fenrir’s strength, but neither Leyding nor Dromi—the chains forged by the dwarves—can hold him: he shatters them with a single flex of his muscles.",
+    "story_fenrir_chained_card_2_detailed_story":
+        "When Fenrir grew so large that he towered even over the mightiest gods, fear settled in Asgard. The prophecies foretold that he would devour Odin during Ragnarök, and his ever-growing power made this threat seem inevitable.\n\nThe gods then decided to chain him. They disguised it as a game—a challenge to test his legendary strength. Fenrir, still naive despite his size, agreed to be bound by Leyding, the strongest chain ever forged by the dwarves.\n\nBut with a simple shrug of his shoulders, the wolf shattered Leyding like a thread. Iron links flew in every direction. Pretending admiration, the gods tried again with Dromi, an even thicker and stronger chain.\n\nFenrir broke it to pieces in a single motion, revealing a supernatural strength that made the gods realize no ordinary chain could ever restrain this creature of chaos.",
+    "story_fenrir_chained_card_2_title": "The Chains Fail",
+    "story_fenrir_chained_card_3_description":
+        "The gods command the dwarves to forge Gleipnir, a magical bond woven from impossible elements. It looks like a silk ribbon but holds an otherworldly power.",
+    "story_fenrir_chained_card_3_detailed_story":
+        "Realizing that brute force would never subdue Fenrir, Odin secretly sent a messenger to the dwarves of Svartalfheim. These master smiths, capable of crafting impossible wonders, received an extraordinary request.\n\nThey were to create Gleipnir, a magical binding woven from six impossible ingredients: the sound of a cat’s footsteps, a woman’s beard, the roots of a mountain, a bear’s sinews, a fish’s breath, and a bird’s saliva.\n\nThese mystical, invisible, and intangible materials were combined by the dwarves in their enchanted forges. The result was paradoxical: Gleipnir looked like a simple silk ribbon—thin and smooth to the touch—but it contained a magic powerful enough to bind the most destructive forces in the universe.\n\nWhen the gods received this miraculous chain, they knew they finally possessed the weapon that could restrain the wolf of destiny.",
+    "story_fenrir_chained_card_3_title": "Gleipnir",
+    "story_fenrir_chained_card_4_description":
+        "Fenrir, suspicious of this strange chain, agrees to be bound only if one of the gods places a hand in his jaws as a pledge of sincerity and good faith.",
+    "story_fenrir_chained_card_4_detailed_story":
+        "When the gods presented Gleipnir to Fenrir, the wolf—now wary after the previous attempts—carefully examined the strange bond. Despite its fragile appearance, something about it stirred his deepest instincts.\n\n“This chain seems suspicious,” said Fenrir, sniffing Gleipnir. “It looks weak, yet I sense powerful magic within it. If this is just another of your games, why not use ordinary chains?”\n\nThe gods tried to reassure him, pretending that because he had already broken the earlier chains, they wanted to test this new creation of the dwarves.\n\nBut Fenrir set his conditions in a deep voice that made the very foundations of Asgard tremble: “I will allow myself to be bound with this ribbon, but only if one of you places a hand in my mouth as a token of good faith. Thus, if you deceive me, at least one of you will pay the price for this betrayal.”",
+    "story_fenrir_chained_card_4_title": "The Challenge",
+    "story_fenrir_chained_card_5_description":
+        "Tyr, the only one who has earned the wolf’s trust, places his hand in its jaws. When Fenrir realizes the trick, he bites down and tears off the god of courage’s hand.",
+    "story_fenrir_chained_card_5_detailed_story":
+        "A heavy silence fell over the assembly of the gods. They all knew they were about to deceive Fenrir—and that whoever placed a hand in the wolf’s mouth would surely lose it. No one dared to volunteer.\n\nOnly Tyr, the god of courage and honor, stepped forward. He was the only one who had fed Fenrir, the only one the wolf still trusted. Without hesitation, true to his reputation for bravery, he extended his right hand and placed it between the beast’s deadly jaws.\n\nGleipnir was then tied around Fenrir’s paws. The wolf tried to break it as he had the others, straining every muscle, pulling with all his might. But the more he struggled, the tighter the magical bond became.\n\nRealizing he had been deceived and would remain imprisoned for eternity, Fenrir lifted his yellow eyes toward Tyr. A look of sorrow and rage passed between god and beast. Then, with a single, sharp motion, Fenrir snapped his jaws shut, tearing Tyr’s hand off with a sickening crack.\n\nFenrir was then dragged to a desolate island and bound to a rock deep within the earth, where he remains chained until Ragnarök—the day he will finally break his bonds and devour Odin.\n\nThus Tyr lost his hand, but earned the eternal gratitude of the gods for his heroic sacrifice that saved the Nine Realms... at least for a time.",
+    "story_fenrir_chained_card_5_title": "Tyr’s Sacrifice",
+    "story_fenrir_chained_title": "Fenrir Chained",
+    "story_loading_card_description": "Please wait while the game is loading.",
+    "story_loading_card_detailed_story":
+        "The story is being prepared for you. This may take a few moments depending on your device and connection speed. Thank you for your patience!",
+    "story_loading_card_title": "Loading...",
+    "story_loading_title": "Loading the Story",
+    "story_mead_of_poetry_card_1_description":
+        "Two dwarves transform the blood of Kvasir—being born of wisdom—into a drink of divine inspiration.",
+    "story_mead_of_poetry_card_1_detailed_story":
+        "When the fragile peace between the Aesir and the Vanir was sealed, the gods mingled their spittle, and from this pact was born Kvasir, a being of pure knowledge. Kvasir roamed the worlds, answering the questions of gods and men; his speech was insight, his breath a song. But greed stirred in the hearts of two dwarves, Fjalar and Galar, thirsty for power. Through deceit they lured Kvasir into a cavern, killed him, and gathered his blood. In massive cauldrons they mixed this blood with the purest honey and cast their runes as one sows seeds. The liquid took on a golden hue, shimmering with a gleam that seemed to contain verses and prophecies. The dwarves soon realized this was no mere drink—it was the source of poetry, the sap of words and wisdom. They named the vessels Óðrerir, Boðn, and Són, and guarded their treasure jealously, unaware that this theft would spark envy and tragedy among giants and gods alike. Thus was born, from violence and treachery, the very essence of inspiration.",
+    "story_mead_of_poetry_card_1_title": "The Blood of Kvasir",
+    "story_mead_of_poetry_card_2_description":
+        "The giant Suttungr seizes the mead and hides it within a mountain, guarded by his daughter Gunnlöð.",
+    "story_mead_of_poetry_card_2_detailed_story":
+        "When the treachery of the dwarves and the theft of Kvasir’s essence were revealed, wrath burst forth. The victim’s kin, outraged, demanded justice. Cornered, Fjalar and Galar offered their treasure as ransom—the drink of verse and vision. The giant Suttungr, a being of vast stature and appetite for marvels, accepted without hesitation. He carried the three cauldrons into the mountain of Hnitbjörg, carving a chamber so deep that even light seemed reluctant to descend. There, among stalactites like stone fangs, he engraved sealing runes and wove defenses and enchantments around them. To guard the gift that granted wisdom, he entrusted his daughter Gunnlöð—sweet and fierce, with eyes the color of honey. Gunnlöð spent her days and nights singing to her ward and sometimes tasting the scent that lingered: the mead radiated a living aura. Waves of desire and loneliness tightened her heart; she became the living key of a treasure that was both promise and curse. Thus the nectar of words slept, watched over by filial love and a giant’s pride.",
+    "story_mead_of_poetry_card_2_title": "Suttungr’s Treasure",
+    "story_mead_of_poetry_card_3_description":
+        "Odin disguises himself and uses cunning and a magic drill to pierce the mountain and reach the mead.",
+    "story_mead_of_poetry_card_3_detailed_story":
+        "Great Odin, ever thirsty for knowledge and power, learned of the mead’s hiding place and desired nothing more than to taste it. Under the guise of Bölverk—an alias and mask of toil—he came to Baugi, Suttungr’s brother, and offered his labor. With wise words and patient gestures, he gained the giant’s trust. Flattered, Baugi agreed to use a magic auger named Rati to bore through the rock. The tool screeched and the stone cracked; the song of iron on stone echoed like a prophecy. When air finally passed through, Odin slipped into the opening—not with strength, but with cunning: he transformed into a serpent and slithered through the crevice, brushing against the warm stone. Inside, the glow of the cauldrons gleamed like the dawn of a new world. He knew wisdom would not yield without a price, and that he must deceive love and duty alike to seize the nectar of the gods. Yet no act was too base for him when the prize was immortal speech.",
+    "story_mead_of_poetry_card_3_title": "Odin’s Trick",
+    "story_mead_of_poetry_card_4_description":
+        "Odin charms Gunnlöð and wins the right to taste the mead three times, altering the destiny of the treasure.",
+    "story_mead_of_poetry_card_4_detailed_story":
+        "In the golden twilight of the cavern, Odin met Gunnlöð. The giant’s daughter, both fierce and tender, lived in rhythm with the cauldrons: she listened to the mead’s murmur as others might to prayers. Odin spoke not with the tone of a ruler, but as a wanderer who knows how to listen. He told her of the solitude of the heavens, the burden of wisdom, and the beauty of verse. Moved by his words and his unexpected gentleness, Gunnlöð offered him three nights of hospitality. At each dawn, she let him drink from the cup; and on the third night, the god—master of guile—drank the entire cauldron, then the next, then the last. The nectar set his spirit aflame: he saw the songs yet to be sung, the words that would make worlds tremble. Gunnlöð, betrayed, watched her treasure vanish, borne away by the silhouette of a sacred bird. Her sorrow mingled with shame, but fate had already turned: poetry had changed masters forever.",
+    "story_mead_of_poetry_card_4_title": "The Seduction of Gunnlöð",
+    "story_mead_of_poetry_card_5_description":
+        "Transformed into a great bird, Odin escapes with the mead while Suttungr pursues him through the storm.",
+    "story_mead_of_poetry_card_5_detailed_story":
+        "As soon as the cauldrons were emptied, Odin transformed—wings and feathers burst from his back, and he took the form of a mighty bird of prey, his dark silhouette framed by the cave’s glow. He leapt from the mountain, the mead dripping in golden drops from his beak, tracing streaks of light through the rain. Hearing his daughter’s cries, Suttungr too took the shape of a monstrous eagle and soared in pursuit. The two beings tore through the clouds; lightning laced their flight, and the heavens roared like a forge. Their wings beat the air like storm-tossed sails, and the distance between wisdom and wrath was measured in heartbeats. Below, the lands saw two colossal shadows—one bearing the gods’ gift, the other the rage of a bereaved father. Odin’s flight became an epic that held the world suspended between awe and terror.",
+    "story_mead_of_poetry_card_5_title": "The Flight of the Eagle",
+    "story_mead_of_poetry_card_6_description":
+        "Odin brings the mead back to Asgard, but a few drops fall to mortals, giving birth to human poetry.",
+    "story_mead_of_poetry_card_6_detailed_story":
+        "At last reaching the threshold of Asgard, the bird alighted in the great hall of the gods and resumed his divine form: Odin, bearer of a burning knowledge and a stolen secret. He spat the mead into golden cups; the gods drank, and poetry resonated within their souls. The halls filled with new songs, unexpected inspirations, and constellations of words woven like webs. Yet in his flight’s haste, a few golden drops had fallen to the earth below. Those pearls of fate touched mortal lips: some turned them into verses that defied the gods, while others gained only delusion or madness. Thus poetry was born for gods and men alike—both wonder and curse, fruit of a divine theft and an irrepressible longing for knowledge. Since then, the world has carried within it this blend of light and downfall.",
+    "story_mead_of_poetry_card_6_title": "The Gift and the Loss",
+    "story_mead_of_poetry_title": "The Mead of Poetry",
+    "story_the_death_of_baldr_card_1_description":
+        "Baldr, beloved by all gods, is haunted by prophetic dreams foretelling his death. His light begins to waver, and the gods, troubled, sense that a dark and inevitable fate is drawing near.",
+    "story_the_death_of_baldr_card_1_detailed_story":
+        "There was a time, distant and sacred, when the gods walked the skies of Asgard and ruled over the Nine Worlds. Among them, none was more beloved than Baldr, the radiant son of Odin and Frigg. He was light incarnate, flawless beauty made divine, a god so pure that even the darkest beings held him in reverence. Wherever he walked, peace followed, laughter blossomed, and hearts were warmed.\n\nBut one day, that brightness began to fade. Night after night, Baldr was consumed by dark dreams—visions terrifying and clear as prophecy. He saw himself perish, pierced by an unknown weapon, and the echoes of his death reverberated through the roots of Yggdrasil. The nightmares clung to him, and he recounted them to the others, pale-faced and shaken to his core.\n\nThe gods did not laugh. For Baldr’s dreams were no mere illusions. They carried within them the raw truth of what was to come. A chill swept through the golden halls of the Aesir, for if Baldr were to die… then it would be the world itself that began to fall into darkness.",
+    "story_the_death_of_baldr_card_1_title": "Baldr’s Nightmares",
+    "story_the_death_of_baldr_card_2_description":
+        "To save her son, Frigg secures oaths from all things in existence so that none may harm Baldr. Yet she overlooks the mistletoe—frail and unassuming—believing it too insignificant to pose any danger.",
+    "story_the_death_of_baldr_card_2_detailed_story":
+        "Frigg, queen of the heavens, could not bear such a threat. Her love for Baldr was infinite, and the mere thought of his death was a torment worse than a thousand deaths of her own. Driven by anguish and resolve, she set out on a sacred journey.\n\nThrough the frozen winds of Niflheim, the blazing lands of Muspellheim, the deep forests of Alfheim, and down to the shadowed depths of Helheim, she sought oaths from every living and lifeless thing. From the stones, that they would not strike her son. From the waters, that they would not drown him. From the fire, that it would not burn him. From the beasts, that they would never attack him. From every plant, every metal, every element, she drew sacred promises never to harm Baldr.\n\nWhen her task was done, Asgard breathed once more in peace. Nothing, it seemed, could harm the beloved god. Yet in her haste, Frigg deemed one humble and discreet plant too trivial to matter—a small sprig of mistletoe hanging from the branches of old oaks. Too young, too frail, she thought. It could harm no one.\n\nAnd so, she passed it by.",
+    "story_the_death_of_baldr_card_2_title": "Frigg’s Oath",
+    "story_the_death_of_baldr_card_3_description":
+        "Loki discovers the flaw: the mistletoe has sworn no oath. Disguised as an old woman, he tricks Frigg into revealing the truth and plucks the fragile plant, shaping it into a weapon of cruel fate.",
+    "story_the_death_of_baldr_card_3_detailed_story":
+        "Where others saw forgetfulness, Loki saw opportunity. The god of chaos, cunning, and discord—ever watchful for weakness—felt the air shift with the scent of coming upheaval.\n\nTaking the form of an old woman, he approached Frigg, offering her the company of a gentle and curious soul. He spoke softly, asking the right questions at just the right time, with that disarming tenderness that so often masked his deceit.\n\n“Have all things in the world sworn to protect Baldr?” he asked, his voice trembling with false frailty.\n\n“All,” Frigg replied with a weary smile. “All… except perhaps one. A small shoot of mistletoe hanging from the trees west of Valhalla. It is so tender, so young, so harmless...”\n\nThat was all Loki needed. He thanked her, bowed deeply, and vanished into the shadows. His steps led him straight to the sacred oaks, where the mistletoe swayed gently in the autumn wind. With calculated precision, he plucked it, feeling within it the key to a destiny he would soon unravel. For even the frailest of things, in the hands of malice, can become a deadly weapon.",
+    "story_the_death_of_baldr_card_3_title": "The Mistletoe",
+    "story_the_death_of_baldr_card_4_description":
+        "Loki shapes the mistletoe into an arrow and gives it to Höd, Baldr’s blind brother. Under the guise of an innocent game, he guides his hand, making him the unwitting instrument of a tragic fratricide.",
+    "story_the_death_of_baldr_card_4_detailed_story":
+        "Back in his lair, Loki began his work. He shaped the mistletoe with care, fashioning it into a slender, supple arrow. It looked unimpressive—fragile even—but it pulsed with a sinister power. It was the only thing in all creation capable of striking Baldr, and Loki knew it.\n\nSoon came the day of games in Asgard. Upon the great plains of the palace, the gods gathered to amuse themselves with a strange pastime: they hurled weapons, stones, and spears at Baldr, who stood unflinching, untouched by any harm. For nothing, they believed, could ever wound him again.\n\nThen Loki approached Höd, Baldr’s blind brother, who stood apart, silent and alone.\n\n“Why do you not join the game, noble Höd?” Loki whispered gently. “Your brother deserves your tribute as well. Here—take this arrow. Let me guide your hand.”\n\nHöd, sightless but pure of heart, agreed without suspicion. He had no reason to doubt. He drew his bow and felt Loki’s cold hand place the arrow between his fingers.\n\nAnd released it.",
+    "story_the_death_of_baldr_card_4_title": "The Arrow",
+    "story_the_death_of_baldr_card_5_description":
+        "The mistletoe arrow strikes Baldr through the heart. The radiant god collapses, mortally wounded. Asgard falls into silence and despair, while Loki slips away, bearer of chaos.",
+    "story_the_death_of_baldr_card_5_detailed_story":
+        "Silence fell even before the arrow reached its mark. It sliced through the air—nearly invisible, almost unreal—and buried itself in Baldr’s chest with dreadful precision.\n\nHe cried out—once. A short, piercing sound that froze the blood of the immortals. Then he fell, struck as if by lightning.\n\nA deathly stillness cloaked Asgard. Laughter ceased. Smiles vanished. Confusion gave way to horror, and horror to despair. Frigg rushed forward, collapsing to her knees, cradling the lifeless body of her son, her scream of grief echoing so loud that even the stars heard it.\n\nHöd, realizing what he had done, dropped his bow and wept bitterly, inconsolable. He had been nothing but a tool—a pawn in the hands of a cruel mind. Yet that did nothing to lessen the tragedy.\n\nAnd Loki, master of mischief, slipped away into the shadows, a faint smile on his lips.\n\nBaldr was dead. And with him, an irreplaceable part of the world’s light was gone. That day, the gods understood that twilight was upon them. The thread of fate had been severed. Ragnarök—the twilight of the gods—had begun.",
+    "story_the_death_of_baldr_card_5_title": "The Death of Baldr",
+    "story_the_death_of_baldr_title": "The Death of Baldr",
+    "story_the_forging_of_mjolnir_card_1_description":
+        "Out of pure mischief, Loki cuts off Sif’s golden hair — Thor’s wife — famed for its radiant, gold-like shine. His cruel act brings Sif shame and awakens Thor’s thunderous wrath.",
+    "story_the_forging_of_mjolnir_card_1_detailed_story":
+        "In ancient times, Loki, god of mischief and deceit, grew terribly bored. To sate his hunger for chaos, he decided to torment Sif, the radiant wife of Thor, known far and wide for her golden hair that seemed to capture the sunlight itself. While she slept peacefully, Loki crept up with a wicked grin and cut away every precious strand. When Sif awoke and saw her shorn head, her cries of despair echoed throughout Asgard. Thor, learning of this vile act against his beloved, erupted in a fury so fierce that the very earth quaked beneath his feet. He swore that Loki would pay dearly for his crime. Even the gods feared the storm of rage about to break upon the trickster.",
+    "story_the_forging_of_mjolnir_card_1_title": "Sif’s Hair",
+    "story_the_forging_of_mjolnir_card_2_description":
+        "When Thor discovers Sif’s humiliation, he seizes Loki and threatens to shatter his bones unless he finds a way to make amends. Terrified, Loki promises to give Sif hair even more beautiful than before.",
+    "story_the_forging_of_mjolnir_card_2_detailed_story":
+        "Blazing with fury, Thor seized Loki by the throat and lifted him as though he weighed nothing. His eyes burned like lightning, and his voice thundered through the halls of Asgard: “Wretched trickster! You dared to dishonor my wife! I will crush you like the vermin you are unless you undo your deed!” Panicking, Loki realized he had gone too far. He struggled to escape Thor’s grip, but the god’s strength was unrelenting. Desperate, he begged for a chance to make amends. “I will bring Sif hair more splendid than before — I swear it on my own blood!” he cried. Thor, though still seething, granted him this one chance, warning that the slightest failure would cost him every bone in his body. Loki’s countdown had begun.",
+    "story_the_forging_of_mjolnir_card_2_title": "Thor’s Threat",
+    "story_the_forging_of_mjolnir_card_3_description":
+        "To keep his promise, Loki descends into Svartalfheim, the realm of the dwarven smiths. He begs Brokkr and Sindri to forge divine treasures worthy of appeasing Thor and the gods.",
+    "story_the_forging_of_mjolnir_card_3_detailed_story":
+        "Knowing he could not fulfill his promise alone, Loki journeyed into the dark depths of Svartalfheim, the realm of the dwarves. There ruled Brokkr and Sindri, two brothers whose craftsmanship surpassed that of any being in the Nine Realms. Within their blazing forges, they shaped wonders from the purest metals, tempered by eternal fire. Loki, cunning as ever, explained his plight — he needed living golden hair for Sif and a gift worthy of Thor’s might. Intrigued and flattered, the dwarves accepted the challenge. They vowed to forge not only Sif’s new hair but other treasures fit for the gods themselves. Their hammers rang in the shadows, sparks flying like newborn stars. Loki watched impatiently, already plotting new tricks to twist the outcome in his favor.",
+    "story_the_forging_of_mjolnir_card_3_title": "The Dwarven Smiths",
+    "story_the_forging_of_mjolnir_card_4_description":
+        "Under the dwarves’ hammers are born great treasures: Draupnir, Gungnir, and finally Mjöllnir, Thor’s hammer. Loki tries to sabotage their work, but though the handle ends up short, the hammer’s power is unmatched.",
+    "story_the_forging_of_mjolnir_card_4_detailed_story":
+        "Brokkr and Sindri set to work, faces blackened by the heat of the forge, hearts swelling with pride. First they crafted Draupnir, the golden ring that spawned eight new rings every nine nights, then Gungnir, Odin’s spear that never missed its mark. But their greatest masterpiece was yet to come — Mjöllnir, the hammer destined for Thor. Fearing that such a weapon would make the gods too powerful, Loki sought to sabotage their work. Transforming into a fly, he bit Brokkr repeatedly, trying to break his focus. The dwarf, though hardened by years at the forge, flinched for an instant — and the hammer’s handle came out shorter than intended. Yet Mjöllnir was born: a weapon so mighty it could summon lightning, shatter mountains, and always return to Thor’s hand. Even imperfect, it surpassed all other creations.",
+    "story_the_forging_of_mjolnir_card_4_title": "The Creation of Mjöllnir",
+    "story_the_forging_of_mjolnir_card_5_description":
+        "The treasures are presented to the gods. Thor receives Mjöllnir — a marvel of power. Though its handle is short, it becomes the sacred weapon that will make giants and enemies of Asgard tremble.",
+    "story_the_forging_of_mjolnir_card_5_detailed_story":
+        "When the treasures were finally presented to the gods, all stood in awe. Odin admired Draupnir and Gungnir, knowing they would increase his power and glory. But the greatest moment came when Thor took hold of Mjöllnir. The hammer pulsed in his grasp, radiating raw might that made the very air tremble. Thor knew at once that this weapon would become the instrument of his strength and the dread of his foes. True, its handle was shorter than planned — yet its power was beyond imagining. The gods declared that Loki had fulfilled his promise, though not without his usual trickery. Thor, half-forgiving, chose to celebrate the gift rather than punish the mischief. From that day forward, Mjöllnir became the symbol of Thor’s divine power — and the sacred weapon that would forever defend Asgard from its enemies.",
+    "story_the_forging_of_mjolnir_card_5_title": "Gift to Thor",
+    "story_the_forging_of_mjolnir_title": "The Forging of Mjöllnir",
+    "story_the_punishment_of_loki_card_1_description":
+        "After Baldr’s death, brought about by Loki’s deceit, the trickster fled, changing shape again and again, hiding in a cabin open to all four winds, fearing the vengeance of the gods.",
+    "story_the_punishment_of_loki_card_1_detailed_story":
+        "When Baldr, beloved of all, was struck down by the arrow guided by Loki’s cunning, a mournful silence fell upon Asgard. The usual laughter of the trickster was replaced by a heart pounding with fear and pride. Foreseeing the wrath of the Aesir, Loki changed his form—slithering as a serpent through river stones, soaring as a lonely bird above sharp cliffs, or disguising himself as an old man with shifty eyes. Each transformation was merely a trick against fate, yet even in his cleverest disguises, his crime burned like a dark flame no one could extinguish. He settled in a remote valley, building a strange cabin with four doors facing each horizon, ever watchful for danger. The nights were long and cold, and by his fire Loki brooded—cunning against loyalty, freedom against doom. The wind whispered the steps of Odin and the Aesir, and every creak in the forest echoed like a coming vengeance. His escape was but a fragile reprieve, and the net of fate was tightening inexorably around the shapeshifting god, like a shadow ready to consume him.",
+    "story_the_punishment_of_loki_card_1_title": "The Trickster’s Escape",
+    "story_the_punishment_of_loki_card_2_description":
+        "Under Odin’s command, the Aesir and their allies swore that no corner of the cosmos would grant Loki refuge. Nature itself became their ally in an inevitable, relentless hunt.",
+    "story_the_punishment_of_loki_card_2_detailed_story":
+        "In Asgard’s great hall, the faces of the Aesir bore not anger but a cold determination. Odin, the Allfather, lifted his single eye to the heavens and swore that Loki would find no haven beneath the sky. The hunt began: Odin’s falcons soared above the forests, the wolves of Fenrir sniffed every trail in the snow, and the warriors of Asgard combed valleys and mountains. Even the Vanir, allies of old, lent their gifts to the search. Nature itself conspired against Loki: every stone rolled beneath his steps, every gust of wind carried his scent, every river mirrored his desperate flight. Days and nights passed, and with them grew the certainty—none can escape forever those they have betrayed. The hunt no longer seemed like a mere pursuit but a cosmic judgment, where every corner of the world joined in divine justice. Vengeance was woven into the fabric of existence, and the footsteps of the divine hunters made the earth tremble, as if all Nine Realms held their breath.",
+    "story_the_punishment_of_loki_card_2_title": "The Gods’ Hunt",
+    "story_the_punishment_of_loki_card_3_description":
+        "In the form of a silver salmon, Loki tries to evade his pursuers, but the net woven by the gods closes in. Thor’s unyielding grip tears him from the waters, delivering him to divine justice.",
+    "story_the_punishment_of_loki_card_3_detailed_story":
+        "Driven to desperation, Loki slipped into an icy river and took the form of a silver-scaled salmon, reflecting the cold glow of the moon. Leaping from rock to rock, he hoped to outwit his pursuers. But the Aesir, armed with Odin’s wisdom, had already prepared a colossal net—woven with enchanted cords, so vast it seemed to cover the entire valley. The gods moved downstream, tightening their snare with the patience of hunters who know the prey cannot escape destiny. The salmon leapt from the water, muscles taut, sides gleaming, in one final desperate attempt to flee. But Thor, with divine strength, caught him by the tail and hurled him onto the shore. The net closed around him like the web of fate itself. Regaining his true form, Loki found himself surrounded by stern faces—Odin’s eye burning with judgment, Thor’s with wrath and power, and the gaze of the other Aesir fixed upon his doom. Defiance still flickered in his eyes, yet behind it crept the shadow of fear. His gift of transformation had failed him, and he knew that the justice of the gods would not falter.",
+    "story_the_punishment_of_loki_card_3_title": "The Capture in the Net",
+    "story_the_punishment_of_loki_card_4_description":
+        "The gods recalled his crimes and decreed an eternal punishment. Loki would see his lineage destroyed, and from his own sons would come the chains that would bind him, sealing his cruel and final fate.",
+    "story_the_punishment_of_loki_card_4_detailed_story":
+        "Chained before the Aesir, Loki listened as the accusations fell like hammers on an anvil: Baldr’s death, the humiliations he had inflicted upon the gods, and every deceit since the dawn of time. Some demanded his immediate death, but Odin raised his hand, declaring that such an end would be too merciful. The punishment must last as long as the world itself. So it was decreed that Loki would be bound in a deep, dark cavern, forced to endure the venom of a serpent dripping above his face. But before that torment began, a cruelty even greater was wrought—his sons, Nárfi and Váli, were turned against each other, and from their entrails the gods forged the chains that bound their father. Loki’s bloodline was destroyed, his future erased, and each link in his chains was a cruel reminder of his betrayal. The judgment of the Aesir was not merely to punish, but to carve suffering into eternity itself—a monument of pain, etched in stone and blood, warning all that treachery against the divine carries the highest price.",
+    "story_the_punishment_of_loki_card_4_title": "The Merciless Judgment",
+    "story_the_punishment_of_loki_card_5_description":
+        "In a frozen cave, Loki is nailed to the rock with the entrails of his children. His defiant words echo in the void—a promise of vengeance yet powerless against divine chains.",
+    "story_the_punishment_of_loki_card_5_detailed_story":
+        "In a glacial cavern, the gods carried out the sentence. Loki was laid upon a stone polished by the cold, his arms and legs spread wide by chains made from his sons’ entrails. The mightiest of the Aesir pulled those living bonds taut, fastening them to the rock with divine strength, leaving no hope of escape. Icy droplets fell from the ceiling, landing rhythmically upon his face, already scorched by pain and despair. Around him, the gods watched—some satisfied, others disturbed by the cruelty of their own justice. Despite his agony, Loki managed to hurl words of defiance, swearing that this injustice would not go unavenged. But his screams echoed through the cavern, swallowed by stone and shadow. He became a ghost within the rock, a whisper of storm and vengeance yet to come. The earth itself seemed to drink in his torment, absorbing it for eternity.",
+    "story_the_punishment_of_loki_card_5_title":
+        "The Binding Beneath the Stone",
+    "story_the_punishment_of_loki_card_6_description":
+        "A serpent suspended above drips burning venom onto Loki, whose screams shake the earth. Yet Sigyn, ever faithful, gathers each drop, softening an eternal torment that shapes the world.",
+    "story_the_punishment_of_loki_card_6_detailed_story":
+        "Above Loki’s face hung a serpent, its corrosive venom falling drop by drop, delivering endless agony. Each droplet seared his skin, wringing screams from him that shook the cavern and the mountains above. Yet he was not left alone. Sigyn, his faithful wife, remained at his side, holding a bowl to catch the poison and ease his suffering. But when the bowl grew full, she had to empty it, and during that brief moment the venom splashed upon Loki’s face, burning with unbearable fury. His cries echoed all the way to Midgard, shaking the earth and the realms of men. Thus began his eternal torment—bound by his sons’ blood, tormented by venom, yet comforted by Sigyn’s unyielding love. This cruel punishment became a living scar upon the cosmos, a warning to gods and mortals alike, and a promise that at Ragnarök, Loki’s fury would be unleashed, engulfing the Nine Realms in devastating chaos.",
+    "story_the_punishment_of_loki_card_6_title": "The Venom and the Loyalty",
+    "story_the_punishment_of_loki_title": "The Punishment of Loki",
+    "story_the_serpent_fishing_card_1_description":
+        "Thor travels to the giant Hymir to seek his help in obtaining an immense cauldron, large enough to hold the gods’ mead. Their meeting marks the beginning of a fragile alliance.",
+    "story_the_serpent_fishing_card_1_detailed_story":
+        "At the dawn of a gray and icy morning, Thor, the warrior god, crossed the threshold of a frozen cavern where Hymir dwelled — the giant whose skin was as hard as frost and whose eyes resembled bottomless abysses. The god’s breath formed white clouds in the still air, and each of his steps echoed through the silence of the colossus’s domain. He did not come as a conqueror but to beg Hymir’s aid in finding a colossal cauldron large enough to hold the gods’ mead. The giant let out a deep laugh that made the stone walls tremble and shook the stalactites above their heads. Then his amusement turned to suspicion — what did this being from the heavens want in his frozen realm? After a long moment where silence weighed heavier than words, a fragile alliance was forged. Hymir agreed, though with both mistrust and challenge: the ocean awaited them — untamed and merciless. Fate already seemed to hang upon the waves, and none knew that this pact would lead them to face a creature capable of testing both the imagination and the courage of the gods.",
+    "story_the_serpent_fishing_card_1_title": "The Quest for the Cauldron",
+    "story_the_serpent_fishing_card_2_description":
+        "To lure a creature worthy of their challenge, Hymir demands an extraordinary bait. Thor tears off the head of a mighty bull, its hot blood summoning the abyssal powers of the sea.",
+    "story_the_serpent_fishing_card_2_detailed_story":
+        "Beneath a sky heavy with low, black clouds, Hymir made his demand with a rumble that shook the cavern: to lure the creature of the depths, they would need bait worthy of its strength. Thor, without a breath of hesitation, strode toward the giant’s herd and chose the most powerful bull among them. The beast bellowed, its eyes reflecting the knowledge of its impending end, its hooves striking the frozen ground. Thor grasped its horns and, with superhuman effort, brought it down, its hot blood spilling in a crimson river that stood out against the immaculate white of the ice. Hymir watched in silence, torn between admiration and rage, as Thor lifted the bull’s head and raised it like a trophy offered to the waves. The air vibrated with the scent of iron and death. Gulls circled overhead, drawn by the brutal sacrifice. Each drop of blood on the snow seemed to call to the depths, and the wind began to howl, as though the ocean itself knew that an extraordinary clash was about to begin.",
+    "story_the_serpent_fishing_card_2_title": "The Bull’s Sacrifice",
+    "story_the_serpent_fishing_card_3_description":
+        "Thor and Hymir set out in a tiny boat, facing furious waves and a stormy sky. The sea roars, as if sensing the confrontation that will shake the worlds.",
+    "story_the_serpent_fishing_card_3_detailed_story":
+        "They climbed into a frail boat, so small one might think their strength alone could shatter its planks with every swell. Hymir, enormous, took the oars and cut through the waves with slow, powerful strokes, sending silver sprays bursting into the air. Beside him, Thor stared at the horizon, his eyes burning with a flame that neither wind nor cold could extinguish. The sea raged, its vast waves battering the fragile vessel, while clouds gathered thick and black, threatening to swallow the sky in thunderous chaos. Thor tied the bull’s bloody head to a dark steel hook, his hands swift despite the endless rolling of the boat. Every splash seemed to beat like a funeral drum, every gust of wind a reminder that they sailed at the edge of the known world. The silence between them was heavy — filled with fear and defiance — for both sensed that what they were calling from the depths was no ordinary creature, but a monster capable of shaking oceans and the destiny of gods.",
+    "story_the_serpent_fishing_card_3_title": "The Endless Ocean",
+    "story_the_serpent_fishing_card_4_description":
+        "The Midgard Serpent bursts from the sea — immense and terrifying — its coils raising storms. Thor wrestles it barehanded, defying both the ocean and the creature that encircles the world.",
+    "story_the_serpent_fishing_card_4_detailed_story":
+        "The silence of the ocean suddenly shattered in a monstrous crash: the taut line quivered like a flash of steel, and Thor pulled with all his might. The sea exploded, and an ancient horror rose forth — scales dark as night, eyes glowing with molten gold, coils wrapping the air as if to seize the world itself. The serpent of the depths emerged, spewing torrents of foam and fury. The boat threatened to splinter under the beast’s weight. Thor, his feet braced on the soaked wood, gripped the rope as if he meant to hold back the sea itself. Hymir, frozen with terror, shrank away, his wide eyes fixed on the gaping maw that could swallow mountains and fortresses whole. The enraged serpent thrashed, its coils striking the waves into tempests. Each passing second seemed to suspend time itself — balanced between victory and catastrophe — while thunder and lightning illuminated their titanic struggle.",
+    "story_the_serpent_fishing_card_4_title": "The Bite of the Depths",
+    "story_the_serpent_fishing_card_5_description":
+        "As Thor prepares to unleash his might upon the serpent, Hymir, terrified, cuts the line. The creature vanishes into the depths, leaving a suspended threat and an unfinished duel.",
+    "story_the_serpent_fishing_card_5_detailed_story":
+        "Thor’s eyes burned with divine fury as he prepared to strike down the serpent, every muscle tense, every fiber of his being vibrating with raw power. But before he could deliver the blow, a scream of terror rose behind him. Hymir, seized by panic, had grabbed the rope and, in a desperate act, severed it. The serpent, freed from its bond, disappeared into the depths with a roar that made the entire ocean quake.\n\nThe boat capsized from the shock, hurling Thor and Hymir into the freezing waters. The thunder god surfaced, gasping, his hair plastered to his face by the salt. Hymir, trembling with cold and fear, clung to a drifting plank. Silence fell over the sea, broken only by the gentle slap of waves and the ragged breaths of the two survivors.\n\nThor gazed toward the horizon, his heart heavy. He had not slain the serpent of the depths, but he had survived a trial that would have broken any other being. The fate of the gods remained uncertain, but one thing was clear — the struggle against the forces of chaos had only just begun.",
+    "story_the_serpent_fishing_card_5_title": "The Unfinished Battle",
+    "story_the_serpent_fishing_title": "The Serpent Fishing",
+    "story_the_wall_of_asgard_card_1_description":
+        "After the war against the Vanir, Asgard is left vulnerable. The Aesir gather and decide they must build a new wall — stronger and higher than ever — to defend their realm.",
+    "story_the_wall_of_asgard_card_1_detailed_story":
+        "The war between the Aesir and the Vanir, two divine clans of formidable power, had shattered the balance of the Nine Worlds. Though a fragile peace was eventually made, the scars of the conflict remained visible, and the gods knew they would never fully fade. The wall that once protected Asgard lay in ruins, leaving their divine city exposed to attacks from giants and other outside threats. Odin, Thor, and the other Aesir then called a great assembly, the sacred Thing, to discuss how to rebuild their defenses. Many spoke, but one truth prevailed: they needed a new fortress — one so strong and majestic that no enemy, not even the mighty Jötnar, could ever bring it down. This decision, born from the heavy memories of war, would set in motion a chain of events none could yet foresee.",
+    "story_the_wall_of_asgard_card_1_title": "The Gods Seek to Protect Asgard",
+    "story_the_wall_of_asgard_card_2_description":
+        "A mysterious giant named Hrimthurs comes before the gods and offers to build an unbreakable wall in six months. In return, he demands Freyja, the sun, and the moon — a price the Aesir find outrageous.",
+    "story_the_wall_of_asgard_card_2_detailed_story":
+        "As the Aesir continued their debate, a towering stranger crossed the gates of Asgard. He introduced himself as a master builder, a giant named Hrimthurs. His offer was astounding: he promised to rebuild a wall so solid that no force could ever topple it, and to do so in just six months. But his price was dreadful — he demanded the hand of Freyja, goddess of beauty and love, along with the sun and the moon, the very sources of light and life. The Aesir were struck with shock. Losing Freyja would wound Asgard’s honor, and surrendering the sun and moon would plunge the worlds into eternal darkness. Yet, tempted by the promise of an impregnable wall, they chose to accept, though not without cunning: they decreed that the giant would receive no help other than from his horse, and that the work must be completed before the first day of summer. The die was cast.",
+    "story_the_wall_of_asgard_card_2_title":
+        "The Giant Builder Offers His Help",
+    "story_the_wall_of_asgard_card_3_description":
+        "Hrimthurs and his horse Svadilfari begin the task. The stones rise so swiftly that the gods grow uneasy — it seems he truly might finish before the deadline.",
+    "story_the_wall_of_asgard_card_3_detailed_story":
+        "The next day, Hrimthurs set to work with astonishing vigor. His loyal horse, Svadilfari, helped him haul enormous blocks of stone that no other being could have moved. Together they labored day and night without rest. At first the Aesir were confident in their trick, but soon they began to doubt as they watched the wall rise at a terrifying pace. Each day the stones grew higher; each night the fortress seemed to advance by a giant’s stride. Within weeks, much of Asgard’s perimeter already stood tall, solid and immense. Odin and the other gods, usually calm and wise, now conferred with unease. If the giant managed to finish on time, they would be bound to give him Freyja, the sun, and the moon. Their plan was turning against them, and despair began to take hold.",
+    "story_the_wall_of_asgard_card_3_title": "The Giant Begins the Work",
+    "story_the_wall_of_asgard_card_4_description":
+        "Seeing the danger, Loki proposes a ruse: he transforms into a mare and lures Svadilfari away, depriving Hrimthurs of his most vital helper.",
+    "story_the_wall_of_asgard_card_4_detailed_story":
+        "As the deadline approached and the Aesir’s anxiety grew, Loki, the god of mischief, offered his aid. Though often the cause of their troubles, he could be useful in desperate times. His plan was bold: he transformed into a beautiful mare, sleek and radiant, and appeared before Svadilfari. Enchanted, the stallion chased after her, abandoning his master. Hrimthurs, bewildered and enraged, had to continue alone — but even his immense strength was not enough to move the stones without his steed. For several nights, Loki, still in the form of a mare, kept Svadilfari distracted and far from the worksite, delaying construction just long enough. The gods watched with a mix of relief and astonishment, knowing Loki’s trick had saved their realm — yet aware that such deceit could one day demand a heavy price.",
+    "story_the_wall_of_asgard_card_4_title": "Loki’s Intervention",
+    "story_the_wall_of_asgard_card_5_description":
+        "Deprived of his horse, Hrimthurs realizes he cannot finish the wall. Deceived, he flies into a rage and threatens to destroy Asgard and crush the gods themselves.",
+    "story_the_wall_of_asgard_card_5_detailed_story":
+        "When Hrimthurs discovered he had been deceived, his fury erupted like a storm. The giant struck the ground with his fists and roared so fiercely that the mountains themselves seemed to tremble. Without Svadilfari, he could not complete the work, and he understood the Aesir had never intended to keep their word. Mad with rage, he tried to tear down the stones already laid, swearing to reduce Asgard to ashes and crush the gods beneath his strength. The Aesir, who had feared this moment, prepared for battle. Thor, his hand clenched around Mjöllnir, waited for the moment to strike. Odin watched in solemn silence — this was no longer a matter of cunning, but a clash between the raw power of a giant and the unyielding will of the gods of Asgard.",
+    "story_the_wall_of_asgard_card_5_title": "The Giant’s Fury",
+    "story_the_wall_of_asgard_card_6_description":
+        "Odin, Thor, and the Aesir face Hrimthurs in a titanic battle. The sky splits with thunder and magic until the giant is slain and Asgard is finally saved.",
+    "story_the_wall_of_asgard_card_6_detailed_story":
+        "Hrimthurs’s fury reached its peak as he hurled himself against the unfinished walls. Thor leapt forward, brandishing Mjöllnir, and struck blows so powerful that the sky burst into lightning. Odin invoked spells to shield his kin, while the other Aesir fought alongside the thunder god. The battle echoed across Asgard: each punch from the giant shook the earth, and each hammer strike shattered stone. Despite his titanic might, Hrimthurs could not withstand the combined wrath of the gods. With a final roar, Thor delivered a crushing blow that shattered the giant’s skull. Hrimthurs collapsed, his body striking the ground with a deafening crash. His lifeless form stood as a grim reminder that even cunning could lead to bloodshed. Asgard was saved — but victory had come at a cost.",
+    "story_the_wall_of_asgard_card_6_title": "The Final Battle",
+    "story_the_wall_of_asgard_card_7_description":
+        "After their victory, the Aesir rebuild Asgard’s wall using the stones already laid. They celebrate their triumph and vow to defend their realm against all future threats.",
+    "story_the_wall_of_asgard_card_7_detailed_story":
+        "With Hrimthurs defeated, the Aesir turned to the ruins of his work. The stones he had laid were of remarkable strength, and rather than destroy them, the gods chose to use them to build their own wall. Stone by stone, they completed Asgard’s fortress — this time as true masters of their fate. The new ramparts rose, towering and unbreakable, a symbol of their unity restored after the war with the Vanir and the threat of the giant. Grand celebrations were held, and though Loki’s deceit had caused much chaos, he was honored for the cunning that had secured their victory. The Aesir swore to defend Asgard at any cost and to watch over their realm until Ragnarök itself. The wall became the eternal bulwark of their power — a sign that even before the greatest threats, the gods would prevail.",
+    "story_the_wall_of_asgard_card_7_title": "The Rebuilding of Asgard",
+    "story_the_wall_of_asgard_title": "The Wall of Asgard",
+    "story_thors_hammer_card_1_description":
+        "One morning, Thor discovers that his hammer, Mjölnir, has been stolen. Deprived of his greatest weapon, all of Asgard becomes vulnerable to the forces of chaos threatening the Nine Realms.",
+    "story_thors_hammer_card_1_detailed_story":
+        "One morning, Thor awoke in a terrible rage that made all of Asgard tremble. His hammer, Mjölnir—his most precious possession—was gone! This legendary weapon, forged by the dwarves in the depths of Svartalfheim, could command lightning and shatter mountains.\n\nWithout Mjölnir, Thor was no more than an ordinary god. Worse still, without this divine weapon, all the gods of Asgard were left defenseless against the ever-looming forces of chaos threatening the Nine Realms.\n\nThe search began at once. Heimdall scanned the horizons with his sharp gaze, Odin sent his ravens Huginn and Muninn to the farthest corners of the cosmos, yet the hammer remained nowhere to be found. Suspicion soon turned toward the giants, the eternal enemies of the gods.",
+    "story_thors_hammer_card_1_title": "Mjölnir Is Stolen",
+    "story_thors_hammer_card_2_description":
+        "The giant Thrym admits to stealing Mjölnir and demands Freyja’s hand in marriage in exchange for its return. His outrageous request enrages the gods and sparks the fury of the goddess herself.",
+    "story_thors_hammer_card_2_detailed_story":
+        "The investigation quickly led to the frost giant Thrym, king of the giants in the icy lands of Jötunheim. Far from denying his crime, he shamelessly admitted to stealing the hammer and hiding it deep underground, where no god could ever reach it.\n\nBut Thrym laid out his terms with a sly grin: he would only return Mjölnir if the gods gave him the hand of the beautiful Freyja in marriage. The goddess of love and beauty was to become his bride and reign beside him over the realm of giants.\n\nThis outrageous demand filled all the gods of Asgard with indignation. How dare he claim the most beautiful of goddesses in exchange for a stolen object? Freyja herself flew into such a terrible rage that her magical necklace, Brísingamen, shattered under the force of her fury. The walls of Valhalla shook with her wrath.",
+    "story_thors_hammer_card_2_title": "Thrym’s Ransom",
+    "story_thors_hammer_card_3_description":
+        "To deceive Thrym, Loki suggests that Thor disguise himself as Freyja. Reluctantly, the god of thunder agrees, donning a bridal gown and veil to fool the giants.",
+    "story_thors_hammer_card_3_detailed_story":
+        "Then Loki came up with an idea as bold as it was absurd: Thor should disguise himself as Freyja to trick Thrym! The thought of the most masculine of gods dressing as a woman amused the cunning trickster to no end.\n\nThor roared in protest: “Never! The gods will mock me for eternity! My reputation as a warrior will be ruined!”\n\nBut wise Heimdall intervened: “Would you rather see the giants invade Asgard while we stand defenseless? Without Mjölnir, we are doomed.”\n\nReluctantly, Thor agreed. With Loki’s help, he donned a magnificent bridal gown, covered himself with a jeweled veil, and fastened Freyja’s repaired necklace around his neck. His mighty hands were hidden beneath long silk gloves. Thus disguised, the god of thunder resembled a shy, veiled bride.",
+    "story_thors_hammer_card_3_title": "The Disguise",
+    "story_thors_hammer_card_4_description":
+        "During the wedding feast, Thor devours an ox, eight salmon, and three barrels of mead. The giants grow suspicious, but Loki excuses his appetite by claiming he has been fasting for love.",
+    "story_thors_hammer_card_4_detailed_story":
+        "At first, the ruse seemed to work perfectly. Thrym greeted his ‘bride’ with overwhelming joy and immediately arranged a grand wedding feast. All the giants of Jötunheim gathered to celebrate this extraordinary union.\n\nBut during the banquet, Thor could not contain his legendary appetite. Forgetting his role, he devoured an entire ox, eight salmon, and every dish meant for the women. He then drained three full barrels of mead in a single gulp, arousing the giants’ suspicion.\n\n“By my beard!” cried Thrym, eyes wide. “Never have I seen a woman eat and drink with such appetite! Why does the fair Freyja feast so fiercely?”\n\nLoki, ever quick with a lie, answered smoothly: “Noble Thrym, Freyja was so eager for this wedding that she hasn’t eaten a thing for eight days and eight nights! Hunger alone drives her now.”",
+    "story_thors_hammer_card_4_title": "The Feast",
+    "story_thors_hammer_card_5_description":
+        "When Mjölnir is placed on Thor’s lap to bless the wedding, he seizes it, tears off his veil, and slaughters Thrym and the giants in a storm of lightning.",
+    "story_thors_hammer_card_5_detailed_story":
+        "Reassured by Loki’s explanation, Thrym decided to proceed with the ceremony. Following ancient custom, he ordered that Thor’s hammer be brought forth to bless the union, to be placed upon the bride’s lap as a symbol of fertility and protection.\n\nThe instant Mjölnir touched his knees, Thor felt his divine strength surge back like a flood. His eyes blazed with joy and pent-up fury. With one powerful motion, he tore off his veil and ripped apart the bridal gown.\n\n“I am Thor, son of Odin!” he roared, raising his hammer high. “And this is my answer to your blackmail!”\n\nLightning burst from Mjölnir as Thor unleashed his wrath upon Thrym and all the gathered giants. Thunder shook the hall as bolts of lightning turned the wedding feast into a battlefield.\n\nThus Thor reclaimed his hammer, and never again did the giants dare challenge the god of thunder openly.",
+    "story_thors_hammer_card_5_title": "Retribution",
+    "story_thors_hammer_title": "Thor’s Hammer",
+    "story_war_of_aesir_and_vanir_card_1_description":
+        "The Vanir’s magic amazes but unsettles the Aesir, and mistrust begins to take root.",
+    "story_war_of_aesir_and_vanir_card_1_detailed_story":
+        "In the great hall of the gods of the sky, the torch flames cast wavering shadows on the walls, as if listening to the whispers of the immortals. The Vanir, masters of fields and harvests, had introduced a new kind of magic—born of earth and seasons—that fascinated as much as it frightened. The Aesir, warriors of Asgard, viewed this power with suspicion: this foreign knowledge threatened their authority. Among them, some saw opportunity, others danger. Words turned to accusations, and accusations into barely contained fury. The silence between speeches was no longer one of respect, but the stillness before a storm. Greed mixed with fear, pride with envy. The wind beating against the hall’s doors seemed itself to foretell a rupture. When gazes grew too heavy and hands clenched on armrests, all understood that the thread binding these two clans was about to snap. The fragile balance of the world was already tilting toward chaos.",
+    "story_war_of_aesir_and_vanir_card_1_title": "The Shadow of Discord",
+    "story_war_of_aesir_and_vanir_card_2_description":
+        "Conflict erupts after the Aesir attempt to destroy a Vanir sorceress.",
+    "story_war_of_aesir_and_vanir_card_2_detailed_story":
+        "Tension found its form in a woman from the Vanir—a messenger and mistress of the arcane powers of fertility. Her radiant beauty and mysterious knowledge disturbed the established order. The Aesir, unable to tolerate such independence, sought to silence her with fire. But three times the flames consumed her body, and three times she was reborn, stronger and more resplendent, as if the earth itself refused to surrender her to the flames. This act revealed the abyss separating the two peoples. The Vanir, outraged by this sacrilege, rose in arms, calling upon the winds and harvests for aid. The Aesir, wounded in pride, seized their spears and prepared for battle. The war did not begin with a cry, but with a fateful silence, when all knew there was no turning back. The first blood soon flowed, and with it shattered the illusion of lasting peace. From then on, the air was heavy with ashes and curses.",
+    "story_war_of_aesir_and_vanir_card_2_title": "The Spark of War",
+    "story_war_of_aesir_and_vanir_card_3_description":
+        "Aesir and Vanir clash without respite, devastating both land and sky.",
+    "story_war_of_aesir_and_vanir_card_3_detailed_story":
+        "Thus began a war no mortal mind could have conceived. The Aesir struck with the fury of thunder, their weapons forged in the fires of eternal forges. The Vanir retaliated by invoking the fertility of the land, turning fields into living traps, summoning torrents and forests where once there was desolation. Each battle tore the world apart, each victory quickly turned to defeat. The walls of Asgard trembled, and the plains of the Vanir burned to ash. Neither side retreated, and yet neither advanced. The endless war became a wound that would not heal. The songs of the skalds no longer celebrated triumphs but spoke only of endless ruin. Winds carried the smoke of burning lands into the mortal realms, and even Yggdrasil, the cosmic tree, seemed to groan under the weight of this discord. In the eyes of the gods there was no longer pride, but the weariness of a futile struggle. And still, none would yield first.",
+    "story_war_of_aesir_and_vanir_card_3_title": "The War of the Gods",
+    "story_war_of_aesir_and_vanir_card_4_description":
+        "Exhausted, the gods exchange hostages to seal a fragile truce.",
+    "story_war_of_aesir_and_vanir_card_4_detailed_story":
+        "When too much blood had been spilled, when weapons grew as heavy as hearts, an idea emerged from the ruins of battle. The two clans, unable to defeat one another, resolved to attempt an act of trust: the exchange of hostages. The Vanir sent two of their wisest—a brother and sister whose beauty and power surpassed even that of fields and rivers. The Aesir, in turn, offered a master of runes, keeper of ancient secrets, and another god with a sharp tongue. The exchange was sealed not in joy but in suspicion, every step burdened by doubt. The hostages crossed enemy plains and fortresses, carrying with them the fragile hopes of an uncertain peace. The air was taut as a drawn bowstring, and every glance cast upon them might at any moment turn into a threat. Yet through this act of caution, a delicate balance began to return. For the first time in ages, the gods raised not their weapons, but their oaths.",
+    "story_war_of_aesir_and_vanir_card_4_title": "The Hostages of Fate",
+    "story_war_of_aesir_and_vanir_card_5_description":
+        "The hostages keep their word, and the gods learn to unite their strengths.",
+    "story_war_of_aesir_and_vanir_card_5_detailed_story":
+        "Time did its work, and slowly, the hostages became more than guarantors—they became bridges. The Vanir, welcomed among the Aesir, taught the magic of the earth, revealing the secrets of harvest and season. The Aesir, in return, shared the discipline of their runes, the courage of battle, and the order of their laws. Grudges did not vanish in an instant, but through years of patience and shared trials, bonds were woven. The children of these divine unions carried within them both legacies—the thunder’s might and the earth’s fertility. Feasts replaced battles, and songs once again celebrated the strength of unity rather than the desolation of war. Yet in every gaze lingered a shadow: the memory of war, like a scar that time could not erase. Still, for a while, peace reigned—fragile, but real.",
+    "story_war_of_aesir_and_vanir_card_5_title":
+        "The Reconciliation of the Gods",
+    "story_war_of_aesir_and_vanir_card_6_description":
+        "Aesir and Vanir unite their forces once and for all, preparing for the future.",
+    "story_war_of_aesir_and_vanir_card_6_detailed_story":
+        "The end of the war was not a victory, but a mutual recognition. The Aesir understood they could not rule alone over sky and battle, and the Vanir accepted that earth and fertility must join with strength and law. A new era began, where the two clans—long enemies—sat side by side in the halls of Asgard. The oaths they swore rang like stones laid in a riverbed: solid, yet subject to the current of fate. The gods knew trials would come, that chaos had not vanished, but they understood that only unity could grant survival when the twilight to come arrived. Thus, from the ashes of discord was born the alliance. The skalds then sang not of victory’s glory, but of the wisdom of compromise, and their songs echoed even in the mortal realms. The Vanir and Aesir became one divine people, bound not by blood spilled, but by blood shared.",
+    "story_war_of_aesir_and_vanir_card_6_title": "The Sealed Alliance",
+    "story_war_of_aesir_and_vanir_title": "The War of the Aesir and the Vanir",
+    "victory_popup_congratulations": "Congratulations!",
+    "victory_popup_generic_message":
+        "You have accomplished a feat worthy of the gods!",
+    "victory_popup_title": "Victory!",
+    "widgets_custom_video_player_codec_incompatible":
+        "Video format not supported",
+    "widgets_custom_video_player_error_loading_music":
+        "Error loading music for card {cardId}: {error}",
+    "widgets_custom_video_player_error_loading_video":
+        "Error loading video: {error}",
+    "widgets_custom_video_player_error_resuming_music":
+        "Error resuming music: {error}",
+    "widgets_custom_video_player_failed_download":
+        "Failed to download image from {url}: {statusCode}",
+    "widgets_custom_video_player_network_error": "Network connection error",
+    "widgets_custom_video_player_playback_error": "Video playback error",
+    "widgets_custom_video_player_timeout": "Video loading timeout",
+    "widgets_custom_video_player_timeout_loading_music":
+        "Timeout when loading music for card {cardId}",
+    "widgets_game_help_dialog_title": "Help",
+    "widgets_guide_jormungandr_popup_controls":
+        "⌨️ Controls:\n↑↓←→ Arrows | R: Restart",
+    "widgets_guide_jormungandr_popup_description":
+        "Help the World Serpent grow\nby devouring mortals’ offerings",
+    "widgets_guide_jormungandr_popup_start_button": "Awaken the Serpent",
+    "widgets_guide_jormungandr_popup_title": "Guide Jörmungandr",
+    "word_search_default_clue": "Find the hidden words.",
+    "word_search_preliminary_screen_help_text":
+        "Odin sacrificed his eye for knowledge. Find the hidden words related to Norse mythology in the rune grid.",
+    "word_search_preliminary_screen_start_button": "Begin the Search",
+    "word_search_screen_rule_1": "Find all the hidden words in the grid.",
+    "word_search_screen_rule_2":
+        "Words can be horizontal, vertical, or diagonal, and read in both directions.",
+    "word_search_screen_rule_3":
+        "Select letters by sliding your finger across the grid.",
+    "word_search_screen_rule_4":
+        "Once all words are found, a secret word will be requested.",
+    "word_search_screen_rule_5":
+        "Use the remaining letters to form the secret word and confirm your victory.",
+    "word_search_screen_title": "Odin's Eye",
+    "games_menu_quiz": "My Guardian Deity",
+    "quiz_preliminary_screen_help_text":
+        "Answer the questions of the gods and discover which deity watches over you.",
+    "quiz_preliminary_screen_start_button": "Start the Quiz",
+  };
+  static const Map<String, Map<String, dynamic>> mapLocales = {
+    "es_ES": _es_ES,
+    "fr_FR": _fr_FR,
+    "en_US": _en_US,
+  };
+}

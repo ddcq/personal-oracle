@@ -2,8 +2,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
-import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
+import 'package:oracle_d_asgard/widgets/chibi_menu_button.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
@@ -72,6 +71,7 @@ class _MainScreenState extends State<MainScreen> {
       body: Stack(
         children: [
           AppBackground(
+            imagePath: 'assets/images/backgrounds/main.jpg',
             child: SafeArea(
               child: Column(
                 children: <Widget>[
@@ -96,11 +96,11 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 0),
+                      padding: EdgeInsets.fromLTRB(0.w, 20.h, 0.w, 20.h),
                       child: ClipRect(
                         child:
                             Image.asset(
-                                  'assets/images/odin_chibi.png',
+                                  'assets/images/odin_chibi.webp',
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                   alignment: Alignment.topCenter,
@@ -124,65 +124,47 @@ class _MainScreenState extends State<MainScreen> {
                           ? 20.h + _bannerAd!.size.height.toDouble()
                           : 20.h,
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                              width: double.infinity,
-                              child: ChibiTextButton(
-                                text: 'main_screen_play'.tr(),
-                                color: ChibiColors.buttonOrange,
-                                onPressed: () {
-                                  context.go('/games');
-                                },
-                              ),
-                            )
-                            .animate(delay: 800.ms)
-                            .slideX(
-                              begin: -0.3,
-                              duration: 400.ms,
-                              curve: Curves.easeOutCubic,
-                            )
-                            .fadeIn(duration: 300.ms),
-
-                        SizedBox(height: 10.h),
-                        Row(
-                              children: [
-                                Expanded(
-                                  child: ChibiIconButton(
-                                    color: ChibiColors.buttonRed,
-                                    onPressed: () {
-                                      context.go('/profile');
-                                    },
-                                    icon: const Icon(
-                                      Icons.emoji_events,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 10.w),
-                                Expanded(
-                                  child: ChibiIconButton(
-                                    color: ChibiColors.buttonGreen,
-                                    onPressed: () {
-                                      context.go('/settings');
-                                    },
-                                    icon: const Icon(
-                                      Icons.settings,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
-                            .animate(delay: 1200.ms)
-                            .slideX(
-                              begin: -0.3,
-                              duration: 400.ms,
-                              curve: Curves.easeOutCubic,
-                            )
-                            .fadeIn(duration: 300.ms),
-                      ],
+                    child: SizedBox(
+                      height: 120.h,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ChibiMenuButton(
+                              key: const ValueKey<int>(0),
+                              text: 'main_screen_play'.tr(),
+                              color: const Color(0xFF9B7374),
+                              onPressed: () {
+                                context.go('/games');
+                              },
+                              iconPath: 'assets/images/menu/play_icon.webp',
+                            ),
+                          ),
+                          SizedBox(width: 10.w),
+                          Expanded(
+                            child: ChibiMenuButton(
+                              key: const ValueKey<int>(1),
+                              text: 'main_screen_profile'.tr(),
+                              color: const Color(0xFF6A8E7F),
+                              onPressed: () {
+                                context.go('/profile');
+                              },
+                              iconPath: 'assets/images/menu/profile_icon.webp',
+                            ),
+                          ),
+                          SizedBox(width: 10.w),
+                          Expanded(
+                            child: ChibiMenuButton(
+                              key: const ValueKey<int>(2),
+                              text: 'main_screen_settings'.tr(),
+                              color: const Color(0xFF686380),
+                              onPressed: () {
+                                context.go('/settings');
+                              },
+                              iconPath: 'assets/images/menu/settings_icon.webp',
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
