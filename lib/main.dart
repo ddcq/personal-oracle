@@ -7,6 +7,7 @@ import 'package:oracle_d_asgard/services/notification_service.dart';
 import 'package:oracle_d_asgard/utils/themes.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:oracle_d_asgard/constants/app_env.dart';
 import 'package:oracle_d_asgard/services/database_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -123,7 +124,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     // Initialize ads with error handling
     try {
-      if (Platform.isIOS || Platform.isAndroid) {
+      if (AppEnv.flagAds == 'enabled' &&
+          (Platform.isIOS || Platform.isAndroid)) {
         await MobileAds.instance.initialize();
       }
     } catch (e) {

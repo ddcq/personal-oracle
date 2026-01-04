@@ -9,6 +9,7 @@ import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:oracle_d_asgard/constants/app_env.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -24,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isIOS || Platform.isAndroid) {
+    if (AppEnv.flagAds == 'enabled' && (Platform.isIOS || Platform.isAndroid)) {
       _loadBannerAd();
     }
   }
@@ -172,7 +173,9 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
 
-          if (_isBannerAdLoaded && _bannerAd != null)
+          if (AppEnv.flagAds == 'enabled' &&
+              _isBannerAdLoaded &&
+              _bannerAd != null)
             Positioned(
               bottom: 0,
               left: 0,

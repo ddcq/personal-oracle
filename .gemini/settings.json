@@ -11,6 +11,12 @@
         "mcp-server"
       ]
     },
+    "github": {
+        "httpUrl": "https://api.githubcopilot.com/mcp/",
+        "headers": {
+            "Authorization": "Bearer $GITHUB_MCP_PAT"
+        }
+    },
     "sequential-thinking": {
       "command": "npx",
       "args": [

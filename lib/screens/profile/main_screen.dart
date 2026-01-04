@@ -31,6 +31,7 @@ import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
 
 import 'package:oracle_d_asgard/widgets/dev_tools_widget.dart';
 import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/constants/app_env.dart';
 
 import 'package:oracle_d_asgard/services/quiz_service.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
@@ -262,6 +263,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showRewardedAd() async {
+    if (AppEnv.flagAds != 'enabled') {
+      final gamificationService = getIt<GamificationService>();
+      final rewardCard = await gamificationService
+          .selectRandomUnearnedCollectibleCard();
+
+      if (rewardCard != null) {
+        _showRewardDialog(rewardCard: rewardCard);
+      } else {
+        _showRewardDialog(
+          title: 'Toutes les cartes sont débloquées !'.tr(),
+          content: 'Vous avez déjà débloqué toutes les cartes disponibles.'
+              .tr(),
+        );
+      }
+      _refreshProfileData();
+      return;
+    }
+
     setState(() {
       _isAdLoading = true;
     });
@@ -294,9 +313,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _showRewardDialog(rewardCard: rewardCard);
               } else {
                 _showRewardDialog(
-                  title: 'Toutes les cartes sont débloquées !',
+                  title: 'Toutes les cartes sont débloquées !'.tr(),
                   content:
-                      'Vous avez déjà débloqué toutes les cartes disponibles.',
+                      'Vous avez déjà débloqué toutes les cartes disponibles.'
+                          .tr(),
                 );
               }
               _refreshProfileData(); // Refresh the UI to show the new card
@@ -314,6 +334,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showRewardedStoryAd() async {
+    if (AppEnv.flagAds != 'enabled') {
+      final gamificationService = getIt<GamificationService>();
+      if (_nextAdRewardStory != null) {
+        final unlockedStory = await gamificationService
+            .selectRandomUnearnedMythStory(_nextAdRewardStory!);
+
+        if (unlockedStory != null) {
+          _showRewardDialog(
+            unlockedStoryChapter: unlockedStory.correctOrder.first,
+          );
+        } else {
+          _showRewardDialog(
+            title: 'Histoire déjà débloquée !'.tr(),
+            content:
+                'Vous avez déjà débloqué tous les chapitres de cette histoire.'
+                    .tr(),
+          );
+        }
+      } else {
+        _showRewardDialog(
+          title: 'Toutes les histoires sont débloquées !'.tr(),
+          content: 'Vous avez déjà débloqué toutes les histoires disponibles.'
+              .tr(),
+        );
+      }
+      _refreshProfileData();
+      return;
+    }
+
     setState(() {
       _isAdLoading = true;
     });

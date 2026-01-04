@@ -304,6 +304,7 @@ class CodegenLoader extends AssetLoader {
     "myth_story_page_font_size_title": "Tamaño de fuente",
     "myth_story_page_sample_text": "Texto de muestra",
     "myth_story_page_unlock_with_ad": "Desbloquear con anuncio",
+    "myth_story_page_unlock_chapter": "Desbloquear capítulo",
     "norse_riddle_asgard_clue_1": "Soy la fortaleza de los dioses Æsir.",
     "norse_riddle_asgard_clue_2":
         "Mis muros fueron construidos por un gigante y su caballo.",
@@ -440,8 +441,19 @@ class CodegenLoader extends AssetLoader {
     "profile_screen_ad_label": "(anuncio)",
     "profile_screen_all_cards_unlocked":
         "¡Todas las cartas coleccionables {version} desbloqueadas!",
+    "profile_screen_all_cards_unlocked_title":
+        "¡Todas las cartas desbloqueadas!",
+    "profile_screen_all_cards_unlocked_content":
+        "Ya has desbloqueado todas las cartas disponibles.",
     "profile_screen_all_stories_unlocked":
         "¡Todas las historias han sido desbloqueadas!",
+    "profile_screen_all_stories_unlocked_title":
+        "¡Todas las historias desbloqueadas!",
+    "profile_screen_all_stories_unlocked_content":
+        "Ya has desbloqueado todas las historias disponibles.",
+    "profile_screen_story_already_unlocked_title": "¡Historia ya desbloqueada!",
+    "profile_screen_story_already_unlocked_content":
+        "Ya has desbloqueado todos los capítulos de esta historia.",
     "profile_screen_ambient_music": "Música Ambiental",
     "profile_screen_cache_clear_failed": "Error al borrar el caché",
     "profile_screen_cache_cleared_success": "¡Caché borrado con éxito!",
@@ -1249,6 +1261,7 @@ class CodegenLoader extends AssetLoader {
     "myth_story_page_font_size_title": "Taille de la police",
     "myth_story_page_sample_text": "Exemple de texte",
     "myth_story_page_unlock_with_ad": "Débloquer avec une pub",
+    "myth_story_page_unlock_chapter": "Débloquer le chapitre",
     "norse_riddle_asgard_clue_1": "Je suis la forteresse des dieux Ases.",
     "norse_riddle_asgard_clue_2":
         "Mes murs ont été construits par un géant et son cheval.",
@@ -1390,8 +1403,18 @@ class CodegenLoader extends AssetLoader {
     "profile_screen_ad_label": "(pub)",
     "profile_screen_all_cards_unlocked":
         "Toutes les cartes à collectionner {version} débloquées !",
+    "profile_screen_all_cards_unlocked_title": "Toutes les cartes débloquées !",
+    "profile_screen_all_cards_unlocked_content":
+        "Vous avez déjà débloqué toutes les cartes disponibles.",
     "profile_screen_all_stories_unlocked":
         "Toutes les histoires ont été débloquées !",
+    "profile_screen_all_stories_unlocked_title":
+        "Toutes les histoires débloquées !",
+    "profile_screen_all_stories_unlocked_content":
+        "Vous avez déjà débloqué toutes les histoires disponibles.",
+    "profile_screen_story_already_unlocked_title": "Histoire déjà débloquée !",
+    "profile_screen_story_already_unlocked_content":
+        "Vous avez déjà débloqué tous les chapitres de cette histoire.",
     "profile_screen_ambient_music": "Musique d'ambiance",
     "profile_screen_cache_clear_failed": "Échec de la suppression du cache",
     "profile_screen_cache_cleared_success": "Cache vidé avec succès !",
@@ -2194,6 +2217,7 @@ class CodegenLoader extends AssetLoader {
     "myth_story_page_font_size_title": "Font Size",
     "myth_story_page_sample_text": "Sample text",
     "myth_story_page_unlock_with_ad": "Unlock with ad",
+    "myth_story_page_unlock_chapter": "Unlock chapter",
     "norse_riddle_asgard_clue_1": "I am the fortress of the Aesir gods.",
     "norse_riddle_asgard_clue_2":
         "My walls were built by a giant and his horse.",
@@ -2321,7 +2345,16 @@ class CodegenLoader extends AssetLoader {
     "profile_screen_ad_label": "(ad)",
     "profile_screen_all_cards_unlocked":
         "All {version} collectible cards unlocked!",
+    "profile_screen_all_cards_unlocked_title": "All cards unlocked!",
+    "profile_screen_all_cards_unlocked_content":
+        "You have already unlocked all available cards.",
     "profile_screen_all_stories_unlocked": "All stories have been unlocked!",
+    "profile_screen_all_stories_unlocked_title": "All stories unlocked!",
+    "profile_screen_all_stories_unlocked_content":
+        "You have already unlocked all available stories.",
+    "profile_screen_story_already_unlocked_title": "Story already unlocked!",
+    "profile_screen_story_already_unlocked_content":
+        "You have already unlocked all chapters of this story.",
     "profile_screen_ambient_music": "Ambient Music",
     "profile_screen_cache_clear_failed": "Failed to clear cache",
     "profile_screen_cache_cleared_success": "Cache cleared successfully!",
