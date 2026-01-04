@@ -2,8 +2,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:oracle_d_asgard/widgets/chibi_menu_button.dart';
-
+import 'package:oracle_d_asgard/widgets/epic_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -80,105 +79,47 @@ class _MainScreenState extends State<MainScreen> {
                     alignment: Alignment.topCenter,
                     child: Padding(
                       padding: EdgeInsets.only(top: 20.h),
-                      child:
-                          Text(
-                                'main_screen_title'.tr(),
-                                textAlign: TextAlign.center,
-                                style: ChibiTextStyles.appBarTitle,
-                              )
-                              .animate()
-                              .slideY(
-                                begin: -0.3,
-                                duration: 800.ms,
-                                curve: Curves.easeOutCubic,
-                              )
-                              .fadeIn(duration: 600.ms),
+                      child: Text(
+                        'main_screen_title'.tr(),
+                        textAlign: TextAlign.center,
+                        style: ChibiTextStyles.appBarTitle,
+                      ).animate().slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),
                     ),
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(0.w, 20.h, 0.w, 20.h),
-                      child: ClipRect(
-                        child:
-                            Image.asset(
-                                  'assets/images/odin_chibi.webp',
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  alignment: Alignment.topCenter,
-                                )
-                                .animate(delay: 400.ms)
-                                .slideY(
-                                  begin: -0.1,
-                                  duration: 800.ms,
-                                  curve: Curves.easeOutCubic,
-                                )
-                                .fadeIn(duration: 600.ms),
+                    // Allows the image to shrink/grow
+                    child: Center(
+                      // Centers the image vertically
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(0.w, 20.h, 0.w, 0),
+                        child: ClipRect(
+                          child: Image.asset(
+                            'assets/images/odin_chibi.webp',
+                            fit: BoxFit.contain, // Scales down to fit
+                            width: double.infinity,
+                            alignment: Alignment.center,
+                          ).animate(delay: 400.ms).slideY(begin: -0.1, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),
+                        ),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      20.w,
-                      0,
-                      20.w,
-                      _isBannerAdLoaded && _bannerAd != null
-                          ? 20.h + _bannerAd!.size.height.toDouble()
-                          : 20.h,
-                    ),
-                    child: SizedBox(
-                      height: 120.h,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: ChibiMenuButton(
-                              key: const ValueKey<int>(0),
-                              text: 'main_screen_play'.tr(),
-                              color: const Color(0xFF9B7374),
-                              onPressed: () {
-                                context.go('/games');
-                              },
-                              iconPath: 'assets/images/menu/play_icon.webp',
-                            ),
-                          ),
-                          SizedBox(width: 8.w),
-                          Expanded(
-                            child: ChibiMenuButton(
-                              key: const ValueKey<int>(1),
-                              text: 'main_screen_trophies'.tr(),
-                              color: const Color(0xFF6A8E7F),
-                              onPressed: () {
-                                context.go('/trophies');
-                              },
-                              iconPath:
-                                  'assets/images/puzzle_chibi.png', // Placeholder
-                            ),
-                          ),
-                          SizedBox(width: 8.w),
-                          Expanded(
-                            child: ChibiMenuButton(
-                              key: const ValueKey<int>(2),
-                              text: 'main_screen_profile'.tr(),
-                              color: const Color(0xFFC8A976),
-                              onPressed: () {
-                                context.go('/profile');
-                              },
-                              iconPath: 'assets/images/menu/profile_icon.webp',
-                            ),
-                          ),
-                          SizedBox(width: 8.w),
-                          Expanded(
-                            child: ChibiMenuButton(
-                              key: const ValueKey<int>(3),
-                              text: 'main_screen_settings'.tr(),
-                              color: const Color(0xFF686380),
-                              onPressed: () {
-                                context.go('/settings');
-                              },
-                              iconPath: 'assets/images/menu/settings_icon.webp',
-                            ),
-                          ),
-                        ],
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, _isBannerAdLoaded && _bannerAd != null ? _bannerAd!.size.height.toDouble() : 0),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(image: AssetImage('assets/images/wood.webp'), fit: BoxFit.cover),
+                      ),
+                      child: SizedBox(
+                        height: 180.h,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            EpicButton(iconData: Icons.games_rounded, label: 'main_screen_play'.tr(), onPressed: () => context.go('/games')),
+                            EpicButton(iconData: Icons.emoji_events, label: 'main_screen_trophies'.tr(), onPressed: () => context.go('/trophies')),
+                            EpicButton(iconData: Icons.person, label: 'main_screen_profile'.tr(), onPressed: () => context.go('/profile')),
+                            EpicButton(iconData: Icons.settings, label: 'main_screen_settings'.tr(), onPressed: () => context.go('/settings')),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -187,9 +128,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
 
-          if (AppEnv.flagAds == 'enabled' &&
-              _isBannerAdLoaded &&
-              _bannerAd != null)
+          if (AppEnv.flagAds == 'enabled' && _isBannerAdLoaded && _bannerAd != null)
             Positioned(
               bottom: 0,
               left: 0,
