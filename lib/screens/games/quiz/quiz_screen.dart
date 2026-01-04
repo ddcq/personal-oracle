@@ -16,6 +16,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:oracle_d_asgard/constants/app_env.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -35,7 +36,7 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isIOS || Platform.isAndroid) {
+    if (AppEnv.flagAds == 'enabled' && (Platform.isIOS || Platform.isAndroid)) {
       _loadInterstitialAd();
     }
   }
@@ -77,7 +78,7 @@ class _QuizScreenState extends State<QuizScreen> {
         currentQuestion++;
       });
     } else {
-      if (_interstitialAd != null) {
+      if (AppEnv.flagAds == 'enabled' && _interstitialAd != null) {
         _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
           onAdDismissedFullScreenContent: (ad) {
             ad.dispose();

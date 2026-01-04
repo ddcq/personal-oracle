@@ -14,6 +14,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart'; // Import AdMob
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
 import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/constants/app_env.dart';
 
 class MythStoryPage extends StatefulWidget {
   final MythStory mythStory;
@@ -83,6 +84,16 @@ class _MythStoryPageState extends State<MythStoryPage> {
   }
 
   void _showRewardedAd(String chapterId) async {
+    if (AppEnv.flagAds != 'enabled') {
+      final gamificationService = getIt<GamificationService>();
+      await gamificationService.unlockStoryPart(widget.mythStory.id, chapterId);
+      setState(() {
+        _unlockedCardIdsFuture = _getUnlockedCardIds();
+      });
+      _showSnackBar('myth_story_page_chapter_unlocked_success'.tr());
+      return;
+    }
+
     setState(() {
       _isAdLoading = true;
     });
@@ -355,12 +366,20 @@ class _StoryContentState extends State<_StoryContent> {
                           const SizedBox(height: 8.0),
                           widget.isAdLoading
                               ? const CircularProgressIndicator()
-                              : ElevatedButton.icon(
+                              : AppEnv.flagAds == 'enabled'
+                              ? ElevatedButton.icon(
                                   onPressed: () =>
                                       widget.showRewardedAd(card.id),
                                   icon: const Icon(Icons.play_arrow),
                                   label: Text(
                                     'myth_story_page_unlock_with_ad'.tr(),
+                                  ),
+                                )
+                              : ElevatedButton(
+                                  onPressed: () =>
+                                      widget.showRewardedAd(card.id),
+                                  child: Text(
+                                    'myth_story_page_unlock_chapter'.tr(),
                                   ),
                                 ),
                         ],
