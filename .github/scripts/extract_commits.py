@@ -1,4 +1,5 @@
-import sys,re
+import sys
+import re
 raw = sys.stdin.read().strip().splitlines()
 out=[]
 for s in raw:

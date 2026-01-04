@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/main_screen.dart';
 import 'package:oracle_d_asgard/screens/games/quiz/quiz_screen.dart';
 import 'package:oracle_d_asgard/screens/games/quiz/result_screen.dart';
-import 'package:oracle_d_asgard/screens/profile/main_screen.dart';
+import 'package:oracle_d_asgard/screens/profile/profile_screen.dart';
+import 'package:oracle_d_asgard/screens/trophies/trophies_screen.dart';
 import 'package:oracle_d_asgard/screens/about_screen.dart';
 import 'package:oracle_d_asgard/screens/settings_screen.dart';
 import 'package:oracle_d_asgard/screens/collectible_card_detail_page.dart';
@@ -105,7 +106,13 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'profile',
           builder: (BuildContext context, GoRouterState state) {
-            return const ProfileScreen();
+            return const ProfilePage();
+          },
+        ),
+        GoRoute(
+          path: 'trophies',
+          builder: (BuildContext context, GoRouterState state) {
+            return const TrophiesScreen();
           },
         ),
         GoRoute(

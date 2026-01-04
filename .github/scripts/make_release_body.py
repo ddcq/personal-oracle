@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from deep_translator import GoogleTranslator
 import re
@@ -29,11 +28,11 @@ else:
 # translate to French and Spanish using GoogleTranslator (web)
 try:
     fr_text = GoogleTranslator(source='en', target='fr').translate(en_text)
-except Exception as e:
+except Exception:
     fr_text = en_text  # fallback to EN
 try:
     es_text = GoogleTranslator(source='en', target='es').translate(en_text)
-except Exception as e:
+except Exception:
     es_text = en_text # fallback to EN
 
 # Build release body with required tags

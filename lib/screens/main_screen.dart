@@ -128,6 +128,7 @@ class _MainScreenState extends State<MainScreen> {
                     child: SizedBox(
                       height: 120.h,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Expanded(
                             child: ChibiMenuButton(
@@ -140,22 +141,35 @@ class _MainScreenState extends State<MainScreen> {
                               iconPath: 'assets/images/menu/play_icon.webp',
                             ),
                           ),
-                          SizedBox(width: 10.w),
+                          SizedBox(width: 8.w),
                           Expanded(
                             child: ChibiMenuButton(
                               key: const ValueKey<int>(1),
-                              text: 'main_screen_profile'.tr(),
+                              text: 'main_screen_trophies'.tr(),
                               color: const Color(0xFF6A8E7F),
+                              onPressed: () {
+                                context.go('/trophies');
+                              },
+                              iconPath:
+                                  'assets/images/puzzle_chibi.png', // Placeholder
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: ChibiMenuButton(
+                              key: const ValueKey<int>(2),
+                              text: 'main_screen_profile'.tr(),
+                              color: const Color(0xFFC8A976),
                               onPressed: () {
                                 context.go('/profile');
                               },
                               iconPath: 'assets/images/menu/profile_icon.webp',
                             ),
                           ),
-                          SizedBox(width: 10.w),
+                          SizedBox(width: 8.w),
                           Expanded(
                             child: ChibiMenuButton(
-                              key: const ValueKey<int>(2),
+                              key: const ValueKey<int>(3),
                               text: 'main_screen_settings'.tr(),
                               color: const Color(0xFF686380),
                               onPressed: () {
