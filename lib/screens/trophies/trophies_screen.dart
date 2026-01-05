@@ -54,8 +54,8 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
 
   Future<void> _loadNextAdRewardCard() async {
     final gamificationService = getIt<GamificationService>();
-    _nextAdRewardCard =
-        await gamificationService.getRandomUnearnedCollectibleCard();
+    _nextAdRewardCard = await gamificationService
+        .getRandomUnearnedCollectibleCard();
     setState(() {});
   }
 
@@ -97,16 +97,16 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
   void _showRewardedAd() async {
     if (AppEnv.flagAds != 'enabled') {
       final gamificationService = getIt<GamificationService>();
-      final rewardCard =
-          await gamificationService.selectRandomUnearnedCollectibleCard();
+      final rewardCard = await gamificationService
+          .selectRandomUnearnedCollectibleCard();
 
       if (rewardCard != null) {
         _showRewardDialog(rewardCard: rewardCard);
       } else {
         _showRewardDialog(
           title: 'Toutes les cartes sont débloquées !'.tr(),
-          content:
-              'Vous avez déjà débloqué toutes les cartes disponibles.'.tr(),
+          content: 'Vous avez déjà débloqué toutes les cartes disponibles.'
+              .tr(),
         );
       }
       _refreshTrophiesData();
@@ -174,7 +174,8 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
 
         if (unlockedStory != null) {
           _showRewardDialog(
-              unlockedStoryChapter: unlockedStory.correctOrder.first);
+            unlockedStoryChapter: unlockedStory.correctOrder.first,
+          );
         } else {
           _showRewardDialog(
             title: 'Histoire déjà débloquée !'.tr(),
@@ -225,7 +226,8 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
 
                 if (unlockedStory != null) {
                   _showRewardDialog(
-                      unlockedStoryChapter: unlockedStory.correctOrder.first);
+                    unlockedStoryChapter: unlockedStory.correctOrder.first,
+                  );
                 } else {
                   _showRewardDialog(
                     title: 'Histoire déjà débloquée !',
@@ -249,7 +251,8 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
             _isAdLoading = false;
           });
           _showSnackBar(
-              'Échec du chargement de la publicité. Veuillez réessayer.');
+            'Échec du chargement de la publicité. Veuillez réessayer.',
+          );
         },
       ),
     );
@@ -257,8 +260,9 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
 
   void _showSnackBar(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -316,13 +320,17 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(
-                    child: Text(
-                        '${'profile_screen_error_prefix'.tr()}: ${snapshot.error}'));
+                  child: Text(
+                    '${'profile_screen_error_prefix'.tr()}: ${snapshot.error}',
+                  ),
+                );
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return Center(
-                    child: Text('profile_screen_no_data_available'.tr()));
+                  child: Text('profile_screen_no_data_available'.tr()),
+                );
               } else {
-                final List<Map<String, dynamic>> snakeScores = snapshot.data![0];
+                final List<Map<String, dynamic>> snakeScores =
+                    snapshot.data![0];
                 final List<CollectibleCard> unlockedCards = snapshot.data![1];
                 final List<Map<String, dynamic>> storyProgress =
                     snapshot.data![2];
@@ -371,7 +379,8 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
                         });
                       },
                       child: _buildSectionTitle(
-                          'profile_screen_unlocked_stories'.tr()),
+                        'profile_screen_unlocked_stories'.tr(),
+                      ),
                     ),
                     UnlockedStoriesGrid(
                       storyProgress: storyProgress,
@@ -405,19 +414,19 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
       child: Text(
         title,
         style: Theme.of(context).textTheme.displayMedium?.copyWith(
-              fontFamily: AppTextStyles.amaticSC,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 40,
-              letterSpacing: 2.0,
-              shadows: [
-                const Shadow(
-                  blurRadius: 15.0,
-                  color: Colors.black87,
-                  offset: Offset(4.0, 4.0),
-                ),
-              ],
+          fontFamily: AppTextStyles.amaticSC,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 40,
+          letterSpacing: 2.0,
+          shadows: [
+            const Shadow(
+              blurRadius: 15.0,
+              color: Colors.black87,
+              offset: Offset(4.0, 4.0),
             ),
+          ],
+        ),
         textAlign: TextAlign.center,
       ),
     );

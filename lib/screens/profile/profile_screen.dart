@@ -40,13 +40,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _loadSelectableDeities() async {
     final gamificationService = getIt<GamificationService>();
 
-    final allPossibleQuizDeityIds = QuizService.getAllowedQuizDeityIds().toSet();
+    final allPossibleQuizDeityIds = QuizService.getAllowedQuizDeityIds()
+        .toSet();
     final allChibiCards = allCollectibleCards
         .where((card) => card.version == CardVersion.chibi)
         .toList();
     final allChibiCardsMap = {for (var card in allChibiCards) card.id: card};
-    final unlockedCards =
-        await gamificationService.getUnlockedCollectibleCards();
+    final unlockedCards = await gamificationService
+        .getUnlockedCollectibleCards();
     final unlockedCardIds = unlockedCards.map((card) => card.id).toSet();
 
     final List<Deity> tempDeities = [];
@@ -135,11 +136,11 @@ class _ProfilePageState extends State<ProfilePage> {
             'profile_screen_change_name'.tr(),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontFamily: AppTextStyles.amaticSC,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
-                ),
+              fontFamily: AppTextStyles.amaticSC,
+              color: Colors.black87,
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            ),
           ),
           content: TextField(
             controller: _nameController,
@@ -229,7 +230,8 @@ class _ProfilePageState extends State<ProfilePage> {
               } else {
                 final String? savedName = snapshot.data![0];
                 final String? savedDeityIconId = snapshot.data![1];
-                final List<Map<String, dynamic>> quizResults = snapshot.data![2];
+                final List<Map<String, dynamic>> quizResults =
+                    snapshot.data![2];
 
                 if (_profileName == null && savedName != null) {
                   _profileName = savedName;
@@ -263,8 +265,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       },
                       onDeityChanged: (newDeityId) {
                         _selectedDeityId = newDeityId;
-                        getIt<GamificationService>()
-                            .saveProfileDeityIcon(newDeityId);
+                        getIt<GamificationService>().saveProfileDeityIcon(
+                          newDeityId,
+                        );
                         _refreshProfileData();
                       },
                       onEditName: () => _showEditNameDialog(context),

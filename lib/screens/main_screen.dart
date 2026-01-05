@@ -79,11 +79,19 @@ class _MainScreenState extends State<MainScreen> {
                     alignment: Alignment.topCenter,
                     child: Padding(
                       padding: EdgeInsets.only(top: 20.h),
-                      child: Text(
-                        'main_screen_title'.tr(),
-                        textAlign: TextAlign.center,
-                        style: ChibiTextStyles.appBarTitle,
-                      ).animate().slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),
+                      child:
+                          Text(
+                                'main_screen_title'.tr(),
+                                textAlign: TextAlign.center,
+                                style: ChibiTextStyles.appBarTitle,
+                              )
+                              .animate()
+                              .slideY(
+                                begin: -0.3,
+                                duration: 800.ms,
+                                curve: Curves.easeOutCubic,
+                              )
+                              .fadeIn(duration: 600.ms),
                     ),
                   ),
                   Expanded(
@@ -93,31 +101,65 @@ class _MainScreenState extends State<MainScreen> {
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(0.w, 20.h, 0.w, 0),
                         child: ClipRect(
-                          child: Image.asset(
-                            'assets/images/odin_chibi.webp',
-                            fit: BoxFit.contain, // Scales down to fit
-                            width: double.infinity,
-                            alignment: Alignment.center,
-                          ).animate(delay: 400.ms).slideY(begin: -0.1, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),
+                          child:
+                              Image.asset(
+                                    'assets/images/odin_chibi.webp',
+                                    fit: BoxFit.contain, // Scales down to fit
+                                    width: double.infinity,
+                                    alignment: Alignment.center,
+                                  )
+                                  .animate(delay: 400.ms)
+                                  .slideY(
+                                    begin: -0.1,
+                                    duration: 800.ms,
+                                    curve: Curves.easeOutCubic,
+                                  )
+                                  .fadeIn(duration: 600.ms),
                         ),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, _isBannerAdLoaded && _bannerAd != null ? _bannerAd!.size.height.toDouble() : 0),
+                    padding: EdgeInsets.fromLTRB(
+                      0,
+                      0,
+                      0,
+                      _isBannerAdLoaded && _bannerAd != null
+                          ? _bannerAd!.size.height.toDouble()
+                          : 0,
+                    ),
                     child: Container(
                       decoration: const BoxDecoration(
-                        image: DecorationImage(image: AssetImage('assets/images/wood.webp'), fit: BoxFit.cover),
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/wood.webp'),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       child: SizedBox(
                         height: 180.h,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            EpicButton(iconData: Icons.games_rounded, label: 'main_screen_play'.tr(), onPressed: () => context.go('/games')),
-                            EpicButton(iconData: Icons.emoji_events, label: 'main_screen_trophies'.tr(), onPressed: () => context.go('/trophies')),
-                            EpicButton(iconData: Icons.person, label: 'main_screen_profile'.tr(), onPressed: () => context.go('/profile')),
-                            EpicButton(iconData: Icons.settings, label: 'main_screen_settings'.tr(), onPressed: () => context.go('/settings')),
+                            EpicButton(
+                              iconData: Icons.games_rounded,
+                              label: 'main_screen_play'.tr(),
+                              onPressed: () => context.go('/games'),
+                            ),
+                            EpicButton(
+                              iconData: Icons.emoji_events,
+                              label: 'main_screen_trophies'.tr(),
+                              onPressed: () => context.go('/trophies'),
+                            ),
+                            EpicButton(
+                              iconData: Icons.person,
+                              label: 'main_screen_profile'.tr(),
+                              onPressed: () => context.go('/profile'),
+                            ),
+                            EpicButton(
+                              iconData: Icons.settings,
+                              label: 'main_screen_settings'.tr(),
+                              onPressed: () => context.go('/settings'),
+                            ),
                           ],
                         ),
                       ),
@@ -128,7 +170,9 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
 
-          if (AppEnv.flagAds == 'enabled' && _isBannerAdLoaded && _bannerAd != null)
+          if (AppEnv.flagAds == 'enabled' &&
+              _isBannerAdLoaded &&
+              _bannerAd != null)
             Positioned(
               bottom: 0,
               left: 0,
