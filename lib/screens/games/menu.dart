@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -5,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
-import 'package:oracle_d_asgard/widgets/chibi_menu_button.dart';
+import 'package:oracle_d_asgard/widgets/epic_button.dart';
 
 class MenuPrincipal extends StatelessWidget {
   const MenuPrincipal({super.key});
@@ -16,49 +18,41 @@ class MenuPrincipal extends StatelessWidget {
       _MiniJeuItem(
         'games_menu_reorder_history'.tr(),
         'assets/images/menu/order_the_scrolls.webp',
-        const Color(0xFF76A2A5),
         () => context.go('/order_the_scrolls_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_asgard_wall'.tr(),
         'assets/images/menu/asgard_wall.webp',
-        const Color(0xFF2F3845),
         () => context.go('/asgard_wall_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_scattered_runes'.tr(),
         'assets/images/menu/puzzle.webp',
-        const Color(0xFF5E6282),
         () => context.go('/puzzle_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_midgard_serpent'.tr(),
         'assets/images/menu/snake.webp',
-        const Color(0xFF498289),
         () => context.go('/snake_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_territory_conquest'.tr(),
         'assets/images/menu/qix.webp',
-        const Color(0xFF565575),
         () => context.go('/qix_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_odin_eye'.tr(),
         'assets/images/menu/word_search.webp',
-        const Color(0xFF6E759F),
         () => context.go('/word_search_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_andvari_loot'.tr(),
         'assets/images/menu/minesweeper.webp',
-        const Color(0xFF7B8295),
         () => context.go('/minesweeper_preliminary'),
       ),
       _MiniJeuItem(
         'games_menu_quiz'.tr(),
         'assets/images/menu/quiz.webp',
-        const Color(0xFF55999C),
         () => context.go('/quiz_preliminary'),
       ),
     ];
@@ -74,27 +68,45 @@ class MenuPrincipal extends StatelessWidget {
         ),
       ),
       body: AppBackground(
+        imagePath: 'assets/images/backgrounds/main.jpg',
         child: SafeArea(
-          child: GridView.builder(
-            padding: EdgeInsets.all(20.w),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
-              childAspectRatio: 0.7,
-            ),
-            itemCount: jeux.length,
-            itemBuilder: (context, index) {
-              final jeu = jeux[index];
-              return ChibiMenuButton(
-                key: ValueKey<int>(index), // Add key for animation delay
-                color: jeu.color,
-                onPressed: jeu.onPressed,
-                iconPath: jeu.iconPath,
-                text: jeu.label,
-              );
-            },
-          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(20.w),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/wood.webp'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Central button
+                      EpicButton(
+                        onPressed: jeux[7].onPressed,
+                        imagePath: jeux[7].iconPath,
+                        size: 100.sp,
+                      ),
+                      // Surrounding buttons
+                      for (var i = 0; i < 7; i++)
+                        Transform.translate(
+                          offset: Offset.fromDirection(i * (2 * pi / 7), 120.r),
+                          child: EpicButton(
+                            onPressed: jeux[i].onPressed,
+                            imagePath: jeux[i].iconPath,
+                            size: 100.sp,
+                          ),
+                        ),
+                    ],
+                  ), // This closes the Stack
+                ), // This closes the Container
+              ), // This closes the Expanded
+            ], // This closes the children list of Column
+          ), // This closes the Column
         ),
       ),
     );
@@ -104,8 +116,7 @@ class MenuPrincipal extends StatelessWidget {
 class _MiniJeuItem {
   final String label;
   final String iconPath;
-  final Color color;
   final VoidCallback onPressed;
 
-  _MiniJeuItem(this.label, this.iconPath, this.color, this.onPressed);
+  _MiniJeuItem(this.label, this.iconPath, this.onPressed);
 }

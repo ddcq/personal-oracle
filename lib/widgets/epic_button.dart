@@ -3,13 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 class EpicButton extends StatefulWidget {
-  const EpicButton({super.key, this.iconData, this.imagePath, this.onPressed, this.label})
+  const EpicButton({super.key, this.iconData, this.imagePath, this.onPressed, this.label, this.size})
     : assert(iconData != null || imagePath != null, 'Either iconData or imagePath must be provided.');
 
   final IconData? iconData;
   final String? imagePath;
   final VoidCallback? onPressed;
   final String? label;
+  final double? size;
 
   @override
   State<EpicButton> createState() => _EpicButtonState();
@@ -20,16 +21,17 @@ class _EpicButtonState extends State<EpicButton> {
 
   @override
   Widget build(BuildContext context) {
+    final buttonSize = widget.size ?? 70.sp;
     List<Widget> stackChildren = [];
 
     if (widget.imagePath != null) {
       stackChildren.add(
         Transform(
-          transform: Matrix4.translationValues(-10.0, 2.0, 2.0)
+          transform: Matrix4.translationValues(-buttonSize / 11, _isPressed ? (-buttonSize / 50) : (-buttonSize / 17.5), 0.0)
             ..setEntry(3, 2, 0.015)
-            ..rotateX(-0.8)
+            ..rotateX(-0.7)
             ..rotateZ(-0.5),
-          child: Image.asset(widget.imagePath!, width: 30.sp, height: 30.sp, fit: BoxFit.contain),
+          child: Image.asset(widget.imagePath!, width: buttonSize / 3, height: buttonSize / 3, fit: BoxFit.contain),
         ),
       );
     } else {
@@ -56,8 +58,8 @@ class _EpicButtonState extends State<EpicButton> {
           onTapCancel: () => setState(() => _isPressed = false),
           onTap: widget.onPressed,
           child: Container(
-            width: 70.sp,
-            height: 70.sp,
+            width: buttonSize,
+            height: buttonSize,
             decoration: BoxDecoration(
               image: DecorationImage(image: AssetImage(_isPressed ? 'assets/images/pressed_button.webp' : 'assets/images/button.webp'), fit: BoxFit.contain),
             ),
