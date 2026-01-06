@@ -12,7 +12,7 @@ class AppBackground extends StatelessWidget {
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(
-            imagePath ?? 'assets/images/backgrounds/landscape.jpg',
+            imagePath ?? 'assets/images/backgrounds/main.jpg',
           ),
           fit: BoxFit.cover,
         ),

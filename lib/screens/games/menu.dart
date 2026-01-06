@@ -69,7 +69,6 @@ class MenuPrincipal extends StatelessWidget {
         ),
       ),
       body: AppBackground(
-        imagePath: 'assets/images/backgrounds/main.jpg',
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

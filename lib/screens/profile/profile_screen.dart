@@ -213,7 +213,6 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
       body: AppBackground(
-        imagePath: 'assets/images/backgrounds/main.jpg',
         child: ListView(
           padding: EdgeInsets.only(
             top: kToolbarHeight + 40,

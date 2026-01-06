@@ -71,7 +71,6 @@ class _MainScreenState extends State<MainScreen> {
       body: Stack(
         children: [
           AppBackground(
-            imagePath: 'assets/images/backgrounds/main.jpg',
             child: SafeArea(
               child: Column(
                 children: <Widget>[

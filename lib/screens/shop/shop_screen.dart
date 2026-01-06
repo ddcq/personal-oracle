@@ -149,7 +149,6 @@ class _ShopScreenState extends State<ShopScreen> {
         elevation: 0,
       ),
       body: AppBackground(
-        imagePath: 'assets/images/backgrounds/main.jpg',
         child: FutureBuilder<Map<String, dynamic>>(
           future: _shopDataFuture,
           builder: (context, snapshot) {
