@@ -95,6 +95,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         elevation: 0,
       ),
       body: AppBackground(
+        imagePath: 'assets/images/backgrounds/main.jpg',
         child: Container(
           color: Colors.black.withAlpha(128),
           child: ListView(
