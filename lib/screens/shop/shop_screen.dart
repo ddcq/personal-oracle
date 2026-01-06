@@ -238,23 +238,39 @@ class _ShopScreenState extends State<ShopScreen> {
                             opacity: canAfford ? 1.0 : 0.5,
                             child: Card(
                               color: Colors.black.withAlpha(200),
+                              clipBehavior: Clip.antiAlias,
                               child: InkWell(
                                 onTap: canAfford ? () => _buyCard(card) : null,
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     Expanded(
-                                      child: Image.asset(
-                                        'assets/images/${card.imagePath}',
-                                        fit: BoxFit.cover,
+                                      child: ClipRRect(
+                                        borderRadius: const BorderRadius.vertical(
+                                          top: Radius.circular(12),
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/${card.imagePath}',
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        card.title,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                    SizedBox(
+                                      height: 48,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0,
+                                          vertical: 4.0,
+                                        ),
+                                        child: Text(
+                                          card.title,
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -327,29 +343,48 @@ class _ShopScreenState extends State<ShopScreen> {
                             opacity: canAfford ? 1.0 : 0.5,
                             child: Card(
                               color: Colors.black.withAlpha(200),
+                              clipBehavior: Clip.antiAlias,
                               child: InkWell(
                                 onTap: canAfford ? () => _buyStory(story, price) : null,
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     Expanded(
-                                      child: imagePath.isNotEmpty
-                                          ? Image.asset(
-                                              'assets/images/stories/$imagePath',
-                                              fit: BoxFit.cover,
-                                            )
-                                          : const Icon(
-                                              Icons.book,
-                                              color: Colors.white,
-                                              size: 50,
-                                            ),
+                                      child: ClipRRect(
+                                        borderRadius: const BorderRadius.vertical(
+                                          top: Radius.circular(12),
+                                        ),
+                                        child: imagePath.isNotEmpty
+                                            ? Image.asset(
+                                                'assets/images/stories/$imagePath',
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Container(
+                                                color: Colors.black54,
+                                                child: const Icon(
+                                                  Icons.book,
+                                                  color: Colors.white,
+                                                  size: 50,
+                                                ),
+                                              ),
+                                      ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        story.title.tr(),
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                    SizedBox(
+                                      height: 48,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0,
+                                          vertical: 4.0,
+                                        ),
+                                        child: Text(
+                                          story.title.tr(),
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                          ),
                                         ),
                                       ),
                                     ),
