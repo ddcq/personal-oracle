@@ -7,7 +7,6 @@ import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_game.dart';
 
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
-import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/locator.dart';
 
@@ -25,6 +24,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   int _cols = 3;
   int _currentLevel = 1;
   bool _isInitialized = false;
+  int _lastCoinsEarned = 0;
 
   @override
   void initState() {
@@ -118,7 +118,9 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     };
   }
 
-  void _showVictoryDialog(CollectibleCard? rewardCard) async {
+  void _showVictoryDialog(int coinsEarned) async {
+    _lastCoinsEarned = coinsEarned;
+    
     // Increment difficulty level
     final gamificationService = getIt<GamificationService>();
     _currentLevel++;
@@ -187,14 +189,13 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
         overlayBuilderMap: {
           'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
             return VictoryPopup(
-              rewardCard: game.associatedCard,
-              unlockedStoryChapter: game.associatedChapter,
+              coinsEarned: _lastCoinsEarned,
               onDismiss: () {
                 game.overlays.remove('victoryOverlay');
                 _resetGame();
               },
               onSeeRewards: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
                 context.push('/profile');
               },
             );

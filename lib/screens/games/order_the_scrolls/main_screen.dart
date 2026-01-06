@@ -183,9 +183,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return VictoryPopup(
-          rewardCard: controller.rewardCard, // Pass the reward card
-          unlockedStoryChapter: controller
-              .unlockedStoryChapter, // Pass the unlocked story chapter
+          coinsEarned: 50,
           onDismiss: () {
             Navigator.of(context).pop();
             controller.victoryPopupShown(); // Reset popup state

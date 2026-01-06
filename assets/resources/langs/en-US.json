@@ -657,5 +657,6 @@
   "word_search_screen_title": "Odin's Eye",
   "games_menu_quiz": "My Guardian Deity",
   "quiz_preliminary_screen_help_text": "Answer the questions of the gods and discover which deity watches over you.",
-  "quiz_preliminary_screen_start_button": "Start the Quiz"
+  "quiz_preliminary_screen_start_button": "Start the Quiz",
+  "victory_popup_coins_earned": "Coins Earned!"
 }

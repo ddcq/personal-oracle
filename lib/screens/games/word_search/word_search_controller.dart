@@ -456,14 +456,10 @@ class WordSearchController with ChangeNotifier {
   }
 
   void _onSecretWordSuccess() async {
-    if (_nextChapter != null) {
-      await _gamificationService.unlockStoryPart(
-        _nextChapter!.story.id,
-        _nextChapter!.chapter.id,
-      );
-      if (level < 10) {
-        await _gamificationService.saveWordSearchDifficulty(level + 1);
-      }
+    const coinsEarned = 50;
+    await _gamificationService.addCoins(coinsEarned);
+    if (level < 10) {
+      await _gamificationService.saveWordSearchDifficulty(level + 1);
     }
     gamePhase = GamePhase.victory;
     notifyListeners();

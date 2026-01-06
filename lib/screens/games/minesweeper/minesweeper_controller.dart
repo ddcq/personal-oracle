@@ -1,10 +1,7 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:oracle_d_asgard/locator.dart';
-import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
-import 'package:oracle_d_asgard/services/video_cache_service.dart';
 
 class Cell {
   bool isRevealed = false;
@@ -26,9 +23,6 @@ class MinesweeperController with ChangeNotifier {
   bool isGameWon = false;
   int treasuresFound = 0;
   bool _isFirstMove = true;
-  CollectibleCard? _rewardCard;
-
-  CollectibleCard? get rewardCard => _rewardCard;
 
   MinesweeperController({
     this.rows = 10,
@@ -45,17 +39,7 @@ class MinesweeperController with ChangeNotifier {
     treasuresFound = 0;
     _isFirstMove = true;
     board = List.generate(rows, (_) => List.generate(cols, (_) => Cell()));
-    _prepareReward();
     notifyListeners();
-  }
-
-  Future<void> _prepareReward() async {
-    final gamificationService = getIt<GamificationService>();
-    _rewardCard = await gamificationService
-        .selectRandomUnearnedCollectibleCard();
-    if (_rewardCard?.videoUrl != null && _rewardCard!.videoUrl!.isNotEmpty) {
-      getIt<VideoCacheService>().preloadVideo(_rewardCard!.videoUrl!);
-    }
   }
 
   void _placeMinesAndTreasures(int initialRow, int initialCol) {

@@ -86,14 +86,14 @@ class _WordSearchView extends StatelessWidget {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return VictoryPopup(
+              coinsEarned: 50,
               onDismiss: () {
                 Navigator.of(context).pop();
               },
               onSeeRewards: () {
                 Navigator.of(context).pop();
-                context.go('/rewards');
+                context.go('/profile');
               },
-              isGenericVictory: true,
             );
           },
         );

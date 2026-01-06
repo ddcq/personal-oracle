@@ -18,6 +18,7 @@ import 'package:easy_localization/easy_localization.dart';
 class VictoryPopup extends StatefulWidget {
   final CollectibleCard? rewardCard;
   final MythCard? unlockedStoryChapter;
+  final int? coinsEarned;
   final VoidCallback onDismiss;
   final VoidCallback onSeeRewards;
   final bool isGenericVictory;
@@ -27,6 +28,7 @@ class VictoryPopup extends StatefulWidget {
     super.key,
     this.rewardCard,
     this.unlockedStoryChapter,
+    this.coinsEarned,
     required this.onDismiss,
     required this.onSeeRewards,
     this.isGenericVictory = false,
@@ -113,6 +115,37 @@ class _VictoryPopupState extends State<VictoryPopup> {
     );
   }
 
+  Widget _buildCoinsContent(int coins) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(
+          Icons.monetization_on,
+          size: 120,
+          color: Colors.amber,
+        )
+            .animate(onPlay: (controller) => controller.repeat())
+            .shimmer(duration: const Duration(seconds: 2))
+            .shake(duration: const Duration(milliseconds: 500)),
+        const SizedBox(height: 20),
+        Text(
+          'victory_popup_coins_earned'.tr(),
+          style: _rewardTitleStyle,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 10),
+        Text(
+          '+$coins',
+          style: _rewardTitleStyle.copyWith(
+            fontSize: 48,
+            color: Colors.amber,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
   Widget _buildCardContent(CollectibleCard card) {
     final imageWidget = SizedBox(
       height: 150,
@@ -182,7 +215,9 @@ class _VictoryPopupState extends State<VictoryPopup> {
   @override
   Widget build(BuildContext context) {
     Widget content;
-    if (widget.isGenericVictory ||
+    if (widget.coinsEarned != null) {
+      content = _buildCoinsContent(widget.coinsEarned!);
+    } else if (widget.isGenericVictory ||
         (widget.rewardCard == null && widget.unlockedStoryChapter == null)) {
       content = _buildGenericContent();
     } else if (widget.rewardCard != null) {

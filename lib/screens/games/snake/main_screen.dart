@@ -8,7 +8,6 @@ import 'dart:async';
 import 'package:oracle_d_asgard/screens/games/snake/snake_flame_game.dart';
 import 'package:oracle_d_asgard/screens/games/snake/snake_game_over_popup.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:oracle_d_asgard/services/video_cache_service.dart';
 import 'package:oracle_d_asgard/widgets/joystick_controller.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' show Direction;
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
@@ -18,10 +17,9 @@ import 'package:oracle_d_asgard/screens/games/snake/models/snake_game_state.dart
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 
-import 'package:oracle_d_asgard/components/victory_popup.dart'; // Import the victory popup
+import 'package:oracle_d_asgard/components/victory_popup.dart';
 
-import 'package:oracle_d_asgard/models/collectible_card.dart'; // Import CollectibleCard
-import 'package:confetti/confetti.dart'; // Import ConfettiController
+import 'package:confetti/confetti.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
@@ -40,7 +38,7 @@ class _SnakeGameState extends State<SnakeGame> {
   Future<int>? _initializeGameFuture;
   bool _isGameInitialized = false;
   bool _isLevelInitialized = false;
-  CollectibleCard? _rewardCard;
+  int _lastCoinsEarned = 0;
 
   @override
   void initState() {
@@ -73,18 +71,9 @@ class _SnakeGameState extends State<SnakeGame> {
   // CLEAN GAME MANAGEMENT METHODS
   // ==========================================
 
-  Future<void> _preloadNextReward() async {
-    _rewardCard = await getIt<GamificationService>()
-        .selectRandomUnearnedCollectibleCard();
-    if (_rewardCard?.videoUrl != null && _rewardCard!.videoUrl!.isNotEmpty) {
-      await getIt<VideoCacheService>().preloadVideo(_rewardCard!.videoUrl!);
-    }
-  }
-
   /// Creates a new game instance at the current level
   void _initializeNewGame() {
     _game?.pauseEngine();
-    _preloadNextReward(); // Preload the reward
     _game = SnakeFlameGame(
       gamificationService: getIt<GamificationService>(),
       onGameEnd: _onGameEnd,
@@ -148,11 +137,11 @@ class _SnakeGameState extends State<SnakeGame> {
   void _onGameEnd(
     int score, {
     required bool isVictory,
-    CollectibleCard? wonCard,
+    int coinsEarned = 0,
   }) async {
     if (isVictory) {
-      final rewardCard = wonCard ?? _rewardCard;
-      _showVictoryDialog(rewardCard);
+      _lastCoinsEarned = coinsEarned;
+      _showVictoryDialog();
     } else {
       _showGameOverDialog(score);
     }
@@ -167,13 +156,13 @@ class _SnakeGameState extends State<SnakeGame> {
   // DIALOG METHODS
   // ==========================================
 
-  void _showVictoryDialog(CollectibleCard? wonCard) {
+  void _showVictoryDialog() {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return VictoryPopup(
-          rewardCard: wonCard,
+          coinsEarned: _lastCoinsEarned,
           onDismiss: () async {
             Navigator.of(context).pop();
             await _levelUp();

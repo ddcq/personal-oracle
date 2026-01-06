@@ -9,7 +9,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/screens/games/snake/game_logic.dart';
 import 'package:oracle_d_asgard/screens/games/snake/models/snake_models.dart';
 import 'package:oracle_d_asgard/screens/games/snake/models/snake_game_state.dart';
@@ -23,7 +22,7 @@ import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
 class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final GamificationService gamificationService;
-  final Function(int, {required bool isVictory, CollectibleCard? wonCard})
+  final Function(int, {required bool isVictory, int coinsEarned})
   onGameEnd;
   final VoidCallback? onResetGame;
   final VoidCallback? onScoreChanged;
@@ -447,13 +446,14 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       Vibration.vibrate(duration: _vibrationDurationLong);
     }
     final bool isVictory = gameState.value.score >= victoryScoreThreshold;
-    CollectibleCard? wonCard;
+    int coinsEarned = 0;
 
     if (isVictory) {
       gamificationService.saveGameScore('Snake', gameState.value.score);
-      wonCard = await gamificationService.selectRandomUnearnedCollectibleCard();
+      coinsEarned = await gamificationService.calculateGameReward(level: level);
+      await gamificationService.addCoins(coinsEarned);
     }
-    onGameEnd(gameState.value.score, isVictory: isVictory, wonCard: wonCard);
+    onGameEnd(gameState.value.score, isVictory: isVictory, coinsEarned: coinsEarned);
   }
 
   void tick() async {

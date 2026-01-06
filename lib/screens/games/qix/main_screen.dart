@@ -9,8 +9,6 @@ import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:oracle_d_asgard/services/video_cache_service.dart';
-import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/joystick_controller.dart';
@@ -31,6 +29,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
   final ValueNotifier<bool> _showVictoryPopupNotifier = ValueNotifier<bool>(
     false,
   );
+  int _lastCoinsEarned = 0;
 
   @override
   void initState() {
@@ -53,13 +52,6 @@ class _QixGameScreenState extends State<QixGameScreen> {
   Future<void> _initializeGame(BuildContext context) async {
     final gamificationService = getIt<GamificationService>();
     final int currentDifficulty = await gamificationService.getQixDifficulty();
-    final CollectibleCard? potentialRewardCard = await gamificationService
-        .selectRandomUnearnedCollectibleCard();
-
-    if (potentialRewardCard?.videoUrl != null &&
-        potentialRewardCard!.videoUrl!.isNotEmpty) {
-      getIt<VideoCacheService>().preloadVideo(potentialRewardCard.videoUrl!);
-    }
 
     _game = QixGame(
       onGameOver: () {
@@ -120,15 +112,14 @@ class _QixGameScreenState extends State<QixGameScreen> {
           },
         );
       },
-      onWin: (CollectibleCard? collectibleCard) async {
+      onWin: (int coinsEarned) async {
+        _lastCoinsEarned = coinsEarned;
         _showVictoryPopupNotifier.value = true;
         await gamificationService.saveQixDifficulty(
           currentDifficulty + 1,
         ); // Increment and save difficulty
+        await gamificationService.addCoins(coinsEarned);
       },
-      rewardCardImagePath:
-          potentialRewardCard?.imagePath, // Pass the image path here
-      rewardCard: potentialRewardCard, // Pass the actual card object
       difficulty: currentDifficulty, // Pass difficulty to QixGame
     );
   }
@@ -260,7 +251,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
                           if (showPopup) {
                             return Positioned.fill(
                               child: VictoryPopup(
-                                rewardCard: _game!.rewardCard,
+                                coinsEarned: _lastCoinsEarned,
                                 onDismiss: () {
                                   _resetGame();
                                 },

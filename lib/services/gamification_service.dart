@@ -470,4 +470,15 @@ class GamificationService with ChangeNotifier {
     }
     return 0;
   }
+
+  Future<void> addCoins(int amount) async {
+    final currentCoins = await getCoins();
+    await saveCoins(currentCoins + amount);
+  }
+
+  Future<int> calculateGameReward({int level = 1}) {
+    const baseReward = 50;
+    final bonus = (level - 1) * 10;
+    return Future.value(baseReward + bonus);
+  }
 }

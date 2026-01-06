@@ -657,5 +657,6 @@
   "word_search_screen_title": "El Ojo de Odín",
   "games_menu_quiz": "Mi Deidad Guardiana",
   "quiz_preliminary_screen_help_text": "Responde a las preguntas de los dioses y descubre qué deidad vela por ti.",
-  "quiz_preliminary_screen_start_button": "Comenzar el Cuestionario"
+  "quiz_preliminary_screen_start_button": "Comenzar el Cuestionario",
+  "victory_popup_coins_earned": "¡Monedas ganadas!"
 }

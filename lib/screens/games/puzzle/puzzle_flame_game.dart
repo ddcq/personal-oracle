@@ -3,19 +3,13 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
-import 'package:flutter/services.dart';
 import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_game.dart';
 import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_model.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/models/myth_story.dart';
-import 'package:oracle_d_asgard/models/myth_card.dart';
-import 'package:oracle_d_asgard/utils/game_utils.dart';
+import 'package:oracle_d_asgard/data/collectible_cards_data.dart' show allCollectibleCards;
 import 'dart:math';
 import 'package:flame/game.dart';
-import 'package:oracle_d_asgard/utils/image_picker_utils.dart';
 import 'package:oracle_d_asgard/locator.dart';
-import 'package:oracle_d_asgard/services/video_cache_service.dart';
 
 class DashedRectangleComponent extends RectangleComponent {
   static const double _dashLength = 5.0;
@@ -95,10 +89,7 @@ class PuzzleFlameGame extends FlameGame {
   final PuzzleGame puzzleGame;
   late ui.Image puzzleImage;
   final GamificationService _gamificationService = getIt<GamificationService>();
-  final Function(CollectibleCard? rewardCard) onRewardEarned;
-  CollectibleCard? associatedCard;
-  MythStory? associatedStory;
-  MythCard? associatedChapter; // The specific chapter to unlock
+  final Function(int coinsEarned) onRewardEarned;
   int currentLevel;
 
   PuzzleFlameGame({
@@ -111,15 +102,6 @@ class PuzzleFlameGame extends FlameGame {
 
   @override
   Color backgroundColor() => Colors.transparent;
-
-  Future<bool> _assetExists(String path) async {
-    try {
-      await rootBundle.load('assets/images/$path');
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
 
   @override
   Future<void> onLoad() async {
@@ -163,79 +145,19 @@ class PuzzleFlameGame extends FlameGame {
   }
 
   Future<void> _loadImageForPuzzle() async {
-    final unearnedContent = await _gamificationService.getUnearnedContent();
-    final List<CollectibleCard> unearnedCollectibleCards =
-        unearnedContent['unearned_collectible_cards'].cast<CollectibleCard>();
-
-    // Calculate story selection probability based on level
-    // 7% per level, capped at 70% for level 10+
-    final int storyPercentage = (currentLevel * 7).clamp(0, 70);
+    // Simply select a random collectible card image for the puzzle
+    final allCards = allCollectibleCards;
     final random = Random();
-    final bool selectStory = random.nextInt(100) < storyPercentage;
-
-    String imageToLoad;
-
-    if (selectStory) {
-      // Try to select a story chapter
-      final nextChapter = await selectNextChapterToWin(_gamificationService);
-
-      if (nextChapter != null) {
-        // Story images are in the stories/ subdirectory
-        imageToLoad = 'stories/${nextChapter.chapter.imagePath}';
-        associatedStory = nextChapter.story;
-        associatedChapter = nextChapter.chapter;
-        associatedCard = null;
-      } else {
-        // Fallback to card if no unearned chapters
-        imageToLoad = await _selectCardImage(unearnedCollectibleCards);
-      }
-    } else {
-      // Select a collectible card
-      imageToLoad = await _selectCardImage(unearnedCollectibleCards);
-    }
-
+    final randomCard = allCards[random.nextInt(allCards.length)];
+    
+    final imageToLoad = randomCard.imagePath.replaceAll('assets/images/', '');
     puzzleImage = await Flame.images.load(imageToLoad);
   }
 
-  Future<String> _selectCardImage(
-    List<CollectibleCard> unearnedCollectibleCards,
-  ) async {
-    final List<CollectibleCard> availableCards = [];
-    for (var card in unearnedCollectibleCards) {
-      if (await _assetExists(card.imagePath)) {
-        availableCards.add(card);
-      }
-    }
-
-    if (availableCards.isNotEmpty) {
-      final random = Random();
-      final selected = availableCards[random.nextInt(availableCards.length)];
-      associatedCard = selected;
-      if (associatedCard?.videoUrl != null &&
-          associatedCard!.videoUrl!.isNotEmpty) {
-        getIt<VideoCacheService>().preloadVideo(associatedCard!.videoUrl!);
-      }
-      associatedStory = null;
-      return selected.imagePath;
-    } else {
-      // Fallback image if no unearned cards
-      associatedCard = null;
-      associatedStory = null;
-      return getRandomCardImagePath();
-    }
-  }
-
   void onGameCompletedFromPuzzleGame() async {
-    if (associatedCard != null) {
-      await _gamificationService.unlockCollectibleCard(associatedCard!);
-    } else if (associatedStory != null && associatedChapter != null) {
-      // Unlock the selected chapter of the story
-      await _gamificationService.unlockStoryPart(
-        associatedStory!.id,
-        associatedChapter!.id,
-      );
-    }
-    onRewardEarned(associatedCard);
+    final coins = await _gamificationService.calculateGameReward(level: currentLevel);
+    await _gamificationService.addCoins(coins);
+    onRewardEarned(coins);
   }
 
   void reset() async {

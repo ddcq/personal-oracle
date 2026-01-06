@@ -1,4 +1,3 @@
-import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,8 @@ import 'package:oracle_d_asgard/screens/games/qix/player.dart';
 import 'package:oracle_d_asgard/screens/games/qix/constants.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart';
+import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/services/gamification_service.dart';
 
 class QixGame extends FlameGame with KeyboardEvents {
   late final ArenaComponent arena;
@@ -19,16 +20,12 @@ class QixGame extends FlameGame with KeyboardEvents {
     0.0,
   );
   final VoidCallback onGameOver;
-  final Function(CollectibleCard?) onWin;
-  final String? rewardCardImagePath;
-  CollectibleCard? rewardCard;
+  final Function(int) onWin;
   final int difficulty;
 
   QixGame({
     required this.onGameOver,
     required this.onWin,
-    this.rewardCardImagePath,
-    this.rewardCard,
     required this.difficulty,
   });
 
@@ -45,7 +42,6 @@ class QixGame extends FlameGame with KeyboardEvents {
     arena = ArenaComponent(
       gridSize: gridSize,
       cellSize: cellSize,
-      rewardCardImagePath: rewardCardImagePath,
       snakeHeadImage: snakeHeadImage,
       difficulty: difficulty,
     );
@@ -106,9 +102,11 @@ class QixGame extends FlameGame with KeyboardEvents {
     onGameOver();
   }
 
-  void win() {
+  void win() async {
     pauseEngine();
-    onWin(rewardCard);
+    final gamificationService = getIt<GamificationService>();
+    final coinsEarned = await gamificationService.calculateGameReward(level: difficulty);
+    onWin(coinsEarned);
   }
 
   @override

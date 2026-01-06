@@ -174,6 +174,8 @@ class GameController extends ChangeNotifier {
           _unlockedStoryChapter!.id,
         );
       }
+      const coinsEarned = 50;
+      await _gamificationService.addCoins(coinsEarned);
       _showVictoryPopup = true;
     } else {
       _showIncorrectOrderPopup = true;

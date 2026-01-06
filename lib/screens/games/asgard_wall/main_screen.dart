@@ -7,13 +7,11 @@ import 'dart:math';
 
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/locator.dart';
-import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_components.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/game_data.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/models/wall_game_models.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:oracle_d_asgard/services/video_cache_service.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
@@ -54,7 +52,7 @@ class _GameScreenState extends State<GameScreen> {
   List<int> nextPieces = [];
   final List<String> pieceImageNames = ['o', 'i', 'z', 's', 't', 'j', 'l'];
 
-  CollectibleCard? _rewardCard;
+  int _coinsToEarn = 50;
 
   @override
   void initState() {
@@ -63,19 +61,11 @@ class _GameScreenState extends State<GameScreen> {
     startGame();
   }
 
-  Future<void> _preloadNextReward() async {
-    _rewardCard = await getIt<GamificationService>()
-        .selectRandomUnearnedCollectibleCard();
-    if (_rewardCard?.videoUrl != null && _rewardCard!.videoUrl!.isNotEmpty) {
-      await getIt<VideoCacheService>().preloadVideo(_rewardCard!.videoUrl!);
-    }
-  }
-
   void startGame() {
     gameTimer?.cancel();
     effectTimer?.cancel();
 
-    _preloadNextReward();
+    _coinsToEarn = 50;
 
     setState(() {
       collisionBoard = List.generate(
@@ -421,7 +411,7 @@ class _GameScreenState extends State<GameScreen> {
     setState(() {});
   }
 
-  void endGame(bool won) {
+  void endGame(bool won) async {
     gameTimer?.cancel();
     effectTimer?.cancel();
     setState(() {
@@ -432,6 +422,7 @@ class _GameScreenState extends State<GameScreen> {
     gamificationService.saveGameScore('Asgard Wall', currentScore);
 
     if (won) {
+      await gamificationService.addCoins(_coinsToEarn);
       _showWinDialog();
     } else {
       _showLossDialog();
@@ -439,45 +430,24 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _showWinDialog() {
-    if (_rewardCard != null) {
-      if (!mounted) return;
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return VictoryPopup(
-            rewardCard: _rewardCard,
-            onDismiss: () {
-              Navigator.of(context).pop();
-              startGame();
-            },
-            onSeeRewards: () {
-              Navigator.of(context).pop();
-              context.go('/profile');
-            },
-          );
-        },
-      );
-    } else {
-      if (!mounted) return;
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return VictoryPopup(
-            isGenericVictory: true,
-            onDismiss: () {
-              Navigator.of(context).pop();
-              startGame();
-            },
-            onSeeRewards: () {
-              Navigator.of(context).pop();
-              context.go('/profile');
-            },
-          );
-        },
-      );
-    }
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return VictoryPopup(
+          coinsEarned: _coinsToEarn,
+          onDismiss: () {
+            Navigator.of(context).pop();
+            startGame();
+          },
+          onSeeRewards: () {
+            Navigator.of(context).pop();
+            context.go('/profile');
+          },
+        );
+      },
+    );
   }
 
   void _showLossDialog() {

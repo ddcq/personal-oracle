@@ -30,7 +30,6 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   late ui.Image _undiscoveredAreaImage;
   final int gridSize;
   final double cellSize;
-  final String? rewardCardImagePath;
   final ui.Image snakeHeadImage;
   final int difficulty;
 
@@ -52,7 +51,6 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   ArenaComponent({
     required this.gridSize,
     required this.cellSize,
-    this.rewardCardImagePath,
     required this.snakeHeadImage,
     required this.difficulty,
   }) : super(
@@ -99,12 +97,7 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    if (rewardCardImagePath != null) {
-      _rewardCardImage = await game.images.load(rewardCardImagePath!);
-    } else {
-      // Load a default image if no reward card image is provided
-      _rewardCardImage = await game.images.load(_defaultRewardCardImagePath);
-    }
+    _rewardCardImage = await game.images.load(_defaultRewardCardImagePath);
     _undiscoveredAreaImage = await game.images.load(
       'qix/grass.webp',
     ); // Load the image for undiscovered areas

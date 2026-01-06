@@ -73,11 +73,8 @@ class _MinesweeperView extends StatelessWidget {
       } else if (controller.isGameWon) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           final gamificationService = getIt<GamificationService>();
-          if (controller.rewardCard != null) {
-            await gamificationService.unlockCollectibleCard(
-              controller.rewardCard!,
-            );
-          }
+          const coinsEarned = 50;
+          await gamificationService.addCoins(coinsEarned);
 
           if (!context.mounted) return;
 
@@ -85,8 +82,7 @@ class _MinesweeperView extends StatelessWidget {
             context: context,
             builder: (BuildContext context) {
               return VictoryPopup(
-                rewardCard: controller.rewardCard,
-                unlockedStoryChapter: null,
+                coinsEarned: coinsEarned,
                 onDismiss: () {
                   controller.initializeGame();
                   Navigator.of(context).pop();

@@ -657,5 +657,6 @@
   "word_search_screen_title": "L'Œil d'Odin",
   "games_menu_quiz": "Ma divinité gardienne",
   "quiz_preliminary_screen_help_text": "Répondez aux questions des dieux et découvrez quelle divinité veille sur vous.",
-  "quiz_preliminary_screen_start_button": "Commencer le Quiz"
+  "quiz_preliminary_screen_start_button": "Commencer le Quiz",
+  "victory_popup_coins_earned": "Pièces gagnées !"
 }
