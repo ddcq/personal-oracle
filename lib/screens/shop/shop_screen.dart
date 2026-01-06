@@ -47,6 +47,9 @@ class _ShopScreenState extends State<ShopScreen> {
         'imagePath': imagePath,
       });
     }
+    
+    // Sort stories by price
+    storiesWithPrices.sort((a, b) => (a['price'] as int).compareTo(b['price'] as int));
 
     return {
       'coins': coins,
