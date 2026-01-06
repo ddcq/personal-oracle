@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/widgets/epic_icon_button.dart';
+import 'package:oracle_d_asgard/widgets/epic_button.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart'; // Import ChibiColors
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -56,23 +56,13 @@ class _GameOverPopupState extends State<GameOverPopup>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        EpicIconButton(
-                          color: ChibiColors.buttonGreen,
+                        EpicButton(
+                          iconData: Icons.replay,
                           onPressed: widget.onReplay,
-                          icon: const Icon(
-                            Icons.replay,
-                            color: Colors.white,
-                            size: 32,
-                          ),
                         ),
-                        EpicIconButton(
-                          color: ChibiColors.buttonOrange,
+                        EpicButton(
+                          iconData: Icons.home,
                           onPressed: widget.onMenu,
-                          icon: const Icon(
-                            Icons.home,
-                            color: Colors.white,
-                            size: 32,
-                          ),
                         ),
                       ],
                     ),

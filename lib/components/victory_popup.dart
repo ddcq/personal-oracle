@@ -1,14 +1,13 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/widgets/epic_icon_button.dart';
+import 'package:oracle_d_asgard/widgets/epic_button.dart';
 
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart'; // Import MythCard
 import 'package:oracle_d_asgard/utils/image_utils.dart';
 import 'package:oracle_d_asgard/widgets/confetti_overlay.dart';
 import 'package:confetti/confetti.dart';
-import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/custom_video_player.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
@@ -229,21 +228,18 @@ class _VictoryPopupState extends State<VictoryPopup> {
     final buttonsRow = Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        EpicIconButton(
-          color: ChibiColors.buttonOrange,
+        EpicButton(
+          iconData: Icons.home,
           onPressed: () => context.go('/'),
-          icon: const Icon(Icons.home, color: Colors.white, size: 32),
         ),
         if (!widget.hideReplayButton)
-          EpicIconButton(
-            color: ChibiColors.buttonGreen,
+          EpicButton(
+            iconData: Icons.replay,
             onPressed: widget.onDismiss,
-            icon: const Icon(Icons.replay, color: Colors.white, size: 32),
           ),
-        EpicIconButton(
-          color: ChibiColors.buttonBlue,
+        EpicButton(
+          iconData: Icons.shopping_cart,
           onPressed: widget.onSeeRewards,
-          icon: const Icon(Icons.shopping_cart, color: Colors.white, size: 32),
         ),
       ],
     );

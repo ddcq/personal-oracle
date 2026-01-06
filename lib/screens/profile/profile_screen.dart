@@ -162,15 +162,14 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                EpicIconButton(
-                  color: Colors.grey,
+                EpicButton(
+                  icon: const Icon(Icons.cancel, color: Colors.white),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  icon: const Icon(Icons.cancel, color: Colors.white),
                 ),
-                EpicIconButton(
-                  color: Colors.amber,
+                EpicButton(
+                  icon: const Icon(Icons.save, color: Colors.white),
                   onPressed: () {
                     getIt<GamificationService>().saveProfileName(
                       _nameController.text,
@@ -180,7 +179,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     });
                     Navigator.of(context).pop();
                   },
-                  icon: const Icon(Icons.save, color: Colors.white),
                 ),
               ],
             ),

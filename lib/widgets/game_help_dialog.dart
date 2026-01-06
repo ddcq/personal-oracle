@@ -2,9 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/widgets/app_dialog.dart';
-import 'package:oracle_d_asgard/widgets/epic_icon_button.dart';
+import 'package:oracle_d_asgard/widgets/epic_button.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
-import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 class GameHelpDialog extends StatelessWidget {
   final List<String> helpTexts;
@@ -76,15 +75,13 @@ class GameHelpDialog extends StatelessWidget {
       ),
       actions: [
         if (onGoToHome != null)
-          EpicIconButton(
-            color: ChibiColors.buttonRed,
+          EpicButton(
+            iconData: Icons.home,
             onPressed: onGoToHome,
-            icon: const Icon(Icons.home, color: Colors.white, size: 32),
           ),
-        EpicIconButton(
-          color: ChibiColors.buttonBlue,
+        EpicButton(
+          iconData: Icons.play_arrow,
           onPressed: onGameResumed,
-          icon: const Icon(Icons.play_arrow, color: Colors.white, size: 32),
         ),
       ],
     );

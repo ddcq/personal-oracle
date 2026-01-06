@@ -6,17 +6,21 @@ class EpicButton extends StatefulWidget {
   const EpicButton({
     super.key,
     this.iconData,
+    this.icon,
     this.imagePath,
+    this.color,
     this.onPressed,
     this.label,
     this.size,
   }) : assert(
-         iconData != null || imagePath != null,
-         'Either iconData or imagePath must be provided.',
+         iconData != null || imagePath != null || icon != null,
+         'Either iconData, imagePath, or icon must be provided.',
        );
 
   final IconData? iconData;
+  final Widget? icon; // Alternative to iconData (for backward compatibility)
   final String? imagePath;
+  final Color? color; // Ignored - kept for backward compatibility
   final VoidCallback? onPressed;
   final String? label;
   final double? size;
@@ -50,6 +54,25 @@ class _EpicButtonState extends State<EpicButton> {
             width: buttonSize / 3,
             height: buttonSize / 3,
             fit: BoxFit.contain,
+          ),
+        ),
+      );
+    } else if (widget.icon != null) {
+      // Use icon widget directly (backward compatibility)
+      stackChildren.add(
+        Transform(
+          transform:
+              Matrix4.translationValues(
+                  -6.0.sp,
+                  _isPressed ? 1.0.sp : -4.0.sp,
+                  0.0,
+                )
+                ..setEntry(3, 2, 0.015)
+                ..rotateX(-0.7)
+                ..rotateZ(-0.5),
+          child: Transform.scale(
+            scale: 0.9,
+            child: widget.icon!,
           ),
         ),
       );
@@ -110,3 +133,6 @@ class _EpicButtonState extends State<EpicButton> {
     );
   }
 }
+
+// Legacy alias for backward compatibility
+typedef EpicIconButton = EpicButton;
