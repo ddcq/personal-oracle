@@ -74,10 +74,14 @@ class ChibiTextStyles {
 }
 
 class ChibiColors {
-  static const Color buttonOrange = Color(0xFFF9A825);
-  static const Color buttonBlue = Color(0xFF1E88E5);
-  static const Color buttonRed = Color(0xFFE53935);
-  static const Color buttonGreen = Color(0xFF4CAF50);
-  static const Color buttonPurple = Color(0xFF9C27B0);
-  static const Color buttonYellow = Color(0xFFFFEB3B);
+  // Dark epic purple - unified color for all buttons
+  static const Color darkEpicPurple = Color(0xFF2D1B4E);
+  
+  // Legacy colors - now all mapped to dark epic purple
+  static const Color buttonOrange = darkEpicPurple;
+  static const Color buttonBlue = darkEpicPurple;
+  static const Color buttonRed = darkEpicPurple;
+  static const Color buttonGreen = darkEpicPurple;
+  static const Color buttonPurple = darkEpicPurple;
+  static const Color buttonYellow = darkEpicPurple;
 }
