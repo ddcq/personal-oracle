@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
+import 'package:oracle_d_asgard/widgets/epic_icon_button.dart';
 
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart'; // Import MythCard
@@ -229,18 +229,18 @@ class _VictoryPopupState extends State<VictoryPopup> {
     final buttonsRow = Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        ChibiIconButton(
+        EpicIconButton(
           color: ChibiColors.buttonOrange,
           onPressed: () => context.go('/'),
           icon: const Icon(Icons.home, color: Colors.white, size: 32),
         ),
         if (!widget.hideReplayButton)
-          ChibiIconButton(
+          EpicIconButton(
             color: ChibiColors.buttonGreen,
             onPressed: widget.onDismiss,
             icon: const Icon(Icons.replay, color: Colors.white, size: 32),
           ),
-        ChibiIconButton(
+        EpicIconButton(
           color: ChibiColors.buttonBlue,
           onPressed: widget.onSeeRewards,
           icon: const Icon(Icons.shopping_cart, color: Colors.white, size: 32),

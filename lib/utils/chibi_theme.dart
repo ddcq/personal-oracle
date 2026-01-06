@@ -9,13 +9,7 @@ class ChibiTextStyles {
     fontWeight: FontWeight.bold,
     fontSize: 70.sp,
     letterSpacing: 2.0.sp,
-    shadows: [
-      const Shadow(
-        blurRadius: 15.0,
-        color: Colors.black87,
-        offset: Offset(4.0, 4.0),
-      ),
-    ],
+    shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
   );
 
   static TextStyle get buttonText => TextStyle(
@@ -33,13 +27,7 @@ class ChibiTextStyles {
     fontWeight: FontWeight.bold,
     fontSize: 24.sp,
     letterSpacing: 2.0.sp,
-    shadows: [
-      const Shadow(
-        blurRadius: 15.0,
-        color: Colors.black87,
-        offset: Offset(4.0, 4.0),
-      ),
-    ],
+    shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
   );
 
   static TextStyle get dialogText => TextStyle(
@@ -48,13 +36,7 @@ class ChibiTextStyles {
     fontFamily: AppTextStyles.amarante,
     fontSize: 20.sp,
     letterSpacing: 1.5.sp,
-    shadows: [
-      const Shadow(
-        blurRadius: 10.0,
-        color: Colors.black87,
-        offset: Offset(2.0, 2.0),
-      ),
-    ],
+    shadows: [const Shadow(blurRadius: 10.0, color: Colors.black87, offset: Offset(2.0, 2.0))],
   );
 
   static TextStyle get overlayTitle => TextStyle(
@@ -63,20 +45,14 @@ class ChibiTextStyles {
     fontWeight: FontWeight.bold,
     fontSize: 40.sp,
     letterSpacing: 2.0.sp,
-    shadows: [
-      const Shadow(
-        blurRadius: 15.0,
-        color: Colors.black87,
-        offset: Offset(4.0, 4.0),
-      ),
-    ],
+    shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
   );
 }
 
 class ChibiColors {
   // Dark epic purple - unified color for all buttons
-  static const Color darkEpicPurple = Color(0xFF2D1B4E);
-  
+  static const Color darkEpicPurple = Color.fromARGB(255, 38, 44, 86);
+
   // Legacy colors - now all mapped to dark epic purple
   static const Color buttonOrange = darkEpicPurple;
   static const Color buttonBlue = darkEpicPurple;

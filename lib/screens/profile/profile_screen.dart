@@ -14,7 +14,7 @@ import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/services/quiz_service.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
-import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
+import 'package:oracle_d_asgard/widgets/epic_icon_button.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -162,14 +162,14 @@ class _ProfilePageState extends State<ProfilePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ChibiIconButton(
+                EpicIconButton(
                   color: Colors.grey,
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                   icon: const Icon(Icons.cancel, color: Colors.white),
                 ),
-                ChibiIconButton(
+                EpicIconButton(
                   color: Colors.amber,
                   onPressed: () {
                     getIt<GamificationService>().saveProfileName(

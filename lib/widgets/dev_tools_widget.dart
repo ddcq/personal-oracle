@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
-import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
+import 'package:oracle_d_asgard/widgets/epic_icon_button.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/models/card_version.dart';
 
@@ -83,7 +83,7 @@ class DevToolsWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ChibiIconButton(
+            EpicIconButton(
               color: ChibiColors.buttonRed,
               onPressed: _clearAndRebuildDatabase,
               icon: const Icon(
@@ -92,12 +92,12 @@ class DevToolsWidget extends StatelessWidget {
                 size: 20,
               ),
             ),
-            ChibiIconButton(
+            EpicIconButton(
               color: ChibiColors.buttonBlue,
               onPressed: _unlockAllStories,
               icon: const Icon(Icons.book, color: Colors.white, size: 20),
             ),
-            ChibiIconButton(
+            EpicIconButton(
               color: ChibiColors.buttonPurple,
               onPressed: _showRandomVictoryPopup,
               icon: const Icon(
@@ -106,7 +106,7 @@ class DevToolsWidget extends StatelessWidget {
                 size: 20,
               ),
             ),
-            ChibiIconButton(
+            EpicIconButton(
               color: ChibiColors.buttonYellow,
               onPressed: _clearCache,
               icon: const Icon(
@@ -121,7 +121,7 @@ class DevToolsWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ChibiIconButton(
+            EpicIconButton(
               color: ChibiColors.buttonGreen,
               onPressed: () => _unlockAllCollectibleCards(CardVersion.chibi),
               icon: const Icon(
@@ -131,7 +131,7 @@ class DevToolsWidget extends StatelessWidget {
               ),
             ),
             SizedBox(width: 20.w),
-            ChibiIconButton(
+            EpicIconButton(
               color: ChibiColors.buttonOrange,
               onPressed: () => _unlockAllCollectibleCards(CardVersion.premium),
               icon: const Icon(
@@ -141,7 +141,7 @@ class DevToolsWidget extends StatelessWidget {
               ),
             ),
             SizedBox(width: 20.w),
-            ChibiIconButton(
+            EpicIconButton(
               color: ChibiColors.buttonYellow,
               onPressed: () => _unlockAllCollectibleCards(CardVersion.epic),
               icon: const Icon(Icons.diamond, color: Colors.white, size: 20),

@@ -13,7 +13,7 @@ import 'package:oracle_d_asgard/screens/games/asgard_wall/models/wall_game_model
 import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
-import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
+import 'package:oracle_d_asgard/widgets/epic_icon_button.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
@@ -682,12 +682,12 @@ class _GameScreenState extends State<GameScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ChibiIconButton(
+                      EpicIconButton(
                         onPressed: gameActive ? movePieceLeft : () {},
                         color: Colors.blueGrey,
                         icon: const Icon(Icons.arrow_left, color: Colors.white),
                       ),
-                      ChibiIconButton(
+                      EpicIconButton(
                         onPressed: gameActive ? rotatePiece : () {},
                         color: Colors.blueGrey,
                         icon: const Icon(
@@ -695,7 +695,7 @@ class _GameScreenState extends State<GameScreen> {
                           color: Colors.white,
                         ),
                       ),
-                      ChibiIconButton(
+                      EpicIconButton(
                         onPressed: gameActive ? dropPiece : () {},
                         color: Colors.blueGrey,
                         icon: const Icon(
@@ -703,7 +703,7 @@ class _GameScreenState extends State<GameScreen> {
                           color: Colors.white,
                         ),
                       ),
-                      ChibiIconButton(
+                      EpicIconButton(
                         onPressed: gameActive ? movePieceRight : () {},
                         color: Colors.blueGrey,
                         icon: const Icon(

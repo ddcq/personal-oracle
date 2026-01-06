@@ -3,13 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class ChibiIconButton extends StatefulWidget {
+class EpicIconButton extends StatefulWidget {
   final Widget icon;
   final Color color;
   final VoidCallback? onPressed;
   final double? size;
 
-  const ChibiIconButton({
+  const EpicIconButton({
     super.key,
     required this.icon,
     required this.color,
@@ -18,10 +18,10 @@ class ChibiIconButton extends StatefulWidget {
   });
 
   @override
-  State<ChibiIconButton> createState() => _ChibiIconButtonState();
+  State<EpicIconButton> createState() => _EpicIconButtonState();
 }
 
-class _ChibiIconButtonState extends State<ChibiIconButton> {
+class _EpicIconButtonState extends State<EpicIconButton> {
   bool _isPressed = false;
 
   void _onTapDown(_) {

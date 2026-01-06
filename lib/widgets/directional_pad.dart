@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/widgets/chibi_icon_button.dart';
+import 'package:oracle_d_asgard/widgets/epic_icon_button.dart';
 
 enum Direction { up, down, left, right }
 
@@ -67,7 +67,7 @@ class DirectionalPad extends StatelessWidget {
   }
 
   Widget _buildDirectionButton(Widget icon, Direction direction) {
-    return ChibiIconButton(
+    return EpicIconButton(
       color: Colors.blueGrey, // You can choose a suitable color
       onPressed: () => onDirectionChanged(direction),
       icon: icon,
