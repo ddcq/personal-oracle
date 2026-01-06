@@ -443,7 +443,7 @@ class _GameScreenState extends State<GameScreen> {
           },
           onSeeRewards: () {
             Navigator.of(context).pop();
-            context.go('/profile');
+            context.go('/shop');
           },
         );
       },

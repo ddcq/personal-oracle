@@ -243,7 +243,7 @@ class _VictoryPopupState extends State<VictoryPopup> {
         ChibiIconButton(
           color: ChibiColors.buttonBlue,
           onPressed: widget.onSeeRewards,
-          icon: const Icon(Icons.emoji_events, color: Colors.white, size: 32),
+          icon: const Icon(Icons.shopping_cart, color: Colors.white, size: 32),
         ),
       ],
     );

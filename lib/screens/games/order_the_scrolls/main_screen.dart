@@ -192,7 +192,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
           onSeeRewards: () {
             Navigator.of(context).pop();
             controller.victoryPopupShown(); // Reset popup state
-            context.go('/profile');
+            context.go('/shop');
           },
         );
       },

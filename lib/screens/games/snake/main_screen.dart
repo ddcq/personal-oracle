@@ -173,7 +173,7 @@ class _SnakeGameState extends State<SnakeGame> {
           },
           onSeeRewards: () {
             Navigator.of(context).pop();
-            context.push('/profile');
+            context.push('/shop');
           },
         );
       },

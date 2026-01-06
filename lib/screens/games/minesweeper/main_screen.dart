@@ -89,7 +89,7 @@ class _MinesweeperView extends StatelessWidget {
                 },
                 onSeeRewards: () {
                   Navigator.of(context).pop();
-                  context.push('/profile');
+                  context.push('/shop');
                 },
               );
             },

@@ -260,7 +260,7 @@ class _QixGameScreenState extends State<QixGameScreen> {
                                   Navigator.of(
                                     context,
                                   ).pop(); // Go back to the previous screen (game menu)
-                                  context.push('/profile');
+                                  context.push('/shop');
                                 },
                               ),
                             );

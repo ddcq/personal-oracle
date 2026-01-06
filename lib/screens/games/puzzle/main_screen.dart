@@ -196,7 +196,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
               },
               onSeeRewards: () {
                 Navigator.of(context).pop();
-                context.push('/profile');
+                context.push('/shop');
               },
             );
           },
