@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/screens/games/word_search/main_screen.dart';
 
 class WordSearchPreliminaryScreen extends StatelessWidget {
@@ -37,7 +38,7 @@ class WordSearchPreliminaryScreen extends StatelessWidget {
 
     final Widget startButton = ChibiTextButton(
       text: 'word_search_preliminary_screen_start_button'.tr(),
-      color: const Color(0xFF8B5CF6), // Color from menu
+      color: ChibiColors.darkEpicPurple,
       onPressed: () {
         Navigator.push(
           context,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 class OrderTheScrollsPreliminaryScreen extends StatelessWidget {
   const OrderTheScrollsPreliminaryScreen({super.key});
@@ -32,7 +33,7 @@ class OrderTheScrollsPreliminaryScreen extends StatelessWidget {
 
     final Widget startButton = ChibiTextButton(
       text: 'order_the_scrolls_preliminary_screen_start_button'.tr(),
-      color: const Color(0xFF6366F1), // Color from menu
+      color: ChibiColors.darkEpicPurple,
       onPressed: () {
         context.go('/order_the_scrolls');
       },

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 import 'package:oracle_d_asgard/screens/games/puzzle/main_screen.dart';
 
@@ -42,7 +43,7 @@ class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
     );
     final Widget startButton = ChibiTextButton(
       text: 'puzzle_preliminary_screen_start_button'.tr(),
-      color: const Color(0xFF06B6D4),
+      color: ChibiColors.darkEpicPurple,
       onPressed: () {
         Navigator.push(
           context,

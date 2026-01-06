@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/screens/games/asgard_wall/main_screen.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 class AsgardWallGameScreen extends StatelessWidget {
   const AsgardWallGameScreen({super.key});
@@ -33,7 +34,7 @@ class AsgardWallGameScreen extends StatelessWidget {
 
     final Widget startButton = ChibiTextButton(
       text: 'asgard_wall_preliminary_screen_start_button'.tr(),
-      color: const Color(0xFFEF4444), // Color from menu
+      color: ChibiColors.darkEpicPurple,
       onPressed: () {
         Navigator.push(
           context,
