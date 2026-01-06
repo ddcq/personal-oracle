@@ -230,51 +230,55 @@ class _ShopScreenState extends State<ShopScreen> {
                         itemCount: availableCards.length,
                         itemBuilder: (context, index) {
                           final card = availableCards[index];
-                          return Card(
-                            color: Colors.black.withAlpha(200),
-                            child: InkWell(
-                              onTap: () => _buyCard(card),
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Image.asset(
-                                      'assets/images/${card.imagePath}',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      card.title,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.white,
+                          final canAfford = coins >= card.price;
+                          return Opacity(
+                            opacity: canAfford ? 1.0 : 0.5,
+                            child: Card(
+                              color: Colors.black.withAlpha(200),
+                              child: InkWell(
+                                onTap: canAfford ? () => _buyCard(card) : null,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: Image.asset(
+                                        'assets/images/${card.imagePath}',
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.monetization_on,
-                                          color: Colors.amber,
-                                          size: 20,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        card.title,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.white,
                                         ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          card.price.toString(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.monetization_on,
+                                            color: canAfford ? Colors.amber : Colors.grey,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            card.price.toString(),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: canAfford ? Colors.white : Colors.grey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           );
@@ -315,57 +319,61 @@ class _ShopScreenState extends State<ShopScreen> {
                           final story = storyData['story'] as MythStory;
                           final price = storyData['price'] as int;
                           final imagePath = storyData['imagePath'] as String;
-                          return Card(
-                            color: Colors.black.withAlpha(200),
-                            child: InkWell(
-                              onTap: () => _buyStory(story, price),
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: imagePath.isNotEmpty
-                                        ? Image.asset(
-                                            'assets/images/stories/$imagePath',
-                                            fit: BoxFit.cover,
-                                          )
-                                        : const Icon(
-                                            Icons.book,
-                                            color: Colors.white,
-                                            size: 50,
-                                          ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      story.title.tr(),
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.white,
+                          final canAfford = coins >= price;
+                          return Opacity(
+                            opacity: canAfford ? 1.0 : 0.5,
+                            child: Card(
+                              color: Colors.black.withAlpha(200),
+                              child: InkWell(
+                                onTap: canAfford ? () => _buyStory(story, price) : null,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: imagePath.isNotEmpty
+                                          ? Image.asset(
+                                              'assets/images/stories/$imagePath',
+                                              fit: BoxFit.cover,
+                                            )
+                                          : const Icon(
+                                              Icons.book,
+                                              color: Colors.white,
+                                              size: 50,
+                                            ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        story.title.tr(),
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.monetization_on,
-                                          color: Colors.amber,
-                                          size: 20,
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          price.toString(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.monetization_on,
+                                            color: canAfford ? Colors.amber : Colors.grey,
+                                            size: 20,
                                           ),
-                                        ),
-                                      ],
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            price.toString(),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: canAfford ? Colors.white : Colors.grey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           );
