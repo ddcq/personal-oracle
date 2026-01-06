@@ -18,6 +18,7 @@ List<CollectibleCard> _createCardVersions({
       tags: tags,
       version: CardVersion.chibi,
       videoUrl: 'https://ddcq.github.io/video/${id}_chibi.mp4',
+      price: 50, // Chibi price
     ),
     CollectibleCard(
       id: id,
@@ -27,6 +28,7 @@ List<CollectibleCard> _createCardVersions({
       tags: tags,
       version: CardVersion.premium,
       videoUrl: 'https://ddcq.github.io/video/${id}_premium.mp4',
+      price: 100, // Premium price
     ),
     CollectibleCard(
       id: id,
@@ -36,6 +38,7 @@ List<CollectibleCard> _createCardVersions({
       tags: tags,
       version: CardVersion.epic,
       videoUrl: 'https://ddcq.github.io/video/${id}_epic.mp4',
+      price: 150, // Epic price
     ),
   ];
 }

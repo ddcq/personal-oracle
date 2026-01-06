@@ -5,6 +5,7 @@ import 'package:oracle_d_asgard/screens/main_screen.dart';
 import 'package:oracle_d_asgard/screens/games/quiz/quiz_screen.dart';
 import 'package:oracle_d_asgard/screens/games/quiz/result_screen.dart';
 import 'package:oracle_d_asgard/screens/profile/profile_screen.dart';
+import 'package:oracle_d_asgard/screens/shop/shop_screen.dart';
 import 'package:oracle_d_asgard/screens/trophies/trophies_screen.dart';
 import 'package:oracle_d_asgard/screens/about_screen.dart';
 import 'package:oracle_d_asgard/screens/settings_screen.dart';
@@ -113,6 +114,12 @@ final GoRouter router = GoRouter(
           path: 'trophies',
           builder: (BuildContext context, GoRouterState state) {
             return const TrophiesScreen();
+          },
+        ),
+        GoRoute(
+          path: 'shop',
+          builder: (BuildContext context, GoRouterState state) {
+            return const ShopScreen();
           },
         ),
         GoRoute(

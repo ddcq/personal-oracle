@@ -19,6 +19,7 @@ _CollectibleCard _$CollectibleCardFromJson(Map<String, dynamic> json) =>
       version:
           $enumDecodeNullable(_$CardVersionEnumMap, json['version']) ??
           CardVersion.epic,
+      price: (json['price'] as num?)?.toInt() ?? 100,
     );
 
 Map<String, dynamic> _$CollectibleCardToJson(_CollectibleCard instance) =>
@@ -30,6 +31,7 @@ Map<String, dynamic> _$CollectibleCardToJson(_CollectibleCard instance) =>
       'videoUrl': instance.videoUrl,
       'tags': instance.tags,
       'version': instance.version,
+      'price': instance.price,
     };
 
 const _$CardVersionEnumMap = {

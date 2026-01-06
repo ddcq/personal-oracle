@@ -12,6 +12,7 @@ _MythStory _$MythStoryFromJson(Map<String, dynamic> json) => _MythStory(
   correctOrder: (json['correctOrder'] as List<dynamic>)
       .map((e) => MythCard.fromJson(e as Map<String, dynamic>))
       .toList(),
+  price: (json['price'] as num?)?.toInt() ?? 200,
 );
 
 Map<String, dynamic> _$MythStoryToJson(_MythStory instance) =>
@@ -19,4 +20,5 @@ Map<String, dynamic> _$MythStoryToJson(_MythStory instance) =>
       'id': instance.id,
       'title': instance.title,
       'correctOrder': instance.correctOrder,
+      'price': instance.price,
     };

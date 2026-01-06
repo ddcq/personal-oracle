@@ -111,6 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
         gamificationService.getProfileName(),
         gamificationService.getProfileDeityIcon(),
         gamificationService.getQuizResults(),
+        gamificationService.getCoins(), // Fetch coins
       ]);
     });
   }
@@ -212,71 +213,71 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
       body: AppBackground(
-        child: Container(
-          color: Colors.black.withAlpha(128),
-          child: FutureBuilder<List<dynamic>>(
-            future: _profileDataFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${'profile_screen_error_prefix'.tr()}: ${snapshot.error}',
-                  ),
-                );
-              } else if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
-              } else {
-                final String? savedName = snapshot.data![0];
-                final String? savedDeityIconId = snapshot.data![1];
-                final List<Map<String, dynamic>> quizResults =
-                    snapshot.data![2];
-
-                if (_profileName == null && savedName != null) {
-                  _profileName = savedName;
-                }
-                if (quizResults.isNotEmpty) {
-                  final lastQuizResult = quizResults.first;
-                  final deityName = lastQuizResult['deity_name'];
-                  _profileName ??= deityName;
-                }
-
-                if (_selectedDeityId == null && savedDeityIconId != null) {
-                  _selectedDeityId = savedDeityIconId;
-                }
-
-                return ListView(
-                  padding: EdgeInsets.only(
-                    top: kToolbarHeight + 40,
-                    left: 16.0,
-                    right: 16.0,
-                    bottom: 16.0,
-                  ),
-                  children: [
-                    ProfileHeader(
-                      profileName: _profileName,
-                      selectedDeityId: _selectedDeityId,
-                      allSelectableDeities: _allSelectableDeities,
-                      onNameChanged: (newName) {
-                        setState(() {
-                          _profileName = newName;
-                        });
-                      },
-                      onDeityChanged: (newDeityId) {
-                        _selectedDeityId = newDeityId;
-                        getIt<GamificationService>().saveProfileDeityIcon(
-                          newDeityId,
-                        );
-                        _refreshProfileData();
-                      },
-                      onEditName: () => _showEditNameDialog(context),
-                    ),
-                  ],
-                );
-              }
-            },
+        imagePath: 'assets/images/backgrounds/main.jpg',
+        child: ListView(
+          padding: EdgeInsets.only(
+            top: kToolbarHeight + 40,
+            left: 16.0,
+            right: 16.0,
+            bottom: 16.0,
           ),
+          children: [
+            FutureBuilder<List<dynamic>>(
+              future: _profileDataFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      '${'profile_screen_error_prefix'.tr()}: ${snapshot.error}',
+                    ),
+                  );
+                } else if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  final String? savedName = snapshot.data![0];
+                  final String? savedDeityIconId = snapshot.data![1];
+                  final List<Map<String, dynamic>> quizResults =
+                      snapshot.data![2];
+                  final int coins = snapshot.data![3];
+
+                  if (_profileName == null && savedName != null) {
+                    _profileName = savedName;
+                  }
+                  if (quizResults.isNotEmpty) {
+                    final lastQuizResult = quizResults.first;
+                    final deityName = lastQuizResult['deity_name'];
+                    _profileName ??= deityName;
+                  }
+
+                  if (_selectedDeityId == null && savedDeityIconId != null) {
+                    _selectedDeityId = savedDeityIconId;
+                  }
+
+                  return ProfileHeader(
+                    profileName: _profileName,
+                    selectedDeityId: _selectedDeityId,
+                    allSelectableDeities: _allSelectableDeities,
+                    onNameChanged: (newName) {
+                      setState(() {
+                        _profileName = newName;
+                      });
+                    },
+                    onDeityChanged: (newDeityId) {
+                      _selectedDeityId = newDeityId;
+                      getIt<GamificationService>().saveProfileDeityIcon(
+                        newDeityId,
+                      );
+                      _refreshProfileData();
+                    },
+                    onEditName: () => _showEditNameDialog(context),
+                    coins: coins,
+                  );
+                }
+              },
+            ),
+          ],
         ),
       ),
     );

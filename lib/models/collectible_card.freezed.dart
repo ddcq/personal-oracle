@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CollectibleCard {
 
- String get id; String get title; String get description; String get imagePath; String? get videoUrl; List<String> get tags; CardVersion get version;
+ String get id; String get title; String get description; String get imagePath; String? get videoUrl; List<String> get tags; CardVersion get version; int get price;
 /// Create a copy of CollectibleCard
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $CollectibleCardCopyWith<CollectibleCard> get copyWith => _$CollectibleCardCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CollectibleCard&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.videoUrl, videoUrl) || other.videoUrl == videoUrl)&&const DeepCollectionEquality().equals(other.tags, tags)&&(identical(other.version, version) || other.version == version));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CollectibleCard&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.videoUrl, videoUrl) || other.videoUrl == videoUrl)&&const DeepCollectionEquality().equals(other.tags, tags)&&(identical(other.version, version) || other.version == version)&&(identical(other.price, price) || other.price == price));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,description,imagePath,videoUrl,const DeepCollectionEquality().hash(tags),version);
+int get hashCode => Object.hash(runtimeType,id,title,description,imagePath,videoUrl,const DeepCollectionEquality().hash(tags),version,price);
 
 @override
 String toString() {
-  return 'CollectibleCard(id: $id, title: $title, description: $description, imagePath: $imagePath, videoUrl: $videoUrl, tags: $tags, version: $version)';
+  return 'CollectibleCard(id: $id, title: $title, description: $description, imagePath: $imagePath, videoUrl: $videoUrl, tags: $tags, version: $version, price: $price)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $CollectibleCardCopyWith<$Res>  {
   factory $CollectibleCardCopyWith(CollectibleCard value, $Res Function(CollectibleCard) _then) = _$CollectibleCardCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String description, String imagePath, String? videoUrl, List<String> tags, CardVersion version
+ String id, String title, String description, String imagePath, String? videoUrl, List<String> tags, CardVersion version, int price
 });
 
 
@@ -65,7 +65,7 @@ class _$CollectibleCardCopyWithImpl<$Res>
 
 /// Create a copy of CollectibleCard
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? description = null,Object? imagePath = null,Object? videoUrl = freezed,Object? tags = null,Object? version = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? description = null,Object? imagePath = null,Object? videoUrl = freezed,Object? tags = null,Object? version = null,Object? price = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,8 @@ as String,imagePath: null == imagePath ? _self.imagePath : imagePath // ignore: 
 as String,videoUrl: freezed == videoUrl ? _self.videoUrl : videoUrl // ignore: cast_nullable_to_non_nullable
 as String?,tags: null == tags ? _self.tags : tags // ignore: cast_nullable_to_non_nullable
 as List<String>,version: null == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
-as CardVersion,
+as CardVersion,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
@@ -159,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String description,  String imagePath,  String? videoUrl,  List<String> tags,  CardVersion version)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String description,  String imagePath,  String? videoUrl,  List<String> tags,  CardVersion version,  int price)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CollectibleCard() when $default != null:
-return $default(_that.id,_that.title,_that.description,_that.imagePath,_that.videoUrl,_that.tags,_that.version);case _:
+return $default(_that.id,_that.title,_that.description,_that.imagePath,_that.videoUrl,_that.tags,_that.version,_that.price);case _:
   return orElse();
 
 }
@@ -180,10 +181,10 @@ return $default(_that.id,_that.title,_that.description,_that.imagePath,_that.vid
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String description,  String imagePath,  String? videoUrl,  List<String> tags,  CardVersion version)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String description,  String imagePath,  String? videoUrl,  List<String> tags,  CardVersion version,  int price)  $default,) {final _that = this;
 switch (_that) {
 case _CollectibleCard():
-return $default(_that.id,_that.title,_that.description,_that.imagePath,_that.videoUrl,_that.tags,_that.version);case _:
+return $default(_that.id,_that.title,_that.description,_that.imagePath,_that.videoUrl,_that.tags,_that.version,_that.price);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +201,10 @@ return $default(_that.id,_that.title,_that.description,_that.imagePath,_that.vid
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String description,  String imagePath,  String? videoUrl,  List<String> tags,  CardVersion version)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String description,  String imagePath,  String? videoUrl,  List<String> tags,  CardVersion version,  int price)?  $default,) {final _that = this;
 switch (_that) {
 case _CollectibleCard() when $default != null:
-return $default(_that.id,_that.title,_that.description,_that.imagePath,_that.videoUrl,_that.tags,_that.version);case _:
+return $default(_that.id,_that.title,_that.description,_that.imagePath,_that.videoUrl,_that.tags,_that.version,_that.price);case _:
   return null;
 
 }
@@ -215,7 +216,7 @@ return $default(_that.id,_that.title,_that.description,_that.imagePath,_that.vid
 @JsonSerializable()
 
 class _CollectibleCard implements CollectibleCard {
-  const _CollectibleCard({required this.id, required this.title, required this.description, required this.imagePath, this.videoUrl, final  List<String> tags = const [], this.version = CardVersion.epic}): _tags = tags;
+  const _CollectibleCard({required this.id, required this.title, required this.description, required this.imagePath, this.videoUrl, final  List<String> tags = const [], this.version = CardVersion.epic, this.price = 100}): _tags = tags;
   factory _CollectibleCard.fromJson(Map<String, dynamic> json) => _$CollectibleCardFromJson(json);
 
 @override final  String id;
@@ -231,6 +232,7 @@ class _CollectibleCard implements CollectibleCard {
 }
 
 @override@JsonKey() final  CardVersion version;
+@override@JsonKey() final  int price;
 
 /// Create a copy of CollectibleCard
 /// with the given fields replaced by the non-null parameter values.
@@ -245,16 +247,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CollectibleCard&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.videoUrl, videoUrl) || other.videoUrl == videoUrl)&&const DeepCollectionEquality().equals(other._tags, _tags)&&(identical(other.version, version) || other.version == version));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CollectibleCard&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.videoUrl, videoUrl) || other.videoUrl == videoUrl)&&const DeepCollectionEquality().equals(other._tags, _tags)&&(identical(other.version, version) || other.version == version)&&(identical(other.price, price) || other.price == price));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,description,imagePath,videoUrl,const DeepCollectionEquality().hash(_tags),version);
+int get hashCode => Object.hash(runtimeType,id,title,description,imagePath,videoUrl,const DeepCollectionEquality().hash(_tags),version,price);
 
 @override
 String toString() {
-  return 'CollectibleCard(id: $id, title: $title, description: $description, imagePath: $imagePath, videoUrl: $videoUrl, tags: $tags, version: $version)';
+  return 'CollectibleCard(id: $id, title: $title, description: $description, imagePath: $imagePath, videoUrl: $videoUrl, tags: $tags, version: $version, price: $price)';
 }
 
 
@@ -265,7 +267,7 @@ abstract mixin class _$CollectibleCardCopyWith<$Res> implements $CollectibleCard
   factory _$CollectibleCardCopyWith(_CollectibleCard value, $Res Function(_CollectibleCard) _then) = __$CollectibleCardCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String description, String imagePath, String? videoUrl, List<String> tags, CardVersion version
+ String id, String title, String description, String imagePath, String? videoUrl, List<String> tags, CardVersion version, int price
 });
 
 
@@ -282,7 +284,7 @@ class __$CollectibleCardCopyWithImpl<$Res>
 
 /// Create a copy of CollectibleCard
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? description = null,Object? imagePath = null,Object? videoUrl = freezed,Object? tags = null,Object? version = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? description = null,Object? imagePath = null,Object? videoUrl = freezed,Object? tags = null,Object? version = null,Object? price = null,}) {
   return _then(_CollectibleCard(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -291,7 +293,8 @@ as String,imagePath: null == imagePath ? _self.imagePath : imagePath // ignore: 
 as String,videoUrl: freezed == videoUrl ? _self.videoUrl : videoUrl // ignore: cast_nullable_to_non_nullable
 as String?,tags: null == tags ? _self._tags : tags // ignore: cast_nullable_to_non_nullable
 as List<String>,version: null == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
-as CardVersion,
+as CardVersion,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

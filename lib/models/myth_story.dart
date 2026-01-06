@@ -10,6 +10,7 @@ abstract class MythStory with _$MythStory {
     required String id,
     required String title,
     required List<MythCard> correctOrder,
+    @Default(200) int price,
   }) = _MythStory;
 
   factory MythStory.fromJson(Map<String, dynamic> json) =>

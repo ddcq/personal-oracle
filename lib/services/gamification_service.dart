@@ -21,6 +21,8 @@ class GamificationService with ChangeNotifier {
 
   GamificationService._internal();
 
+  static const String _playerCoinsKey = 'player_coins';
+
   Future<void> saveGameScore(String gameName, int score) async {
     final db = await _databaseService.database;
     await db.insert('game_scores', {
@@ -39,6 +41,28 @@ class GamificationService with ChangeNotifier {
       whereArgs: [gameName],
       orderBy: 'score DESC',
     );
+  }
+
+  Future<void> saveCoins(int amount) async {
+    final db = await _databaseService.database;
+    await db.insert('game_settings', {
+      'setting_key': _playerCoinsKey,
+      'setting_value': amount.toString(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    notifyListeners();
+  }
+
+  Future<int> getCoins() async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'game_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_playerCoinsKey],
+    );
+    if (result.isNotEmpty) {
+      return int.parse(result.first['setting_value'] as String);
+    }
+    return 0; // Default to 0 coins
   }
 
   Future<void> unlockCollectibleCard(CollectibleCard card) async {
@@ -360,8 +384,7 @@ class GamificationService with ChangeNotifier {
     for (var story in allMythStories) {
       final List<String> partsUnlockedForStory =
           unlockedStoryParts[story.id] ?? [];
-      if (partsUnlockedForStory.isEmpty) {
-        // Only add stories with no unlocked chapters
+      if (partsUnlockedForStory.length < story.correctOrder.length) {
         unearnedMythStories.add(story);
       }
     }
@@ -432,5 +455,19 @@ class GamificationService with ChangeNotifier {
       return selectedCard;
     }
     return null;
+  }
+
+  Future<int> getUnlockedChapterCountForStory(String storyId) async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'story_progress',
+      where: 'story_id = ?',
+      whereArgs: [storyId],
+    );
+    if (result.isNotEmpty) {
+      final List<dynamic> parts = jsonDecode(result.first['parts_unlocked']);
+      return parts.length;
+    }
+    return 0;
   }
 }

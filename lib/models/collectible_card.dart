@@ -15,6 +15,7 @@ abstract class CollectibleCard with _$CollectibleCard {
     String? videoUrl,
     @Default([]) List<String> tags,
     @Default(CardVersion.epic) CardVersion version,
+    @Default(100) int price,
   }) = _CollectibleCard;
 
   factory CollectibleCard.fromJson(Map<String, dynamic> json) =>

@@ -16,6 +16,7 @@ class ProfileHeader extends StatelessWidget {
   final Function(String) onNameChanged;
   final Function(String) onDeityChanged;
   final Function() onEditName;
+  final int? coins; // Add coins parameter
 
   const ProfileHeader({
     super.key,
@@ -25,6 +26,7 @@ class ProfileHeader extends StatelessWidget {
     required this.onNameChanged,
     required this.onDeityChanged,
     required this.onEditName,
+    this.coins, // Initialize coins
   });
 
   @override
@@ -68,6 +70,31 @@ class ProfileHeader extends StatelessWidget {
             ],
           ),
         ),
+        const SizedBox(height: 10),
+        if (coins != null)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.monetization_on, color: Colors.amber, size: 30),
+              SizedBox(width: 5),
+              Text(
+                coins.toString(),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontFamily: AppTextStyles.amaticSC,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  shadows: [
+                    const Shadow(
+                      blurRadius: 5.0,
+                      color: Colors.black54,
+                      offset: Offset(2.0, 2.0),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         const SizedBox(height: 20),
         SimpleGestureDetector(
           onTap: () async {
@@ -99,15 +126,18 @@ class ProfileHeader extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(
-                      color: const Color(0xFFDAA520),
+                      color: const Color.fromARGB(255, 0, 28, 71),
                       width: 5,
-                    ),
-                    boxShadow: const [
-                      BoxShadow(color: Color(0xFFDAA520), offset: Offset(5, 5)),
+                    ), // Change to deep blue
+                    boxShadow: [
                       BoxShadow(
-                        color: Color(0xFFFFD700),
+                        color: const Color.fromARGB(255, 0, 26, 65),
+                        offset: Offset(5, 5),
+                      ), // Change to deep blue
+                      BoxShadow(
+                        color: const Color.fromARGB(255, 0, 59, 117),
                         offset: Offset(-5, -5),
-                      ),
+                      ), // Change to slightly lighter deep blue
                     ],
                   ),
                   child: ClipRRect(
@@ -162,10 +192,19 @@ class ProfileHeader extends StatelessWidget {
       height: 150,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: const Color(0xFFDAA520), width: 5),
-        boxShadow: const [
-          BoxShadow(color: Color(0xFFDAA520), offset: Offset(5, 5)),
-          BoxShadow(color: Color(0xFFFFD700), offset: Offset(-5, -5)),
+        border: Border.all(
+          color: const Color.fromARGB(255, 0, 28, 71),
+          width: 5,
+        ), // Change to deep blue
+        boxShadow: [
+          BoxShadow(
+            color: const Color.fromARGB(255, 0, 26, 65),
+            offset: Offset(5, 5),
+          ), // Change to deep blue
+          BoxShadow(
+            color: const Color.fromARGB(255, 0, 59, 117),
+            offset: Offset(-5, -5),
+          ), // Change to slightly lighter deep blue
         ],
       ),
       child: ClipRRect(

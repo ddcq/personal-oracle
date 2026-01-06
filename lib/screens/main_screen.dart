@@ -156,6 +156,11 @@ class _MainScreenState extends State<MainScreen> {
                               onPressed: () => context.go('/profile'),
                             ),
                             EpicButton(
+                              iconData: Icons.shopping_cart,
+                              label: 'Boutique', // TODO: Add translation
+                              onPressed: () => context.go('/shop'),
+                            ),
+                            EpicButton(
                               iconData: Icons.settings,
                               label: 'main_screen_settings'.tr(),
                               onPressed: () => context.go('/settings'),
