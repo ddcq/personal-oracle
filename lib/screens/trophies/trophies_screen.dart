@@ -17,6 +17,7 @@ import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
+import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/dev_tools_widget.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/constants/app_env.dart';
@@ -54,8 +55,7 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
 
   Future<void> _loadNextAdRewardCard() async {
     final gamificationService = getIt<GamificationService>();
-    _nextAdRewardCard = await gamificationService
-        .getRandomUnearnedCollectibleCard();
+    _nextAdRewardCard = await gamificationService.getRandomUnearnedCollectibleCard();
     setState(() {});
   }
 
@@ -97,17 +97,12 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
   void _showRewardedAd() async {
     if (AppEnv.flagAds != 'enabled') {
       final gamificationService = getIt<GamificationService>();
-      final rewardCard = await gamificationService
-          .selectRandomUnearnedCollectibleCard();
+      final rewardCard = await gamificationService.selectRandomUnearnedCollectibleCard();
 
       if (rewardCard != null) {
         _showRewardDialog(rewardCard: rewardCard);
       } else {
-        _showRewardDialog(
-          title: 'Toutes les cartes sont débloquées !'.tr(),
-          content: 'Vous avez déjà débloqué toutes les cartes disponibles.'
-              .tr(),
-        );
+        _showRewardDialog(title: 'Toutes les cartes sont débloquées !'.tr(), content: 'Vous avez déjà débloqué toutes les cartes disponibles.'.tr());
       }
       _refreshTrophiesData();
       return;
@@ -138,18 +133,12 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
           ad.show(
             onUserEarnedReward: (ad, reward) async {
               final gamificationService = getIt<GamificationService>();
-              final rewardCard = await gamificationService
-                  .selectRandomUnearnedCollectibleCard();
+              final rewardCard = await gamificationService.selectRandomUnearnedCollectibleCard();
 
               if (rewardCard != null) {
                 _showRewardDialog(rewardCard: rewardCard);
               } else {
-                _showRewardDialog(
-                  title: 'Toutes les cartes sont débloquées !'.tr(),
-                  content:
-                      'Vous avez déjà débloqué toutes les cartes disponibles.'
-                          .tr(),
-                );
+                _showRewardDialog(title: 'Toutes les cartes sont débloquées !'.tr(), content: 'Vous avez déjà débloqué toutes les cartes disponibles.'.tr());
               }
               _refreshTrophiesData();
             },
@@ -169,27 +158,15 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
     if (AppEnv.flagAds != 'enabled') {
       final gamificationService = getIt<GamificationService>();
       if (_nextAdRewardStory != null) {
-        final unlockedStory = await gamificationService
-            .selectRandomUnearnedMythStory(_nextAdRewardStory!);
+        final unlockedStory = await gamificationService.selectRandomUnearnedMythStory(_nextAdRewardStory!);
 
         if (unlockedStory != null) {
-          _showRewardDialog(
-            unlockedStoryChapter: unlockedStory.correctOrder.first,
-          );
+          _showRewardDialog(unlockedStoryChapter: unlockedStory.correctOrder.first);
         } else {
-          _showRewardDialog(
-            title: 'Histoire déjà débloquée !'.tr(),
-            content:
-                'Vous avez déjà débloqué tous les chapitres de cette histoire.'
-                    .tr(),
-          );
+          _showRewardDialog(title: 'Histoire déjà débloquée !'.tr(), content: 'Vous avez déjà débloqué tous les chapitres de cette histoire.'.tr());
         }
       } else {
-        _showRewardDialog(
-          title: 'Toutes les histoires sont débloquées !'.tr(),
-          content: 'Vous avez déjà débloqué toutes les histoires disponibles.'
-              .tr(),
-        );
+        _showRewardDialog(title: 'Toutes les histoires sont débloquées !'.tr(), content: 'Vous avez déjà débloqué toutes les histoires disponibles.'.tr());
       }
       _refreshTrophiesData();
       return;
@@ -221,26 +198,15 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
             onUserEarnedReward: (ad, reward) async {
               final gamificationService = getIt<GamificationService>();
               if (_nextAdRewardStory != null) {
-                final unlockedStory = await gamificationService
-                    .selectRandomUnearnedMythStory(_nextAdRewardStory!);
+                final unlockedStory = await gamificationService.selectRandomUnearnedMythStory(_nextAdRewardStory!);
 
                 if (unlockedStory != null) {
-                  _showRewardDialog(
-                    unlockedStoryChapter: unlockedStory.correctOrder.first,
-                  );
+                  _showRewardDialog(unlockedStoryChapter: unlockedStory.correctOrder.first);
                 } else {
-                  _showRewardDialog(
-                    title: 'Histoire déjà débloquée !',
-                    content:
-                        'Vous avez déjà débloqué tous les chapitres de cette histoire.',
-                  );
+                  _showRewardDialog(title: 'Histoire déjà débloquée !', content: 'Vous avez déjà débloqué tous les chapitres de cette histoire.');
                 }
               } else {
-                _showRewardDialog(
-                  title: 'Toutes les histoires sont débloquées !',
-                  content:
-                      'Vous avez déjà débloqué toutes les histoires disponibles.',
-                );
+                _showRewardDialog(title: 'Toutes les histoires sont débloquées !', content: 'Vous avez déjà débloqué toutes les histoires disponibles.');
               }
               _refreshTrophiesData();
             },
@@ -250,9 +216,7 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
           setState(() {
             _isAdLoading = false;
           });
-          _showSnackBar(
-            'Échec du chargement de la publicité. Veuillez réessayer.',
-          );
+          _showSnackBar('Échec du chargement de la publicité. Veuillez réessayer.');
         },
       ),
     );
@@ -260,41 +224,20 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
 
   void _showSnackBar(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
   void _showRandomVictoryPopup() {
-    final random = Random();
-    if (random.nextBool()) {
-      final allCards = allCollectibleCards;
-      if (allCards.isNotEmpty) {
-        final randomCard = allCards[random.nextInt(allCards.length)];
-        _showRewardDialog(rewardCard: randomCard);
-      }
-    } else {
-      final allStories = getMythStories();
-      if (allStories.isNotEmpty) {
-        final randomStory = allStories[random.nextInt(allStories.length)];
-        if (randomStory.correctOrder.isNotEmpty) {
-          final randomChapter = randomStory
-              .correctOrder[random.nextInt(randomStory.correctOrder.length)];
-          _showRewardDialog(unlockedStoryChapter: randomChapter);
-        }
-      }
-    }
+    _showRewardDialog(coinsEarned: 50);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Text('trophies_screen_title'.tr()),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+      appBar: ChibiAppBar(
+        titleText: 'trophies_screen_title'.tr(),
         leading: IconButton(
           icon: const Icon(Icons.home, color: Colors.white),
           onPressed: () {
@@ -319,31 +262,17 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${'profile_screen_error_prefix'.tr()}: ${snapshot.error}',
-                  ),
-                );
+                return Center(child: Text('${'profile_screen_error_prefix'.tr()}: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(
-                  child: Text('profile_screen_no_data_available'.tr()),
-                );
+                return Center(child: Text('profile_screen_no_data_available'.tr()));
               } else {
-                final List<Map<String, dynamic>> snakeScores =
-                    snapshot.data![0];
+                final List<Map<String, dynamic>> snakeScores = snapshot.data![0];
                 final List<CollectibleCard> unlockedCards = snapshot.data![1];
-                final List<Map<String, dynamic>> storyProgress =
-                    snapshot.data![2];
-                final List<Map<String, dynamic>> asgardWallScores =
-                    snapshot.data![3];
+                final List<Map<String, dynamic>> storyProgress = snapshot.data![2];
+                final List<Map<String, dynamic>> asgardWallScores = snapshot.data![3];
 
                 return ListView(
-                  padding: EdgeInsets.only(
-                    top: kToolbarHeight,
-                    left: 16.0,
-                    right: 16.0,
-                    bottom: 16.0,
-                  ),
+                  padding: EdgeInsets.only(top: kToolbarHeight, left: 16.0, right: 16.0, bottom: 16.0),
                   children: [
                     const SizedBox(height: 20),
                     _buildSectionTitle('profile_screen_game_scores'.tr()),
@@ -362,12 +291,7 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
                     ),
                     const SizedBox(height: 20),
                     _buildSectionTitle('profile_screen_collectible_cards'.tr()),
-                    CollectibleCardGrid(
-                      cards: unlockedCards,
-                      nextAdRewardCard: _nextAdRewardCard,
-                      isAdLoading: _isAdLoading,
-                      showRewardedAd: _showRewardedAd,
-                    ),
+                    CollectibleCardGrid(cards: unlockedCards, nextAdRewardCard: _nextAdRewardCard, isAdLoading: _isAdLoading, showRewardedAd: _showRewardedAd),
                     const SizedBox(height: 20),
                     SimpleGestureDetector(
                       onTap: () {
@@ -378,9 +302,7 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
                           }
                         });
                       },
-                      child: _buildSectionTitle(
-                        'profile_screen_unlocked_stories'.tr(),
-                      ),
+                      child: _buildSectionTitle('profile_screen_unlocked_stories'.tr()),
                     ),
                     UnlockedStoriesGrid(
                       storyProgress: storyProgress,
@@ -419,33 +341,23 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
           fontWeight: FontWeight.bold,
           fontSize: 40,
           letterSpacing: 2.0,
-          shadows: [
-            const Shadow(
-              blurRadius: 15.0,
-              color: Colors.black87,
-              offset: Offset(4.0, 4.0),
-            ),
-          ],
+          shadows: [const Shadow(blurRadius: 15.0, color: Colors.black87, offset: Offset(4.0, 4.0))],
         ),
         textAlign: TextAlign.center,
       ),
     );
   }
 
-  void _showRewardDialog({
-    CollectibleCard? rewardCard,
-    MythCard? unlockedStoryChapter,
-    String? title,
-    String? content,
-  }) {
+  void _showRewardDialog({CollectibleCard? rewardCard, MythCard? unlockedStoryChapter, String? title, String? content, int? coinsEarned}) {
     if (mounted) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          if (rewardCard != null || unlockedStoryChapter != null) {
+          if (rewardCard != null || unlockedStoryChapter != null || coinsEarned != null) {
             return VictoryPopup(
               rewardCard: rewardCard,
               unlockedStoryChapter: unlockedStoryChapter,
+              coinsEarned: coinsEarned,
               hideReplayButton: true,
               onDismiss: () {
                 Navigator.of(context).pop();

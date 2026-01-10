@@ -5,6 +5,7 @@ import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:oracle_d_asgard/widgets/epic_button.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -66,136 +67,271 @@ class _ShopScreenState extends State<ShopScreen> {
     }
   }
 
-  Future<void> _buyCard(CollectibleCard card) async {
-    final gamificationService = getIt<GamificationService>();
-    final currentCoins = await gamificationService.getCoins();
-
-    if (currentCoins >= card.price) {
-      await gamificationService.saveCoins(currentCoins - card.price);
-      await gamificationService.unlockCollectibleCard(card);
-      setState(() {
-        _shopDataFuture = _fetchShopData();
-      });
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('shop_bought_card'.tr(args: [card.title])),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } else {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('shop_not_enough_coins'.tr()),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+  Future<void> _showConfirmationDialog({
+    required BuildContext context,
+    required String title,
+    required String itemName,
+    required int price,
+    required String imagePath,
+    required VoidCallback onConfirm,
+  }) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.black.withAlpha(217),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: Colors.amber, width: 2),
+          ),
+          title:
+              Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                SizedBox(
+                  height: 150,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(imagePath, fit: BoxFit.contain),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(itemName,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.monetization_on,
+                        color: Colors.amber, size: 24),
+                    const SizedBox(width: 8),
+                    Text(
+                      price.toString(),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                EpicButton(
+                  iconData: Icons.close,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  label: 'cancel'.tr(),
+                ),
+                EpicButton(
+                  iconData: Icons.check,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    onConfirm();
+                  },
+                  label: 'confirm'.tr(),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  Future<void> _buyStory(MythStory story, int price) async {
-    final gamificationService = getIt<GamificationService>();
-    final currentCoins = await gamificationService.getCoins();
+  Future<void> _buyCard(CollectibleCard card) async {
+    _showConfirmationDialog(
+      context: context,
+      title: 'shop_buy_card_title'.tr(),
+      itemName: card.title,
+      price: card.price,
+      imagePath: 'assets/images/${card.imagePath}',
+      onConfirm: () async {
+        final gamificationService = getIt<GamificationService>();
+        final currentCoins = await gamificationService.getCoins();
 
-    if (currentCoins >= price) {
-      final unlockedChaptersCount = await gamificationService
-          .getUnlockedChapterCountForStory(story.id);
-      final nextChapterIndex = unlockedChaptersCount;
-
-      if (nextChapterIndex < story.correctOrder.length) {
-        final nextChapterId = story.correctOrder[nextChapterIndex].id;
-        await gamificationService.saveCoins(currentCoins - price);
-        await gamificationService.unlockStoryPart(story.id, nextChapterId);
-        setState(() {
-          _shopDataFuture = _fetchShopData();
-        });
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'shop_bought_story_part'.tr(args: [story.title.tr()]),
+        if (currentCoins >= card.price) {
+          await gamificationService.saveCoins(currentCoins - card.price);
+          await gamificationService.unlockCollectibleCard(card);
+          setState(() {
+            _shopDataFuture = _fetchShopData();
+          });
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: 'shop_bought_card_prefix'.tr()),
+                    TextSpan(
+                      text: '«${card.title}»',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: 'shop_bought_card_suffix'.tr()),
+                  ],
+                ),
+              ),
+              backgroundColor: Colors.green,
             ),
-            backgroundColor: Colors.green,
-          ),
-        );
-      } else {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('shop_story_all_unlocked'.tr()),
-            backgroundColor: Colors.blue,
-          ),
-        );
-      }
-    } else {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('shop_not_enough_coins'.tr()),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+          );
+        } else {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('shop_not_enough_coins'.tr()),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Future<void> _buyStory(MythStory story, int price, String imagePath) async {
+    _showConfirmationDialog(
+      context: context,
+      title: 'shop_buy_story_title'.tr(),
+      itemName: story.title.tr(),
+      price: price,
+      imagePath: imagePath,
+      onConfirm: () async {
+        final gamificationService = getIt<GamificationService>();
+        final currentCoins = await gamificationService.getCoins();
+
+        if (currentCoins >= price) {
+          final unlockedChaptersCount = await gamificationService
+              .getUnlockedChapterCountForStory(story.id);
+          final nextChapterIndex = unlockedChaptersCount;
+
+          if (nextChapterIndex < story.correctOrder.length) {
+            final nextChapterId = story.correctOrder[nextChapterIndex].id;
+            await gamificationService.saveCoins(currentCoins - price);
+            await gamificationService.unlockStoryPart(story.id, nextChapterId);
+            setState(() {
+              _shopDataFuture = _fetchShopData();
+            });
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(text: 'shop_bought_story_part_prefix'.tr()),
+                      TextSpan(
+                        text: '«${story.title.tr()}»',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(text: 'shop_bought_story_part_suffix'.tr()),
+                    ],
+                  ),
+                ),
+                backgroundColor: Colors.green,
+              ),
+            );
+          } else {
+            if (!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('shop_story_all_unlocked'.tr()),
+                backgroundColor: Colors.blue,
+              ),
+            );
+          }
+        } else {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('shop_not_enough_coins'.tr()),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Text('shop_title'.tr()),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: AppBackground(
-        child: FutureBuilder<Map<String, dynamic>>(
-          future: _shopDataFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Erreur: ${snapshot.error}'));
-            } else if (!snapshot.hasData) {
-              return const Center(child: Text('Aucune donnée disponible'));
-            }
+    return FutureBuilder<Map<String, dynamic>>(
+      future: _shopDataFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: AppBackground(
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            appBar: AppBar(title: Text('shop_title'.tr())),
+            body: AppBackground(
+              child: Center(child: Text('Erreur: ${snapshot.error}')),
+            ),
+          );
+        } else if (!snapshot.hasData) {
+          return Scaffold(
+            appBar: AppBar(title: Text('shop_title'.tr())),
+            body: const AppBackground(
+              child: Center(child: Text('Aucune donnée disponible')),
+            ),
+          );
+        }
 
-            final coins = snapshot.data!['coins'] as int;
-            final availableCards =
-                snapshot.data!['availableCards'] as List<CollectibleCard>;
-            final availableStories =
-                snapshot.data!['availableStories']
-                    as List<Map<String, dynamic>>;
+        final coins = snapshot.data!['coins'] as int;
+        final availableCards =
+            snapshot.data!['availableCards'] as List<CollectibleCard>;
+        final availableStories =
+            snapshot.data!['availableStories'] as List<Map<String, dynamic>>;
 
-            return CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  expandedHeight: 80.0,
-                  backgroundColor: Colors.transparent,
-                  flexibleSpace: FlexibleSpaceBar(
-                    titlePadding: EdgeInsets.zero,
-                    title: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Icon(
-                            Icons.monetization_on,
-                            color: Colors.amber,
-                            size: 30,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            coins.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: Text('shop_title'.tr()),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.monetization_on,
+                      color: Colors.amber,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      coins.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          body: AppBackground(
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: kToolbarHeight + MediaQuery.of(context).padding.top,
                   ),
                 ),
                 SliverList(
@@ -204,7 +340,9 @@ class _ShopScreenState extends State<ShopScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         'shop_cards_section_title'.tr(),
-                        style: Theme.of(context).textTheme.headlineMedium
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
                             ?.copyWith(color: Colors.white),
                       ),
                     ),
@@ -213,7 +351,9 @@ class _ShopScreenState extends State<ShopScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           'shop_no_cards_available'.tr(),
-                          style: Theme.of(context).textTheme.bodyMedium
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
                               ?.copyWith(color: Colors.white70),
                         ),
                       )
@@ -224,11 +364,11 @@ class _ShopScreenState extends State<ShopScreen> {
                         padding: const EdgeInsets.all(10),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 0.7,
-                            ),
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.7,
+                        ),
                         itemCount: availableCards.length,
                         itemBuilder: (context, index) {
                           final card = availableCards[index];
@@ -241,11 +381,13 @@ class _ShopScreenState extends State<ShopScreen> {
                               child: InkWell(
                                 onTap: canAfford ? () => _buyCard(card) : null,
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     Expanded(
                                       child: ClipRRect(
-                                        borderRadius: const BorderRadius.vertical(
+                                        borderRadius:
+                                            const BorderRadius.vertical(
                                           top: Radius.circular(12),
                                         ),
                                         child: Image.asset(
@@ -274,14 +416,17 @@ class _ShopScreenState extends State<ShopScreen> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                      padding:
+                                          const EdgeInsets.only(bottom: 8.0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
                                           Icon(
                                             Icons.monetization_on,
-                                            color: canAfford ? Colors.amber : Colors.grey,
+                                            color: canAfford
+                                                ? Colors.amber
+                                                : Colors.grey,
                                             size: 20,
                                           ),
                                           const SizedBox(width: 4),
@@ -289,7 +434,9 @@ class _ShopScreenState extends State<ShopScreen> {
                                             card.price.toString(),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: canAfford ? Colors.white : Colors.grey,
+                                              color: canAfford
+                                                  ? Colors.white
+                                                  : Colors.grey,
                                             ),
                                           ),
                                         ],
@@ -306,7 +453,9 @@ class _ShopScreenState extends State<ShopScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         'shop_stories_section_title'.tr(),
-                        style: Theme.of(context).textTheme.headlineMedium
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
                             ?.copyWith(color: Colors.white),
                       ),
                     ),
@@ -315,7 +464,9 @@ class _ShopScreenState extends State<ShopScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           'shop_no_stories_available'.tr(),
-                          style: Theme.of(context).textTheme.bodyMedium
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
                               ?.copyWith(color: Colors.white70),
                         ),
                       )
@@ -326,11 +477,11 @@ class _ShopScreenState extends State<ShopScreen> {
                         padding: const EdgeInsets.all(10),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 0.7,
-                            ),
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.7,
+                        ),
                         itemCount: availableStories.length,
                         itemBuilder: (context, index) {
                           final storyData = availableStories[index];
@@ -344,13 +495,23 @@ class _ShopScreenState extends State<ShopScreen> {
                               color: Colors.black.withAlpha(200),
                               clipBehavior: Clip.antiAlias,
                               child: InkWell(
-                                onTap: canAfford ? () => _buyStory(story, price) : null,
+                                onTap: canAfford
+                                    ? () => _buyStory(
+                                          story,
+                                          price,
+                                          imagePath.isNotEmpty
+                                              ? 'assets/images/stories/$imagePath'
+                                              : 'assets/images/icons/story.png',
+                                        )
+                                    : null,
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     Expanded(
                                       child: ClipRRect(
-                                        borderRadius: const BorderRadius.vertical(
+                                        borderRadius:
+                                            const BorderRadius.vertical(
                                           top: Radius.circular(12),
                                         ),
                                         child: imagePath.isNotEmpty
@@ -388,14 +549,17 @@ class _ShopScreenState extends State<ShopScreen> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                      padding:
+                                          const EdgeInsets.only(bottom: 8.0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
                                           Icon(
                                             Icons.monetization_on,
-                                            color: canAfford ? Colors.amber : Colors.grey,
+                                            color: canAfford
+                                                ? Colors.amber
+                                                : Colors.grey,
                                             size: 20,
                                           ),
                                           const SizedBox(width: 4),
@@ -403,7 +567,9 @@ class _ShopScreenState extends State<ShopScreen> {
                                             price.toString(),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: canAfford ? Colors.white : Colors.grey,
+                                              color: canAfford
+                                                  ? Colors.white
+                                                  : Colors.grey,
                                             ),
                                           ),
                                         ],
@@ -419,10 +585,10 @@ class _ShopScreenState extends State<ShopScreen> {
                   ]),
                 ),
               ],
-            );
-          },
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

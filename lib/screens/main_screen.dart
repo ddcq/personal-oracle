@@ -9,6 +9,7 @@ import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:oracle_d_asgard/constants/app_env.dart';
+import 'package:hexagon/hexagon.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -65,6 +66,25 @@ class _MainScreenState extends State<MainScreen> {
     )..load();
   }
 
+  Widget? _buildHexagonButton(int col, int row) {
+    final buttons = [
+      {'icon': Icons.games_rounded, 'label': 'main_screen_play'.tr(), 'route': '/games'},
+      {'icon': Icons.emoji_events, 'label': 'main_screen_trophies'.tr(), 'route': '/trophies'},
+      {'icon': Icons.person, 'label': 'main_screen_profile'.tr(), 'route': '/profile'},
+      {'icon': Icons.shopping_cart, 'label': 'Boutique', 'route': '/shop'},
+      {'icon': Icons.settings, 'label': 'main_screen_settings'.tr(), 'route': '/settings'},
+    ];
+
+    final index = row * 3 + col;
+    // Skip first tile (index 0) to have 2 buttons on first row and 3 on second row
+    if (index == 0 || index > buttons.length) return null;
+
+    final button = buttons[index - 1];
+    return Center(
+      child: EpicButton(iconData: button['icon'] as IconData, label: button['label'] as String, onPressed: () => context.go(button['route'] as String)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,105 +98,50 @@ class _MainScreenState extends State<MainScreen> {
                     alignment: Alignment.topCenter,
                     child: Padding(
                       padding: EdgeInsets.only(top: 20.h),
-                      child:
-                          Text(
-                                'main_screen_title'.tr(),
-                                textAlign: TextAlign.center,
-                                style: ChibiTextStyles.appBarTitle,
-                              )
-                              .animate()
-                              .slideY(
-                                begin: -0.3,
-                                duration: 800.ms,
-                                curve: Curves.easeOutCubic,
-                              )
-                              .fadeIn(duration: 600.ms),
+                      child: Text(
+                        'main_screen_title'.tr(),
+                        textAlign: TextAlign.center,
+                        style: ChibiTextStyles.appBarTitle,
+                      ).animate().slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),
                     ),
                   ),
                   Expanded(
-                    // Allows the image to shrink/grow
-                    child: Center(
-                      // Centers the image vertically
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(0.w, 20.h, 0.w, 0),
-                        child: ClipRect(
-                          child:
-                              Image.asset(
-                                    'assets/images/odin_chibi.webp',
-                                    fit: BoxFit.contain, // Scales down to fit
-                                    width: double.infinity,
-                                    alignment: Alignment.center,
-                                  )
-                                  .animate(delay: 400.ms)
-                                  .slideY(
-                                    begin: -0.1,
-                                    duration: 800.ms,
-                                    curve: Curves.easeOutCubic,
-                                  )
-                                  .fadeIn(duration: 600.ms),
+                    child: ClipRect(
+                      child: Image.asset(
+                        'assets/images/odin_chibi.webp',
+                        fit: BoxFit.contain,
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                      ).animate(delay: 400.ms).slideY(begin: -0.1, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),
+                    ),
+                  ),
+                  Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(image: AssetImage('assets/images/wood.webp'), fit: BoxFit.cover),
+                    ),
+                    child: SizedBox(
+                      height: 250.h,
+                      width: double.infinity,
+                      child: Transform.translate(
+                        offset: Offset(-MediaQuery.of(context).size.width * 0.08, 50.h),
+                        child: Transform.rotate(
+                          angle: -12 * 3.14159 / 180,
+                          child: HexagonOffsetGrid.oddPointy(
+                            columns: 3,
+                            rows: 2,
+                            buildTile: (col, row) => HexagonWidgetBuilder(color: Colors.transparent, child: _buildHexagonButton(col, row)),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      0,
-                      0,
-                      0,
-                      _isBannerAdLoaded && _bannerAd != null
-                          ? _bannerAd!.size.height.toDouble()
-                          : 0,
-                    ),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/wood.webp'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: SizedBox(
-                        height: 180.h,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            EpicButton(
-                              iconData: Icons.games_rounded,
-                              label: 'main_screen_play'.tr(),
-                              onPressed: () => context.go('/games'),
-                            ),
-                            EpicButton(
-                              iconData: Icons.emoji_events,
-                              label: 'main_screen_trophies'.tr(),
-                              onPressed: () => context.go('/trophies'),
-                            ),
-                            EpicButton(
-                              iconData: Icons.person,
-                              label: 'main_screen_profile'.tr(),
-                              onPressed: () => context.go('/profile'),
-                            ),
-                            EpicButton(
-                              iconData: Icons.shopping_cart,
-                              label: 'Boutique', // TODO: Add translation
-                              onPressed: () => context.go('/shop'),
-                            ),
-                            EpicButton(
-                              iconData: Icons.settings,
-                              label: 'main_screen_settings'.tr(),
-                              onPressed: () => context.go('/settings'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  if (_isBannerAdLoaded && _bannerAd != null) SizedBox(height: _bannerAd!.size.height.toDouble()),
                 ],
               ),
             ),
           ),
 
-          if (AppEnv.flagAds == 'enabled' &&
-              _isBannerAdLoaded &&
-              _bannerAd != null)
+          if (AppEnv.flagAds == 'enabled' && _isBannerAdLoaded && _bannerAd != null)
             Positioned(
               bottom: 0,
               left: 0,

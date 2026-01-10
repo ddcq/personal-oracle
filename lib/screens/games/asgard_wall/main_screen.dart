@@ -422,6 +422,7 @@ class _GameScreenState extends State<GameScreen> {
     gamificationService.saveGameScore('Asgard Wall', currentScore);
 
     if (won) {
+      _coinsToEarn = gamificationService.calculateAsgardWallCoins(currentScore);
       await gamificationService.addCoins(_coinsToEarn);
       _showWinDialog();
     } else {

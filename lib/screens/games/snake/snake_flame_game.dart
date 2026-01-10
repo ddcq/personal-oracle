@@ -450,7 +450,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     if (isVictory) {
       gamificationService.saveGameScore('Snake', gameState.value.score);
-      coinsEarned = await gamificationService.calculateGameReward(level: level);
+      coinsEarned = gamificationService.calculateSnakeGameCoins(gameState.value.score);
       await gamificationService.addCoins(coinsEarned);
     }
     onGameEnd(gameState.value.score, isVictory: isVictory, coinsEarned: coinsEarned);

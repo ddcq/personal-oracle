@@ -481,4 +481,15 @@ class GamificationService with ChangeNotifier {
     final bonus = (level - 1) * 10;
     return Future.value(baseReward + bonus);
   }
+
+  int calculateSnakeGameCoins(int score) {
+    return (score ~/ 20) * 10;
+  }
+
+  int calculateAsgardWallCoins(int score) {
+    if (score <= 100) {
+      return 0;
+    }
+    return ((score - 100) ~/ 20) * 10;
+  }
 }
