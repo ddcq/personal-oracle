@@ -340,15 +340,6 @@ class _StoryContentState extends State<_StoryContent> {
                           const SizedBox(height: 8.0),
                           widget.isAdLoading
                               ? const CircularProgressIndicator()
-                              : AppEnv.flagAds == 'enabled'
-                              ? ElevatedButton.icon(
-                                  onPressed: () =>
-                                      widget.showRewardedAd(card.id),
-                                  icon: const Icon(Icons.play_arrow),
-                                  label: Text(
-                                    'myth_story_page_unlock_with_ad'.tr(),
-                                  ),
-                                )
                               : ElevatedButton(
                                   onPressed: () {
                                     context.push('/shop');

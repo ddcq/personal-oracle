@@ -344,7 +344,9 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
                     _buildSectionTitle('profile_screen_collectible_cards'.tr()),
                     CollectibleCardGrid(
                       cards: unlockedCards,
-                      nextAdRewardCard: _nextAdRewardCard,
+                      nextAdRewardCard: AppEnv.flagAds == 'enabled'
+                          ? _nextAdRewardCard
+                          : null,
                       isAdLoading: _isAdLoading,
                       showRewardedAd: _showRewardedAd,
                     ),
@@ -364,7 +366,9 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
                     ),
                     UnlockedStoriesGrid(
                       storyProgress: storyProgress,
-                      nextAdRewardStory: _nextAdRewardStory,
+                      nextAdRewardStory: AppEnv.flagAds == 'enabled'
+                          ? _nextAdRewardStory
+                          : null,
                       isAdLoading: _isAdLoading,
                       showRewardedStoryAd: _showRewardedStoryAd,
                     ),
