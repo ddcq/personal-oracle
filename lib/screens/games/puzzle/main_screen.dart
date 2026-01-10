@@ -120,7 +120,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
 
   void _showVictoryDialog(int coinsEarned) async {
     _lastCoinsEarned = coinsEarned;
-    
+
     // Increment difficulty level
     final gamificationService = getIt<GamificationService>();
     _currentLevel++;

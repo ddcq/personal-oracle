@@ -22,8 +22,7 @@ import 'package:oracle_d_asgard/widgets/directional_pad.dart' as dp;
 
 class SnakeFlameGame extends FlameGame with KeyboardEvents {
   final GamificationService gamificationService;
-  final Function(int, {required bool isVictory, int coinsEarned})
-  onGameEnd;
+  final Function(int, {required bool isVictory, int coinsEarned}) onGameEnd;
   final VoidCallback? onResetGame;
   final VoidCallback? onScoreChanged;
   final VoidCallback? onConfettiTrigger;
@@ -450,10 +449,16 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
 
     if (isVictory) {
       gamificationService.saveGameScore('Snake', gameState.value.score);
-      coinsEarned = gamificationService.calculateSnakeGameCoins(gameState.value.score);
+      coinsEarned = gamificationService.calculateSnakeGameCoins(
+        gameState.value.score,
+      );
       await gamificationService.addCoins(coinsEarned);
     }
-    onGameEnd(gameState.value.score, isVictory: isVictory, coinsEarned: coinsEarned);
+    onGameEnd(
+      gameState.value.score,
+      isVictory: isVictory,
+      coinsEarned: coinsEarned,
+    );
   }
 
   void tick() async {

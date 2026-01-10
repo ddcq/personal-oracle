@@ -48,9 +48,11 @@ class _ShopScreenState extends State<ShopScreen> {
         'imagePath': imagePath,
       });
     }
-    
+
     // Sort stories by price
-    storiesWithPrices.sort((a, b) => (a['price'] as int).compareTo(b['price'] as int));
+    storiesWithPrices.sort(
+      (a, b) => (a['price'] as int).compareTo(b['price'] as int),
+    );
 
     return {
       'coins': coins,
@@ -85,8 +87,13 @@ class _ShopScreenState extends State<ShopScreen> {
             borderRadius: BorderRadius.circular(20),
             side: const BorderSide(color: Colors.amber, width: 2),
           ),
-          title:
-              Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -98,25 +105,32 @@ class _ShopScreenState extends State<ShopScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text(itemName,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold)),
+                Text(
+                  itemName,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.monetization_on,
-                        color: Colors.amber, size: 24),
+                    const Icon(
+                      Icons.monetization_on,
+                      color: Colors.amber,
+                      size: 24,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       price.toString(),
                       style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -340,9 +354,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         'shop_cards_section_title'.tr(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
+                        style: Theme.of(context).textTheme.headlineMedium
                             ?.copyWith(color: Colors.white),
                       ),
                     ),
@@ -351,9 +363,7 @@ class _ShopScreenState extends State<ShopScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           'shop_no_cards_available'.tr(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
+                          style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(color: Colors.white70),
                         ),
                       )
@@ -364,11 +374,11 @@ class _ShopScreenState extends State<ShopScreen> {
                         padding: const EdgeInsets.all(10),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 0.7,
-                        ),
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 0.7,
+                            ),
                         itemCount: availableCards.length,
                         itemBuilder: (context, index) {
                           final card = availableCards[index];
@@ -388,8 +398,8 @@ class _ShopScreenState extends State<ShopScreen> {
                                       child: ClipRRect(
                                         borderRadius:
                                             const BorderRadius.vertical(
-                                          top: Radius.circular(12),
-                                        ),
+                                              top: Radius.circular(12),
+                                            ),
                                         child: Image.asset(
                                           'assets/images/${card.imagePath}',
                                           fit: BoxFit.cover,
@@ -416,8 +426,9 @@ class _ShopScreenState extends State<ShopScreen> {
                                       ),
                                     ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 8.0),
+                                      padding: const EdgeInsets.only(
+                                        bottom: 8.0,
+                                      ),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -453,9 +464,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         'shop_stories_section_title'.tr(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
+                        style: Theme.of(context).textTheme.headlineMedium
                             ?.copyWith(color: Colors.white),
                       ),
                     ),
@@ -464,9 +473,7 @@ class _ShopScreenState extends State<ShopScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           'shop_no_stories_available'.tr(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
+                          style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(color: Colors.white70),
                         ),
                       )
@@ -477,11 +484,11 @@ class _ShopScreenState extends State<ShopScreen> {
                         padding: const EdgeInsets.all(10),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 0.7,
-                        ),
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 0.7,
+                            ),
                         itemCount: availableStories.length,
                         itemBuilder: (context, index) {
                           final storyData = availableStories[index];
@@ -497,12 +504,12 @@ class _ShopScreenState extends State<ShopScreen> {
                               child: InkWell(
                                 onTap: canAfford
                                     ? () => _buyStory(
-                                          story,
-                                          price,
-                                          imagePath.isNotEmpty
-                                              ? 'assets/images/stories/$imagePath'
-                                              : 'assets/images/icons/story.png',
-                                        )
+                                        story,
+                                        price,
+                                        imagePath.isNotEmpty
+                                            ? 'assets/images/stories/$imagePath'
+                                            : 'assets/images/icons/story.png',
+                                      )
                                     : null,
                                 child: Column(
                                   crossAxisAlignment:
@@ -512,8 +519,8 @@ class _ShopScreenState extends State<ShopScreen> {
                                       child: ClipRRect(
                                         borderRadius:
                                             const BorderRadius.vertical(
-                                          top: Radius.circular(12),
-                                        ),
+                                              top: Radius.circular(12),
+                                            ),
                                         child: imagePath.isNotEmpty
                                             ? Image.asset(
                                                 'assets/images/stories/$imagePath',
@@ -549,8 +556,9 @@ class _ShopScreenState extends State<ShopScreen> {
                                       ),
                                     ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 8.0),
+                                      padding: const EdgeInsets.only(
+                                        bottom: 8.0,
+                                      ),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,

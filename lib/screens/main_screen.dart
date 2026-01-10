@@ -68,11 +68,27 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget? _buildHexagonButton(int col, int row) {
     final buttons = [
-      {'icon': Icons.games_rounded, 'label': 'main_screen_play'.tr(), 'route': '/games'},
-      {'icon': Icons.emoji_events, 'label': 'main_screen_trophies'.tr(), 'route': '/trophies'},
-      {'icon': Icons.person, 'label': 'main_screen_profile'.tr(), 'route': '/profile'},
+      {
+        'icon': Icons.games_rounded,
+        'label': 'main_screen_play'.tr(),
+        'route': '/games',
+      },
+      {
+        'icon': Icons.emoji_events,
+        'label': 'main_screen_trophies'.tr(),
+        'route': '/trophies',
+      },
+      {
+        'icon': Icons.person,
+        'label': 'main_screen_profile'.tr(),
+        'route': '/profile',
+      },
       {'icon': Icons.shopping_cart, 'label': 'Boutique', 'route': '/shop'},
-      {'icon': Icons.settings, 'label': 'main_screen_settings'.tr(), 'route': '/settings'},
+      {
+        'icon': Icons.settings,
+        'label': 'main_screen_settings'.tr(),
+        'route': '/settings',
+      },
     ];
 
     final index = row * 3 + col;
@@ -81,7 +97,11 @@ class _MainScreenState extends State<MainScreen> {
 
     final button = buttons[index - 1];
     return Center(
-      child: EpicButton(iconData: button['icon'] as IconData, label: button['label'] as String, onPressed: () => context.go(button['route'] as String)),
+      child: EpicButton(
+        iconData: button['icon'] as IconData,
+        label: button['label'] as String,
+        onPressed: () => context.go(button['route'] as String),
+      ),
     );
   }
 
@@ -98,50 +118,78 @@ class _MainScreenState extends State<MainScreen> {
                     alignment: Alignment.topCenter,
                     child: Padding(
                       padding: EdgeInsets.only(top: 20.h),
-                      child: Text(
-                        'main_screen_title'.tr(),
-                        textAlign: TextAlign.center,
-                        style: ChibiTextStyles.appBarTitle,
-                      ).animate().slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),
+                      child:
+                          Text(
+                                'main_screen_title'.tr(),
+                                textAlign: TextAlign.center,
+                                style: ChibiTextStyles.appBarTitle,
+                              )
+                              .animate()
+                              .slideY(
+                                begin: -0.3,
+                                duration: 800.ms,
+                                curve: Curves.easeOutCubic,
+                              )
+                              .fadeIn(duration: 600.ms),
                     ),
                   ),
                   Expanded(
                     child: ClipRect(
-                      child: Image.asset(
-                        'assets/images/odin_chibi.webp',
-                        fit: BoxFit.contain,
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                      ).animate(delay: 400.ms).slideY(begin: -0.1, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),
+                      child:
+                          Image.asset(
+                                'assets/images/odin_chibi.webp',
+                                fit: BoxFit.contain,
+                                width: double.infinity,
+                                alignment: Alignment.center,
+                              )
+                              .animate(delay: 400.ms)
+                              .slideY(
+                                begin: -0.1,
+                                duration: 800.ms,
+                                curve: Curves.easeOutCubic,
+                              )
+                              .fadeIn(duration: 600.ms),
                     ),
                   ),
                   Container(
                     decoration: const BoxDecoration(
-                      image: DecorationImage(image: AssetImage('assets/images/wood.webp'), fit: BoxFit.cover),
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/wood.webp'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     child: SizedBox(
                       height: 250.h,
                       width: double.infinity,
                       child: Transform.translate(
-                        offset: Offset(-MediaQuery.of(context).size.width * 0.08, 50.h),
+                        offset: Offset(
+                          -MediaQuery.of(context).size.width * 0.08,
+                          50.h,
+                        ),
                         child: Transform.rotate(
                           angle: -12 * 3.14159 / 180,
                           child: HexagonOffsetGrid.oddPointy(
                             columns: 3,
                             rows: 2,
-                            buildTile: (col, row) => HexagonWidgetBuilder(color: Colors.transparent, child: _buildHexagonButton(col, row)),
+                            buildTile: (col, row) => HexagonWidgetBuilder(
+                              color: Colors.transparent,
+                              child: _buildHexagonButton(col, row),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  if (_isBannerAdLoaded && _bannerAd != null) SizedBox(height: _bannerAd!.size.height.toDouble()),
+                  if (_isBannerAdLoaded && _bannerAd != null)
+                    SizedBox(height: _bannerAd!.size.height.toDouble()),
                 ],
               ),
             ),
           ),
 
-          if (AppEnv.flagAds == 'enabled' && _isBannerAdLoaded && _bannerAd != null)
+          if (AppEnv.flagAds == 'enabled' &&
+              _isBannerAdLoaded &&
+              _bannerAd != null)
             Positioned(
               bottom: 0,
               left: 0,

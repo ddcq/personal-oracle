@@ -104,10 +104,7 @@ class _ChibiTextButtonState extends State<ChibiTextButton> {
                       gradient: RadialGradient(
                         center: Alignment.center,
                         radius: 0.8,
-                        colors: [
-                          widget.color,
-                          darken(widget.color, 0.15),
-                        ],
+                        colors: [widget.color, darken(widget.color, 0.15)],
                       ),
                     ),
                     child: Container(
@@ -148,7 +145,9 @@ class _ChibiTextButtonState extends State<ChibiTextButton> {
               .shimmer(
                 delay: (_isPressed ? 0 : 200).ms,
                 duration: 300.ms,
-                color: Colors.white.withAlpha(20), // Reduced from 30 for darker look
+                color: Colors.white.withAlpha(
+                  20,
+                ), // Reduced from 30 for darker look
               ),
     );
   }

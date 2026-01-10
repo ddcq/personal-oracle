@@ -40,7 +40,11 @@ class MenuPrincipal extends StatelessWidget {
     if (index == 0 || index > routes.length) return null;
 
     return Center(
-      child: EpicButton(onPressed: () => context.go(routes[index - 1]), imagePath: images[index - 1], size: 100.sp),
+      child: EpicButton(
+        onPressed: () => context.go(routes[index - 1]),
+        imagePath: images[index - 1],
+        size: 100.sp,
+      ),
     );
   }
 
@@ -66,14 +70,19 @@ class MenuPrincipal extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(20.w),
                   decoration: const BoxDecoration(
-                    image: DecorationImage(image: AssetImage('assets/images/wood.webp'), fit: BoxFit.cover),
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/wood.webp'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   child: Newton(
                     effectConfigurations: [
                       // Effet lucioles dorées flottantes
                       DeterministicEffectConfiguration(
                         particleConfiguration: ParticleConfiguration(
-                          shape: ImageAssetShape('assets/images/menu/star.webp'),
+                          shape: ImageAssetShape(
+                            'assets/images/menu/star.webp',
+                          ),
                           size: const Size(8, 8),
                           color: SingleParticleColor(color: Color(0xFFACFFFF)),
                         ),
@@ -81,13 +90,21 @@ class MenuPrincipal extends StatelessWidget {
                           particleCount: 0,
                           emitDuration: Duration(milliseconds: 160),
                           particlesPerEmit: 1,
-                          particleLifespan: DurationRange.between(Duration(seconds: 9), Duration(seconds: 18)),
+                          particleLifespan: DurationRange.between(
+                            Duration(seconds: 9),
+                            Duration(seconds: 18),
+                          ),
                           origin: Offset(0.5, 0.5),
                           minOriginOffset: Offset(-0.45, -0.45),
                           maxOriginOffset: Offset(0.45, 0.45),
                         ),
-                        layerProperties: const LayerProperties(particleLayer: ParticleLayer.foreground),
-                        deterministicProperties: const DeterministicProperties(distance: NumRange.between(30, 120), angle: NumRange.between(-180, 180)),
+                        layerProperties: const LayerProperties(
+                          particleLayer: ParticleLayer.foreground,
+                        ),
+                        deterministicProperties: const DeterministicProperties(
+                          distance: NumRange.between(30, 120),
+                          angle: NumRange.between(-180, 180),
+                        ),
                         visualProperties: const VisualProperties(
                           beginScale: NumRange.between(0.6, 1.0),
                           endScale: NumRange.between(1.5, 2.5),
@@ -105,14 +122,20 @@ class MenuPrincipal extends StatelessWidget {
                         height: 500.h,
                         width: double.infinity,
                         child: Transform.translate(
-                          offset: Offset(MediaQuery.of(context).size.width * 0.05, 50.h),
+                          offset: Offset(
+                            MediaQuery.of(context).size.width * 0.05,
+                            50.h,
+                          ),
                           child: Transform.rotate(
                             angle: -12 * 3.14159 / 180,
                             child: HexagonOffsetGrid.oddPointy(
                               columns: 3,
                               rows: 4,
-                              buildTile: (col, row) =>
-                                  HexagonWidgetBuilder(padding: 1.w, color: Colors.transparent, child: _buildHexagonButton(col, row, context)),
+                              buildTile: (col, row) => HexagonWidgetBuilder(
+                                padding: 1.w,
+                                color: Colors.transparent,
+                                child: _buildHexagonButton(col, row, context),
+                              ),
                             ),
                           ),
                         ),

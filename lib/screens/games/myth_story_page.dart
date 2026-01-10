@@ -5,9 +5,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
-
 import 'package:oracle_d_asgard/services/sound_service.dart';
-import 'package:oracle_d_asgard/utils/text_styles.dart';
+
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:provider/provider.dart';
@@ -67,7 +66,9 @@ class _MythStoryPageState extends State<MythStoryPage> {
 
   Future<List<String>> _getUnlockedCardIds() async {
     final gamificationService = getIt<GamificationService>();
-    final progress = await gamificationService.getStoryProgress(widget.mythStory.id);
+    final progress = await gamificationService.getStoryProgress(
+      widget.mythStory.id,
+    );
     if (progress != null) {
       final unlockedParts = jsonDecode(progress['parts_unlocked']);
       return List<String>.from(unlockedParts);
@@ -77,7 +78,9 @@ class _MythStoryPageState extends State<MythStoryPage> {
 
   void _showSnackBar(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -97,7 +100,8 @@ class _MythStoryPageState extends State<MythStoryPage> {
     });
 
     RewardedAd.load(
-      adUnitId: 'ca-app-pub-9329709593733606/7159103317', // Use your AdMob rewarded ad unit ID
+      adUnitId:
+          'ca-app-pub-9329709593733606/7159103317', // Use your AdMob rewarded ad unit ID
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
@@ -116,9 +120,13 @@ class _MythStoryPageState extends State<MythStoryPage> {
           ad.show(
             onUserEarnedReward: (ad, reward) async {
               final gamificationService = getIt<GamificationService>();
-              await gamificationService.unlockStoryPart(widget.mythStory.id, chapterId);
+              await gamificationService.unlockStoryPart(
+                widget.mythStory.id,
+                chapterId,
+              );
               setState(() {
-                _unlockedCardIdsFuture = _getUnlockedCardIds(); // Refresh unlocked chapters
+                _unlockedCardIdsFuture =
+                    _getUnlockedCardIds(); // Refresh unlocked chapters
               });
               _showSnackBar('myth_story_page_chapter_unlocked_success'.tr());
             },
@@ -158,7 +166,10 @@ class _MythStoryPageState extends State<MythStoryPage> {
                       _saveFontSize(value);
                     },
                   ),
-                  Text('myth_story_page_sample_text'.tr(), style: TextStyle(fontSize: _fontSize)),
+                  Text(
+                    'myth_story_page_sample_text'.tr(),
+                    style: TextStyle(fontSize: _fontSize),
+                  ),
                 ],
               );
             },
@@ -182,11 +193,21 @@ class _MythStoryPageState extends State<MythStoryPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: () => Navigator.of(context).pop()),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         actions: [
-          IconButton(icon: Icon(Icons.format_size), onPressed: _showFontSizeDialog),
           IconButton(
-            icon: Icon(themeProvider.themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode),
+            icon: Icon(Icons.format_size),
+            onPressed: _showFontSizeDialog,
+          ),
+          IconButton(
+            icon: Icon(
+              themeProvider.themeMode == ThemeMode.dark
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+            ),
             onPressed: () {
               themeProvider.toggleTheme();
             },
@@ -204,7 +225,11 @@ class _MythStoryPageState extends State<MythStoryPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(child: Text('${'myth_story_page_error_prefix'.tr()}: ${snapshot.error}'));
+                    return Center(
+                      child: Text(
+                        '${'myth_story_page_error_prefix'.tr()}: ${snapshot.error}',
+                      ),
+                    );
                   } else {
                     final unlockedCardIds = snapshot.data ?? [];
                     String? firstLockedChapterId;
@@ -268,7 +293,8 @@ class _StoryContentState extends State<_StoryContent> {
           itemBuilder: (context, index) {
             final card = widget.mythStory.correctOrder[index];
             final isUnlocked = widget.unlockedCardIds.contains(card.id);
-            final isFirstLockedChapter = (card.id == widget.firstLockedChapterId);
+            final isFirstLockedChapter =
+                (card.id == widget.firstLockedChapterId);
             return Card(
               color: Theme.of(context).cardColor, // Use theme's card color
               margin: const EdgeInsets.all(8.0),
@@ -279,42 +305,67 @@ class _StoryContentState extends State<_StoryContent> {
                   children: [
                     Text(
                       'story_${widget.mythStory.id}_card_${card.id}_title'.tr(),
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
                     ),
                     const SizedBox(height: 8.0),
                     if (isUnlocked) ...[
                       if (card.videoUrl != null)
-                        CustomVideoPlayer(videoUrl: card.videoUrl!, placeholderAsset: 'assets/images/stories/${card.imagePath}')
+                        CustomVideoPlayer(
+                          videoUrl: card.videoUrl!,
+                          placeholderAsset:
+                              'assets/images/stories/${card.imagePath}',
+                        )
                       else
                         Image.asset('assets/images/stories/${card.imagePath}'),
                       const SizedBox(height: 8.0),
                       Text(
                         card.detailedStory.tr(),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface, fontSize: widget.fontSize),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: widget.fontSize,
+                        ),
                       ),
                     ] else if (isFirstLockedChapter)
                       Column(
                         children: [
-                          Text('myth_story_page_chapter_locked'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                          Text(
+                            'myth_story_page_chapter_locked'.tr(),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
                           const SizedBox(height: 8.0),
                           widget.isAdLoading
                               ? const CircularProgressIndicator()
                               : AppEnv.flagAds == 'enabled'
                               ? ElevatedButton.icon(
-                                  onPressed: () => widget.showRewardedAd(card.id),
+                                  onPressed: () =>
+                                      widget.showRewardedAd(card.id),
                                   icon: const Icon(Icons.play_arrow),
-                                  label: Text('myth_story_page_unlock_with_ad'.tr()),
+                                  label: Text(
+                                    'myth_story_page_unlock_with_ad'.tr(),
+                                  ),
                                 )
                               : ElevatedButton(
                                   onPressed: () {
                                     context.push('/shop');
                                   },
-                                  child: Text('myth_story_page_unlock_chapter'.tr()),
+                                  child: Text(
+                                    'myth_story_page_unlock_chapter'.tr(),
+                                  ),
                                 ),
                         ],
                       )
                     else
-                      Text('myth_story_page_chapter_locked'.tr(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                      Text(
+                        'myth_story_page_chapter_locked'.tr(),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
                   ],
                 ),
               ),

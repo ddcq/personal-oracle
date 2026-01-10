@@ -6,7 +6,8 @@ import 'package:flame/flame.dart';
 import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_game.dart';
 import 'package:oracle_d_asgard/screens/games/puzzle/puzzle_model.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:oracle_d_asgard/data/collectible_cards_data.dart' show allCollectibleCards;
+import 'package:oracle_d_asgard/data/collectible_cards_data.dart'
+    show allCollectibleCards;
 import 'dart:math';
 import 'package:flame/game.dart';
 import 'package:oracle_d_asgard/locator.dart';
@@ -149,13 +150,15 @@ class PuzzleFlameGame extends FlameGame {
     final allCards = allCollectibleCards;
     final random = Random();
     final randomCard = allCards[random.nextInt(allCards.length)];
-    
+
     final imageToLoad = randomCard.imagePath.replaceAll('assets/images/', '');
     puzzleImage = await Flame.images.load(imageToLoad);
   }
 
   void onGameCompletedFromPuzzleGame() async {
-    final coins = await _gamificationService.calculateGameReward(level: currentLevel);
+    final coins = await _gamificationService.calculateGameReward(
+      level: currentLevel,
+    );
     await _gamificationService.addCoins(coins);
     onRewardEarned(coins);
   }

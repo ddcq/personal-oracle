@@ -75,14 +75,8 @@ class GameHelpDialog extends StatelessWidget {
       ),
       actions: [
         if (onGoToHome != null)
-          EpicButton(
-            iconData: Icons.home,
-            onPressed: onGoToHome,
-          ),
-        EpicButton(
-          iconData: Icons.play_arrow,
-          onPressed: onGameResumed,
-        ),
+          EpicButton(iconData: Icons.home, onPressed: onGoToHome),
+        EpicButton(iconData: Icons.play_arrow, onPressed: onGameResumed),
       ],
     );
   }

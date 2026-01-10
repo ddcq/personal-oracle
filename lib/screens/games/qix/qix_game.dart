@@ -105,7 +105,9 @@ class QixGame extends FlameGame with KeyboardEvents {
   void win() async {
     pauseEngine();
     final gamificationService = getIt<GamificationService>();
-    final coinsEarned = await gamificationService.calculateGameReward(level: difficulty);
+    final coinsEarned = await gamificationService.calculateGameReward(
+      level: difficulty,
+    );
     onWin(coinsEarned);
   }
 

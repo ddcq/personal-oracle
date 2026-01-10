@@ -70,10 +70,7 @@ class _EpicButtonState extends State<EpicButton> {
                 ..setEntry(3, 2, 0.015)
                 ..rotateX(-0.7)
                 ..rotateZ(-0.5),
-          child: Transform.scale(
-            scale: 0.9,
-            child: widget.icon!,
-          ),
+          child: Transform.scale(scale: 0.9, child: widget.icon!),
         ),
       );
     } else {
