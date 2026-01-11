@@ -294,6 +294,28 @@ class GamificationService with ChangeNotifier {
     }
   }
 
+  Future<void> saveNorseQuizLevel(int level) async {
+    final db = await _databaseService.database;
+    await db.insert('game_settings', {
+      'setting_key': 'norse_quiz_level',
+      'setting_value': level.toString(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    notifyListeners();
+  }
+
+  Future<int> getNorseQuizLevel() async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'game_settings',
+      where: 'setting_key = ?',
+      whereArgs: ['norse_quiz_level'],
+    );
+    if (result.isNotEmpty) {
+      return int.parse(result.first['setting_value'] as String);
+    }
+    return 1; // Default level
+  }
+
   Future<void> saveProfileName(String name) async {
     final db = await _databaseService.database;
     await db.insert('game_settings', {

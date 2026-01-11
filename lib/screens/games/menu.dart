@@ -22,6 +22,7 @@ class MenuPrincipal extends StatelessWidget {
       '/word_search_preliminary',
       '/minesweeper_preliminary',
       '/quiz_preliminary',
+      '/norse_quiz_preliminary',
     ];
 
     final images = [
@@ -33,6 +34,7 @@ class MenuPrincipal extends StatelessWidget {
       'assets/images/menu/word_search.webp',
       'assets/images/menu/minesweeper.webp',
       'assets/images/menu/quiz.webp',
+      'assets/images/menu/norse_quiz.webp',
     ];
 
     final index = row * 3 + col;

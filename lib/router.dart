@@ -20,6 +20,9 @@ import 'package:oracle_d_asgard/screens/games/qix/preliminary_screen.dart'; // I
 import 'package:oracle_d_asgard/screens/games/quiz/preliminary_screen.dart'; // Import QuizPreliminaryScreen
 import 'package:oracle_d_asgard/screens/games/word_search/preliminary_screen.dart'; // Import WordSearchPreliminaryScreen
 import 'package:oracle_d_asgard/screens/games/minesweeper/preliminary_screen.dart'; // Import MinesweeperPreliminaryScreen
+import 'package:oracle_d_asgard/screens/games/norse_quiz/norse_quiz_preliminary_screen.dart';
+import 'package:oracle_d_asgard/screens/games/norse_quiz/norse_quiz_screen.dart';
+import 'package:oracle_d_asgard/screens/games/norse_quiz/norse_quiz_result_screen.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/models/card_version.dart';
 
@@ -104,6 +107,24 @@ final GoRouter router = GoRouter(
             return const MinesweeperPreliminaryScreen();
           },
         ),
+        GoRoute(
+          path: 'norse_quiz_preliminary',
+          builder: (BuildContext context, GoRouterState state) {
+            return const NorseQuizPreliminaryScreen();
+          },
+        ),
+        GoRoute(
+            path: '/norse_quiz',
+            builder: (context, state) => const NorseQuizScreen(),
+            routes: [
+              GoRoute(
+                path: 'result',
+                builder: (context, state) {
+                  final score = state.extra as int? ?? 0;
+                  return NorseQuizResultScreen(score: score);
+                },
+              ),
+            ]),
         GoRoute(
           path: 'profile',
           builder: (BuildContext context, GoRouterState state) {

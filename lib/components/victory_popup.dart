@@ -22,6 +22,10 @@ class VictoryPopup extends StatefulWidget {
   final VoidCallback onSeeRewards;
   final bool isGenericVictory;
   final bool hideReplayButton;
+  final String? customTitle;
+  final bool didLevelUp;
+  final int newLevel;
+  final Widget? content;
 
   const VictoryPopup({
     super.key,
@@ -32,6 +36,10 @@ class VictoryPopup extends StatefulWidget {
     required this.onSeeRewards,
     this.isGenericVictory = false,
     this.hideReplayButton = false,
+    this.customTitle,
+    this.didLevelUp = false,
+    this.newLevel = 0,
+    this.content,
   });
 
   @override
@@ -148,6 +156,17 @@ class _VictoryPopupState extends State<VictoryPopup> {
             textAlign: TextAlign.center,
           ),
         ),
+        if (widget.didLevelUp) ...[
+          const SizedBox(height: 10),
+          Text(
+            'norse_quiz_result_screen_level_up'.tr(namedArgs: {'level': '${widget.newLevel}'}),
+            style: _rewardTitleStyle.copyWith(
+              fontSize: 22,
+              color: Colors.greenAccent,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ],
     );
   }
@@ -221,7 +240,9 @@ class _VictoryPopupState extends State<VictoryPopup> {
   @override
   Widget build(BuildContext context) {
     Widget content;
-    if (widget.coinsEarned != null) {
+    if (widget.content != null) {
+      content = widget.content!;
+    } else if (widget.coinsEarned != null) {
       content = _buildCoinsContent(widget.coinsEarned!);
     } else if (widget.isGenericVictory ||
         (widget.rewardCard == null && widget.unlockedStoryChapter == null)) {
@@ -325,7 +346,7 @@ class _VictoryPopupState extends State<VictoryPopup> {
                       Positioned(
                         top: 0,
                         child: Text(
-                          'victory_popup_title'.tr(),
+                          widget.customTitle ?? 'victory_popup_title'.tr(),
                           style: Theme.of(context).textTheme.displayMedium
                               ?.copyWith(
                                 fontFamily: AppTextStyles.amaticSC,
