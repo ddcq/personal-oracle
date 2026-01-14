@@ -75,8 +75,18 @@ class _VisualNovelScreenState extends State<VisualNovelScreen> {
   }
 
   void _onScenarioComplete() async {
-    // Award 50 coins
-    await getIt<GamificationService>().addCoins(50);
+    final currentSceneId = gameState.currentSceneId;
+    final gamificationService = getIt<GamificationService>();
+    
+    // Check if this ending was already completed
+    final alreadyCompleted = await gamificationService.isVisualNovelEndingCompleted(currentSceneId);
+    
+    // Award coins only if it's the first time completing this ending
+    final coinsEarned = alreadyCompleted ? 0 : 50;
+    if (!alreadyCompleted) {
+      await gamificationService.addCoins(50);
+      await gamificationService.markVisualNovelEndingCompleted(currentSceneId);
+    }
 
     if (!mounted) return;
 
@@ -85,8 +95,24 @@ class _VisualNovelScreenState extends State<VisualNovelScreen> {
       context: context,
       barrierDismissible: false,
       builder: (context) => VictoryPopup(
-        coinsEarned: 50,
-        customTitle: 'Fin de l\'Épopée',
+        coinsEarned: coinsEarned,
+        customTitle: alreadyCompleted ? 'Fin Déjà Complétée' : 'Fin de l\'Épopée',
+        content: alreadyCompleted ? Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.check_circle, color: Colors.green, size: 60),
+            const SizedBox(height: 10),
+            Text(
+              'Vous avez déjà complété cette fin !',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                decoration: TextDecoration.none,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ) : null,
         onDismiss: () {
           Navigator.of(context).pop();
           context.go('/visual_novel_preliminary');

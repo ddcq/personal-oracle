@@ -498,6 +498,38 @@ class GamificationService with ChangeNotifier {
     await saveCoins(currentCoins + amount);
   }
 
+  // Visual Novel ending tracking
+  Future<bool> isVisualNovelEndingCompleted(String endingId) async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'game_settings',
+      where: 'setting_key = ?',
+      whereArgs: ['vn_ending_$endingId'],
+    );
+    return result.isNotEmpty && result.first['setting_value'] == 'true';
+  }
+
+  Future<void> markVisualNovelEndingCompleted(String endingId) async {
+    final db = await _databaseService.database;
+    await db.insert('game_settings', {
+      'setting_key': 'vn_ending_$endingId',
+      'setting_value': 'true',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    notifyListeners();
+  }
+
+  Future<List<String>> getCompletedVisualNovelEndings() async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'game_settings',
+      where: 'setting_key LIKE ?',
+      whereArgs: ['vn_ending_%'],
+    );
+    return result
+        .map((e) => (e['setting_key'] as String).replaceFirst('vn_ending_', ''))
+        .toList();
+  }
+
   Future<int> calculateGameReward({int level = 1}) {
     const baseReward = 50;
     final bonus = (level - 1) * 10;
