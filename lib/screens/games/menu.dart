@@ -39,15 +39,63 @@ class MenuPrincipal extends StatelessWidget {
       'assets/images/menu/visual_novel.webp',
     ];
 
+    final gameNames = [
+      'games_menu_reorder_history',
+      'games_menu_asgard_wall',
+      'puzzle_preliminary_screen_title',
+      'games_menu_midgard_serpent',
+      'games_menu_territory_conquest',
+      'games_menu_scattered_runes',
+      'games_menu_odin_eye',
+      'games_menu_quiz',
+      'norse_quiz_preliminary_title',
+      'visual_novel_title',
+    ];
+
     final index = row * 3 + col;
     // Skip first tile (index 0) to have 2 buttons on first row and 3 on second row
     if (index == 0 || index > routes.length) return null;
 
     return Center(
-      child: EpicButton(
-        onPressed: () => context.go(routes[index - 1]),
-        imagePath: images[index - 1],
-        size: 100.sp,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          EpicButton(
+            onPressed: () => context.go(routes[index - 1]),
+            imagePath: images[index - 1],
+            size: 100.sp,
+          ),
+          SizedBox(height: 4.h),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.7),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: const Color(0xFFd4af37).withOpacity(0.5),
+                width: 1,
+              ),
+            ),
+            child: Text(
+              gameNames[index - 1].tr(),
+              style: TextStyle(
+                color: const Color(0xFFd4af37),
+                fontSize: 11.sp,
+                fontWeight: FontWeight.bold,
+                shadows: [
+                  Shadow(
+                    color: Colors.black,
+                    offset: Offset(1.w, 1.h),
+                    blurRadius: 2,
+                  ),
+                ],
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     );
   }

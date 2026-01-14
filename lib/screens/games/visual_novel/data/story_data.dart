@@ -60,7 +60,7 @@ class StoryData {
         DialogueLine(
           speaker: "Narrateur",
           text: "*Loki déambule dans les jardins dorés, son regard tombe sur Sif qui dort paisiblement près de la fontaine*",
-          characterImage: 'assets/images/vn/sif_sleeping.webp',
+          characterImage: 'assets/images/vn/sif_asleep.webp',
         ),
         DialogueLine(
           speaker: "Loki",
@@ -302,21 +302,16 @@ class StoryData {
       dialogues: [
         DialogueLine(
           speaker: "Narrateur",
-          text: "Loki arrive chez les fils d'Ívaldi, déterminé à réparer le mal causé par sa malice délibérée. Les nains l'accueillent avec méfiance mais respectent sa demande directe.",
+          text:
+              "Loki arrive chez les fils d'Ívaldi, déterminé à réparer le mal causé par sa malice délibérée. Les nains l'accueillent avec méfiance mais respectent sa demande directe.",
         ),
-        DialogueLine(
-          speaker: "Narrateur",
-          text: "*Dans les forges souterraines, Brokkr et Eitri travaillent le métal*",
-        ),
+        DialogueLine(speaker: "Narrateur", text: "*Dans les forges souterraines, Brokkr et Eitri travaillent le métal*"),
         DialogueLine(
           speaker: "Brokkr",
           text: "Tu assumes ta malice, Loki. C'est déjà mieux que tes mensonges habituels.",
           characterImage: 'assets/images/vn/brokkr_suspicious.webp',
         ),
-        DialogueLine(
-          speaker: "Narrateur",
-          text: "Les fils d'Ívaldi acceptent de créer des cheveux d'or pur pour Sif.",
-        ),
+        DialogueLine(speaker: "Narrateur", text: "Les fils d'Ívaldi acceptent de créer des cheveux d'or pur pour Sif."),
       ],
       nextSceneId: 'scene_bet_brokkr_eitri',
     ),
@@ -332,10 +327,7 @@ class StoryData {
           speaker: "Narrateur",
           text: "*Hic* Loki arrive en titubant chez les fils d'Ívaldi, encore étourdi par l'hydromel. Les nains le regardent avec amusement et exaspération.",
         ),
-        DialogueLine(
-          speaker: "Narrateur",
-          text: "*Dans les forges souterraines, l'ambiance est... particulière*",
-        ),
+        DialogueLine(speaker: "Narrateur", text: "*Dans les forges souterraines, l'ambiance est... particulière*"),
         DialogueLine(
           speaker: "Brokkr",
           text: "Par ma barbe ! Tu pues l'hydromel, Loki ! *rire* Et tu veux qu'on forge des cheveux d'or dans cet état ?",
