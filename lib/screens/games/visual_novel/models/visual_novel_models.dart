@@ -91,7 +91,8 @@ class Scene {
   final String id;
   final SceneType type;
   final String title; // Scene title
-  final String content; // Main text content (for non-dialogue scenes)
+  final String? content; // Short context text (for choice scenes)
+  final List<String>? paragraphs; // Main text content as array of paragraphs (for narrative scenes)
   final List<DialogueLine>? dialogues; // Dialogue lines (for dialogue scenes)
   final String? speaker; // Who is speaking (if single dialogue)
   final List<Choice>? choices; // Available choices (if choice scene)
@@ -104,7 +105,8 @@ class Scene {
     required this.id,
     required this.type,
     required this.title,
-    this.content = '',
+    this.content,
+    this.paragraphs,
     this.dialogues,
     this.speaker,
     this.choices,
@@ -115,6 +117,7 @@ class Scene {
   });
 
   bool get hasDialogues => dialogues != null && dialogues!.isNotEmpty;
+  bool get hasParagraphs => paragraphs != null && paragraphs!.isNotEmpty;
 }
 
 /// Represents an act/chapter in the story

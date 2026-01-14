@@ -63,19 +63,12 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget>
     if (widget.scene.hasDialogues) {
       // For dialogue scenes, each dialogue line is a "sentence"
       _sentences = widget.scene.dialogues!.map((d) => d.text).toList();
+    } else if (widget.scene.hasParagraphs) {
+      // For narrative scenes with paragraphs array, use them directly
+      _sentences = List.from(widget.scene.paragraphs!);
     } else {
-      // For non-dialogue scenes, split content into sentences
-      String text = widget.scene.content;
-      List<String> rawSentences = text
-          .split(RegExp(r'(?<=[.!?])\s+|(?<=\*[^*]+\*)\s*'))
-          .where((s) => s.trim().isNotEmpty)
-          .toList();
-
-      _sentences = rawSentences.map((s) => s.trim()).toList();
-
-      if (_sentences.isEmpty) {
-        _sentences = [text]; // Fallback to full text
-      }
+      // Fallback: empty list
+      _sentences = [];
     }
   }
 
