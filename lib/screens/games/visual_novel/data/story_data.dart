@@ -296,36 +296,66 @@ class StoryData {
     // ========== Scènes communes (chemin malice direct) ==========
     'scene_dwarves_sons_ivaldi': Scene(
       id: 'scene_dwarves_sons_ivaldi',
-      type: SceneType.narrative,
+      type: SceneType.dialogue,
       title: 'Chez les Fils d\'Ívaldi',
-      paragraphs: [
-        'Loki arrive chez les fils d\'Ívaldi, déterminé à réparer le mal causé par sa malice délibérée. Les nains l\'accueillent avec méfiance mais respectent sa demande directe.',
-        '*Dans les forges souterraines, Brokkr et Eitri travaillent le métal*',
-        '"Tu assumes ta malice, Loki. C\'est déjà mieux que tes mensonges habituels," dit Brokkr.',
-        'Les fils d\'Ívaldi acceptent de créer des cheveux d\'or pur pour Sif.',
-
-      ],
       backgroundImage: 'assets/images/vn/dwarf_forge.webp',
-      characterImage: 'assets/images/vn/loki_nervous.webp',
+      dialogues: [
+        DialogueLine(
+          speaker: "Narrateur",
+          text: "Loki arrive chez les fils d'Ívaldi, déterminé à réparer le mal causé par sa malice délibérée. Les nains l'accueillent avec méfiance mais respectent sa demande directe.",
+        ),
+        DialogueLine(
+          speaker: "Narrateur",
+          text: "*Dans les forges souterraines, Brokkr et Eitri travaillent le métal*",
+        ),
+        DialogueLine(
+          speaker: "Brokkr",
+          text: "Tu assumes ta malice, Loki. C'est déjà mieux que tes mensonges habituels.",
+          characterImage: 'assets/images/vn/brokkr_suspicious.webp',
+        ),
+        DialogueLine(
+          speaker: "Narrateur",
+          text: "Les fils d'Ívaldi acceptent de créer des cheveux d'or pur pour Sif.",
+        ),
+      ],
       nextSceneId: 'scene_bet_brokkr_eitri',
     ),
 
     // ========== Variante IVRE des fils d'Ívaldi ==========
     'scene_dwarves_sons_ivaldi_drunk': Scene(
       id: 'scene_dwarves_sons_ivaldi_drunk',
-      type: SceneType.narrative,
+      type: SceneType.dialogue,
       title: 'Chez les Fils d\'Ívaldi (Version Ivre)',
-      paragraphs: [
-        '*Hic* Loki arrive en titubant chez les fils d\'Ívaldi, encore étourdi par l\'hydromel. Les nains le regardent avec amusement et exaspération.',
-        '*Dans les forges souterraines, l\'ambiance est... particulière*',
-        '"Par ma barbe ! Tu pues l\'hydromel, Loki ! *rire* Et tu veux qu\'on forge des cheveux d\'or dans cet état ?" s\'exclame Brokkr.',
-        '"*Hic* Écoutez-moi... *rote* C\'était un accident ! L\'hydromel m\'a... *hoquet* ... trahi !"',
-        'Eitri sourit : "Au moins, tu n\'es pas venu avec des mensonges cette fois. L\'ivresse rend honnête !"',
-        'Les nains acceptent, mais préviennent : "Ton état d\'ivresse pourrait affecter ta concentration pour les tâches à venir..."',
-
-      ],
       backgroundImage: 'assets/images/vn/dwarf_forge.webp',
-      characterImage: 'assets/images/vn/loki_nervous.webp',
+      dialogues: [
+        DialogueLine(
+          speaker: "Narrateur",
+          text: "*Hic* Loki arrive en titubant chez les fils d'Ívaldi, encore étourdi par l'hydromel. Les nains le regardent avec amusement et exaspération.",
+        ),
+        DialogueLine(
+          speaker: "Narrateur",
+          text: "*Dans les forges souterraines, l'ambiance est... particulière*",
+        ),
+        DialogueLine(
+          speaker: "Brokkr",
+          text: "Par ma barbe ! Tu pues l'hydromel, Loki ! *rire* Et tu veux qu'on forge des cheveux d'or dans cet état ?",
+          characterImage: 'assets/images/vn/brokkr_amused.webp',
+        ),
+        DialogueLine(
+          speaker: "Loki",
+          text: "*Hic* Écoutez-moi... *rote* C'était un accident ! L'hydromel m'a... *hoquet* ... trahi !",
+          characterImage: 'assets/images/vn/loki_nervous.webp',
+        ),
+        DialogueLine(
+          speaker: "Eitri",
+          text: "Au moins, tu n'es pas venu avec des mensonges cette fois. L'ivresse rend honnête !",
+          characterImage: 'assets/images/vn/eitri_amused.webp',
+        ),
+        DialogueLine(
+          speaker: "Narrateur",
+          text: 'Les nains acceptent, mais préviennent : "Ton état d\'ivresse pourrait affecter ta concentration pour les tâches à venir..."',
+        ),
+      ],
       nextSceneId: 'scene_bet_brokkr_eitri_drunk',
     ),
 
