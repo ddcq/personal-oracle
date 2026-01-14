@@ -131,6 +131,7 @@ flutter:
     - assets/images/qix/
     - assets/images/snake/
     - assets/images/stories/
+    - assets/images/vn/
     - assets/resources/langs/
   #   - images/a_dot_ham.jpeg
 

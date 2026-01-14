@@ -23,6 +23,8 @@ import 'package:oracle_d_asgard/screens/games/minesweeper/preliminary_screen.dar
 import 'package:oracle_d_asgard/screens/games/norse_quiz/norse_quiz_preliminary_screen.dart';
 import 'package:oracle_d_asgard/screens/games/norse_quiz/norse_quiz_screen.dart';
 import 'package:oracle_d_asgard/screens/games/norse_quiz/norse_quiz_result_screen.dart';
+import 'package:oracle_d_asgard/screens/games/visual_novel/visual_novel_preliminary_screen.dart';
+import 'package:oracle_d_asgard/screens/games/visual_novel/screens/visual_novel_screen.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/models/card_version.dart';
 
@@ -114,6 +116,12 @@ final GoRouter router = GoRouter(
           },
         ),
         GoRoute(
+          path: 'visual_novel_preliminary',
+          builder: (BuildContext context, GoRouterState state) {
+            return const VisualNovelPreliminaryScreen();
+          },
+        ),
+        GoRoute(
             path: '/norse_quiz',
             builder: (context, state) => const NorseQuizScreen(),
             routes: [
@@ -125,6 +133,12 @@ final GoRouter router = GoRouter(
                 },
               ),
             ]),
+        GoRoute(
+          path: 'visual_novel',
+          builder: (BuildContext context, GoRouterState state) {
+            return const VisualNovelScreen();
+          },
+        ),
         GoRoute(
           path: 'profile',
           builder: (BuildContext context, GoRouterState state) {
