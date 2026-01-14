@@ -662,10 +662,10 @@
   "word_search_screen_rule_5": "Utilisez les lettres restantes pour former le mot secret et valider votre victoire.",
   "word_search_screen_title": "L'Œil d'Odin",
   "games_menu_quiz": "Ma divinité gardienne",
+  "games_menu_norse_quiz": "Quiz de Mythologie Nordique",
   "quiz_preliminary_screen_help_text": "Répondez aux questions des dieux et découvrez quelle divinité veille sur vous.",
   "quiz_preliminary_screen_start_button": "Commencer le Quiz",
   "victory_popup_coins_earned": "Pièces gagnées !",
-  "victory_popup_coins_earned_message": "Vous avez gagné {coins} pièces !"
-
+  "victory_popup_coins_earned_message": "Vous avez gagné {coins} pièces !",
   "visual_novel_title": "Roman Visuel : Loki"
 }

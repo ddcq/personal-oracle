@@ -662,6 +662,7 @@
   "word_search_screen_rule_5": "Usa las letras restantes para formar la palabra secreta y confirma tu victoria.",
   "word_search_screen_title": "El Ojo de Odín",
   "games_menu_quiz": "Mi Deidad Guardiana",
+  "games_menu_norse_quiz": "Cuestionario de Mitología Nórdica",
   "quiz_preliminary_screen_help_text": "Responde a las preguntas de los dioses y descubre qué deidad vela por ti.",
   "quiz_preliminary_screen_start_button": "Comenzar el Cuestionario",
   "victory_popup_coins_earned": "¡Monedas ganadas!",
@@ -902,7 +903,6 @@
   "norse_quiz_q60_a2": "Baldr",
   "norse_quiz_q60_a3": "Bragi",
   "norse_quiz_result_screen_level_up": "You leveled up! New level: {level}",
-  "norse_quiz_result_screen_correct_answers": "{score} correct answers"
-
+  "norse_quiz_result_screen_correct_answers": "{score} correct answers",
   "visual_novel_title": "Novela Visual: Loki"
 }

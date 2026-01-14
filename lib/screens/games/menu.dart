@@ -42,13 +42,13 @@ class MenuPrincipal extends StatelessWidget {
     final gameNames = [
       'games_menu_reorder_history',
       'games_menu_asgard_wall',
-      'puzzle_preliminary_screen_title',
+      'puzzle_screen_title',
       'games_menu_midgard_serpent',
       'games_menu_territory_conquest',
       'games_menu_scattered_runes',
       'games_menu_odin_eye',
       'games_menu_quiz',
-      'norse_quiz_preliminary_title',
+      'games_menu_norse_quiz',
       'visual_novel_title',
     ];
 

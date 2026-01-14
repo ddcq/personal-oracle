@@ -662,6 +662,7 @@
   "word_search_screen_rule_5": "Use the remaining letters to form the secret word and confirm your victory.",
   "word_search_screen_title": "Odin's Eye",
   "games_menu_quiz": "My Guardian Deity",
+  "games_menu_norse_quiz": "Norse Mythology Quiz",
   "quiz_preliminary_screen_help_text": "Answer the questions of the gods and discover which deity watches over you.",
   "quiz_preliminary_screen_start_button": "Start the Quiz",
   "victory_popup_coins_earned": "Coins Earned!",
@@ -902,7 +903,6 @@
   "norse_quiz_q60_a2": "Baldr",
   "norse_quiz_q60_a3": "Bragi",
   "norse_quiz_result_screen_level_up": "You leveled up! New level: {level}",
-  "norse_quiz_result_screen_correct_answers": "{score} correct answers"
-
+  "norse_quiz_result_screen_correct_answers": "{score} correct answers",
   "visual_novel_title": "Visual Novel: Loki"
 }
