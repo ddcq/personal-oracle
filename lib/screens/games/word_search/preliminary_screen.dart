@@ -59,7 +59,7 @@ class WordSearchPreliminaryScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'games_menu_scattered_runes'.tr(),
+                      'games_menu_odin_eye'.tr(),
                       style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
                       textAlign: TextAlign.center,
                     ),

@@ -48,7 +48,7 @@ class MinesweeperPreliminaryScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'games_menu_odin_eye'.tr(),
+                      'games_menu_andvari_loot'.tr(),
                       style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
                       textAlign: TextAlign.center,
                     ),
