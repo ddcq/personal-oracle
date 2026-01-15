@@ -50,6 +50,12 @@ class NorseQuizPreliminaryScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    Text(
+                      'games_menu_norse_quiz'.tr(),
+                      style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
                     gameInfoLayout,
                     const SizedBox(height: 32),
                     startButton,

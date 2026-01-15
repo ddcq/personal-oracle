@@ -62,6 +62,12 @@ class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    Text(
+                      'puzzle_screen_title'.tr(),
+                      style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
                     puzzleLayout,
                     const SizedBox(height: 32),
                     startButton,

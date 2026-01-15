@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/screens/games/minesweeper/main_screen.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 class MinesweeperPreliminaryScreen extends StatelessWidget {
   const MinesweeperPreliminaryScreen({super.key});
@@ -46,6 +47,12 @@ class MinesweeperPreliminaryScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    Text(
+                      'games_menu_odin_eye'.tr(),
+                      style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
                     gameInfoLayout,
                     const SizedBox(height: 32),
                     ChibiTextButton(

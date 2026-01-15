@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -60,7 +61,17 @@ class VisualNovelPreliminaryScreen extends StatelessWidget {
           children: [
             SafeArea(
               child: Center(
-                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [gameInfoLayout, const SizedBox(height: 20), startButton]),
+                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text(
+                    'visual_novel_title'.tr(),
+                    style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  gameInfoLayout,
+                  const SizedBox(height: 20),
+                  startButton,
+                ]),
               ),
             ),
             Positioned(
