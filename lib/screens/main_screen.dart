@@ -9,7 +9,7 @@ import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:oracle_d_asgard/constants/app_env.dart';
-import 'package:hexagon/hexagon.dart';
+import 'package:oracle_d_asgard/widgets/hexagonal_grid.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -66,43 +66,22 @@ class _MainScreenState extends State<MainScreen> {
     )..load();
   }
 
-  Widget? _buildHexagonButton(int col, int row) {
+  List<HexGridItem> _buildGridItems(BuildContext context) {
     final buttons = [
-      {
-        'icon': Icons.games_rounded,
-        'label': 'main_screen_play'.tr(),
-        'route': '/games',
-      },
-      {
-        'icon': Icons.emoji_events,
-        'label': 'main_screen_trophies'.tr(),
-        'route': '/trophies',
-      },
-      {
-        'icon': Icons.person,
-        'label': 'main_screen_profile'.tr(),
-        'route': '/profile',
-      },
+      {'icon': Icons.games_rounded, 'label': 'main_screen_play'.tr(), 'route': '/games'},
+      {'icon': Icons.emoji_events, 'label': 'main_screen_trophies'.tr(), 'route': '/trophies'},
+      {'icon': Icons.person, 'label': 'main_screen_profile'.tr(), 'route': '/profile'},
       {'icon': Icons.shopping_cart, 'label': 'Boutique', 'route': '/shop'},
-      {
-        'icon': Icons.settings,
-        'label': 'main_screen_settings'.tr(),
-        'route': '/settings',
-      },
+      {'icon': Icons.settings, 'label': 'main_screen_settings'.tr(), 'route': '/settings'},
     ];
 
-    final index = row * 3 + col;
-    // Skip first tile (index 0) to have 2 buttons on first row and 3 on second row
-    if (index == 0 || index > buttons.length) return null;
-
-    final button = buttons[index - 1];
-    return Center(
-      child: EpicButton(
-        iconData: button['icon'] as IconData,
-        label: button['label'] as String,
-        onPressed: () => context.go(button['route'] as String),
-      ),
-    );
+    return List.generate(buttons.length, (i) {
+      final button = buttons[i];
+      return HexGridItem(
+        onTap: () => context.go(button['route'] as String),
+        child: EpicButton(iconData: button['icon'] as IconData, label: button['label'] as String, onPressed: () => context.go(button['route'] as String)),
+      );
+    });
   }
 
   @override
@@ -118,78 +97,49 @@ class _MainScreenState extends State<MainScreen> {
                     alignment: Alignment.topCenter,
                     child: Padding(
                       padding: EdgeInsets.only(top: 20.h),
-                      child:
-                          Text(
-                                'main_screen_title'.tr(),
-                                textAlign: TextAlign.center,
-                                style: ChibiTextStyles.appBarTitle,
-                              )
-                              .animate()
-                              .slideY(
-                                begin: -0.3,
-                                duration: 800.ms,
-                                curve: Curves.easeOutCubic,
-                              )
-                              .fadeIn(duration: 600.ms),
+                      child: Text(
+                        'main_screen_title'.tr(),
+                        textAlign: TextAlign.center,
+                        style: ChibiTextStyles.appBarTitle,
+                      ).animate().slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),
                     ),
                   ),
                   Expanded(
                     child: ClipRect(
-                      child:
-                          Image.asset(
-                                'assets/images/odin_chibi.webp',
-                                fit: BoxFit.contain,
-                                width: double.infinity,
-                                alignment: Alignment.center,
-                              )
-                              .animate(delay: 400.ms)
-                              .slideY(
-                                begin: -0.1,
-                                duration: 800.ms,
-                                curve: Curves.easeOutCubic,
-                              )
-                              .fadeIn(duration: 600.ms),
+                      child: Image.asset(
+                        'assets/images/odin_chibi.webp',
+                        fit: BoxFit.contain,
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                      ).animate(delay: 400.ms).slideY(begin: -0.1, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),
                     ),
                   ),
                   Container(
                     decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/wood.webp'),
-                        fit: BoxFit.cover,
-                      ),
+                      image: DecorationImage(image: AssetImage('assets/images/wood.webp'), fit: BoxFit.cover),
                     ),
                     child: SizedBox(
                       height: 250.h,
                       width: double.infinity,
-                      child: Transform.translate(
-                        offset: Offset(
-                          -MediaQuery.of(context).size.width * 0.08,
-                          50.h,
-                        ),
-                        child: Transform.rotate(
-                          angle: -12 * 3.14159 / 180,
-                          child: HexagonOffsetGrid.oddPointy(
-                            columns: 3,
-                            rows: 2,
-                            buildTile: (col, row) => HexagonWidgetBuilder(
-                              color: Colors.transparent,
-                              child: _buildHexagonButton(col, row),
-                            ),
-                          ),
-                        ),
+                      child: HexagonalGrid(
+                        items: _buildGridItems(context),
+                        columns: 3,
+                        rows: 2,
+                        hexSize: 60.0,
+                        skipFirstTile: true,
+                        centerHorizontally: true,
+                        verticalOffset: 0.3,
+                        containerHeight: 250.h,
                       ),
                     ),
                   ),
-                  if (_isBannerAdLoaded && _bannerAd != null)
-                    SizedBox(height: _bannerAd!.size.height.toDouble()),
+                  if (_isBannerAdLoaded && _bannerAd != null) SizedBox(height: _bannerAd!.size.height.toDouble()),
                 ],
               ),
             ),
           ),
 
-          if (AppEnv.flagAds == 'enabled' &&
-              _isBannerAdLoaded &&
-              _bannerAd != null)
+          if (AppEnv.flagAds == 'enabled' && _isBannerAdLoaded && _bannerAd != null)
             Positioned(
               bottom: 0,
               left: 0,
