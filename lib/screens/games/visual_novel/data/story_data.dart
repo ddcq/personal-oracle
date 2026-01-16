@@ -67,7 +67,11 @@ class StoryData {
           text: "Ah, la belle Sif… Ses cheveux dorés flottent dans la brise matinale comme des fils de lumière. Si sereins… si prévisibles.",
           characterImage: 'assets/images/vn/loki_mischievous.webp',
         ),
-        DialogueLine(speaker: "Narrateur", text: "*Au loin, un tonneau d'hydromel abandonné par les festivités d'hier attire l'attention*"),
+        DialogueLine(
+          speaker: "Narrateur",
+          text: "*Au loin, un tonneau d'hydromel abandonné par les festivités d'hier attire l'attention*",
+          characterImage: 'assets/images/vn/barrel.webp',
+        ),
         DialogueLine(
           speaker: "Loki",
           text:
@@ -192,13 +196,21 @@ class StoryData {
           text: "Ah ! Ce tonneau d'hydromel oublié... Pourquoi attendre une fête quand on peut en créer une soi-même ?",
           characterImage: 'assets/images/vn/loki_mischievous.webp',
         ),
-        DialogueLine(speaker: "Narrateur", text: "*Loki s'approche du tonneau et commence à boire directement au goulot*"),
+        DialogueLine(
+          speaker: "Narrateur",
+          text: "*Loki s'approche du tonneau et commence à boire directement au goulot*",
+          characterImage: 'assets/images/vn/barrel.webp',
+        ),
         DialogueLine(
           speaker: "Loki",
           text: "Mmh ! *glou glou* Délicieux ! *hic* L'ennui s'envole déjà ! *bulle* Encore un peu...",
           characterImage: 'assets/images/vn/loki_mischievous.webp',
         ),
-        DialogueLine(speaker: "Narrateur", text: "*Animation : Loki vide méthodiquement le tonneau, des bulles s'échappent, l'écran vacille légèrement*"),
+        DialogueLine(
+          speaker: "Narrateur",
+          text: "*Animation : Loki vide méthodiquement le tonneau, des bulles s'échappent, l'écran vacille légèrement*",
+          characterImage: 'assets/images/vn/barrel.webp',
+        ),
         DialogueLine(
           speaker: "Loki",
           text: "*Hic* Voilà ! *rote* Maintenant tout Asgard me paraît... plus amusant ! *titube*",
