@@ -5,6 +5,7 @@ import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class NorseQuizResultScreen extends StatefulWidget {
   final int score;
@@ -55,21 +56,76 @@ class _NorseQuizResultScreenState extends State<NorseQuizResultScreen> {
   }
 
   Widget _buildResultContent() {
+    final rewardTitleStyle = Theme.of(context).textTheme.displayMedium!.copyWith(
+      fontFamily: AppTextStyles.amaticSC,
+      color: Colors.amber,
+      fontWeight: FontWeight.bold,
+      fontSize: 30,
+      letterSpacing: 1.0,
+      shadows: [
+        Shadow(
+          blurRadius: 8.0,
+          color: Colors.black87,
+          offset: const Offset(2.0, 2.0),
+        ),
+      ],
+      decoration: TextDecoration.none,
+    );
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          'norse_quiz_result_screen_correct_answers'.tr(namedArgs: {'score': '${widget.score}'}),
-          style: const TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 10),
-        if (_coinsWon > 0)
-          Text(
-            'victory_popup_coins_earned_message'.tr(namedArgs: {'coins': '$_coinsWon'}),
-            style: const TextStyle(fontSize: 22, color: Colors.amber, fontWeight: FontWeight.bold),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Colors.black.withAlpha(0),
+                Colors.black.withAlpha((255 * 0.7).round()),
+                Colors.black.withAlpha(0),
+              ],
+              stops: const [0.0, 0.5, 1.0],
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            'norse_quiz_result_screen_correct_answers'.tr(namedArgs: {'score': '${widget.score}'}),
+            style: rewardTitleStyle.copyWith(
+              fontSize: 24,
+              color: Colors.white,
+            ),
             textAlign: TextAlign.center,
           ),
+        ),
+        if (_coinsWon > 0) ...[
+          const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  Colors.black.withAlpha(0),
+                  Colors.black.withAlpha((255 * 0.7).round()),
+                  Colors.black.withAlpha(0),
+                ],
+                stops: const [0.0, 0.5, 1.0],
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              'victory_popup_coins_earned_message'.tr(namedArgs: {'coins': '$_coinsWon'}),
+              style: rewardTitleStyle.copyWith(
+                fontSize: 24,
+                color: Colors.white,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ],
     );
   }

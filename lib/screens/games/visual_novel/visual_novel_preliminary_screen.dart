@@ -18,26 +18,12 @@ class VisualNovelPreliminaryScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Loki chibi image - using menu visual novel image
-          Image.asset(
-            'assets/images/menu/visual_novel.webp',
-            width: 120,
-            height: 120,
-            fit: BoxFit.contain,
-          ),
+          Image.asset('assets/images/menu/visual_novel.webp', width: 120, height: 120, fit: BoxFit.contain),
           const SizedBox(height: 16),
-          const Text(
-            'L\'Oracle d\'Asgard - Loki',
-            style: TextStyle(color: Color(0xFFd4af37), fontSize: 24, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 12),
           const Text(
             'Vivez l\'épopée tragique de Loki Laufeyjarson à travers ses propres yeux. '
             'De fils adoptif d\'Odin au catalyseur de Ragnarök, découvrez comment '
-            'l\'amour, la trahison et l\'amertume façonnent le destin d\'un dieu.\n\n'
-            '• Histoire basée sur la mythologie nordique authentique\n'
-            '• Vos choix influencent l\'état psychologique de Loki\n'
-            '• Explorez les relations complexes entre les dieux d\'Asgard',
+            'l\'amour, la trahison et l\'amertume façonnent le destin d\'un dieu.',
             style: TextStyle(color: Colors.white, fontSize: 16),
             textAlign: TextAlign.center,
           ),
@@ -61,17 +47,16 @@ class VisualNovelPreliminaryScreen extends StatelessWidget {
           children: [
             SafeArea(
               child: Center(
-                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(
-                    'visual_novel_title'.tr(),
-                    style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  gameInfoLayout,
-                  const SizedBox(height: 20),
-                  startButton,
-                ]),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('visual_novel_title'.tr(), style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32), textAlign: TextAlign.center),
+                    const SizedBox(height: 20),
+                    gameInfoLayout,
+                    const SizedBox(height: 20),
+                    startButton,
+                  ],
+                ),
               ),
             ),
             Positioned(
