@@ -10,6 +10,10 @@ class VisualNovelPreliminaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Check current language
+    final currentLocale = context.locale;
+    final isFrench = currentLocale.languageCode == 'fr';
+    
     final Widget gameInfoLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
@@ -20,11 +24,34 @@ class VisualNovelPreliminaryScreen extends StatelessWidget {
           // Loki chibi image - using menu visual novel image
           Image.asset('assets/images/menu/visual_novel.webp', width: 120, height: 120, fit: BoxFit.contain),
           const SizedBox(height: 16),
-          const Text(
-            'Vivez l\'épopée tragique de Loki Laufeyjarson à travers ses propres yeux. '
-            'De fils adoptif d\'Odin au catalyseur de Ragnarök, découvrez comment '
-            'l\'amour, la trahison et l\'amertume façonnent le destin d\'un dieu.',
-            style: TextStyle(color: Colors.white, fontSize: 16),
+          // Language warning for non-French users
+          if (!isFrench) ...[
+            Container(
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: Colors.orange.withAlpha(200),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.warning, color: Colors.white, size: 24),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'visual_novel_french_only_warning'.tr(),
+                      style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          Text(
+            'visual_novel_preliminary_screen_description'.tr(),
+            style: const TextStyle(color: Colors.white, fontSize: 16),
             textAlign: TextAlign.center,
           ),
         ],
@@ -32,11 +59,11 @@ class VisualNovelPreliminaryScreen extends StatelessWidget {
     );
 
     final Widget startButton = ChibiTextButton(
-      text: 'Commencer l\'Épopée',
-      color: ChibiColors.darkEpicPurple,
-      onPressed: () {
+      text: 'visual_novel_preliminary_screen_start_button'.tr(),
+      color: isFrench ? ChibiColors.darkEpicPurple : Colors.grey,
+      onPressed: isFrench ? () {
         context.go('/visual_novel');
-      },
+      } : null,
     );
 
     return Scaffold(
