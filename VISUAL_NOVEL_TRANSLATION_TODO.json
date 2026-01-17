@@ -1,0 +1,379 @@
+{
+  "metadata": {
+    "total_texts": 39,
+    "status": "TO_TRANSLATE",
+    "priority": "HIGH",
+    "estimated_hours": "8-10",
+    "instructions": "Traduire tous les textes en EN et ES. Conserver les noms propres nordiques identiques."
+  },
+  "story_metadata": {
+    "vn_story_title": {
+      "fr": "L'Oracle d'Asgard - Loki",
+      "en": "[TODO] The Oracle of Asgard - Loki",
+      "es": "[TODO] El Oráculo de Asgard - Loki",
+      "context": "Titre principal du Visual Novel"
+    },
+    "vn_story_description": {
+      "fr": "L'épopée de Loki aux multiples destins",
+      "en": "[TODO]",
+      "es": "[TODO]",
+      "context": "Description du Visual Novel"
+    }
+  },
+  "act_metadata": {
+    "vn_act2_title": {
+      "fr": "L'Utile",
+      "en": "[TODO]",
+      "es": "[TODO]",
+      "context": "Titre de l'Acte II"
+    },
+    "vn_act2_description": {
+      "fr": "Quand l'ennui mène à la destinée",
+      "en": "[TODO]",
+      "es": "[TODO]",
+      "context": "Description de l'Acte II"
+    }
+  },
+  "speakers": {
+    "vn_speaker_brokkr": {
+      "fr": "Brokkr",
+      "en": "[TODO]",
+      "es": "[TODO]",
+      "context": "Nom du personnage: Brokkr"
+    },
+    "vn_speaker_narrateur": {
+      "fr": "Narrateur",
+      "en": "[TODO]",
+      "es": "[TODO]",
+      "context": "Nom du personnage: Narrateur"
+    },
+    "vn_speaker_eitri": {
+      "fr": "Eitri",
+      "en": "[TODO]",
+      "es": "[TODO]",
+      "context": "Nom du personnage: Eitri"
+    }
+  },
+  "scenes": {
+    "scene_root_bored_loki": {
+      "title": {
+        "key": "vn_scene_root_bored_loki_title",
+        "fr": "L'Ennui d'Asgard",
+        "en": "[TODO]",
+        "es": "[TODO]",
+        "context": "Titre de la scène scene_root_bored_loki"
+      },
+      "content": null,
+      "dialogues": [
+        {
+          "key": "vn_scene_root_bored_loki_d1",
+          "fr": "*Dans les palais dorés d'Asgard, l'éternité pèse sur l'esprit de Loki*",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_root_bored_loki"
+        },
+        {
+          "key": "vn_scene_root_bored_loki_d2",
+          "fr": "Encore une journée parfaite… Trop parfaite. L'ordre, l'harmonie, la perfection éternelle d'Asgard… Comme c'est… ennuyeux.",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 2 de scene_root_bored_loki"
+        }
+      ],
+      "choices": []
+    },
+    "scene_first_choice": {
+      "title": {
+        "key": "vn_scene_first_choice_title",
+        "fr": "L'Ennui Créateur",
+        "en": "[TODO]",
+        "es": "[TODO]",
+        "context": "Titre de la scène scene_first_choice"
+      },
+      "content": {
+        "key": "vn_scene_first_choice_content",
+        "fr": "Comment Loki va-t-il briser la monotonie de cette journée parfaite ?",
+        "en": "[TODO]",
+        "es": "[TODO]",
+        "context": "Contenu de la scène scene_first_choice"
+      },
+      "dialogues": [
+        {
+          "key": "vn_scene_first_choice_d1",
+          "fr": "Couper les cheveux de Sif (Malice pure)",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_first_choice"
+        }
+      ],
+      "choices": [
+        {
+          "key": "vn_choice_path_malice_cut_hair",
+          "fr": null,
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "description": null
+        }
+      ]
+    },
+    "scene_malice_hair_cut": {
+      "title": {
+        "key": "vn_scene_malice_hair_cut_title",
+        "fr": "L'Acte de Malice Pure",
+        "en": "[TODO]",
+        "es": "[TODO]",
+        "context": "Titre de la scène scene_malice_hair_cut"
+      },
+      "content": null,
+      "dialogues": [
+        {
+          "key": "vn_scene_malice_hair_cut_d1",
+          "fr": "La perfection de ces cheveux dorés... il est temps de créer un peu de chaos dans ce monde trop ordonné.",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_malice_hair_cut"
+        }
+      ],
+      "choices": []
+    },
+    "scene_malice_thor_fury": {
+      "title": {
+        "key": "vn_scene_malice_thor_fury_title",
+        "fr": "La Fureur de Thor",
+        "en": "[TODO]",
+        "es": "[TODO]",
+        "context": "Titre de la scène scene_malice_thor_fury"
+      },
+      "content": null,
+      "dialogues": [
+        {
+          "key": "vn_scene_malice_thor_fury_d1",
+          "fr": "LOKI ! THOR ! VIENS VOIR CE QUE TON FRÈRE A FAIT !",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_malice_thor_fury"
+        },
+        {
+          "key": "vn_scene_malice_thor_fury_d2",
+          "fr": "Qu'est-ce qui... PAR LES BARBES D'ODIN ! Tes cheveux !",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 2 de scene_malice_thor_fury"
+        },
+        {
+          "key": "vn_scene_malice_thor_fury_d3",
+          "fr": "*Thor saisit violemment Loki par le col, ses yeux lançant des éclairs*",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 3 de scene_malice_thor_fury"
+        },
+        {
+          "key": "vn_scene_malice_thor_fury_d4",
+          "fr": "TU VAS ME REMPLACER SES CHEVEUX IMMÉDIATEMENT, OU JE TE BRISE EN MILLE MORCEAUX !",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 4 de scene_malice_thor_fury"
+        }
+      ],
+      "choices": []
+    },
+    "scene_malice_promise_hair": {
+      "title": {
+        "key": "vn_scene_malice_promise_hair_title",
+        "fr": "La Promesse Dorée",
+        "en": "[TODO]",
+        "es": "[TODO]",
+        "context": "Titre de la scène scene_malice_promise_hair"
+      },
+      "content": null,
+      "dialogues": [
+        {
+          "key": "vn_scene_malice_promise_hair_d1",
+          "fr": "Je peux lui créer des cheveux encore plus magnifiques ! Des cheveux d'or véritable, forgés par les fils d'Ívaldi !",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_malice_promise_hair"
+        }
+      ],
+      "choices": []
+    },
+    "scene_drunk_mead_fest": {
+      "title": {
+        "key": "vn_scene_drunk_mead_fest_title",
+        "fr": "Fête Solo - L'Hydromel Appelle",
+        "en": "[TODO]",
+        "es": "[TODO]",
+        "context": "Titre de la scène scene_drunk_mead_fest"
+      },
+      "content": null,
+      "dialogues": [
+        {
+          "key": "vn_scene_drunk_mead_fest_d1",
+          "fr": "Ah ! Ce tonneau d'hydromel oublié... Pourquoi attendre une fête quand on peut en créer une soi-même ?",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_drunk_mead_fest"
+        }
+      ],
+      "choices": []
+    },
+    "scene_drunk_accident": {
+      "title": {
+        "key": "vn_scene_drunk_accident_title",
+        "fr": "L'Accident Alcoolisé",
+        "en": "[TODO]",
+        "es": "[TODO]",
+        "context": "Titre de la scène scene_drunk_accident"
+      },
+      "content": null,
+      "dialogues": [
+        {
+          "key": "vn_scene_drunk_accident_d1",
+          "fr": "*Titube* Bon... juste un petit somme près de la belle Sif... *hic* Que pourrait-il arriver ?",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_drunk_accident"
+        }
+      ],
+      "choices": []
+    },
+    "scene_drunk_thor_discovery": {
+      "title": {
+        "key": "vn_scene_drunk_thor_discovery_title",
+        "fr": "Thor et l'Ivrogne Coupable",
+        "en": "[TODO]",
+        "es": "[TODO]",
+        "context": "Titre de la scène scene_drunk_thor_discovery"
+      },
+      "content": null,
+      "dialogues": [
+        {
+          "key": "vn_scene_drunk_thor_discovery_d1",
+          "fr": "THOR ! VIENS VOIR CE QUE TON FRÈRE A FAIT ! IL EST IVRE MORT !",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_drunk_thor_discovery"
+        }
+      ],
+      "choices": []
+    },
+    "scene_drunk_choice_promise": {
+      "title": {
+        "key": "vn_scene_drunk_choice_promise_title",
+        "fr": "Promesse d'Ivrogne",
+        "en": "[TODO]",
+        "es": "[TODO]",
+        "context": "Titre de la scène scene_drunk_choice_promise"
+      },
+      "content": {
+        "key": "vn_scene_drunk_choice_promise_content",
+        "fr": "Comment Loki va-t-il essayer de se rattraper, même ivre ?",
+        "en": "[TODO]",
+        "es": "[TODO]",
+        "context": "Contenu de la scène scene_drunk_choice_promise"
+      },
+      "dialogues": [
+        {
+          "key": "vn_scene_drunk_choice_promise_d1",
+          "fr": "Promettre des cheveux d'or (en bafouillant)",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_drunk_choice_promise"
+        }
+      ],
+      "choices": [
+        {
+          "key": "vn_choice_drunk_promise_yes",
+          "fr": null,
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "description": null
+        }
+      ]
+    },
+    "scene_dwarves_sons_ivaldi": {
+      "title": null,
+      "content": null,
+      "dialogues": [
+        {
+          "key": "vn_scene_dwarves_sons_ivaldi_d1",
+          "fr": "Loki arrive chez les fils d'Ívaldi, déterminé à réparer le mal causé par sa malice délibérée. Les nains l'accueillent avec méfiance mais respectent sa demande directe.",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_dwarves_sons_ivaldi"
+        }
+      ],
+      "choices": []
+    },
+    "scene_dwarves_sons_ivaldi_drunk": {
+      "title": null,
+      "content": null,
+      "dialogues": [
+        {
+          "key": "vn_scene_dwarves_sons_ivaldi_drunk_d1",
+          "fr": "*Hic* Loki arrive en titubant chez les fils d'Ívaldi, encore étourdi par l'hydromel. Les nains le regardent avec amusement et exaspération.",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_dwarves_sons_ivaldi_drunk"
+        }
+      ],
+      "choices": []
+    },
+    "scene_bet_brokkr_eitri": {
+      "title": null,
+      "content": null,
+      "dialogues": [
+        {
+          "key": "vn_scene_bet_brokkr_eitri_d1",
+          "fr": "Mes amis nains, vos talents sont reconnus dans tous les Neuf Royaumes. Mais dites-moi... qui forge mieux ?",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_bet_brokkr_eitri"
+        }
+      ],
+      "choices": []
+    },
+    "scene_bet_brokkr_eitri_drunk": {
+      "title": null,
+      "content": null,
+      "dialogues": [
+        {
+          "key": "vn_scene_bet_brokkr_eitri_drunk_d1",
+          "fr": "*Hic* Mes amis nains... *rote* Qui... qui forge le mieux ? *hoquet* Entre vous deux ?",
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "context": "Dialogue 1 de scene_bet_brokkr_eitri_drunk"
+        }
+      ],
+      "choices": []
+    },
+    "scene_sabotage_attempts": {
+      "title": null,
+      "content": null,
+      "dialogues": [],
+      "choices": [
+        {
+          "key": "vn_choice_sabotage_perfect",
+          "fr": null,
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "description": null
+        }
+      ]
+    },
+    "scene_sabotage_attempts_drunk": {
+      "title": null,
+      "content": null,
+      "dialogues": [],
+      "choices": [
+        {
+          "key": "vn_choice_drunk_sabotage_slow",
+          "fr": null,
+          "en": "[TODO]",
+          "es": "[TODO]",
+          "description": null
+        }
+      ]
+    }
+  }
+}
