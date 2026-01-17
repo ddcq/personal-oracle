@@ -41,15 +41,15 @@ class MenuPrincipal extends StatelessWidget {
     ];
 
     final gameNames = [
-      'games_menu_reorder_history',
-      'games_menu_asgard_wall',
-      'puzzle_screen_title',
-      'games_menu_midgard_serpent',
-      'games_menu_territory_conquest',
-      'games_menu_odin_eye',
-      'games_menu_andvari_loot',
-      'games_menu_quiz',
-      'games_menu_norse_quiz',
+      'order_the_scrolls_title',
+      'asgard_wall_title',
+      'puzzle_title',
+      'snake_title',
+      'qix_title',
+      'word_search_title',
+      'minesweeper_title',
+      'quiz_title',
+      'norse_quiz_title',
       'visual_novel_title',
     ];
 
