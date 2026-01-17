@@ -96,7 +96,7 @@ class _VisualNovelScreenState extends State<VisualNovelScreen> {
       barrierDismissible: false,
       builder: (context) => VictoryPopup(
         coinsEarned: coinsEarned,
-        customTitle: alreadyCompleted ? 'Fin Déjà Complétée' : 'Fin de l\'Épopée',
+        customTitle: alreadyCompleted ? 'vn_ending_already_completed'.tr() : 'vn_ending_title'.tr(),
         content: alreadyCompleted ? Column(
           mainAxisSize: MainAxisSize.min,
           children: [

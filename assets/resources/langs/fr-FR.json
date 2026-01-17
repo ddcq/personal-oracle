@@ -889,9 +889,8 @@
   "victory_popup_congratulations": "Félicitations !",
   "victory_popup_generic_message": "Vous avez accompli un exploit digne des dieux !",
   "victory_popup_title": "Victoire !",
-  "visual_novel_french_only_warning": "⚠️ Ce jeu est actuellement disponible uniquement en français",
-  "visual_novel_preliminary_screen_description": "Vivez l'épopée tragique de Loki Laufeyjarson à travers ses propres yeux. De fils adoptif d'Odin au catalyseur de Ragnarök, découvrez comment l'amour, la trahison et l'amertume façonnent le destin d'un dieu.",
   "visual_novel_preliminary_screen_start_button": "Commencer l'Épopée",
+  "visual_novel_preliminary_screen_description": "Vivez l'épopée tragique de Loki Laufeyjarson à travers ses propres yeux. De fils adoptif d'Odin au catalyseur de Ragnarök, découvrez comment l'amour, la trahison et l'amertume façonnent le destin d'un dieu.",
   "visual_novel_title": "La vie de Loki",
   "vn_act2_description": "Quand l'ennui mène à la destinée",
   "vn_act2_title": "L'Utile",
@@ -1115,5 +1114,7 @@
   "word_search_screen_rule_4": "Une fois tous les mots trouvés, un mot secret vous sera demandé.",
   "word_search_screen_rule_5": "Utilisez les lettres restantes pour former le mot secret et valider votre victoire.",
   "word_search_screen_title": "L'Œil d'Odin",
-  "word_search_title": "L'Œil d'Odin"
+  "word_search_title": "L'Œil d'Odin",
+  "vn_ending_already_completed": "Fin Déjà Complétée",
+  "vn_ending_title": "Fin de l'Épopée"
 }
