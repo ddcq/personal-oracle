@@ -20,6 +20,7 @@ import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/router.dart'; // Import the router
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:oracle_d_asgard/widgets/app_restart_wrapper.dart';
+import 'package:oracle_d_asgard/generated/codegen_loader.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,6 +52,7 @@ void main() async {
           Locale('es', 'ES'),
         ],
         path: 'assets/resources/langs',
+        assetLoader: const CodegenLoader(),
         fallbackLocale: const Locale('en', 'US'),
         child: ChangeNotifierProvider(
           create: (context) => ThemeProvider(),
@@ -99,6 +101,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   Future<void> _initializeServicesAfterStartup() async {
+    // Initialize SoundService first
+    try {
+      await getIt<SoundService>().init();
+    } catch (e) {
+      debugPrint('Failed to initialize SoundService: $e');
+    }
+
     // Initialize CacheService and validate cache
     try {
       final cacheService = getIt<CacheService>();

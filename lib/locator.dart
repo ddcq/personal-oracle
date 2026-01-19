@@ -8,12 +8,7 @@ import 'package:oracle_d_asgard/services/video_cache_service.dart';
 final getIt = GetIt.instance;
 
 Future<void> setupLocator() async {
-  // Eager singleton for services that need to be initialized at startup
-  final soundService = SoundService();
-  await soundService.init();
-  getIt.registerSingleton<SoundService>(soundService);
-
-  // Lazy singletons for other services
+  getIt.registerLazySingleton<SoundService>(() => SoundService());
   getIt.registerLazySingleton(() => GamificationService());
   getIt.registerLazySingleton(() => DatabaseService());
   getIt.registerLazySingleton(() => CacheService());
