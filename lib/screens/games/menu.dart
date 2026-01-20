@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +8,7 @@ import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/epic_button.dart';
 import 'package:oracle_d_asgard/widgets/hexagonal_grid.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+import 'package:oracle_d_asgard/utils/translation_extensions.dart';
 
 class MenuPrincipal extends StatelessWidget {
   const MenuPrincipal({super.key});
@@ -57,24 +57,26 @@ class MenuPrincipal extends StatelessWidget {
       routes.length,
       (i) => HexGridItem(
         onTap: () => context.go(routes[i]),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            EpicButton(onPressed: () => context.go(routes[i]), imagePath: images[i], size: 60.sp),
-            SizedBox(
-              width: 130.w,
-              child: Text(
-                gameNames[i].tr(),
-                style: ChibiTextStyles.appBarTitle.copyWith(
-                  fontSize: 14.sp,
-                  letterSpacing: 1.0.sp,
+        child: TranslationBuilder(
+          builder: (context) => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              EpicButton(onPressed: () => context.go(routes[i]), imagePath: images[i], size: 60.sp),
+              SizedBox(
+                width: 130.w,
+                child: Text(
+                  gameNames[i].trAsync(),
+                  style: ChibiTextStyles.appBarTitle.copyWith(
+                    fontSize: 14.sp,
+                    letterSpacing: 1.0.sp,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.visible,
                 ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.visible,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -85,7 +87,7 @@ class MenuPrincipal extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
-        titleText: 'games_menu_mini_games'.tr(),
+        titleText: 'games_menu_mini_games'.trAsync(),
         leading: IconButton(
           icon: const Icon(Icons.home),
           onPressed: () {

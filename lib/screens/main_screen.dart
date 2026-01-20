@@ -10,6 +10,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:oracle_d_asgard/constants/app_env.dart';
 import 'package:oracle_d_asgard/widgets/hexagonal_grid.dart';
+import 'package:oracle_d_asgard/utils/main_screen_translations.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -67,12 +68,13 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   List<HexGridItem> _buildGridItems(BuildContext context) {
+    final locale = context.locale.toString();
     final buttons = [
-      {'icon': Icons.games_rounded, 'label': 'main_screen_play'.tr(), 'route': '/games'},
-      {'icon': Icons.emoji_events, 'label': 'main_screen_trophies'.tr(), 'route': '/trophies'},
-      {'icon': Icons.person, 'label': 'main_screen_profile'.tr(), 'route': '/profile'},
+      {'icon': Icons.games_rounded, 'label': MainScreenTranslations.translate('main_screen_play', locale), 'route': '/games'},
+      {'icon': Icons.emoji_events, 'label': MainScreenTranslations.translate('main_screen_trophies', locale), 'route': '/trophies'},
+      {'icon': Icons.person, 'label': MainScreenTranslations.translate('main_screen_profile', locale), 'route': '/profile'},
       {'icon': Icons.shopping_cart, 'label': 'Boutique', 'route': '/shop'},
-      {'icon': Icons.settings, 'label': 'main_screen_settings'.tr(), 'route': '/settings'},
+      {'icon': Icons.settings, 'label': MainScreenTranslations.translate('main_screen_settings', locale), 'route': '/settings'},
     ];
 
     return List.generate(buttons.length, (i) {
@@ -98,7 +100,7 @@ class _MainScreenState extends State<MainScreen> {
                     child: Padding(
                       padding: EdgeInsets.only(top: 20.h),
                       child: Text(
-                        'main_screen_title'.tr(),
+                        MainScreenTranslations.translate('main_screen_title', context.locale.toString()),
                         textAlign: TextAlign.center,
                         style: ChibiTextStyles.appBarTitle,
                       ).animate().slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),

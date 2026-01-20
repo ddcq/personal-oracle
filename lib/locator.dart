@@ -4,6 +4,7 @@ import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/services/sound_service.dart';
 import 'package:oracle_d_asgard/services/database_service.dart';
 import 'package:oracle_d_asgard/services/video_cache_service.dart';
+import 'package:oracle_d_asgard/services/translation_service.dart';
 
 final getIt = GetIt.instance;
 
@@ -13,4 +14,5 @@ Future<void> setupLocator() async {
   getIt.registerLazySingleton(() => DatabaseService());
   getIt.registerLazySingleton(() => CacheService());
   getIt.registerLazySingleton(() => VideoCacheService());
+  getIt.registerLazySingleton(() => TranslationService());
 }
