@@ -26,8 +26,6 @@ class MusicSelector extends StatelessWidget {
         return 'mute';
       } else if (soundService.readingPageMusicCardId != null) {
         return soundService.readingPageMusicCardId!;
-      } else if (soundService.readingPageMusicAsset != null) {
-        return soundService.readingPageMusicAsset!;
       } else {
         return 'default';
       }

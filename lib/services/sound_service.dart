@@ -11,7 +11,6 @@ class SoundService with ChangeNotifier {
   final List<AudioPlayer> _fxPlayers = [];
   bool _isMuted = false;
   bool _isFxMuted = false;
-  String? _readingPageMusicAsset;
   String? _readingPageMusicCardId;
   bool _isReadingPageMusicMuted = false;
   MusicType _currentMusic = MusicType.none;
@@ -25,7 +24,6 @@ class SoundService with ChangeNotifier {
 
   Future<void> init() async {
     _musicPlayer.setReleaseMode(ReleaseMode.loop);
-    _readingPageMusicAsset = 'audio/reading.mp3';
 
     _musicPlayer.onPlayerComplete.listen((_) {
       if (_currentMusic == MusicType.card && _previousMusic != MusicType.none) {
@@ -58,7 +56,6 @@ class SoundService with ChangeNotifier {
   bool get isMuted => _isMuted;
   bool get isFxMuted => _isFxMuted;
   bool get isReadingPageMusicMuted => _isReadingPageMusicMuted;
-  String? get readingPageMusicAsset => _readingPageMusicAsset;
   String? get readingPageMusicCardId => _readingPageMusicCardId;
   String? get currentAmbientMusicCardId => _currentAmbientMusicCardId;
 
@@ -77,14 +74,7 @@ class SoundService with ChangeNotifier {
         if (_currentAmbientMusicCardId != null) {
           await _playAmbientMusicFromCard(_currentAmbientMusicCardId!);
         } else {
-          await _musicPlayer
-              .play(AssetSource('audio/ambiance.mp3'))
-              .timeout(
-                const Duration(seconds: 5),
-                onTimeout: () {
-                  debugPrint('Main menu music loading timeout');
-                },
-              );
+          await _playDefaultAmbientMusic();
         }
         _currentMusic = MusicType.mainMenu;
         currentCardId = _currentAmbientMusicCardId;
@@ -93,6 +83,34 @@ class SoundService with ChangeNotifier {
       }
     }
     notifyListeners();
+  }
+
+  Future<void> _playDefaultAmbientMusic() async {
+    final musicPath = '/music/ambiance.mp3';
+    final musicUrl = 'https://ddcq.github.io$musicPath';
+    final cacheService = getIt<CacheService>();
+    final cacheManager = DefaultCacheManager();
+
+    var fileInfo = await cacheManager.getFileFromCache(musicUrl);
+    if (fileInfo == null) {
+      debugPrint('Downloading default ambient music: $musicUrl');
+      fileInfo = await cacheManager.downloadFile(musicUrl);
+      final version = cacheService.getVersionFor(musicPath);
+      if (version != null) {
+        await cacheService.setVersionFor(musicPath, version);
+      }
+    }
+
+    await _musicPlayer.setReleaseMode(ReleaseMode.loop);
+    await _musicPlayer.setVolume(1.0);
+    await _musicPlayer
+        .play(DeviceFileSource(fileInfo.file.path))
+        .timeout(
+          const Duration(seconds: 10),
+          onTimeout: () {
+            debugPrint('Default ambient music loading timeout');
+          },
+        );
   }
 
   Future<void> _playAmbientMusicFromCard(String cardId) async {
@@ -141,14 +159,7 @@ class SoundService with ChangeNotifier {
         if (_readingPageMusicCardId != null) {
           await playStoryMusicFromCard(_readingPageMusicCardId!);
         } else {
-          await _musicPlayer
-              .play(AssetSource(_readingPageMusicAsset ?? 'audio/reading.mp3'))
-              .timeout(
-                const Duration(seconds: 5),
-                onTimeout: () {
-                  debugPrint('Story music loading timeout');
-                },
-              );
+          await _playDefaultReadingMusic();
           _currentMusic = MusicType.story;
           currentCardId = null;
         }
@@ -158,6 +169,34 @@ class SoundService with ChangeNotifier {
     } else if (_isReadingPageMusicMuted) {
       await _musicPlayer.stop();
     }
+  }
+
+  Future<void> _playDefaultReadingMusic() async {
+    final musicPath = '/music/reading.mp3';
+    final musicUrl = 'https://ddcq.github.io$musicPath';
+    final cacheService = getIt<CacheService>();
+    final cacheManager = DefaultCacheManager();
+
+    var fileInfo = await cacheManager.getFileFromCache(musicUrl);
+    if (fileInfo == null) {
+      debugPrint('Downloading default reading music: $musicUrl');
+      fileInfo = await cacheManager.downloadFile(musicUrl);
+      final version = cacheService.getVersionFor(musicPath);
+      if (version != null) {
+        await cacheService.setVersionFor(musicPath, version);
+      }
+    }
+
+    await _musicPlayer.setReleaseMode(ReleaseMode.loop);
+    await _musicPlayer.setVolume(0.5);
+    await _musicPlayer
+        .play(DeviceFileSource(fileInfo.file.path))
+        .timeout(
+          const Duration(seconds: 10),
+          onTimeout: () {
+            debugPrint('Default reading music loading timeout');
+          },
+        );
   }
 
   Future<void> playStoryMusicFromCard(String cardId) async {
@@ -199,14 +238,12 @@ class SoundService with ChangeNotifier {
   void setReadingPageMusic(String? assetPath) {
     if (assetPath == 'mute' || assetPath == null) {
       _isReadingPageMusicMuted = true;
-      _readingPageMusicAsset = null;
       _readingPageMusicCardId = null;
       if (_currentMusic == MusicType.story) {
         _musicPlayer.stop();
       }
     } else {
       _isReadingPageMusicMuted = false;
-      _readingPageMusicAsset = assetPath;
       _readingPageMusicCardId = null;
       if (_currentMusic == MusicType.story) {
         playStoryMusic();
@@ -218,7 +255,6 @@ class SoundService with ChangeNotifier {
   void setReadingPageMusicByCardId(String cardId) {
     _isReadingPageMusicMuted = false;
     _readingPageMusicCardId = cardId;
-    _readingPageMusicAsset = null;
     if (_currentMusic == MusicType.story) {
       playStoryMusicFromCard(cardId);
     }
