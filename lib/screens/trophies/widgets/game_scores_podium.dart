@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oracle_d_asgard/screens/profile/utils/profile_helpers.dart';
+import 'package:oracle_d_asgard/screens/trophies/utils/trophies_helpers.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 
 class GameScoresPodium extends StatelessWidget {

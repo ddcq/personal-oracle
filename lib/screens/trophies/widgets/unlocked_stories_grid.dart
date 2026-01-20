@@ -6,7 +6,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:oracle_d_asgard/data/stories_data.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/screens/games/myth_story_page.dart';
-import 'package:oracle_d_asgard/screens/profile/widgets/ad_reward_button.dart';
+import 'package:oracle_d_asgard/screens/trophies/widgets/ad_reward_button.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 

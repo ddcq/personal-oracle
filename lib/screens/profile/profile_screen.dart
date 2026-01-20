@@ -201,14 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
             context.go('/');
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.shield, color: Colors.white),
-            onPressed: () {
-              context.go('/trophies');
-            },
-          ),
-        ],
+        actions: [],
       ),
       body: AppBackground(
         child: ListView(

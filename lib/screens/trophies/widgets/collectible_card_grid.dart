@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/screens/profile/widgets/ad_reward_button.dart';
+import 'package:oracle_d_asgard/screens/trophies/widgets/ad_reward_button.dart';
 import 'package:oracle_d_asgard/widgets/interactive_collectible_card.dart';
 
 class CollectibleCardGrid extends StatelessWidget {

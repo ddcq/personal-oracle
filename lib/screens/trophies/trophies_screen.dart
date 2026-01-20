@@ -4,9 +4,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:oracle_d_asgard/screens/profile/widgets/collectible_card_grid.dart';
-import 'package:oracle_d_asgard/screens/profile/widgets/game_scores_podium.dart';
-import 'package:oracle_d_asgard/screens/profile/widgets/unlocked_stories_grid.dart';
+import 'package:oracle_d_asgard/screens/trophies/widgets/collectible_card_grid.dart';
+import 'package:oracle_d_asgard/screens/trophies/widgets/game_scores_podium.dart';
+import 'package:oracle_d_asgard/screens/trophies/widgets/unlocked_stories_grid.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
@@ -281,14 +281,7 @@ class _TrophiesScreenState extends State<TrophiesScreen> {
             context.go('/');
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person, color: Colors.white),
-            onPressed: () {
-              context.go('/profile');
-            },
-          ),
-        ],
+        actions: [],
       ),
       body: AppBackground(
         child: Container(
