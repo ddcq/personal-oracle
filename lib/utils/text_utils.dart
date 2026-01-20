@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
+import 'package:oracle_d_asgard/data/stories_data.dart';
+import 'package:oracle_d_asgard/screens/games/visual_novel/data/story_data.dart';
 
 /// Extracts a set of unique words with 4 or more characters from a MythCard.
 ///
@@ -28,6 +30,98 @@ Set<String> extractWordsFromMythCard(MythCard card) {
   });
 
   return words;
+}
+
+/// Extracts all words from all myth stories and visual novel content
+/// Returns a set of unique words with 4 or more characters
+Set<String> extractAllWordsFromStories() {
+  final allWords = <String>{};
+  
+  // Extract words from all myth stories
+  final allStories = getMythStories().skip(1).toList(); // Skip loading story
+  for (final story in allStories) {
+    for (final chapter in story.correctOrder) {
+      allWords.addAll(extractWordsFromMythCard(chapter));
+    }
+  }
+  
+  // Extract words from visual novel
+  final visualNovelStory = StoryData.lokiStory;
+  for (final scene in visualNovelStory.scenes.values) {
+    // Extract from title
+    final wordRegex = RegExp(r'[a-zA-Zà-üÀ-Ü]+');
+    
+    if (scene.title.isNotEmpty) {
+      final translatedTitle = scene.title.tr();
+      wordRegex.allMatches(translatedTitle.toLowerCase()).forEach((match) {
+        final word = match.group(0)!;
+        if (word.length >= 4) {
+          allWords.add(word);
+        }
+      });
+    }
+    
+    // Extract from content
+    if (scene.content != null && scene.content!.isNotEmpty) {
+      final translatedContent = scene.content!.tr();
+      wordRegex.allMatches(translatedContent.toLowerCase()).forEach((match) {
+        final word = match.group(0)!;
+        if (word.length >= 4) {
+          allWords.add(word);
+        }
+      });
+    }
+    
+    // Extract from paragraphs
+    if (scene.paragraphs != null) {
+      for (final paragraph in scene.paragraphs!) {
+        final translatedParagraph = paragraph.tr();
+        wordRegex.allMatches(translatedParagraph.toLowerCase()).forEach((match) {
+          final word = match.group(0)!;
+          if (word.length >= 4) {
+            allWords.add(word);
+          }
+        });
+      }
+    }
+    
+    // Extract from dialogues
+    if (scene.dialogues != null) {
+      for (final dialogue in scene.dialogues!) {
+        final translatedText = dialogue.text.tr();
+        wordRegex.allMatches(translatedText.toLowerCase()).forEach((match) {
+          final word = match.group(0)!;
+          if (word.length >= 4) {
+            allWords.add(word);
+          }
+        });
+      }
+    }
+    
+    // Extract from choices
+    if (scene.choices != null) {
+      for (final choice in scene.choices!) {
+        final translatedText = choice.text.tr();
+        final translatedDescription = choice.description.tr();
+        
+        wordRegex.allMatches(translatedText.toLowerCase()).forEach((match) {
+          final word = match.group(0)!;
+          if (word.length >= 4) {
+            allWords.add(word);
+          }
+        });
+        
+        wordRegex.allMatches(translatedDescription.toLowerCase()).forEach((match) {
+          final word = match.group(0)!;
+          if (word.length >= 4) {
+            allWords.add(word);
+          }
+        });
+      }
+    }
+  }
+  
+  return allWords;
 }
 
 /// A map of characters with diacritics to their base characters.

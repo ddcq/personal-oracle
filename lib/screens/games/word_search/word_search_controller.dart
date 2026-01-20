@@ -141,9 +141,15 @@ class WordSearchController with ChangeNotifier {
   }
 
   List<String> _extractAndNormalizeWords(MythCard mythCard) {
-    return extractWordsFromMythCard(
-      mythCard,
-    ).map(normalizeForWordSearch).toSet().toList();
+    // Get all words from all stories and visual novel
+    final allWords = extractAllWordsFromStories();
+    
+    // Also include words from current myth card to ensure relevant content
+    final currentCardWords = extractWordsFromMythCard(mythCard);
+    allWords.addAll(currentCardWords);
+    
+    // Normalize all words for the word search
+    return allWords.map(normalizeForWordSearch).toSet().toList();
   }
 
   void _selectRiddle() {
