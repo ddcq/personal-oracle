@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/generated/version.dart';
@@ -40,6 +41,12 @@ class AboutScreen extends StatelessWidget {
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/settings');
+          },
+        ),
       ),
       body: AppBackground(
         child: Container(
