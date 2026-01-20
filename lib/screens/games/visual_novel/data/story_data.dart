@@ -3,7 +3,7 @@
 library;
 
 import 'package:easy_localization/easy_localization.dart';
-import '../models/visual_novel_models.dart';
+import 'package:oracle_d_asgard/screens/games/visual_novel/models/visual_novel_models.dart';
 
 class StoryData {
   static Story get lokiStory => Story(

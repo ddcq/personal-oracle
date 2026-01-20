@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/visual_novel_models.dart';
-import 'choice_widget.dart';
+import 'package:oracle_d_asgard/screens/games/visual_novel/models/visual_novel_models.dart';
+import 'package:oracle_d_asgard/screens/games/visual_novel/widgets/choice_widget.dart';
 
 class SceneDisplayWidget extends StatefulWidget {
   final Scene scene;
@@ -10,13 +10,13 @@ class SceneDisplayWidget extends StatefulWidget {
   final VisualNovelGameState gameState;
 
   const SceneDisplayWidget({
-    Key? key,
+    super.key,
     required this.scene,
     required this.onChoiceMade,
     required this.onSceneProgression,
     required this.onScenarioComplete,
     required this.gameState,
-  }) : super(key: key);
+  });
 
   @override
   State<SceneDisplayWidget> createState() => _SceneDisplayWidgetState();
@@ -152,8 +152,8 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget>
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.black.withOpacity(0.3),
-                  Colors.black.withOpacity(0.7),
+                  Colors.black.withAlpha(76),
+                  Colors.black.withAlpha(178),
                 ],
               ),
             ),
@@ -173,7 +173,7 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget>
                     return Container(
                       width: 200,
                       height: 400,
-                      color: Colors.grey.withOpacity(0.3),
+                      color: Colors.grey.withAlpha(76),
                       child: const Icon(
                         Icons.person,
                         size: 100,
@@ -193,10 +193,10 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget>
             child: Container(
               margin: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.85),
+                color: Colors.black.withAlpha(217),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: const Color(0xFFd4af37).withOpacity(0.6),
+                  color: const Color(0xFFd4af37).withAlpha(153),
                   width: 1.5,
                 ),
               ),
@@ -227,7 +227,7 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget>
                         _getCurrentSpeaker(),
                         style: TextStyle(
                           color: _getCurrentSpeaker() == 'Narrateur'
-                              ? Colors.white.withOpacity(0.8)
+                              ? Colors.white.withAlpha(204)
                               : const Color(0xFFd4af37),
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -262,7 +262,7 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget>
                         Text(
                           '${_currentSentenceIndex + 1} / ${_sentences.length}',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
+                            color: Colors.white.withAlpha(153),
                             fontSize: 12,
                           ),
                         ),
@@ -275,7 +275,7 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget>
                               Text(
                                 'Cliquez pour continuer',
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.7),
+                                  color: Colors.white.withAlpha(178),
                                   fontSize: 12,
                                   fontStyle: FontStyle.italic,
                                 ),
@@ -284,7 +284,7 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget>
                               Icon(
                                 Icons.touch_app,
                                 size: 16,
-                                color: Colors.white.withOpacity(0.7),
+                                color: Colors.white.withAlpha(178),
                               ),
                             ],
                           ),
@@ -315,7 +315,7 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget>
                                   ? 'Cliquez pour continuer vers la scène suivante'
                                   : 'Cliquez pour terminer l\'histoire',
                               style: TextStyle(
-                                color: const Color(0xFFd4af37).withOpacity(0.8),
+                                color: const Color(0xFFd4af37).withAlpha(204),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -326,7 +326,7 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget>
                                   ? Icons.arrow_forward
                                   : Icons.check_circle,
                               size: 16,
-                              color: const Color(0xFFd4af37).withOpacity(0.8),
+                              color: const Color(0xFFd4af37).withAlpha(204),
                             ),
                           ],
                         ),

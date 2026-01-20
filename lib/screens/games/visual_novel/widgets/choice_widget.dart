@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/visual_novel_models.dart';
+import 'package:oracle_d_asgard/screens/games/visual_novel/models/visual_novel_models.dart';
 
 class ChoiceWidget extends StatefulWidget {
   final Choice choice;
@@ -7,11 +7,11 @@ class ChoiceWidget extends StatefulWidget {
   final EmotionalState emotionalState;
 
   const ChoiceWidget({
-    Key? key,
+    super.key,
     required this.choice,
     required this.onSelected,
     required this.emotionalState,
-  }) : super(key: key);
+  });
 
   @override
   State<ChoiceWidget> createState() => _ChoiceWidgetState();
@@ -101,14 +101,14 @@ class _ChoiceWidgetState extends State<ChoiceWidget>
                 ),
                 gradient: LinearGradient(
                   colors: [
-                    _getChoiceColor().withOpacity(0.1),
-                    _getChoiceColor().withOpacity(0.05),
+                    _getChoiceColor().withAlpha(25),
+                    _getChoiceColor().withAlpha(12),
                   ],
                 ),
                 boxShadow: _isHovered
                     ? [
                         BoxShadow(
-                          color: _getChoiceColor().withOpacity(0.3),
+                          color: _getChoiceColor().withAlpha(76),
                           blurRadius: 8,
                           spreadRadius: 0,
                         ),
@@ -164,7 +164,7 @@ class _ChoiceWidgetState extends State<ChoiceWidget>
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: _getChoiceColor().withOpacity(0.2),
+                          color: _getChoiceColor().withAlpha(51),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(

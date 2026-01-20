@@ -1,6 +1,6 @@
 /// Norse Mythology Visual Novel - Main Export
 /// Based on the epic tragic story of Loki Laufeyjarson
-library visual_novel;
+library;
 
 // Models
 export 'models/visual_novel_models.dart';

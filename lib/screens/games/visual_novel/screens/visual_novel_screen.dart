@@ -10,7 +10,7 @@ import 'package:oracle_d_asgard/screens/games/visual_novel/widgets/scene_display
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 
 class VisualNovelScreen extends StatefulWidget {
-  const VisualNovelScreen({Key? key}) : super(key: key);
+  const VisualNovelScreen({super.key});
 
   @override
   State<VisualNovelScreen> createState() => _VisualNovelScreenState();

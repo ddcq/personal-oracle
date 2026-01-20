@@ -145,4 +145,9 @@ class DatabaseService {
       _database = null;
     }
   }
+
+  Future<void> destroyAndRebuildDatabase() async {
+    await deleteDb();
+    await reinitializeDb();
+  }
 }

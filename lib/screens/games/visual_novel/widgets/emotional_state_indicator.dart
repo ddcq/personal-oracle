@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import '../models/visual_novel_models.dart';
+import 'package:oracle_d_asgard/screens/games/visual_novel/models/visual_novel_models.dart';
 
 class EmotionalStateIndicator extends StatelessWidget {
   final EmotionalState emotionalState;
 
   const EmotionalStateIndicator({
-    Key? key,
+    super.key,
     required this.emotionalState,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +101,9 @@ class EmotionalStateIndicator extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: analysisColor.withOpacity(0.1),
+        color: analysisColor.withAlpha(25),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: analysisColor.withOpacity(0.3)),
+        border: Border.all(color: analysisColor.withAlpha(76)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,41 +130,35 @@ class EmotionalStateIndicator extends StatelessWidget {
     // Complex psychological analysis based on emotional variables
     if (emotionalState.bitterness >= 80) {
       if (emotionalState.lucidity >= 70) {
-        return "Loki a atteint un état de lucidité amère. Il voit clairement les manipulations mais ressent une rage profonde.";
+        return 'Loki a atteint un état de lucidité amère. Il voit clairement les manipulations mais ressent une rage profonde.';
       } else {
-        return "L'amertume consume Loki. Il risque de prendre des décisions impulsives et destructrices.";
+        return 'L\'amertume consume Loki. Il risque de prendre des décisions impulsives et destructrices.';
       }
     }
 
     if (emotionalState.loyalty <= 20) {
       if (emotionalState.pride >= 70) {
-        return "Loki se détache d'Asgard par orgueil blessé. Il pourrait retourner sa intelligence contre les dieux.";
+        return 'Loki se détache d\'Asgard par orgueil blessé. Il pourrait retourner sa intelligence contre les dieux.';
       } else {
-        return "La loyauté de Loki s'effrite. Il commence à questionner sa place parmi les dieux.";
+        return 'La loyauté de Loki s\'effrite. Il commence à questionner sa place parmi les dieux.';
       }
     }
 
     if (emotionalState.lucidity >= 90) {
-      return "Loki voit à travers tous les mensonges et manipulations. Cette clairvoyance est à la fois un don et une malédiction.";
-    }
+              return 'Loki voit à travers tous les mensonges et manipulations. Cette clairvoyance est à la fois un don et une malédiction.';    }
 
     if (emotionalState.pride >= 80) {
-      return "L'orgueil de Loki enfle. Il risque de défier ouvertement l'autorité des dieux.";
-    }
+              return 'L\'orgueil de Loki enfle. Il risque de défier ouvertement l\'autorité des dieux.';    }
 
     if (emotionalState.bitterness >= 50 && emotionalState.lucidity >= 60) {
-      return "Loki développe une compréhension cynique de sa position. Il reste fonctionnel mais de plus en plus détaché.";
-    }
+              return 'Loki développe une compréhension cynique de sa position. Il reste fonctionnel mais de plus en plus détaché.';    }
 
     if (emotionalState.loyalty >= 60 && emotionalState.pride <= 40) {
-      return "Malgré les épreuves, Loki conserve un attachement à Asgard, tempéré par une humilité croissante.";
-    }
+              return 'Malgré les épreuves, Loki conserve un attachement à Asgard, tempéré par une humilité croissante.';    }
 
     // Balanced state
     if (emotionalState.loyalty >= 50 && emotionalState.lucidity >= 50) {
-      return "Loki navigue avec intelligence entre ses devoirs et ses désirs personnels. État relativement stable.";
-    }
+              return 'Loki navigue avec intelligence entre ses devoirs et ses désirs personnels. État relativement stable.';    }
 
-    return "L'état psychologique de Loki reste complexe, mêlant espoir, frustration et une intelligence aiguë.";
-  }
+            return 'L\'état psychologique de Loki reste complexe, mêlant espoir, frustration et une intelligence aiguë.';  }
 }
