@@ -144,8 +144,8 @@ class _NorseQuizResultScreenState extends State<NorseQuizResultScreen> {
       child: VictoryPopup(
         customTitle: 'victory_popup_title'.tr(),
         content: _buildResultContent(),
-        onDismiss: () => context.go('/norse_quiz'), // Replay
-        onSeeRewards: () => context.go('/norse_quiz_preliminary'), // Back to norse quiz preliminary screen
+        onDismiss: () => context.go('/norse_quiz_preliminary'), // Replay
+        onSeeRewards: () => context.go('/trophies'), // Go to trophies
         hideReplayButton: false, // Show replay button
       ),
     );
