@@ -45,15 +45,14 @@ Set<String> extractAllWordsFromStories() {
     }
   }
   
-  // Extract words from visual novel
+  // Extract words from visual novel (without translation as these are direct texts)
   final visualNovelStory = StoryData.lokiStory;
+  final wordRegex = RegExp(r'[a-zA-Zà-üÀ-Ü]+');
+  
   for (final scene in visualNovelStory.scenes.values) {
-    // Extract from title
-    final wordRegex = RegExp(r'[a-zA-Zà-üÀ-Ü]+');
-    
+    // Extract from title (direct text, no translation)
     if (scene.title.isNotEmpty) {
-      final translatedTitle = scene.title.tr();
-      wordRegex.allMatches(translatedTitle.toLowerCase()).forEach((match) {
+      wordRegex.allMatches(scene.title.toLowerCase()).forEach((match) {
         final word = match.group(0)!;
         if (word.length >= 4) {
           allWords.add(word);
@@ -61,10 +60,9 @@ Set<String> extractAllWordsFromStories() {
       });
     }
     
-    // Extract from content
+    // Extract from content (direct text, no translation)
     if (scene.content != null && scene.content!.isNotEmpty) {
-      final translatedContent = scene.content!.tr();
-      wordRegex.allMatches(translatedContent.toLowerCase()).forEach((match) {
+      wordRegex.allMatches(scene.content!.toLowerCase()).forEach((match) {
         final word = match.group(0)!;
         if (word.length >= 4) {
           allWords.add(word);
@@ -72,11 +70,10 @@ Set<String> extractAllWordsFromStories() {
       });
     }
     
-    // Extract from paragraphs
+    // Extract from paragraphs (direct text, no translation)
     if (scene.paragraphs != null) {
       for (final paragraph in scene.paragraphs!) {
-        final translatedParagraph = paragraph.tr();
-        wordRegex.allMatches(translatedParagraph.toLowerCase()).forEach((match) {
+        wordRegex.allMatches(paragraph.toLowerCase()).forEach((match) {
           final word = match.group(0)!;
           if (word.length >= 4) {
             allWords.add(word);
@@ -85,11 +82,10 @@ Set<String> extractAllWordsFromStories() {
       }
     }
     
-    // Extract from dialogues
+    // Extract from dialogues (direct text, no translation)
     if (scene.dialogues != null) {
       for (final dialogue in scene.dialogues!) {
-        final translatedText = dialogue.text.tr();
-        wordRegex.allMatches(translatedText.toLowerCase()).forEach((match) {
+        wordRegex.allMatches(dialogue.text.toLowerCase()).forEach((match) {
           final word = match.group(0)!;
           if (word.length >= 4) {
             allWords.add(word);
@@ -98,20 +94,17 @@ Set<String> extractAllWordsFromStories() {
       }
     }
     
-    // Extract from choices
+    // Extract from choices (direct text, no translation)
     if (scene.choices != null) {
       for (final choice in scene.choices!) {
-        final translatedText = choice.text.tr();
-        final translatedDescription = choice.description.tr();
-        
-        wordRegex.allMatches(translatedText.toLowerCase()).forEach((match) {
+        wordRegex.allMatches(choice.text.toLowerCase()).forEach((match) {
           final word = match.group(0)!;
           if (word.length >= 4) {
             allWords.add(word);
           }
         });
         
-        wordRegex.allMatches(translatedDescription.toLowerCase()).forEach((match) {
+        wordRegex.allMatches(choice.description.toLowerCase()).forEach((match) {
           final word = match.group(0)!;
           if (word.length >= 4) {
             allWords.add(word);
