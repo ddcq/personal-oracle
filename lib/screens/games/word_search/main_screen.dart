@@ -93,7 +93,7 @@ class _WordSearchView extends StatelessWidget {
               },
               onSeeRewards: () {
                 Navigator.of(context).pop();
-                context.go('/shop');
+                context.push('/shop');
               },
             );
           },

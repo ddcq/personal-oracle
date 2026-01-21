@@ -195,7 +195,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
                 _resetGame();
               },
               onSeeRewards: () {
-                Navigator.of(context).pop();
+                game.overlays.remove('victoryOverlay');
                 context.push('/shop');
               },
             );

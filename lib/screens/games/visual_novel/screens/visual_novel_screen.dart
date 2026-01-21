@@ -105,7 +105,7 @@ class _VisualNovelScreenState extends State<VisualNovelScreen> {
         },
         onSeeRewards: () {
           Navigator.of(context).pop();
-          context.go('/shop');
+          context.push('/shop');
         },
       ),
     );
