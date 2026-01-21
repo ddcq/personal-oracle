@@ -148,36 +148,6 @@ class _VisualNovelScreenState extends State<VisualNovelScreen> {
               gameState: gameState,
             ),
           ),
-
-          // Navigation bar
-          Container(
-            height: 60,
-            color: Colors.black87,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.save, color: Colors.white),
-                  onPressed: () {
-                    // TODO: Save game functionality
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Game saved')));
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.history, color: Colors.white),
-                  onPressed: () {
-                    // TODO: Show history/log
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.settings, color: Colors.white),
-                  onPressed: () {
-                    // TODO: Show settings
-                  },
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

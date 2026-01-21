@@ -632,20 +632,77 @@ class StoryData {
     // FIN CHEMIN MINEUR : Ignorer Sif + Forges proactives
     'scene_proactive_forges': Scene(
       id: 'scene_proactive_forges',
-      type: SceneType.narrative,
+      type: SceneType.dialogue,
       title: 'vn_ending_artisan_title'.tr(),
-      paragraphs: [
-        'vn_ending_artisan_p1'.tr(),
-        'vn_ending_artisan_p2'.tr(),
-        'vn_ending_artisan_p3'.tr(),
-        'vn_ending_artisan_p4'.tr(),
-        'vn_ending_artisan_p5'.tr(),
-        'vn_ending_artisan_p6'.tr(),
-        'vn_ending_artisan_p7'.tr(),
-        'vn_ending_artisan_p8'.tr(),
+      backgroundImage: 'assets/images/vn/asgard_palace_morning.webp',
+      dialogues: [
+        DialogueLine(
+          speaker: 'vn_speaker_narrateur'.tr(),
+          text: 'vn_ending_artisan_p1'.tr(),
+        ),
+        DialogueLine(
+          speaker: 'vn_loki'.tr(),
+          text: 'vn_ending_artisan_p2'.tr(),
+          characterImage: 'assets/images/vn/loki_thoughtful.webp',
+        ),
       ],
+      nextSceneId: 'scene_artisan_at_forge',
+    ),
+    
+    'scene_artisan_at_forge': Scene(
+      id: 'scene_artisan_at_forge',
+      type: SceneType.dialogue,
+      title: 'vn_ending_artisan_title'.tr(),
       backgroundImage: 'assets/images/vn/dwarf_forge.webp',
-      characterImage: 'assets/images/vn/loki_mischievous.webp',
+      dialogues: [
+        DialogueLine(
+          speaker: 'vn_speaker_narrateur'.tr(),
+          text: 'vn_ending_artisan_p3'.tr(),
+        ),
+        DialogueLine(
+          speaker: 'vn_loki'.tr(),
+          text: 'vn_ending_artisan_p4'.tr(),
+          characterImage: 'assets/images/vn/loki_happy.webp',
+        ),
+        DialogueLine(
+          speaker: 'vn_brokkr'.tr(),
+          text: 'vn_ending_artisan_p5'.tr(),
+          characterImage: 'assets/images/vn/brokkr.webp',
+        ),
+        DialogueLine(
+          speaker: 'vn_eitri'.tr(),
+          text: 'vn_ending_artisan_p6'.tr(),
+          characterImage: 'assets/images/vn/eitri.webp',
+        ),
+      ],
+      nextSceneId: 'scene_artisan_working',
+    ),
+    
+    'scene_artisan_working': Scene(
+      id: 'scene_artisan_working',
+      type: SceneType.dialogue,
+      title: 'vn_ending_artisan_title'.tr(),
+      backgroundImage: 'assets/images/vn/dwarf_forge.webp',
+      dialogues: [
+        DialogueLine(
+          speaker: 'vn_speaker_narrateur'.tr(),
+          text: 'vn_ending_artisan_p7'.tr(),
+        ),
+        DialogueLine(
+          speaker: 'vn_loki'.tr(),
+          text: 'vn_ending_artisan_p8'.tr(),
+          characterImage: 'assets/images/vn/loki_mischievous.webp',
+        ),
+        DialogueLine(
+          speaker: 'vn_speaker_narrateur'.tr(),
+          text: 'vn_ending_artisan_p9'.tr(),
+          characterImage: 'assets/images/vn/asgard_palace.webp',
+        ),
+        DialogueLine(
+          speaker: 'vn_speaker_narrateur'.tr(),
+          text: 'vn_ending_artisan_p10'.tr(),
+        ),
+      ],
     ),
   };
 }

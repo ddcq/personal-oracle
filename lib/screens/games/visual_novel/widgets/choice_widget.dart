@@ -77,7 +77,7 @@ class _ChoiceWidgetState extends State<ChoiceWidget>
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: MouseRegion(
         onEnter: (_) {
           setState(() => _isHovered = true);
@@ -94,7 +94,7 @@ class _ChoiceWidgetState extends State<ChoiceWidget>
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                   color: _getChoiceColor(),
                   width: _isHovered ? 2 : 1,
@@ -116,16 +116,41 @@ class _ChoiceWidgetState extends State<ChoiceWidget>
                     : null,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Choice icon
-                    Icon(
-                      _getChoiceIcon(),
-                      color: _getChoiceColor(),
-                      size: 20,
+                    // Choice icon with consequence badge
+                    Column(
+                      children: [
+                        Icon(
+                          _getChoiceIcon(),
+                          color: _getChoiceColor(),
+                          size: 18,
+                        ),
+                        const SizedBox(height: 4),
+                        // Emotional impact preview (compact)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: _getChoiceColor().withAlpha(51),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            _getConsequencePreview(),
+                            style: TextStyle(
+                              color: _getChoiceColor(),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 10),
 
                     // Choice content
                     Expanded(
@@ -135,47 +160,30 @@ class _ChoiceWidgetState extends State<ChoiceWidget>
                           // Choice text
                           Text(
                             widget.choice.text,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
+                              height: 1.2,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 3),
 
-                          // Choice description
+                          // Choice description (compact)
                           Text(
                             widget.choice.description,
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 14,
+                            style: const TextStyle(
+                              color: Colors.white60,
+                              fontSize: 11,
                               fontStyle: FontStyle.italic,
+                              height: 1.3,
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
                     ),
-
-                    // Emotional impact preview (subtle)
-                    if (_isHovered)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _getChoiceColor().withAlpha(51),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          _getConsequencePreview(),
-                          style: TextStyle(
-                            color: _getChoiceColor(),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
                   ],
                 ),
               ),
@@ -191,18 +199,18 @@ class _ChoiceWidgetState extends State<ChoiceWidget>
     List<String> effects = [];
 
     if (consequence.prideChange != 0) {
-      effects.add('Fierté ${consequence.prideChange > 0 ? '+' : ''}${consequence.prideChange}');
+      effects.add('${consequence.prideChange > 0 ? '+' : ''}${consequence.prideChange}');
     }
     if (consequence.bitternessChange != 0) {
-      effects.add('Amertume ${consequence.bitternessChange > 0 ? '+' : ''}${consequence.bitternessChange}');
+      effects.add('${consequence.bitternessChange > 0 ? '+' : ''}${consequence.bitternessChange}');
     }
     if (consequence.loyaltyChange != 0) {
-      effects.add('Loyauté ${consequence.loyaltyChange > 0 ? '+' : ''}${consequence.loyaltyChange}');
+      effects.add('${consequence.loyaltyChange > 0 ? '+' : ''}${consequence.loyaltyChange}');
     }
     if (consequence.lucidityChange != 0) {
-      effects.add('Lucidité ${consequence.lucidityChange > 0 ? '+' : ''}${consequence.lucidityChange}');
+      effects.add('${consequence.lucidityChange > 0 ? '+' : ''}${consequence.lucidityChange}');
     }
 
-    return effects.isEmpty ? 'Neutre' : effects.first;
+    return effects.isEmpty ? '0' : effects.first;
   }
 }
