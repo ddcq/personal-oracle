@@ -89,6 +89,7 @@ class _WordSearchView extends StatelessWidget {
               coinsEarned: 50,
               onDismiss: () {
                 Navigator.of(context).pop();
+                controller.resetGame();
               },
               onSeeRewards: () {
                 Navigator.of(context).pop();
