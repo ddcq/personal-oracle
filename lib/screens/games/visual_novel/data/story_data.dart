@@ -53,31 +53,11 @@ class StoryData {
       backgroundImage: 'assets/images/vn/asgard_palace_morning.webp',
       dialogues: [
         DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_root_bored_loki_d1'.tr()),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_root_bored_loki_d2'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_scene_root_bored_loki_d3'.tr(),
-          characterImage: 'assets/images/vn/sif_asleep.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_root_bored_loki_d4'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_scene_root_bored_loki_d5'.tr(),
-          characterImage: 'assets/images/vn/barrel.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_root_bored_loki_dialogue_6'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_root_bored_loki_d2'.tr(), characterImage: 'assets/images/vn/loki_mischievous.webp'),
+        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_root_bored_loki_d3'.tr(), characterImage: 'assets/images/vn/sif_asleep.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_root_bored_loki_d4'.tr(), characterImage: 'assets/images/vn/loki_mischievous.webp'),
+        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_root_bored_loki_d5'.tr(), characterImage: 'assets/images/vn/barrel.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_root_bored_loki_dialogue_6'.tr(), characterImage: 'assets/images/vn/loki_mischievous.webp'),
       ],
       nextSceneId: 'scene_first_choice',
     ),
@@ -120,26 +100,11 @@ class StoryData {
       title: 'vn_malice_cut_title'.tr(),
       backgroundImage: 'assets/images/vn/asgard_palace_morning.webp',
       dialogues: [
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_malice_hair_cut_d1'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_scene_malice_hair_cut_d2'.tr(),
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_malice_hair_cut_d3'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
+        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_malice_hair_cut_d1'.tr(), characterImage: 'assets/images/vn/loki_mischievous.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_malice_hair_cut_d2'.tr(), characterImage: 'assets/images/vn/loki_mischievous.webp'),
+        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_malice_hair_cut_d3'.tr()),
         DialogueLine(speaker: 'vn_sif'.tr(), text: 'vn_scene_malice_hair_cut_d4'.tr(), characterImage: 'assets/images/vn/sif_shocked.webp'),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_malice_hair_cut_d5'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_malice_hair_cut_d5'.tr(), characterImage: 'assets/images/vn/loki_mischievous.webp'),
       ],
       nextSceneId: 'scene_malice_thor_fury',
     ),
@@ -152,17 +117,9 @@ class StoryData {
       dialogues: [
         DialogueLine(speaker: 'vn_sif'.tr(), text: 'vn_scene_malice_thor_fury_d1'.tr(), characterImage: 'assets/images/vn/sif_shocked.webp'),
         DialogueLine(speaker: 'vn_thor'.tr(), text: 'vn_scene_malice_thor_fury_d2'.tr(), characterImage: 'assets/images/vn/thor_angry.webp'),
-        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_malice_thor_fury_d3'.tr()),
-        DialogueLine(
-          speaker: 'vn_thor'.tr(),
-          text: 'vn_scene_malice_thor_fury_d4'.tr(),
-          characterImage: 'assets/images/vn/thor_angry.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_malice_thor_fury_d5'.tr(),
-          characterImage: 'assets/images/vn/loki_nervous.webp',
-        ),
+        DialogueLine(speaker: 'vn_thor'.tr(), text: 'vn_scene_malice_thor_fury_d3'.tr(), characterImage: 'assets/images/vn/thor_angry.webp'),
+        DialogueLine(speaker: 'vn_thor'.tr(), text: 'vn_scene_malice_thor_fury_d4'.tr(), characterImage: 'assets/images/vn/thor_angry.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_malice_thor_fury_d5'.tr(), characterImage: 'assets/images/vn/loki_nervous.webp'),
       ],
       nextSceneId: 'scene_malice_promise_hair',
     ),
@@ -173,11 +130,7 @@ class StoryData {
       title: 'vn_promise_hair_title'.tr(),
       backgroundImage: 'assets/images/vn/asgard_palace_morning.webp',
       dialogues: [
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_malice_promise_hair_d1'.tr(),
-          characterImage: 'assets/images/vn/loki_nervous.webp',
-        ),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_malice_promise_hair_d1'.tr(), characterImage: 'assets/images/vn/loki_nervous.webp'),
         DialogueLine(speaker: 'vn_thor'.tr(), text: 'vn_scene_malice_promise_hair_d2'.tr(), characterImage: 'assets/images/vn/thor_angry.webp'),
         DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_malice_promise_hair_d3'.tr()),
       ],
@@ -191,31 +144,11 @@ class StoryData {
       title: 'vn_drunk_fest_title'.tr(),
       backgroundImage: 'assets/images/vn/asgard_palace_morning.webp',
       dialogues: [
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_drunk_mead_fest_d1'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_scene_drunk_mead_fest_d2'.tr(),
-          characterImage: 'assets/images/vn/barrel.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_drunk_mead_fest_d3'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_scene_drunk_mead_fest_d4'.tr(),
-          characterImage: 'assets/images/vn/barrel.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_drunk_mead_fest_d5'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_drunk_mead_fest_d1'.tr(), characterImage: 'assets/images/vn/loki_mischievous.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_drunk_mead_fest_d2'.tr(), characterImage: 'assets/images/vn/loki_drunk.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_drunk_mead_fest_d3'.tr(), characterImage: 'assets/images/vn/loki_drunk.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_drunk_mead_fest_d4'.tr(), characterImage: 'assets/images/vn/loki_drunk.webp'),
+        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_drunk_mead_fest_d5'.tr()),
       ],
       nextSceneId: 'scene_drunk_accident',
     ),
@@ -226,27 +159,11 @@ class StoryData {
       title: 'vn_drunk_accident_title'.tr(),
       backgroundImage: 'assets/images/vn/asgard_palace_morning.webp',
       dialogues: [
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_drunk_accident_d1'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_scene_drunk_accident_d2'.tr(),
-          characterImage: 'assets/images/vn/sif_asleep.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_drunk_accident_d3'.tr(),
-          characterImage: 'assets/images/vn/loki_nervous.webp',
-        ),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_drunk_accident_d1'.tr(), characterImage: 'assets/images/vn/loki_mischievous.webp'),
+        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_drunk_accident_d2'.tr(), characterImage: 'assets/images/vn/sif_asleep.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_drunk_accident_d3'.tr(), characterImage: 'assets/images/vn/loki_nervous.webp'),
         DialogueLine(speaker: 'vn_sif'.tr(), text: 'vn_scene_drunk_accident_d4'.tr(), characterImage: 'assets/images/vn/sif_shocked.webp'),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_drunk_accident_d5'.tr(),
-          characterImage: 'assets/images/vn/loki_nervous.webp',
-        ),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_drunk_accident_d5'.tr(), characterImage: 'assets/images/vn/loki_nervous.webp'),
       ],
       nextSceneId: 'scene_drunk_thor_discovery',
     ),
@@ -257,26 +174,10 @@ class StoryData {
       title: 'vn_drunk_thor_title'.tr(),
       backgroundImage: 'assets/images/vn/asgard_palace_morning.webp',
       dialogues: [
-        DialogueLine(
-          speaker: 'vn_sif'.tr(),
-          text: 'vn_scene_drunk_thor_discovery_d1'.tr(),
-          characterImage: 'assets/images/vn/sif_shocked.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_thor'.tr(),
-          text: 'vn_scene_drunk_thor_discovery_d2'.tr(),
-          characterImage: 'assets/images/vn/thor_angry.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_drunk_thor_discovery_d3'.tr(),
-          characterImage: 'assets/images/vn/loki_nervous.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_thor'.tr(),
-          text: 'vn_scene_drunk_thor_discovery_d4'.tr(),
-          characterImage: 'assets/images/vn/thor_angry.webp',
-        ),
+        DialogueLine(speaker: 'vn_sif'.tr(), text: 'vn_scene_drunk_thor_discovery_d1'.tr(), characterImage: 'assets/images/vn/sif_shocked.webp'),
+        DialogueLine(speaker: 'vn_thor'.tr(), text: 'vn_scene_drunk_thor_discovery_d2'.tr(), characterImage: 'assets/images/vn/thor_angry.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_drunk_thor_discovery_d3'.tr(), characterImage: 'assets/images/vn/loki_nervous.webp'),
+        DialogueLine(speaker: 'vn_thor'.tr(), text: 'vn_scene_drunk_thor_discovery_d4'.tr(), characterImage: 'assets/images/vn/thor_angry.webp'),
         DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_drunk_thor_discovery_d5'.tr()),
       ],
       nextSceneId: 'scene_drunk_choice_promise',
@@ -312,17 +213,10 @@ class StoryData {
       title: 'vn_dwarves_title'.tr(),
       backgroundImage: 'assets/images/vn/dwarf_forge.webp',
       dialogues: [
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_dwarves_narrator_1'.tr(),
-        ),
+        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_dwarves_narrator_1'.tr()),
         DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_dwarves_sons_ivaldi_d1'.tr()),
-        DialogueLine(
-          speaker: 'vn_brokkr'.tr(),
-          text: 'vn_scene_dwarves_sons_ivaldi_d2'.tr(),
-          characterImage: 'assets/images/vn/brokkr_suspicious.webp',
-        ),
-        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_dwarves_sons_ivaldi_d3'.tr()),
+        DialogueLine(speaker: 'vn_brokkr'.tr(), text: 'vn_scene_dwarves_sons_ivaldi_d2'.tr(), characterImage: 'assets/images/vn/brokkr_suspicious.webp'),
+        DialogueLine(speaker: 'vn_brokkr'.tr(), text: 'vn_dwarves_sons_ivaldi_d3_brokkr'.tr(), characterImage: 'assets/images/vn/brokkr_suspicious.webp'),
       ],
       nextSceneId: 'scene_bet_brokkr_eitri',
     ),
@@ -334,30 +228,12 @@ class StoryData {
       title: 'vn_dwarves_drunk_title'.tr(),
       backgroundImage: 'assets/images/vn/dwarf_forge.webp',
       dialogues: [
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_scene_dwarves_sons_ivaldi_drunk_d1'.tr(),
-        ),
-        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_dwarves_sons_ivaldi_drunk_d2'.tr()),
-        DialogueLine(
-          speaker: 'vn_brokkr'.tr(),
-          text: 'vn_scene_dwarves_sons_ivaldi_drunk_d3'.tr(),
-          characterImage: 'assets/images/vn/brokkr_amused.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_dwarves_sons_ivaldi_drunk_d4'.tr(),
-          characterImage: 'assets/images/vn/loki_nervous.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_eitri'.tr(),
-          text: 'vn_scene_dwarves_sons_ivaldi_drunk_d5'.tr(),
-          characterImage: 'assets/images/vn/eitri_amused.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_dwarves_drunk_narrator_3'.tr(),
-        ),
+        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_dwarves_sons_ivaldi_drunk_d1'.tr()),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_dwarves_sons_ivaldi_drunk_d2'.tr(), characterImage: 'assets/images/vn/loki_nervous.webp'),
+        DialogueLine(speaker: 'vn_brokkr'.tr(), text: 'vn_scene_dwarves_sons_ivaldi_drunk_d3'.tr(), characterImage: 'assets/images/vn/brokkr_amused.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_dwarves_sons_ivaldi_drunk_d4'.tr(), characterImage: 'assets/images/vn/loki_nervous.webp'),
+        DialogueLine(speaker: 'vn_eitri'.tr(), text: 'vn_scene_dwarves_sons_ivaldi_drunk_d5'.tr(), characterImage: 'assets/images/vn/eitri_amused.webp'),
+        DialogueLine(speaker: 'vn_brokkr'.tr(), text: 'vn_dwarves_drunk_narrator_3'.tr(), characterImage: 'assets/images/vn/brokkr_amused.webp'),
       ],
       nextSceneId: 'scene_bet_brokkr_eitri_drunk',
     ),
@@ -386,31 +262,11 @@ class StoryData {
       title: 'vn_bet_title'.tr(),
       backgroundImage: 'assets/images/vn/dwarf_forge.webp',
       dialogues: [
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_bet_brokkr_eitri_d1'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_brokkr'.tr(),
-          text: 'vn_scene_bet_brokkr_eitri_d2'.tr(),
-          characterImage: 'assets/images/vn/brokkr_suspicious.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_eitri'.tr(),
-          text: 'vn_scene_bet_brokkr_eitri_d3'.tr(),
-          characterImage: 'assets/images/vn/eitri_interested.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_bet_brokkr_eitri_d4'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_brokkr'.tr(),
-          text: 'vn_scene_bet_brokkr_eitri_d5'.tr(),
-          characterImage: 'assets/images/vn/brokkr_determined.webp',
-        ),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_bet_brokkr_eitri_d1'.tr(), characterImage: 'assets/images/vn/loki_mischievous.webp'),
+        DialogueLine(speaker: 'vn_brokkr'.tr(), text: 'vn_scene_bet_brokkr_eitri_d2'.tr(), characterImage: 'assets/images/vn/brokkr_suspicious.webp'),
+        DialogueLine(speaker: 'vn_eitri'.tr(), text: 'vn_scene_bet_brokkr_eitri_d3'.tr(), characterImage: 'assets/images/vn/eitri_interested.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_bet_brokkr_eitri_d4'.tr(), characterImage: 'assets/images/vn/loki_mischievous.webp'),
+        DialogueLine(speaker: 'vn_brokkr'.tr(), text: 'vn_scene_bet_brokkr_eitri_d5'.tr(), characterImage: 'assets/images/vn/brokkr_determined.webp'),
       ],
       nextSceneId: 'scene_sabotage_attempts',
     ),
@@ -422,27 +278,11 @@ class StoryData {
       title: 'vn_bet_drunk_title'.tr(),
       backgroundImage: 'assets/images/vn/dwarf_forge.webp',
       dialogues: [
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_bet_brokkr_eitri_drunk_d1'.tr(),
-          characterImage: 'assets/images/vn/loki_nervous.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_brokkr'.tr(),
-          text: 'vn_scene_bet_brokkr_eitri_drunk_d2'.tr(),
-          characterImage: 'assets/images/vn/brokkr_amused.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_eitri'.tr(),
-          text: 'vn_scene_bet_brokkr_eitri_drunk_d3'.tr(),
-          characterImage: 'assets/images/vn/eitri_amused.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_scene_bet_brokkr_eitri_drunk_d4'.tr(),
-          characterImage: 'assets/images/vn/loki_nervous.webp',
-        ),
-        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_scene_bet_brokkr_eitri_drunk_d5'.tr()),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_bet_brokkr_eitri_drunk_d1'.tr(), characterImage: 'assets/images/vn/loki_nervous.webp'),
+        DialogueLine(speaker: 'vn_brokkr'.tr(), text: 'vn_scene_bet_brokkr_eitri_drunk_d2'.tr(), characterImage: 'assets/images/vn/brokkr_amused.webp'),
+        DialogueLine(speaker: 'vn_eitri'.tr(), text: 'vn_scene_bet_brokkr_eitri_drunk_d3'.tr(), characterImage: 'assets/images/vn/eitri_amused.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_scene_bet_brokkr_eitri_drunk_d4'.tr(), characterImage: 'assets/images/vn/loki_nervous.webp'),
+        DialogueLine(speaker: 'vn_brokkr'.tr(), text: 'vn_scene_bet_brokkr_eitri_drunk_d5_brokkr'.tr(), characterImage: 'assets/images/vn/brokkr_amused.webp'),
       ],
       nextSceneId: 'scene_sabotage_attempts_drunk',
     ),
@@ -636,72 +476,37 @@ class StoryData {
       title: 'vn_ending_artisan_title'.tr(),
       backgroundImage: 'assets/images/vn/asgard_palace_morning.webp',
       dialogues: [
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_ending_artisan_p1'.tr(),
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_ending_artisan_p2'.tr(),
-          characterImage: 'assets/images/vn/loki_thoughtful.webp',
-        ),
+        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_ending_artisan_p1'.tr()),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_ending_artisan_p1_loki_thought'.tr(), characterImage: 'assets/images/vn/loki_thoughtful.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_ending_artisan_p2'.tr(), characterImage: 'assets/images/vn/loki_thoughtful.webp'),
       ],
       nextSceneId: 'scene_artisan_at_forge',
     ),
-    
+
     'scene_artisan_at_forge': Scene(
       id: 'scene_artisan_at_forge',
       type: SceneType.dialogue,
       title: 'vn_ending_artisan_title'.tr(),
       backgroundImage: 'assets/images/vn/dwarf_forge.webp',
       dialogues: [
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_ending_artisan_p3'.tr(),
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_ending_artisan_p4'.tr(),
-          characterImage: 'assets/images/vn/loki_happy.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_brokkr'.tr(),
-          text: 'vn_ending_artisan_p5'.tr(),
-          characterImage: 'assets/images/vn/brokkr.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_eitri'.tr(),
-          text: 'vn_ending_artisan_p6'.tr(),
-          characterImage: 'assets/images/vn/eitri.webp',
-        ),
+        DialogueLine(speaker: 'vn_brokkr'.tr(), text: 'vn_ending_artisan_p3_brokkr'.tr(), characterImage: 'assets/images/vn/brokkr_suspicious.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_ending_artisan_p4'.tr(), characterImage: 'assets/images/vn/loki_happy.webp'),
+        DialogueLine(speaker: 'vn_brokkr'.tr(), text: 'vn_ending_artisan_p5'.tr(), characterImage: 'assets/images/vn/brokkr_amused.webp'),
+        DialogueLine(speaker: 'vn_eitri'.tr(), text: 'vn_ending_artisan_p6'.tr(), characterImage: 'assets/images/vn/eitri_amused.webp'),
       ],
       nextSceneId: 'scene_artisan_working',
     ),
-    
+
     'scene_artisan_working': Scene(
       id: 'scene_artisan_working',
       type: SceneType.dialogue,
       title: 'vn_ending_artisan_title'.tr(),
       backgroundImage: 'assets/images/vn/dwarf_forge.webp',
       dialogues: [
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_ending_artisan_p7'.tr(),
-        ),
-        DialogueLine(
-          speaker: 'vn_loki'.tr(),
-          text: 'vn_ending_artisan_p8'.tr(),
-          characterImage: 'assets/images/vn/loki_mischievous.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_ending_artisan_p9'.tr(),
-          characterImage: 'assets/images/vn/asgard_palace.webp',
-        ),
-        DialogueLine(
-          speaker: 'vn_speaker_narrateur'.tr(),
-          text: 'vn_ending_artisan_p10'.tr(),
-        ),
+        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_ending_artisan_p7'.tr(), characterImage: 'assets/images/vn/loki_happy.webp'),
+        DialogueLine(speaker: 'vn_loki'.tr(), text: 'vn_ending_artisan_p8'.tr(), characterImage: 'assets/images/vn/loki_happy.webp'),
+        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_ending_artisan_p9'.tr(), characterImage: 'assets/images/vn/asgard_palace_morning.webp'),
+        DialogueLine(speaker: 'vn_speaker_narrateur'.tr(), text: 'vn_ending_artisan_p10'.tr(), characterImage: 'assets/images/vn/loki_happy.webp'),
       ],
     ),
   };
