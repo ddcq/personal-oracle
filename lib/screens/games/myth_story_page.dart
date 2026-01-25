@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
@@ -46,6 +47,7 @@ class _MythStoryPageState extends State<MythStoryPage> {
   @override
   void dispose() {
     _soundService.playMainMenuMusic();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.dispose();
   }
 
@@ -189,9 +191,9 @@ class _MythStoryPageState extends State<MythStoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: ChibiAppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
@@ -215,8 +217,8 @@ class _MythStoryPageState extends State<MythStoryPage> {
         ],
         titleText: widget.mythStory.title.tr(),
       ),
-      body: AppBackground(
-        child: SafeArea(
+      body: SafeArea(
+        child: AppBackground(
           child: Center(
             child: SingleChildScrollView(
               child: FutureBuilder<List<String>>(

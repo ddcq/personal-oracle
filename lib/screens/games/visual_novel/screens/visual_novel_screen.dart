@@ -136,19 +136,21 @@ class _VisualNovelScreenState extends State<VisualNovelScreen> {
         title: Text(story.title, style: const TextStyle(color: Colors.white)),
         actions: [EmotionalStateIndicator(emotionalState: gameState.emotionalState)],
       ),
-      body: Column(
-        children: [
-          // Main scene display
-          Expanded(
-            child: SceneDisplayWidget(
-              scene: currentScene,
-              onChoiceMade: _onChoiceMade,
-              onSceneProgression: _onSceneProgression,
-              onScenarioComplete: _onScenarioComplete,
-              gameState: gameState,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Main scene display
+            Expanded(
+              child: SceneDisplayWidget(
+                scene: currentScene,
+                onChoiceMade: _onChoiceMade,
+                onSceneProgression: _onSceneProgression,
+                onScenarioComplete: _onScenarioComplete,
+                gameState: gameState,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
