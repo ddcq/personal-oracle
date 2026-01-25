@@ -128,6 +128,7 @@ flutter:
     - assets/images/heads/
     - assets/images/icons/
     - assets/images/menu/
+    - assets/images/minesweeper/
     - assets/images/profile/
     - assets/images/qix/
     - assets/images/snake/

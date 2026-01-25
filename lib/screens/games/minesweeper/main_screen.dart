@@ -147,9 +147,11 @@ class _MinesweeperView extends StatelessWidget {
         ),
         const _RuneLegend(),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _MinesweeperGrid(controller: controller),
+          child: Center(
+            child: AspectRatio(
+              aspectRatio: 1.0,
+              child: _MinesweeperGrid(controller: controller),
+            ),
           ),
         ),
       ],
@@ -162,41 +164,75 @@ class _MinesweeperGrid extends StatelessWidget {
 
   const _MinesweeperGrid({required this.controller});
 
+  // Constantes pour l'image de fond
+  static const double cellSize = 83.0;
+  static const double borderSize = 33.0;
+
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: controller.cols,
-      ),
-      itemCount: controller.rows * controller.cols,
-      itemBuilder: (context, index) {
-        final row = index ~/ controller.cols;
-        final col = index % controller.cols;
-        final cell = controller.board[row][col];
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = constraints.maxWidth;
+        final gridSize = controller.cols * cellSize + borderSize * 2;
+        final scale = size / gridSize;
 
-        return SimpleGestureDetector(
-          onTap: () => controller.revealCell(row, col),
-          onLongPress: () => controller.toggleFlag(row, col),
-          child:
-              Container(
-                    key: ValueKey(
-                      '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
-                    ),
-                    decoration: BoxDecoration(
-                      color: cell.isRevealed
-                          ? Colors.grey[800]
-                          : Colors.grey[600],
-                      border: Border.all(color: Colors.grey[900]!),
-                    ),
-                    child: Center(child: _buildCellContent(cell, context)),
-                  )
-                  .animate(
-                    key: ValueKey(
-                      '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
-                    ),
-                  )
-                  .scale(duration: const Duration(milliseconds: 300)),
+        return Container(
+          width: size,
+          height: size, // 1:1 ratio enforced
+          color: Colors.transparent,
+          child: Stack(
+            children: [
+              // Image de fond - prend 100% de la largeur et garde ratio 1:1
+              Positioned.fill(
+                child: Image.asset(
+                  'assets/images/minesweeper/background.webp',
+                  fit: BoxFit.fill,
+                ),
+              ),
+              // Grille de jeu positionnée avec bordure
+              Positioned(
+                left: borderSize * scale,
+                top: borderSize * scale,
+                width: controller.cols * cellSize * scale,
+                height: controller.rows * cellSize * scale,
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: controller.cols,
+                    childAspectRatio: 1.0,
+                  ),
+                  itemCount: controller.rows * controller.cols,
+                  itemBuilder: (context, index) {
+                    final row = index ~/ controller.cols;
+                    final col = index % controller.cols;
+                    final cell = controller.board[row][col];
+
+                    return SimpleGestureDetector(
+                      onTap: () => controller.revealCell(row, col),
+                      onLongPress: () => controller.toggleFlag(row, col),
+                      child: Container(
+                        key: ValueKey(
+                          '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
+                        ),
+                        decoration: BoxDecoration(
+                          color: cell.isRevealed
+                              ? Colors.transparent
+                              : Colors.black.withOpacity(0.3),
+                        ),
+                        child: Center(child: _buildCellContent(cell, context)),
+                      )
+                          .animate(
+                            key: ValueKey(
+                              '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
+                            ),
+                          )
+                          .scale(duration: const Duration(milliseconds: 300)),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

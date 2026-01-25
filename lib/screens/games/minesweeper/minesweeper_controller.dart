@@ -25,8 +25,8 @@ class MinesweeperController with ChangeNotifier {
   bool _isFirstMove = true;
 
   MinesweeperController({
-    this.rows = 10,
-    this.cols = 10,
+    this.rows = 9,
+    this.cols = 9,
     this.mineCount = 15,
     this.treasureCount = 5,
   }) {
