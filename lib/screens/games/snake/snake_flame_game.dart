@@ -1,4 +1,5 @@
-import 'dart:io';
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -389,12 +390,12 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
       if (gameState.value.score > oldScore) {
         switch (oldFoodType) {
           case FoodType.regular:
-            if (Platform.isAndroid || Platform.isIOS) {
+            if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
               Vibration.vibrate(duration: _vibrationDurationShort);
             }
             break;
           case FoodType.golden:
-            if (Platform.isAndroid || Platform.isIOS) {
+            if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
               Vibration.vibrate(
                 duration: _vibrationDurationShort,
                 amplitude: _vibrationAmplitudeHigh,
@@ -405,7 +406,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
             break;
         }
       } else {
-        if (Platform.isAndroid || Platform.isIOS) {
+        if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
           Vibration.vibrate(
             duration: _vibrationDurationMedium,
             amplitude: _vibrationAmplitudeHigh,
@@ -441,7 +442,7 @@ class SnakeFlameGame extends FlameGame with KeyboardEvents {
     gameState.value.isGameOver = true;
     gameState.value.isGameRunning = false;
     pauseEngine();
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       Vibration.vibrate(duration: _vibrationDurationLong);
     }
     final bool isVictory = gameState.value.score >= victoryScoreThreshold;

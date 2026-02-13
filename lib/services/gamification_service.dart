@@ -2,13 +2,14 @@ import 'package:collection/collection.dart'; // For firstWhereOrNull
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:oracle_d_asgard/services/database_service.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:flutter/foundation.dart'; // Import for ChangeNotifier
+import 'package:flutter/foundation.dart' show ChangeNotifier, debugPrint; // Import for ChangeNotifier
+import 'package:oracle_d_asgard/services/storage/storage_factory.dart';
+import 'package:oracle_d_asgard/services/storage/storage_adapter.dart';
+import 'package:oracle_d_asgard/services/game_reward_config.dart';
 
 import 'package:oracle_d_asgard/models/collectible_card.dart';
-import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/models/myth_story.dart';
+import 'package:oracle_d_asgard/models/unearned_content.dart';
 import 'package:oracle_d_asgard/data/collectible_cards_data.dart';
 import 'package:oracle_d_asgard/data/stories_data.dart';
 import 'package:oracle_d_asgard/models/card_version.dart'; // Import CardVersion
@@ -17,85 +18,114 @@ class GamificationService with ChangeNotifier {
   static final GamificationService _instance = GamificationService._internal();
   factory GamificationService() => _instance;
 
-  final DatabaseService _databaseService = DatabaseService();
+  late final StorageAdapter _storage;
 
-  GamificationService._internal();
+  // Cache for frequently accessed settings
+  final Map<String, dynamic> _settingsCache = {};
+  DateTime? _settingsCacheTime;
+
+  // Cache for progress data (shorter TTL as it changes more often)
+  UnearnedContent? _unearnedContentCache;
+  DateTime? _unearnedContentCacheTime;
+
+  GamificationService._internal() {
+    _storage = StorageFactory.getAdapter();
+  }
 
   static const String _playerCoinsKey = 'player_coins';
 
+  /// Checks if the settings cache is still valid.
+  bool get _isSettingsCacheValid {
+    if (_settingsCacheTime == null) return false;
+    return DateTime.now().difference(_settingsCacheTime!) <
+        GameRewardConfig.settingsCacheDuration;
+  }
+
+  /// Checks if the unearned content cache is still valid.
+  bool get _isUnearnedContentCacheValid {
+    if (_unearnedContentCacheTime == null) return false;
+    return DateTime.now().difference(_unearnedContentCacheTime!) <
+        GameRewardConfig.progressCacheDuration;
+  }
+
+  /// Invalidates all caches. Call this after any mutation operation.
+  void _invalidateCache() {
+    _settingsCache.clear();
+    _settingsCacheTime = null;
+    _unearnedContentCache = null;
+    _unearnedContentCacheTime = null;
+  }
+
+  /// Gets a setting from cache or storage.
+  Future<String?> _getCachedSetting(String key) async {
+    if (_isSettingsCacheValid && _settingsCache.containsKey(key)) {
+      return _settingsCache[key] as String?;
+    }
+
+    final value = await _storage.getSetting(key);
+    _settingsCache[key] = value;
+    _settingsCacheTime = DateTime.now();
+    return value;
+  }
+
+  /// Saves a setting and invalidates the cache.
+  Future<void> _saveSetting(String key, String value) async {
+    await _storage.saveSetting(key, value);
+    _settingsCache[key] = value;
+    _settingsCacheTime = DateTime.now();
+  }
+
   Future<void> saveGameScore(String gameName, int score) async {
-    final db = await _databaseService.database;
-    await db.insert('game_scores', {
-      'game_name': gameName,
-      'score': score,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
-    notifyListeners(); // Notify listeners after saving
+    await _storage.saveGameScore(
+      gameName: gameName,
+      score: score,
+      timestamp: DateTime.now().millisecondsSinceEpoch,
+    );
+    _invalidateCache(); // Scores might affect progress
+    notifyListeners();
   }
 
   Future<List<Map<String, dynamic>>> getGameScores(String gameName) async {
-    final db = await _databaseService.database;
-    return await db.query(
-      'game_scores',
-      where: 'game_name = ?',
-      whereArgs: [gameName],
-      orderBy: 'score DESC',
-    );
+    return await _storage.getGameScores(gameName);
   }
 
   Future<void> saveCoins(int amount) async {
-    final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': _playerCoinsKey,
-      'setting_value': amount.toString(),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _saveSetting(_playerCoinsKey, amount.toString());
     notifyListeners();
   }
 
   Future<int> getCoins() async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: [_playerCoinsKey],
-    );
-    if (result.isNotEmpty) {
-      return int.parse(result.first['setting_value'] as String);
-    }
-    return 0; // Default to 0 coins
+    final value = await _getCachedSetting(_playerCoinsKey);
+    return value != null ? int.tryParse(value) ?? 0 : 0;
   }
 
   Future<void> unlockCollectibleCard(CollectibleCard card) async {
-    // Modified to accept CollectibleCard
-    final db = await _databaseService.database;
-    await db.insert('collectible_cards', {
-      'card_id': card.id,
-      'version': card.version.toJson(), // Save version
-      'unlocked_at': DateTime.now().millisecondsSinceEpoch,
-    }, conflictAlgorithm: ConflictAlgorithm.ignore);
-    notifyListeners(); // Notify listeners
+    final isUnlocked = await _storage.isCollectibleCardUnlocked(
+      card.id,
+      card.version.toJson(),
+    );
+
+    if (!isUnlocked) {
+      await _storage.saveCollectibleCard(
+        cardId: card.id,
+        version: card.version.toJson(),
+        timestamp: DateTime.now().millisecondsSinceEpoch,
+      );
+      _invalidateCache(); // Card unlock affects unearned content
+      notifyListeners();
+    }
   }
 
   Future<bool> isCollectibleCardUnlocked(
     String cardId,
     CardVersion version,
   ) async {
-    // Modified to accept version
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'collectible_cards',
-      where: 'card_id = ? AND version = ?',
-      whereArgs: [cardId, version.toJson()],
-    );
-    return result.isNotEmpty;
+    return await _storage.isCollectibleCardUnlocked(cardId, version.toJson());
   }
 
   Future<List<CollectibleCard>> getUnlockedCollectibleCards() async {
-    // Modified return type
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'collectible_cards',
-    );
+    final result = await _storage.getUnlockedCollectibleCards();
+
     return result
         .map((e) {
           final cardId = e['card_id'] as String;
@@ -130,324 +160,214 @@ class GamificationService with ChangeNotifier {
   }
 
   Future<void> unlockStoryPart(String storyId, String partId) async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> existing = await db.query(
-      'story_progress',
-      where: 'story_id = ?',
-      whereArgs: [storyId],
-    );
+    final existing = await _storage.getStoryProgress(storyId);
 
-    if (existing.isNotEmpty) {
-      final List<dynamic> parts = jsonDecode(existing.first['parts_unlocked']);
-      if (!parts.contains(partId)) {
-        parts.add(partId);
-        await db.update(
-          'story_progress',
-          {'parts_unlocked': jsonEncode(parts)},
-          where: 'story_id = ?',
-          whereArgs: [storyId],
-        );
-      } else {}
-    } else {
-      await db.insert('story_progress', {
-        'story_id': storyId,
-        'parts_unlocked': jsonEncode([partId]),
-        'unlocked_at': DateTime.now().millisecondsSinceEpoch,
-      }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    List<String> parts = [];
+    if (existing != null) {
+      parts = List<String>.from(jsonDecode(existing['parts_unlocked']));
+      if (parts.contains(partId)) {
+        return; // Already unlocked, no need to save
+      }
     }
+
+    parts.add(partId);
+    await _storage.saveStoryProgress(
+      storyId: storyId,
+      partsUnlocked: parts,
+      timestamp: existing?['unlocked_at'] ?? DateTime.now().millisecondsSinceEpoch,
+    );
+    _invalidateCache(); // Story progress affects unearned content
     notifyListeners();
   }
 
   Future<Map<String, dynamic>?> getStoryProgress(String storyId) async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'story_progress',
-      where: 'story_id = ?',
-      whereArgs: [storyId],
-    );
-    if (result.isNotEmpty) {
-      return result.first;
-    }
-    return null;
+    return await _storage.getStoryProgress(storyId);
   }
 
   Future<List<Map<String, dynamic>>> getUnlockedStoryProgress() async {
-    final db = await _databaseService.database;
-    final result = await db.query('story_progress');
-
-    return result;
+    return await _storage.getAllStoryProgress();
   }
 
   Future<void> unlockStory(String storyId, List<String> allParts) async {
-    final db = await _databaseService.database;
-    await db.insert('story_progress', {
-      'story_id': storyId,
-      'parts_unlocked': jsonEncode(allParts),
-      'unlocked_at': DateTime.now().millisecondsSinceEpoch,
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _storage.saveStoryProgress(
+      storyId: storyId,
+      partsUnlocked: allParts,
+      timestamp: DateTime.now().millisecondsSinceEpoch,
+    );
+    _invalidateCache();
     notifyListeners();
   }
 
   Future<void> saveQuizResult(String deityName) async {
-    final db = await _databaseService.database;
-    await db.insert('quiz_results', {
-      'deity_name': deityName,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _storage.saveQuizResult(
+      deityName: deityName,
+      timestamp: DateTime.now().millisecondsSinceEpoch,
+    );
     notifyListeners();
   }
 
   Future<List<Map<String, dynamic>>> getQuizResults() async {
-    final db = await _databaseService.database;
-    return await db.query('quiz_results', orderBy: 'timestamp DESC');
+    return await _storage.getQuizResults();
   }
 
   Future<void> saveQixDifficulty(int level) async {
-    final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': 'qix_difficulty',
-      'setting_value': level.toString(),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _saveSetting('qix_difficulty', level.toString());
     notifyListeners();
   }
 
   Future<int> getQixDifficulty() async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['qix_difficulty'],
-    );
-    if (result.isNotEmpty) {
-      return int.parse(result.first['setting_value'] as String);
-    } else {
-      return 0; // Default difficulty
-    }
+    final value = await _getCachedSetting('qix_difficulty');
+    return value != null ? int.tryParse(value) ?? 0 : 0;
   }
 
   Future<void> saveSnakeDifficulty(int level) async {
-    final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': 'snake_difficulty',
-      'setting_value': level.toString(),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _saveSetting('snake_difficulty', level.toString());
     notifyListeners();
   }
 
   Future<int> getSnakeDifficulty() async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['snake_difficulty'],
-    );
-    if (result.isNotEmpty) {
-      return int.parse(result.first['setting_value'] as String);
-    } else {
-      return 0; // Default difficulty
-    }
+    final value = await _getCachedSetting('snake_difficulty');
+    return value != null ? int.tryParse(value) ?? 0 : 0;
   }
 
   Future<void> saveWordSearchDifficulty(int level) async {
-    final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': 'word_search_difficulty',
-      'setting_value': level.toString(),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _saveSetting('word_search_difficulty', level.toString());
     notifyListeners();
   }
 
   Future<int> getWordSearchDifficulty() async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['word_search_difficulty'],
-    );
-    if (result.isNotEmpty) {
-      return int.parse(result.first['setting_value'] as String);
-    } else {
-      return 1; // Default difficulty
-    }
+    final value = await _getCachedSetting('word_search_difficulty');
+    return value != null ? int.tryParse(value) ?? 1 : 1;
   }
 
   Future<void> savePuzzleDifficulty(int level) async {
-    final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': 'puzzle_difficulty',
-      'setting_value': level.toString(),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _saveSetting('puzzle_difficulty', level.toString());
     notifyListeners();
   }
 
   Future<int> getPuzzleDifficulty() async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['puzzle_difficulty'],
-    );
-    if (result.isNotEmpty) {
-      return int.parse(result.first['setting_value'] as String);
-    } else {
-      return 1; // Default difficulty (level 1)
-    }
+    final value = await _getCachedSetting('puzzle_difficulty');
+    return value != null ? int.tryParse(value) ?? 1 : 1;
   }
 
   Future<void> saveNorseQuizLevel(int level) async {
-    final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': 'norse_quiz_level',
-      'setting_value': level.toString(),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _saveSetting('norse_quiz_level', level.toString());
     notifyListeners();
   }
 
   Future<int> getNorseQuizLevel() async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['norse_quiz_level'],
-    );
-    if (result.isNotEmpty) {
-      return int.parse(result.first['setting_value'] as String);
-    }
-    return 1; // Default level
+    final value = await _getCachedSetting('norse_quiz_level');
+    return value != null ? int.tryParse(value) ?? 1 : 1;
   }
 
   Future<void> saveProfileName(String name) async {
-    final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': 'profile_name',
-      'setting_value': name,
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _saveSetting('profile_name', name);
     notifyListeners();
   }
 
   Future<String?> getProfileName() async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['profile_name'],
-    );
-    if (result.isNotEmpty) {
-      return result.first['setting_value'] as String?;
-    }
-    return null;
+    return await _getCachedSetting('profile_name');
   }
 
   Future<void> saveProfileDeityIcon(String deityId) async {
-    final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': 'profile_deity_icon',
-      'setting_value': deityId,
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _saveSetting('profile_deity_icon', deityId);
     notifyListeners();
   }
 
   Future<String?> getProfileDeityIcon() async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['profile_deity_icon'],
-    );
-    if (result.isNotEmpty) {
-      return result.first['setting_value'] as String?;
-    }
-    return null;
+    return await _getCachedSetting('profile_deity_icon');
   }
 
-  Future<Map<String, dynamic>> getUnearnedContent() async {
-    final allMythStories = getMythStories().skip(1).toList();
-    final unlockedCollectibleCards =
-        await getUnlockedCollectibleCards(); // Now returns CollectibleCard objects
+  /// Builds a map of unlocked story parts for quick lookup.
+  ///
+  /// This helper method is extracted to avoid duplication between
+  /// getUnearnedContent() and selectRandomUnearnedMythStory().
+  Future<Map<String, List<String>>> _getUnlockedStoryPartsMap() async {
     final unlockedStoryProgress = await getUnlockedStoryProgress();
-
-    // Create a map for quick lookup of unlocked cards by id and version
-    final Map<String, Map<CardVersion, bool>> unlockedCardVersions = {};
-    for (var card in unlockedCollectibleCards) {
-      unlockedCardVersions.putIfAbsent(card.id, () => {});
-      unlockedCardVersions[card.id]![card.version] = true;
-    }
-
-    // Filter CollectibleCards based on new logic
-    final List<CollectibleCard> unearnedCollectibleCards = [];
-    for (var card in allCollectibleCards) {
-      final bool hasChibi =
-          unlockedCardVersions[card.id]?[CardVersion.chibi] ?? false;
-      final bool hasPremium =
-          unlockedCardVersions[card.id]?[CardVersion.premium] ?? false;
-      final bool hasEpic =
-          unlockedCardVersions[card.id]?[CardVersion.epic] ?? false;
-
-      if (card.version == CardVersion.chibi && !hasChibi) {
-        unearnedCollectibleCards.add(card);
-      } else if (card.version == CardVersion.premium &&
-          hasChibi &&
-          !hasPremium) {
-        unearnedCollectibleCards.add(card);
-      } else if (card.version == CardVersion.epic && hasPremium && !hasEpic) {
-        unearnedCollectibleCards.add(card);
-      }
-    }
-
-    // Process MythStories (no change here, as it's not related to card versions)
     final Map<String, List<String>> unlockedStoryParts = {};
+
     for (var progress in unlockedStoryProgress) {
-      unlockedStoryParts[progress['story_id'] as String] = List<String>.from(
-        jsonDecode(progress['parts_unlocked']),
-      );
+      unlockedStoryParts[progress['story_id'] as String] =
+          List<String>.from(jsonDecode(progress['parts_unlocked']));
     }
 
-    final List<MythStory> unearnedMythStories = [];
-    for (var story in allMythStories) {
-      final List<String> partsUnlockedForStory =
-          unlockedStoryParts[story.id] ?? [];
-      if (partsUnlockedForStory.length < story.correctOrder.length) {
-        unearnedMythStories.add(story);
+    return unlockedStoryParts;
+  }
+
+  /// Gets all content (cards and stories) that the player has not yet earned.
+  ///
+  /// This method uses caching to avoid expensive calculations on every call.
+  /// The cache is invalidated whenever cards are unlocked or story progress changes.
+  Future<UnearnedContent> getUnearnedContent() async {
+    // Return cached result if still valid
+    if (_isUnearnedContentCacheValid && _unearnedContentCache != null) {
+      return _unearnedContentCache!;
+    }
+
+    final allMythStories = getMythStories().skip(1).toList();
+    final unlockedCollectibleCards = await getUnlockedCollectibleCards();
+    final unlockedStoryParts = await _getUnlockedStoryPartsMap();
+
+    // Build version lookup map for O(1) access
+    final Map<String, Set<CardVersion>> unlockedCardVersions = {};
+    for (var card in unlockedCollectibleCards) {
+      unlockedCardVersions.putIfAbsent(card.id, () => {}).add(card.version);
+    }
+
+    // Optimized filtering with single pass - O(n) instead of O(n²)
+    final unearnedCollectibleCards = allCollectibleCards.where((card) {
+      final versions = unlockedCardVersions[card.id];
+
+      // No versions unlocked - can earn chibi
+      if (versions == null || versions.isEmpty) {
+        return card.version == CardVersion.chibi;
       }
-    }
 
-    return {
-      'unearned_collectible_cards': unearnedCollectibleCards,
-      'unearned_myth_stories': unearnedMythStories,
-    };
+      // Check eligibility based on version progression: chibi → premium → epic
+      return switch (card.version) {
+        CardVersion.chibi => !versions.contains(CardVersion.chibi),
+        CardVersion.premium => versions.contains(CardVersion.chibi) &&
+                               !versions.contains(CardVersion.premium),
+        CardVersion.epic => versions.contains(CardVersion.premium) &&
+                           !versions.contains(CardVersion.epic),
+      };
+    }).toList();
+
+    // Filter stories that are not fully unlocked
+    final unearnedMythStories = allMythStories.where((story) {
+      final partsUnlocked = unlockedStoryParts[story.id]?.length ?? 0;
+      return partsUnlocked < story.correctOrder.length;
+    }).toList();
+
+    // Cache the result
+    _unearnedContentCache = UnearnedContent(
+      collectibleCards: unearnedCollectibleCards,
+      mythStories: unearnedMythStories,
+    );
+    _unearnedContentCacheTime = DateTime.now();
+
+    return _unearnedContentCache!;
   }
 
   Future<MythStory?> getRandomUnearnedMythStory() async {
     final unearnedContent = await getUnearnedContent();
-    final unearnedMythStories =
-        unearnedContent['unearned_myth_stories'] as List<MythStory>;
 
-    if (unearnedMythStories.isNotEmpty) {
+    if (unearnedContent.mythStories.isNotEmpty) {
       final random = Random();
-      return unearnedMythStories[random.nextInt(unearnedMythStories.length)];
+      return unearnedContent.mythStories[
+          random.nextInt(unearnedContent.mythStories.length)];
     }
     return null;
   }
 
   Future<MythStory?> selectRandomUnearnedMythStory(MythStory story) async {
-    final unlockedStoryProgress = await getUnlockedStoryProgress();
-    final Map<String, List<String>> unlockedStoryParts = {};
-    for (var progress in unlockedStoryProgress) {
-      unlockedStoryParts[progress['story_id'] as String] = List<String>.from(
-        jsonDecode(progress['parts_unlocked']),
-      );
-    }
+    final unlockedStoryParts = await _getUnlockedStoryPartsMap();
+    final partsUnlockedForStory = unlockedStoryParts[story.id] ?? [];
 
-    final List<String> partsUnlockedForStory =
-        unlockedStoryParts[story.id] ?? [];
-    MythCard? firstUnearnedChapter;
-
-    for (var mythCard in story.correctOrder) {
-      if (!partsUnlockedForStory.contains(mythCard.id)) {
-        firstUnearnedChapter = mythCard;
-        break;
-      }
-    }
+    // Find first unearned chapter
+    final firstUnearnedChapter = story.correctOrder.firstWhereOrNull(
+      (mythCard) => !partsUnlockedForStory.contains(mythCard.id),
+    );
 
     if (firstUnearnedChapter != null) {
       await unlockStoryPart(story.id, firstUnearnedChapter.id);
@@ -458,12 +378,11 @@ class GamificationService with ChangeNotifier {
 
   Future<CollectibleCard?> getRandomUnearnedCollectibleCard() async {
     final unearnedContent = await getUnearnedContent();
-    final unearnedCards =
-        unearnedContent['unearned_collectible_cards'] as List<CollectibleCard>;
 
-    if (unearnedCards.isNotEmpty) {
+    if (unearnedContent.collectibleCards.isNotEmpty) {
       final random = Random();
-      return unearnedCards[random.nextInt(unearnedCards.length)];
+      return unearnedContent.collectibleCards[
+          random.nextInt(unearnedContent.collectibleCards.length)];
     } else {
       debugPrint('All collectible cards already earned. No new card awarded.');
       return null;
@@ -480,14 +399,9 @@ class GamificationService with ChangeNotifier {
   }
 
   Future<int> getUnlockedChapterCountForStory(String storyId) async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'story_progress',
-      where: 'story_id = ?',
-      whereArgs: [storyId],
-    );
-    if (result.isNotEmpty) {
-      final List<dynamic> parts = jsonDecode(result.first['parts_unlocked']);
+    final progress = await _storage.getStoryProgress(storyId);
+    if (progress != null) {
+      final List<dynamic> parts = jsonDecode(progress['parts_unlocked']);
       return parts.length;
     }
     return 0;
@@ -500,50 +414,53 @@ class GamificationService with ChangeNotifier {
 
   // Visual Novel ending tracking
   Future<bool> isVisualNovelEndingCompleted(String endingId) async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key = ?',
-      whereArgs: ['vn_ending_$endingId'],
-    );
-    return result.isNotEmpty && result.first['setting_value'] == 'true';
+    final value = await _getCachedSetting('vn_ending_$endingId');
+    return value == 'true';
   }
 
   Future<void> markVisualNovelEndingCompleted(String endingId) async {
-    final db = await _databaseService.database;
-    await db.insert('game_settings', {
-      'setting_key': 'vn_ending_$endingId',
-      'setting_value': 'true',
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _saveSetting('vn_ending_$endingId', 'true');
     notifyListeners();
   }
 
   Future<List<String>> getCompletedVisualNovelEndings() async {
-    final db = await _databaseService.database;
-    final List<Map<String, dynamic>> result = await db.query(
-      'game_settings',
-      where: 'setting_key LIKE ?',
-      whereArgs: ['vn_ending_%'],
-    );
-    return result
-        .map((e) => (e['setting_key'] as String).replaceFirst('vn_ending_', ''))
-        .toList();
+    // Note: This could be optimized with a prefix query in storage adapters
+    // For now, we check all possible endings defined in GameRewardConfig
+    final List<String> endings = [];
+
+    for (int i = 1; i <= GameRewardConfig.maxVisualNovelEndings; i++) {
+      final endingId = 'ending_$i';
+      if (await isVisualNovelEndingCompleted(endingId)) {
+        endings.add(endingId);
+      }
+    }
+
+    return endings;
   }
 
-  Future<int> calculateGameReward({int level = 1}) {
-    const baseReward = 50;
-    final bonus = (level - 1) * 10;
-    return Future.value(baseReward + bonus);
+  /// Calculates the base game reward with level bonus.
+  ///
+  /// No longer returns Future as this is a pure calculation.
+  int calculateGameReward({int level = 1}) {
+    return GameRewardConfig.baseGameReward +
+        (level - 1) * GameRewardConfig.bonusPerLevel;
   }
 
+  /// Calculates coins earned from Snake game score.
   int calculateSnakeGameCoins(int score) {
-    return (score ~/ 20) * 10;
+    return (score ~/ GameRewardConfig.snakeScoreDivisor) *
+        GameRewardConfig.snakeCoinMultiplier;
   }
 
+  /// Calculates coins earned from Asgard Wall game score.
+  ///
+  /// Players must exceed minimum score to earn coins.
   int calculateAsgardWallCoins(int score) {
-    if (score <= 100) {
+    if (score <= GameRewardConfig.asgardWallMinScore) {
       return 0;
     }
-    return ((score - 100) ~/ 20) * 10;
+    return ((score - GameRewardConfig.asgardWallMinScore) ~/
+            GameRewardConfig.asgardWallScoreDivisor) *
+        GameRewardConfig.asgardWallCoinMultiplier;
   }
 }

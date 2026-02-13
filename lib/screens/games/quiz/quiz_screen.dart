@@ -1,4 +1,5 @@
-import 'dart:io';
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/data/app_data.dart';
@@ -36,14 +37,14 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
-    if (AppEnv.flagAds == 'enabled' && (Platform.isIOS || Platform.isAndroid)) {
+    if (AppEnv.flagAds == 'enabled' && !kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
       _loadInterstitialAd();
     }
   }
 
   @override
   void dispose() {
-    if (Platform.isIOS || Platform.isAndroid) {
+    if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
       _interstitialAd?.dispose();
     }
     super.dispose();

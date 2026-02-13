@@ -66,8 +66,7 @@ class GameController extends ChangeNotifier {
 
     if (_allChaptersEarned) {
       final unearnedContent = await _gamificationService.getUnearnedContent();
-      final cards = (unearnedContent['unearned_collectible_cards'] as List)
-          .cast<CollectibleCard>();
+      final cards = unearnedContent.collectibleCards;
       if (cards.isNotEmpty) {
         _rewardCard = cards[Random().nextInt(cards.length)];
         if (_rewardCard?.videoUrl != null &&

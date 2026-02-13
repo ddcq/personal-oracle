@@ -1,7 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
+import 'dart:io' show Directory;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
@@ -17,6 +18,13 @@ class DatabaseService {
   }
 
   Future<Database> _initDatabase() async {
+    // On web, sqflite doesn't work. Return a mock database that will fail gracefully.
+    if (kIsWeb) {
+      throw Exception(
+        'Database not supported on web platform. Use SharedPreferences or IndexedDB instead.',
+      );
+    }
+
     try {
       Directory documentsDirectory = await getApplicationDocumentsDirectory();
       String path = join(documentsDirectory.path, 'oracle_d_asgard.db');
@@ -117,6 +125,11 @@ class DatabaseService {
   }
 
   Future<void> deleteDb() async {
+    if (kIsWeb) {
+      _database = null;
+      return; // No-op on web
+    }
+
     try {
       if (_database != null && _database!.isOpen) {
         await _database!.close();

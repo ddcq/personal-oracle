@@ -1,22 +1,23 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:oracle_d_asgard/locator.dart';
-import 'package:oracle_d_asgard/services/cache_service.dart';
+import 'package:flutter/foundation.dart' show ChangeNotifier, debugPrint;
+import 'package:oracle_d_asgard/services/audio/audio_config.dart';
+import 'package:oracle_d_asgard/services/audio/audio_loader.dart';
+import 'package:oracle_d_asgard/services/audio/music_state.dart';
 
-enum MusicType { mainMenu, story, card, none }
+export 'package:oracle_d_asgard/services/audio/music_state.dart' show MusicType;
 
+/// Service for managing music and sound effects playback.
+///
+/// This service handles:
+/// - Background music (main menu, story reading, card music)
+/// - Sound effects with pooling
+/// - Mute/unmute state
+/// - Platform-specific audio loading (web vs native)
 class SoundService with ChangeNotifier {
   final AudioPlayer _musicPlayer = AudioPlayer();
   final List<AudioPlayer> _fxPlayers = [];
-  bool _isMuted = false;
-  bool _isFxMuted = false;
-  String? _readingPageMusicCardId;
-  bool _isReadingPageMusicMuted = false;
-  MusicType _currentMusic = MusicType.none;
-  MusicType _previousMusic = MusicType.none;
-  String? currentCardId;
-  String? _currentAmbientMusicCardId;
+  final MusicState _state = MusicState();
+  final AudioLoader _audioLoader = AudioLoader();
 
   SoundService() {
     // Constructor is now minimal
@@ -26,7 +27,7 @@ class SoundService with ChangeNotifier {
     _musicPlayer.setReleaseMode(ReleaseMode.loop);
 
     _musicPlayer.onPlayerComplete.listen((_) {
-      if (_currentMusic == MusicType.card && _previousMusic != MusicType.none) {
+      if (_state.currentMusic == MusicType.card && _state.hasPreviousMusic) {
         resumePreviousMusic();
       }
     });
@@ -53,31 +54,71 @@ class SoundService with ChangeNotifier {
     }
   }
 
-  bool get isMuted => _isMuted;
-  bool get isFxMuted => _isFxMuted;
-  bool get isReadingPageMusicMuted => _isReadingPageMusicMuted;
-  String? get readingPageMusicCardId => _readingPageMusicCardId;
-  String? get currentAmbientMusicCardId => _currentAmbientMusicCardId;
+  // Getters delegating to state
+  bool get isMuted => _state.isMuted;
+  bool get isFxMuted => _state.isFxMuted;
+  bool get isReadingPageMusicMuted => _state.isReadingPageMusicMuted;
+  String? get readingPageMusicCardId => _state.readingPageMusicCardId;
+  String? get currentAmbientMusicCardId => _state.currentAmbientMusicCardId;
+  String? get currentCardId => _state.currentCardId;
 
   void setFxMuted(bool muted) {
-    _isFxMuted = muted;
+    _state.setFxMuted(muted);
     notifyListeners();
   }
 
-  Future<void> playMainMenuMusic() async {
-    if (!_isMuted) {
-      try {
-        await _musicPlayer.stop();
-        await _musicPlayer.setReleaseMode(ReleaseMode.loop);
-        await _musicPlayer.setVolume(1.0);
+  /// Generic helper to play music with unified web/native handling.
+  Future<void> _playMusic({
+    required String fileName,
+    required ReleaseMode releaseMode,
+    required double volume,
+    required MusicType musicType,
+    String? cardId,
+  }) async {
+    if (!_state.shouldPlayMusic) return;
 
-        if (_currentAmbientMusicCardId != null) {
-          await _playAmbientMusicFromCard(_currentAmbientMusicCardId!);
-        } else {
-          await _playDefaultAmbientMusic();
-        }
-        _currentMusic = MusicType.mainMenu;
-        currentCardId = _currentAmbientMusicCardId;
+    try {
+      await _musicPlayer.stop();
+      await _audioLoader.configurePlayer(
+        player: _musicPlayer,
+        releaseMode: releaseMode,
+        volume: volume,
+      );
+
+      final musicUrl = AudioConfig.getMusicUrl(fileName);
+      final musicPath = AudioConfig.getMusicPath(fileName);
+
+      final result = await _audioLoader.playFromUrl(
+        player: _musicPlayer,
+        musicUrl: musicUrl,
+        musicPath: musicPath,
+      );
+
+      if (result.success) {
+        _state.setCurrentMusic(musicType);
+        _state.setCurrentCardId(cardId);
+      } else {
+        debugPrint('Failed to play music: ${result.errorMessage}');
+      }
+    } catch (e) {
+      debugPrint('Error playing music ($fileName): $e');
+    }
+  }
+
+  Future<void> playMainMenuMusic() async {
+    if (_state.shouldPlayMusic) {
+      try {
+        final fileName = _state.currentAmbientMusicCardId != null
+            ? '${_state.currentAmbientMusicCardId}.mp3'
+            : AudioConfig.ambientMusicFile;
+
+        await _playMusic(
+          fileName: fileName,
+          releaseMode: ReleaseMode.loop,
+          volume: AudioConfig.fullVolume,
+          musicType: MusicType.mainMenu,
+          cardId: _state.currentAmbientMusicCardId,
+        );
       } catch (e) {
         debugPrint('Error loading main menu music: $e');
       }
@@ -85,150 +126,46 @@ class SoundService with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _playDefaultAmbientMusic() async {
-    final musicPath = '/music/ambiance.mp3';
-    final musicUrl = 'https://ddcq.github.io$musicPath';
-    final cacheService = getIt<CacheService>();
-    final cacheManager = DefaultCacheManager();
-
-    var fileInfo = await cacheManager.getFileFromCache(musicUrl);
-    if (fileInfo == null) {
-      debugPrint('Downloading default ambient music: $musicUrl');
-      fileInfo = await cacheManager.downloadFile(musicUrl);
-      final version = cacheService.getVersionFor(musicPath);
-      if (version != null) {
-        await cacheService.setVersionFor(musicPath, version);
-      }
-    }
-
-    await _musicPlayer.setReleaseMode(ReleaseMode.loop);
-    await _musicPlayer.setVolume(1.0);
-    await _musicPlayer
-        .play(DeviceFileSource(fileInfo.file.path))
-        .timeout(
-          const Duration(seconds: 10),
-          onTimeout: () {
-            debugPrint('Default ambient music loading timeout');
-          },
-        );
-  }
-
-  Future<void> _playAmbientMusicFromCard(String cardId) async {
-    final musicPath = '/music/$cardId.mp3';
-    final musicUrl = 'https://ddcq.github.io$musicPath';
-    final cacheService = getIt<CacheService>();
-    final cacheManager = DefaultCacheManager();
-
-    var fileInfo = await cacheManager.getFileFromCache(musicUrl);
-    if (fileInfo == null) {
-      debugPrint('Downloading ambient music: $musicUrl');
-      fileInfo = await cacheManager.downloadFile(musicUrl);
-      final version = cacheService.getVersionFor(musicPath);
-      if (version != null) {
-        await cacheService.setVersionFor(musicPath, version);
-      }
-    }
-
-    await _musicPlayer.setReleaseMode(ReleaseMode.loop);
-    await _musicPlayer.setVolume(1.0);
-    await _musicPlayer
-        .play(DeviceFileSource(fileInfo.file.path))
-        .timeout(
-          const Duration(seconds: 10),
-          onTimeout: () {
-            debugPrint('Ambient card music loading timeout');
-          },
-        );
-  }
-
   void setAmbientMusicByCardId(String? cardId) {
-    _currentAmbientMusicCardId = cardId;
-    if (_currentMusic == MusicType.mainMenu) {
+    _state.setAmbientMusicCardId(cardId);
+    if (_state.currentMusic == MusicType.mainMenu) {
       playMainMenuMusic();
     }
     notifyListeners();
   }
 
   Future<void> playStoryMusic() async {
-    if (!_isMuted && !_isReadingPageMusicMuted) {
+    if (_state.shouldPlayStoryMusic) {
       try {
-        await _musicPlayer.stop();
-        await _musicPlayer.setReleaseMode(ReleaseMode.loop);
-        await _musicPlayer.setVolume(0.5);
+        final fileName = _state.readingPageMusicCardId != null
+            ? '${_state.readingPageMusicCardId}.mp3'
+            : AudioConfig.readingMusicFile;
 
-        if (_readingPageMusicCardId != null) {
-          await playStoryMusicFromCard(_readingPageMusicCardId!);
-        } else {
-          await _playDefaultReadingMusic();
-          _currentMusic = MusicType.story;
-          currentCardId = null;
-        }
+        await _playMusic(
+          fileName: fileName,
+          releaseMode: ReleaseMode.loop,
+          volume: AudioConfig.storyVolume,
+          musicType: MusicType.story,
+          cardId: _state.readingPageMusicCardId,
+        );
       } catch (e) {
         debugPrint('Error loading story music: $e');
       }
-    } else if (_isReadingPageMusicMuted) {
+    } else if (_state.isReadingPageMusicMuted) {
       await _musicPlayer.stop();
     }
   }
 
-  Future<void> _playDefaultReadingMusic() async {
-    final musicPath = '/music/reading.mp3';
-    final musicUrl = 'https://ddcq.github.io$musicPath';
-    final cacheService = getIt<CacheService>();
-    final cacheManager = DefaultCacheManager();
-
-    var fileInfo = await cacheManager.getFileFromCache(musicUrl);
-    if (fileInfo == null) {
-      debugPrint('Downloading default reading music: $musicUrl');
-      fileInfo = await cacheManager.downloadFile(musicUrl);
-      final version = cacheService.getVersionFor(musicPath);
-      if (version != null) {
-        await cacheService.setVersionFor(musicPath, version);
-      }
-    }
-
-    await _musicPlayer.setReleaseMode(ReleaseMode.loop);
-    await _musicPlayer.setVolume(0.5);
-    await _musicPlayer
-        .play(DeviceFileSource(fileInfo.file.path))
-        .timeout(
-          const Duration(seconds: 10),
-          onTimeout: () {
-            debugPrint('Default reading music loading timeout');
-          },
-        );
-  }
-
   Future<void> playStoryMusicFromCard(String cardId) async {
-    if (!_isMuted && !_isReadingPageMusicMuted) {
+    if (_state.shouldPlayStoryMusic) {
       try {
-        await _musicPlayer.stop();
-        final musicPath = '/music/$cardId.mp3';
-        final musicUrl = 'https://ddcq.github.io$musicPath';
-        final cacheService = getIt<CacheService>();
-        final cacheManager = DefaultCacheManager();
-
-        var fileInfo = await cacheManager.getFileFromCache(musicUrl);
-        if (fileInfo == null) {
-          debugPrint('Downloading music: $musicUrl');
-          fileInfo = await cacheManager.downloadFile(musicUrl);
-          final version = cacheService.getVersionFor(musicPath);
-          if (version != null) {
-            await cacheService.setVersionFor(musicPath, version);
-          }
-        }
-
-        await _musicPlayer.setReleaseMode(ReleaseMode.loop);
-        await _musicPlayer.setVolume(0.5);
-        await _musicPlayer
-            .play(DeviceFileSource(fileInfo.file.path))
-            .timeout(
-              const Duration(seconds: 10),
-              onTimeout: () {
-                debugPrint('Card music loading timeout');
-              },
-            );
-        _currentMusic = MusicType.story;
+        await _playMusic(
+          fileName: '$cardId.mp3',
+          releaseMode: ReleaseMode.loop,
+          volume: AudioConfig.storyVolume,
+          musicType: MusicType.story,
+          cardId: cardId,
+        );
       } catch (e) {
         debugPrint('Error loading card music for story: $e');
       }
@@ -236,16 +173,15 @@ class SoundService with ChangeNotifier {
   }
 
   void setReadingPageMusic(String? assetPath) {
-    if (assetPath == 'mute' || assetPath == null) {
-      _isReadingPageMusicMuted = true;
-      _readingPageMusicCardId = null;
-      if (_currentMusic == MusicType.story) {
+    if (assetPath == AudioConfig.muteMusicIdentifier || assetPath == null) {
+      _state.setReadingPageMusicMuted(true);
+      if (_state.currentMusic == MusicType.story) {
         _musicPlayer.stop();
       }
     } else {
-      _isReadingPageMusicMuted = false;
-      _readingPageMusicCardId = null;
-      if (_currentMusic == MusicType.story) {
+      _state.setReadingPageMusicMuted(false);
+      _state.setReadingPageMusicCardId(null);
+      if (_state.currentMusic == MusicType.story) {
         playStoryMusic();
       }
     }
@@ -253,58 +189,31 @@ class SoundService with ChangeNotifier {
   }
 
   void setReadingPageMusicByCardId(String cardId) {
-    _isReadingPageMusicMuted = false;
-    _readingPageMusicCardId = cardId;
-    if (_currentMusic == MusicType.story) {
+    _state.setReadingPageMusicCardId(cardId);
+    if (_state.currentMusic == MusicType.story) {
       playStoryMusicFromCard(cardId);
     }
     notifyListeners();
   }
 
   Future<void> playCardMusic(String cardId, {bool asAmbient = false}) async {
-    if (!_isMuted) {
+    if (_state.shouldPlayMusic) {
       try {
-        if (_currentMusic != MusicType.card && !asAmbient) {
-          _previousMusic = _currentMusic;
-        }
-        await _musicPlayer.stop();
-        final musicPath = '/music/$cardId.mp3';
-        final musicUrl = 'https://ddcq.github.io$musicPath';
-        final cacheService = getIt<CacheService>();
-        final cacheManager = DefaultCacheManager();
-
-        var fileInfo = await cacheManager.getFileFromCache(musicUrl);
-        if (fileInfo == null) {
-          debugPrint('Downloading music: $musicUrl');
-          fileInfo = await cacheManager.downloadFile(musicUrl);
-          final version = cacheService.getVersionFor(musicPath);
-          if (version != null) {
-            await cacheService.setVersionFor(musicPath, version);
-          }
+        // Save previous music if playing one-time card music
+        if (!asAmbient) {
+          _state.savePreviousMusic();
         }
 
-        if (asAmbient) {
-          await _musicPlayer.setReleaseMode(ReleaseMode.loop);
-        } else {
-          await _musicPlayer.setReleaseMode(ReleaseMode.stop);
-        }
-
-        await _musicPlayer
-            .play(DeviceFileSource(fileInfo.file.path))
-            .timeout(
-              const Duration(seconds: 10),
-              onTimeout: () {
-                debugPrint('Card music loading timeout for $cardId');
-                if (_previousMusic != MusicType.none && !asAmbient) {
-                  resumePreviousMusic();
-                }
-              },
-            );
-        _currentMusic = asAmbient ? MusicType.mainMenu : MusicType.card;
-        currentCardId = cardId;
+        await _playMusic(
+          fileName: '$cardId.mp3',
+          releaseMode: asAmbient ? ReleaseMode.loop : ReleaseMode.stop,
+          volume: AudioConfig.fullVolume,
+          musicType: asAmbient ? MusicType.mainMenu : MusicType.card,
+          cardId: cardId,
+        );
       } catch (e) {
         debugPrint('Error loading card music for $cardId: $e');
-        if (_previousMusic != MusicType.none && !asAmbient) {
+        if (_state.hasPreviousMusic && !asAmbient) {
           await resumePreviousMusic();
         }
       }
@@ -313,16 +222,22 @@ class SoundService with ChangeNotifier {
   }
 
   Future<void> resumePreviousMusic() async {
-    if (!_isMuted) {
-      if (_previousMusic == MusicType.mainMenu) {
-        await playMainMenuMusic();
-      } else if (_previousMusic == MusicType.story) {
-        await playStoryMusic();
-      } else {
-        await _musicPlayer.stop();
+    if (_state.shouldPlayMusic && _state.hasPreviousMusic) {
+      final previousType = _state.previousMusic;
+
+      switch (previousType) {
+        case MusicType.mainMenu:
+          await playMainMenuMusic();
+          break;
+        case MusicType.story:
+          await playStoryMusic();
+          break;
+        default:
+          await _musicPlayer.stop();
       }
-      _currentMusic = _previousMusic;
-      _previousMusic = MusicType.none;
+
+      _state.setCurrentMusic(previousType);
+      _state.clearPreviousMusic();
     }
   }
 
@@ -331,11 +246,9 @@ class SoundService with ChangeNotifier {
   }
 
   Future<void> resumeMusic() async {
-    if (!_isMuted) {
+    if (_state.shouldPlayMusic && _state.isPlayingMusic) {
       try {
-        if (_currentMusic != MusicType.none) {
-          await _musicPlayer.resume();
-        }
+        await _musicPlayer.resume();
       } catch (e) {
         debugPrint('Error resuming music: $e');
       }
@@ -343,37 +256,46 @@ class SoundService with ChangeNotifier {
   }
 
   void setMuted(bool muted) {
-    _isMuted = muted;
-    if (_isMuted) {
+    _state.setMuted(muted);
+
+    if (muted) {
       _musicPlayer.stop();
-      _currentMusic = MusicType.none;
-      currentCardId = null;
     } else {
       playMainMenuMusic();
     }
+
     notifyListeners();
   }
 
+  /// Plays a sound effect from assets.
+  ///
+  /// Uses a pool of AudioPlayers for concurrent playback.
+  /// Maximum concurrent effects is defined in AudioConfig.
   Future<void> playSoundEffect(String assetPath) async {
-    if (!_isFxMuted) {
-      try {
-        // Find an available player or create a new one
-        AudioPlayer? player = _fxPlayers.firstWhere(
-          (p) =>
-              p.state == PlayerState.completed ||
-              p.state == PlayerState.stopped,
-          orElse: () {
-            final newPlayer = AudioPlayer();
-            _fxPlayers.add(newPlayer);
-            return newPlayer;
-          },
-        );
+    if (_state.isFxMuted) return;
 
-        await player.setReleaseMode(ReleaseMode.release);
-        await player.play(AssetSource(assetPath));
-      } catch (e) {
-        debugPrint('Error playing sound effect $assetPath: $e');
-      }
+    try {
+      // Find an available player or create a new one (up to max limit)
+      AudioPlayer? player = _fxPlayers.firstWhere(
+        (p) =>
+            p.state == PlayerState.completed ||
+            p.state == PlayerState.stopped,
+        orElse: () {
+          if (_fxPlayers.length >= AudioConfig.maxConcurrentSoundEffects) {
+            // Reuse oldest player if at limit
+            return _fxPlayers.first;
+          }
+
+          final newPlayer = AudioPlayer();
+          _fxPlayers.add(newPlayer);
+          return newPlayer;
+        },
+      );
+
+      await player.setReleaseMode(ReleaseMode.release);
+      await player.play(AssetSource(assetPath));
+    } catch (e) {
+      debugPrint('Error playing sound effect $assetPath: $e');
     }
   }
 

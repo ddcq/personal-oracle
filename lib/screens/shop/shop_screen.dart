@@ -27,11 +27,9 @@ class _ShopScreenState extends State<ShopScreen> {
     final gamificationService = getIt<GamificationService>();
     final coins = await gamificationService.getCoins();
     final unearnedContent = await gamificationService.getUnearnedContent();
-    final availableCards =
-        unearnedContent['unearned_collectible_cards'] as List<CollectibleCard>;
+    final availableCards = unearnedContent.collectibleCards;
     availableCards.sort((a, b) => a.price.compareTo(b.price));
-    final availableStories =
-        unearnedContent['unearned_myth_stories'] as List<MythStory>;
+    final availableStories = unearnedContent.mythStories;
 
     // For stories, we need to know the price of the *next* unearned chapter
     final List<Map<String, dynamic>> storiesWithPrices = [];

@@ -1,7 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io' show Platform;
 import 'dart:async';
 import 'package:oracle_d_asgard/services/notification_service.dart';
 import 'package:oracle_d_asgard/utils/themes.dart';
@@ -21,9 +22,30 @@ import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/router.dart'; // Import the router
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:oracle_d_asgard/widgets/app_restart_wrapper.dart';
+import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Configure window size for desktop platforms (macOS, Windows, Linux)
+  // Skip this configuration on web since Platform checks aren't supported
+  if (!kIsWeb && (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
+    await windowManager.ensureInitialized();
+
+    const windowOptions = WindowOptions(
+      size: Size(400, 800), // Width x Height - resembles a mobile phone
+      minimumSize: Size(350, 600), // Minimum window size
+      center: true, // Center the window on screen
+      backgroundColor: Colors.transparent,
+      skipTaskbar: false,
+      titleBarStyle: TitleBarStyle.normal,
+    );
+
+    await windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+  }
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -138,6 +160,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     // Initialize ads with error handling
     try {
       if (AppEnv.flagAds == 'enabled' &&
+          !kIsWeb &&
           (Platform.isIOS || Platform.isAndroid)) {
         await MobileAds.instance.initialize();
       }
@@ -164,16 +187,19 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     await _loadAudioSettings();
 
     // Start music with error handling (only if not already started by _loadAudioSettings)
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final ambientMusicSelection = prefs.getString('ambientMusicSelection');
-      // Only play main menu if no custom music was selected
-      if (ambientMusicSelection == null || ambientMusicSelection == 'default') {
-        getIt<SoundService>().playMainMenuMusic();
+    // Skip autoplay on web - browsers require user interaction first
+    if (!kIsWeb) {
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        final ambientMusicSelection = prefs.getString('ambientMusicSelection');
+        // Only play main menu if no custom music was selected
+        if (ambientMusicSelection == null || ambientMusicSelection == 'default') {
+          getIt<SoundService>().playMainMenuMusic();
+        }
+      } catch (e) {
+        debugPrint('Failed to start music: $e');
+        // Continue without music
       }
-    } catch (e) {
-      debugPrint('Failed to start music: $e');
-      // Continue without music
     }
   }
 
@@ -212,7 +238,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       }
 
       // Play the selected ambient music after loading settings
-      if (ambientMusicSelection != 'mute') {
+      // Skip autoplay on web - browsers require user interaction first
+      if (!kIsWeb && ambientMusicSelection != 'mute') {
         if (ambientMusicSelection != null &&
             ambientMusicSelection != 'default') {
           soundService.playMainMenuMusic();

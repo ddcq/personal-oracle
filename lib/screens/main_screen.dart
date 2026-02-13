@@ -1,4 +1,5 @@
-import 'dart:io';
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +27,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    if (AppEnv.flagAds == 'enabled' && (Platform.isIOS || Platform.isAndroid)) {
+    if (AppEnv.flagAds == 'enabled' && !kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
       _loadBannerAd();
     }
   }
@@ -43,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void dispose() {
-    if (Platform.isIOS || Platform.isAndroid) {
+    if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
       _bannerAd?.dispose();
     }
     super.dispose();
