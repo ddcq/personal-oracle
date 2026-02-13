@@ -72,13 +72,17 @@ class _MainScreenState extends State<MainScreen> {
     final buttons = [
       {'icon': Icons.games_rounded, 'label': MainScreenTranslations.translate('main_screen_play', locale), 'route': '/games'},
       {'icon': Icons.emoji_events, 'label': MainScreenTranslations.translate('main_screen_trophies', locale), 'route': '/trophies'},
-      {'icon': Icons.person, 'label': MainScreenTranslations.translate('main_screen_profile', locale), 'route': '/profile'},
+      //      {'icon': Icons.person, 'label': MainScreenTranslations.translate('main_screen_profile', locale), 'route': '/profile'},
       {'icon': Icons.shopping_cart, 'label': 'Boutique', 'route': '/shop'},
+      {},
       {'icon': Icons.settings, 'label': MainScreenTranslations.translate('main_screen_settings', locale), 'route': '/settings'},
     ];
 
     return List.generate(buttons.length, (i) {
       final button = buttons[i];
+      if (button.isEmpty) {
+        return HexGridItem(onTap: () {}, child: const SizedBox.shrink());
+      }
       return HexGridItem(
         onTap: () => context.go(button['route'] as String),
         child: EpicButton(iconData: button['icon'] as IconData, label: button['label'] as String, onPressed: () => context.go(button['route'] as String)),

@@ -7,7 +7,6 @@ import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/epic_button.dart';
 import 'package:oracle_d_asgard/widgets/hexagonal_grid.dart';
-import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/utils/translation_extensions.dart';
 
 class MenuPrincipal extends StatelessWidget {
@@ -57,27 +56,7 @@ class MenuPrincipal extends StatelessWidget {
       routes.length,
       (i) => HexGridItem(
         onTap: () => context.go(routes[i]),
-        child: TranslationBuilder(
-          builder: (context) => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              EpicButton(onPressed: () => context.go(routes[i]), imagePath: images[i], size: 60.sp),
-              SizedBox(
-                width: 130.w,
-                child: Text(
-                  gameNames[i].trAsync(),
-                  style: ChibiTextStyles.appBarTitle.copyWith(
-                    fontSize: 14.sp,
-                    letterSpacing: 1.0.sp,
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.visible,
-                ),
-              ),
-            ],
-          ),
-        ),
+        child: EpicButton(onPressed: () => context.go(routes[i]), imagePath: images[i], size: 80.sp, label: gameNames[i].trAsync()),
       ),
     );
   }
@@ -137,22 +116,20 @@ class MenuPrincipal extends StatelessWidget {
                         distanceCurve: Curves.easeInOutQuad,
                       ),
                     ],
-                    child: Center(
-                      child: SizedBox(
-                        height: 580.h,
-                        width: double.infinity,
-                        child: Transform.translate(
-                          offset: Offset(MediaQuery.of(context).size.width * 0.05, 50.h),
-                          child: HexagonalGrid(
-                            items: _buildGridItems(context),
-                            columns: 3,
-                            rows: 5,
-                            hexSize: 55.0,
-                            skipFirstTile: true,
-                            horizontalOffset: 0.22,
-                            verticalOffset: 0.15,
-                            containerHeight: 580.h,
-                          ),
+                    child: SizedBox(
+                      height: 580.h,
+                      width: double.infinity,
+                      child: Transform.translate(
+                        offset: Offset(MediaQuery.of(context).size.width * 0.0, 50.h),
+                        child: HexagonalGrid(
+                          items: _buildGridItems(context),
+                          columns: 3,
+                          rows: 5,
+                          hexSize: 65.0,
+                          skipFirstTile: true,
+                          horizontalOffset: 0.22,
+                          verticalOffset: 0.10,
+                          containerHeight: 580.h,
                         ),
                       ),
                     ),

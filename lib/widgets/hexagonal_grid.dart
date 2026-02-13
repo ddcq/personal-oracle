@@ -6,10 +6,7 @@ class HexGridItem {
   final Widget child;
   final VoidCallback? onTap;
 
-  const HexGridItem({
-    required this.child,
-    this.onTap,
-  });
+  const HexGridItem({required this.child, this.onTap});
 }
 
 /// Widget pour afficher des éléments dans une grille hexagonale
@@ -61,9 +58,7 @@ class HexagonalGrid extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final positions = _calculatePositions(screenWidth);
 
-    return Stack(
-      children: _buildGridItems(positions),
-    );
+    return Stack(children: _buildGridItems(positions));
   }
 
   /// Calcule les positions de chaque élément dans la grille hexagonale
@@ -71,16 +66,14 @@ class HexagonalGrid extends StatelessWidget {
     final positions = <Offset>[];
     final scaledHexSize = hexSize.sp;
     final horizontalSpacing = scaledHexSize * 1.73; // √3 approximation for pointy hex
-    final verticalSpacing = scaledHexSize * 1.5;
+    final verticalSpacing = scaledHexSize * 1.73;
 
     // Calculer la largeur totale de la grille
     final gridWidth = (columns - 1) * horizontalSpacing + scaledHexSize * 2.4;
 
     // Calculer startX selon le mode de centrage
-    final startX = centerHorizontally 
-        ? (screenWidth - gridWidth) / 2 + scaledHexSize * 1.2
-        : screenWidth * horizontalOffset;
-    
+    final startX = centerHorizontally ? (screenWidth - gridWidth) / 2 + scaledHexSize * 1.2 : screenWidth * horizontalOffset;
+
     final startY = containerHeight * verticalOffset;
 
     for (int row = 0; row < rows; row++) {
@@ -112,18 +105,14 @@ class HexagonalGrid extends StatelessWidget {
 
       widgets.add(
         Positioned(
-          left: position.dx - scaledHexSize * 1.2,
+          left: position.dx - scaledHexSize * 1.4,
           top: position.dy - scaledHexSize * 1.4,
           child: GestureDetector(
             onTap: item.onTap,
             child: SizedBox(
               width: scaledHexSize * 2.4,
               height: scaledHexSize * 2.8,
-              child: Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none,
-                children: [item.child],
-              ),
+              child: Stack(alignment: Alignment.center, clipBehavior: Clip.none, children: [item.child]),
             ),
           ),
         ),
