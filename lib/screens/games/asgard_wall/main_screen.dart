@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:async';
 import 'dart:math';
 
@@ -13,10 +14,11 @@ import 'package:oracle_d_asgard/screens/games/asgard_wall/models/wall_game_model
 import 'package:oracle_d_asgard/screens/games/asgard_wall/welcome_screen.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
-import 'package:oracle_d_asgard/widgets/epic_icon_button.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/widgets/squared_icon_button.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -382,7 +384,7 @@ class _GameScreenState extends State<GameScreen> {
           return true;
         case LogicalKeyboardKey.arrowDown:
         case LogicalKeyboardKey.keyS:
-          movePieceDown();
+          dropPiece();
           return true;
         case LogicalKeyboardKey.arrowUp:
         case LogicalKeyboardKey.keyW:
@@ -605,45 +607,37 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/backgrounds/landscape.jpg'),
-              fit: BoxFit.cover,
-            ),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        extendBodyBehindAppBar: false,
+        appBar: ChibiAppBar(
+          titleText: 'asgard_wall_game_screen_title'.tr(),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              context.go('/games');
+            },
           ),
-        ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          extendBodyBehindAppBar: false,
-          appBar: ChibiAppBar(
-            titleText: 'asgard_wall_game_screen_title'.tr(),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.help_outline, color: Colors.white),
               onPressed: () {
-                context.go('/games');
+                WelcomeScreenDialog.show(
+                  context,
+                  onGamePaused: () {
+                    _isPaused = true;
+                  },
+                  onGameResumed: () {
+                    _isPaused = false;
+                  },
+                );
               },
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.help_outline, color: Colors.white),
-                onPressed: () {
-                  WelcomeScreenDialog.show(
-                    context,
-                    onGamePaused: () {
-                      _isPaused = true;
-                    },
-                    onGameResumed: () {
-                      _isPaused = false;
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
-          body: Focus(
+          ],
+        ),
+        body: SafeArea(
+          child: Focus(
             focusNode: focusNode,
             onKeyEvent: (node, event) {
               return handleKeyPress(event)
@@ -680,52 +674,55 @@ class _GameScreenState extends State<GameScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      EpicIconButton(
-                        onPressed: gameActive ? movePieceLeft : () {},
-                        color: Colors.blueGrey,
-                        icon: const Icon(Icons.arrow_left, color: Colors.white),
-                      ),
-                      EpicIconButton(
-                        onPressed: gameActive ? rotatePiece : () {},
-                        color: Colors.blueGrey,
-                        icon: const Icon(
-                          Icons.rotate_right,
-                          color: Colors.white,
+                  if (!kIsWeb)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SquaredIconButton(
+                          onPressed: gameActive ? movePieceLeft : () {},
+                          child: const Icon(
+                            Icons.arrow_left,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      EpicIconButton(
-                        onPressed: gameActive ? dropPiece : () {},
-                        color: Colors.blueGrey,
-                        icon: const Icon(
-                          Icons.arrow_downward,
-                          color: Colors.white,
+                        SquaredIconButton(
+                          onPressed: gameActive ? rotatePiece : () {},
+                          child: const Icon(
+                            Icons.rotate_right,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      EpicIconButton(
-                        onPressed: gameActive ? movePieceRight : () {},
-                        color: Colors.blueGrey,
-                        icon: const Icon(
-                          Icons.arrow_right,
-                          color: Colors.white,
+                        SquaredIconButton(
+                          onPressed: gameActive ? dropPiece : () {},
+                          child: const Icon(
+                            Icons.arrow_downward,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                        SquaredIconButton(
+                          onPressed: gameActive ? movePieceRight : () {},
+                          child: const Icon(
+                            Icons.arrow_right,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
                   const SizedBox(height: 16),
-                  ChibiTextButton(
-                    onPressed: startGame,
-                    text: 'asgard_wall_game_screen_restart'.tr(),
-                    color: const Color(0xFFFFD700),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: ChibiTextButton(
+                      onPressed: startGame,
+                      text: 'asgard_wall_game_screen_restart'.tr(),
+                      color: const Color(0xFFC0A000),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

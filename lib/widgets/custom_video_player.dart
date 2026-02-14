@@ -1,10 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/services/cache_service.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart' as video_player;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'dart:io';
 
 class CustomVideoPlayer extends StatefulWidget {
   final String videoUrl;
@@ -56,33 +57,46 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   }
 
   Future<void> _performVideoLoad() async {
-    final cacheService = getIt<CacheService>();
-    final videoPath = Uri.parse(widget.videoUrl).path;
-    FileInfo? fileInfo = await DefaultCacheManager().getFileFromCache(
-      widget.videoUrl,
-    );
-    File videoFile;
-
-    if (fileInfo != null && fileInfo.file.existsSync()) {
-      debugPrint('Video found in cache: ${fileInfo.file.path}');
-      videoFile = fileInfo.file;
+    if (kIsWeb) {
+      _videoPlayerController = video_player.VideoPlayerController.networkUrl(
+        Uri.parse(widget.videoUrl),
+        videoPlayerOptions: video_player.VideoPlayerOptions(
+          mixWithOthers: true,
+        ),
+      );
     } else {
-      debugPrint('Downloading video: ${widget.videoUrl}');
-      fileInfo = await DefaultCacheManager().downloadFile(widget.videoUrl);
-      videoFile = fileInfo.file;
-      debugPrint('Video downloaded: ${fileInfo.file.path}');
-      final version = cacheService.getVersionFor(videoPath);
-      if (version != null) {
-        await cacheService.setVersionFor(videoPath, version);
+      final cacheService = getIt<CacheService>();
+      final videoPath = Uri.parse(widget.videoUrl).path;
+      var fileInfo = await DefaultCacheManager().getFileFromCache(
+        widget.videoUrl,
+      );
+      File videoFile;
+
+      if (fileInfo != null && fileInfo.file.existsSync()) {
+        debugPrint('Video found in cache: ${fileInfo.file.path}');
+        videoFile = fileInfo.file;
+      } else {
+        debugPrint('Downloading video: ${widget.videoUrl}');
+        final downloadedFile = await DefaultCacheManager().downloadFile(
+          widget.videoUrl,
+        );
+        videoFile = downloadedFile.file;
+        debugPrint('Video downloaded: ${downloadedFile.file.path}');
+        final version = cacheService.getVersionFor(videoPath);
+        if (version != null) {
+          await cacheService.setVersionFor(videoPath, version);
+        }
       }
+
+      if (!mounted) return;
+
+      _videoPlayerController = video_player.VideoPlayerController.file(
+        videoFile,
+        videoPlayerOptions: video_player.VideoPlayerOptions(
+          mixWithOthers: true,
+        ),
+      );
     }
-
-    if (!mounted) return;
-
-    _videoPlayerController = video_player.VideoPlayerController.file(
-      videoFile,
-      videoPlayerOptions: video_player.VideoPlayerOptions(mixWithOthers: true),
-    );
 
     await _videoPlayerController!.initialize();
 
