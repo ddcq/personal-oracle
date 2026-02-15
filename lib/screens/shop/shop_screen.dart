@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/locator.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
@@ -307,290 +308,306 @@ class _ShopScreenState extends State<ShopScreen> {
         final availableStories =
             snapshot.data!['availableStories'] as List<Map<String, dynamic>>;
 
-        return Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            title: Text('shop_title'.tr()),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.monetization_on,
-                      color: Colors.amber,
-                      size: 24,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      coins.toString(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, dynamic result) {
+            if (didPop) return;
+            context.go('/');
+          },
+          child: Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              title: Text('shop_title'.tr()),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  context.go('/');
+                },
               ),
-            ],
-          ),
-          body: AppBackground(
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: kToolbarHeight + MediaQuery.of(context).padding.top,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.monetization_on,
+                        color: Colors.amber,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        coins.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'shop_cards_section_title'.tr(),
-                        style: Theme.of(context).textTheme.headlineMedium
-                            ?.copyWith(color: Colors.white),
-                      ),
-                    ),
-                    if (availableCards.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'shop_no_cards_available'.tr(),
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(color: Colors.white70),
-                        ),
-                      )
-                    else
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.all(10),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 0.7,
-                            ),
-                        itemCount: availableCards.length,
-                        itemBuilder: (context, index) {
-                          final card = availableCards[index];
-                          final canAfford = coins >= card.price;
-                          return Opacity(
-                            opacity: canAfford ? 1.0 : 0.5,
-                            child: Card(
-                              color: Colors.black.withAlpha(200),
-                              clipBehavior: Clip.antiAlias,
-                              child: InkWell(
-                                onTap: canAfford ? () => _buyCard(card) : null,
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Expanded(
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                              top: Radius.circular(12),
-                                            ),
-                                        child: Image.asset(
-                                          'assets/images/${card.imagePath}',
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 48,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0,
-                                          vertical: 4.0,
-                                        ),
-                                        child: Text(
-                                          card.title,
-                                          textAlign: TextAlign.center,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        bottom: 8.0,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.monetization_on,
-                                            color: canAfford
-                                                ? Colors.amber
-                                                : Colors.grey,
-                                            size: 20,
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            card.price.toString(),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: canAfford
-                                                  ? Colors.white
-                                                  : Colors.grey,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'shop_stories_section_title'.tr(),
-                        style: Theme.of(context).textTheme.headlineMedium
-                            ?.copyWith(color: Colors.white),
-                      ),
-                    ),
-                    if (availableStories.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'shop_no_stories_available'.tr(),
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(color: Colors.white70),
-                        ),
-                      )
-                    else
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.all(10),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 0.7,
-                            ),
-                        itemCount: availableStories.length,
-                        itemBuilder: (context, index) {
-                          final storyData = availableStories[index];
-                          final story = storyData['story'] as MythStory;
-                          final price = storyData['price'] as int;
-                          final imagePath = storyData['imagePath'] as String;
-                          final canAfford = coins >= price;
-                          return Opacity(
-                            opacity: canAfford ? 1.0 : 0.5,
-                            child: Card(
-                              color: Colors.black.withAlpha(200),
-                              clipBehavior: Clip.antiAlias,
-                              child: InkWell(
-                                onTap: canAfford
-                                    ? () => _buyStory(
-                                        story,
-                                        price,
-                                        imagePath.isNotEmpty
-                                            ? 'assets/images/stories/$imagePath'
-                                            : 'assets/images/icons/story.png',
-                                      )
-                                    : null,
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Expanded(
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            const BorderRadius.vertical(
-                                              top: Radius.circular(12),
-                                            ),
-                                        child: imagePath.isNotEmpty
-                                            ? Image.asset(
-                                                'assets/images/stories/$imagePath',
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Container(
-                                                color: Colors.black54,
-                                                child: const Icon(
-                                                  Icons.book,
-                                                  color: Colors.white,
-                                                  size: 50,
-                                                ),
-                                              ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 48,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0,
-                                          vertical: 4.0,
-                                        ),
-                                        child: Text(
-                                          story.title.tr(),
-                                          textAlign: TextAlign.center,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        bottom: 8.0,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.monetization_on,
-                                            color: canAfford
-                                                ? Colors.amber
-                                                : Colors.grey,
-                                            size: 20,
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            price.toString(),
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: canAfford
-                                                  ? Colors.white
-                                                  : Colors.grey,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                  ]),
-                ),
               ],
+            ),
+            body: AppBackground(
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height:
+                          kToolbarHeight + MediaQuery.of(context).padding.top,
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'shop_cards_section_title'.tr(),
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(color: Colors.white),
+                        ),
+                      ),
+                      if (availableCards.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'shop_no_cards_available'.tr(),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(color: Colors.white70),
+                          ),
+                        )
+                      else
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.all(10),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                childAspectRatio: 0.7,
+                              ),
+                          itemCount: availableCards.length,
+                          itemBuilder: (context, index) {
+                            final card = availableCards[index];
+                            final canAfford = coins >= card.price;
+                            return Opacity(
+                              opacity: canAfford ? 1.0 : 0.5,
+                              child: Card(
+                                color: Colors.black.withAlpha(200),
+                                clipBehavior: Clip.antiAlias,
+                                child: InkWell(
+                                  onTap: canAfford
+                                      ? () => _buyCard(card)
+                                      : null,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Expanded(
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              const BorderRadius.vertical(
+                                                top: Radius.circular(12),
+                                              ),
+                                          child: Image.asset(
+                                            'assets/images/${card.imagePath}',
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 48,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0,
+                                            vertical: 4.0,
+                                          ),
+                                          child: Text(
+                                            card.title,
+                                            textAlign: TextAlign.center,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 8.0,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.monetization_on,
+                                              color: canAfford
+                                                  ? Colors.amber
+                                                  : Colors.grey,
+                                              size: 20,
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              card.price.toString(),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: canAfford
+                                                    ? Colors.white
+                                                    : Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'shop_stories_section_title'.tr(),
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(color: Colors.white),
+                        ),
+                      ),
+                      if (availableStories.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'shop_no_stories_available'.tr(),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(color: Colors.white70),
+                          ),
+                        )
+                      else
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.all(10),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                childAspectRatio: 0.7,
+                              ),
+                          itemCount: availableStories.length,
+                          itemBuilder: (context, index) {
+                            final storyData = availableStories[index];
+                            final story = storyData['story'] as MythStory;
+                            final price = storyData['price'] as int;
+                            final imagePath = storyData['imagePath'] as String;
+                            final canAfford = coins >= price;
+                            return Opacity(
+                              opacity: canAfford ? 1.0 : 0.5,
+                              child: Card(
+                                color: Colors.black.withAlpha(200),
+                                clipBehavior: Clip.antiAlias,
+                                child: InkWell(
+                                  onTap: canAfford
+                                      ? () => _buyStory(
+                                          story,
+                                          price,
+                                          imagePath.isNotEmpty
+                                              ? 'assets/images/stories/$imagePath'
+                                              : 'assets/images/icons/story.png',
+                                        )
+                                      : null,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Expanded(
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              const BorderRadius.vertical(
+                                                top: Radius.circular(12),
+                                              ),
+                                          child: imagePath.isNotEmpty
+                                              ? Image.asset(
+                                                  'assets/images/stories/$imagePath',
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Container(
+                                                  color: Colors.black54,
+                                                  child: const Icon(
+                                                    Icons.book,
+                                                    color: Colors.white,
+                                                    size: 50,
+                                                  ),
+                                                ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 48,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0,
+                                            vertical: 4.0,
+                                          ),
+                                          child: Text(
+                                            story.title.tr(),
+                                            textAlign: TextAlign.center,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 8.0,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.monetization_on,
+                                              color: canAfford
+                                                  ? Colors.amber
+                                                  : Colors.grey,
+                                              size: 20,
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              price.toString(),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: canAfford
+                                                    ? Colors.white
+                                                    : Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                    ]),
+                  ),
+                ],
+              ),
             ),
           ),
         );
