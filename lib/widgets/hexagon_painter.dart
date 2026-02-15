@@ -7,11 +7,7 @@ class HexagonPainter extends CustomPainter {
   final Color? borderColor;
   final double borderWidth;
 
-  const HexagonPainter({
-    this.color,
-    this.borderColor,
-    this.borderWidth = 2.0,
-  });
+  const HexagonPainter({this.color, this.borderColor, this.borderWidth = 2.0});
 
   @override
   void paint(Canvas canvas, Size size) {

@@ -122,17 +122,18 @@ final GoRouter router = GoRouter(
           },
         ),
         GoRoute(
-            path: '/norse_quiz',
-            builder: (context, state) => const NorseQuizScreen(),
-            routes: [
-              GoRoute(
-                path: 'result',
-                builder: (context, state) {
-                  final score = state.extra as int? ?? 0;
-                  return NorseQuizResultScreen(score: score);
-                },
-              ),
-            ]),
+          path: '/norse_quiz',
+          builder: (context, state) => const NorseQuizScreen(),
+          routes: [
+            GoRoute(
+              path: 'result',
+              builder: (context, state) {
+                final score = state.extra as int? ?? 0;
+                return NorseQuizResultScreen(score: score);
+              },
+            ),
+          ],
+        ),
         GoRoute(
           path: 'visual_novel',
           builder: (BuildContext context, GoRouterState state) {

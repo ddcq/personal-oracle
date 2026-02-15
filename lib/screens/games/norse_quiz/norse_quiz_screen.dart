@@ -40,9 +40,15 @@ class _NorseQuizScreenState extends State<NorseQuizScreen> {
   }
 
   void _setupQuestionsForLevel() {
-    final easyQuestions = norseQuizQuestions.where((q) => q.difficulty == QuizDifficulty.easy).toList();
-    final mediumQuestions = norseQuizQuestions.where((q) => q.difficulty == QuizDifficulty.medium).toList();
-    final hardQuestions = norseQuizQuestions.where((q) => q.difficulty == QuizDifficulty.hard).toList();
+    final easyQuestions = norseQuizQuestions
+        .where((q) => q.difficulty == QuizDifficulty.easy)
+        .toList();
+    final mediumQuestions = norseQuizQuestions
+        .where((q) => q.difficulty == QuizDifficulty.medium)
+        .toList();
+    final hardQuestions = norseQuizQuestions
+        .where((q) => q.difficulty == QuizDifficulty.hard)
+        .toList();
 
     easyQuestions.shuffle();
     mediumQuestions.shuffle();
@@ -111,9 +117,7 @@ class _NorseQuizScreenState extends State<NorseQuizScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Scaffold(
-        body: AppBackground(
-          child: Center(child: CircularProgressIndicator()),
-        ),
+        body: AppBackground(child: Center(child: CircularProgressIndicator())),
       );
     }
 
@@ -158,7 +162,10 @@ class _NorseQuizScreenState extends State<NorseQuizScreen> {
                     }
 
                     return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 8.0,
+                      ),
                       child: ChibiTextButton(
                         text: option.tr(),
                         color: buttonColor,

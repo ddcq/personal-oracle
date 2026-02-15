@@ -86,8 +86,7 @@ class MusicState {
   bool get shouldPlayMusic => !_isMuted;
 
   /// Checks if story music should play (not muted globally or specifically).
-  bool get shouldPlayStoryMusic =>
-      !_isMuted && !_isReadingPageMusicMuted;
+  bool get shouldPlayStoryMusic => !_isMuted && !_isReadingPageMusicMuted;
 
   /// Checks if there's a previous music type to restore.
   bool get hasPreviousMusic => _previousMusic != MusicType.none;

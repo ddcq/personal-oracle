@@ -92,7 +92,8 @@ class Scene {
   final SceneType type;
   final String title; // Scene title
   final String? content; // Short context text (for choice scenes)
-  final List<String>? paragraphs; // Main text content as array of paragraphs (for narrative scenes)
+  final List<String>?
+  paragraphs; // Main text content as array of paragraphs (for narrative scenes)
   final List<DialogueLine>? dialogues; // Dialogue lines (for dialogue scenes)
   final String? speaker; // Who is speaking (if single dialogue)
   final List<Choice>? choices; // Available choices (if choice scene)

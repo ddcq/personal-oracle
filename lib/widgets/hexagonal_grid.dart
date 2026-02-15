@@ -65,14 +65,17 @@ class HexagonalGrid extends StatelessWidget {
   List<Offset> _calculatePositions(double screenWidth) {
     final positions = <Offset>[];
     final scaledHexSize = hexSize.sp;
-    final horizontalSpacing = scaledHexSize * 1.73; // √3 approximation for pointy hex
+    final horizontalSpacing =
+        scaledHexSize * 1.73; // √3 approximation for pointy hex
     final verticalSpacing = scaledHexSize * 1.73;
 
     // Calculer la largeur totale de la grille
     final gridWidth = (columns - 1) * horizontalSpacing + scaledHexSize * 2.4;
 
     // Calculer startX selon le mode de centrage
-    final startX = centerHorizontally ? (screenWidth - gridWidth) / 2 + scaledHexSize * 1.2 : screenWidth * horizontalOffset;
+    final startX = centerHorizontally
+        ? (screenWidth - gridWidth) / 2 + scaledHexSize * 1.2
+        : screenWidth * horizontalOffset;
 
     final startY = containerHeight * verticalOffset;
 
@@ -85,7 +88,8 @@ class HexagonalGrid extends StatelessWidget {
         if (index - (skipFirstTile ? 1 : 0) >= items.length) continue;
 
         final offsetX = col * horizontalSpacing;
-        final offsetY = row * verticalSpacing + (col.isOdd ? verticalSpacing / 2 : 0);
+        final offsetY =
+            row * verticalSpacing + (col.isOdd ? verticalSpacing / 2 : 0);
 
         positions.add(Offset(startX + offsetX, startY + offsetY));
       }
@@ -112,7 +116,11 @@ class HexagonalGrid extends StatelessWidget {
             child: SizedBox(
               width: scaledHexSize * 2.4,
               height: scaledHexSize * 2.8,
-              child: Stack(alignment: Alignment.center, clipBehavior: Clip.none, children: [item.child]),
+              child: Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [item.child],
+              ),
             ),
           ),
         ),

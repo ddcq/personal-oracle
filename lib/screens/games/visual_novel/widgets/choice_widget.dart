@@ -116,7 +116,10 @@ class _ChoiceWidgetState extends State<ChoiceWidget>
                     : null,
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -199,16 +202,24 @@ class _ChoiceWidgetState extends State<ChoiceWidget>
     List<String> effects = [];
 
     if (consequence.prideChange != 0) {
-      effects.add('${consequence.prideChange > 0 ? '+' : ''}${consequence.prideChange}');
+      effects.add(
+        '${consequence.prideChange > 0 ? '+' : ''}${consequence.prideChange}',
+      );
     }
     if (consequence.bitternessChange != 0) {
-      effects.add('${consequence.bitternessChange > 0 ? '+' : ''}${consequence.bitternessChange}');
+      effects.add(
+        '${consequence.bitternessChange > 0 ? '+' : ''}${consequence.bitternessChange}',
+      );
     }
     if (consequence.loyaltyChange != 0) {
-      effects.add('${consequence.loyaltyChange > 0 ? '+' : ''}${consequence.loyaltyChange}');
+      effects.add(
+        '${consequence.loyaltyChange > 0 ? '+' : ''}${consequence.loyaltyChange}',
+      );
     }
     if (consequence.lucidityChange != 0) {
-      effects.add('${consequence.lucidityChange > 0 ? '+' : ''}${consequence.lucidityChange}');
+      effects.add(
+        '${consequence.lucidityChange > 0 ? '+' : ''}${consequence.lucidityChange}',
+      );
     }
 
     return effects.isEmpty ? '0' : effects.first;

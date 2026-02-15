@@ -25,7 +25,10 @@ class MinesweeperScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(create: (_) => MinesweeperController(), child: const _MinesweeperView());
+    return ChangeNotifierProvider(
+      create: (_) => MinesweeperController(),
+      child: const _MinesweeperView(),
+    );
   }
 }
 
@@ -130,7 +133,9 @@ class _MinesweeperView extends StatelessWidget {
           ),
         ],
       ),
-      body: AppBackground(child: SafeArea(child: _buildPortraitLayout(controller))),
+      body: AppBackground(
+        child: SafeArea(child: _buildPortraitLayout(controller)),
+      ),
     );
   }
 
@@ -139,12 +144,18 @@ class _MinesweeperView extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: _TreasureCounter(treasuresFound: controller.treasuresFound, totalTreasures: controller.treasureCount),
+          child: _TreasureCounter(
+            treasuresFound: controller.treasuresFound,
+            totalTreasures: controller.treasureCount,
+          ),
         ),
         const _RuneLegend(),
         Expanded(
           child: Center(
-            child: AspectRatio(aspectRatio: 1.0, child: _MinesweeperGrid(controller: controller)),
+            child: AspectRatio(
+              aspectRatio: 1.0,
+              child: _MinesweeperGrid(controller: controller),
+            ),
           ),
         ),
       ],
@@ -176,7 +187,12 @@ class _MinesweeperGrid extends StatelessWidget {
           child: Stack(
             children: [
               // Image de fond - prend 100% de la largeur et garde ratio 1:1
-              Positioned.fill(child: Image.asset('assets/images/minesweeper/background.webp', fit: BoxFit.fill)),
+              Positioned.fill(
+                child: Image.asset(
+                  'assets/images/minesweeper/background.webp',
+                  fit: BoxFit.fill,
+                ),
+              ),
               // Grille de jeu positionnée avec bordure
               Positioned(
                 left: borderSize * scale,
@@ -188,7 +204,10 @@ class _MinesweeperGrid extends StatelessWidget {
                     // Couche 1 : Grille de jeu en dessous (contenu révélé)
                     GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: controller.cols, childAspectRatio: 1.0),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: controller.cols,
+                        childAspectRatio: 1.0,
+                      ),
                       itemCount: controller.rows * controller.cols,
                       itemBuilder: (context, index) {
                         final row = index ~/ controller.cols;
@@ -199,9 +218,13 @@ class _MinesweeperGrid extends StatelessWidget {
                           onTap: () => controller.revealCell(row, col),
                           onLongPress: () => controller.toggleFlag(row, col),
                           child: Container(
-                            key: ValueKey('${row}_${col}_${cell.isRevealed}_${cell.isFlagged}'),
+                            key: ValueKey(
+                              '${row}_${col}_${cell.isRevealed}_${cell.isFlagged}',
+                            ),
                             color: Colors.transparent,
-                            child: Center(child: _buildCellContent(cell, context)),
+                            child: Center(
+                              child: _buildCellContent(cell, context),
+                            ),
                           ),
                         );
                       },
@@ -210,7 +233,10 @@ class _MinesweeperGrid extends StatelessWidget {
                     IgnorePointer(
                       child: GridView.builder(
                         physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: controller.cols, childAspectRatio: 1.0),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: controller.cols,
+                          childAspectRatio: 1.0,
+                        ),
                         itemCount: controller.rows * controller.cols,
                         itemBuilder: (context, index) {
                           final row = index ~/ controller.cols;
@@ -229,7 +255,10 @@ class _MinesweeperGrid extends StatelessWidget {
                     IgnorePointer(
                       child: GridView.builder(
                         physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: controller.cols, childAspectRatio: 1.0),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: controller.cols,
+                          childAspectRatio: 1.0,
+                        ),
                         itemCount: controller.rows * controller.cols,
                         itemBuilder: (context, index) {
                           final row = index ~/ controller.cols;
@@ -239,7 +268,11 @@ class _MinesweeperGrid extends StatelessWidget {
                           // Afficher le drapeau uniquement si la case est flagguée
                           if (cell.isFlagged) {
                             return const Center(
-                              child: Icon(Icons.flag, color: Colors.red, size: 25.6),
+                              child: Icon(
+                                Icons.flag,
+                                color: Colors.red,
+                                size: 25.6,
+                              ),
                             );
                           }
                           return const SizedBox.shrink();
@@ -267,10 +300,20 @@ class _MinesweeperGrid extends StatelessWidget {
     const imageSize = 40.0;
 
     if (cell.hasMine) {
-      return Image.asset('assets/images/explosion.png', key: const ValueKey('explosion'), width: imageSize, height: imageSize);
+      return Image.asset(
+        'assets/images/explosion.png',
+        key: const ValueKey('explosion'),
+        width: imageSize,
+        height: imageSize,
+      );
     }
     if (cell.hasTreasure) {
-      return Image.asset('assets/images/sparkle.png', key: const ValueKey('sparkle'), width: imageSize, height: imageSize);
+      return Image.asset(
+        'assets/images/sparkle.png',
+        key: const ValueKey('sparkle'),
+        width: imageSize,
+        height: imageSize,
+      );
     }
     if (cell.adjacentMines > 0 || cell.adjacentTreasures > 0) {
       List<Widget> counts = [];
@@ -286,7 +329,11 @@ class _MinesweeperGrid extends StatelessWidget {
         counts.add(
           Text(
             _getRuneForMines(cell.adjacentMines),
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: currentFontSize),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+              fontSize: currentFontSize,
+            ),
           ),
         );
       }
@@ -294,7 +341,11 @@ class _MinesweeperGrid extends StatelessWidget {
         counts.add(
           Text(
             _getRuneForTreasures(cell.adjacentTreasures),
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.yellow, fontSize: currentFontSize),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.yellow,
+              fontSize: currentFontSize,
+            ),
           ),
         );
       }
@@ -321,13 +372,17 @@ class _TreasureCounter extends StatelessWidget {
   final int treasuresFound;
   final int totalTreasures;
 
-  const _TreasureCounter({required this.treasuresFound, required this.totalTreasures});
+  const _TreasureCounter({
+    required this.treasuresFound,
+    required this.totalTreasures,
+  });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final containerWidth = screenWidth * 0.5;
-    final coinSize = (containerWidth - (totalTreasures - 1) * 8.0) / totalTreasures;
+    final coinSize =
+        (containerWidth - (totalTreasures - 1) * 8.0) / totalTreasures;
 
     return Center(
       child: SizedBox(
@@ -338,9 +393,37 @@ class _TreasureCounter extends StatelessWidget {
             final isFound = index < treasuresFound;
             return ColorFiltered(
               colorFilter: isFound
-                  ? const ColorFilter.mode(Colors.transparent, BlendMode.multiply)
-                  : const ColorFilter.matrix([0.2126, 0.7152, 0.0722, 0, 0, 0.2126, 0.7152, 0.0722, 0, 0, 0.2126, 0.7152, 0.0722, 0, 0, 0, 0, 0, 1, 0]),
-              child: Image.asset('assets/images/sparkle.png', width: coinSize, height: coinSize),
+                  ? const ColorFilter.mode(
+                      Colors.transparent,
+                      BlendMode.multiply,
+                    )
+                  : const ColorFilter.matrix([
+                      0.2126,
+                      0.7152,
+                      0.0722,
+                      0,
+                      0,
+                      0.2126,
+                      0.7152,
+                      0.0722,
+                      0,
+                      0,
+                      0.2126,
+                      0.7152,
+                      0.0722,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      1,
+                      0,
+                    ]),
+              child: Image.asset(
+                'assets/images/sparkle.png',
+                width: coinSize,
+                height: coinSize,
+              ),
             );
           }),
         ),
@@ -352,7 +435,12 @@ class _TreasureCounter extends StatelessWidget {
 class _RuneLegend extends StatelessWidget {
   const _RuneLegend();
 
-  List<Widget> _buildRuneTexts(List<String> runes, TextStyle runeStyle, TextStyle valueStyle, {String Function(int)? suffixBuilder}) {
+  List<Widget> _buildRuneTexts(
+    List<String> runes,
+    TextStyle runeStyle,
+    TextStyle valueStyle, {
+    String Function(int)? suffixBuilder,
+  }) {
     return [
       for (int i = 1; i < runes.length; i++)
         if (runes[i].isNotEmpty)
@@ -371,10 +459,20 @@ class _RuneLegend extends StatelessWidget {
     final double uniformFontSize = MediaQuery.of(context).size.width * 0.035;
     const double imageSize = 32.0;
 
-    TextStyle legendTextStyle = ChibiTextStyles.dialogText.copyWith(fontSize: uniformFontSize);
-    TextStyle mineRuneTextStyle = legendTextStyle.copyWith(color: Colors.red, fontSize: uniformFontSize * 1.5);
-    TextStyle treasureRuneTextStyle = legendTextStyle.copyWith(color: Colors.yellow, fontSize: uniformFontSize * 1.5);
-    TextStyle valueTextStyle = legendTextStyle.copyWith(fontSize: uniformFontSize * 0.8);
+    TextStyle legendTextStyle = ChibiTextStyles.dialogText.copyWith(
+      fontSize: uniformFontSize,
+    );
+    TextStyle mineRuneTextStyle = legendTextStyle.copyWith(
+      color: Colors.red,
+      fontSize: uniformFontSize * 1.5,
+    );
+    TextStyle treasureRuneTextStyle = legendTextStyle.copyWith(
+      color: Colors.yellow,
+      fontSize: uniformFontSize * 1.5,
+    );
+    TextStyle valueTextStyle = legendTextStyle.copyWith(
+      fontSize: uniformFontSize * 0.8,
+    );
 
     return Container(
       padding: const EdgeInsets.all(6.0),
@@ -393,13 +491,26 @@ class _RuneLegend extends StatelessWidget {
             spacing: 2.0,
             runSpacing: 4.0,
             children: [
-              Image.asset('assets/images/explosion.png', width: imageSize, height: imageSize),
+              Image.asset(
+                'assets/images/explosion.png',
+                width: imageSize,
+                height: imageSize,
+              ),
               const SizedBox(width: 4),
               ..._buildRuneTexts(mineRunes, mineRuneTextStyle, valueTextStyle),
               const SizedBox(width: 16),
-              Image.asset('assets/images/sparkle.png', width: imageSize, height: imageSize),
+              Image.asset(
+                'assets/images/sparkle.png',
+                width: imageSize,
+                height: imageSize,
+              ),
               const SizedBox(width: 4),
-              ..._buildRuneTexts(treasureRunes, treasureRuneTextStyle, valueTextStyle, suffixBuilder: (count) => count > 1 ? '+' : ''),
+              ..._buildRuneTexts(
+                treasureRunes,
+                treasureRuneTextStyle,
+                valueTextStyle,
+                suffixBuilder: (count) => count > 1 ? '+' : '',
+              ),
             ],
           ),
         ],
@@ -440,7 +551,9 @@ class _SpriteTile extends StatelessWidget {
           height: constraints.maxHeight,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: const AssetImage('assets/images/minesweeper/foreground.webp'),
+              image: const AssetImage(
+                'assets/images/minesweeper/foreground.webp',
+              ),
               fit: BoxFit.none,
               repeat: ImageRepeat.noRepeat,
               scale: scale,

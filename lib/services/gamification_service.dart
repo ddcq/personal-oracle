@@ -2,7 +2,8 @@ import 'package:collection/collection.dart'; // For firstWhereOrNull
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart' show ChangeNotifier, debugPrint; // Import for ChangeNotifier
+import 'package:flutter/foundation.dart'
+    show ChangeNotifier, debugPrint; // Import for ChangeNotifier
 import 'package:oracle_d_asgard/services/storage/storage_factory.dart';
 import 'package:oracle_d_asgard/services/storage/storage_adapter.dart';
 import 'package:oracle_d_asgard/services/game_reward_config.dart';
@@ -174,7 +175,8 @@ class GamificationService with ChangeNotifier {
     await _storage.saveStoryProgress(
       storyId: storyId,
       partsUnlocked: parts,
-      timestamp: existing?['unlocked_at'] ?? DateTime.now().millisecondsSinceEpoch,
+      timestamp:
+          existing?['unlocked_at'] ?? DateTime.now().millisecondsSinceEpoch,
     );
     _invalidateCache(); // Story progress affects unearned content
     notifyListeners();
@@ -287,8 +289,9 @@ class GamificationService with ChangeNotifier {
     final Map<String, List<String>> unlockedStoryParts = {};
 
     for (var progress in unlockedStoryProgress) {
-      unlockedStoryParts[progress['story_id'] as String] =
-          List<String>.from(jsonDecode(progress['parts_unlocked']));
+      unlockedStoryParts[progress['story_id'] as String] = List<String>.from(
+        jsonDecode(progress['parts_unlocked']),
+      );
     }
 
     return unlockedStoryParts;
@@ -326,10 +329,12 @@ class GamificationService with ChangeNotifier {
       // Check eligibility based on version progression: chibi → premium → epic
       return switch (card.version) {
         CardVersion.chibi => !versions.contains(CardVersion.chibi),
-        CardVersion.premium => versions.contains(CardVersion.chibi) &&
-                               !versions.contains(CardVersion.premium),
-        CardVersion.epic => versions.contains(CardVersion.premium) &&
-                           !versions.contains(CardVersion.epic),
+        CardVersion.premium =>
+          versions.contains(CardVersion.chibi) &&
+              !versions.contains(CardVersion.premium),
+        CardVersion.epic =>
+          versions.contains(CardVersion.premium) &&
+              !versions.contains(CardVersion.epic),
       };
     }).toList();
 
@@ -354,8 +359,9 @@ class GamificationService with ChangeNotifier {
 
     if (unearnedContent.mythStories.isNotEmpty) {
       final random = Random();
-      return unearnedContent.mythStories[
-          random.nextInt(unearnedContent.mythStories.length)];
+      return unearnedContent.mythStories[random.nextInt(
+        unearnedContent.mythStories.length,
+      )];
     }
     return null;
   }
@@ -381,8 +387,9 @@ class GamificationService with ChangeNotifier {
 
     if (unearnedContent.collectibleCards.isNotEmpty) {
       final random = Random();
-      return unearnedContent.collectibleCards[
-          random.nextInt(unearnedContent.collectibleCards.length)];
+      return unearnedContent.collectibleCards[random.nextInt(
+        unearnedContent.collectibleCards.length,
+      )];
     } else {
       debugPrint('All collectible cards already earned. No new card awarded.');
       return null;

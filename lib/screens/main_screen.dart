@@ -27,7 +27,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    if (AppEnv.flagAds == 'enabled' && !kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
+    if (AppEnv.flagAds == 'enabled' &&
+        !kIsWeb &&
+        (Platform.isIOS || Platform.isAndroid)) {
       _loadBannerAd();
     }
   }
@@ -71,12 +73,30 @@ class _MainScreenState extends State<MainScreen> {
   List<HexGridItem> _buildGridItems(BuildContext context) {
     final locale = context.locale.toString();
     final buttons = [
-      {'icon': Icons.games_rounded, 'label': MainScreenTranslations.translate('main_screen_play', locale), 'route': '/games'},
-      {'icon': Icons.emoji_events, 'label': MainScreenTranslations.translate('main_screen_trophies', locale), 'route': '/trophies'},
+      {
+        'icon': Icons.games_rounded,
+        'label': MainScreenTranslations.translate('main_screen_play', locale),
+        'route': '/games',
+      },
+      {
+        'icon': Icons.emoji_events,
+        'label': MainScreenTranslations.translate(
+          'main_screen_trophies',
+          locale,
+        ),
+        'route': '/trophies',
+      },
       //      {'icon': Icons.person, 'label': MainScreenTranslations.translate('main_screen_profile', locale), 'route': '/profile'},
       {'icon': Icons.shopping_cart, 'label': 'Boutique', 'route': '/shop'},
       {},
-      {'icon': Icons.settings, 'label': MainScreenTranslations.translate('main_screen_settings', locale), 'route': '/settings'},
+      {
+        'icon': Icons.settings,
+        'label': MainScreenTranslations.translate(
+          'main_screen_settings',
+          locale,
+        ),
+        'route': '/settings',
+      },
     ];
 
     return List.generate(buttons.length, (i) {
@@ -86,7 +106,11 @@ class _MainScreenState extends State<MainScreen> {
       }
       return HexGridItem(
         onTap: () => context.go(button['route'] as String),
-        child: EpicButton(iconData: button['icon'] as IconData, label: button['label'] as String, onPressed: () => context.go(button['route'] as String)),
+        child: EpicButton(
+          iconData: button['icon'] as IconData,
+          label: button['label'] as String,
+          onPressed: () => context.go(button['route'] as String),
+        ),
       );
     });
   }
@@ -104,26 +128,48 @@ class _MainScreenState extends State<MainScreen> {
                     alignment: Alignment.topCenter,
                     child: Padding(
                       padding: EdgeInsets.only(top: 20.h),
-                      child: Text(
-                        MainScreenTranslations.translate('main_screen_title', context.locale.toString()),
-                        textAlign: TextAlign.center,
-                        style: ChibiTextStyles.appBarTitle,
-                      ).animate().slideY(begin: -0.3, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),
+                      child:
+                          Text(
+                                MainScreenTranslations.translate(
+                                  'main_screen_title',
+                                  context.locale.toString(),
+                                ),
+                                textAlign: TextAlign.center,
+                                style: ChibiTextStyles.appBarTitle,
+                              )
+                              .animate()
+                              .slideY(
+                                begin: -0.3,
+                                duration: 800.ms,
+                                curve: Curves.easeOutCubic,
+                              )
+                              .fadeIn(duration: 600.ms),
                     ),
                   ),
                   Expanded(
                     child: ClipRect(
-                      child: Image.asset(
-                        'assets/images/odin_chibi.webp',
-                        fit: BoxFit.contain,
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                      ).animate(delay: 400.ms).slideY(begin: -0.1, duration: 800.ms, curve: Curves.easeOutCubic).fadeIn(duration: 600.ms),
+                      child:
+                          Image.asset(
+                                'assets/images/odin_chibi.webp',
+                                fit: BoxFit.contain,
+                                width: double.infinity,
+                                alignment: Alignment.center,
+                              )
+                              .animate(delay: 400.ms)
+                              .slideY(
+                                begin: -0.1,
+                                duration: 800.ms,
+                                curve: Curves.easeOutCubic,
+                              )
+                              .fadeIn(duration: 600.ms),
                     ),
                   ),
                   Container(
                     decoration: const BoxDecoration(
-                      image: DecorationImage(image: AssetImage('assets/images/wood.webp'), fit: BoxFit.cover),
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/wood.webp'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     child: SizedBox(
                       height: 250.h,
@@ -140,13 +186,16 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     ),
                   ),
-                  if (_isBannerAdLoaded && _bannerAd != null) SizedBox(height: _bannerAd!.size.height.toDouble()),
+                  if (_isBannerAdLoaded && _bannerAd != null)
+                    SizedBox(height: _bannerAd!.size.height.toDouble()),
                 ],
               ),
             ),
           ),
 
-          if (AppEnv.flagAds == 'enabled' && _isBannerAdLoaded && _bannerAd != null)
+          if (AppEnv.flagAds == 'enabled' &&
+              _isBannerAdLoaded &&
+              _bannerAd != null)
             Positioned(
               bottom: 0,
               left: 0,

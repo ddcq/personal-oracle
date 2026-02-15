@@ -44,7 +44,8 @@ class _NorseQuizResultScreenState extends State<NorseQuizResultScreen> {
 
     // Handle level up
     if (widget.score == 10) {
-      final currentLevel = await getIt<GamificationService>().getNorseQuizLevel();
+      final currentLevel = await getIt<GamificationService>()
+          .getNorseQuizLevel();
       if (currentLevel < 10) {
         final newLevel = currentLevel + 1;
         await getIt<GamificationService>().saveNorseQuizLevel(newLevel);
@@ -56,21 +57,22 @@ class _NorseQuizResultScreenState extends State<NorseQuizResultScreen> {
   }
 
   Widget _buildResultContent() {
-    final rewardTitleStyle = Theme.of(context).textTheme.displayMedium!.copyWith(
-      fontFamily: AppTextStyles.amaticSC,
-      color: Colors.amber,
-      fontWeight: FontWeight.bold,
-      fontSize: 30,
-      letterSpacing: 1.0,
-      shadows: [
-        Shadow(
-          blurRadius: 8.0,
-          color: Colors.black87,
-          offset: const Offset(2.0, 2.0),
-        ),
-      ],
-      decoration: TextDecoration.none,
-    );
+    final rewardTitleStyle = Theme.of(context).textTheme.displayMedium!
+        .copyWith(
+          fontFamily: AppTextStyles.amaticSC,
+          color: Colors.amber,
+          fontWeight: FontWeight.bold,
+          fontSize: 30,
+          letterSpacing: 1.0,
+          shadows: [
+            Shadow(
+              blurRadius: 8.0,
+              color: Colors.black87,
+              offset: const Offset(2.0, 2.0),
+            ),
+          ],
+          decoration: TextDecoration.none,
+        );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -91,11 +93,10 @@ class _NorseQuizResultScreenState extends State<NorseQuizResultScreen> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
-            'norse_quiz_result_screen_correct_answers'.tr(namedArgs: {'score': '${widget.score}'}),
-            style: rewardTitleStyle.copyWith(
-              fontSize: 24,
-              color: Colors.white,
+            'norse_quiz_result_screen_correct_answers'.tr(
+              namedArgs: {'score': '${widget.score}'},
             ),
+            style: rewardTitleStyle.copyWith(fontSize: 24, color: Colors.white),
             textAlign: TextAlign.center,
           ),
         ),
@@ -117,7 +118,9 @@ class _NorseQuizResultScreenState extends State<NorseQuizResultScreen> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
-              'victory_popup_coins_earned_message'.tr(namedArgs: {'coins': '$_coinsWon'}),
+              'victory_popup_coins_earned_message'.tr(
+                namedArgs: {'coins': '$_coinsWon'},
+              ),
               style: rewardTitleStyle.copyWith(
                 fontSize: 24,
                 color: Colors.white,
@@ -134,9 +137,7 @@ class _NorseQuizResultScreenState extends State<NorseQuizResultScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Scaffold(
-        body: AppBackground(
-          child: Center(child: CircularProgressIndicator()),
-        ),
+        body: AppBackground(child: Center(child: CircularProgressIndicator())),
       );
     }
 

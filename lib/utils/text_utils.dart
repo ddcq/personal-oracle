@@ -36,7 +36,7 @@ Set<String> extractWordsFromMythCard(MythCard card) {
 /// Returns a set of unique words with 4 or more characters
 Set<String> extractAllWordsFromStories() {
   final allWords = <String>{};
-  
+
   // Extract words from all myth stories
   final allStories = getMythStories().skip(1).toList(); // Skip loading story
   for (final story in allStories) {
@@ -44,11 +44,11 @@ Set<String> extractAllWordsFromStories() {
       allWords.addAll(extractWordsFromMythCard(chapter));
     }
   }
-  
+
   // Extract words from visual novel (without translation as these are direct texts)
   final visualNovelStory = StoryData.lokiStory;
   final wordRegex = RegExp(r'[a-zA-Zà-üÀ-Ü]+');
-  
+
   for (final scene in visualNovelStory.scenes.values) {
     // Extract from title (direct text, no translation)
     if (scene.title.isNotEmpty) {
@@ -59,7 +59,7 @@ Set<String> extractAllWordsFromStories() {
         }
       });
     }
-    
+
     // Extract from content (direct text, no translation)
     if (scene.content != null && scene.content!.isNotEmpty) {
       wordRegex.allMatches(scene.content!.toLowerCase()).forEach((match) {
@@ -69,7 +69,7 @@ Set<String> extractAllWordsFromStories() {
         }
       });
     }
-    
+
     // Extract from paragraphs (direct text, no translation)
     if (scene.paragraphs != null) {
       for (final paragraph in scene.paragraphs!) {
@@ -81,7 +81,7 @@ Set<String> extractAllWordsFromStories() {
         });
       }
     }
-    
+
     // Extract from dialogues (direct text, no translation)
     if (scene.dialogues != null) {
       for (final dialogue in scene.dialogues!) {
@@ -93,7 +93,7 @@ Set<String> extractAllWordsFromStories() {
         });
       }
     }
-    
+
     // Extract from choices (direct text, no translation)
     if (scene.choices != null) {
       for (final choice in scene.choices!) {
@@ -103,7 +103,7 @@ Set<String> extractAllWordsFromStories() {
             allWords.add(word);
           }
         });
-        
+
         wordRegex.allMatches(choice.description.toLowerCase()).forEach((match) {
           final word = match.group(0)!;
           if (word.length >= 4) {
@@ -113,7 +113,7 @@ Set<String> extractAllWordsFromStories() {
       }
     }
   }
-  
+
   return allWords;
 }
 

@@ -193,7 +193,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         final prefs = await SharedPreferences.getInstance();
         final ambientMusicSelection = prefs.getString('ambientMusicSelection');
         // Only play main menu if no custom music was selected
-        if (ambientMusicSelection == null || ambientMusicSelection == 'default') {
+        if (ambientMusicSelection == null ||
+            ambientMusicSelection == 'default') {
           getIt<SoundService>().playMainMenuMusic();
         }
       } catch (e) {

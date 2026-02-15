@@ -10,9 +10,7 @@ class AudioLoadResult {
   final bool success;
   final String? errorMessage;
 
-  const AudioLoadResult.success()
-      : success = true,
-        errorMessage = null;
+  const AudioLoadResult.success() : success = true, errorMessage = null;
 
   const AudioLoadResult.error(this.errorMessage) : success = false;
 }
@@ -27,8 +25,8 @@ class AudioLoader {
   final DefaultCacheManager? _cacheManager;
 
   AudioLoader()
-      : _cacheService = kIsWeb ? null : getIt<CacheService>(),
-        _cacheManager = kIsWeb ? null : DefaultCacheManager();
+    : _cacheService = kIsWeb ? null : getIt<CacheService>(),
+      _cacheManager = kIsWeb ? null : DefaultCacheManager();
 
   /// Plays audio from a URL with automatic platform-specific handling.
   ///
@@ -70,12 +68,14 @@ class AudioLoader {
     required Duration timeout,
   }) async {
     try {
-      await player.play(UrlSource(musicUrl)).timeout(
-        timeout,
-        onTimeout: () {
-          debugPrint('Audio loading timeout: $musicUrl');
-        },
-      );
+      await player
+          .play(UrlSource(musicUrl))
+          .timeout(
+            timeout,
+            onTimeout: () {
+              debugPrint('Audio loading timeout: $musicUrl');
+            },
+          );
       return const AudioLoadResult.success();
     } catch (e) {
       return AudioLoadResult.error('Web playback failed: $e');
@@ -110,12 +110,14 @@ class AudioLoader {
       }
 
       // Play from cached file
-      await player.play(DeviceFileSource(fileInfo.file.path)).timeout(
-        timeout,
-        onTimeout: () {
-          debugPrint('Audio loading timeout: $musicUrl');
-        },
-      );
+      await player
+          .play(DeviceFileSource(fileInfo.file.path))
+          .timeout(
+            timeout,
+            onTimeout: () {
+              debugPrint('Audio loading timeout: $musicUrl');
+            },
+          );
 
       return const AudioLoadResult.success();
     } catch (e) {

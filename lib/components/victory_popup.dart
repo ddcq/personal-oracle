@@ -159,7 +159,9 @@ class _VictoryPopupState extends State<VictoryPopup> {
         if (widget.didLevelUp) ...[
           const SizedBox(height: 10),
           Text(
-            'norse_quiz_result_screen_level_up'.tr(namedArgs: {'level': '${widget.newLevel}'}),
+            'norse_quiz_result_screen_level_up'.tr(
+              namedArgs: {'level': '${widget.newLevel}'},
+            ),
             style: _rewardTitleStyle.copyWith(
               fontSize: 22,
               color: Colors.greenAccent,

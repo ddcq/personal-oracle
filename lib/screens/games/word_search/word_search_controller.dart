@@ -143,11 +143,11 @@ class WordSearchController with ChangeNotifier {
   List<String> _extractAndNormalizeWords(MythCard mythCard) {
     // Get all words from all stories and visual novel
     final allWords = extractAllWordsFromStories();
-    
+
     // Also include words from current myth card to ensure relevant content
     final currentCardWords = extractWordsFromMythCard(mythCard);
     allWords.addAll(currentCardWords);
-    
+
     // Normalize all words for the word search
     return allWords.map(normalizeForWordSearch).toSet().toList();
   }

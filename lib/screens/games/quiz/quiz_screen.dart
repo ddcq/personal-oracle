@@ -37,7 +37,9 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
-    if (AppEnv.flagAds == 'enabled' && !kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
+    if (AppEnv.flagAds == 'enabled' &&
+        !kIsWeb &&
+        (Platform.isIOS || Platform.isAndroid)) {
       _loadInterstitialAd();
     }
   }

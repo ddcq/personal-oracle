@@ -15,14 +15,10 @@ class DatabaseStorageAdapter implements StorageAdapter {
   Future<void> saveSetting(String key, String value) async {
     try {
       final db = await _databaseService.database;
-      await db.insert(
-        'game_settings',
-        {
-          'setting_key': key,
-          'setting_value': value,
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      await db.insert('game_settings', {
+        'setting_key': key,
+        'setting_value': value,
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
       debugPrint('Error saving setting $key: $e');
     }
@@ -70,15 +66,11 @@ class DatabaseStorageAdapter implements StorageAdapter {
   }) async {
     try {
       final db = await _databaseService.database;
-      await db.insert(
-        'game_scores',
-        {
-          'game_name': gameName,
-          'score': score,
-          'timestamp': timestamp,
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      await db.insert('game_scores', {
+        'game_name': gameName,
+        'score': score,
+        'timestamp': timestamp,
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
       debugPrint('Error saving game score: $e');
     }
@@ -108,15 +100,11 @@ class DatabaseStorageAdapter implements StorageAdapter {
   }) async {
     try {
       final db = await _databaseService.database;
-      await db.insert(
-        'collectible_cards',
-        {
-          'card_id': cardId,
-          'version': version,
-          'unlocked_at': timestamp,
-        },
-        conflictAlgorithm: ConflictAlgorithm.ignore,
-      );
+      await db.insert('collectible_cards', {
+        'card_id': cardId,
+        'version': version,
+        'unlocked_at': timestamp,
+      }, conflictAlgorithm: ConflictAlgorithm.ignore);
     } catch (e) {
       debugPrint('Error saving collectible card: $e');
     }
@@ -157,15 +145,11 @@ class DatabaseStorageAdapter implements StorageAdapter {
   }) async {
     try {
       final db = await _databaseService.database;
-      await db.insert(
-        'story_progress',
-        {
-          'story_id': storyId,
-          'parts_unlocked': jsonEncode(partsUnlocked),
-          'unlocked_at': timestamp,
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      await db.insert('story_progress', {
+        'story_id': storyId,
+        'parts_unlocked': jsonEncode(partsUnlocked),
+        'unlocked_at': timestamp,
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
       debugPrint('Error saving story progress: $e');
     }
@@ -209,14 +193,10 @@ class DatabaseStorageAdapter implements StorageAdapter {
   }) async {
     try {
       final db = await _databaseService.database;
-      await db.insert(
-        'quiz_results',
-        {
-          'deity_name': deityName,
-          'timestamp': timestamp,
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      await db.insert('quiz_results', {
+        'deity_name': deityName,
+        'timestamp': timestamp,
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
       debugPrint('Error saving quiz result: $e');
     }

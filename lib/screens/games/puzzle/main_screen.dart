@@ -184,23 +184,25 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
           ),
         ],
       ),
-      body: GameWidget<PuzzleFlameGame>(
-        game: _flameGame!,
-        overlayBuilderMap: {
-          'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
-            return VictoryPopup(
-              coinsEarned: _lastCoinsEarned,
-              onDismiss: () {
-                game.overlays.remove('victoryOverlay');
-                _resetGame();
-              },
-              onSeeRewards: () {
-                game.overlays.remove('victoryOverlay');
-                context.push('/shop');
-              },
-            );
+      body: SafeArea(
+        child: GameWidget<PuzzleFlameGame>(
+          game: _flameGame!,
+          overlayBuilderMap: {
+            'victoryOverlay': (BuildContext context, PuzzleFlameGame game) {
+              return VictoryPopup(
+                coinsEarned: _lastCoinsEarned,
+                onDismiss: () {
+                  game.overlays.remove('victoryOverlay');
+                  _resetGame();
+                },
+                onSeeRewards: () {
+                  game.overlays.remove('victoryOverlay');
+                  context.push('/shop');
+                },
+              );
+            },
           },
-        },
+        ),
       ),
     );
   }

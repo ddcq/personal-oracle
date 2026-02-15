@@ -10,19 +10,26 @@ class VisualNovelPreliminaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     final Widget gameInfoLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+        color: Colors.black.withAlpha(128),
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           // Loki chibi image - using menu visual novel image
-          Image.asset('assets/images/menu/visual_novel.webp', width: 120, height: 120, fit: BoxFit.contain),
+          Image.asset(
+            'assets/images/menu/visual_novel.webp',
+            width: 120,
+            height: 120,
+            fit: BoxFit.contain,
+          ),
           const SizedBox(height: 16),
-          // Language warning for non-French users
 
+          // Language warning for non-French users
           Text(
             'visual_novel_preliminary_screen_description'.tr(),
             style: const TextStyle(color: Colors.white, fontSize: 16),
@@ -51,7 +58,11 @@ class VisualNovelPreliminaryScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('visual_novel_title'.tr(), style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32), textAlign: TextAlign.center),
+                    Text(
+                      'visual_novel_title'.tr(),
+                      style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
+                      textAlign: TextAlign.center,
+                    ),
                     const SizedBox(height: 20),
                     gameInfoLayout,
                     const SizedBox(height: 20),
@@ -64,7 +75,11 @@ class VisualNovelPreliminaryScreen extends StatelessWidget {
               top: 50,
               left: 20,
               child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 30,
+                ),
                 onPressed: () => context.go('/games'),
               ),
             ),

@@ -15,7 +15,8 @@ class CollectibleCardDetailPage extends StatefulWidget {
   const CollectibleCardDetailPage({super.key, required this.card});
 
   @override
-  State<CollectibleCardDetailPage> createState() => _CollectibleCardDetailPageState();
+  State<CollectibleCardDetailPage> createState() =>
+      _CollectibleCardDetailPageState();
 }
 
 class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
@@ -51,11 +52,16 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
         appBar: AppBar(
           title: Text(
             'collectible_card_${widget.card.id}_title'.tr(),
-            style: TextStyle(color: Colors.white, fontFamily: AppTextStyles.amaticSC),
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: AppTextStyles.amaticSC,
+            ),
           ),
           backgroundColor: Colors.transparent,
           elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.white), // For back button
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ), // For back button
         ),
         body: SafeArea(
           child: Container(
@@ -95,12 +101,20 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            InteractiveCollectibleCard(card: widget.card, enableNavigation: false, playVideo: true),
+            InteractiveCollectibleCard(
+              card: widget.card,
+              enableNavigation: false,
+              playVideo: true,
+            ),
             const SizedBox(height: 20),
             Text(
               'collectible_card_${widget.card.id}_title'.tr(),
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 10),
             Text(
@@ -114,7 +128,10 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
     );
   }
 
-  Widget _buildLandscapeLayout(BuildContext context, BoxConstraints constraints) {
+  Widget _buildLandscapeLayout(
+    BuildContext context,
+    BoxConstraints constraints,
+  ) {
     final cardSize = constraints.maxHeight * 0.8;
     return Center(
       child: SingleChildScrollView(
@@ -126,7 +143,11 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
             SizedBox(
               width: cardSize,
               height: cardSize,
-              child: InteractiveCollectibleCard(card: widget.card, enableNavigation: false, playVideo: true),
+              child: InteractiveCollectibleCard(
+                card: widget.card,
+                enableNavigation: false,
+                playVideo: true,
+              ),
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -137,7 +158,11 @@ class _CollectibleCardDetailPageState extends State<CollectibleCardDetailPage> {
                   Text(
                     'collectible_card_${widget.card.id}_title'.tr(),
                     textAlign: TextAlign.left,
-                    style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Text(

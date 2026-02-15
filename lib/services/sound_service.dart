@@ -278,8 +278,7 @@ class SoundService with ChangeNotifier {
       // Find an available player or create a new one (up to max limit)
       AudioPlayer? player = _fxPlayers.firstWhere(
         (p) =>
-            p.state == PlayerState.completed ||
-            p.state == PlayerState.stopped,
+            p.state == PlayerState.completed || p.state == PlayerState.stopped,
         orElse: () {
           if (_fxPlayers.length >= AudioConfig.maxConcurrentSoundEffects) {
             // Reuse oldest player if at limit

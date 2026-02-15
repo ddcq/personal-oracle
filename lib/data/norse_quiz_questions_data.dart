@@ -1,4 +1,3 @@
-
 enum QuizDifficulty { easy, medium, hard }
 
 class NorseQuizQuestion {
@@ -18,7 +17,12 @@ class NorseQuizQuestion {
 final List<NorseQuizQuestion> norseQuizQuestions = [
   const NorseQuizQuestion(
     question: 'norse_quiz_q1',
-    options: ['norse_quiz_q1_a1', 'norse_quiz_q1_a2', 'norse_quiz_q1_a3', 'norse_quiz_q1_a4'],
+    options: [
+      'norse_quiz_q1_a1',
+      'norse_quiz_q1_a2',
+      'norse_quiz_q1_a3',
+      'norse_quiz_q1_a4',
+    ],
     correctAnswerIndex: 1,
     difficulty: QuizDifficulty.easy,
   ),
@@ -42,7 +46,12 @@ final List<NorseQuizQuestion> norseQuizQuestions = [
   ),
   const NorseQuizQuestion(
     question: 'norse_quiz_q5',
-    options: ['norse_quiz_q5_a1', 'norse_quiz_q5_a2', 'norse_quiz_q5_a3', 'norse_quiz_q5_a4'],
+    options: [
+      'norse_quiz_q5_a1',
+      'norse_quiz_q5_a2',
+      'norse_quiz_q5_a3',
+      'norse_quiz_q5_a4',
+    ],
     correctAnswerIndex: 3,
     difficulty: QuizDifficulty.easy,
   ),

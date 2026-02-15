@@ -253,14 +253,12 @@ class WebStorageAdapter implements StorageAdapter {
         results = List<Map<String, dynamic>>.from(jsonDecode(resultsJson));
       }
 
-      results.add({
-        'deity_name': deityName,
-        'timestamp': timestamp,
-      });
+      results.add({'deity_name': deityName, 'timestamp': timestamp});
 
       // Sort by timestamp descending
-      results.sort((a, b) =>
-          (b['timestamp'] as int).compareTo(a['timestamp'] as int));
+      results.sort(
+        (a, b) => (b['timestamp'] as int).compareTo(a['timestamp'] as int),
+      );
 
       await prefs.setString(_quizResultsKey, jsonEncode(results));
     } catch (e) {

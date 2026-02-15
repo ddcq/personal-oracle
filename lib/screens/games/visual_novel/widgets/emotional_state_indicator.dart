@@ -4,18 +4,12 @@ import 'package:oracle_d_asgard/screens/games/visual_novel/models/visual_novel_m
 class EmotionalStateIndicator extends StatelessWidget {
   final EmotionalState emotionalState;
 
-  const EmotionalStateIndicator({
-    super.key,
-    required this.emotionalState,
-  });
+  const EmotionalStateIndicator({super.key, required this.emotionalState});
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<void>(
-      icon: Icon(
-        Icons.psychology,
-        color: _getPsychologicalStateColor(),
-      ),
+      icon: Icon(Icons.psychology, color: _getPsychologicalStateColor()),
       tooltip: 'État émotionnel de Loki',
       itemBuilder: (context) => [
         PopupMenuItem(
@@ -31,10 +25,26 @@ class EmotionalStateIndicator extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              _buildEmotionBar('Fierté', emotionalState.pride, const Color(0xFF8e24aa)),
-              _buildEmotionBar('Amertume', emotionalState.bitterness, const Color(0xFFd32f2f)),
-              _buildEmotionBar('Loyauté', emotionalState.loyalty, const Color(0xFF388e3c)),
-              _buildEmotionBar('Lucidité', emotionalState.lucidity, const Color(0xFF1976d2)),
+              _buildEmotionBar(
+                'Fierté',
+                emotionalState.pride,
+                const Color(0xFF8e24aa),
+              ),
+              _buildEmotionBar(
+                'Amertume',
+                emotionalState.bitterness,
+                const Color(0xFFd32f2f),
+              ),
+              _buildEmotionBar(
+                'Loyauté',
+                emotionalState.loyalty,
+                const Color(0xFF388e3c),
+              ),
+              _buildEmotionBar(
+                'Lucidité',
+                emotionalState.lucidity,
+                const Color(0xFF1976d2),
+              ),
               const SizedBox(height: 8),
               _buildPsychologicalAnalysis(),
             ],
@@ -67,7 +77,10 @@ class EmotionalStateIndicator extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(label, style: const TextStyle(fontSize: 14)),
-              Text('$value', style: TextStyle(color: color, fontWeight: FontWeight.bold)),
+              Text(
+                '$value',
+                style: TextStyle(color: color, fontWeight: FontWeight.bold),
+              ),
             ],
           ),
           const SizedBox(height: 2),
@@ -117,10 +130,7 @@ class EmotionalStateIndicator extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            analysis,
-            style: const TextStyle(fontSize: 12),
-          ),
+          Text(analysis, style: const TextStyle(fontSize: 12)),
         ],
       ),
     );
@@ -145,20 +155,26 @@ class EmotionalStateIndicator extends StatelessWidget {
     }
 
     if (emotionalState.lucidity >= 90) {
-              return 'Loki voit à travers tous les mensonges et manipulations. Cette clairvoyance est à la fois un don et une malédiction.';    }
+      return 'Loki voit à travers tous les mensonges et manipulations. Cette clairvoyance est à la fois un don et une malédiction.';
+    }
 
     if (emotionalState.pride >= 80) {
-              return 'L\'orgueil de Loki enfle. Il risque de défier ouvertement l\'autorité des dieux.';    }
+      return 'L\'orgueil de Loki enfle. Il risque de défier ouvertement l\'autorité des dieux.';
+    }
 
     if (emotionalState.bitterness >= 50 && emotionalState.lucidity >= 60) {
-              return 'Loki développe une compréhension cynique de sa position. Il reste fonctionnel mais de plus en plus détaché.';    }
+      return 'Loki développe une compréhension cynique de sa position. Il reste fonctionnel mais de plus en plus détaché.';
+    }
 
     if (emotionalState.loyalty >= 60 && emotionalState.pride <= 40) {
-              return 'Malgré les épreuves, Loki conserve un attachement à Asgard, tempéré par une humilité croissante.';    }
+      return 'Malgré les épreuves, Loki conserve un attachement à Asgard, tempéré par une humilité croissante.';
+    }
 
     // Balanced state
     if (emotionalState.loyalty >= 50 && emotionalState.lucidity >= 50) {
-              return 'Loki navigue avec intelligence entre ses devoirs et ses désirs personnels. État relativement stable.';    }
+      return 'Loki navigue avec intelligence entre ses devoirs et ses désirs personnels. État relativement stable.';
+    }
 
-            return 'L\'état psychologique de Loki reste complexe, mêlant espoir, frustration et une intelligence aiguë.';  }
+    return 'L\'état psychologique de Loki reste complexe, mêlant espoir, frustration et une intelligence aiguë.';
+  }
 }

@@ -22,21 +22,28 @@ class SceneDisplayWidget extends StatefulWidget {
   State<SceneDisplayWidget> createState() => _SceneDisplayWidgetState();
 }
 
-class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTickerProviderStateMixin {
+class _SceneDisplayWidgetState extends State<SceneDisplayWidget>
+    with SingleTickerProviderStateMixin {
   late AnimationController _textController;
   late Animation<double> _fadeAnimation;
 
   List<String> _sentences = [];
   int _currentSentenceIndex = 0;
-  
+
   // Computed property: text is complete when on the last sentence
   bool get _isTextComplete => _currentSentenceIndex >= _sentences.length - 1;
 
   @override
   void initState() {
     super.initState();
-    _textController = AnimationController(duration: const Duration(milliseconds: 800), vsync: this);
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _textController, curve: Curves.easeIn));
+    _textController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _textController, curve: Curves.easeIn));
     _textController.forward();
 
     // Split text into sentences
@@ -61,7 +68,8 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
     } else if (widget.scene.hasParagraphs) {
       // For narrative scenes with paragraphs array, use them directly
       _sentences = List.from(widget.scene.paragraphs!);
-    } else if (widget.scene.content != null && widget.scene.content!.isNotEmpty) {
+    } else if (widget.scene.content != null &&
+        widget.scene.content!.isNotEmpty) {
       // For choice scenes, use the content as a single sentence
       _sentences = [widget.scene.content!];
       // For choice scenes, start at last index to show choices immediately
@@ -90,14 +98,16 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
   }
 
   String _getCurrentSpeaker() {
-    if (widget.scene.hasDialogues && _currentSentenceIndex < widget.scene.dialogues!.length) {
+    if (widget.scene.hasDialogues &&
+        _currentSentenceIndex < widget.scene.dialogues!.length) {
       return widget.scene.dialogues![_currentSentenceIndex].speaker;
     }
     return widget.scene.speaker ?? 'Narrateur';
   }
 
   String? _getCurrentCharacterImage() {
-    if (widget.scene.hasDialogues && _currentSentenceIndex < widget.scene.dialogues!.length) {
+    if (widget.scene.hasDialogues &&
+        _currentSentenceIndex < widget.scene.dialogues!.length) {
       return widget.scene.dialogues![_currentSentenceIndex].characterImage;
     }
     return widget.scene.characterImage;
@@ -129,9 +139,18 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
       },
       child: Container(
         decoration: BoxDecoration(
-          image: widget.scene.backgroundImage != null ? DecorationImage(image: AssetImage(widget.scene.backgroundImage!), fit: BoxFit.cover) : null,
+          image: widget.scene.backgroundImage != null
+              ? DecorationImage(
+                  image: AssetImage(widget.scene.backgroundImage!),
+                  fit: BoxFit.cover,
+                )
+              : null,
           gradient: widget.scene.backgroundImage == null
-              ? const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF1a237e), Color(0xFF000051)])
+              ? const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF1a237e), Color(0xFF000051)],
+                )
               : null,
         ),
         child: Stack(
@@ -142,7 +161,10 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.black.withAlpha(76), Colors.black.withAlpha(178)],
+                  colors: [
+                    Colors.black.withAlpha(76),
+                    Colors.black.withAlpha(178),
+                  ],
                 ),
               ),
             ),
@@ -162,7 +184,11 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
                         width: 200,
                         height: 400,
                         color: Colors.grey.withAlpha(76),
-                        child: const Icon(Icons.person, size: 100, color: Colors.white54),
+                        child: const Icon(
+                          Icons.person,
+                          size: 100,
+                          color: Colors.white54,
+                        ),
                       );
                     },
                   ),
@@ -179,7 +205,10 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
                 decoration: BoxDecoration(
                   color: Colors.black.withAlpha(217),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFd4af37).withAlpha(153), width: 1.5),
+                  border: Border.all(
+                    color: const Color(0xFFd4af37).withAlpha(153),
+                    width: 1.5,
+                  ),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(20),
@@ -193,7 +222,11 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
                           padding: const EdgeInsets.only(bottom: 12),
                           child: Text(
                             widget.scene.title,
-                            style: const TextStyle(color: Color(0xFFd4af37), fontSize: 18, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              color: Color(0xFFd4af37),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
 
@@ -203,10 +236,14 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
                         child: Text(
                           _getCurrentSpeaker(),
                           style: TextStyle(
-                            color: _getCurrentSpeaker() == 'Narrateur' ? Colors.white.withAlpha(204) : const Color(0xFFd4af37),
+                            color: _getCurrentSpeaker() == 'Narrateur'
+                                ? Colors.white.withAlpha(204)
+                                : const Color(0xFFd4af37),
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            fontStyle: _getCurrentSpeaker() == 'Narrateur' ? FontStyle.italic : FontStyle.normal,
+                            fontStyle: _getCurrentSpeaker() == 'Narrateur'
+                                ? FontStyle.italic
+                                : FontStyle.normal,
                           ),
                         ),
                       ),
@@ -215,7 +252,14 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
                       Container(
                         constraints: const BoxConstraints(minHeight: 80),
                         width: double.infinity,
-                        child: Text(_getCurrentText(), style: const TextStyle(color: Colors.white, fontSize: 16, height: 1.4)),
+                        child: Text(
+                          _getCurrentText(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            height: 1.4,
+                          ),
+                        ),
                       ),
 
                       const SizedBox(height: 16),
@@ -225,7 +269,13 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Text progress indicator
-                          Text('${_currentSentenceIndex + 1} / ${_sentences.length}', style: TextStyle(color: Colors.white.withAlpha(153), fontSize: 12)),
+                          Text(
+                            '${_currentSentenceIndex + 1} / ${_sentences.length}',
+                            style: TextStyle(
+                              color: Colors.white.withAlpha(153),
+                              fontSize: 12,
+                            ),
+                          ),
 
                           // Continue indicator
                           if (!_isTextComplete)
@@ -234,10 +284,18 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
                               children: [
                                 Text(
                                   'Cliquez pour continuer',
-                                  style: TextStyle(color: Colors.white.withAlpha(178), fontSize: 12, fontStyle: FontStyle.italic),
+                                  style: TextStyle(
+                                    color: Colors.white.withAlpha(178),
+                                    fontSize: 12,
+                                    fontStyle: FontStyle.italic,
+                                  ),
                                 ),
                                 const SizedBox(width: 4),
-                                Icon(Icons.touch_app, size: 16, color: Colors.white.withAlpha(178)),
+                                Icon(
+                                  Icons.touch_app,
+                                  size: 16,
+                                  color: Colors.white.withAlpha(178),
+                                ),
                               ],
                             ),
                         ],
@@ -247,7 +305,11 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
                       if (widget.scene.choices != null) ...[
                         const SizedBox(height: 16),
                         ...widget.scene.choices!.map(
-                          (choice) => ChoiceWidget(choice: choice, onSelected: widget.onChoiceMade, emotionalState: widget.gameState.emotionalState),
+                          (choice) => ChoiceWidget(
+                            choice: choice,
+                            onSelected: widget.onChoiceMade,
+                            emotionalState: widget.gameState.emotionalState,
+                          ),
                         ),
                       ],
 
@@ -260,14 +322,24 @@ class _SceneDisplayWidgetState extends State<SceneDisplayWidget> with SingleTick
                             children: [
                               Flexible(
                                 child: Text(
-                                  widget.scene.nextSceneId != null ? 'Continuer' : 'Terminer',
-                                  style: TextStyle(color: const Color(0xFFd4af37).withAlpha(204), fontSize: 14, fontWeight: FontWeight.w500),
+                                  widget.scene.nextSceneId != null
+                                      ? 'Continuer'
+                                      : 'Terminer',
+                                  style: TextStyle(
+                                    color: const Color(
+                                      0xFFd4af37,
+                                    ).withAlpha(204),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
                               const SizedBox(width: 4),
                               Icon(
-                                widget.scene.nextSceneId != null ? Icons.arrow_forward : Icons.check_circle,
+                                widget.scene.nextSceneId != null
+                                    ? Icons.arrow_forward
+                                    : Icons.check_circle,
                                 size: 16,
                                 color: const Color(0xFFd4af37).withAlpha(204),
                               ),
