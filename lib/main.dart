@@ -23,6 +23,7 @@ import 'package:oracle_d_asgard/router.dart'; // Import the router
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:oracle_d_asgard/widgets/app_restart_wrapper.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -281,28 +282,117 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(360, 690), // Standard mobile design size
-      minTextAdapt: false,
-      splitScreenMode: true,
-      builder: (context, child) {
-        return MaterialApp.router(
-          key: ValueKey(
-            context.locale.toString(),
-          ), // Force rebuild when locale changes
-          title: context.locale.languageCode == 'fr'
-              ? 'Oracle d\'Asgard'
-              : 'Oracle of Asgard',
-          theme: AppThemes.lightTheme,
-          darkTheme: AppThemes.darkTheme,
-          themeMode: Provider.of<ThemeProvider>(context).themeMode,
-          routerConfig: router, // Use routerConfig instead of home and routes
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          locale: context.locale,
-          debugShowCheckedModeBanner: false,
-        );
-      },
+    if (kIsWeb) {
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          double aspectRatio = 9 / 16; // Ratio largeur/hauteur (9:16)
+
+          double availableWidth = constraints.maxWidth;
+
+          double availableHeight = constraints.maxHeight;
+
+          double calculatedWidth = availableWidth;
+
+          double calculatedHeight = availableWidth / aspectRatio;
+
+          if (calculatedHeight > availableHeight) {
+            calculatedHeight = availableHeight;
+
+            calculatedWidth = availableHeight * aspectRatio;
+          }
+
+          return Center(
+            child: SizedBox(
+              width: calculatedWidth,
+
+              height: calculatedHeight,
+
+              child: ResponsiveProvider(
+                gameSize: Size(calculatedWidth, calculatedHeight),
+                child: ScreenUtilInit(
+                  designSize: const Size(360, 690), // Use fixed design size for consistent scaling
+
+                  minTextAdapt: false,
+
+                  splitScreenMode: true,
+
+                  builder: (context, child) {
+                    return MaterialApp.router(
+                    key: ValueKey(
+                      context.locale.toString(),
+                    ), // Force rebuild when locale changes
+
+                    title: context.locale.languageCode == 'fr'
+                        ? 'Oracle d\'Asgard'
+                        : 'Oracle of Asgard',
+
+                    theme: AppThemes.lightTheme,
+
+                    darkTheme: AppThemes.darkTheme,
+
+                    themeMode: Provider.of<ThemeProvider>(context).themeMode,
+
+                    routerConfig:
+                        router, // Use routerConfig instead of home and routes
+
+                    localizationsDelegates: context.localizationDelegates,
+
+                    supportedLocales: context.supportedLocales,
+
+                    locale: context.locale,
+
+                    debugShowCheckedModeBanner: false,
+                  );
+                },
+              ),
+            ),
+            ),
+          );
+        },
+      );
+    } else {
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          return ResponsiveProvider(
+            gameSize: Size(constraints.maxWidth, constraints.maxHeight),
+            child: ScreenUtilInit(
+              designSize: const Size(360, 690), // Standard mobile design size
+
+              minTextAdapt: false,
+
+              splitScreenMode: true,
+
+              builder: (context, child) {
+                return MaterialApp.router(
+            key: ValueKey(
+              context.locale.toString(),
+            ), // Force rebuild when locale changes
+
+            title: context.locale.languageCode == 'fr'
+                ? 'Oracle d\'Asgard'
+                : 'Oracle of Asgard',
+
+            theme: AppThemes.lightTheme,
+
+            darkTheme: AppThemes.darkTheme,
+
+            themeMode: Provider.of<ThemeProvider>(context).themeMode,
+
+            routerConfig: router, // Use routerConfig instead of home and routes
+
+            localizationsDelegates: context.localizationDelegates,
+
+            supportedLocales: context.supportedLocales,
+
+            locale: context.locale,
+
+            debugShowCheckedModeBanner: false,
+          );
+        },
+      ),
     );
+        },
+      );
+    }
   }
 }

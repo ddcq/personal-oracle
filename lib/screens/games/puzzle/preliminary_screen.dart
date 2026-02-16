@@ -7,6 +7,7 @@ import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/screens/games/puzzle/main_screen.dart';
 
 import 'package:oracle_d_asgard/widgets/app_background.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 // =========================================
 // PUZZLE GAME - Les Runes Dispersées
@@ -22,6 +23,7 @@ class PuzzlePreliminaryScreen extends StatefulWidget {
 class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
     final Widget puzzleLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
@@ -35,7 +37,7 @@ class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
           const SizedBox(height: 16),
           Text(
             'puzzle_preliminary_screen_help_text'.tr(),
-            style: const TextStyle(color: Colors.white, fontSize: 18),
+            style: TextStyle(color: Colors.white, fontSize: responsive.sp(18)),
             textAlign: TextAlign.center,
           ),
         ],
@@ -62,10 +64,17 @@ class _PuzzlePreliminaryScreenState extends State<PuzzlePreliminaryScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'puzzle_screen_title'.tr(),
-                      style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
-                      textAlign: TextAlign.center,
+                    Builder(
+                      builder: (context) {
+                        final responsive = Responsive(context);
+                        return Text(
+                          'puzzle_screen_title'.tr(),
+                          style: ChibiTextStyles.appBarTitleResponsive(context).copyWith(
+                            fontSize: responsive.sp(32),
+                          ),
+                          textAlign: TextAlign.center,
+                        );
+                      },
                     ),
                     const SizedBox(height: 20),
                     puzzleLayout,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 class GameControls extends StatelessWidget {
   final GameController controller;
@@ -17,18 +17,19 @@ class GameControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
     final buttonTextStyle = TextStyle(
       // Define a common text style for buttons
-      fontSize: 16.sp,
+      fontSize: responsive.sp(16),
       fontWeight: FontWeight.bold,
-      letterSpacing: 1.5.sp,
+      letterSpacing: responsive.sp(1.5),
       color: Colors.white,
     );
 
     if (!controller.validated) {
       return SizedBox(
         width: double.infinity,
-        height: 50.h, // Adjusted height with .h
+        height: responsive.height(50), // Adjusted height with responsive
         child: ChibiTextButton(
           // Replaced TextButton with ChibiButton
           text: 'Valider l\'ordre',
@@ -63,10 +64,10 @@ class GameControls extends StatelessWidget {
             ),
           ),
 
-        SizedBox(height: 12.h), // Adjusted height with .h
+        SizedBox(height: responsive.height(12)), // Adjusted height with .h
         SizedBox(
           width: double.infinity,
-          height: 50.h, // Adjusted height with .h
+          height: responsive.height(50), // Adjusted height with responsive
           child: ChibiTextButton(
             // Replaced TextButton with ChibiButton
             text: 'Rejouer avec un autre mythe',

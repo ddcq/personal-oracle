@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:newton_particles/newton_particles.dart';
 
@@ -8,6 +7,7 @@ import 'package:oracle_d_asgard/widgets/chibi_app_bar.dart';
 import 'package:oracle_d_asgard/widgets/epic_button.dart';
 import 'package:oracle_d_asgard/widgets/hexagonal_grid.dart';
 import 'package:oracle_d_asgard/utils/translation_extensions.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 class MenuPrincipal extends StatelessWidget {
   const MenuPrincipal({super.key});
@@ -56,11 +56,13 @@ class MenuPrincipal extends StatelessWidget {
       routes.length,
       (i) => HexGridItem(
         onTap: () => context.go(routes[i]),
-        child: EpicButton(
-          onPressed: () => context.go(routes[i]),
-          imagePath: images[i],
-          size: 80.sp,
-          label: gameNames[i].trAsync(),
+        child: Builder(
+          builder: (context) => EpicButton(
+            onPressed: () => context.go(routes[i]),
+            imagePath: images[i],
+            size: Responsive(context).sp(80),
+            label: gameNames[i].trAsync(),
+          ),
         ),
       ),
     );
@@ -134,25 +136,30 @@ class MenuPrincipal extends StatelessWidget {
                         distanceCurve: Curves.easeInOutQuad,
                       ),
                     ],
-                    child: SizedBox(
-                      height: 580.h,
-                      width: double.infinity,
-                      child: Transform.translate(
-                        offset: Offset(
-                          MediaQuery.of(context).size.width * 0.0,
-                          50.h,
-                        ),
-                        child: HexagonalGrid(
-                          items: _buildGridItems(context),
-                          columns: 3,
-                          rows: 5,
-                          hexSize: 65.0,
-                          skipFirstTile: true,
-                          horizontalOffset: 0.22,
-                          verticalOffset: 0.10,
-                          containerHeight: 580.h,
-                        ),
-                      ),
+                    child: Builder(
+                      builder: (context) {
+                        final responsive = Responsive(context);
+                        return SizedBox(
+                          height: responsive.height(580),
+                          width: double.infinity,
+                          child: Transform.translate(
+                            offset: Offset(
+                              responsive.gameSize.width * 0.0,
+                              responsive.height(50),
+                            ),
+                            child: HexagonalGrid(
+                              items: _buildGridItems(context),
+                              columns: 3,
+                              rows: 5,
+                              hexSize: 65.0,
+                              skipFirstTile: true,
+                              horizontalOffset: 0.22,
+                              verticalOffset: 0.10,
+                              containerHeight: responsive.height(580),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ), // This closes the Newton + Stack
                 ), // This closes the Container

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/models/collectible_card.dart';
 import 'package:oracle_d_asgard/widgets/epic_button.dart';
 
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart'; // Import MythCard
 import 'package:oracle_d_asgard/utils/image_utils.dart';
@@ -69,29 +70,33 @@ class _VictoryPopupState extends State<VictoryPopup> {
     super.dispose();
   }
 
-  TextStyle get _rewardTitleStyle =>
-      Theme.of(context).textTheme.displayMedium!.copyWith(
-        fontFamily: AppTextStyles.amaticSC,
-        color: Colors.amber,
-        fontWeight: FontWeight.bold,
-        fontSize: 30,
-        letterSpacing: 1.0,
-        shadows: [
-          Shadow(
-            blurRadius: 8.0,
-            color: Colors.black87,
-            offset: const Offset(2.0, 2.0),
-          ),
-        ],
-        decoration: TextDecoration.none,
-      );
+  TextStyle _rewardTitleStyle(BuildContext context) {
+    final responsive = Responsive(context);
+    return Theme.of(context).textTheme.displayMedium!.copyWith(
+      fontFamily: AppTextStyles.amaticSC,
+      color: Colors.amber,
+      fontWeight: FontWeight.bold,
+      fontSize: responsive.sp(30),
+      letterSpacing: 1.0,
+      shadows: [
+        Shadow(
+          blurRadius: 8.0,
+          color: Colors.black87,
+          offset: const Offset(2.0, 2.0),
+        ),
+      ],
+      decoration: TextDecoration.none,
+    );
+  }
 
-  TextStyle get _rewardDescriptionStyle =>
-      Theme.of(context).textTheme.displayMedium!.copyWith(
-        fontSize: 12,
-        color: Colors.white70,
-        decoration: TextDecoration.none,
-      );
+  TextStyle _rewardDescriptionStyle(BuildContext context) {
+    final responsive = Responsive(context);
+    return Theme.of(context).textTheme.displayMedium!.copyWith(
+      fontSize: responsive.sp(12),
+      color: Colors.white70,
+      decoration: TextDecoration.none,
+    );
+  }
 
   Widget _buildGenericContent() {
     return Column(
@@ -105,18 +110,23 @@ class _VictoryPopupState extends State<VictoryPopup> {
         const SizedBox(height: 10),
         Text(
           'victory_popup_congratulations'.tr(),
-          style: _rewardTitleStyle,
+          style: _rewardTitleStyle(context),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 5),
-        Text(
-          'victory_popup_generic_message'.tr(),
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.white70,
-            decoration: TextDecoration.none,
-          ),
-          textAlign: TextAlign.center,
+        Builder(
+          builder: (context) {
+            final responsive = Responsive(context);
+            return Text(
+              'victory_popup_generic_message'.tr(),
+              style: TextStyle(
+                fontSize: responsive.sp(16),
+                color: Colors.white70,
+                decoration: TextDecoration.none,
+              ),
+              textAlign: TextAlign.center,
+            );
+          }
         ),
       ],
     );
@@ -145,28 +155,38 @@ class _VictoryPopupState extends State<VictoryPopup> {
               10,
             ), // Optional: add some rounded corners
           ),
-          child: Text(
-            'victory_popup_coins_earned_message'.tr(
-              namedArgs: {'coins': coins.toString()},
-            ),
-            style: _rewardTitleStyle.copyWith(
-              fontSize: 24,
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.center,
+          child: Builder(
+            builder: (context) {
+              final responsive = Responsive(context);
+              return Text(
+                'victory_popup_coins_earned_message'.tr(
+                  namedArgs: {'coins': coins.toString()},
+                ),
+                style: _rewardTitleStyle(context).copyWith(
+                  fontSize: responsive.sp(24),
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              );
+            }
           ),
         ),
         if (widget.didLevelUp) ...[
           const SizedBox(height: 10),
-          Text(
-            'norse_quiz_result_screen_level_up'.tr(
-              namedArgs: {'level': '${widget.newLevel}'},
-            ),
-            style: _rewardTitleStyle.copyWith(
-              fontSize: 22,
-              color: Colors.greenAccent,
-            ),
-            textAlign: TextAlign.center,
+          Builder(
+            builder: (context) {
+              final responsive = Responsive(context);
+              return Text(
+                'norse_quiz_result_screen_level_up'.tr(
+                  namedArgs: {'level': '${widget.newLevel}'},
+                ),
+                style: _rewardTitleStyle(context).copyWith(
+                  fontSize: responsive.sp(22),
+                  color: Colors.greenAccent,
+                ),
+                textAlign: TextAlign.center,
+              );
+            }
           ),
         ],
       ],
@@ -184,16 +204,20 @@ class _VictoryPopupState extends State<VictoryPopup> {
           : Image.asset(addAssetPrefix(card.imagePath), fit: BoxFit.contain),
     );
 
-    final titleWidget = Text(
-      'collectible_card_${card.id}_title'.tr(),
-      style: _rewardTitleStyle,
-      textAlign: TextAlign.center,
+    final titleWidget = Builder(
+      builder: (context) => Text(
+        'collectible_card_${card.id}_title'.tr(),
+        style: _rewardTitleStyle(context),
+        textAlign: TextAlign.center,
+      ),
     );
 
-    final descriptionWidget = Text(
-      card.description.tr(),
-      style: _rewardDescriptionStyle,
-      textAlign: TextAlign.center,
+    final descriptionWidget = Builder(
+      builder: (context) => Text(
+        card.description.tr(),
+        style: _rewardDescriptionStyle(context),
+        textAlign: TextAlign.center,
+      ),
     );
 
     return Column(
@@ -215,16 +239,20 @@ class _VictoryPopupState extends State<VictoryPopup> {
       fit: BoxFit.contain,
     );
 
-    final titleWidget = Text(
-      storyChapter.title.tr(),
-      style: _rewardTitleStyle,
-      textAlign: TextAlign.center,
+    final titleWidget = Builder(
+      builder: (context) => Text(
+        storyChapter.title.tr(),
+        style: _rewardTitleStyle(context),
+        textAlign: TextAlign.center,
+      ),
     );
 
-    final descriptionWidget = Text(
-      storyChapter.description.tr(),
-      style: _rewardDescriptionStyle,
-      textAlign: TextAlign.center,
+    final descriptionWidget = Builder(
+      builder: (context) => Text(
+        storyChapter.description.tr(),
+        style: _rewardDescriptionStyle(context),
+        textAlign: TextAlign.center,
+      ),
     );
 
     return Column(
@@ -347,24 +375,29 @@ class _VictoryPopupState extends State<VictoryPopup> {
                       // The title, positioned to overflow
                       Positioned(
                         top: 0,
-                        child: Text(
-                          widget.customTitle ?? 'victory_popup_title'.tr(),
-                          style: Theme.of(context).textTheme.displayMedium
-                              ?.copyWith(
-                                fontFamily: AppTextStyles.amaticSC,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 70,
-                                letterSpacing: 2.0,
-                                shadows: [
-                                  const Shadow(
-                                    blurRadius: 15.0,
-                                    color: Colors.black87,
-                                    offset: Offset(4.0, 4.0),
+                        child: Builder(
+                          builder: (context) {
+                            final responsive = Responsive(context);
+                            return Text(
+                              widget.customTitle ?? 'victory_popup_title'.tr(),
+                              style: Theme.of(context).textTheme.displayMedium
+                                  ?.copyWith(
+                                    fontFamily: AppTextStyles.amaticSC,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: responsive.sp(70),
+                                    letterSpacing: 2.0,
+                                    shadows: [
+                                      const Shadow(
+                                        blurRadius: 15.0,
+                                        color: Colors.black87,
+                                        offset: Offset(4.0, 4.0),
+                                      ),
+                                    ],
+                                    decoration: TextDecoration.none,
                                   ),
-                                ],
-                                decoration: TextDecoration.none,
-                              ),
+                            );
+                          }
                         ),
                       ),
                     ],

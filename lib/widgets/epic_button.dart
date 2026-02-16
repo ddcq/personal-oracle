@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 class EpicButton extends StatefulWidget {
   const EpicButton({
@@ -34,7 +34,8 @@ class _EpicButtonState extends State<EpicButton> {
 
   @override
   Widget build(BuildContext context) {
-    final buttonSize = widget.size ?? 70.sp;
+    final responsive = Responsive(context);
+    final buttonSize = widget.size ?? responsive.sp(70);
     List<Widget> stackChildren = [];
 
     if (widget.imagePath != null) {
@@ -63,8 +64,8 @@ class _EpicButtonState extends State<EpicButton> {
         Transform(
           transform:
               Matrix4.translationValues(
-                  -6.0.sp,
-                  _isPressed ? 1.0.sp : -4.0.sp,
+                  -responsive.sp(6.0),
+                  _isPressed ? responsive.sp(1.0) : -responsive.sp(4.0),
                   0.0,
                 )
                 ..setEntry(3, 2, 0.015)
@@ -78,8 +79,8 @@ class _EpicButtonState extends State<EpicButton> {
         Transform(
           transform:
               Matrix4.translationValues(
-                  -6.0.sp,
-                  _isPressed ? 1.0.sp : -4.0.sp,
+                  -responsive.sp(6.0),
+                  _isPressed ? responsive.sp(1.0) : -responsive.sp(4.0),
                   0.0,
                 )
                 ..setEntry(3, 2, 0.015)
@@ -89,7 +90,7 @@ class _EpicButtonState extends State<EpicButton> {
             scale: 0.9,
             child: Icon(
               widget.iconData!,
-              size: 28.sp,
+              size: responsive.sp(28),
               color: const Color.fromARGB(255, 220, 255, 255).withAlpha(204),
             ),
           ),
@@ -126,7 +127,7 @@ class _EpicButtonState extends State<EpicButton> {
           Text(
             textAlign: TextAlign.center,
             widget.label!,
-            style: ChibiTextStyles.buttonText.copyWith(fontSize: 10.0.sp),
+            style: ChibiTextStyles.buttonText.copyWith(fontSize: responsive.sp(10.0)),
           ),
       ],
     );

@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/epic_button.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -117,6 +117,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -127,7 +129,7 @@ class _MainScreenState extends State<MainScreen> {
                   Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: EdgeInsets.only(top: 20.h),
+                      padding: EdgeInsets.only(top: responsive.height(20)),
                       child:
                           Text(
                                 MainScreenTranslations.translate(
@@ -135,7 +137,7 @@ class _MainScreenState extends State<MainScreen> {
                                   context.locale.toString(),
                                 ),
                                 textAlign: TextAlign.center,
-                                style: ChibiTextStyles.appBarTitle,
+                                style: ChibiTextStyles.appBarTitleResponsive(context),
                               )
                               .animate()
                               .slideY(
@@ -172,7 +174,7 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     ),
                     child: SizedBox(
-                      height: 250.h,
+                      height: responsive.height(250),
                       width: double.infinity,
                       child: HexagonalGrid(
                         items: _buildGridItems(context),
@@ -182,7 +184,7 @@ class _MainScreenState extends State<MainScreen> {
                         skipFirstTile: true,
                         centerHorizontally: true,
                         verticalOffset: 0.3,
-                        containerHeight: 250.h,
+                        containerHeight: responsive.height(250),
                       ),
                     ),
                   ),

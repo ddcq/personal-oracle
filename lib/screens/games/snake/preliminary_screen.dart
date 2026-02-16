@@ -5,15 +5,18 @@ import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/screens/games/snake/main_screen.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 class SnakePreliminaryScreen extends StatelessWidget {
   const SnakePreliminaryScreen({super.key});
 
   static Widget _buildBonusInfo(
+    BuildContext context,
     String imagePath,
     String nameKey,
     String effectKey,
   ) {
+    final responsive = Responsive(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -21,15 +24,15 @@ class SnakePreliminaryScreen extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           '${nameKey.tr()}: ',
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
-            fontSize: 14,
+            fontSize: responsive.sp(14),
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
           effectKey.tr(),
-          style: const TextStyle(color: Colors.white70, fontSize: 14),
+          style: TextStyle(color: Colors.white70, fontSize: responsive.sp(14)),
         ),
       ],
     );
@@ -37,6 +40,7 @@ class SnakePreliminaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
     final Widget gameInfoLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
@@ -51,38 +55,42 @@ class SnakePreliminaryScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'snake_preliminary_screen_help_text'.tr(),
-            style: const TextStyle(color: Colors.white, fontSize: 18),
+            style: TextStyle(color: Colors.white, fontSize: responsive.sp(18)),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
           Text(
             'snake_bonus_title'.tr(),
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: responsive.sp(16),
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 12),
           _buildBonusInfo(
+            context,
             'assets/images/snake/speed.png',
             'snake_bonus_speed_name',
             'snake_bonus_speed_effect',
           ),
           const SizedBox(height: 8),
           _buildBonusInfo(
+            context,
             'assets/images/snake/shield.png',
             'snake_bonus_shield_name',
             'snake_bonus_shield_effect',
           ),
           const SizedBox(height: 8),
           _buildBonusInfo(
+            context,
             'assets/images/snake/freeze.png',
             'snake_bonus_freeze_name',
             'snake_bonus_freeze_effect',
           ),
           const SizedBox(height: 8),
           _buildBonusInfo(
+            context,
             'assets/images/snake/ghost.png',
             'snake_bonus_ghost_name',
             'snake_bonus_ghost_effect',
@@ -90,9 +98,9 @@ class SnakePreliminaryScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'snake_bonus_duration'.tr(),
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white70,
-              fontSize: 12,
+              fontSize: responsive.sp(12),
               fontStyle: FontStyle.italic,
             ),
           ),
@@ -122,10 +130,17 @@ class SnakePreliminaryScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'games_menu_midgard_serpent'.tr(),
-                      style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
-                      textAlign: TextAlign.center,
+                    Builder(
+                      builder: (context) {
+                        final responsive = Responsive(context);
+                        return Text(
+                          'games_menu_midgard_serpent'.tr(),
+                          style: ChibiTextStyles.appBarTitleResponsive(context).copyWith(
+                            fontSize: responsive.sp(32),
+                          ),
+                          textAlign: TextAlign.center,
+                        );
+                      },
                     ),
                     const SizedBox(height: 20),
                     gameInfoLayout,

@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 import 'package:oracle_d_asgard/widgets/app_dialog.dart';
 import 'package:oracle_d_asgard/widgets/epic_button.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart';
@@ -42,10 +42,11 @@ class GameHelpDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
     final theme = Theme.of(context);
     final textStyle = theme.textTheme.bodyLarge?.copyWith(
       color: const Color(0xFFC5CAE9),
-      fontSize: 16.sp, // Use .sp for responsive font size
+      fontSize: responsive.sp(16),
       fontFamily: AppTextStyles.amarante,
     );
 
@@ -56,8 +57,8 @@ class GameHelpDialog extends StatelessWidget {
         fontFamily: AppTextStyles.amaticSC,
         color: Colors.white,
         fontWeight: FontWeight.bold,
-        fontSize: 24.sp,
-        letterSpacing: 1.5.sp,
+        fontSize: responsive.sp(24),
+        letterSpacing: responsive.sp(1.5),
         shadows: [
           const Shadow(
             blurRadius: 10.0,

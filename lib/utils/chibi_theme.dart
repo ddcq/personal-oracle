@@ -1,8 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:oracle_d_asgard/utils/text_styles.dart'; // Assuming AppTextStyles is still needed for font families
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 class ChibiTextStyles {
+  // NEW RESPONSIVE METHODS - Use these for correct dimensions on web
+  // These use ResponsiveProvider and work correctly across all platforms
+
+  static TextStyle appBarTitleResponsive(BuildContext context) {
+    final responsive = Responsive(context);
+    return TextStyle(
+      fontFamily: AppTextStyles.amaticSC,
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: responsive.sp(70),
+      letterSpacing: responsive.sp(2.0),
+      shadows: [
+        const Shadow(
+          blurRadius: 15.0,
+          color: Colors.black87,
+          offset: Offset(4.0, 4.0),
+        ),
+      ],
+    );
+  }
+
+  static TextStyle buttonTextResponsive(BuildContext context) {
+    final responsive = Responsive(context);
+    return TextStyle(
+      fontSize: responsive.sp(20),
+      fontWeight: FontWeight.bold,
+      letterSpacing: responsive.sp(1.5),
+      color: Colors.white,
+      fontFamily: AppTextStyles.amarante,
+      decoration: TextDecoration.none,
+    );
+  }
+
+  static TextStyle storyTitleResponsive(BuildContext context) {
+    final responsive = Responsive(context);
+    return TextStyle(
+      fontFamily: AppTextStyles.amaticSC,
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: responsive.sp(24),
+      letterSpacing: responsive.sp(2.0),
+      shadows: [
+        const Shadow(
+          blurRadius: 15.0,
+          color: Colors.black87,
+          offset: Offset(4.0, 4.0),
+        ),
+      ],
+    );
+  }
+
+  static TextStyle dialogTextResponsive(BuildContext context) {
+    final responsive = Responsive(context);
+    return TextStyle(
+      color: Colors.white,
+      decoration: TextDecoration.none,
+      fontFamily: AppTextStyles.amarante,
+      fontSize: responsive.sp(20),
+      letterSpacing: responsive.sp(1.5),
+      shadows: [
+        const Shadow(
+          blurRadius: 10.0,
+          color: Colors.black87,
+          offset: Offset(2.0, 2.0),
+        ),
+      ],
+    );
+  }
+
+  static TextStyle overlayTitleResponsive(BuildContext context) {
+    final responsive = Responsive(context);
+    return TextStyle(
+      fontFamily: AppTextStyles.amaticSC,
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: responsive.sp(40),
+      letterSpacing: responsive.sp(2.0),
+      shadows: [
+        const Shadow(
+          blurRadius: 15.0,
+          color: Colors.black87,
+          offset: Offset(4.0, 4.0),
+        ),
+      ],
+    );
+  }
+
+  // LEGACY GETTERS - Kept for backward compatibility
+  // These still use flutter_screenutil but will be incorrect on web
+  // Gradually replace these with the *Responsive() methods above
+
   static TextStyle get appBarTitle => TextStyle(
     fontFamily: AppTextStyles.amaticSC,
     color: Colors.white,

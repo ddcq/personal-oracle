@@ -4,12 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 class QuizPreliminaryScreen extends StatelessWidget {
   const QuizPreliminaryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
     final Widget gameInfoLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
@@ -24,7 +26,7 @@ class QuizPreliminaryScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'quiz_preliminary_screen_help_text'.tr(),
-            style: const TextStyle(color: Colors.white, fontSize: 18),
+            style: TextStyle(color: Colors.white, fontSize: responsive.sp(18)),
             textAlign: TextAlign.center,
           ),
         ],
@@ -50,10 +52,17 @@ class QuizPreliminaryScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'games_menu_quiz'.tr(),
-                      style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
-                      textAlign: TextAlign.center,
+                    Builder(
+                      builder: (context) {
+                        final responsive = Responsive(context);
+                        return Text(
+                          'games_menu_quiz'.tr(),
+                          style: ChibiTextStyles.appBarTitleResponsive(context).copyWith(
+                            fontSize: responsive.sp(32),
+                          ),
+                          textAlign: TextAlign.center,
+                        );
+                      },
                     ),
                     const SizedBox(height: 20),
                     gameInfoLayout,

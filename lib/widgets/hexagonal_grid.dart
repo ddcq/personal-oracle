@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 /// Configuration pour un élément de la grille hexagonale
 class HexGridItem {
@@ -55,16 +55,17 @@ class HexagonalGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final positions = _calculatePositions(screenWidth);
+    final responsive = Responsive(context);
+    final gameWidth = responsive.gameSize.width;
+    final positions = _calculatePositions(gameWidth, responsive);
 
-    return Stack(children: _buildGridItems(positions));
+    return Stack(children: _buildGridItems(positions, responsive));
   }
 
   /// Calcule les positions de chaque élément dans la grille hexagonale
-  List<Offset> _calculatePositions(double screenWidth) {
+  List<Offset> _calculatePositions(double screenWidth, Responsive responsive) {
     final positions = <Offset>[];
-    final scaledHexSize = hexSize.sp;
+    final scaledHexSize = responsive.sp(hexSize);
     final horizontalSpacing =
         scaledHexSize * 1.73; // √3 approximation for pointy hex
     final verticalSpacing = scaledHexSize * 1.73;
@@ -99,9 +100,9 @@ class HexagonalGrid extends StatelessWidget {
   }
 
   /// Construit les widgets positionnés de la grille
-  List<Widget> _buildGridItems(List<Offset> positions) {
+  List<Widget> _buildGridItems(List<Offset> positions, Responsive responsive) {
     final widgets = <Widget>[];
-    final scaledHexSize = hexSize.sp;
+    final scaledHexSize = responsive.sp(hexSize);
 
     for (int i = 0; i < positions.length && i < items.length; i++) {
       final position = positions[i];

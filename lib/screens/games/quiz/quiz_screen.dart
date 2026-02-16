@@ -13,7 +13,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/locator.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -127,33 +127,36 @@ class _QuizScreenState extends State<QuizScreen> {
             .scaleX(duration: 400.ms, curve: Curves.easeInOut),
       ),
       body: AppBackground(
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                    padding: EdgeInsets.all(20.w),
-                    margin: EdgeInsets.all(20.w),
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(
-                        0,
-                        0,
-                        0,
-                        0.5,
-                      ), // Semi-transparent background
-                      borderRadius: BorderRadius.circular(15.r),
-                    ),
-                    child: AutoSizeText(
-                      question.question,
-                      textAlign: TextAlign.center,
-                      maxLines: 4, // Allow multiple lines for questions
-                      minFontSize: 10.0,
-                      stepGranularity: 1.0,
-                      style: Theme.of(context).textTheme.displayMedium
-                          ?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.sp, // Max font size
+        child: Builder(
+          builder: (context) {
+            final responsive = Responsive(context);
+            return SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                        padding: EdgeInsets.all(responsive.width(20)),
+                        margin: EdgeInsets.all(responsive.width(20)),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(
+                            0,
+                            0,
+                            0,
+                            0.5,
+                          ), // Semi-transparent background
+                          borderRadius: BorderRadius.circular(responsive.width(15)),
+                        ),
+                        child: AutoSizeText(
+                          question.question,
+                          textAlign: TextAlign.center,
+                          maxLines: 4, // Allow multiple lines for questions
+                          minFontSize: 10.0,
+                          stepGranularity: 1.0,
+                          style: Theme.of(context).textTheme.displayMedium
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsive.sp(20), // Max font size
                             shadows: [
                               const Shadow(
                                 blurRadius: 10.0,
@@ -168,26 +171,26 @@ class _QuizScreenState extends State<QuizScreen> {
                   .fadeIn(duration: 300.ms)
                   .slideY(begin: -0.1, duration: 400.ms),
               Expanded(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: question.answers.length,
-                  separatorBuilder: (context, index) => SizedBox(height: 5.h),
-                  itemBuilder: (context, index) {
-                    final answer = question.answers[index];
-                    final String letter = String.fromCharCode(
-                      'A'.codeUnitAt(0) + index,
-                    );
-                    final traits = answer.scores.keys.toList();
-                    final gradientColors = traits.isNotEmpty
-                        ? TraitColors.gradients[traits.first]
-                        : null;
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: question.answers.length,
+                      separatorBuilder: (context, index) => SizedBox(height: responsive.height(5)),
+                      itemBuilder: (context, index) {
+                        final answer = question.answers[index];
+                        final String letter = String.fromCharCode(
+                          'A'.codeUnitAt(0) + index,
+                        );
+                        final traits = answer.scores.keys.toList();
+                        final gradientColors = traits.isNotEmpty
+                            ? TraitColors.gradients[traits.first]
+                            : null;
 
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        left: 20.w,
-                        right: 20.w,
-                        bottom: 10.h,
-                      ),
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            left: responsive.width(20),
+                            right: responsive.width(20),
+                            bottom: responsive.height(10),
+                          ),
                       child:
                           AnswerButton(
                                 text: answer.text,
@@ -203,10 +206,12 @@ class _QuizScreenState extends State<QuizScreen> {
                               .fadeIn(duration: 200.ms),
                     );
                   },
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

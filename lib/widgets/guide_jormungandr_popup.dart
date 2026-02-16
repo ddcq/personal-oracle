@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 
@@ -11,6 +11,7 @@ class GuideJormungandrPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Container(
@@ -28,19 +29,19 @@ class GuideJormungandrPopup extends StatelessWidget {
               style: ChibiTextStyles.overlayTitle,
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: responsive.height(8)),
             Text(
               'widgets_guide_jormungandr_popup_description'.tr(),
-              style: TextStyle(color: Colors.white70, fontSize: 14.sp),
+              style: TextStyle(color: Colors.white70, fontSize: responsive.sp(14)),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: responsive.height(8)),
             Text(
               'widgets_guide_jormungandr_popup_controls'.tr(),
-              style: TextStyle(color: Colors.white54, fontSize: 12.sp),
+              style: TextStyle(color: Colors.white54, fontSize: responsive.sp(12)),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: responsive.height(16)),
             ChibiTextButton(
               text: 'widgets_guide_jormungandr_popup_start_button'.tr(),
               color: const Color(0xFF22C55E),

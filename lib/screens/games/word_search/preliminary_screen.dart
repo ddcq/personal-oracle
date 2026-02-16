@@ -5,12 +5,14 @@ import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/screens/games/word_search/main_screen.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 class WordSearchPreliminaryScreen extends StatelessWidget {
   const WordSearchPreliminaryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
     final Widget gameInfoLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
@@ -29,7 +31,7 @@ class WordSearchPreliminaryScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'word_search_preliminary_screen_help_text'.tr(),
-            style: const TextStyle(color: Colors.white, fontSize: 18),
+            style: TextStyle(color: Colors.white, fontSize: responsive.sp(18)),
             textAlign: TextAlign.center,
           ),
         ],
@@ -58,10 +60,17 @@ class WordSearchPreliminaryScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'games_menu_odin_eye'.tr(),
-                      style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
-                      textAlign: TextAlign.center,
+                    Builder(
+                      builder: (context) {
+                        final responsive = Responsive(context);
+                        return Text(
+                          'games_menu_odin_eye'.tr(),
+                          style: ChibiTextStyles.appBarTitleResponsive(context).copyWith(
+                            fontSize: responsive.sp(32),
+                          ),
+                          textAlign: TextAlign.center,
+                        );
+                      },
                     ),
                     const SizedBox(height: 20),
                     gameInfoLayout,

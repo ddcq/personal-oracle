@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 class VisualNovelPreliminaryScreen extends StatelessWidget {
   const VisualNovelPreliminaryScreen({super.key});
@@ -58,10 +59,17 @@ class VisualNovelPreliminaryScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'visual_novel_title'.tr(),
-                      style: ChibiTextStyles.appBarTitle.copyWith(fontSize: 32),
-                      textAlign: TextAlign.center,
+                    Builder(
+                      builder: (context) {
+                        final responsive = Responsive(context);
+                        return Text(
+                          'visual_novel_title'.tr(),
+                          style: ChibiTextStyles.appBarTitleResponsive(context).copyWith(
+                            fontSize: responsive.sp(32),
+                          ),
+                          textAlign: TextAlign.center,
+                        );
+                      },
                     ),
                     const SizedBox(height: 20),
                     gameInfoLayout,

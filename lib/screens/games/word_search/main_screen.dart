@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/screens/games/word_search/word_search_controller.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
@@ -299,6 +299,7 @@ class _SecretWordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const titleFontSize = 28.0;
+    final responsive = Responsive(context);
 
     return Center(
       child: Column(
@@ -307,7 +308,7 @@ class _SecretWordInput extends StatelessWidget {
           Text(
             controller.instructionClue,
             style: ChibiTextStyles.storyTitle.copyWith(
-              fontSize: titleFontSize.sp,
+              fontSize: responsive.sp(titleFontSize),
               shadows: [
                 const Shadow(
                   blurRadius: 20.0,
@@ -339,28 +340,33 @@ class _SecretWordInput extends StatelessWidget {
   }
 
   Widget _buildLetterContainer(String letter, bool isError) {
-    final containerWidth = 35.0.sp;
-    final containerHeight = containerWidth * 1.5;
-    const letterFontSize = 24.0;
+    return Builder(
+      builder: (context) {
+        final responsive = Responsive(context);
+        final containerWidth = responsive.sp(35.0);
+        final containerHeight = containerWidth * 1.5;
+        const letterFontSize = 24.0;
 
-    return Container(
-      width: containerWidth,
-      height: containerHeight,
-      decoration: BoxDecoration(
-        color: isError
-            ? ChibiColors.buttonRed.withAlpha(180)
-            : Colors.black.withAlpha(102),
-        border: Border.all(color: Colors.white.withAlpha(150), width: 2),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Center(
-        child: Text(
-          letter,
-          style: ChibiTextStyles.storyTitle.copyWith(
-            fontSize: letterFontSize.sp,
+        return Container(
+          width: containerWidth,
+          height: containerHeight,
+          decoration: BoxDecoration(
+            color: isError
+                ? ChibiColors.buttonRed.withAlpha(180)
+                : Colors.black.withAlpha(102),
+            border: Border.all(color: Colors.white.withAlpha(150), width: 2),
+            borderRadius: BorderRadius.circular(8),
           ),
-        ),
-      ),
+          child: Center(
+            child: Text(
+              letter,
+              style: ChibiTextStyles.storyTitle.copyWith(
+                fontSize: responsive.sp(letterFontSize),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
