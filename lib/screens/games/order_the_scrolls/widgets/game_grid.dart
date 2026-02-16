@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/models/myth_card.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/widgets/draggable_myth_card.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 class GameGrid extends StatelessWidget {
   final GameController controller;
@@ -23,7 +24,8 @@ class GameGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final responsive = Responsive(context);
+    final screenWidth = responsive.gameSize.width;
     final crossAxisCount = screenWidth > 600 ? 3 : 2;
     final cardSize = (screenWidth - 48) / crossAxisCount - 8;
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:oracle_d_asgard/utils/text_styles.dart';
 import 'package:oracle_d_asgard/screens/games/order_the_scrolls/game_controller.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class ThumbnailList extends StatelessWidget {
@@ -12,8 +13,8 @@ class ThumbnailList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final double fontSize = screenWidth * 0.06;
+    final responsive = Responsive(context);
+    final double fontSize = responsive.sp(22);
 
     return ListView.builder(
       itemCount: controller.shuffledCards.length,

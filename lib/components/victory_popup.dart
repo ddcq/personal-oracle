@@ -298,20 +298,22 @@ class _VictoryPopupState extends State<VictoryPopup> {
 
     return ConfettiOverlay(
       controller: _confettiController,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        color: Colors.black54,
-        child: Center(
-          child:
-              Stack(
+      child: Builder(
+        builder: (context) {
+          final responsive = Responsive(context);
+          return Container(
+            width: responsive.gameSize.width,
+            height: responsive.gameSize.height,
+            color: Colors.black54,
+            child: Center(
+              child: Stack(
                     clipBehavior: Clip.none,
                     alignment: Alignment.topCenter,
                     children: [
                       ConstrainedBox(
                         constraints: BoxConstraints(
                           maxWidth: 400,
-                          maxHeight: MediaQuery.of(context).size.height * 0.9,
+                          maxHeight: responsive.gameSize.height * 0.9,
                         ),
                         child: AspectRatio(
                           aspectRatio: 1.0 / 1.2, // 1:1 ratio
@@ -401,16 +403,18 @@ class _VictoryPopupState extends State<VictoryPopup> {
                         ),
                       ),
                     ],
-                  )
-                  .animate()
-                  .scale(
-                    begin: const Offset(0.1, 0.1),
-                    end: const Offset(1.0, 1.0),
-                    duration: 2.seconds,
-                    curve: Curves.easeOutBack,
-                  )
-                  .fadeIn(duration: 2.seconds, curve: Curves.easeIn),
-        ),
+                )
+                .animate()
+                .scale(
+                  begin: const Offset(0.1, 0.1),
+                  end: const Offset(1.0, 1.0),
+                  duration: 2.seconds,
+                  curve: Curves.easeOutBack,
+                )
+                .fadeIn(duration: 2.seconds, curve: Curves.easeIn),
+            ),
+          );
+        }
       ),
     );
   }

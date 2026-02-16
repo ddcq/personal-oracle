@@ -14,6 +14,7 @@ import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/joystick_controller.dart';
 import 'package:oracle_d_asgard/widgets/directional_pad.dart' show Direction;
 import 'package:oracle_d_asgard/widgets/progress_bar.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 import 'dart:math' as math;
 
 class QixGameScreen extends StatefulWidget {
@@ -173,7 +174,8 @@ class _QixGameScreenState extends State<QixGameScreen> {
                     child: Text('qix_main_game_not_initialized_error'.tr()),
                   );
                 } else {
-                  final Size screenSize = MediaQuery.of(context).size;
+                  final responsive = Responsive(context);
+                  final Size screenSize = responsive.gameSize;
                   final double appBarHeight =
                       AppBar().preferredSize.height; // Standard AppBar height
                   final double statusBarHeight = MediaQuery.of(

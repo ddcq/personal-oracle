@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 class AdRewardButton extends StatelessWidget {
   final String imagePath;
@@ -51,14 +52,17 @@ class AdRewardButton extends StatelessWidget {
                         padding: EdgeInsets.only(top: 8.0),
                         child: CircularProgressIndicator(color: Colors.white),
                       )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            icon,
-                            color: Colors.white,
-                            size: MediaQuery.of(context).size.width / 6,
-                          ),
+                    : Builder(
+                        builder: (context) {
+                          final responsive = Responsive(context);
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                icon,
+                                color: Colors.white,
+                                size: responsive.gameSize.width / 6,
+                              ),
                           Text(
                             title,
                             textAlign: TextAlign.center,
@@ -68,12 +72,14 @@ class AdRewardButton extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                           ),
-                          Text(
-                            'profile_screen_ad_label'.tr(),
-                            style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(color: Colors.white70),
-                          ),
-                        ],
+                              Text(
+                                'profile_screen_ad_label'.tr(),
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(color: Colors.white70),
+                              ),
+                            ],
+                          );
+                        }
                       ),
               ),
             ],

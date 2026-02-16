@@ -74,7 +74,7 @@ class _OrderTheScrollsGameState extends State<OrderTheScrollsGame> {
             appBar: AppBar(
               title: Text(
                 controller.selectedStory.title.tr(),
-                style: ChibiTextStyles.storyTitle,
+                style: ChibiTextStyles.storyTitleResponsive(context),
               ),
               backgroundColor: Colors.transparent,
               elevation: 0,

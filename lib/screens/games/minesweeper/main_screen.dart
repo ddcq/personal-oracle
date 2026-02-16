@@ -11,6 +11,7 @@ import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 
@@ -311,7 +312,8 @@ class _MinesweeperGrid extends StatelessWidget {
     }
     if (cell.adjacentMines > 0 || cell.adjacentTreasures > 0) {
       List<Widget> counts = [];
-      double baseFontSize = MediaQuery.of(context).size.width * 0.06;
+      final responsive = Responsive(context);
+      double baseFontSize = responsive.sp(22);
 
       double currentFontSize = baseFontSize;
 
@@ -373,7 +375,8 @@ class _TreasureCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final responsive = Responsive(context);
+    final screenWidth = responsive.gameSize.width;
     final containerWidth = screenWidth * 0.5;
     final coinSize =
         (containerWidth - (totalTreasures - 1) * 8.0) / totalTreasures;
@@ -450,7 +453,8 @@ class _RuneLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double uniformFontSize = MediaQuery.of(context).size.width * 0.035;
+    final responsive = Responsive(context);
+    final double uniformFontSize = responsive.sp(13);
     const double imageSize = 32.0;
 
     TextStyle legendTextStyle = ChibiTextStyles.dialogText.copyWith(

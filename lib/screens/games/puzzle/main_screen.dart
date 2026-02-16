@@ -9,6 +9,8 @@ import 'package:oracle_d_asgard/widgets/game_help_dialog.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 import 'package:oracle_d_asgard/services/gamification_service.dart';
 import 'package:oracle_d_asgard/locator.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 
 class PuzzleScreen extends StatefulWidget {
   const PuzzleScreen({super.key});
@@ -73,6 +75,8 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     if (!_isInitialized || _game == null) return;
 
     final dimensions = _calculatePuzzleDimensions(context);
+    final responsive = Responsive(context);
+    final gameSize = responsive.gameSize;
 
     // Update the game with the new piece size and board dimensions
     _game!.pieceSize = dimensions['pieceSize'];
@@ -82,15 +86,17 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     setState(() {
       _game!.initializeAndScatter(
         dimensions['puzzleBoardBounds'],
-        MediaQuery.of(context).size,
+        gameSize,
       );
     });
     _flameGame!.reset();
   }
 
   Map<String, dynamic> _calculatePuzzleDimensions(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final responsive = Responsive(context);
+    final gameSize = responsive.gameSize;
+    final screenWidth = gameSize.width;
+    final screenHeight = gameSize.height;
     final bool isPortrait = screenHeight > screenWidth;
 
     // Calculate pieceSize based on the smaller dimension to ensure it fits
@@ -161,10 +167,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
         ),
         title: Text(
           '${'puzzle_screen_title'.tr()} - ${'level'.tr()} $_currentLevel (${_rows}x$_cols)',
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: ChibiTextStyles.storyTitleResponsive(context),
         ),
         actions: [
           IconButton(
