@@ -156,7 +156,7 @@ class PuzzleFlameGame extends FlameGame {
   }
 
   void onGameCompletedFromPuzzleGame() async {
-    final coins = await _gamificationService.calculateGameReward(
+    final coins = _gamificationService.calculateGameReward(
       level: currentLevel,
     );
     await _gamificationService.addCoins(coins);

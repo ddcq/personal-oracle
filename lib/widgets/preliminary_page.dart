@@ -1,19 +1,34 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
+import 'package:oracle_d_asgard/utils/chibi_theme.dart';
 import 'package:oracle_d_asgard/widgets/app_background.dart';
 import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
-import 'package:oracle_d_asgard/screens/games/minesweeper/main_screen.dart';
-import 'package:oracle_d_asgard/utils/chibi_theme.dart';
-import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
-class MinesweeperPreliminaryScreen extends StatelessWidget {
-  const MinesweeperPreliminaryScreen({super.key});
+class PreliminaryPage extends StatelessWidget {
+  final String title;
+  final String imagePath;
+  final String helpText;
+  final String buttonText;
+  final VoidCallback onPressed;
+  final String backRoute;
+
+  const PreliminaryPage({
+    super.key,
+    required this.title,
+    required this.imagePath,
+    required this.helpText,
+    required this.buttonText,
+    required this.onPressed,
+    this.backRoute = '/games',
+  });
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
-    final Widget gameInfoLayout = Container(
+
+    final gameInfoLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -23,19 +38,21 @@ class MinesweeperPreliminaryScreen extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(
-            'assets/images/menu/minesweeper.webp',
-            width: 80,
-            height: 80,
-          ),
+          Image.asset(imagePath, width: 120),
           const SizedBox(height: 16),
           Text(
-            'minesweeper_preliminary_screen_help_text'.tr(),
+            helpText,
             style: TextStyle(color: Colors.white, fontSize: responsive.sp(18)),
             textAlign: TextAlign.center,
           ),
         ],
       ),
+    );
+
+    final startButton = ChibiTextButton(
+      text: buttonText.tr(),
+      color: ChibiColors.darkEpicPurple,
+      onPressed: onPressed,
     );
 
     return Scaffold(
@@ -49,33 +66,17 @@ class MinesweeperPreliminaryScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Builder(
-                      builder: (context) {
-                        final responsive = Responsive(context);
-                        return Text(
-                          'games_menu_andvari_loot'.tr(),
-                          style: ChibiTextStyles.appBarTitleResponsive(context).copyWith(
-                            fontSize: responsive.sp(32),
-                          ),
-                          textAlign: TextAlign.center,
-                        );
-                      },
+                    Text(
+                      title.tr(),
+                      style: ChibiTextStyles.appBarTitleResponsive(
+                        context,
+                      ).copyWith(fontSize: responsive.sp(32)),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20),
                     gameInfoLayout,
                     const SizedBox(height: 32),
-                    ChibiTextButton(
-                      text: 'minesweeper_preliminary_screen_start_button'.tr(),
-                      color: Colors.brown, // Color from menu
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MinesweeperScreen(),
-                          ),
-                        );
-                      },
-                    ),
+                    startButton,
                   ],
                 ),
               ),
@@ -85,7 +86,7 @@ class MinesweeperPreliminaryScreen extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => context.go('/games'),
+                  onPressed: () => context.go(backRoute),
                 ),
               ),
             ),

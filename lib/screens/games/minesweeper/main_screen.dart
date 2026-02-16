@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:oracle_d_asgard/screens/games/minesweeper/minesweeper_controller.dart';
 import 'package:oracle_d_asgard/locator.dart';
@@ -15,10 +13,6 @@ import 'package:oracle_d_asgard/widgets/game_over_popup.dart';
 import 'package:oracle_d_asgard/components/victory_popup.dart';
 
 import 'package:oracle_d_asgard/services/gamification_service.dart';
-import 'package:simple_gesture_detector/simple_gesture_detector.dart';
-import 'package:flutter/services.dart';
-import 'dart:ui' as ui;
-import 'dart:typed_data';
 
 class MinesweeperScreen extends StatelessWidget {
   const MinesweeperScreen({super.key});
@@ -27,7 +21,7 @@ class MinesweeperScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => MinesweeperController(),
-      child: const _MinesweeperView(),
+      child: _MinesweeperView(),
     );
   }
 }
