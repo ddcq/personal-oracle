@@ -13,6 +13,7 @@ class PreliminaryPage extends StatelessWidget {
   final String buttonText;
   final VoidCallback onPressed;
   final String backRoute;
+  final Widget? customContent;
 
   const PreliminaryPage({
     super.key,
@@ -22,6 +23,7 @@ class PreliminaryPage extends StatelessWidget {
     required this.buttonText,
     required this.onPressed,
     this.backRoute = '/games',
+    this.customContent,
   });
 
   @override
@@ -31,29 +33,24 @@ class PreliminaryPage extends StatelessWidget {
     final gameInfoLayout = Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.black.withAlpha(128),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Image.asset(imagePath, width: 120),
-          const SizedBox(height: 16),
-          Text(
-            helpText,
-            style: TextStyle(color: Colors.white, fontSize: responsive.sp(18)),
-            textAlign: TextAlign.center,
+      decoration: BoxDecoration(color: Colors.black.withAlpha(128), borderRadius: BorderRadius.circular(20)),
+      child:
+          customContent ??
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(imagePath, width: 120),
+              const SizedBox(height: 16),
+              Text(
+                helpText.tr(),
+                style: TextStyle(color: Colors.white, fontSize: responsive.sp(18)),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
-        ],
-      ),
     );
 
-    final startButton = ChibiTextButton(
-      text: buttonText.tr(),
-      color: ChibiColors.darkEpicPurple,
-      onPressed: onPressed,
-    );
+    final startButton = ChibiTextButton(text: buttonText.tr(), color: ChibiColors.darkEpicPurple, onPressed: onPressed);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -68,9 +65,7 @@ class PreliminaryPage extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       title.tr(),
-                      style: ChibiTextStyles.appBarTitleResponsive(
-                        context,
-                      ).copyWith(fontSize: responsive.sp(32)),
+                      style: ChibiTextStyles.appBarTitleResponsive(context).copyWith(fontSize: responsive.sp(32)),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20),

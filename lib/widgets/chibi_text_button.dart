@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:oracle_d_asgard/utils/chibi_theme.dart';
+import 'package:oracle_d_asgard/providers/responsive_provider.dart';
 
 class ChibiTextButton extends StatefulWidget {
   final String text;
@@ -46,6 +46,7 @@ class _ChibiTextButtonState extends State<ChibiTextButton> {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
     final Color lightColor = lighten(widget.color, 0.1); // Reduced from 0.2
     final Color darkColor = darken(widget.color, 0.3); // Increased from 0.2
     final Color borderColor = darken(widget.color, 0.5); // Increased from 0.3
@@ -57,10 +58,10 @@ class _ChibiTextButtonState extends State<ChibiTextButton> {
       finalTextStyle = baseStyle;
     } else {
       const double designFontSize = 20.0;
-      finalTextStyle = baseStyle.copyWith(fontSize: designFontSize.sp);
+      finalTextStyle = baseStyle.copyWith(fontSize: responsive.sp(designFontSize));
     }
 
-    final borderWidth = 3.w;
+    final borderWidth = responsive.width(3);
 
     return GestureDetector(
       onTap: widget.onPressed,
@@ -78,26 +79,26 @@ class _ChibiTextButtonState extends State<ChibiTextButton> {
                         ? [darkColor, widget.color, lightColor]
                         : [lightColor, widget.color, darkColor],
                   ),
-                  borderRadius: BorderRadius.circular(16.r),
+                  borderRadius: BorderRadius.circular(responsive.width(16)),
                   boxShadow: [
                     // Outer shadow - more dramatic
                     BoxShadow(
                       color: Colors.black.withAlpha(120), // Increased from 64
-                      offset: Offset(0, 6.h), // Increased from 4.h
-                      blurRadius: 12.r, // Increased from 6.r
+                      offset: Offset(0, responsive.height(6)), // Increased from 4.h
+                      blurRadius: responsive.width(12), // Increased from 6.r
                     ),
                     // Additional glow effect
                     BoxShadow(
                       color: borderColor.withAlpha(80),
-                      offset: Offset(0, 2.h),
-                      blurRadius: 4.r,
+                      offset: Offset(0, responsive.height(2)),
+                      blurRadius: responsive.width(4),
                       spreadRadius: -1,
                     ),
                   ],
                   border: Border.all(color: borderColor, width: borderWidth),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: BorderRadius.circular(responsive.width(8)),
                   child: Container(
                     decoration: BoxDecoration(
                       // Dark vignette effect from edges

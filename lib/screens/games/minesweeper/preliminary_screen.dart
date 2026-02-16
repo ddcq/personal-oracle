@@ -1,97 +1,25 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:oracle_d_asgard/widgets/app_background.dart';
-import 'package:oracle_d_asgard/widgets/chibi_text_button.dart';
 import 'package:oracle_d_asgard/screens/games/minesweeper/main_screen.dart';
-import 'package:oracle_d_asgard/utils/chibi_theme.dart';
-import 'package:oracle_d_asgard/providers/responsive_provider.dart';
+import 'package:oracle_d_asgard/widgets/preliminary_page.dart';
 
 class MinesweeperPreliminaryScreen extends StatelessWidget {
   const MinesweeperPreliminaryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final responsive = Responsive(context);
-    final Widget gameInfoLayout = Container(
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.black.withAlpha(128),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Image.asset(
-            'assets/images/menu/minesweeper.webp',
-            width: 80,
-            height: 80,
+    return PreliminaryPage(
+      title: 'games_menu_andvari_loot',
+      imagePath: 'assets/images/menu/minesweeper.webp',
+      helpText: 'minesweeper_preliminary_screen_help_text',
+      buttonText: 'minesweeper_preliminary_screen_start_button',
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MinesweeperScreen(),
           ),
-          const SizedBox(height: 16),
-          Text(
-            'minesweeper_preliminary_screen_help_text'.tr(),
-            style: TextStyle(color: Colors.white, fontSize: responsive.sp(18)),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      extendBodyBehindAppBar: true,
-      body: AppBackground(
-        child: Stack(
-          children: [
-            SafeArea(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Builder(
-                      builder: (context) {
-                        final responsive = Responsive(context);
-                        return Text(
-                          'games_menu_andvari_loot'.tr(),
-                          style: ChibiTextStyles.appBarTitleResponsive(context).copyWith(
-                            fontSize: responsive.sp(32),
-                          ),
-                          textAlign: TextAlign.center,
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    gameInfoLayout,
-                    const SizedBox(height: 32),
-                    ChibiTextButton(
-                      text: 'minesweeper_preliminary_screen_start_button'.tr(),
-                      color: Colors.brown, // Color from menu
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MinesweeperScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SafeArea(
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => context.go('/games'),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+        );
+      },
     );
   }
 }
