@@ -48,6 +48,14 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   Path? _cachedPath;
   bool _pathNeedsUpdate = false;
 
+  // Dirty tracking for cells to avoid rendering entire grid every frame
+  final Set<IntVector2> _dirtyCells = {};
+  bool _fullGridRenderNeeded = true;
+
+  // Cache for grid rendering to avoid redrawing unchanged cells (web optimization)
+  ui.Picture? _gridCachePicture;
+  final ui.PictureRecorder _pictureRecorder = ui.PictureRecorder();
+
   ArenaComponent({
     required this.gridSize,
     required this.cellSize,
@@ -91,6 +99,10 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   }
 
   bool isPointOnCurrentDrawingPath(IntVector2 point) {
+    // Optimize for common case: empty path
+    if (_currentDrawingPath.isEmpty) return false;
+    // Use last-in check optimization for active drawing
+    if (_currentDrawingPath.last == point) return true;
     return _currentDrawingPath.contains(point);
   }
 
@@ -122,7 +134,13 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
 
   void _setGridValue(int x, int y, int value) {
     int oldValue = _grid[y][x];
+    if (oldValue == value) return; // No change, skip update
+
     _grid[y][x] = value;
+
+    // Mark cell as dirty for rendering optimization
+    _dirtyCells.add(IntVector2(x, y));
+    _fullGridRenderNeeded = true;
 
     // Check if the cell is within the inner playable area (not border)
     bool isInnerCell = x > 0 && x < gridSize - 1 && y > 0 && y < gridSize - 1;
@@ -393,21 +411,41 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     queue.add(IntVector2(startX, startY));
     visited[startY][startX] = true;
 
+    // Cache Qix position to avoid repeated getter calls
+    final IntVector2 qixPos = _qixComponent.gridPosition;
+
     while (queue.isNotEmpty) {
       IntVector2 current = queue.removeFirst();
       filledPoints.add(current);
 
-      if (current == _qixComponent.gridPosition) {
+      if (current == qixPos) {
         containsQix = true;
       }
 
-      for (IntVector2 neighbor in current.cardinalNeighbors) {
-        if (neighbor.isInBounds(0, gridSize - 1, 0, gridSize - 1)) {
-          if (_isFree(neighbor) && !visited[neighbor.y][neighbor.x]) {
-            visited[neighbor.y][neighbor.x] = true;
-            queue.add(neighbor);
-          }
-        }
+      // Inline bounds checking and grid access for performance
+      final int x = current.x;
+      final int y = current.y;
+
+      // Check all 4 cardinal directions without allocating neighbor objects
+      // Up
+      if (y > 0 && !visited[y - 1][x] && _grid[y - 1][x] == game_constants.kGridFree) {
+        visited[y - 1][x] = true;
+        queue.add(IntVector2(x, y - 1));
+      }
+      // Down
+      if (y < gridSize - 1 && !visited[y + 1][x] && _grid[y + 1][x] == game_constants.kGridFree) {
+        visited[y + 1][x] = true;
+        queue.add(IntVector2(x, y + 1));
+      }
+      // Left
+      if (x > 0 && !visited[y][x - 1] && _grid[y][x - 1] == game_constants.kGridFree) {
+        visited[y][x - 1] = true;
+        queue.add(IntVector2(x - 1, y));
+      }
+      // Right
+      if (x < gridSize - 1 && !visited[y][x + 1] && _grid[y][x + 1] == game_constants.kGridFree) {
+        visited[y][x + 1] = true;
+        queue.add(IntVector2(x + 1, y));
       }
     }
     return FloodFillResult(filledPoints, containsQix);
@@ -440,9 +478,9 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
   }
 
   void _updateCellComponent(int x, int y) {
-    // All rendering is now handled in the `render` method based on the grid state.
-    // This method is intentionally left empty but is kept for potential future use
-    // if other side effects are needed when a cell's state changes.
+    // Mark cell as dirty for rendering optimization
+    _dirtyCells.add(IntVector2(x, y));
+    _fullGridRenderNeeded = true;
   }
 
   void _buildCachedPath() {
@@ -475,12 +513,14 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
     }
   }
 
-  @override
-  void render(Canvas canvas) {
+  void _rebuildGridCache() {
+    // Rebuild the entire grid cache
+    final Canvas cacheCanvas = Canvas(_pictureRecorder);
+
     // Render the undiscovered area image as a background
     final Paint backgroundPaint = Paint()
       ..colorFilter = const ColorFilter.mode(Colors.black54, BlendMode.darken);
-    canvas.drawImageRect(
+    cacheCanvas.drawImageRect(
       _undiscoveredAreaImage,
       Rect.fromLTWH(
         0,
@@ -499,16 +539,14 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
         if (cellValue == game_constants.kGridFilled) {
           final sprite = _filledSprites[y * gridSize + x];
           if (sprite != null) {
-            // By rendering sprites slightly larger, we can hide the gaps
-            // that might appear due to floating-point inaccuracies.
             sprite.render(
-              canvas,
+              cacheCanvas,
               position: Vector2(x * cellSize, y * cellSize),
               size: Vector2.all(cellSize + 0.5),
             );
           }
         } else if (cellValue == game_constants.kGridEdge) {
-          canvas.drawRect(
+          cacheCanvas.drawRect(
             Rect.fromLTWH(x * cellSize, y * cellSize, cellSize, cellSize),
             _boundaryPaint,
           );
@@ -516,7 +554,24 @@ class ArenaComponent extends PositionComponent with HasGameReference<QixGame> {
       }
     }
 
-    // Render current drawing path with cache
+    _gridCachePicture = _pictureRecorder.endRecording();
+    _fullGridRenderNeeded = false;
+    _dirtyCells.clear();
+  }
+
+  @override
+  void render(Canvas canvas) {
+    // Use cached rendering for grid (huge performance boost on web)
+    if (_fullGridRenderNeeded || _gridCachePicture == null) {
+      _rebuildGridCache();
+    }
+
+    // Draw the cached grid picture
+    if (_gridCachePicture != null) {
+      canvas.drawPicture(_gridCachePicture!);
+    }
+
+    // Render current drawing path with cache (this changes frequently so always render)
     if (_currentDrawingPath.isNotEmpty) {
       if (_pathNeedsUpdate || _cachedPath == null) {
         _buildCachedPath();

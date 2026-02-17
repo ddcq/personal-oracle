@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:oracle_d_asgard/screens/games/qix/constants.dart'
     as game_constants;
 import 'package:oracle_d_asgard/screens/games/qix/qix_game.dart';
+import 'package:oracle_d_asgard/screens/games/qix/player.dart';
 import 'package:oracle_d_asgard/utils/int_vector2.dart';
 
 typedef IsGridEdgeChecker = bool Function(IntVector2 position);
@@ -34,10 +35,17 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
   late double _moveAngle;
   late double speed;
 
-  IntVector2 get gridPosition => IntVector2(
-    (virtualPosition.x / cellSize).round(),
-    (virtualPosition.y / cellSize).round(),
-  );
+  IntVector2 get gridPosition {
+    // Cache grid position calculation to avoid expensive round operations
+    if (_lastCheckedVirtualPosition != virtualPosition) {
+      _cachedGridPosition = IntVector2(
+        (virtualPosition.x / cellSize).round(),
+        (virtualPosition.y / cellSize).round(),
+      );
+      _lastCheckedVirtualPosition = virtualPosition.clone();
+    }
+    return _cachedGridPosition;
+  }
 
   double _animationTime = 0.0;
 
@@ -45,6 +53,10 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
   late double _wobbleMagnitude;
   final Vector2 _cachedRenderOffset = Vector2.zero();
   final Vector2 _cachedVelocity = Vector2.zero();
+
+  // Cache grid position to avoid recalculations
+  IntVector2 _cachedGridPosition = IntVector2(0, 0);
+  Vector2 _lastCheckedVirtualPosition = Vector2.zero();
 
   QixComponent({
     required IntVector2 initialGridPosition,
@@ -114,19 +126,26 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
         (tempNextVirtualPosition.y / cellSize).round(),
       );
 
-      if (isGridEdge(tempNextGridPosition) || isFilled(tempNextGridPosition)) {
+      // Optimize: check grid edge first as it's faster (usually cached at boundaries)
+      // and short-circuit if true to avoid expensive isFilled check
+      final bool hitEdge = isGridEdge(tempNextGridPosition);
+      final bool hitFilled = !hitEdge && isFilled(tempNextGridPosition);
+
+      if (hitEdge || hitFilled) {
         collision = true;
         final currentGridPos = IntVector2(
           (nextVirtualPosition.x / cellSize).round(),
           (nextVirtualPosition.y / cellSize).round(),
         );
 
+        // Optimize collision checks by avoiding redundant isFilled calls
+        final horizontalPos = IntVector2(tempNextGridPosition.x, currentGridPos.y);
+        final verticalPos = IntVector2(currentGridPos.x, tempNextGridPosition.y);
+
         final hitHorizontal =
-            isGridEdge(IntVector2(tempNextGridPosition.x, currentGridPos.y)) ||
-            isFilled(IntVector2(tempNextGridPosition.x, currentGridPos.y));
+            isGridEdge(horizontalPos) || isFilled(horizontalPos);
         final hitVertical =
-            isGridEdge(IntVector2(currentGridPos.x, tempNextGridPosition.y)) ||
-            isFilled(IntVector2(currentGridPos.x, tempNextGridPosition.y));
+            isGridEdge(verticalPos) || isFilled(verticalPos);
 
         if (hitHorizontal && hitVertical) {
           // Corner hit, reverse direction
@@ -154,7 +173,9 @@ class QixComponent extends PositionComponent with HasGameReference<QixGame> {
 
     position = virtualPosition;
 
-    if (isPlayerPath(gridPosition)) {
+    // Only check player path collision if player is actually drawing
+    // This avoids expensive contains() checks on empty/small lists
+    if (game.player.state == PlayerState.drawing && isPlayerPath(gridPosition)) {
       onGameOver();
       return;
     }

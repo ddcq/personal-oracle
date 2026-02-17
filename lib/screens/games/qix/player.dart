@@ -36,6 +36,7 @@ class Player extends PositionComponent {
 
   // Cache for update calculations
   final Vector2 _cachedTargetPixelPosition = Vector2.zero();
+  IntVector2 _lastTargetGridPosition = IntVector2(-1, -1);
 
   Player({
     required this.gridSize,
@@ -129,9 +130,14 @@ class Player extends PositionComponent {
     }
 
     // Smoothly move towards the target grid position
-    _cachedTargetPixelPosition.setFrom(
-      targetGridPosition.toVector2() * cellSize,
-    );
+    // Only recalculate target pixel position if target has changed
+    if (_lastTargetGridPosition != targetGridPosition) {
+      _cachedTargetPixelPosition.setFrom(
+        targetGridPosition.toVector2() * cellSize,
+      );
+      _lastTargetGridPosition = targetGridPosition;
+    }
+
     if (position.distanceTo(_cachedTargetPixelPosition) >
         _positionSnapThreshold) {
       position.moveToTarget(_cachedTargetPixelPosition, _moveSpeed * dt);
